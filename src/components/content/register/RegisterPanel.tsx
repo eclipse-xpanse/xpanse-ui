@@ -71,6 +71,7 @@ function RegisterPanel(): JSX.Element {
                         message={`Service ${ocl?.name} Registered Successfully`}
                         closable={true}
                         onClose={onRemove}
+                        className={'result'}
                     />
                 );
             } else {
@@ -82,6 +83,7 @@ function RegisterPanel(): JSX.Element {
                         message={`Service Registration Failed`}
                         description={registerResult}
                         onClose={onRemove}
+                        className={'result'}
                         action={
                             <Button size='small' type='primary' onClick={onRemove} danger={true}>
                                 Try Again
