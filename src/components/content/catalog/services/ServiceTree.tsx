@@ -3,9 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
 import { Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
+import { Key } from "antd/es/table/interface";
+import React from "react";
 
 function ServiceTree({
     treeData,
@@ -14,15 +15,13 @@ function ServiceTree({
     treeData: DataNode[];
     setKey: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element {
-    const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
-
-    const onSelect = (selectedKeysValue: React.Key[], info: any) => {
+    const onSelect = (selectedKeysValue: Key[]) => {
         setKey(selectedKeysValue[0].toString());
     };
 
     return (
         <>
-            <Tree defaultExpandAll={true} autoExpandParent={autoExpandParent} onSelect={onSelect} treeData={treeData} />
+            <Tree defaultExpandAll={true} autoExpandParent={true} onSelect={onSelect} treeData={treeData} />
         </>
     );
 }

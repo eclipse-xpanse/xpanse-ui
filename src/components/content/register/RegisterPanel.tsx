@@ -4,7 +4,7 @@
  */
 
 import { Alert, Button, Upload, UploadFile } from 'antd';
-import { AppstoreAddOutlined, CloudUploadOutlined, HomeOutlined, UploadOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { ObjectSerializer } from '../../../xpanse-api/generated/models/ObjectSerializer';

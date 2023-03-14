@@ -64,6 +64,7 @@ function ServiceProvider({
             setActiveKey(items[0]!.key);
         }
         lastServiceName = serviceName;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [items]);
 
     const onChange = (key: string) => {
