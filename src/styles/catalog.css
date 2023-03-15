@@ -38,6 +38,6 @@
 }
 
 .catalog-middleware .ant-tabs-tab-btn {
-    fontsize: 14px;
-    fontweight: bold;
+    font-size: 14px;
+    font-weight: bold;
 }

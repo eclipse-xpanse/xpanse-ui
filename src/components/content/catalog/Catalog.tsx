@@ -6,21 +6,27 @@
 import React, { useEffect, useState } from 'react';
 import '../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
-import ServiceTree from './services/ServiceTree';
 import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { CategoryOclVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { Tree } from 'antd';
 
 function Catalog(): JSX.Element {
-    const [key, setKey] = useState<string>('');
+    const [key, setKey] = useState<React.Key>('');
+    const [serviceDetails, setServiceDetails] = useState<JSX.Element>(<></>);
+    const [serviceTree, setServiceTree] = useState<JSX.Element>(<></>);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
     const location = useLocation();
 
+    const onSelect = (selectedKeys: React.Key[]) => {
+        setKey(selectedKeys[0]);
+    };
+
     useEffect(() => {
-        const path = location.hash.split('#')[1];
+        const path: string = location.hash.split('#')[1];
         if (!path) {
             return;
         }
@@ -43,8 +49,46 @@ function Catalog(): JSX.Element {
                 tData.push(dn);
             });
             setTreeData(tData);
+            setServiceDetails(<></>);
+            setServiceTree(<></>);
         });
     }, [location]);
+
+    useEffect(() => {
+        setServiceTree(
+            <Tree
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                onSelect={onSelect}
+                treeData={treeData}
+                expandedKeys={treeData.map((dataNode) => dataNode.key)}
+            />
+        );
+    }, [treeData]);
+
+    useEffect(() => {
+        if (treeData.length === 0 || isParentTreeSelected() || key === '' || key === undefined) {
+            setServiceDetails(<></>);
+        } else {
+            setServiceDetails(
+                <div className={'right-class'}>
+                    <div className={'left-title-class'}>Cloud Provider</div>
+                    <ServiceProvider categoryOclData={categoryOclData} serviceName={key.toString()} />
+                </div>
+            );
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [key]);
+
+    function isParentTreeSelected(): boolean {
+        let isParentNode: boolean = false;
+        treeData.forEach((dataNode: DataNode) => {
+            if (dataNode.key === key) {
+                isParentNode = true;
+            }
+        });
+        return isParentNode;
+    }
 
     return (
         <div className={'catalog-middleware'}>
@@ -54,13 +98,10 @@ function Catalog(): JSX.Element {
                         <HomeOutlined />
                         &ensp;Service Tree
                     </div>
-                    <ServiceTree treeData={treeData} setKey={setKey} />
+                    {serviceTree}
                 </div>
                 <div className={'middle-class'}></div>
-                <div className={'right-class'}>
-                    <div className={'left-title-class'}>Cloud Provider</div>
-                    <ServiceProvider categoryOclData={categoryOclData} serviceName={key} />
-                </div>
+                {serviceDetails}
             </div>
         </div>
     );
