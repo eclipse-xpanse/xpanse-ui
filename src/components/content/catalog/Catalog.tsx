@@ -46,6 +46,16 @@ function Catalog(): JSX.Element {
         });
     }, [location]);
 
+    function isParentTreeSelected(): boolean {
+        let isParentNode: boolean = false;
+        treeData.forEach((dataNode: DataNode) => {
+            if (dataNode.key === key) {
+                isParentNode = true;
+            }
+        });
+        return isParentNode;
+    }
+
     return (
         <div className={'catalog-middleware'}>
             <div className={'container'}>
@@ -57,10 +67,14 @@ function Catalog(): JSX.Element {
                     <ServiceTree treeData={treeData} setKey={setKey} />
                 </div>
                 <div className={'middle-class'}></div>
-                <div className={'right-class'}>
-                    <div className={'left-title-class'}>Cloud Provider</div>
-                    <ServiceProvider categoryOclData={categoryOclData} serviceName={key} />
-                </div>
+                {treeData.length === 0 || isParentTreeSelected() || !key ? (
+                    <></>
+                ) : (
+                    <div className={'right-class'}>
+                        <div className={'left-title-class'}>Cloud Provider</div>
+                        <ServiceProvider categoryOclData={categoryOclData} serviceName={key} />
+                    </div>
+                )}
             </div>
         </div>
     );

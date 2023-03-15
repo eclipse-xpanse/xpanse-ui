@@ -5,8 +5,8 @@
 
 import { Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
-import { Key } from "antd/es/table/interface";
-import React from "react";
+import { Key } from 'antd/es/table/interface';
+import React from 'react';
 
 function ServiceTree({
     treeData,
@@ -21,7 +21,13 @@ function ServiceTree({
 
     return (
         <>
-            <Tree defaultExpandAll={true} autoExpandParent={true} onSelect={onSelect} treeData={treeData} />
+            <Tree
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                onSelect={onSelect}
+                treeData={treeData}
+                expandedKeys={treeData.map((dataNode) => dataNode.key)}
+            />
         </>
     );
 }

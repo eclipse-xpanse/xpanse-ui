@@ -50,26 +50,7 @@ function ServiceProvider({
             });
         });
 
-    useEffect(() => {
-        if (items.length > 0 && lastServiceName !== serviceName) {
-            const key = serviceName + '@' + items[0].key;
-            const details = detailMapper.get(key);
-            if (details) {
-                setServiceDetails(details);
-            }
-            const regions = regionMapper.get(key);
-            if (regions) {
-                setServiceRegions(regions);
-            }
-            setActiveKey(items[0]!.key);
-        }
-        lastServiceName = serviceName;
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [items]);
-
-    const onChange = (key: string) => {
-        setActiveKey(key);
-        const serviceKey = serviceName + '@' + key;
+    function updateServiceDetails(serviceKey: string): void {
         const regions = regionMapper.get(serviceKey);
         const details = detailMapper.get(serviceKey);
         if (details) {
@@ -78,6 +59,25 @@ function ServiceProvider({
         if (regions) {
             setServiceRegions(regions);
         }
+    }
+    useEffect(() => {
+        if (items.length > 0 && lastServiceName !== serviceName) {
+            updateServiceDetails(serviceName + '@' + items[0].key);
+            setActiveKey(items[0]!.key);
+        } else if (items.length > 0 && lastServiceName === serviceName) {
+            setActiveKey(items[0]!.key);
+        }
+        lastServiceName = serviceName;
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [serviceName]);
+
+    useEffect(() => {
+        updateServiceDetails(serviceName + '@' + activeKey);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activeKey]);
+
+    const onChange = (key: string) => {
+        setActiveKey(key);
     };
 
     return (
