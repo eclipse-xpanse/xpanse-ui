@@ -4,7 +4,7 @@
  */
 
 import { Alert, Button, Upload, UploadFile } from 'antd';
-import { AppstoreAddOutlined, CloudUploadOutlined, HomeOutlined, UploadOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { ObjectSerializer } from '../../../xpanse-api/generated/models/ObjectSerializer';
@@ -71,6 +71,7 @@ function RegisterPanel(): JSX.Element {
                         message={`Service ${ocl?.name} Registered Successfully`}
                         closable={true}
                         onClose={onRemove}
+                        className={'result'}
                     />
                 );
             } else {
@@ -82,6 +83,7 @@ function RegisterPanel(): JSX.Element {
                         message={`Service Registration Failed`}
                         description={registerResult}
                         onClose={onRemove}
+                        className={'result'}
                         action={
                             <Button size='small' type='primary' onClick={onRemove} danger={true}>
                                 Try Again

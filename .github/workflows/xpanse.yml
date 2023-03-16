@@ -17,6 +17,12 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v3
-            - name: Check UI code format
+            - name: Install EsLint
+              working-directory: ./
+              run: npm install eslint@8.34.0
+            - name: Run EsLint
+              working-directory: ./
+              run: npx eslint . --ext .js,.jsx,.ts,.tsx --config package.json
+            - name: Check Prettier Format
               working-directory: ./
               run: npx prettier --config .prettierrc --check .
