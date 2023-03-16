@@ -35,8 +35,8 @@ function ServiceDetail({
                 &nbsp;Basic Information
             </h3>
             <Descriptions bordered column={1}>
-                <Descriptions.Item label='Property' labelStyle={{ width: '230px' }}>
-                    Information
+                <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
+                    {serviceDetails.description}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails ? serviceDetails.category : ''}</Descriptions.Item>
                 <Descriptions.Item label='Provider'>
