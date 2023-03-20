@@ -34,8 +34,8 @@ The following steps must be followed to generate new client and datamodels whene
 2. Downland generator jar from maven central. For example from - https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/6.4.0/openapi-generator-cli-6.4.0.jar
 3. Run the jar as below
     ```shell
-    $cd ui/src/xpanse-gui
-    $java -jar openapi-generator-cli-6.3.0.jar generate -i api.json -g typescript -o generated
+    $cd src/xpanse-gui
+    $java -jar openapi-generator-cli-6.4.0.jar generate -i api.json -g typescript -o generated
     ```
     This step will generate all required models and client
 4. Delete all additional files and keep only the TypeScript files.
