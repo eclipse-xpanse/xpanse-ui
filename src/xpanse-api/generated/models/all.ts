@@ -1,8 +1,4 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
+export * from './Area';
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';

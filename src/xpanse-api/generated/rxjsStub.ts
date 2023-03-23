@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 export class Observable<T> {
     constructor(private promise: Promise<T>) {}
 

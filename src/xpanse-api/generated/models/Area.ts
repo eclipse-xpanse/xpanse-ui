@@ -12,25 +12,39 @@
 
 import { HttpFile } from '../http/http';
 
-export class SystemStatus {
-    'healthStatus': SystemStatusHealthStatusEnum;
+/**
+ * The area of the regions
+ */
+export class Area {
+    /**
+     * The name of the area
+     */
+    'name': string;
+    /**
+     * The regions of the area
+     */
+    'regions': Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{ name: string; baseName: string; type: string; format: string }> = [
         {
-            name: 'healthStatus',
-            baseName: 'healthStatus',
-            type: 'SystemStatusHealthStatusEnum',
+            name: 'name',
+            baseName: 'name',
+            type: 'string',
+            format: '',
+        },
+        {
+            name: 'regions',
+            baseName: 'regions',
+            type: 'Array<string>',
             format: '',
         },
     ];
 
     static getAttributeTypeMap() {
-        return SystemStatus.attributeTypeMap;
+        return Area.attributeTypeMap;
     }
 
     public constructor() {}
 }
-
-export type SystemStatusHealthStatusEnum = 'OK' | 'NOK';

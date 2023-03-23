@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 /**
  * Represents an error caused by an api call i.e. it has attributes for a HTTP status code
  * and the returned body object.

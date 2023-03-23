@@ -1,10 +1,5 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 import { RequestContext, ResponseContext } from './http/http';
-import { from, Observable } from './rxjsStub';
+import { Observable, from } from './rxjsStub';
 
 /**
  * Defines the contract for a middleware intercepting requests before
@@ -21,7 +16,6 @@ export interface Middleware {
      *
      */
     pre(context: RequestContext): Observable<RequestContext>;
-
     /**
      * Modifies the returned response before it is deserialized.
      *
@@ -58,7 +52,6 @@ export interface PromiseMiddleware {
      *
      */
     pre(context: RequestContext): Promise<RequestContext>;
-
     /**
      * Modifies the returned response before it is deserialized.
      *
