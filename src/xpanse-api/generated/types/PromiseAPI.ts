@@ -1,26 +1,9 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
+import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import { Configuration } from '../configuration';
-import { CategoryOclVo } from '../models/CategoryOclVo';
-import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { Ocl } from '../models/Ocl';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
-import { Response } from '../models/Response';
-import { ServiceVo } from '../models/ServiceVo';
-import { SystemStatus } from '../models/SystemStatus';
-import { ObservableAdminApi, ObservableServiceApi, ObservableServiceVendorApi } from './ObservableAPI';
+
+import { ObservableAdminApi, ObservableServiceVendorApi } from './ObservableAPI';
 
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
-
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { OclDetailVo } from '../models/OclDetailVo';
-
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
 
@@ -40,6 +23,18 @@ export class PromiseAdminApi {
     }
 }
 
+import { ObservableServiceApi } from './ObservableAPI';
+
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
+import { SystemStatus } from '../models/SystemStatus';
+import { CreateRequest } from '../models/CreateRequest';
+import { DeployServiceEntity } from '../models/DeployServiceEntity';
+import { ServiceVo } from '../models/ServiceVo';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { OclDetailVo } from '../models/OclDetailVo';
+import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
+import { CategoryOclVo } from '../models/CategoryOclVo';
+import { Ocl } from '../models/Ocl';
 export class PromiseServiceApi {
     private api: ObservableServiceApi;
 
@@ -52,7 +47,34 @@ export class PromiseServiceApi {
     }
 
     /**
+     * Start a task to deploy registered service.
+     * @param createRequest
+     */
+    public deploy(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
+        const result = this.api.deploy(createRequest, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Start a task to destroy the deployed service using id.
      * @param id
+     */
+    public destroy(id: string, _options?: Configuration): Promise<Response> {
+        const result = this.api.destroy(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * @param id
+     */
+    public openApi(id: string, _options?: Configuration): Promise<string> {
+        const result = this.api.openApi(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Get deployed service using id.
+     * @param id Task id of deploy service
      */
     public serviceDetail(id: string, _options?: Configuration): Promise<DeployServiceEntity> {
         const result = this.api.serviceDetail(id, _options);
@@ -60,29 +82,13 @@ export class PromiseServiceApi {
     }
 
     /**
+     * List the deployed services.
      */
     public services(_options?: Configuration): Promise<Array<ServiceVo>> {
         const result = this.api.services(_options);
         return result.toPromise();
     }
-
-    /**
-     * @param createRequest
-     */
-    public start(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
-        const result = this.api.start(createRequest, _options);
-        return result.toPromise();
-    }
-
-    /**
-     * @param id
-     */
-    public stop(id: string, _options?: Configuration): Promise<Response> {
-        const result = this.api.stop(id, _options);
-        return result.toPromise();
-    }
 }
-
 export class PromiseServiceVendorApi {
     private api: ObservableServiceVendorApi;
 

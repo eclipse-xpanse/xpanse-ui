@@ -1,13 +1,9 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
+import { Area } from './Area';
 import { Billing } from './Billing';
 import { CategoryOclVo } from './CategoryOclVo';
 import { CloudServiceProvider } from './CloudServiceProvider';
 import { CreateRequest } from './CreateRequest';
-import { DeployServiceEntity } from './DeployServiceEntity';
+import { DeployResourceEntity } from './DeployResourceEntity';
 import { DeployVariable } from './DeployVariable';
 import { Deployment } from './Deployment';
 import { Flavor } from './Flavor';
@@ -15,20 +11,18 @@ import { Ocl } from './Ocl';
 import { OclDetailVo } from './OclDetailVo';
 import { ProviderOclVo } from './ProviderOclVo';
 import { RegisterServiceEntity } from './RegisterServiceEntity';
-import { Response } from './Response';
 import { ServiceVo } from './ServiceVo';
 import { SystemStatus } from './SystemStatus';
 import { VersionOclVo } from './VersionOclVo';
+import { DeployServiceEntity } from './DeployServiceEntity';
 import YAML from 'yaml';
-import { DeployResource } from './DeployResource';
-import { DeployResult } from './DeployResult';
 
+export * from './Area';
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
 export * from './CreateRequest';
 export * from './DeployResourceEntity';
-export * from './DeployServiceEntity';
 export * from './DeployVariable';
 export * from './Deployment';
 export * from './Flavor';
@@ -48,7 +42,6 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
     'application/json': Infinity,
     'application/octet-stream': 0,
     'application/x-www-form-urlencoded': 0,
-    'application/x-yaml': 0,
 };
 
 let enumsMap: Set<string> = new Set<string>([
@@ -57,12 +50,12 @@ let enumsMap: Set<string> = new Set<string>([
     'CloudServiceProviderNameEnum',
     'CreateRequestCategoryEnum',
     'CreateRequestCspEnum',
-    'DeployResourceKindEnum',
-    'DeployResultStateEnum',
-    'DeployServiceEntityCspEnum',
+    'DeployResourceEntityKindEnum',
     'DeployServiceEntityCategoryEnum',
+    'DeployServiceEntityCspEnum',
     'DeployServiceEntityServiceStateEnum',
     'DeployVariableKindEnum',
+    'DeployVariableTypeEnum',
     'DeploymentKindEnum',
     'OclCategoryEnum',
     'OclDetailVoCategoryEnum',
@@ -78,12 +71,12 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: { [index: string]: any } = {
+    Area: Area,
     Billing: Billing,
     CategoryOclVo: CategoryOclVo,
     CloudServiceProvider: CloudServiceProvider,
     CreateRequest: CreateRequest,
-    DeployResource: DeployResource,
-    DeployResult: DeployResult,
+    DeployResourceEntity: DeployResourceEntity,
     DeployServiceEntity: DeployServiceEntity,
     DeployVariable: DeployVariable,
     Deployment: Deployment,
@@ -287,10 +280,6 @@ export class ObjectSerializer {
             return JSON.stringify(data);
         }
 
-        if (mediaType === 'application/x-yaml') {
-            return YAML.stringify(data);
-        }
-
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.stringify.');
     }
 
@@ -310,12 +299,12 @@ export class ObjectSerializer {
             return JSON.parse(rawData);
         }
 
-        if (mediaType === 'application/yaml') {
-            return YAML.parse(rawData);
-        }
-
         if (mediaType === 'text/html') {
             return rawData;
+        }
+
+        if (mediaType === 'application/yaml') {
+            return YAML.parse(rawData);
         }
 
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.parse.');

@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 import { HttpLibrary, RequestContext, ResponseContext } from './http';
 import { from, Observable } from '../rxjsStub';
 import 'whatwg-fetch';
