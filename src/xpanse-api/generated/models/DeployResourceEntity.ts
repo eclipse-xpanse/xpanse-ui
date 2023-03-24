@@ -87,4 +87,4 @@ export class DeployResourceEntity {
     public constructor() {}
 }
 
-export type DeployResourceEntityKindEnum = 'vm' | 'container' | 'public_ip' | 'vpc';
+export type DeployResourceEntityKindEnum = 'vm' | 'container' | 'public_ip' | 'vpc' | 'disk';

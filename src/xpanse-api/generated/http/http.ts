@@ -11,15 +11,15 @@ export * from './isomorphic-fetch';
  * Represents an HTTP method.
  */
 export enum HttpMethod {
-    GET = 'GET',
-    HEAD = 'HEAD',
-    POST = 'POST',
-    PUT = 'PUT',
-    DELETE = 'DELETE',
-    CONNECT = 'CONNECT',
-    OPTIONS = 'OPTIONS',
-    TRACE = 'TRACE',
-    PATCH = 'PATCH',
+    GET = "GET",
+    HEAD = "HEAD",
+    POST = "POST",
+    PUT = "PUT",
+    DELETE = "DELETE",
+    CONNECT = "CONNECT",
+    OPTIONS = "OPTIONS",
+    TRACE = "TRACE",
+    PATCH = "PATCH"
 }
 
 /**
@@ -61,7 +61,9 @@ export class RequestContext {
      *
      */
     public getUrl(): string {
-        return this.url.toString().endsWith('/') ? this.url.toString().slice(0, -1) : this.url.toString();
+        return this.url.toString().endsWith("/") ?
+            this.url.toString().slice(0, -1)
+            : this.url.toString();
     }
 
     /**
@@ -106,13 +108,13 @@ export class RequestContext {
      *
      */
     public addCookie(name: string, value: string): void {
-        if (!this.headers['Cookie']) {
-            this.headers['Cookie'] = '';
+        if (!this.headers["Cookie"]) {
+            this.headers["Cookie"] = "";
         }
-        this.headers['Cookie'] += name + '=' + value + '; ';
+        this.headers["Cookie"] += name + "=" + value + "; ";
     }
 
-    public setHeaderParam(key: string, value: string): void {
+    public setHeaderParam(key: string, value: string): void  {
         this.headers[key] = value;
     }
 }
@@ -143,8 +145,8 @@ export class SelfDecodingBody implements ResponseBody {
 
         return new Promise<string>((resolve, reject) => {
             const reader = new FileReader();
-            reader.addEventListener('load', () => resolve(reader.result as string));
-            reader.addEventListener('error', () => reject(reader.error));
+            reader.addEventListener("load", () => resolve(reader.result as string));
+            reader.addEventListener("error", () => reject(reader.error));
             reader.readAsText(data);
         });
     }
@@ -170,12 +172,12 @@ export class ResponseContext {
             return result;
         }
 
-        const parameters = this.headers[headerName].split(';');
+        const parameters = this.headers[headerName].split(";");
         for (const parameter of parameters) {
-            let [key, value] = parameter.split('=', 2);
+            let [key, value] = parameter.split("=", 2);
             key = key.toLowerCase().trim();
             if (value === undefined) {
-                result[''] = key;
+                result[""] = key;
             } else {
                 value = value.trim();
                 if (value.startsWith('"') && value.endsWith('"')) {
@@ -189,15 +191,15 @@ export class ResponseContext {
 
     public async getBodyAsFile(): Promise<HttpFile> {
         const data = await this.body.binary();
-        const fileName = this.getParsedHeader('content-disposition')['filename'] || '';
-        const contentType = this.headers['content-type'] || '';
+        const fileName = this.getParsedHeader("content-disposition")["filename"] || "";
+        const contentType = this.headers["content-type"] || "";
         try {
             return new File([data], fileName, { type: contentType });
         } catch (error) {
             /** Fallback for when the File constructor is not available */
             return Object.assign(data, {
                 name: fileName,
-                type: contentType,
+                type: contentType
             });
         }
     }
@@ -228,9 +230,9 @@ export interface PromiseHttpLibrary {
 }
 
 export function wrapHttpLibrary(promiseHttpLibrary: PromiseHttpLibrary): HttpLibrary {
-    return {
-        send(request: RequestContext): Observable<ResponseContext> {
-            return from(promiseHttpLibrary.send(request));
-        },
-    };
+  return {
+    send(request: RequestContext): Observable<ResponseContext> {
+      return from(promiseHttpLibrary.send(request));
+    }
+  }
 }

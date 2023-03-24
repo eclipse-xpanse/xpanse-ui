@@ -16,20 +16,21 @@
  */
 
 import { CreateRequest } from './CreateRequest';
-import { DeployResult } from './DeployResult';
+import { DeployResourceEntity } from './DeployResourceEntity';
+import { HttpFile } from '../http/http';
 
 export class DeployServiceEntity {
     'createTime'?: Date;
     'lastModifiedTime'?: Date;
-    'id'?: string;
+    'category'?: DeployServiceEntityCategoryEnum;
     'name'?: string;
     'version'?: string;
     'csp'?: DeployServiceEntityCspEnum;
-    'category'?: DeployServiceEntityCategoryEnum;
-    'serviceState'?: DeployServiceEntityServiceStateEnum;
     'flavor'?: string;
+    'serviceState'?: DeployServiceEntityServiceStateEnum;
     'createRequest'?: CreateRequest;
-    'deployResult'?: DeployResult;
+    'deployResourceList'?: Array<DeployResourceEntity>;
+    'property'?: { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -47,10 +48,10 @@ export class DeployServiceEntity {
             format: 'date-time',
         },
         {
-            name: 'id',
-            baseName: 'id',
-            type: 'string',
-            format: 'uuid',
+            name: 'category',
+            baseName: 'category',
+            type: 'DeployServiceEntityCategoryEnum',
+            format: '',
         },
         {
             name: 'name',
@@ -71,9 +72,9 @@ export class DeployServiceEntity {
             format: '',
         },
         {
-            name: 'category',
-            baseName: 'category',
-            type: 'DeployServiceEntityCategoryEnum',
+            name: 'flavor',
+            baseName: 'flavor',
+            type: 'string',
             format: '',
         },
         {
@@ -83,21 +84,21 @@ export class DeployServiceEntity {
             format: '',
         },
         {
-            name: 'flavor',
-            baseName: 'flavor',
-            type: 'string',
-            format: '',
-        },
-        {
             name: 'createRequest',
             baseName: 'createRequest',
             type: 'CreateRequest',
             format: '',
         },
         {
-            name: 'deployResult',
-            baseName: 'deployResult',
-            type: 'DeployResult',
+            name: 'deployResourceList',
+            baseName: 'deployResourceList',
+            type: 'Array<DeployResourceEntity>',
+            format: '',
+        },
+        {
+            name: 'property',
+            baseName: 'property',
+            type: '{ [key: string]: string; }',
             format: '',
         },
     ];
@@ -109,7 +110,6 @@ export class DeployServiceEntity {
     public constructor() {}
 }
 
-export type DeployServiceEntityCspEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';
 export type DeployServiceEntityCategoryEnum =
     | 'ai'
     | 'compute'
@@ -121,6 +121,7 @@ export type DeployServiceEntityCategoryEnum =
     | 'security'
     | 'middleware'
     | 'others';
+export type DeployServiceEntityCspEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';
 export type DeployServiceEntityServiceStateEnum =
     | 'REGISTERED'
     | 'UPDATED'

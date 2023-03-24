@@ -4,7 +4,7 @@
  */
 
 import { Ocl } from '../../../xpanse-api/generated';
-import { Button, Descriptions, Image, Popover } from 'antd';
+import { Button, Descriptions, Tag, Image, Popover } from 'antd';
 import YAML from 'yaml';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
@@ -77,23 +77,25 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                                 <br />
                                 <b>Service Name</b>
                                 <br />
-                                {ocl.name}
+                                <Tag color='blue'>{ocl.name}</Tag>
                                 <br />
                                 <br />
                             </div>
                             <div>
                                 <b>Cloud Service Provider</b>
                                 <br />
-                                {ocl.cloudServiceProvider.name}
+                                <Tag color='cyan'>{ocl.cloudServiceProvider.name}</Tag>
                                 <br />
                                 <br />
                             </div>
                             <div>
                                 <b>Available Regions</b>
                                 <br />
-                                {ocl.cloudServiceProvider && ocl.cloudServiceProvider.regions
-                                    ? ocl.cloudServiceProvider.regions.join(', ')
-                                    : PLACE_HOLDER_UNKNOWN_VALUE}
+                                {ocl.cloudServiceProvider.regions.map((region, index) => (
+                                    <Tag color='orange'>
+                                        {region.area}:&nbsp;{region.name}
+                                    </Tag>
+                                ))}
                                 <br />
                                 <br />
                             </div>

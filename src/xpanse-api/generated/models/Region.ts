@@ -15,20 +15,14 @@
  * Do not edit the class manually.
  */
 
-import { Region } from './Region';
+import { HttpFile } from '../http/http';
 
 /**
- * The cloud service provider of the managed service
+ * The regions of the Cloud Service Provider
  */
-export class CloudServiceProvider {
-    /**
-     * The Cloud Service Provider. valid values: aws, azure, alibaba, huawei
-     */
-    'name': CloudServiceProviderNameEnum;
-    /**
-     * The regions of the Cloud Service Provider
-     */
-    'regions': Array<Region>;
+export class Region {
+    'name'?: string;
+    'area'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -36,22 +30,20 @@ export class CloudServiceProvider {
         {
             name: 'name',
             baseName: 'name',
-            type: 'CloudServiceProviderNameEnum',
+            type: 'string',
             format: '',
         },
         {
-            name: 'regions',
-            baseName: 'regions',
-            type: 'Array<Region>',
+            name: 'area',
+            baseName: 'area',
+            type: 'string',
             format: '',
         },
     ];
 
     static getAttributeTypeMap() {
-        return CloudServiceProvider.attributeTypeMap;
+        return Region.attributeTypeMap;
     }
 
     public constructor() {}
 }
-
-export type CloudServiceProviderNameEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';

@@ -4,22 +4,35 @@
  */
 
 import { Configuration } from '../configuration';
+import { Billing } from '../models/Billing';
 import { CategoryOclVo } from '../models/CategoryOclVo';
+import { CloudServiceProvider } from '../models/CloudServiceProvider';
 import { CreateRequest } from '../models/CreateRequest';
+import { DeployResourceEntity } from '../models/DeployResourceEntity';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
+import { DeployVariable } from '../models/DeployVariable';
+import { Deployment } from '../models/Deployment';
+import { Flavor } from '../models/Flavor';
 import { Ocl } from '../models/Ocl';
+import { OclDetailVo } from '../models/OclDetailVo';
+import { ProviderOclVo } from '../models/ProviderOclVo';
+import { Region } from '../models/Region';
 import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
-import { ObservableAdminApi, ObservableServiceApi, ObservableServiceVendorApi } from './ObservableAPI';
+import { VersionOclVo } from '../models/VersionOclVo';
+import { ObservableAdminApi } from './ObservableAPI';
 
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
+import { ObservableServiceApi } from './ObservableAPI';
 
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 
+import { ObservableServiceVendorApi } from './ObservableAPI';
+
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { OclDetailVo } from '../models/OclDetailVo';
+
 
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
@@ -52,7 +65,34 @@ export class PromiseServiceApi {
     }
 
     /**
+     * Start a task to deploy registered service.
+     * @param createRequest
+     */
+    public deploy(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
+        const result = this.api.deploy(createRequest, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Start a task to destroy the deployed service using id.
      * @param id
+     */
+    public destroy(id: string, _options?: Configuration): Promise<Response> {
+        const result = this.api.destroy(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * @param id
+     */
+    public openApi(id: string, _options?: Configuration): Promise<string> {
+        const result = this.api.openApi(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Get deployed service using id.
+     * @param id Task id of deploy service
      */
     public serviceDetail(id: string, _options?: Configuration): Promise<DeployServiceEntity> {
         const result = this.api.serviceDetail(id, _options);
@@ -60,25 +100,10 @@ export class PromiseServiceApi {
     }
 
     /**
+     * List the deployed services.
      */
     public services(_options?: Configuration): Promise<Array<ServiceVo>> {
         const result = this.api.services(_options);
-        return result.toPromise();
-    }
-
-    /**
-     * @param createRequest
-     */
-    public start(createRequest: CreateRequest, _options?: Configuration): Promise<string> {
-        const result = this.api.start(createRequest, _options);
-        return result.toPromise();
-    }
-
-    /**
-     * @param id
-     */
-    public stop(id: string, _options?: Configuration): Promise<Response> {
-        const result = this.api.stop(id, _options);
         return result.toPromise();
     }
 }

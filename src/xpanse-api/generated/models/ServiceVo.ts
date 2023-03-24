@@ -44,6 +44,14 @@ export class ServiceVo {
      * The state of the service
      */
     'serviceState'?: ServiceVoServiceStateEnum;
+    /**
+     * Time of register service.
+     */
+    'createTime': Date;
+    /**
+     * Time of update service.
+     */
+    'lastModifiedTime': Date;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -89,6 +97,18 @@ export class ServiceVo {
             baseName: 'serviceState',
             type: 'ServiceVoServiceStateEnum',
             format: '',
+        },
+        {
+            name: 'createTime',
+            baseName: 'createTime',
+            type: 'Date',
+            format: 'date-time',
+        },
+        {
+            name: 'lastModifiedTime',
+            baseName: 'lastModifiedTime',
+            type: 'Date',
+            format: 'date-time',
         },
     ];
 

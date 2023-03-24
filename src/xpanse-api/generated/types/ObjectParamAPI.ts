@@ -11,13 +11,13 @@ import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
-
-import { ObservableAdminApi, ObservableServiceApi, ObservableServiceVendorApi } from './ObservableAPI';
+import { ObservableAdminApi } from './ObservableAPI';
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
+
+import { ObservableServiceApi } from './ObservableAPI';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { CategoryOclVo } from '../models/CategoryOclVo';
 import { OclDetailVo } from '../models/OclDetailVo';
+import { CategoryOclVo } from '../models/CategoryOclVo';
 
 export interface AdminApiHealthRequest {}
 
@@ -40,9 +40,36 @@ export class ObjectAdminApi {
     }
 }
 
-export interface ServiceApiServiceDetailRequest {
+export interface ServiceApiDeployRequest {
     /**
      *
+     * @type CreateRequest
+     * @memberof ServiceApideploy
+     */
+    createRequest: CreateRequest;
+}
+
+export interface ServiceApiDestroyRequest {
+    /**
+     *
+     * @type string
+     * @memberof ServiceApidestroy
+     */
+    id: string;
+}
+
+export interface ServiceApiOpenApiRequest {
+    /**
+     *
+     * @type string
+     * @memberof ServiceApiopenApi
+     */
+    id: string;
+}
+
+export interface ServiceApiServiceDetailRequest {
+    /**
+     * Task id of deploy service
      * @type string
      * @memberof ServiceApiserviceDetail
      */
@@ -50,24 +77,6 @@ export interface ServiceApiServiceDetailRequest {
 }
 
 export interface ServiceApiServicesRequest {}
-
-export interface ServiceApiStartRequest {
-    /**
-     *
-     * @type CreateRequest
-     * @memberof ServiceApistart
-     */
-    createRequest: CreateRequest;
-}
-
-export interface ServiceApiStopRequest {
-    /**
-     *
-     * @type string
-     * @memberof ServiceApistop
-     */
-    id: string;
-}
 
 export class ObjectServiceApi {
     private api: ObservableServiceApi;
@@ -81,6 +90,30 @@ export class ObjectServiceApi {
     }
 
     /**
+     * Start a task to deploy registered service.
+     * @param param the request object
+     */
+    public deploy(param: ServiceApiDeployRequest, options?: Configuration): Promise<string> {
+        return this.api.deploy(param.createRequest, options).toPromise();
+    }
+
+    /**
+     * Start a task to destroy the deployed service using id.
+     * @param param the request object
+     */
+    public destroy(param: ServiceApiDestroyRequest, options?: Configuration): Promise<Response> {
+        return this.api.destroy(param.id, options).toPromise();
+    }
+
+    /**
+     * @param param the request object
+     */
+    public openApi(param: ServiceApiOpenApiRequest, options?: Configuration): Promise<string> {
+        return this.api.openApi(param.id, options).toPromise();
+    }
+
+    /**
+     * Get deployed service using id.
      * @param param the request object
      */
     public serviceDetail(param: ServiceApiServiceDetailRequest, options?: Configuration): Promise<DeployServiceEntity> {
@@ -88,26 +121,16 @@ export class ObjectServiceApi {
     }
 
     /**
+     * List the deployed services.
      * @param param the request object
      */
     public services(param: ServiceApiServicesRequest = {}, options?: Configuration): Promise<Array<ServiceVo>> {
         return this.api.services(options).toPromise();
     }
-
-    /**
-     * @param param the request object
-     */
-    public start(param: ServiceApiStartRequest, options?: Configuration): Promise<string> {
-        return this.api.start(param.createRequest, options).toPromise();
-    }
-
-    /**
-     * @param param the request object
-     */
-    public stop(param: ServiceApiStopRequest, options?: Configuration): Promise<Response> {
-        return this.api.stop(param.id, options).toPromise();
-    }
 }
+
+import { ObservableServiceVendorApi } from './ObservableAPI';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 
 export interface ServiceVendorApiDetailRequest {
     /**

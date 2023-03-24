@@ -16,6 +16,7 @@
  */
 
 import { OclDetailVo } from './OclDetailVo';
+import { Region } from './Region';
 
 /**
  * List of the registered services group by service version.
@@ -24,15 +25,15 @@ export class ProviderOclVo {
     /**
      * The Cloud Service Provider.
      */
-    'name'?: ProviderOclVoNameEnum;
+    'name': ProviderOclVoNameEnum;
     /**
      * The regions of the Cloud Service Provider.
      */
-    'regions'?: Array<string>;
+    'regions': Array<Region>;
     /**
      * The list of the registered services.
      */
-    'details'?: Array<OclDetailVo>;
+    'details': Array<OclDetailVo>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -46,7 +47,7 @@ export class ProviderOclVo {
         {
             name: 'regions',
             baseName: 'regions',
-            type: 'Array<string>',
+            type: 'Array<Region>',
             format: '',
         },
         {
