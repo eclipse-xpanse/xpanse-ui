@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { from, Observable } from '../rxjsStub';
+import { Observable, from } from '../rxjsStub';
 
 export * from './isomorphic-fetch';
 
@@ -119,7 +119,6 @@ export class RequestContext {
 
 export interface ResponseBody {
     text(): Promise<string>;
-
     binary(): Promise<Blob>;
 }
 

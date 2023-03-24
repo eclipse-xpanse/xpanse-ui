@@ -17,7 +17,6 @@
 
 import { CreateRequest } from './CreateRequest';
 import { DeployResourceEntity } from './DeployResourceEntity';
-import { HttpFile } from '../http/http';
 
 export class DeployServiceEntity {
     'createTime'?: Date;
@@ -29,8 +28,7 @@ export class DeployServiceEntity {
     'flavor'?: string;
     'serviceState'?: DeployServiceEntityServiceStateEnum;
     'createRequest'?: CreateRequest;
-    'deployResourceList'?: Array<DeployResourceEntity>;
-    'property'?: { [key: string]: string };
+    'deployResourceEntity'?: Array<DeployResourceEntity>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -90,15 +88,9 @@ export class DeployServiceEntity {
             format: '',
         },
         {
-            name: 'deployResourceList',
-            baseName: 'deployResourceList',
+            name: 'deployResourceEntity',
+            baseName: 'deployResourceEntity',
             type: 'Array<DeployResourceEntity>',
-            format: '',
-        },
-        {
-            name: 'property',
-            baseName: 'property',
-            type: '{ [key: string]: string; }',
             format: '',
         },
     ];

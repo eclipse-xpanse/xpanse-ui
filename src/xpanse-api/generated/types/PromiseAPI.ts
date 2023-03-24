@@ -4,35 +4,21 @@
  */
 
 import { Configuration } from '../configuration';
-import { Billing } from '../models/Billing';
 import { CategoryOclVo } from '../models/CategoryOclVo';
-import { CloudServiceProvider } from '../models/CloudServiceProvider';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployResourceEntity } from '../models/DeployResourceEntity';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { DeployVariable } from '../models/DeployVariable';
-import { Deployment } from '../models/Deployment';
-import { Flavor } from '../models/Flavor';
 import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
-import { ProviderOclVo } from '../models/ProviderOclVo';
-import { Region } from '../models/Region';
 import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
-import { VersionOclVo } from '../models/VersionOclVo';
 import { ObservableAdminApi } from './ObservableAPI';
-
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
 import { ObservableServiceApi } from './ObservableAPI';
-
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-
 import { ObservableServiceVendorApi } from './ObservableAPI';
-
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
 
@@ -51,7 +37,6 @@ export class PromiseAdminApi {
         return result.toPromise();
     }
 }
-
 export class PromiseServiceApi {
     private api: ObservableServiceApi;
 
@@ -106,7 +91,6 @@ export class PromiseServiceApi {
         return result.toPromise();
     }
 }
-
 export class PromiseServiceVendorApi {
     private api: ObservableServiceVendorApi;
 

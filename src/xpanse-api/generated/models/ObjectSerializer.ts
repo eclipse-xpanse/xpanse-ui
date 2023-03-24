@@ -3,8 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import YAML from 'yaml';
-
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
@@ -24,6 +22,7 @@ export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
 
+import YAML from 'yaml';
 import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
 import { CategoryOclVo } from './CategoryOclVo';
 import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';

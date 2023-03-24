@@ -15,13 +15,11 @@
  * Do not edit the class manually.
  */
 
-import { HttpFile } from '../http/http';
-
 /**
  * The regions of the Cloud Service Provider
  */
 export class Region {
-    'name'?: string;
+    'name': string;
     'area'?: string;
 
     static readonly discriminator: string | undefined = undefined;

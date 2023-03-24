@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { HttpLibrary } from './http/http';
 import { Middleware, PromiseMiddleware, PromiseMiddlewareWrapper } from './middleware';
 import { IsomorphicFetchHttpLibrary as DefaultHttpLibrary } from './http/isomorphic-fetch';

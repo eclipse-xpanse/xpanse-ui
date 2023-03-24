@@ -3,14 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS } from './baseapi';
+import { BaseAPIRequestFactory, RequiredError } from './baseapi';
 import { Configuration } from '../configuration';
-import { RequestContext, HttpMethod, ResponseContext, HttpFile } from '../http/http';
+import { RequestContext, HttpMethod, ResponseContext } from '../http/http';
 import { ObjectSerializer } from '../models/ObjectSerializer';
 import { ApiException } from './exception';
-import { canConsumeForm, isCodeInRange } from '../util';
+import { isCodeInRange } from '../util';
 import { SecurityAuthentication } from '../auth/auth';
-
 import { CreateRequest } from '../models/CreateRequest';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { Response } from '../models/Response';
@@ -181,14 +180,6 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -196,6 +187,14 @@ export class ServiceApiResponseProcessor {
                 'uuid'
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                'uuid'
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('202', response.httpStatusCode)) {
             const body: string = ObjectSerializer.deserialize(
@@ -241,14 +240,6 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -256,6 +247,14 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('202', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -301,14 +300,6 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -316,6 +307,14 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: string = ObjectSerializer.deserialize(
@@ -361,14 +360,6 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -376,6 +367,14 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: DeployServiceEntity = ObjectSerializer.deserialize(
@@ -421,14 +420,6 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -436,6 +427,14 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: Array<ServiceVo> = ObjectSerializer.deserialize(

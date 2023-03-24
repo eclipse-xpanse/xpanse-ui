@@ -3,32 +3,22 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { RequestContext, ResponseContext } from '../http/http';
+import { ResponseContext, RequestContext } from '../http/http';
 import { Configuration } from '../configuration';
 import { Observable, of, from } from '../rxjsStub';
 import { mergeMap, map } from '../rxjsStub';
-import { Billing } from '../models/Billing';
 import { CategoryOclVo } from '../models/CategoryOclVo';
-import { CloudServiceProvider } from '../models/CloudServiceProvider';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployResourceEntity } from '../models/DeployResourceEntity';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { DeployVariable } from '../models/DeployVariable';
-import { Deployment } from '../models/Deployment';
-import { Flavor } from '../models/Flavor';
 import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
-import { ProviderOclVo } from '../models/ProviderOclVo';
-import { Region } from '../models/Region';
 import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
-import { VersionOclVo } from '../models/VersionOclVo';
-
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 export class ObservableAdminApi {
     private requestFactory: AdminApiRequestFactory;
     private responseProcessor: AdminApiResponseProcessor;

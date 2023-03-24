@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { RequestContext, HttpMethod } from './http/http';
 
 export interface BaseServerConfiguration {

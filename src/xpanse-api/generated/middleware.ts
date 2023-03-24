@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { RequestContext, ResponseContext } from './http/http';
 import { Observable, from } from './rxjsStub';
 
