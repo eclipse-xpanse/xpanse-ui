@@ -15,7 +15,6 @@
  * Do not edit the class manually.
  */
 
-
 /**
  * The variables for the deployment, which will be passed to the deployer
  */

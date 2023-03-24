@@ -33,7 +33,6 @@ import { ObservableServiceVendorApi } from './ObservableAPI';
 
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 
-
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
 

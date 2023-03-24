@@ -75,7 +75,6 @@ export class ObservableAdminApi {
     }
 }
 
-
 export class ObservableServiceApi {
     private requestFactory: ServiceApiRequestFactory;
     private responseProcessor: ServiceApiResponseProcessor;
@@ -249,7 +248,6 @@ export class ObservableServiceApi {
             );
     }
 }
-
 
 export class ObservableServiceVendorApi {
     private requestFactory: ServiceVendorApiRequestFactory;
