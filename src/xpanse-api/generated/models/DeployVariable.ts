@@ -24,17 +24,21 @@ export class DeployVariable {
      */
     'name': string;
     /**
-     * The description for the deploy variable
-     */
-    'description': string;
-    /**
      * The kind of the deploy variable
      */
     'kind': DeployVariableKindEnum;
     /**
      * The type of the deploy variable
      */
-    'type': string;
+    'type': DeployVariableTypeEnum;
+    /**
+     * The example value for the deploy variable
+     */
+    'example'?: string;
+    /**
+     * The description for the deploy variable
+     */
+    'description': string;
     /**
      * The value of the deploy variable
      */
@@ -58,12 +62,6 @@ export class DeployVariable {
             format: '',
         },
         {
-            name: 'description',
-            baseName: 'description',
-            type: 'string',
-            format: '',
-        },
-        {
             name: 'kind',
             baseName: 'kind',
             type: 'DeployVariableKindEnum',
@@ -72,6 +70,18 @@ export class DeployVariable {
         {
             name: 'type',
             baseName: 'type',
+            type: 'DeployVariableTypeEnum',
+            format: '',
+        },
+        {
+            name: 'example',
+            baseName: 'example',
+            type: 'string',
+            format: '',
+        },
+        {
+            name: 'description',
+            baseName: 'description',
             type: 'string',
             format: '',
         },
@@ -103,3 +113,4 @@ export class DeployVariable {
 }
 
 export type DeployVariableKindEnum = 'fix_env' | 'fix_variable' | 'env' | 'variable';
+export type DeployVariableTypeEnum = 'string' | 'number';

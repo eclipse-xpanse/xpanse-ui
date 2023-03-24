@@ -19,23 +19,23 @@ export class ServiceVo {
     /**
      * The ID of the service
      */
-    'id'?: string;
+    'id': string;
     /**
      * The catalog of the service
      */
-    'category'?: ServiceVoCategoryEnum;
+    'category': ServiceVoCategoryEnum;
     /**
      * The name of the service
      */
-    'name'?: string;
+    'name': string;
     /**
      * The version of the service
      */
-    'version'?: string;
+    'version': string;
     /**
      * The provider of the service
      */
-    'csp'?: ServiceVoCspEnum;
+    'csp': ServiceVoCspEnum;
     /**
      * The flavor of the service
      */
@@ -43,7 +43,7 @@ export class ServiceVo {
     /**
      * The state of the service
      */
-    'serviceState'?: ServiceVoServiceStateEnum;
+    'serviceState': ServiceVoServiceStateEnum;
 
     static readonly discriminator: string | undefined = undefined;
 

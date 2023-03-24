@@ -24,11 +24,11 @@ export class VersionOclVo {
     /**
      * Version of the registered service.
      */
-    'version'?: string;
+    'version': string;
     /**
      * List of the registered services group by service version.
      */
-    'cloudProvider'?: Array<ProviderOclVo>;
+    'cloudProvider': Array<ProviderOclVo>;
 
     static readonly discriminator: string | undefined = undefined;
 

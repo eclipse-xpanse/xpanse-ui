@@ -59,19 +59,19 @@ export class OclDetailVo {
     /**
      * ID of the registered service.
      */
-    'id'?: string;
+    'id': string;
     /**
      * Time of register service.
      */
-    'createTime'?: Date;
+    'createTime': Date;
     /**
      * Time of update service.
      */
-    'lastModifiedTime'?: Date;
+    'lastModifiedTime': Date;
     /**
      * State of service.
      */
-    'serviceState'?: OclDetailVoServiceStateEnum;
+    'serviceState': OclDetailVoServiceStateEnum;
 
     static readonly discriminator: string | undefined = undefined;
 

@@ -15,6 +15,7 @@ export * from './Flavor';
 export * from './Ocl';
 export * from './OclDetailVo';
 export * from './ProviderOclVo';
+export * from './Region';
 export * from './RegisterServiceEntity';
 export * from './Response';
 export * from './ServiceVo';

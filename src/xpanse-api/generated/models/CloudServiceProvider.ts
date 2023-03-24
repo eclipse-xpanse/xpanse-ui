@@ -15,6 +15,8 @@
  * Do not edit the class manually.
  */
 
+import { Region } from './Region';
+
 /**
  * The cloud service provider of the managed service
  */
@@ -26,7 +28,7 @@ export class CloudServiceProvider {
     /**
      * The regions of the Cloud Service Provider
      */
-    'regions': Array<string>;
+    'regions': Array<Region>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -40,7 +42,7 @@ export class CloudServiceProvider {
         {
             name: 'regions',
             baseName: 'regions',
-            type: 'Array<string>',
+            type: 'Array<Region>',
             format: '',
         },
     ];

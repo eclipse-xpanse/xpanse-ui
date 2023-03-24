@@ -3,26 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Billing } from './Billing';
-import { CategoryOclVo } from './CategoryOclVo';
-import { CloudServiceProvider } from './CloudServiceProvider';
-import { CreateRequest } from './CreateRequest';
-import { DeployServiceEntity } from './DeployServiceEntity';
-import { DeployVariable } from './DeployVariable';
-import { Deployment } from './Deployment';
-import { Flavor } from './Flavor';
-import { Ocl } from './Ocl';
-import { OclDetailVo } from './OclDetailVo';
-import { ProviderOclVo } from './ProviderOclVo';
-import { RegisterServiceEntity } from './RegisterServiceEntity';
-import { Response } from './Response';
-import { ServiceVo } from './ServiceVo';
-import { SystemStatus } from './SystemStatus';
-import { VersionOclVo } from './VersionOclVo';
-import YAML from 'yaml';
-import { DeployResource } from './DeployResource';
-import { DeployResult } from './DeployResult';
-
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
@@ -35,11 +15,42 @@ export * from './Flavor';
 export * from './Ocl';
 export * from './OclDetailVo';
 export * from './ProviderOclVo';
+export * from './Region';
 export * from './RegisterServiceEntity';
 export * from './Response';
 export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
+
+import YAML from 'yaml';
+import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
+import { CategoryOclVo } from './CategoryOclVo';
+import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';
+import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from './CreateRequest';
+import { DeployResourceEntity, DeployResourceEntityKindEnum } from './DeployResourceEntity';
+import {
+    DeployServiceEntity,
+    DeployServiceEntityCategoryEnum,
+    DeployServiceEntityCspEnum,
+    DeployServiceEntityServiceStateEnum,
+} from './DeployServiceEntity';
+import { DeployVariable, DeployVariableKindEnum, DeployVariableTypeEnum } from './DeployVariable';
+import { Deployment, DeploymentKindEnum } from './Deployment';
+import { Flavor } from './Flavor';
+import { Ocl, OclCategoryEnum } from './Ocl';
+import { OclDetailVo, OclDetailVoCategoryEnum, OclDetailVoServiceStateEnum } from './OclDetailVo';
+import { ProviderOclVo, ProviderOclVoNameEnum } from './ProviderOclVo';
+import { Region } from './Region';
+import {
+    RegisterServiceEntity,
+    RegisterServiceEntityCspEnum,
+    RegisterServiceEntityCategoryEnum,
+    RegisterServiceEntityServiceStateEnum,
+} from './RegisterServiceEntity';
+import { Response } from './Response';
+import { ServiceVo, ServiceVoCategoryEnum, ServiceVoCspEnum, ServiceVoServiceStateEnum } from './ServiceVo';
+import { SystemStatus, SystemStatusHealthStatusEnum } from './SystemStatus';
+import { VersionOclVo } from './VersionOclVo';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -48,7 +59,6 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
     'application/json': Infinity,
     'application/octet-stream': 0,
     'application/x-www-form-urlencoded': 0,
-    'application/x-yaml': 0,
 };
 
 let enumsMap: Set<string> = new Set<string>([
@@ -57,12 +67,12 @@ let enumsMap: Set<string> = new Set<string>([
     'CloudServiceProviderNameEnum',
     'CreateRequestCategoryEnum',
     'CreateRequestCspEnum',
-    'DeployResourceKindEnum',
-    'DeployResultStateEnum',
-    'DeployServiceEntityCspEnum',
+    'DeployResourceEntityKindEnum',
     'DeployServiceEntityCategoryEnum',
+    'DeployServiceEntityCspEnum',
     'DeployServiceEntityServiceStateEnum',
     'DeployVariableKindEnum',
+    'DeployVariableTypeEnum',
     'DeploymentKindEnum',
     'OclCategoryEnum',
     'OclDetailVoCategoryEnum',
@@ -82,8 +92,7 @@ let typeMap: { [index: string]: any } = {
     CategoryOclVo: CategoryOclVo,
     CloudServiceProvider: CloudServiceProvider,
     CreateRequest: CreateRequest,
-    DeployResource: DeployResource,
-    DeployResult: DeployResult,
+    DeployResourceEntity: DeployResourceEntity,
     DeployServiceEntity: DeployServiceEntity,
     DeployVariable: DeployVariable,
     Deployment: Deployment,
@@ -91,6 +100,7 @@ let typeMap: { [index: string]: any } = {
     Ocl: Ocl,
     OclDetailVo: OclDetailVo,
     ProviderOclVo: ProviderOclVo,
+    Region: Region,
     RegisterServiceEntity: RegisterServiceEntity,
     Response: Response,
     ServiceVo: ServiceVo,
@@ -287,10 +297,6 @@ export class ObjectSerializer {
             return JSON.stringify(data);
         }
 
-        if (mediaType === 'application/x-yaml') {
-            return YAML.stringify(data);
-        }
-
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.stringify.');
     }
 
@@ -310,12 +316,12 @@ export class ObjectSerializer {
             return JSON.parse(rawData);
         }
 
-        if (mediaType === 'application/yaml') {
-            return YAML.parse(rawData);
-        }
-
         if (mediaType === 'text/html') {
             return rawData;
+        }
+
+        if (mediaType === 'application/yaml') {
+            return YAML.parse(rawData);
         }
 
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.parse.');

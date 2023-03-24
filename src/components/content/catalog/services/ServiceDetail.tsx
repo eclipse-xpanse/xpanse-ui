@@ -6,14 +6,16 @@
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { OclDetailVo } from '../../../../xpanse-api/generated';
+import { Area } from '../../../utils/Area';
 
 function ServiceDetail({
     serviceDetails,
-    serviceRegions,
+    serviceAreas,
 }: {
     serviceDetails: OclDetailVo;
-    serviceRegions: string[];
+    serviceAreas: Area[];
 }): JSX.Element {
+    const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     return (
         <>
             <div className={'catalog-detail-class'}>
@@ -22,9 +24,9 @@ function ServiceDetail({
                     &nbsp;Available Regions
                 </h3>
                 <Space size={[0, 8]} wrap>
-                    {serviceRegions.map((serviceRegion, index) => (
-                        <Tag key={index} color='default'>
-                            {serviceRegion}
+                    {serviceAreas.map((area, index) => (
+                        <Tag color='orange'>
+                            {area.name}:&nbsp;{area.regions ? area.regions.join(', ') : PLACE_HOLDER_UNKNOWN_VALUE}
                         </Tag>
                     ))}
                 </Space>
