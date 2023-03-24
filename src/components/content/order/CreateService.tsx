@@ -8,7 +8,6 @@ import { To, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Divider, Select, Space, Tabs } from 'antd';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
-    CloudServiceProviderNameEnum,
     CreateRequestCategoryEnum,
     CreateRequestCspEnum,
     Flavor,
@@ -17,25 +16,11 @@ import {
     RegisterServiceEntity,
 } from '../../../xpanse-api/generated';
 import { OrderSubmitProps } from './OrderSubmit';
-import { DeployParam } from './orderInputItem/OrderCommon';
+import { DeployParam } from './formElement/Common';
 import Navigate from './Navigate';
 import { Tab } from 'rc-tabs/lib/interface';
-import { HuaWeiLogo, AzureLogo, AlibabaLogo, AWSLogo, XpanseLogo } from './CSPLogo';
 import { Area } from '../../utils/Area';
-
-interface CSP {
-    name: string;
-    icon?: string;
-    logo?: string;
-}
-
-const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
-    ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
-    ['azure', { name: 'Azure', logo: AzureLogo }],
-    ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
-    ['openstack', { name: 'Openstack', logo: XpanseLogo }],
-    ['aws', { name: 'aws', logo: AWSLogo }],
-]);
+import CspSelect from './formElement/CspSelect';
 
 function CreateService(): JSX.Element {
     const navigate = useNavigate();
@@ -45,14 +30,12 @@ function CreateService(): JSX.Element {
     const [versionValue, setVersionValue] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
     const [categoryName, setCategoryName] = useState<string>('');
-    const [service, setService] = useState<Ocl | undefined>(undefined);
     const [versionMapper, setVersionMapper] = useState<Map<string, RegisterServiceEntity[]>>(
         new Map<string, RegisterServiceEntity[]>()
     );
     //select cloudProvider
-    const [cloudProviderValue, setCloudProviderValue] = useState<string>('');
-    const [csp, setCsp] = useState<CSP[]>([]);
-    const [isSelected, setIsSelected] = useState<number>();
+    const [selectCsp, setSelectCsp] = useState<string>('');
+
     //select flavor
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [flavorOptions, setFlavorOptions] = useState<{ value: string; label: string }[]>([]);
@@ -70,10 +53,7 @@ function CreateService(): JSX.Element {
     const handleChangeVersion = (value: string) => {
         setVersionValue(value);
     };
-    const onChangeCloudProvider = (key: string, index: number) => {
-        setCloudProviderValue(key.charAt(0).toLowerCase() + key.slice(1));
-        setIsSelected(index);
-    };
+
     const handleChangeFlavor = (value: string) => {
         setFlavorValue(value);
     };
@@ -119,6 +99,7 @@ function CreateService(): JSX.Element {
                 });
                 setVersionOptions(versions);
                 setVersionValue(versions[0].value);
+                setSelectCsp(result.get(versions[0].value)?.at(0)?.csp as string);
                 updateArea(versions[0].value, result);
             } else {
                 return;
@@ -166,27 +147,9 @@ function CreateService(): JSX.Element {
                 });
                 areaMapper.set(v.cloudServiceProvider.name || '', areas || []);
                 flavorMapper.set(v.serviceVersion || '', v.flavors || []);
-                setCloudProviderValue(v.cloudServiceProvider.name);
             });
         setAreaMapper(areaMapper);
         setFlavorMapper(flavorMapper);
-
-        let cspItems: CSP[] = [];
-        if (oclList.length > 0) {
-            oclList.forEach((item) => {
-                if (item.serviceVersion === version) {
-                    if (item && item.cloudServiceProvider) {
-                        cspItems.push({
-                            name: cspMap.get(item.cloudServiceProvider.name)?.name as string,
-                            logo: cspMap.get(item.cloudServiceProvider.name)?.logo,
-                        });
-                        setService(item);
-                        setIsSelected(oclList.indexOf(item));
-                    }
-                }
-            });
-            setCsp(cspItems);
-        }
     }
 
     useEffect(() => {
@@ -195,7 +158,7 @@ function CreateService(): JSX.Element {
 
     //set area
     useEffect(() => {
-        const areaList: Area[] = areaMapper.get(cloudProviderValue) || [];
+        const areaList: Area[] = areaMapper.get(selectCsp) || [];
         setAreaList(areaList);
         if (areaList.length > 0) {
             const areaItems: Tab[] = areaList.map((area: Area) => {
@@ -216,7 +179,7 @@ function CreateService(): JSX.Element {
         } else {
             return;
         }
-    }, [cloudProviderValue, areaMapper]);
+    }, [selectCsp, areaMapper]);
 
     //set region
     useEffect(() => {
@@ -262,17 +225,34 @@ function CreateService(): JSX.Element {
     }, [versionValue, flavorMapper]);
 
     const gotoOrderSubmit = function () {
+        let service: Ocl = new Ocl();
+        versionMapper.forEach((v, k) => {
+            if (k === versionValue) {
+                let oclList: Ocl[] = [];
+                v.map((registerServiceEntity) => {
+                    if (registerServiceEntity.ocl instanceof Ocl) {
+                        oclList.push(registerServiceEntity.ocl);
+                    }
+                });
+                oclList.forEach((item) => {
+                    if (item.serviceVersion === versionValue && item?.cloudServiceProvider.name === selectCsp) {
+                        service = item;
+                    }
+                });
+            }
+        });
+
         let props: OrderSubmitProps = {
             category: categoryName as CreateRequestCategoryEnum,
             name: serviceName,
             version: versionValue,
             region: regionValue,
-            csp: cloudProviderValue as CreateRequestCspEnum,
+            csp: selectCsp as CreateRequestCspEnum,
             flavor: flavorValue,
             params: new Array<DeployParam>(),
         };
 
-        if (service !== undefined && service?.deployment.context !== undefined) {
+        if (service?.deployment.context !== undefined) {
             for (let param of service?.deployment.context) {
                 props.params.push({
                     name: param.name,
@@ -294,6 +274,10 @@ function CreateService(): JSX.Element {
         });
     };
 
+    const onChangeCloudProvider = (key: string, index: number) => {
+        setSelectCsp(key.charAt(0).toLowerCase() + key.slice(1));
+    };
+
     return (
         <>
             <div>
@@ -311,25 +295,12 @@ function CreateService(): JSX.Element {
                     />
                 </div>
                 <Divider />
-                <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
-                <div className={'services-content-body'}>
-                    {csp.map((item, index) => {
-                        return (
-                            <div
-                                onClick={() => {
-                                    onChangeCloudProvider(item.name, index);
-                                }}
-                                key={index}
-                                className={
-                                    isSelected === index ? 'cloud-provider-select-hover' : 'cloud-provider-select'
-                                }
-                            >
-                                <img src={item.logo} alt={item.name} />
-                                <div className='service-type-option-info' />
-                            </div>
-                        );
-                    })}
-                </div>
+                <CspSelect
+                    selectCsp={selectCsp as CreateRequestCspEnum}
+                    versionMapper={versionMapper}
+                    version={versionValue}
+                    onChangeHandler={onChangeCloudProvider}
+                />
                 <div className={'cloud-provider-tab-class content-title'}>
                     <Tabs
                         type='card'
