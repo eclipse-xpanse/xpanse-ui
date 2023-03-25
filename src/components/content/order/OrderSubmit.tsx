@@ -35,19 +35,12 @@ function OrderItem(props: DeployParamItem) {
 }
 
 export interface OrderSubmitProps {
-    // The category of the service
     category: CreateRequestCategoryEnum;
-    // The name of the service
     name: string;
-    // The version of service
     version: string;
-    // The region of the provider.
     region: string;
-    // The csp of the Service.
     csp: CreateRequestCspEnum;
-    // The flavor of the Service.
     flavor: string;
-    // The deployment context
     params: DeployParam[];
 }
 

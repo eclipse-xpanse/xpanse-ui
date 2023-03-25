@@ -4,13 +4,8 @@
  */
 
 import { useEffect, useState } from 'react';
-import {
-    CloudServiceProviderNameEnum,
-    CreateRequestCspEnum,
-    Ocl,
-    RegisterServiceEntity,
-} from '../../../../xpanse-api/generated';
-import { AlibabaLogo, AWSLogo, AzureLogo, HuaWeiLogo, XpanseLogo } from '../CSPLogo';
+import { CloudServiceProviderNameEnum, Ocl, RegisterServiceEntity } from '../../../../xpanse-api/generated';
+import { AlibabaLogo, AWSLogo, AzureLogo, HuaWeiLogo, XpanseLogo } from '../CspLogo';
 
 interface CSP {
     name: string;
@@ -27,21 +22,19 @@ const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
 ]);
 
 export default function CspSelect({
-    selectCsp,
     versionMapper,
-    version,
+    selectVersion,
     onChangeHandler,
 }: {
-    selectCsp: CreateRequestCspEnum;
     versionMapper: Map<string, RegisterServiceEntity[]>;
-    version: string;
-    onChangeHandler: (key: string, index: number) => void;
+    selectVersion: string;
+    onChangeHandler: (csp: string) => void;
 }): JSX.Element {
     const [csp, setCsp] = useState<CSP[]>([]);
     const [isSelected, setIsSelected] = useState<number>();
 
     const onChangeCloudProvider = (key: string, index: number) => {
-        onChangeHandler(key, index);
+        onChangeHandler(key.charAt(0).toLowerCase() + key.slice(1));
         setIsSelected(index);
     };
 
@@ -50,8 +43,9 @@ export default function CspSelect({
         let oclList: Ocl[] = [];
 
         versionMapper.forEach((v, k) => {
-            if (k === version) {
+            if (k === selectVersion) {
                 let ocls: Ocl[] = [];
+                // eslint-disable-next-line array-callback-return
                 v.map((registerServiceEntity) => {
                     if (registerServiceEntity.ocl instanceof Ocl) {
                         ocls.push(registerServiceEntity.ocl);
@@ -63,22 +57,20 @@ export default function CspSelect({
 
         if (oclList.length > 0) {
             oclList.forEach((item) => {
-                if (item.serviceVersion === version) {
+                if (item.serviceVersion === selectVersion) {
                     if (item && item.cloudServiceProvider) {
                         cspItems.push({
                             name: cspMap.get(item.cloudServiceProvider.name)?.name as string,
                             logo: cspMap.get(item.cloudServiceProvider.name)?.logo,
                         });
-
-                        if (item.cloudServiceProvider.name === selectCsp) {
-                            setIsSelected(oclList.indexOf(item));
-                        }
                     }
                 }
             });
             setCsp(cspItems);
+            onChangeHandler(oclList[0].cloudServiceProvider.name);
+            setIsSelected(oclList.indexOf(oclList[0]));
         }
-    }, [versionMapper, version]);
+    }, [versionMapper, selectVersion]);
 
     return (
         <>
