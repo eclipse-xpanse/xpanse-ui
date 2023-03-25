@@ -1,11 +1,16 @@
-// TODO: better import syntax?
-import { BaseAPIRequestFactory, RequiredError, COLLECTION_FORMATS } from './baseapi';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import { BaseAPIRequestFactory } from './baseapi';
 import { Configuration } from '../configuration';
 import { RequestContext, HttpMethod, ResponseContext, HttpFile } from '../http/http';
 import { ObjectSerializer } from '../models/ObjectSerializer';
 import { ApiException } from './exception';
-import { canConsumeForm, isCodeInRange } from '../util';
+import { isCodeInRange } from '../util';
 import { SecurityAuthentication } from '../auth/auth';
+import { Response } from '../models/Response';
 import { SystemStatus } from '../models/SystemStatus';
 
 /**
@@ -52,14 +57,6 @@ export class AdminApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -67,6 +64,14 @@ export class AdminApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: SystemStatus = ObjectSerializer.deserialize(

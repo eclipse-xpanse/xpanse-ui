@@ -55,7 +55,7 @@ function Services(): JSX.Element {
             <div className={'services-content-body'}>
                 {services.map((item, index) => {
                     return (
-                        <div key={index} className={'service-type-option-detail'} onClick={(e) => onClicked(item.name)}>
+                        <div key={index} className={'service-type-option-detail'} onClick={() => onClicked(item.name)}>
                             <div className='service-type-option-image'>
                                 <img className='service-type-option-service-icon' src={item.icon} alt={'App'} />
                             </div>

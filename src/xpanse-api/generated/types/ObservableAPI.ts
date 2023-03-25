@@ -1,19 +1,24 @@
-import { ResponseContext, RequestContext, HttpFile } from '../http/http';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import { ResponseContext, RequestContext } from '../http/http';
 import { Configuration } from '../configuration';
 import { Observable, of, from } from '../rxjsStub';
 import { mergeMap, map } from '../rxjsStub';
-
-import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { SystemStatus } from '../models/SystemStatus';
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
+import { CategoryOclVo } from '../models/CategoryOclVo';
 import { CreateRequest } from '../models/CreateRequest';
 import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { ServiceVo } from '../models/ServiceVo';
+import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
 import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
-import { CategoryOclVo } from '../models/CategoryOclVo';
-import { Ocl } from '../models/Ocl';
+import { Response } from '../models/Response';
+import { ServiceVo } from '../models/ServiceVo';
+import { SystemStatus } from '../models/SystemStatus';
+import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 export class ObservableAdminApi {
     private requestFactory: AdminApiRequestFactory;
     private responseProcessor: AdminApiResponseProcessor;
@@ -59,6 +64,7 @@ export class ObservableAdminApi {
             );
     }
 }
+
 export class ObservableServiceApi {
     private requestFactory: ServiceApiRequestFactory;
     private responseProcessor: ServiceApiResponseProcessor;
@@ -232,6 +238,7 @@ export class ObservableServiceApi {
             );
     }
 }
+
 export class ObservableServiceVendorApi {
     private requestFactory: ServiceVendorApiRequestFactory;
     private responseProcessor: ServiceVendorApiResponseProcessor;

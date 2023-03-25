@@ -6,8 +6,9 @@
 import { useEffect, useState } from 'react';
 import { Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { Area, CategoryOclVo, OclDetailVo, ProviderOclVo, VersionOclVo } from '../../../../xpanse-api/generated';
+import { CategoryOclVo, OclDetailVo, ProviderOclVo, Region, VersionOclVo } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
+import { Area } from '../../../utils/Area';
 
 let lastServiceName: string = '';
 
@@ -26,6 +27,19 @@ function ServiceProvider({
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = serviceName.split('@');
 
+    function group(list: any[], key: string): Map<string, any[]> {
+        let map: Map<string, any[]> = new Map<string, any[]>();
+        list.map((val) => {
+            if (!map.has(val[key])) {
+                map.set(
+                    val[key],
+                    list.filter((data) => data[key] === val[key])
+                );
+            }
+        });
+        return map;
+    }
+
     const items: Tab[] = categoryOclData
         .filter((service: CategoryOclVo) => service.name === name)
         .flatMap((service: CategoryOclVo) => service.versions)
@@ -40,7 +54,22 @@ function ServiceProvider({
                 }
                 const key = serviceName + '@' + cloudProvider.name;
                 detailMapper.set(key, cloudProvider.details[0]);
-                areaMapper.set(key, cloudProvider.areas || []);
+                const result: Map<string, Region[]> = group(cloudProvider.regions, 'area');
+                let areas: Area[] = [];
+
+                result.forEach((v, k) => {
+                    let regions: string[] = [];
+
+                    v.forEach((region) => {
+                        if (region.name != null) {
+                            regions.push(region.name);
+                        }
+                    });
+                    let area: Area = { name: k, regions: regions };
+                    areas.push(area);
+                });
+
+                areaMapper.set(key, areas);
                 const name = cloudProvider.name!.toString();
                 return {
                     label: name,

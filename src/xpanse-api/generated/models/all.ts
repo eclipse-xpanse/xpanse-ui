@@ -1,4 +1,8 @@
-export * from './Area';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
@@ -11,6 +15,7 @@ export * from './Flavor';
 export * from './Ocl';
 export * from './OclDetailVo';
 export * from './ProviderOclVo';
+export * from './Region';
 export * from './RegisterServiceEntity';
 export * from './Response';
 export * from './ServiceVo';

@@ -1,39 +1,56 @@
-import { Area } from './Area';
-import { Billing } from './Billing';
-import { CategoryOclVo } from './CategoryOclVo';
-import { CloudServiceProvider } from './CloudServiceProvider';
-import { CreateRequest } from './CreateRequest';
-import { DeployResourceEntity } from './DeployResourceEntity';
-import { DeployVariable } from './DeployVariable';
-import { Deployment } from './Deployment';
-import { Flavor } from './Flavor';
-import { Ocl } from './Ocl';
-import { OclDetailVo } from './OclDetailVo';
-import { ProviderOclVo } from './ProviderOclVo';
-import { RegisterServiceEntity } from './RegisterServiceEntity';
-import { ServiceVo } from './ServiceVo';
-import { SystemStatus } from './SystemStatus';
-import { VersionOclVo } from './VersionOclVo';
-import { DeployServiceEntity } from './DeployServiceEntity';
-import YAML from 'yaml';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
 
-export * from './Area';
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
 export * from './CreateRequest';
 export * from './DeployResourceEntity';
+export * from './DeployServiceEntity';
 export * from './DeployVariable';
 export * from './Deployment';
 export * from './Flavor';
 export * from './Ocl';
 export * from './OclDetailVo';
 export * from './ProviderOclVo';
+export * from './Region';
 export * from './RegisterServiceEntity';
 export * from './Response';
 export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
+
+import YAML from 'yaml';
+import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
+import { CategoryOclVo } from './CategoryOclVo';
+import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';
+import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from './CreateRequest';
+import { DeployResourceEntity, DeployResourceEntityKindEnum } from './DeployResourceEntity';
+import {
+    DeployServiceEntity,
+    DeployServiceEntityCategoryEnum,
+    DeployServiceEntityCspEnum,
+    DeployServiceEntityServiceStateEnum,
+} from './DeployServiceEntity';
+import { DeployVariable, DeployVariableKindEnum, DeployVariableTypeEnum } from './DeployVariable';
+import { Deployment, DeploymentKindEnum } from './Deployment';
+import { Flavor } from './Flavor';
+import { Ocl, OclCategoryEnum } from './Ocl';
+import { OclDetailVo, OclDetailVoCategoryEnum, OclDetailVoServiceStateEnum } from './OclDetailVo';
+import { ProviderOclVo, ProviderOclVoNameEnum } from './ProviderOclVo';
+import { Region } from './Region';
+import {
+    RegisterServiceEntity,
+    RegisterServiceEntityCspEnum,
+    RegisterServiceEntityCategoryEnum,
+    RegisterServiceEntityServiceStateEnum,
+} from './RegisterServiceEntity';
+import { Response } from './Response';
+import { ServiceVo, ServiceVoCategoryEnum, ServiceVoCspEnum, ServiceVoServiceStateEnum } from './ServiceVo';
+import { SystemStatus, SystemStatusHealthStatusEnum } from './SystemStatus';
+import { VersionOclVo } from './VersionOclVo';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -71,7 +88,6 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: { [index: string]: any } = {
-    Area: Area,
     Billing: Billing,
     CategoryOclVo: CategoryOclVo,
     CloudServiceProvider: CloudServiceProvider,
@@ -84,6 +100,7 @@ let typeMap: { [index: string]: any } = {
     Ocl: Ocl,
     OclDetailVo: OclDetailVo,
     ProviderOclVo: ProviderOclVo,
+    Region: Region,
     RegisterServiceEntity: RegisterServiceEntity,
     Response: Response,
     ServiceVo: ServiceVo,

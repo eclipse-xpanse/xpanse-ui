@@ -7,10 +7,10 @@ import Navigate from './Navigate';
 import '../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
-import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './orderInputItem/OrderCommon';
-import { OrderTextInput } from './orderInputItem/OrderTextInput';
-import { OrderNumberInput } from './orderInputItem/OrderNumberInput';
-import { OrderSwitch } from './orderInputItem/OrderSwitch';
+import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './formElement/Common';
+import { TextInput } from './formElement/TextInput';
+import { NumberInput } from './formElement/NumberInput';
+import { Switch } from './formElement/Switch';
 import { Alert, Button, Form } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
@@ -22,32 +22,25 @@ const waitServicePeriod: number = 5000;
 
 function OrderItem(props: DeployParamItem) {
     if (props.item.type === 'string') {
-        return <OrderTextInput item={props.item} onChangeHandler={props.onChangeHandler} />;
+        return <TextInput item={props.item} onChangeHandler={props.onChangeHandler} />;
     }
     if (props.item.type === 'number') {
-        return <OrderNumberInput item={props.item} onChangeHandler={props.onChangeHandler} />;
+        return <NumberInput item={props.item} onChangeHandler={props.onChangeHandler} />;
     }
     if (props.item.type === 'boolean') {
-        return <OrderSwitch item={props.item} onChangeHandler={props.onChangeHandler} />;
+        return <Switch item={props.item} onChangeHandler={props.onChangeHandler} />;
     }
 
     return <></>;
 }
 
 export interface OrderSubmitProps {
-    // The category of the service
     category: CreateRequestCategoryEnum;
-    // The name of the service
     name: string;
-    // The version of service
     version: string;
-    // The region of the provider.
     region: string;
-    // The csp of the Service.
     csp: CreateRequestCspEnum;
-    // The flavor of the Service.
     flavor: string;
-    // The deployment context
     params: DeployParam[];
 }
 

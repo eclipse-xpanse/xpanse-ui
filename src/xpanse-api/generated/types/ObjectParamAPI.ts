@@ -1,8 +1,24 @@
-import { ResponseContext, RequestContext, HttpFile } from '../http/http';
-import { Configuration } from '../configuration';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
 
-import { ObservableAdminApi, ObservableServiceApi } from './ObservableAPI';
+import { Configuration } from '../configuration';
+import { CategoryOclVo } from '../models/CategoryOclVo';
+import { CreateRequest } from '../models/CreateRequest';
+import { DeployServiceEntity } from '../models/DeployServiceEntity';
+import { Ocl } from '../models/Ocl';
+import { OclDetailVo } from '../models/OclDetailVo';
+import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
+import { Response } from '../models/Response';
+import { ServiceVo } from '../models/ServiceVo';
+import { SystemStatus } from '../models/SystemStatus';
+import { ObservableAdminApi } from './ObservableAPI';
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
+import { ObservableServiceApi } from './ObservableAPI';
+import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
+import { ObservableServiceVendorApi } from './ObservableAPI';
+import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 
 export interface AdminApiHealthRequest {}
 
@@ -113,18 +129,6 @@ export class ObjectServiceApi {
         return this.api.services(options).toPromise();
     }
 }
-
-import { ObservableServiceVendorApi } from './ObservableAPI';
-import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { SystemStatus } from '../models/SystemStatus';
-import { CreateRequest } from '../models/CreateRequest';
-import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
-import { ServiceVo } from '../models/ServiceVo';
-import { Ocl } from '../models/Ocl';
-import { OclDetailVo } from '../models/OclDetailVo';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
-import { CategoryOclVo } from '../models/CategoryOclVo';
 
 export interface ServiceVendorApiDetailRequest {
     /**

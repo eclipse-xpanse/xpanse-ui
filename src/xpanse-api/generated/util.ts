@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 /**
  * Returns if a specific http code is in a given code range
  * where the code range is defined as a combination of digits

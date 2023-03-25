@@ -5,7 +5,6 @@
 
 import { RocketOutlined, SettingOutlined } from '@ant-design/icons';
 import { Card, Divider } from 'antd';
-import Navigate from '../order/Navigate';
 
 function WelcomeCard(): JSX.Element {
     return (

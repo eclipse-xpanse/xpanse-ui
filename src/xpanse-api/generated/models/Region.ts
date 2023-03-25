@@ -15,25 +15,19 @@
  * Do not edit the class manually.
  */
 
-import { OclDetailVo } from './OclDetailVo';
-import { Region } from './Region';
-
 /**
- * List of the registered services group by service version.
+ * The regions of the Cloud Service Provider
  */
-export class ProviderOclVo {
+export class Region {
     /**
-     * The Cloud Service Provider.
+     * The name of the Region
      */
-    'name': ProviderOclVoNameEnum;
+    'name': string;
+
     /**
-     * The regions of the Cloud Service Provider.
+     * The area which the region belongs to, such as Asia, Europe, Africa
      */
-    'regions': Array<Region>;
-    /**
-     * The list of the registered services.
-     */
-    'details': Array<OclDetailVo>;
+    'area'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -41,28 +35,20 @@ export class ProviderOclVo {
         {
             name: 'name',
             baseName: 'name',
-            type: 'ProviderOclVoNameEnum',
+            type: 'string',
             format: '',
         },
         {
-            name: 'regions',
-            baseName: 'regions',
-            type: 'Array<Region>',
-            format: '',
-        },
-        {
-            name: 'details',
-            baseName: 'details',
-            type: 'Array<OclDetailVo>',
+            name: 'area',
+            baseName: 'area',
+            type: 'string',
             format: '',
         },
     ];
 
     static getAttributeTypeMap() {
-        return ProviderOclVo.attributeTypeMap;
+        return Region.attributeTypeMap;
     }
 
     public constructor() {}
 }
-
-export type ProviderOclVoNameEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';

@@ -28,12 +28,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -68,12 +68,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -100,12 +100,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -141,12 +141,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -170,12 +170,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "202": {
@@ -225,12 +225,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -263,12 +263,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -297,12 +297,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -322,12 +322,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -360,12 +360,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -386,12 +386,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "202": {
@@ -411,12 +411,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -445,12 +445,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -474,12 +474,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -519,12 +519,12 @@
                         "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -546,19 +546,6 @@
                     "success": { "type": "boolean", "description": "The success boolean of response." }
                 }
             },
-            "Area": {
-                "required": ["name", "regions"],
-                "type": "object",
-                "properties": {
-                    "name": { "type": "string", "description": "The name of the area" },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the area",
-                        "items": { "type": "string", "description": "The regions of the area" }
-                    }
-                },
-                "description": "The area of the regions"
-            },
             "Billing": {
                 "required": ["currency", "model", "period"],
                 "type": "object",
@@ -578,7 +565,7 @@
                 "description": "The billing policy of the managed service"
             },
             "CloudServiceProvider": {
-                "required": ["areas", "name"],
+                "required": ["name", "regions"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -586,10 +573,10 @@
                         "description": "The Cloud Service Provider. valid values: aws, azure, alibaba, huawei",
                         "enum": ["aws", "azure", "alibaba", "huawei", "openstack"]
                     },
-                    "areas": {
+                    "regions": {
                         "type": "array",
-                        "description": "The area of the regions",
-                        "items": { "$ref": "#/components/schemas/Area" }
+                        "description": "The regions of the Cloud Service Provider",
+                        "items": { "$ref": "#/components/schemas/Region" }
                     }
                 },
                 "description": "The cloud service provider of the managed service"
@@ -607,7 +594,7 @@
                     "type": {
                         "type": "string",
                         "description": "The type of the deploy variable",
-                        "enum": ["string", "number", "boolean"]
+                        "enum": ["string", "number"]
                     },
                     "example": { "type": "string", "description": "The example value for the deploy variable" },
                     "description": { "type": "string", "description": "The description for the deploy variable" },
@@ -699,6 +686,12 @@
                     },
                     "billing": { "$ref": "#/components/schemas/Billing" }
                 }
+            },
+            "Region": {
+                "required": ["name"],
+                "type": "object",
+                "properties": { "name": { "type": "string" }, "area": { "type": "string" } },
+                "description": "The regions of the Cloud Service Provider"
             },
             "CreateRequest": {
                 "required": ["category", "csp", "flavor", "name", "region", "version"],
@@ -968,7 +961,7 @@
                 }
             },
             "ProviderOclVo": {
-                "required": ["areas", "details", "name"],
+                "required": ["details", "name", "regions"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -976,10 +969,10 @@
                         "description": "The Cloud Service Provider.",
                         "enum": ["aws", "azure", "alibaba", "huawei", "openstack"]
                     },
-                    "areas": {
+                    "regions": {
                         "type": "array",
                         "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Area" }
+                        "items": { "$ref": "#/components/schemas/Region" }
                     },
                     "details": {
                         "type": "array",

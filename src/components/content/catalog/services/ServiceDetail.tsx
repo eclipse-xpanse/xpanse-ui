@@ -5,7 +5,8 @@
 
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Area, OclDetailVo } from '../../../../xpanse-api/generated';
+import { OclDetailVo } from '../../../../xpanse-api/generated';
+import { Area } from '../../../utils/Area';
 
 function ServiceDetail({
     serviceDetails,
