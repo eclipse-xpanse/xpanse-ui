@@ -29,7 +29,7 @@ function ServiceProvider({
 
     function group(list: any[], key: string): Map<string, any[]> {
         let map: Map<string, any[]> = new Map<string, any[]>();
-        list.map((val) => {
+        list.forEach((val) => {
             if (!map.has(val[key])) {
                 map.set(
                     val[key],
