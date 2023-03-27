@@ -8,9 +8,19 @@ import './styles/app.css';
 import Home from './components/content/home/Home';
 import LoginScreen from './components/content/login/LoginScreen';
 import Protected from './components/protectedRoutes/ProtectedRoute';
-import { catalogPageRoute, homePageRoute, registerPageRoute } from './components/utils/constants';
+import {
+    catalogPageRoute,
+    createServicePageRoute,
+    homePageRoute,
+    orderPageRoute,
+    registerPageRoute,
+    servicesPageRoute,
+} from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Catalog from './components/content/catalog/Catalog';
+import Services from './components/content/order/Services';
+import CreateService from './components/content/order/CreateService';
+import OrderSubmitPage from './components/content/order/OrderSubmit';
 
 function App(): JSX.Element {
     return (
@@ -36,6 +46,30 @@ function App(): JSX.Element {
                 element={
                     <Protected>
                         <Catalog />
+                    </Protected>
+                }
+            />
+            <Route
+                path={orderPageRoute}
+                element={
+                    <Protected>
+                        <OrderSubmitPage />
+                    </Protected>
+                }
+            />
+            <Route
+                path={servicesPageRoute}
+                element={
+                    <Protected>
+                        <Services />
+                    </Protected>
+                }
+            />
+            <Route
+                path={createServicePageRoute}
+                element={
+                    <Protected>
+                        <CreateService />
                     </Protected>
                 }
             />
