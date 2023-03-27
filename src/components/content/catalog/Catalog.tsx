@@ -56,13 +56,7 @@ function Catalog(): JSX.Element {
 
     useEffect(() => {
         setServiceTree(
-            <Tree
-                defaultExpandAll={true}
-                autoExpandParent={true}
-                onSelect={onSelect}
-                treeData={treeData}
-                expandedKeys={treeData.map((dataNode) => dataNode.key)}
-            />
+            <Tree defaultExpandAll={true} autoExpandParent={true} onSelect={onSelect} treeData={treeData} />
         );
     }, [treeData]);
 
