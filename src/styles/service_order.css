@@ -215,3 +215,12 @@
     font-size: 14px;
     font-weight: bold;
 }
+
+.service-blank-class {
+    display: flex;
+    align-items: center;
+    text-align: justify;
+    width: 400px;
+    height: 200px;
+    margin: 0 auto;
+}

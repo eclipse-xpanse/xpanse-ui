@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../utils/constants';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { Empty } from 'antd';
 
 function Services(): JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string }[]>([]);
@@ -41,33 +42,47 @@ function Services(): JSX.Element {
                 });
                 setServices(serviceList);
             } else {
-                return;
+                let serviceList: { name: string; content: string; icon: string }[] = [];
+                setServices(serviceList);
             }
         });
     }, [location]);
 
     return (
-        <div className={'services-content'}>
-            <div className={'content-title'}>
-                <FormOutlined />
-                &nbsp;Select Service
-            </div>
-            <div className={'services-content-body'}>
-                {services.map((item, index) => {
-                    return (
-                        <div key={index} className={'service-type-option-detail'} onClick={() => onClicked(item.name)}>
-                            <div className='service-type-option-image'>
-                                <img className='service-type-option-service-icon' src={item.icon} alt={'App'} />
-                            </div>
-                            <div className='service-type-option-info'>
-                                <span className='service-type-option'>{item.name}</span>
-                                <span className='service-type-option-description'>{item.content}</span>
-                            </div>
-                        </div>
-                    );
-                })}
-            </div>
-        </div>
+        <>
+            {services.length > 0 ? (
+                <div className={'services-content'}>
+                    <div className={'content-title'}>
+                        <FormOutlined />
+                        &nbsp;Select Service
+                    </div>
+
+                    <div className={'services-content-body'}>
+                        {services.map((item, index) => {
+                            return (
+                                <div
+                                    key={index}
+                                    className={'service-type-option-detail'}
+                                    onClick={() => onClicked(item.name)}
+                                >
+                                    <div className='service-type-option-image'>
+                                        <img className='service-type-option-service-icon' src={item.icon} alt={'App'} />
+                                    </div>
+                                    <div className='service-type-option-info'>
+                                        <span className='service-type-option'>{item.name}</span>
+                                        <span className='service-type-option-description'>{item.content}</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            ) : (
+                <div className={'service-blank-class'}>
+                    <Empty description={'No services available.'} />
+                </div>
+            )}
+        </>
     );
 }
 
