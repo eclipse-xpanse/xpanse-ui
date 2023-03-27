@@ -594,7 +594,7 @@
                     "type": {
                         "type": "string",
                         "description": "The type of the deploy variable",
-                        "enum": ["string", "number"]
+                        "enum": ["string", "number", "boolean"]
                     },
                     "example": { "type": "string", "description": "The example value for the deploy variable" },
                     "description": { "type": "string", "description": "The description for the deploy variable" },

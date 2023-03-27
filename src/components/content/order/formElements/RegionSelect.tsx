@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { RegisterServiceEntity } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
-import { filterAreaList } from './Common';
+import { filterAreaList } from './AreaSelect';
 import { Select, Space } from 'antd';
 
 export default function RegionSelect({
@@ -25,10 +25,13 @@ export default function RegionSelect({
     const [regionOptions, setRegionOptions] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectRegion, setSelectRegion] = useState<string>('');
 
-    const handleChangeRegion = (value: string) => {
-        setSelectRegion(value);
-        onChangeHandler(value);
-    };
+    const handleChangeRegion = useCallback(
+        (value: string) => {
+            setSelectRegion(value);
+            onChangeHandler(value);
+        },
+        [onChangeHandler]
+    );
 
     useEffect(() => {
         const areaList: Area[] = filterAreaList(selectVersion, selectCsp, versionMapper);
@@ -56,7 +59,7 @@ export default function RegionSelect({
         } else {
             return;
         }
-    }, [selectArea, selectCsp, selectVersion, versionMapper]);
+    }, [handleChangeRegion, selectArea, selectCsp, selectVersion, versionMapper]);
 
     return (
         <>

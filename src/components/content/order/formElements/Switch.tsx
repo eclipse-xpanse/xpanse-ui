@@ -4,7 +4,7 @@
  */
 
 import { Form, Switch as AntdSwitch } from 'antd';
-import { DeployParam, SwitchOnChangeHandler } from './Common';
+import { DeployParam, SwitchOnChangeHandler } from './CommonTypes';
 
 export function Switch({
     item,

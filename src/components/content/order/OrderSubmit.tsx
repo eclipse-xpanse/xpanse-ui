@@ -7,10 +7,10 @@ import Navigate from './Navigate';
 import '../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
-import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './formElement/Common';
-import { TextInput } from './formElement/TextInput';
-import { NumberInput } from './formElement/NumberInput';
-import { Switch } from './formElement/Switch';
+import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './formElements/CommonTypes';
+import { TextInput } from './formElements/TextInput';
+import { NumberInput } from './formElements/NumberInput';
+import { Switch } from './formElements/Switch';
 import { Alert, Button, Form } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
@@ -112,7 +112,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         serviceApi
             .serviceDetail(uuid)
             .then((response) => {
-                // success, exit from deploying.
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
                     Tip('success', 'Deploy success.');
@@ -157,13 +156,11 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 console.log('success ', response);
                 Tip('success', response);
                 waitingServiceReady(response, deployTimeout, new Date());
-                // setUuid(response);
             })
             .catch((error) => {
                 console.error(error);
                 Tip('error', 'Create service deploy failed.');
                 setDeploying(false);
-                // setUuid(undefined);
             })
             .finally(() => {});
     }

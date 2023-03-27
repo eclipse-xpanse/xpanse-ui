@@ -45,12 +45,11 @@ export default function CspSelect({
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 let ocls: Ocl[] = [];
-                // eslint-disable-next-line array-callback-return
-                v.map((registerServiceEntity) => {
+                for (let registerServiceEntity of v) {
                     if (registerServiceEntity.ocl instanceof Ocl) {
                         ocls.push(registerServiceEntity.ocl);
                     }
-                });
+                }
                 oclList = ocls;
             }
         });
@@ -70,7 +69,7 @@ export default function CspSelect({
             onChangeHandler(oclList[0].cloudServiceProvider.name);
             setIsSelected(oclList.indexOf(oclList[0]));
         }
-    }, [versionMapper, selectVersion]);
+    }, [versionMapper, selectVersion, onChangeHandler]);
 
     return (
         <>

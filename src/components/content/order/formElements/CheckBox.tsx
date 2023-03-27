@@ -4,7 +4,7 @@
  */
 
 import { Checkbox, Form } from 'antd';
-import { CheckBoxOnChangeHandler, DeployParam } from './Common';
+import { CheckBoxOnChangeHandler, DeployParam } from './CommonTypes';
 
 export function CheckBox({
     item,

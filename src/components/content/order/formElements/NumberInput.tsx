@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { NumberInputEventHandler, DeployParam } from './Common';
+import { NumberInputEventHandler, DeployParam } from './CommonTypes';
 import { Form, InputNumber } from 'antd';
 
 export function NumberInput({

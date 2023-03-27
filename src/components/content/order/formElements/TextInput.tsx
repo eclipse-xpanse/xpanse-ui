@@ -5,7 +5,7 @@
 
 import { Form, Input, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { DeployParam, TextInputEventHandler } from './Common';
+import { DeployParam, TextInputEventHandler } from './CommonTypes';
 
 export function TextInput({
     item,

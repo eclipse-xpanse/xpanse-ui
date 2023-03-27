@@ -3,18 +3,17 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { To, useLocation } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { RegisterServiceEntity } from '../../../xpanse-api/generated';
-import { listToMap } from './formElement/Common';
 import Navigate from './Navigate';
-import CspSelect from './formElement/CspSelect';
-import VersionSelect from './formElement/VersionSelect';
-import AreaSelect from './formElement/AreaSelect';
-import RegionSelect from './formElement/RegionSelect';
-import FlavorSelect from './formElement/FlavorSelect';
-import GoToSubmit from './formElement/GoToSubmit';
+import CspSelect from './formElements/CspSelect';
+import VersionSelect from './formElements/VersionSelect';
+import AreaSelect from './formElements/AreaSelect';
+import RegionSelect from './formElements/RegionSelect';
+import FlavorSelect from './formElements/FlavorSelect';
+import GoToSubmit from './formElements/GoToSubmit';
 
 function CreateService(): JSX.Element {
     const location = useLocation();
@@ -31,25 +30,38 @@ function CreateService(): JSX.Element {
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
 
-    const onChangeVersion = (value: string) => {
+    const onChangeVersion = useCallback((value: string) => {
         setSelectVersion(value);
-    };
+    }, []);
 
-    const onChangeCloudProvider = (csp: string) => {
+    const onChangeCloudProvider = useCallback((csp: string) => {
         setSelectCsp(csp);
-    };
+    }, []);
 
-    const onChangeFlavor = (value: string) => {
+    const onChangeFlavor = useCallback((value: string) => {
         setSelectFlavor(value);
-    };
+    }, []);
 
-    const onChangeAreaValue = (key: string) => {
+    const onChangeAreaValue = useCallback((key: string) => {
         setSelectArea(key);
-    };
+    }, []);
 
-    const onChangeRegion = (value: string) => {
+    const onChangeRegion = useCallback((value: string) => {
         setSelectRegion(value);
-    };
+    }, []);
+
+    function groupRegisterServicesByVersion(registerServiceEntityList: RegisterServiceEntity[]): Map<string, any[]> {
+        let map: Map<string, any[]> = new Map<string, any[]>();
+        for (let registerServiceEntity of registerServiceEntityList) {
+            if (!map.has(registerServiceEntity.version as string)) {
+                map.set(
+                    registerServiceEntity.version as string,
+                    registerServiceEntityList.filter((data) => data.version === registerServiceEntity.version)
+                );
+            }
+        }
+        return map;
+    }
 
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
@@ -62,7 +74,7 @@ function CreateService(): JSX.Element {
         serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
             if (rsp.length > 0) {
                 let versions: { value: string; label: string }[] = [];
-                const result: Map<string, RegisterServiceEntity[]> = listToMap(rsp, 'version');
+                const result: Map<string, RegisterServiceEntity[]> = groupRegisterServicesByVersion(rsp);
                 setVersionMapper(result);
                 result.forEach((v, k) => {
                     let versionItem = { value: k || '', label: k || '' };

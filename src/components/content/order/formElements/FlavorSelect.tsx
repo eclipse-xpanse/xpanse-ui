@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Flavor, Ocl, RegisterServiceEntity } from '../../../../xpanse-api/generated';
 import { Select, Space } from 'antd';
 
@@ -29,43 +29,47 @@ export default function FlavorSelect({
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [flavor, setFlavor] = useState<FlavorItem>({ value: '', label: '', price: '0' });
 
-    const onChangeFlavor = (flavors: FlavorItem[], value: string) => {
-        setSelectFlavor(value);
-        setFlavor(flavors.filter((v) => v.value === value).at(0) as FlavorItem);
-        onChangeHandler(value);
-    };
+    const onChangeFlavor = useCallback(
+        (flavors: FlavorItem[], value: string) => {
+            setSelectFlavor(value);
+            setFlavor(flavors.filter((v) => v.value === value).at(0) as FlavorItem);
+            onChangeHandler(value);
+        },
+        [onChangeHandler]
+    );
 
     useEffect(() => {
         let oclList: Ocl[] = [];
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
-                v.map((registerServiceEntity) => {
+                for (let registerServiceEntity of v) {
                     if (registerServiceEntity.ocl instanceof Ocl) {
                         oclList.push(registerServiceEntity.ocl);
                     }
-                });
+                }
             }
         });
+        let flavors = new Map<string, Flavor[]>();
         oclList
             .filter((v) => (v as Ocl).serviceVersion === selectVersion)
-            .flatMap((v) => {
-                flavorMapper.set(v.serviceVersion || '', v.flavors || []);
+            .forEach((v) => {
+                flavors.set(v.serviceVersion || '', v.flavors || []);
             });
-        setFlavorMapper(flavorMapper);
+        setFlavorMapper(flavors);
     }, [selectVersion, versionMapper, selectCsp]);
 
     useEffect(() => {
         const flavorList: Flavor[] = flavorMapper.get(selectVersion) || [];
         let flavors: { value: string; label: string; price: string }[] = [];
         if (flavorList.length > 0) {
-            flavorList.map((flavor) => {
+            for (let flavor of flavorList) {
                 let flavorItem = { value: flavor.name, label: flavor.name, price: flavor.fixedPrice.toString() };
                 flavors.push(flavorItem);
-            });
+            }
             setFlavorOptions(flavors);
             onChangeFlavor(flavors, flavors[0].value);
         }
-    }, [selectVersion, flavorMapper]);
+    }, [selectVersion, flavorMapper, onChangeFlavor]);
 
     return (
         <>

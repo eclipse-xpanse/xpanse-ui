@@ -1,7 +1,7 @@
 .order-navigate {
     display: flex;
     border: 1px solid transparent;
-    color: #f97025;
+    color: rgb(24, 120, 255);
     font-weight: bold;
     padding: 10px;
 }
@@ -9,7 +9,7 @@
 .order-navigate:hover {
     cursor: pointer;
     font-weight: bold;
-    text-shadow: 0 0 1px red;
+    text-shadow: 0 0 1px rgb(24, 120, 255);
 }
 
 .Line {

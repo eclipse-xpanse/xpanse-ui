@@ -9,7 +9,7 @@ import {
     Ocl,
     RegisterServiceEntity,
 } from '../../../../xpanse-api/generated';
-import { DeployParam } from './Common';
+import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../OrderSubmit';
 import { useNavigate } from 'react-router-dom';
@@ -38,11 +38,11 @@ export default function GoToSubmit({
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 let oclList: Ocl[] = [];
-                v.map((registerServiceEntity) => {
+                for (let registerServiceEntity of v) {
                     if (registerServiceEntity.ocl instanceof Ocl) {
                         oclList.push(registerServiceEntity.ocl);
                     }
-                });
+                }
                 oclList.forEach((item) => {
                     if (item.serviceVersion === selectVersion && item?.cloudServiceProvider.name === selectCsp) {
                         service = item;
