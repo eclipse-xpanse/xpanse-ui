@@ -118,7 +118,7 @@
 .cloud-provider-select {
     display: flex;
     flex-flow: nowrap row;
-    padding: 0px;
+    padding: 0;
     width: 200px;
     height: 58px;
     margin: 10px;
@@ -129,7 +129,7 @@
     cursor: pointer;
     display: flex;
     flex-flow: nowrap row;
-    padding: 0px;
+    padding: 0;
     width: 200px;
     height: 58px;
     margin: 10px;
@@ -137,14 +137,13 @@
     outline: 1px transparent dashed;
     outline-offset: -10px;
     border-radius: 4%;
-    /*background:#795548;*/
 }
 
 .cloud-provider-select:hover {
     cursor: pointer;
     display: flex;
     flex-flow: nowrap row;
-    padding: 0px;
+    padding: 0;
     width: 200px;
     height: 58px;
     margin: 10px;
@@ -223,4 +222,10 @@
     width: 400px;
     height: 200px;
     margin: 0 auto;
+}
+
+.submit-alert-tip {
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
 }

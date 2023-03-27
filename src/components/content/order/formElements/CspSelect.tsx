@@ -5,7 +5,8 @@
 
 import { useEffect, useState } from 'react';
 import { CloudServiceProviderNameEnum, Ocl, RegisterServiceEntity } from '../../../../xpanse-api/generated';
-import { AlibabaLogo, AWSLogo, AzureLogo, HuaWeiLogo, XpanseLogo } from '../CspLogo';
+import { AlibabaLogo, AWSLogo, AzureLogo, HuaWeiLogo } from '../CspLogo';
+import { Image } from 'antd';
 
 interface CSP {
     name: string;
@@ -17,7 +18,7 @@ const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
     ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
     ['azure', { name: 'Azure', logo: AzureLogo }],
     ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
-    ['openstack', { name: 'Openstack', logo: XpanseLogo }],
+    ['openstack', { name: 'Openstack', logo: 'unknown' }],
     ['aws', { name: 'aws', logo: AWSLogo }],
 ]);
 
@@ -84,7 +85,15 @@ export default function CspSelect({
                             key={index}
                             className={isSelected === index ? 'cloud-provider-select-hover' : 'cloud-provider-select'}
                         >
-                            <img src={item.logo} alt={item.name} />
+                            {/*<img src={item.logo} alt={item.name} />*/}
+                            <Image
+                                width={200}
+                                height={56}
+                                src={item.logo}
+                                alt={item.name}
+                                preview={false}
+                                fallback={'https://img.shields.io/badge/-' + item.name + '-gray'}
+                            />
                             <div className='service-type-option-info' />
                         </div>
                     );

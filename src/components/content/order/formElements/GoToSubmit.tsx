@@ -89,7 +89,7 @@ export default function GoToSubmit({
                 <div className={'order-param-item-left'} />
                 <div className={'order-param-submit'}>
                     <Button type='primary' onClick={gotoOrderSubmit}>
-                        Next
+                        &nbsp;&nbsp;Next&nbsp;&nbsp;
                     </Button>
                 </div>
             </div>

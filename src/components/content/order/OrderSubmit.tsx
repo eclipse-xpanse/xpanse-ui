@@ -50,7 +50,12 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [deploying, setDeploying] = useState<boolean>(false);
 
     function Tip(type: 'error' | 'success', msg: string) {
-        setTip(<Alert message={msg} description='' type={type} />);
+        setTip(
+            <div className={'submit-alert-tip'}>
+                {' '}
+                <Alert message='Deployment:' description={msg} showIcon type={type} />{' '}
+            </div>
+        );
     }
 
     function TipClear() {

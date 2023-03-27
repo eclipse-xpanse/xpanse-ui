@@ -27,12 +27,10 @@ export default function FlavorSelect({
     const [flavorMapper, setFlavorMapper] = useState<Map<string, Flavor[]>>(new Map<string, Flavor[]>());
     const [flavorOptions, setFlavorOptions] = useState<FlavorItem[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
-    const [flavor, setFlavor] = useState<FlavorItem>({ value: '', label: '', price: '0' });
 
     const onChangeFlavor = useCallback(
         (flavors: FlavorItem[], value: string) => {
             setSelectFlavor(value);
-            setFlavor(flavors.filter((v) => v.value === value).at(0) as FlavorItem);
             onChangeHandler(value);
         },
         [onChangeHandler]
@@ -73,12 +71,7 @@ export default function FlavorSelect({
 
     return (
         <>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                Flavor:
-                <span className={'order-red-font'}>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Price:&nbsp;&nbsp;{flavor?.price}
-                </span>
-            </div>
+            <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <Space wrap>
                     <Select
