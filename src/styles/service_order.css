@@ -101,7 +101,7 @@
     width: 370px;
     height: 115px;
     margin: 10px;
-    border: 1px solid #1677ff;
+    border: 2px solid #1677ff;
 }
 
 .service-type-option-detail:hover {
@@ -112,7 +112,7 @@
     width: 300px;
     height: 100px;
     margin: 10px;
-    border: 1px solid #1677ff;
+    border: 2px solid #ff1631;
 }
 
 .cloud-provider-select {
@@ -120,7 +120,7 @@
     flex-flow: nowrap row;
     padding: 0;
     width: 200px;
-    height: 58px;
+    height: 60px;
     margin: 10px;
     border: 1px solid #f2f1f1;
 }
@@ -131,9 +131,9 @@
     flex-flow: nowrap row;
     padding: 0;
     width: 200px;
-    height: 58px;
+    height: 60px;
     margin: 10px;
-    border: 1px solid #1677ff;
+    border: 2px solid #1677ff;
     outline: 1px transparent dashed;
     outline-offset: -10px;
     border-radius: 4%;
@@ -145,13 +145,12 @@
     flex-flow: nowrap row;
     padding: 0;
     width: 200px;
-    height: 58px;
+    height: 60px;
     margin: 10px;
-    border: 1px solid #1677ff;
+    border: 3px solid #f2f1f1;
     outline: 1px transparent dashed;
     outline-offset: -10px;
     border-radius: 4%;
-    /*background:#795548;*/
 }
 
 .service-type-option-image {
