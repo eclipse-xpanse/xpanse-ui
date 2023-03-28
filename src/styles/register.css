@@ -6,6 +6,7 @@
     display: flex;
     align-items: baseline;
     gap: 10px;
+    margin-top: 20px;
 }
 
 .ocl-data-hover {
@@ -13,5 +14,9 @@
 }
 
 .result {
-    margin-top: 10px;
+    margin-top: 20px;
+}
+
+.ant-upload-list-item-name {
+    padding: 0 !important;
 }

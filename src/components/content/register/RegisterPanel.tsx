@@ -3,156 +3,77 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert, Button, Upload, UploadFile } from 'antd';
+import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useEffect, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
-import { ObjectSerializer } from '../../../xpanse-api/generated/models/ObjectSerializer';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { Ocl } from '../../../xpanse-api/generated';
-import DisplayOclData from './DisplayOclData';
 import '../../../styles/register.css';
+import RegisterResult from './RegisterResult';
+import OclSummaryDisplay from './OclSummaryDisplay';
+import loadOclFile from './loadOclFile';
+import { registerService } from './registerService';
+import YamlSyntaxValidationResult from './YamlSyntaxValidationResult';
+import { ValidationStatus } from './ValidationStatus';
 
 function RegisterPanel(): JSX.Element {
-    type FileValidationStatus = 'notStarted' | 'inProgress' | 'completed';
+    const ocl = useRef<Ocl | undefined>(undefined);
+    const files = useRef<UploadFile[]>([]);
+    const yamlValidationResult = useRef<string>('');
+    const oclDisplayData = useRef<JSX.Element>(<></>);
+    const registerResult = useRef<string>('');
+    const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
+    const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
+    const [registerRequestStatus, setRegisterRequestStatus] = useState<ValidationStatus>('notStarted');
 
-    const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-    const [yamlSyntaxValidationResult, setYamlSyntaxValidationResult] = useState<JSX.Element | undefined>(undefined);
-    const [isYamlSyntaxValid, setIsYamlSyntaxValid] = useState<boolean>(false);
-    const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<FileValidationStatus>('notStarted');
-
-    const [registerResult, setRegisterResult] = useState<String>('');
-    const [isRegisterSuccessful, setIsRegisterSuccessful] = useState<boolean>(false);
-
-    const [ocl, setOcl] = useState<Ocl | null>(null);
-    const [isOclDataValid, setIsOclDataValid] = useState<boolean>(false);
-    const [oclDataDisplay, setOclDataDisplay] = useState<JSX.Element | undefined>(undefined);
-    const [registrationResultDisplay, setRegistrationResultDisplay] = useState<JSX.Element | undefined>(undefined);
-
-    useEffect(() => {
-        if (fileList.length > 0) {
-            setYamlSyntaxValidationStatus('inProgress');
+    function validateAndLoadYamlFile(uploadedFiles: UploadFile[]) {
+        if (uploadedFiles.length > 0) {
             const reader = new FileReader();
-            if (fileList) {
-                reader.readAsText(fileList[0] as RcFile);
-                reader.onload = (e) => {
-                    if (e.target) {
-                        try {
-                            setOcl(
-                                ObjectSerializer.deserialize(
-                                    ObjectSerializer.parse(e.target.result as string, 'application/yaml'),
-                                    'Oclv2',
-                                    ''
-                                )
-                            );
-                            setYamlSyntaxValidationResult(
-                                <Alert type={'info'} showIcon={true} message={'YAML Syntax Valid'} />
-                            );
-                            setIsYamlSyntaxValid(true);
-                        } catch (e: any) {
-                            console.log(e);
-                            setYamlSyntaxValidationResult(<Alert type={'error'} showIcon={true} message={e.message} />);
-                            setIsYamlSyntaxValid(false);
-                        }
+            reader.readAsText(uploadedFiles[0] as RcFile);
+            reader.onload = (e) => {
+                if (e.target) {
+                    try {
+                        ocl.current = loadOclFile(e.target.result as string);
+                        files.current[0].status = 'success';
+                        yamlValidationResult.current = 'YAML Syntax Valid';
+                        setYamlSyntaxValidationStatus('completed');
+                        oclDisplayData.current = OclSummaryDisplay(
+                            setOclValidationStatus,
+                            ocl.current,
+                            files.current[0]
+                        );
+                    } catch (e: any) {
+                        console.log(e);
+                        files.current[0].status = 'error';
+                        yamlValidationResult.current = e.message;
+                        setYamlSyntaxValidationStatus('error');
                     }
-                };
-            }
-            setYamlSyntaxValidationStatus('completed');
-        }
-    }, [fileList]);
-
-    useEffect(() => {
-        if (registerResult) {
-            if (isRegisterSuccessful) {
-                setRegistrationResultDisplay(
-                    <Alert
-                        type={'success'}
-                        message={`Service ${ocl?.name} Registered Successfully`}
-                        closable={true}
-                        onClose={onRemove}
-                        className={'result'}
-                    />
-                );
-            } else {
-                setRegistrationResultDisplay(
-                    <Alert
-                        type={'error'}
-                        closable={true}
-                        showIcon={true}
-                        message={`Service Registration Failed`}
-                        description={registerResult}
-                        onClose={onRemove}
-                        className={'result'}
-                        action={
-                            <Button size='small' type='primary' onClick={onRemove} danger={true}>
-                                Try Again
-                            </Button>
-                        }
-                    />
-                );
-            }
-        }
-    }, [registerResult, ocl?.name, isRegisterSuccessful]);
-
-    useEffect(() => {
-        if (isYamlSyntaxValid) {
-            if (isYamlSyntaxValid && ocl !== null && ocl !== undefined) {
-                const oclTableData = DisplayOclData({ ocl: ocl });
-                if (typeof oclTableData === 'string') {
-                    setIsOclDataValid(false);
-                    setOclDataDisplay(
-                        <Alert
-                            type={'error'}
-                            showIcon={true}
-                            message={`OCL data in the uploaded file not Valid. Error while parsing - ${oclTableData}`}
-                        />
-                    );
-                } else {
-                    setIsOclDataValid(true);
-                    setOclDataDisplay(oclTableData);
                 }
-            }
+            };
         }
-    }, [yamlSyntaxValidationResult, ocl, isYamlSyntaxValid]);
+    }
 
-    const customRequest = () => {
-        if (fileList) {
-            serviceVendorApi
-                .register(ocl as Ocl)
-                .then(() => {
-                    fileList[0].status = 'success';
-                    setRegisterResult('Service Registered Successfully');
-                    setIsRegisterSuccessful(true);
-                })
-                .catch((error: any) => {
-                    setRegisterResult(error.message);
-                    fileList[0].status = 'error';
-                    setIsRegisterSuccessful(false);
-                });
-        }
-        return;
+    const sendRequestRequest = () => {
+        registerService(ocl.current as Ocl, setRegisterRequestStatus, registerResult, files.current[0]);
     };
 
     const setFileData = (file: RcFile): boolean => {
-        setFileList([file]);
+        files.current.pop();
+        files.current.push(file);
+        setYamlSyntaxValidationStatus('notStarted');
+        validateAndLoadYamlFile([file]);
         return false;
     };
 
     const onRemove = () => {
-        setFileList([]);
-        setOcl(null);
-
-        setRegisterResult('');
-        setIsRegisterSuccessful(false);
-
+        files.current.pop();
+        ocl.current = undefined;
+        yamlValidationResult.current = '';
+        registerResult.current = '';
         setYamlSyntaxValidationStatus('notStarted');
-        setIsYamlSyntaxValid(false);
-        setYamlSyntaxValidationResult(undefined);
-
-        setIsOclDataValid(false);
-        setOclDataDisplay(undefined);
-        setRegistrationResultDisplay(undefined);
+        setOclValidationStatus('notStarted');
+        setRegisterRequestStatus('notStarted');
+        oclDisplayData.current = <></>;
     };
 
     return (
@@ -161,15 +82,19 @@ function RegisterPanel(): JSX.Element {
                 <AppstoreAddOutlined />
                 &ensp;Register Service
             </div>
-            {registrationResultDisplay}
-            <br />
+            <RegisterResult
+                ocl={ocl.current}
+                registerRequestStatus={registerRequestStatus}
+                registerResult={registerResult.current}
+                onRemove={onRemove}
+            />
             <div className={'register-buttons'}>
                 <Upload
                     name={'OCL File'}
                     multiple={false}
                     beforeUpload={setFileData}
                     maxCount={1}
-                    fileList={fileList}
+                    fileList={files.current}
                     onRemove={onRemove}
                     accept={'.yaml, .yml'}
                     showUploadList={true}
@@ -186,16 +111,27 @@ function RegisterPanel(): JSX.Element {
                 </Upload>
                 <Button
                     size={'large'}
-                    disabled={Boolean(registerResult) || !isOclDataValid}
+                    disabled={
+                        yamlSyntaxValidationStatus === 'notStarted' ||
+                        (registerRequestStatus === 'notStarted' && yamlSyntaxValidationStatus === 'error') ||
+                        registerRequestStatus === 'error' ||
+                        registerRequestStatus === 'completed' ||
+                        oclValidationStatus === 'error'
+                    }
                     type={'primary'}
                     icon={<CloudUploadOutlined />}
-                    onClick={customRequest}
+                    onClick={sendRequestRequest}
                 >
                     Register
                 </Button>
-                {yamlSyntaxValidationResult}
+                {yamlSyntaxValidationStatus === 'completed' || yamlSyntaxValidationStatus === 'error' ? (
+                    <YamlSyntaxValidationResult
+                        validationResult={yamlValidationResult.current}
+                        yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
+                    />
+                ) : null}
             </div>
-            <div>{oclDataDisplay}</div>
+            <div>{oclDisplayData.current}</div>
         </div>
     );
 }
