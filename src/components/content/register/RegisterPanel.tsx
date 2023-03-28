@@ -55,11 +55,12 @@ function RegisterPanel(): JSX.Element {
 
     const sendRequestRequest = () => {
         registerService(ocl.current as Ocl, setRegisterRequestStatus, registerResult, files.current[0]);
-        console.log(files.current[0].status);
     };
 
     const setFileData = (file: RcFile): boolean => {
+        files.current.pop();
         files.current.push(file);
+        setYamlSyntaxValidationStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
     };
