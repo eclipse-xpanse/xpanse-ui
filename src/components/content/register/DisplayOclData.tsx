@@ -46,7 +46,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
             // @ts-ignore
             yamlDocument.contents = ocl.deployment;
             return (
-                <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Deployment'} trigger='hover'>
+                <Popover
+                    content={<pre className={'deployment-script'}>{yamlDocument.toString()}</pre>}
+                    title={'Deployment'}
+                    trigger='hover'
+                >
                     <Button className={'ocl-data-hover'} type={'link'}>
                         {ocl.deployment.kind}
                     </Button>
