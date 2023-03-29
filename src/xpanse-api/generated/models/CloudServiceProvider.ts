@@ -54,4 +54,11 @@ export class CloudServiceProvider {
     public constructor() {}
 }
 
-export type CloudServiceProviderNameEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';
+export type CloudServiceProviderNameEnum =
+    | 'aws'
+    | 'azure'
+    | 'alibaba'
+    | 'huawei'
+    | 'openstack'
+    | 'google'
+    | 'flexibleEngine';
