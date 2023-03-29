@@ -719,7 +719,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["aws", "azure", "alibaba", "huawei", "openstack"]
+                        "enum": ["aws", "azure", "alibaba", "huawei", "openstack", "google", "flexibleEngine"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "property": {

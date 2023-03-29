@@ -4,7 +4,7 @@
  */
 
 import { CloudServiceProviderNameEnum } from '../../../../xpanse-api/generated';
-import { AlibabaLogo, AWSLogo, AzureLogo, HuaWeiLogo } from '../CspLogo';
+import { AlibabaLogo, AWSLogo, AzureLogo, FlexibleEngineLogo, GoogleLogo, HuaWeiLogo, OpenStackLogo } from '../CspLogo';
 import { Image } from 'antd';
 
 interface CSP {
@@ -17,7 +17,9 @@ const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
     ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
     ['azure', { name: 'Azure', logo: AzureLogo }],
     ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
-    ['openstack', { name: 'Openstack', logo: 'unknown' }],
+    ['openstack', { name: 'Openstack', logo: OpenStackLogo }],
+    ['google', { name: 'Google', logo: GoogleLogo }],
+    ['flexibleEngine', { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
     ['aws', { name: 'aws', logo: AWSLogo }],
 ]);
 
