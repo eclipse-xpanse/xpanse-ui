@@ -19,6 +19,7 @@ import GoToSubmit from './formElements/GoToSubmit';
 import { Select, Space, Tabs } from 'antd';
 import { Area } from '../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
+import sortVersion from '../../utils/Sort';
 
 function filterAreaList(
     selectVersion: string,
@@ -102,6 +103,7 @@ function CreateService(): JSX.Element {
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
         const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
+        const latestVersion = location.search.split('?')[1].split('&')[2].split('=')[1];
         if (!categoryName || !serviceName) {
             return;
         }
@@ -121,13 +123,12 @@ function CreateService(): JSX.Element {
                 versionMapper.current = currentVersions;
 
                 let currentVersionList = getVersionList();
-                let currentVersion = currentVersionList[0].value;
-                let currentCspList = getCspList(currentVersion);
-                let currentAreaList = getAreaList(currentVersion, currentCspList[0]);
-                let currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0].key);
-                let currentFlavorList = getFlavorList(currentVersion);
+                let currentCspList = getCspList(latestVersion);
+                let currentAreaList = getAreaList(latestVersion, currentCspList[0]);
+                let currentRegionList = getRegionList(latestVersion, currentCspList[0], currentAreaList[0].key);
+                let currentFlavorList = getFlavorList(latestVersion);
                 setVersionList(currentVersionList);
-                setSelectVersion(currentVersionList[0].value);
+                setSelectVersion(latestVersion);
                 setCspList(currentCspList);
                 setSelectCsp(currentCspList[0]);
                 setAreaList(currentAreaList);
@@ -146,11 +147,18 @@ function CreateService(): JSX.Element {
         if (versionMapper.current.size <= 0) {
             return [{ value: '', label: '' }];
         }
-
-        let versions: { value: string; label: string }[] = [];
+        let versionSet: string[] = [];
         versionMapper.current.forEach((v, k) => {
-            let versionItem = { value: k || '', label: k || '' };
-            versions.push(versionItem);
+            versionSet.push(k);
+        });
+        let versions: { value: string; label: string }[] = [];
+        sortVersion(versionSet).forEach((verision) => {
+            versionMapper.current.forEach((v, k) => {
+                if (verision === k) {
+                    let versionItem = { value: k || '', label: k || '' };
+                    versions.push(versionItem);
+                }
+            });
         });
 
         return versions;
@@ -269,6 +277,7 @@ function CreateService(): JSX.Element {
         setAreaList(currentAreaList);
         setSelectArea(currentAreaList[0].key);
         setRegionList(currentRegionList);
+        setSelectRegion(currentRegionList[0].value);
         setFlavorList(currentFlavorList);
         setSelectFlavor(currentFlavorList[0].value);
     }, []);
