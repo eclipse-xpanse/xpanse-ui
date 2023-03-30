@@ -319,11 +319,12 @@ function CreateService(): JSX.Element {
                     Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
                     <Select
                         value={selectVersion}
-                        style={{ width: 120 }}
+                        className={'version-drop-down'}
                         onChange={onChangeVersion}
                         options={versionList}
                     />
                 </div>
+                <br />
                 <CspSelect
                     selectCsp={selectCsp}
                     cspList={cspList}

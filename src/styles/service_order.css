@@ -49,11 +49,6 @@
     font-weight: normal;
 }
 
-.order-red-font {
-    color: red;
-    font-weight: bold;
-}
-
 .order-param-failed {
     width: 100%;
     margin-left: 15px;
@@ -93,16 +88,6 @@
     border: 1px solid #edeeee;
 }
 
-.service-type-option-detail-selected {
-    display: flex;
-    flex-flow: nowrap row;
-    padding: 20px;
-    width: 370px;
-    height: 115px;
-    margin: 10px;
-    border: 2px solid #1677ff;
-}
-
 .service-type-option-detail:hover {
     cursor: pointer;
     display: flex;
@@ -110,7 +95,7 @@
     padding: 20px;
     width: 300px;
     height: 100px;
-    border: 2px solid #ff1631;
+    border: 3px solid #f2f1f1;
 }
 
 .cloud-provider-select {
@@ -120,7 +105,7 @@
     width: 200px;
     height: 60px;
     margin: 10px;
-    border: 1px solid #b5b5b5;
+    border: 1px solid #ebebeb;
 }
 
 .cloud-provider-select-hover {
@@ -129,12 +114,11 @@
     flex-flow: nowrap row;
     padding: 0;
     width: 200px;
-    height: 60px;
+    height: 62px;
     margin: 10px;
-    border: 2px solid #1677ff;
-    outline: 1px #b5b5b5 dashed;
+    border: 3px solid #b5b5b5;
+    outline: 1px transparent dashed;
     outline-offset: -5px;
-    border-radius: 4%;
 }
 
 .cloud-provider-select:hover {
@@ -148,7 +132,6 @@
     border: 3px solid #f2f1f1;
     outline: 1px transparent dashed;
     outline-offset: -10px;
-    border-radius: 4%;
 }
 
 .service-type-option-image {
@@ -228,4 +211,8 @@
 }
 .services-content-body-col {
     margin: 15px;
+}
+
+.version-drop-down {
+    width: fit-content;
 }
