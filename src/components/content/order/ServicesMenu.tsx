@@ -3,9 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BarsOutlined } from '@ant-design/icons';
+import { BarsOutlined, HddOutlined } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
-import { servicesLabelName, servicesPageRoute, servicesSubPageRoute } from '../../utils/constants';
+import {
+    myServicesLabelName,
+    myServicesRoute,
+    servicesLabelName,
+    servicesPageRoute,
+    servicesSubPageRoute,
+} from '../../utils/constants';
+import { Link } from 'react-router-dom';
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {
@@ -20,7 +27,16 @@ export const servicesMenu = (data: string[]): ItemType => {
     return {
         key: servicesPageRoute,
         label: servicesLabelName,
-        icon: <BarsOutlined />,
+        icon: <HddOutlined />,
         children: subMenuItems,
+    };
+};
+
+export const serviceListMenu = (): ItemType => {
+    return {
+        key: myServicesRoute,
+        label: <Link to={myServicesRoute}>{myServicesLabelName}</Link>,
+        icon: <BarsOutlined />,
+        title: 'MyServices',
     };
 };

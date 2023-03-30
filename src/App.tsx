@@ -14,6 +14,7 @@ import {
     homePageRoute,
     orderPageRoute,
     registerPageRoute,
+    myServicesRoute,
     servicesPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
@@ -21,6 +22,7 @@ import Catalog from './components/content/catalog/Catalog';
 import Services from './components/content/order/Services';
 import CreateService from './components/content/order/CreateService';
 import OrderSubmitPage from './components/content/order/OrderSubmit';
+import ServiceList from './components/content/order/ServiceList';
 
 function App(): JSX.Element {
     return (
@@ -62,6 +64,14 @@ function App(): JSX.Element {
                 element={
                     <Protected>
                         <Services />
+                    </Protected>
+                }
+            />
+            <Route
+                path={myServicesRoute}
+                element={
+                    <Protected>
+                        <ServiceList />
                     </Protected>
                 }
             />
