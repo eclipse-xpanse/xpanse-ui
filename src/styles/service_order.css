@@ -90,7 +90,6 @@
     padding: 20px;
     width: 300px;
     height: 100px;
-    margin: 10px;
     border: 1px solid #edeeee;
 }
 
@@ -111,7 +110,6 @@
     padding: 20px;
     width: 300px;
     height: 100px;
-    margin: 10px;
     border: 2px solid #ff1631;
 }
 
@@ -227,4 +225,7 @@
     margin-bottom: 20px;
     margin-left: 30px;
     margin-right: 30px;
+}
+.services-content-body-col {
+    margin: 15px;
 }
