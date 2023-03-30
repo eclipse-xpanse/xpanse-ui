@@ -19,7 +19,7 @@ import GoToSubmit from './formElements/GoToSubmit';
 import { Select, Space, Tabs } from 'antd';
 import { Area } from '../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
-import sortVersion from '../../utils/Sort';
+import { sortVersion } from '../../utils/Sort';
 
 function filterAreaList(
     selectVersion: string,

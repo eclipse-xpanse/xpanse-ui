@@ -11,7 +11,7 @@ import { createServicePageRoute } from '../../utils/constants';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
-import sortVersion from '../../utils/Sort';
+import { sortVersion } from '../../utils/Sort';
 import { VersionOclVo } from '../../../xpanse-api/generated';
 
 function Services(): JSX.Element {
