@@ -178,7 +178,7 @@ function ServiceList(): JSX.Element {
                         refreshData();
                     }}
                 >
-                    flush
+                    refresh
                 </Button>
             </div>
             <div className={'service-instance-list'}>
