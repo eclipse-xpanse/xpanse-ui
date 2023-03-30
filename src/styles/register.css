@@ -24,3 +24,9 @@
 .ocl-display-tag {
     margin-top: 10px;
 }
+
+.deployment-script {
+    max-height: 30vh;
+    position: relative;
+    overflow: auto;
+}
