@@ -280,6 +280,7 @@ function CreateService(): JSX.Element {
         setSelectRegion(currentRegionList[0].value);
         setFlavorList(currentFlavorList);
         setSelectFlavor(currentFlavorList[0].value);
+        setSelectRegion(currentRegionList[0].value);
     }, []);
 
     const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum) => {
