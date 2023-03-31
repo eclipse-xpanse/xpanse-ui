@@ -13,25 +13,22 @@ function OclSummaryDisplay(
     ocl: Ocl,
     file: UploadFile
 ): JSX.Element {
-    if (ocl) {
-        const oclTableData = DisplayOclData({ ocl: ocl });
-        if (typeof oclTableData === 'string') {
-            file.status = 'error';
-            setOclValidationStatus('error');
-            return (
-                <Alert
-                    type={'error'}
-                    showIcon={true}
-                    message={`OCL data in the uploaded file not Valid. Error while parsing - ${oclTableData}`}
-                />
-            );
-        } else {
-            file.status = 'success';
-            setOclValidationStatus('completed');
-            return oclTableData;
-        }
+    const oclTableData = DisplayOclData({ ocl: ocl });
+    if (typeof oclTableData === 'string') {
+        file.status = 'error';
+        setOclValidationStatus('error');
+        return (
+            <Alert
+                type={'error'}
+                showIcon={true}
+                message={`OCL data in the uploaded file not Valid. Error while parsing - ${oclTableData}`}
+            />
+        );
+    } else {
+        file.status = 'success';
+        setOclValidationStatus('completed');
+        return oclTableData;
     }
-    return <></>;
 }
 
 export default OclSummaryDisplay;

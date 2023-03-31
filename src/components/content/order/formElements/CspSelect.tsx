@@ -13,7 +13,7 @@ interface CSP {
     logo?: string;
 }
 
-const cspMap: Map<CloudServiceProviderNameEnum, CSP> = new Map([
+const cspMap = new Map<CloudServiceProviderNameEnum, CSP>([
     ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
     ['azure', { name: 'Azure', logo: AzureLogo }],
     ['alibaba', { name: 'Alibaba', logo: AlibabaLogo }],
@@ -48,7 +48,7 @@ export default function CspSelect({
                             <Image
                                 width={200}
                                 height={56}
-                                src={cspMap.get(item)?.logo as string}
+                                src={cspMap.get(item)?.logo}
                                 alt={item}
                                 preview={false}
                                 fallback={'https://img.shields.io/badge/-' + item + '-gray'}

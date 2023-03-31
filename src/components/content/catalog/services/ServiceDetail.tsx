@@ -15,7 +15,6 @@ function ServiceDetail({
     serviceDetails: OclDetailVo;
     serviceAreas: Area[];
 }): JSX.Element {
-    const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     return (
         <>
             <div className={'catalog-detail-class'}>
@@ -26,7 +25,7 @@ function ServiceDetail({
                 <Space size={[0, 8]} wrap>
                     {serviceAreas.map((area) => (
                         <Tag color='orange'>
-                            {area.name}:&nbsp;{area.regions ? area.regions.join(', ') : PLACE_HOLDER_UNKNOWN_VALUE}
+                            {area.name}:&nbsp;{area.regions.join(', ')}
                         </Tag>
                     ))}
                 </Space>
@@ -40,35 +39,21 @@ function ServiceDetail({
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
-                <Descriptions.Item label='Category'>{serviceDetails ? serviceDetails.category : ''}</Descriptions.Item>
-                <Descriptions.Item label='Provider'>
-                    {serviceDetails && serviceDetails.cloudServiceProvider
-                        ? serviceDetails.cloudServiceProvider.name
-                        : ''}
-                </Descriptions.Item>
-                <Descriptions.Item label='Service Version'>
-                    {serviceDetails ? serviceDetails.serviceVersion : ''}
-                </Descriptions.Item>
-                <Descriptions.Item label='Billing Mode'>
-                    {serviceDetails && serviceDetails.billing ? serviceDetails.billing.model : ''}
-                </Descriptions.Item>
-                <Descriptions.Item label='Register Time'>
-                    {serviceDetails ? serviceDetails.createTime?.toUTCString() : ''}
-                </Descriptions.Item>
+                <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
+                <Descriptions.Item label='Provider'>{serviceDetails.cloudServiceProvider.name}</Descriptions.Item>
+                <Descriptions.Item label='Service Version'>{serviceDetails.serviceVersion}</Descriptions.Item>
+                <Descriptions.Item label='Billing Mode'>{serviceDetails.billing.model}</Descriptions.Item>
+                <Descriptions.Item label='Register Time'>{serviceDetails.createTime.toUTCString()}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>
-                    {serviceDetails ? serviceDetails.lastModifiedTime?.toUTCString() : ''}
+                    {serviceDetails.lastModifiedTime.toUTCString()}
                 </Descriptions.Item>
-                <Descriptions.Item label='Status'>
-                    {serviceDetails ? serviceDetails.serviceState : ''}
-                </Descriptions.Item>
+                <Descriptions.Item label='Status'>{serviceDetails.serviceState}</Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
-                    {serviceDetails && serviceDetails.flavors
-                        ? serviceDetails.flavors
-                              .map((flavor) => {
-                                  return flavor.name;
-                              })
-                              .join(',')
-                        : ''}
+                    {serviceDetails.flavors
+                        .map((flavor) => {
+                            return flavor.name;
+                        })
+                        .join(',')}
                 </Descriptions.Item>
             </Descriptions>
         </>

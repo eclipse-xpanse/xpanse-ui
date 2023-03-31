@@ -23,7 +23,7 @@ export function updateServiceResult(
             setUpdateRequestStatus('completed');
             updateResult.current = 'Service updated Successfully';
         })
-        .catch((error: any) => {
+        .catch((error: Error) => {
             file.status = 'error';
             setUpdateRequestStatus('error');
             updateResult.current = error.message;

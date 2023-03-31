@@ -10,7 +10,6 @@ import { loginPageRoute } from '../../utils/constants';
 
 function clearStorage(navigate: NavigateFunction): void {
     localStorage.clear();
-    console.log('navigate');
     navigate(loginPageRoute);
 }
 

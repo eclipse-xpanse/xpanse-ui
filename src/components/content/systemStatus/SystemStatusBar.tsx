@@ -16,7 +16,7 @@ function SystemStatusBar(): JSX.Element {
     adminApi
         .health()
         .then((systemStatus: SystemStatus) => setHealthState(systemStatus.healthStatus))
-        .catch((error: any) => {
+        .catch((error: unknown) => {
             console.error(error);
             setHealthState('NOK');
         });

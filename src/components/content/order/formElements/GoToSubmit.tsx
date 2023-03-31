@@ -37,21 +37,21 @@ export default function GoToSubmit({
         let service: Ocl = new Ocl();
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
-                let oclList: Ocl[] = [];
-                for (let registerServiceEntity of v) {
+                const oclList: Ocl[] = [];
+                for (const registerServiceEntity of v) {
                     if (registerServiceEntity.ocl instanceof Ocl) {
                         oclList.push(registerServiceEntity.ocl);
                     }
                 }
                 oclList.forEach((item) => {
-                    if (item.serviceVersion === selectVersion && item?.cloudServiceProvider.name === selectCsp) {
+                    if (item.serviceVersion === selectVersion && item.cloudServiceProvider.name === selectCsp) {
                         service = item;
                     }
                 });
             }
         });
 
-        let props: OrderSubmitProps = {
+        const props: OrderSubmitProps = {
             category: categoryName as CreateRequestCategoryEnum,
             name: serviceName,
             version: selectVersion,
@@ -61,19 +61,17 @@ export default function GoToSubmit({
             params: new Array<DeployParam>(),
         };
 
-        if (service?.deployment.context !== undefined) {
-            for (let param of service?.deployment.context) {
-                props.params.push({
-                    name: param.name,
-                    kind: param.kind,
-                    type: param.type,
-                    example: param.example === undefined ? '' : param.example,
-                    description: param.description,
-                    value: param.value === undefined ? '' : param.value,
-                    mandatory: param.mandatory,
-                    validator: param.validator === undefined ? '' : param.validator,
-                });
-            }
+        for (const param of service.deployment.context) {
+            props.params.push({
+                name: param.name,
+                kind: param.kind,
+                type: param.type,
+                example: param.example === undefined ? '' : param.example,
+                description: param.description,
+                value: param.value === undefined ? '' : param.value,
+                mandatory: param.mandatory,
+                validator: param.validator === undefined ? '' : param.validator,
+            });
         }
 
         navigate('/order', {

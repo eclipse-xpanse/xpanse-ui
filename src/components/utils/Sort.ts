@@ -5,8 +5,8 @@
 
 export const sortVersion = (versions: string[]): string[] => {
     versions.sort((a, b) => {
-        const prefixA = a.match(/[^0-9]/g)?.[0] || '';
-        const prefixB = b.match(/[^0-9]/g)?.[0] || '';
+        const prefixA = a.match(/[^0-9]/g)?.[0] ?? '';
+        const prefixB = b.match(/[^0-9]/g)?.[0] ?? '';
         const versionA = a.replace(prefixA, '');
         const versionB = b.replace(prefixA, '');
         if (prefixA.toLowerCase() < prefixB.toUpperCase()) {
@@ -21,8 +21,8 @@ export const sortVersion = (versions: string[]): string[] => {
 };
 
 export const sortVersionNum = (a: string, b: string): number => {
-    const prefixA = a.match(/[^0-9]/g)?.[0] || '';
-    const prefixB = b.match(/[^0-9]/g)?.[0] || '';
+    const prefixA = a.match(/[^0-9]/g)?.[0] ?? '';
+    const prefixB = b.match(/[^0-9]/g)?.[0] ?? '';
     const versionA = a.replace(prefixA, '');
     const versionB = b.replace(prefixA, '');
     if (prefixA.toLowerCase() < prefixB.toUpperCase()) {
@@ -39,10 +39,10 @@ function sort(a: string, b: string) {
     const bArr = b.split('.').map(Number);
     const len = Math.max(aArr.length, bArr.length);
     for (let i = 0; i < len; i++) {
-        if (aArr[i] === undefined) {
+        if (i >= aArr.length) {
             return 1;
         }
-        if (bArr[i] === undefined) {
+        if (i > bArr.length - 1) {
             return -1;
         }
         if (aArr[i] > bArr[i]) {

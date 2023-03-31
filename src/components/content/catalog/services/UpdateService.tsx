@@ -72,18 +72,24 @@ function UpdateService({
                             ocl.current,
                             files.current[0]
                         );
-                    } catch (e: any) {
-                        console.log(e);
-                        files.current[0].status = 'error';
-                        yamlValidationResult.current = e.message;
-                        setYamlSyntaxValidationStatus('error');
+                    } catch (e: unknown) {
+                        if (e instanceof Error) {
+                            console.log(e);
+                            files.current[0].status = 'error';
+                            yamlValidationResult.current = e.message;
+                            setYamlSyntaxValidationStatus('error');
+                        } else {
+                            console.log(e);
+                        }
                     }
                 }
             };
         }
     }
     const sendRequestRequest = () => {
-        updateServiceResult(id, ocl.current as Ocl, setUpdateRequestStatus, updateResult, files.current[0]);
+        if (ocl.current) {
+            updateServiceResult(id, ocl.current, setUpdateRequestStatus, updateResult, files.current[0]);
+        }
     };
 
     const setFileData = (file: RcFile): boolean => {
@@ -133,12 +139,14 @@ function UpdateService({
                         <AppstoreAddOutlined />
                         &nbsp;Update Service
                     </div>
-                    <UpdateResult
-                        ocl={ocl.current}
-                        updateRequestStatus={updateRequestStatus}
-                        updateResult={updateResult.current}
-                        onRemove={onRemove}
-                    />
+                    {ocl.current ? (
+                        <UpdateResult
+                            ocl={ocl.current}
+                            updateRequestStatus={updateRequestStatus}
+                            updateResult={updateResult.current}
+                            onRemove={onRemove}
+                        />
+                    ) : null}
                     <div className={'register-buttons'}>
                         <Upload
                             name={'OCL File'}

@@ -22,7 +22,7 @@ export function registerService(
             setRegisterRequestStatus('completed');
             registerResult.current = 'Service Registered Successfully';
         })
-        .catch((error: any) => {
+        .catch((error: Error) => {
             file.status = 'error';
             setRegisterRequestStatus('error');
             registerResult.current = error.message;

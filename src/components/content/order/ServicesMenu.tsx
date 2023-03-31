@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {
-        let subMenuLabelStr: string =
+        const subMenuLabelStr: string =
             subMenu.charAt(0).toUpperCase() + subMenu.substring(1, subMenu.length).replace('_', '');
         return {
             key: servicesSubPageRoute + subMenu,
