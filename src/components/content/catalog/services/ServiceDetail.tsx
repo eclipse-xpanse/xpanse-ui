@@ -24,7 +24,7 @@ function ServiceDetail({
                     &nbsp;Available Regions
                 </h3>
                 <Space size={[0, 8]} wrap>
-                    {serviceAreas.map((area, index) => (
+                    {serviceAreas.map((area) => (
                         <Tag color='orange'>
                             {area.name}:&nbsp;{area.regions ? area.regions.join(', ') : PLACE_HOLDER_UNKNOWN_VALUE}
                         </Tag>

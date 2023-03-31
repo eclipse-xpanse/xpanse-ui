@@ -3,12 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useState } from 'react';
-import { Tabs } from 'antd';
+import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { Alert, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import { CategoryOclVo, OclDetailVo, ProviderOclVo, Region, VersionOclVo } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../utils/Area';
+import UpdateService from './UpdateService';
+import UnregisterService from './UnregisterService';
 
 let lastServiceName: string = '';
 
@@ -26,6 +28,8 @@ function ServiceProvider({
     const detailMapper: Map<string, OclDetailVo> = new Map<string, OclDetailVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = serviceName.split('@');
+    const updateStatusWhenUnregister = useRef<string>('');
+    const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
 
     function group(list: any[], key: string): Map<string, any[]> {
         let map: Map<string, any[]> = new Map<string, any[]>();
@@ -109,12 +113,46 @@ function ServiceProvider({
         setActiveKey(key);
     };
 
+    function setUnregisterTipsInfo(type: 'error' | 'success', msg: string) {
+        setUnregisterTips(
+            <div className={'submit-alert-tip'}>
+                {' '}
+                {type === 'success' ? (
+                    <Alert
+                        message='Unregister:'
+                        description={msg}
+                        showIcon
+                        type={type}
+                        closable={true}
+                        onClose={onRemove}
+                    />
+                ) : (
+                    <Alert message='Unregister:' description={msg} showIcon type={type} closable={true} />
+                )}{' '}
+            </div>
+        );
+    }
+
+    const onConfirmUnregister = (type: string, msg: string, unregisterResult: MutableRefObject<string>) => {
+        setUnregisterTipsInfo(type as 'success' | 'error', msg);
+        updateStatusWhenUnregister.current = unregisterResult.current;
+    };
+
+    const onRemove = () => {
+        window.location.reload();
+    };
+
     return (
         <>
             {serviceName.length > 0 ? (
                 <>
+                    {unregisterTips}
                     <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
                     <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
+                    <div className={'update-unregister-btn-class'}>
+                        <UpdateService id={serviceDetails.id} updateStatusWhenUnregister={updateStatusWhenUnregister} />
+                        <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
+                    </div>
                 </>
             ) : (
                 <></>

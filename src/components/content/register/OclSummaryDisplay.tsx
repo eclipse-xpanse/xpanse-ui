@@ -5,7 +5,6 @@
 
 import DisplayOclData from './DisplayOclData';
 import { Alert, UploadFile } from 'antd';
-import React from 'react';
 import { Ocl } from '../../../xpanse-api/generated';
 import { ValidationStatus } from './ValidationStatus';
 

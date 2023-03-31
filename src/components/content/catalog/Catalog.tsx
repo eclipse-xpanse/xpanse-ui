@@ -90,7 +90,7 @@ function Catalog(): JSX.Element {
                 <div className={'left-class'}>
                     <div className={'left-title-class'}>
                         <HomeOutlined />
-                        &ensp;Service Tree
+                        &nbsp;Service Tree
                     </div>
                     {serviceTree}
                 </div>
