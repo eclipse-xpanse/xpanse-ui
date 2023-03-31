@@ -4,38 +4,38 @@
  */
 
 import { Alert, Button } from 'antd';
-import { Ocl } from '../../../xpanse-api/generated';
-import { ValidationStatus } from './ValidationStatus';
+import { Ocl } from '../../../../xpanse-api/generated';
+import { ValidationStatus } from '../../register/ValidationStatus';
 
-function RegisterResult({
+function UpdateResult({
     ocl,
-    registerRequestStatus,
-    registerResult,
+    updateRequestStatus,
+    updateResult,
     onRemove,
 }: {
     ocl: Ocl | undefined;
-    registerRequestStatus: ValidationStatus;
-    registerResult: string;
+    updateRequestStatus: ValidationStatus;
+    updateResult: string;
     onRemove: () => void;
 }): JSX.Element {
-    if (registerRequestStatus === 'completed') {
+    if (updateRequestStatus === 'completed') {
         return (
             <Alert
                 type={'success'}
-                message={`Service ${ocl?.name} Registered Successfully`}
+                message={`Service ${ocl?.name} Updated Successfully`}
                 closable={true}
                 onClose={onRemove}
                 className={'result'}
             />
         );
-    } else if (registerRequestStatus === 'error') {
+    } else if (updateRequestStatus === 'error') {
         return (
             <Alert
                 type={'error'}
                 closable={true}
                 showIcon={true}
-                message={`Service Registration Failed`}
-                description={registerResult}
+                message={`Service Update Failed`}
+                description={updateResult}
                 onClose={onRemove}
                 className={'result'}
                 action={
@@ -50,4 +50,4 @@ function RegisterResult({
     return <></>;
 }
 
-export default RegisterResult;
+export default UpdateResult;

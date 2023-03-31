@@ -4,7 +4,6 @@
  */
 
 import { Alert } from 'antd';
-import React from 'react';
 import { ValidationStatus } from './ValidationStatus';
 
 function YamlSyntaxValidationResult({

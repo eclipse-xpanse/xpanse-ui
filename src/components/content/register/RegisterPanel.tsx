@@ -5,7 +5,7 @@
 
 import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { Ocl } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
@@ -80,7 +80,7 @@ function RegisterPanel(): JSX.Element {
         <div className={'register-content'}>
             <div className={'content-title'}>
                 <AppstoreAddOutlined />
-                &ensp;Register Service
+                &nbsp;Register Service
             </div>
             <RegisterResult
                 ocl={ocl.current}
