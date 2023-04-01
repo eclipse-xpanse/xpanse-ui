@@ -22,7 +22,7 @@ function UnregisterService({
                 unregisterResult.current = 'completed';
                 onConfirmHandler('success', 'Service Unregistered Successfully', unregisterResult);
             })
-            .catch((error: any) => {
+            .catch((error: Error) => {
                 unregisterResult.current = 'error';
                 onConfirmHandler('error', 'Service Unregister Failed, '.concat(error.message), unregisterResult);
             });

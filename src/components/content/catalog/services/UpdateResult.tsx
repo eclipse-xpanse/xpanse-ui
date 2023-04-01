@@ -13,7 +13,7 @@ function UpdateResult({
     updateResult,
     onRemove,
 }: {
-    ocl: Ocl | undefined;
+    ocl: Ocl;
     updateRequestStatus: ValidationStatus;
     updateResult: string;
     onRemove: () => void;
@@ -22,7 +22,7 @@ function UpdateResult({
         return (
             <Alert
                 type={'success'}
-                message={`Service ${ocl?.name} Updated Successfully`}
+                message={`Service ${ocl.name} Updated Successfully`}
                 closable={true}
                 onClose={onRemove}
                 className={'result'}

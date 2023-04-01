@@ -12,13 +12,14 @@ import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
 import { serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
+import { MenuInfo } from 'rc-menu/lib/interface';
 
 function LayoutSider(): JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
     const [items, setItems] = useState<ItemType[]>([]);
     const navigate = useNavigate();
 
-    const onClicked = function (cfg: any) {
+    const onClicked = function (cfg: MenuInfo): void {
         navigate(cfg.key);
     };
 
@@ -29,7 +30,7 @@ function LayoutSider(): JSX.Element {
                 .then((rsp) => {
                     setItems([catalogMenu(rsp), registerPanelMenu()]);
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     console.log(error.message);
                     setItems([catalogMenu([]), registerPanelMenu()]);
                 });
@@ -39,7 +40,7 @@ function LayoutSider(): JSX.Element {
                 .then((rsp) => {
                     setItems([servicesMenu(rsp), serviceListMenu()]);
                 })
-                .catch((error) => {
+                .catch((error: Error) => {
                     console.log(error.message);
                     setItems([]);
                 });

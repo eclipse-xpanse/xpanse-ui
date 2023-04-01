@@ -68,7 +68,7 @@ function ServiceList(): JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (text, record) => (
+            render: () => (
                 <Space size='middle'>
                     <Button type='primary' icon={<CopyOutlined />}>
                         migrate
@@ -82,13 +82,13 @@ function ServiceList(): JSX.Element {
     ];
 
     function updateCspFilters(resp: ServiceVo[]): void {
-        let filters: ColumnFilterItem[] = [];
-        let cspSet = new Set<string>('');
-        resp.forEach((v, index) => {
+        const filters: ColumnFilterItem[] = [];
+        const cspSet = new Set<string>('');
+        resp.forEach((v) => {
             cspSet.add(v.csp);
         });
         cspSet.forEach((csp) => {
-            let filter = {
+            const filter = {
                 text: csp,
                 value: csp,
             };
@@ -97,13 +97,13 @@ function ServiceList(): JSX.Element {
         setCspFilters(filters);
     }
     function updateCategoryFilters(resp: ServiceVo[]): void {
-        let filters: ColumnFilterItem[] = [];
-        let categorySet = new Set<string>('');
-        resp.forEach((v, index) => {
+        const filters: ColumnFilterItem[] = [];
+        const categorySet = new Set<string>('');
+        resp.forEach((v) => {
             categorySet.add(v.category);
         });
         categorySet.forEach((category) => {
-            let filter = {
+            const filter = {
                 text: category,
                 value: category,
             };
@@ -113,13 +113,13 @@ function ServiceList(): JSX.Element {
     }
 
     function updateVersionFilters(resp: ServiceVo[]): void {
-        let filters: ColumnFilterItem[] = [];
-        let versionSet = new Set<string>('');
-        resp.forEach((v, index) => {
+        const filters: ColumnFilterItem[] = [];
+        const versionSet = new Set<string>('');
+        resp.forEach((v) => {
             versionSet.add(v.version);
         });
         versionSet.forEach((version) => {
-            let filter = {
+            const filter = {
                 text: version,
                 value: version,
             };
@@ -129,13 +129,13 @@ function ServiceList(): JSX.Element {
     }
 
     function updateNameFilters(resp: ServiceVo[]): void {
-        let filters: ColumnFilterItem[] = [];
-        let nameSet = new Set<string>('');
-        resp.forEach((v, index) => {
+        const filters: ColumnFilterItem[] = [];
+        const nameSet = new Set<string>('');
+        resp.forEach((v) => {
             nameSet.add(v.name);
         });
         nameSet.forEach((name) => {
-            let filter = {
+            const filter = {
                 text: name,
                 value: name,
             };
@@ -145,8 +145,8 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
-        serviceApi.services().then((resp) => {
-            let serviceList: ServiceVo[] = [];
+        void serviceApi.services().then((resp) => {
+            const serviceList: ServiceVo[] = [];
             if (resp.length > 0) {
                 setServiceVoList(resp);
                 updateVersionFilters(resp);

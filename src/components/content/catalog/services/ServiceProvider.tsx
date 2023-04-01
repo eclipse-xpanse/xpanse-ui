@@ -6,7 +6,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Alert, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CategoryOclVo, OclDetailVo, ProviderOclVo, Region, VersionOclVo } from '../../../../xpanse-api/generated';
+import { CategoryOclVo, OclDetailVo, ProviderOclVo, Region } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../utils/Area';
 import UpdateService from './UpdateService';
@@ -22,7 +22,7 @@ function ServiceProvider({
     serviceName: string;
 }): JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<OclDetailVo>(new OclDetailVo());
+    const [serviceDetails, setServiceDetails] = useState<OclDetailVo | undefined>(undefined);
     const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
 
     const detailMapper: Map<string, OclDetailVo> = new Map<string, OclDetailVo>();
@@ -31,13 +31,13 @@ function ServiceProvider({
     const updateStatusWhenUnregister = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
 
-    function group(list: any[], key: string): Map<string, any[]> {
-        let map: Map<string, any[]> = new Map<string, any[]>();
-        list.forEach((val) => {
-            if (!map.has(val[key])) {
+    function groupRegionsByArea(regions: Region[]): Map<string, Region[]> {
+        const map: Map<string, Region[]> = new Map<string, Region[]>();
+        regions.forEach((region) => {
+            if (region.area && !map.has(region.area)) {
                 map.set(
-                    val[key],
-                    list.filter((data) => data[key] === val[key])
+                    region.area,
+                    regions.filter((data) => data.area === region.area)
                 );
             }
         });
@@ -47,34 +47,26 @@ function ServiceProvider({
     const items: Tab[] = categoryOclData
         .filter((service: CategoryOclVo) => service.name === name)
         .flatMap((service: CategoryOclVo) => service.versions)
-        .filter((v) => (v as VersionOclVo).version === version)
+        .filter((v) => v.version === version)
         .flatMap((v) => {
-            if (!v || !v.cloudProvider) {
-                return { key: '', label: '' };
-            }
             return v.cloudProvider.map((cloudProvider: ProviderOclVo) => {
-                if (!cloudProvider.details) {
-                    return { key: '', label: '' };
-                }
                 const key = serviceName + '@' + cloudProvider.name;
                 detailMapper.set(key, cloudProvider.details[0]);
-                const result: Map<string, Region[]> = group(cloudProvider.regions, 'area');
-                let areas: Area[] = [];
+                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.regions);
+                const areas: Area[] = [];
 
                 result.forEach((v, k) => {
-                    let regions: string[] = [];
+                    const regions: string[] = [];
 
                     v.forEach((region) => {
-                        if (region.name != null) {
-                            regions.push(region.name);
-                        }
+                        regions.push(region.name);
                     });
-                    let area: Area = { name: k, regions: regions };
+                    const area: Area = { name: k, regions: regions };
                     areas.push(area);
                 });
 
                 areaMapper.set(key, areas);
-                const name = cloudProvider.name!.toString();
+                const name = cloudProvider.name.toString();
                 return {
                     label: name,
                     key: name,
@@ -96,9 +88,9 @@ function ServiceProvider({
     useEffect(() => {
         if (items.length > 0 && lastServiceName !== serviceName) {
             updateServiceDetails(serviceName + '@' + items[0].key);
-            setActiveKey(items[0]!.key);
+            setActiveKey(items[0]?.key);
         } else if (items.length > 0 && lastServiceName === serviceName) {
-            setActiveKey(items[0]!.key);
+            setActiveKey(items[0]?.key);
         }
         lastServiceName = serviceName;
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,11 +140,18 @@ function ServiceProvider({
                 <>
                     {unregisterTips}
                     <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
-                    <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
-                    <div className={'update-unregister-btn-class'}>
-                        <UpdateService id={serviceDetails.id} updateStatusWhenUnregister={updateStatusWhenUnregister} />
-                        <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
-                    </div>
+                    {serviceDetails !== undefined ? (
+                        <>
+                            <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
+                            <div className={'update-unregister-btn-class'}>
+                                <UpdateService
+                                    id={serviceDetails.id}
+                                    updateStatusWhenUnregister={updateStatusWhenUnregister}
+                                />
+                                <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
+                            </div>
+                        </>
+                    ) : null}
                 </>
             ) : (
                 <></>

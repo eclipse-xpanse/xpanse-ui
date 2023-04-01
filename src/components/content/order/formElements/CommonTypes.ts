@@ -26,9 +26,3 @@ export interface DeployParam {
     mandatory: boolean;
     validator: string;
 }
-
-export interface DeployParamItem {
-    item: DeployParam;
-
-    [key: string]: any;
-}

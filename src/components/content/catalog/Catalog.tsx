@@ -30,18 +30,18 @@ function Catalog(): JSX.Element {
         if (!path) {
             return;
         }
-        serviceVendorApi.listRegisteredServicesTree(path).then((data) => {
+        void serviceVendorApi.listRegisteredServicesTree(path).then((data) => {
             setCategoryOclData(data);
-            let tData: DataNode[] = [];
+            const tData: DataNode[] = [];
             data.forEach((service) => {
-                let dn: DataNode = {
+                const dn: DataNode = {
                     title: service.name,
                     key: service.name || '',
                     children: [],
                 };
-                const versionList: VersionOclVo[] = service.versions || [];
+                const versionList: VersionOclVo[] = service.versions;
                 versionList.forEach((v: VersionOclVo) => {
-                    dn.children!.push({
+                    dn.children?.push({
                         title: v.version,
                         key: service.name + '@' + v.version,
                     });
@@ -61,7 +61,7 @@ function Catalog(): JSX.Element {
     }, [treeData]);
 
     useEffect(() => {
-        if (treeData.length === 0 || isParentTreeSelected() || key === '' || key === undefined) {
+        if (treeData.length === 0 || isParentTreeSelected() || key === '') {
             setServiceDetails(<></>);
         } else {
             setServiceDetails(

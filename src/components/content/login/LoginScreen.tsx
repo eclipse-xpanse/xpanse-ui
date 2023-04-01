@@ -8,17 +8,19 @@ import { Form, Image, Input, message, Modal, Space } from 'antd';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { homePageRoute, isAuthenticatedKey, usernameKey } from '../../utils/constants';
 import { useForm } from 'antd/es/form/Form';
+import { Location } from '@remix-run/router';
 
 function LoginScreen(): JSX.Element {
-    const validUsers: Array<string> = ['csp', 'user', 'otc'];
+    const validUsers: string[] = ['csp', 'user', 'otc'];
     const [loginForm] = useForm();
-    const location = useLocation();
-    const origin = location.state?.from?.pathname || homePageRoute;
+    const location: Location = useLocation();
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    const origin = (location.state?.from?.pathname as string) || homePageRoute;
     const navigate = useNavigate();
 
     function validateUser(enteredUser: string): void {
-        if (enteredUser && !validUsers.includes(enteredUser as string)) {
-            message.error('Please use valid user from: ' + validUsers.join(','));
+        if (enteredUser && !validUsers.includes(enteredUser)) {
+            void message.error('Please use valid user from: ' + validUsers.join(','));
         } else {
             localStorage.setItem(isAuthenticatedKey, 'true');
             localStorage.setItem(usernameKey, enteredUser);
@@ -49,7 +51,8 @@ function LoginScreen(): JSX.Element {
                     labelCol={{ span: 8 }}
                     wrapperCol={{ span: 16 }}
                     autoComplete='off'
-                    onFinish={(values) => validateUser(values.username)}
+                    //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+                    onFinish={(values) => validateUser(values.username as string)}
                     preserve={false}
                 >
                     <Form.Item

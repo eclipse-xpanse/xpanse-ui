@@ -29,18 +29,30 @@
     "eslintConfig": {
         "extends": [
             "react-app",
-            "react-app/jest"
+            "react-app/jest",
+            "eslint:recommended",
+            "plugin:@typescript-eslint/recommended",
+            "plugin:@typescript-eslint/recommended-requiring-type-checking",
+            "plugin:@typescript-eslint/strict"
         ],
         "plugins": [
-            "react"
+            "react",
+            "@typescript-eslint"
         ],
         "rules": {
             "react/jsx-uses-react": "error",
-            "react/jsx-uses-vars": "error"
+            "react/jsx-uses-vars": "error",
+            "no-undef": "off",
+            "@typescript-eslint/no-inferrable-types": "off"
         },
         "ignorePatterns": [
             "src/xpanse-api/**"
-        ]
+        ],
+        "root": true,
+        "parser": "@typescript-eslint/parser",
+        "parserOptions": {
+            "project": "tsconfig.json"
+        }
     },
     "browserslist": {
         "production": [
@@ -55,7 +67,9 @@
         ]
     },
     "devDependencies": {
-        "eslint": "^8.34.0",
+        "@typescript-eslint/eslint-plugin": "^5.57.0",
+        "@typescript-eslint/parser": "^5.57.0",
+        "eslint": "^8.37.0",
         "eslint-plugin-react": "^7.32.2",
         "eslint-plugin-require-explicit-generics": "^0.4.2",
         "prettier": "2.8.4",

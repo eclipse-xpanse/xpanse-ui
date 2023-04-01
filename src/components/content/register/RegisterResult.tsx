@@ -13,7 +13,7 @@ function RegisterResult({
     registerResult,
     onRemove,
 }: {
-    ocl: Ocl | undefined;
+    ocl: Ocl;
     registerRequestStatus: ValidationStatus;
     registerResult: string;
     onRemove: () => void;
@@ -22,7 +22,7 @@ function RegisterResult({
         return (
             <Alert
                 type={'success'}
-                message={`Service ${ocl?.name} Registered Successfully`}
+                message={`Service ${ocl.name} Registered Successfully`}
                 closable={true}
                 onClose={onRemove}
                 className={'result'}

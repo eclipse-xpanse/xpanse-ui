@@ -31,7 +31,7 @@ function Services(): JSX.Element {
     };
 
     function getVersions(versionVos: VersionOclVo[]) {
-        let versionList: string[] = [];
+        const versionList: string[] = [];
         versionVos.forEach((versionOclVo) => {
             versionList.push(versionOclVo.version);
         });
@@ -43,11 +43,11 @@ function Services(): JSX.Element {
         if (!categoryName) {
             return;
         }
-        serviceVendorApi.listRegisteredServicesTree(categoryName).then((rsp) => {
-            let serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
+        void serviceVendorApi.listRegisteredServicesTree(categoryName).then((rsp) => {
+            const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
             if (rsp.length > 0) {
                 rsp.forEach((item) => {
-                    let serviceItem = {
+                    const serviceItem = {
                         name: item.name || '',
                         content: item.versions[0].cloudProvider[0].details[0].description,
                         icon: item.versions[0].cloudProvider[0].details[0].icon,

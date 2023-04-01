@@ -10,9 +10,12 @@ import YAML from 'yaml';
 function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     const getFlavoursText = (ocl: Ocl): JSX.Element => {
+        // These warnings must be suppressed because the Ocl object here is created from the import file and the data not necessarily contains all the mandatory fields.
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (ocl.flavors) {
             const yamlDocument = new YAML.Document();
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             yamlDocument.contents = ocl.flavors;
             return (
                 <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Flavors'} trigger='hover'>
@@ -27,9 +30,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
     };
 
     const getBillingText = (ocl: Ocl): JSX.Element => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (ocl.billing) {
             const yamlDocument = new YAML.Document();
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             yamlDocument.contents = ocl.billing;
             return (
                 <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Billing'} trigger='hover'>
@@ -41,9 +46,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
     };
 
     const getDeploymentText = (ocl: Ocl): JSX.Element => {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (ocl.deployment) {
             const yamlDocument = new YAML.Document();
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
             yamlDocument.contents = ocl.deployment;
             return (
                 <Popover
@@ -112,6 +119,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                     <div>
                         <Descriptions title={'Basic Information'} column={2} bordered className={'ocl-data-info-table'}>
                             <Descriptions.Item label='Category'>
+                                {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                                 {ocl.category ? ocl.category : PLACE_HOLDER_UNKNOWN_VALUE}
                             </Descriptions.Item>
                             <Descriptions.Item label='Version'>{ocl.serviceVersion}</Descriptions.Item>
@@ -125,8 +133,13 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                 </div>
             </>
         );
-    } catch (error: any) {
-        return error.message;
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return error.message;
+        } else {
+            console.log(error);
+            return 'Unhandled Exception';
+        }
     }
 }
 

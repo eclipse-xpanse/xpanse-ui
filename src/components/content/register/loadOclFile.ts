@@ -7,7 +7,7 @@ import { Ocl } from '../../../xpanse-api/generated';
 import { ObjectSerializer } from '../../../xpanse-api/generated/models/ObjectSerializer';
 
 function loadOclFile(fileData: string): Ocl {
-    return ObjectSerializer.deserialize(ObjectSerializer.parse(fileData, 'application/yaml'), 'Ocl', '');
+    return ObjectSerializer.deserialize(ObjectSerializer.parse(fileData, 'application/yaml'), 'Ocl', '') as Ocl;
 }
 
 export default loadOclFile;

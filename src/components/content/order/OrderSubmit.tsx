@@ -7,7 +7,13 @@ import Navigate from './Navigate';
 import '../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
 import { ChangeEvent, useState } from 'react';
-import { DeployParam, DeployParamItem, ParamOnChangeHandler } from './formElements/CommonTypes';
+import {
+    DeployParam,
+    NumberInputEventHandler,
+    ParamOnChangeHandler,
+    SwitchOnChangeHandler,
+    TextInputEventHandler,
+} from './formElements/CommonTypes';
 import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
@@ -20,15 +26,15 @@ const deployTimeout: number = 3600000;
 // 5 seconds.
 const waitServicePeriod: number = 5000;
 
-function OrderItem(props: DeployParamItem) {
-    if (props.item.type === 'string') {
-        return <TextInput item={props.item} onChangeHandler={props.onChangeHandler} />;
+function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
+    if (item.type === 'string') {
+        return <TextInput item={item} onChangeHandler={onChangeHandler as TextInputEventHandler} />;
     }
-    if (props.item.type === 'number') {
-        return <NumberInput item={props.item} onChangeHandler={props.onChangeHandler} />;
+    if (item.type === 'number') {
+        return <NumberInput item={item} onChangeHandler={onChangeHandler as NumberInputEventHandler} />;
     }
-    if (props.item.type === 'boolean') {
-        return <Switch item={props.item} onChangeHandler={props.onChangeHandler} />;
+    if (item.type === 'boolean') {
+        return <Switch item={item} onChangeHandler={onChangeHandler as SwitchOnChangeHandler} />;
     }
 
     return <></>;
@@ -63,7 +69,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     }
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
-        console.log(parameters);
         if (parameter.type === 'string') {
             return (event: ChangeEvent<HTMLInputElement>) => {
                 TipClear();
@@ -103,7 +108,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 );
             };
         }
-        return (value: any) => {
+        return (value: unknown) => {
             console.log(value);
         };
     }
@@ -111,8 +116,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     function waitingServiceReady(uuid: string, timeout: number, date: Date) {
         Tip(
             'success',
-            (('Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000)) as string) +
-                's]'
+            'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
         serviceApi
             .serviceDetail(uuid)
@@ -134,12 +138,11 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     setDeploying(false);
                     TipClear();
                 }
-            })
-            .finally(() => {});
+            });
     }
 
     function OnSubmit() {
-        let createRequest = new CreateRequest();
+        const createRequest = new CreateRequest();
         createRequest.name = props.name;
         createRequest.version = props.version;
         createRequest.category = props.category;
@@ -147,9 +150,9 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         createRequest.region = props.region;
         createRequest.flavor = props.flavor;
         createRequest.property = {};
-        for (let item of parameters) {
+        for (const item of parameters) {
             if (item.kind === 'variable' || item.kind === 'env') {
-                createRequest.property[item.name] = item.value as string;
+                createRequest.property[item.name] = item.value;
             }
         }
         // Start deploying
@@ -166,8 +169,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 console.error(error);
                 Tip('error', 'Create service deploy failed.');
                 setDeploying(false);
-            })
-            .finally(() => {});
+            });
     }
 
     return (
@@ -213,9 +215,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
 }
 
 export function OrderSubmitPage(): JSX.Element {
-    const { state } = useLocation();
-    const { props } = state;
-    return OrderSubmit(props);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
+    return OrderSubmit(useLocation().state.props);
 }
 
 export default OrderSubmitPage;
