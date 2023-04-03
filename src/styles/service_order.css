@@ -213,6 +213,12 @@
     margin: 15px;
 }
 
+.services-content-price-class {
+    font-size: 14px;
+    font-weight: bold;
+    color: red;
+}
+
 .version-drop-down {
     width: fit-content;
 }
