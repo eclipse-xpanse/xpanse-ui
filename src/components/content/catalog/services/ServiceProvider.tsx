@@ -17,9 +17,11 @@ let lastServiceName: string = '';
 function ServiceProvider({
     categoryOclData,
     serviceName,
+    confirmUnregister,
 }: {
     categoryOclData: CategoryOclVo[];
     serviceName: string;
+    confirmUnregister: (disabled: boolean) => void;
 }): JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<OclDetailVo | undefined>(undefined);
@@ -30,6 +32,8 @@ function ServiceProvider({
     const [name, version] = serviceName.split('@');
     const updateStatusWhenUnregister = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
+    const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
+    const [unregisterTabsItemDisabled, setUnregisterTabsItemDisabled] = useState<boolean>(false);
 
     function groupRegionsByArea(regions: Region[]): Map<string, Region[]> {
         const map: Map<string, Region[]> = new Map<string, Region[]>();
@@ -71,6 +75,7 @@ function ServiceProvider({
                     label: name,
                     key: name,
                     children: [],
+                    disabled: unregisterTabsItemDisabled,
                 };
             });
         });
@@ -125,9 +130,25 @@ function ServiceProvider({
         );
     }
 
-    const onConfirmUnregister = (type: string, msg: string, unregisterResult: MutableRefObject<string>) => {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    const onConfirmUnregister = async (
+        type: string,
+        msg: string,
+        unregisterResult: MutableRefObject<string>,
+        id: string
+    ) => {
         setUnregisterTipsInfo(type as 'success' | 'error', msg);
+        setUnregisterServiceId(id);
         updateStatusWhenUnregister.current = unregisterResult.current;
+        if (type.length > 0) {
+            confirmUnregister(true);
+            setUnregisterTabsItemDisabled(true);
+        }
+        if (type === 'success') {
+            await sleep(500);
+            window.location.reload();
+        }
     };
 
     const onRemove = () => {
@@ -136,9 +157,9 @@ function ServiceProvider({
 
     return (
         <>
-            {serviceName.length > 0 ? (
+            {serviceName.length > 0 && categoryOclData.length > 0 ? (
                 <>
-                    {unregisterTips}
+                    {serviceDetails !== undefined && unregisterServiceId === serviceDetails.id ? unregisterTips : ''}
                     <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
                     {serviceDetails !== undefined ? (
                         <>
@@ -148,6 +169,7 @@ function ServiceProvider({
                                     id={serviceDetails.id}
                                     updateStatusWhenUnregister={updateStatusWhenUnregister}
                                 />
+                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
                                 <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
                             </div>
                         </>
