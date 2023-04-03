@@ -11,92 +11,118 @@ import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { CategoryOclVo, VersionOclVo } from '../../../xpanse-api/generated';
-import { Tree } from 'antd';
+import { Empty, Tree } from 'antd';
 
 function Catalog(): JSX.Element {
-    const [key, setKey] = useState<React.Key>('');
-    const [serviceDetails, setServiceDetails] = useState<JSX.Element>(<></>);
-    const [serviceTree, setServiceTree] = useState<JSX.Element>(<></>);
+    const [selectKey, setSelectKey] = useState<React.Key>('');
+    const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
     const location = useLocation();
-
-    const onSelect = (selectedKeys: React.Key[]) => {
-        setKey(selectedKeys[0]);
-    };
+    const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
 
     useEffect(() => {
         const path: string = location.hash.split('#')[1];
         if (!path) {
             return;
         }
-        void serviceVendorApi.listRegisteredServicesTree(path).then((data) => {
-            setCategoryOclData(data);
-            const tData: DataNode[] = [];
-            data.forEach((service) => {
-                const dn: DataNode = {
-                    title: service.name,
-                    key: service.name || '',
-                    children: [],
-                };
-                const versionList: VersionOclVo[] = service.versions;
-                versionList.forEach((v: VersionOclVo) => {
-                    dn.children?.push({
-                        title: v.version,
-                        key: service.name + '@' + v.version,
+        serviceVendorApi
+            .listRegisteredServicesTree(path)
+            .then((data) => {
+                const tData: DataNode[] = [];
+                const tExpandKeys: React.Key[] = [];
+                if (data.length > 0) {
+                    setCategoryOclData(data);
+                    data.forEach((service) => {
+                        const dn: DataNode = {
+                            title: service.name,
+                            key: service.name || '',
+                            children: [],
+                        };
+                        const versionList: VersionOclVo[] = service.versions;
+                        versionList.forEach((v: VersionOclVo) => {
+                            dn.children?.push({
+                                title: v.version,
+                                key: service.name + '@' + v.version,
+                            });
+                            tExpandKeys.push(service.name + '@' + v.version);
+                        });
+                        tData.push(dn);
                     });
-                });
-                tData.push(dn);
+                    setTreeData(tData);
+                    setSelectKey(data[0].name + '@' + data[0].versions[0].version);
+                    setExpandKeys(tExpandKeys);
+                } else {
+                    setTreeData([]);
+                    setSelectKey('');
+                    setExpandKeys([]);
+                    setCategoryOclData([]);
+                }
+            })
+            .catch((error: Error) => {
+                console.log(error.message);
+                setTreeData([]);
+                setSelectKey('');
+                setExpandKeys([]);
+                setCategoryOclData([]);
             });
-            setTreeData(tData);
-            setServiceDetails(<></>);
-            setServiceTree(<></>);
-        });
     }, [location]);
 
-    useEffect(() => {
-        setServiceTree(
-            <Tree defaultExpandAll={true} autoExpandParent={true} onSelect={onSelect} treeData={treeData} />
-        );
-    }, [treeData]);
-
-    useEffect(() => {
-        if (treeData.length === 0 || isParentTreeSelected() || key === '') {
-            setServiceDetails(<></>);
-        } else {
-            setServiceDetails(
-                <div className={'right-class'}>
-                    <div className={'left-title-class'}>Cloud Provider</div>
-                    <ServiceProvider categoryOclData={categoryOclData} serviceName={key.toString()} />
-                </div>
-            );
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [key]);
-
-    function isParentTreeSelected(): boolean {
+    function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
         treeData.forEach((dataNode: DataNode) => {
-            if (dataNode.key === key) {
+            if (dataNode.key === selectKey) {
                 isParentNode = true;
             }
         });
         return isParentNode;
     }
 
+    const onSelect = (selectedKeys: React.Key[]) => {
+        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
+            return;
+        }
+        setSelectKey(selectedKeys[0]);
+    };
+
+    const onConfirmUnregister = (disabled: boolean) => {
+        setUnregisteredDisabled(disabled);
+    };
+
     return (
         <div className={'catalog-middleware'}>
-            <div className={'container'}>
-                <div className={'left-class'}>
-                    <div className={'left-title-class'}>
-                        <HomeOutlined />
-                        &nbsp;Service Tree
-                    </div>
-                    {serviceTree}
+            {treeData.length === 0 || isParentTreeSelected(selectKey) || selectKey === '' ? (
+                <div className={'service-blank-class'}>
+                    <Empty description={'No services available.'} />
                 </div>
-                <div className={'middle-class'}></div>
-                {serviceDetails}
-            </div>
+            ) : (
+                <div className={'container'}>
+                    <div className={'left-class'}>
+                        <div className={'left-title-class'}>
+                            <HomeOutlined />
+                            &nbsp;Service Tree
+                        </div>
+                        <Tree
+                            defaultExpandAll={true}
+                            autoExpandParent={true}
+                            onSelect={onSelect}
+                            selectedKeys={[selectKey]}
+                            expandedKeys={expandKeys}
+                            treeData={treeData}
+                            disabled={unregisteredDisabled}
+                        />
+                    </div>
+                    <div className={'middle-class'} />
+                    <div className={'right-class'}>
+                        <div className={'left-title-class'}>Cloud Provider</div>
+                        <ServiceProvider
+                            categoryOclData={categoryOclData}
+                            serviceName={selectKey.toString()}
+                            confirmUnregister={onConfirmUnregister}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

@@ -12,7 +12,7 @@ function UnregisterService({
     onConfirmHandler,
 }: {
     id: string;
-    onConfirmHandler: (type: string, message: string, unregisterResult: MutableRefObject<string>) => void;
+    onConfirmHandler: (type: string, message: string, unregisterResult: MutableRefObject<string>, id: string) => void;
 }): JSX.Element {
     const unregisterResult = useRef<string>('');
     function unregisterServiceResult(): void {
@@ -20,11 +20,11 @@ function UnregisterService({
             .unregister(id)
             .then(() => {
                 unregisterResult.current = 'completed';
-                onConfirmHandler('success', 'Service Unregistered Successfully', unregisterResult);
+                onConfirmHandler('success', 'Service Unregistered Successfully', unregisterResult, id);
             })
             .catch((error: Error) => {
                 unregisterResult.current = 'error';
-                onConfirmHandler('error', 'Service Unregister Failed, '.concat(error.message), unregisterResult);
+                onConfirmHandler('error', 'Service Unregister Failed, '.concat(error.message), unregisterResult, id);
             });
     }
 
