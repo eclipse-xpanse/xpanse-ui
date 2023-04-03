@@ -7,6 +7,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { To, useLocation } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
+    Billing,
+    BillingCurrencyEnum,
+    BillingPeriodEnum,
     CloudServiceProviderNameEnum,
     Flavor,
     Ocl,
@@ -20,6 +23,7 @@ import { Select, Space, Tabs } from 'antd';
 import { Area } from '../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 import { sortVersion } from '../../utils/Sort';
+import { currencyMapper } from '../../utils/currency';
 
 function filterAreaList(
     selectVersion: string,
@@ -93,6 +97,8 @@ function CreateService(): JSX.Element {
         { value: '', label: '', price: '' },
     ]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
+    const [priceValue, setPriceValue] = useState<string>('');
+    const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
         const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
@@ -126,6 +132,7 @@ function CreateService(): JSX.Element {
                 const currentAreaList = getAreaList(latestVersion, currentCspList[0]);
                 const currentRegionList = getRegionList(latestVersion, currentCspList[0], currentAreaList[0].key);
                 const currentFlavorList = getFlavorList(latestVersion);
+                const currentBilling = getBilling(latestVersion, currentCspList[0]);
                 setVersionList(currentVersionList);
                 setSelectVersion(latestVersion);
                 setCspList(currentCspList);
@@ -136,6 +143,8 @@ function CreateService(): JSX.Element {
                 setSelectRegion(currentRegionList[0].value);
                 setFlavorList(currentFlavorList);
                 setSelectFlavor(currentFlavorList[0].value);
+                setPriceValue(currentFlavorList[0].price);
+                setCurrency(currencyMapper[currentBilling.currency]);
             } else {
                 return;
             }
@@ -258,6 +267,23 @@ function CreateService(): JSX.Element {
 
         return flavors;
     }
+    function getBilling(selectVersion: string, csp: CloudServiceProviderNameEnum): Billing {
+        let billing: Billing = {
+            model: '' as string,
+            period: 'daily' as BillingPeriodEnum,
+            currency: 'euro' as BillingCurrencyEnum,
+        };
+        versionMapper.current.forEach((v, k) => {
+            if (selectVersion === k) {
+                v.forEach((registerServiceEntity) => {
+                    if (csp === registerServiceEntity.csp && registerServiceEntity.ocl) {
+                        billing = registerServiceEntity.ocl.billing;
+                    }
+                });
+            }
+        });
+        return billing;
+    }
 
     const onChangeVersion = useCallback((value: string) => {
         const currentVersion = value;
@@ -265,6 +291,7 @@ function CreateService(): JSX.Element {
         const currentAreaList = getAreaList(currentVersion, currentCspList[0]);
         const currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0].key);
         const currentFlavorList = getFlavorList(currentVersion);
+        const billing: Billing = getBilling(currentVersion, currentCspList[0]);
         setSelectVersion(currentVersion);
         setCspList(currentCspList);
         setSelectCsp(currentCspList[0]);
@@ -274,17 +301,24 @@ function CreateService(): JSX.Element {
         setSelectRegion(currentRegionList[0].value);
         setFlavorList(currentFlavorList);
         setSelectFlavor(currentFlavorList[0].value);
-        setSelectRegion(currentRegionList[0].value);
+        setPriceValue(currentFlavorList[0].price);
+        setCurrency(currencyMapper[billing.currency]);
     }, []);
 
     const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum) => {
         const currentAreaList = getAreaList(selectVersion, csp);
         const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0].key);
+        const currentFlavorList = getFlavorList(selectVersion);
+        const billing: Billing = getBilling(selectVersion, csp);
         setSelectCsp(csp);
         setAreaList(currentAreaList);
         setSelectArea(currentAreaList[0].key);
         setRegionList(currentRegionList);
         setSelectRegion(currentRegionList[0].value);
+        setFlavorList(currentFlavorList);
+        setSelectFlavor(currentFlavorList[0].value);
+        setPriceValue(currentFlavorList[0].price);
+        setCurrency(currencyMapper[billing.currency]);
     }, []);
 
     const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum, key: string) => {
@@ -298,8 +332,16 @@ function CreateService(): JSX.Element {
         setSelectRegion(value);
     }, []);
 
-    const onChangeFlavor = useCallback((value: string) => {
+    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProviderNameEnum) => {
         setSelectFlavor(value);
+        const currentFlavorList = getFlavorList(selectVersion);
+        const billing: Billing = getBilling(selectVersion, csp);
+        currentFlavorList.forEach((flaver) => {
+            if (value === flaver.value) {
+                setPriceValue(flaver.price);
+            }
+        });
+        setCurrency(currencyMapper[billing.currency]);
     }, []);
 
     return (
@@ -358,10 +400,18 @@ function CreateService(): JSX.Element {
                             className={'select-box-class'}
                             value={selectFlavor}
                             style={{ width: 450 }}
-                            onChange={onChangeFlavor}
+                            onChange={(value) => {
+                                onChangeFlavor(value, selectVersion, selectCsp);
+                            }}
                             options={flavorList}
                         />
                     </Space>
+                </div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                    Price:&nbsp;
+                    <span className={'services-content-price-class'}>
+                        {priceValue}&nbsp;{currency}
+                    </span>
                 </div>
             </div>
             <div>
