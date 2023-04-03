@@ -54,6 +54,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
+    const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
 
     function ResultDetails({ msg, uuid }: { msg: string; uuid: string }): JSX.Element {
         return (
@@ -142,6 +143,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     Tip('success', 'Deployment successful.', uuid);
                 } else {
                     Tip('error', 'Deployment failed.', uuid);
+                    setRequestSubmitted(false);
                 }
             })
             .catch((error) => {
@@ -153,6 +155,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 } else {
                     setDeploying(false);
                     TipClear();
+                    setRequestSubmitted(false);
                 }
             });
     }
@@ -177,6 +180,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         serviceApi
             .deploy(createRequest)
             .then((uuid) => {
+                setRequestSubmitted(true);
                 Tip('success', 'Request accepted', uuid);
                 waitingServiceReady(uuid, deployTimeout, new Date());
             })
@@ -219,7 +223,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 <div className={'order-param-item-row'}>
                     <div className={'order-param-item-left'} />
                     <div className={'order-param-submit'}>
-                        <Button type='primary' loading={deploying} htmlType='submit'>
+                        <Button type='primary' loading={deploying} htmlType='submit' disabled={requestSubmitted}>
                             Deploy
                         </Button>
                     </div>
