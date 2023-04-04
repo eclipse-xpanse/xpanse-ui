@@ -54,12 +54,28 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
+    const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
 
-    function Tip(type: 'error' | 'success', msg: string) {
+    function ResultDetails({ msg, uuid }: { msg: string; uuid: string }): JSX.Element {
+        return (
+            <>
+                {msg}
+                <br />
+                Request ID: <b>{uuid}</b>
+            </>
+        );
+    }
+
+    function Tip(type: 'error' | 'success', msg: string, uuid: string) {
         setTip(
             <div className={'submit-alert-tip'}>
                 {' '}
-                <Alert message='Deployment:' description={msg} showIcon type={type} />{' '}
+                <Alert
+                    message={`Deployment Status`}
+                    description=<ResultDetails msg={msg} uuid={uuid} />
+                    showIcon
+                    type={type}
+                />{' '}
             </div>
         );
     }
@@ -116,16 +132,18 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     function waitingServiceReady(uuid: string, timeout: number, date: Date) {
         Tip(
             'success',
-            'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
+            'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]',
+            uuid
         );
         serviceApi
             .serviceDetail(uuid)
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
-                    Tip('success', 'Deploy success.');
+                    Tip('success', 'Deployment successful.', uuid);
                 } else {
-                    Tip('error', 'Deploy failed.');
+                    Tip('error', 'Deployment failed.', uuid);
+                    setRequestSubmitted(false);
                 }
             })
             .catch((error) => {
@@ -137,6 +155,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 } else {
                     setDeploying(false);
                     TipClear();
+                    setRequestSubmitted(false);
                 }
             });
     }
@@ -160,14 +179,14 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
 
         serviceApi
             .deploy(createRequest)
-            .then((response) => {
-                console.log('success ', response);
-                Tip('success', response);
-                waitingServiceReady(response, deployTimeout, new Date());
+            .then((uuid) => {
+                setRequestSubmitted(true);
+                Tip('success', 'Request accepted', uuid);
+                waitingServiceReady(uuid, deployTimeout, new Date());
             })
             .catch((error) => {
                 console.error(error);
-                Tip('error', 'Create service deploy failed.');
+                Tip('error', 'Create service deploy failed.', '-');
                 setDeploying(false);
             });
     }
@@ -204,7 +223,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 <div className={'order-param-item-row'}>
                     <div className={'order-param-item-left'} />
                     <div className={'order-param-submit'}>
-                        <Button type='primary' loading={deploying} htmlType='submit'>
+                        <Button type='primary' loading={deploying} htmlType='submit' disabled={requestSubmitted}>
                             Deploy
                         </Button>
                     </div>
