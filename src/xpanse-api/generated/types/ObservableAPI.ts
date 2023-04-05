@@ -9,16 +9,16 @@ import { Observable, of, from } from '../rxjsStub';
 import { mergeMap, map } from '../rxjsStub';
 import { CategoryOclVo } from '../models/CategoryOclVo';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
+import { RegisteredServiceVo } from '../models/RegisteredServiceVo';
+import { ServiceDetailVo } from '../models/ServiceDetailVo';
 export class ObservableAdminApi {
     private requestFactory: AdminApiRequestFactory;
     private responseProcessor: AdminApiResponseProcessor;
@@ -179,7 +179,7 @@ export class ObservableServiceApi {
      * Get deployed service using id.
      * @param id Task id of deploy service
      */
-    public serviceDetail(id: string, _options?: Configuration): Observable<DeployServiceEntity> {
+    public serviceDetail(id: string, _options?: Configuration): Observable<ServiceDetailVo> {
         const requestContextPromise = this.requestFactory.serviceDetail(id, _options);
 
         // build promise chain
@@ -395,7 +395,7 @@ export class ObservableServiceVendorApi {
         serviceName?: string,
         serviceVersion?: string,
         _options?: Configuration
-    ): Observable<Array<RegisterServiceEntity>> {
+    ): Observable<Array<RegisteredServiceVo>> {
         const requestContextPromise = this.requestFactory.listRegisteredServices(
             categoryName,
             cspName,

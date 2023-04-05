@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { ServiceDetailVo } from './ServiceDetailVo';
+
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
@@ -27,13 +29,6 @@ import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
 import { CategoryOclVo } from './CategoryOclVo';
 import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from './CreateRequest';
-import { DeployResourceEntity, DeployResourceEntityKindEnum } from './DeployResourceEntity';
-import {
-    DeployServiceEntity,
-    DeployServiceEntityCategoryEnum,
-    DeployServiceEntityCspEnum,
-    DeployServiceEntityServiceStateEnum,
-} from './DeployServiceEntity';
 import { DeployVariable, DeployVariableKindEnum, DeployVariableTypeEnum } from './DeployVariable';
 import { Deployment, DeploymentKindEnum } from './Deployment';
 import { Flavor } from './Flavor';
@@ -41,16 +36,12 @@ import { Ocl, OclCategoryEnum } from './Ocl';
 import { OclDetailVo, OclDetailVoCategoryEnum, OclDetailVoServiceStateEnum } from './OclDetailVo';
 import { ProviderOclVo, ProviderOclVoNameEnum } from './ProviderOclVo';
 import { Region } from './Region';
-import {
-    RegisterServiceEntity,
-    RegisterServiceEntityCspEnum,
-    RegisterServiceEntityCategoryEnum,
-    RegisterServiceEntityServiceStateEnum,
-} from './RegisterServiceEntity';
 import { Response } from './Response';
 import { ServiceVo, ServiceVoCategoryEnum, ServiceVoCspEnum, ServiceVoServiceStateEnum } from './ServiceVo';
 import { SystemStatus, SystemStatusHealthStatusEnum } from './SystemStatus';
 import { VersionOclVo } from './VersionOclVo';
+import { DeployResource } from './DeployResource';
+import { RegisteredServiceVo } from './RegisteredServiceVo';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -68,10 +59,7 @@ let enumsMap: Set<string> = new Set<string>([
     'CloudServiceProviderNameEnum',
     'CreateRequestCategoryEnum',
     'CreateRequestCspEnum',
-    'DeployResourceEntityKindEnum',
-    'DeployServiceEntityCategoryEnum',
-    'DeployServiceEntityCspEnum',
-    'DeployServiceEntityServiceStateEnum',
+    'DeployResourceKindEnum',
     'DeployVariableKindEnum',
     'DeployVariableTypeEnum',
     'DeploymentKindEnum',
@@ -79,9 +67,12 @@ let enumsMap: Set<string> = new Set<string>([
     'OclDetailVoCategoryEnum',
     'OclDetailVoServiceStateEnum',
     'ProviderOclVoNameEnum',
-    'RegisterServiceEntityCspEnum',
-    'RegisterServiceEntityCategoryEnum',
-    'RegisterServiceEntityServiceStateEnum',
+    'RegisteredServiceVoCspEnum',
+    'RegisteredServiceVoCategoryEnum',
+    'RegisteredServiceVoServiceStateEnum',
+    'ServiceDetailVoCategoryEnum',
+    'ServiceDetailVoCspEnum',
+    'ServiceDetailVoServiceStateEnum',
     'ServiceVoCategoryEnum',
     'ServiceVoCspEnum',
     'ServiceVoServiceStateEnum',
@@ -93,8 +84,7 @@ let typeMap: { [index: string]: any } = {
     CategoryOclVo: CategoryOclVo,
     CloudServiceProvider: CloudServiceProvider,
     CreateRequest: CreateRequest,
-    DeployResourceEntity: DeployResourceEntity,
-    DeployServiceEntity: DeployServiceEntity,
+    DeployResource: DeployResource,
     DeployVariable: DeployVariable,
     Deployment: Deployment,
     Flavor: Flavor,
@@ -102,8 +92,9 @@ let typeMap: { [index: string]: any } = {
     OclDetailVo: OclDetailVo,
     ProviderOclVo: ProviderOclVo,
     Region: Region,
-    RegisterServiceEntity: RegisterServiceEntity,
+    RegisteredServiceVo: RegisteredServiceVo,
     Response: Response,
+    ServiceDetailVo: ServiceDetailVo,
     ServiceVo: ServiceVo,
     SystemStatus: SystemStatus,
     VersionOclVo: VersionOclVo,
@@ -132,7 +123,7 @@ export class ObjectSerializer {
                 return expectedType; // the type does not have a discriminator. use it.
             } else {
                 if (data[discriminatorProperty]) {
-                    var discriminatorType = data[discriminatorProperty];
+                    const discriminatorType = data[discriminatorProperty];
                     if (typeMap[discriminatorType]) {
                         return discriminatorType; // use the type given in the discriminator
                     } else {

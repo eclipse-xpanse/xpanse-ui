@@ -11,9 +11,9 @@ import { ApiException } from './exception';
 import { isCodeInRange } from '../util';
 import { SecurityAuthentication } from '../auth/auth';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
+import { ServiceDetailVo } from '../models/ServiceDetailVo';
 
 /**
  * no description
@@ -172,6 +172,14 @@ export class ServiceApiResponseProcessor {
      */
     public async deploy(response: ResponseContext): Promise<string> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                'uuid'
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -187,14 +195,6 @@ export class ServiceApiResponseProcessor {
                 'uuid'
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('202', response.httpStatusCode)) {
             const body: string = ObjectSerializer.deserialize(
@@ -232,6 +232,14 @@ export class ServiceApiResponseProcessor {
      */
     public async destroy(response: ResponseContext): Promise<Response> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -247,14 +255,6 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('202', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -292,6 +292,14 @@ export class ServiceApiResponseProcessor {
      */
     public async openApi(response: ResponseContext): Promise<string> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -307,14 +315,6 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: string = ObjectSerializer.deserialize(
@@ -350,8 +350,16 @@ export class ServiceApiResponseProcessor {
      * @params response Response returned by the server for a request to serviceDetail
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async serviceDetail(response: ResponseContext): Promise<DeployServiceEntity> {
+    public async serviceDetail(response: ResponseContext): Promise<ServiceDetailVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -368,30 +376,22 @@ export class ServiceApiResponseProcessor {
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: DeployServiceEntity = ObjectSerializer.deserialize(
+            const body: ServiceDetailVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'DeployServiceEntity',
+                'ServiceDetailVo',
                 ''
-            ) as DeployServiceEntity;
+            ) as ServiceDetailVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: DeployServiceEntity = ObjectSerializer.deserialize(
+            const body: ServiceDetailVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'DeployServiceEntity',
+                'ServiceDetailVo',
                 ''
-            ) as DeployServiceEntity;
+            ) as ServiceDetailVo;
             return body;
         }
 
@@ -412,6 +412,14 @@ export class ServiceApiResponseProcessor {
      */
     public async services(response: ResponseContext): Promise<Array<ServiceVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -427,14 +435,6 @@ export class ServiceApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: Array<ServiceVo> = ObjectSerializer.deserialize(

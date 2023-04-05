@@ -7,7 +7,7 @@ import {
     CreateRequestCategoryEnum,
     CreateRequestCspEnum,
     Ocl,
-    RegisterServiceEntity,
+    RegisteredServiceVo,
 } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
@@ -29,7 +29,7 @@ export default function GoToSubmit({
     selectCsp: string;
     selectRegion: string;
     selectFlavor: string;
-    versionMapper: Map<string, RegisterServiceEntity[]>;
+    versionMapper: Map<string, RegisteredServiceVo[]>;
 }): JSX.Element {
     const navigate = useNavigate();
 
@@ -38,10 +38,8 @@ export default function GoToSubmit({
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 const oclList: Ocl[] = [];
-                for (const registerServiceEntity of v) {
-                    if (registerServiceEntity.ocl instanceof Ocl) {
-                        oclList.push(registerServiceEntity.ocl);
-                    }
+                for (const registeredServiceVo of v) {
+                    oclList.push(registeredServiceVo.ocl);
                 }
                 oclList.forEach((item) => {
                     if (item.serviceVersion === selectVersion && item.cloudServiceProvider.name === selectCsp) {
