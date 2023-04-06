@@ -2,8 +2,9 @@
  * SPDX-License-Identifier: Apache-2.0
  * SPDX-FileCopyrightText: Huawei Inc.
  */
+
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Table } from 'antd';
+import { Alert, Button, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ServiceVo } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
@@ -12,12 +13,20 @@ import { CloseCircleOutlined, CopyOutlined, SyncOutlined } from '@ant-design/ico
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
 
+// 1 hour.
+const destroyTimeout: number = 3600000;
+// 5 seconds.
+const waitServicePeriod: number = 3000;
+
 function ServiceList(): JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
+    const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
+    const [loading, setLoading] = useState<boolean>(false);
+    const [id, setId] = useState<string>('');
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -68,18 +77,87 @@ function ServiceList(): JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: () => (
-                <Space size='middle'>
-                    <Button type='primary' icon={<CopyOutlined />}>
-                        migrate
-                    </Button>
-                    <Button type='primary' icon={<CloseCircleOutlined />}>
-                        destroy
-                    </Button>
-                </Space>
-            ),
+            render: (text: string, record: ServiceVo, index) => {
+                return (
+                    <>
+                        <Space size='middle'>
+                            <Button
+                                type='primary'
+                                icon={<CopyOutlined />}
+                                disabled={record.serviceState === 'DEPLOY_SUCCESS' && !loading ? false : true}
+                            >
+                                migrate
+                            </Button>
+                            <Button
+                                loading={record.id === id ? loading : false}
+                                type='primary'
+                                icon={<CloseCircleOutlined />}
+                                onClick={() => destroy(record)}
+                                disabled={record.serviceState === 'DEPLOY_SUCCESS' && !loading ? false : true}
+                            >
+                                destroy
+                            </Button>
+                        </Space>
+                    </>
+                );
+            },
         },
     ];
+
+    function Tip(type: 'error' | 'success', msg: string) {
+        setTip(
+            <div className={'submit-alert-tip'}>
+                {' '}
+                <Alert message='Destroy:' description={msg} showIcon type={type} />{' '}
+            </div>
+        );
+    }
+
+    function TipClear() {
+        setTip(undefined);
+    }
+
+    function waitingServiceDestroy(uuid: string, timeout: number, date: Date) {
+        Tip(
+            'success',
+            'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
+        );
+        serviceApi
+            .serviceDetail(uuid)
+            .then((response) => {
+                if (response.serviceState === 'DESTROY_SUCCESS') {
+                    Tip('success', 'Destroy success.');
+                    setLoading(false);
+                    refreshData();
+                    TipClear();
+                } else {
+                    setTimeout(() => {
+                        waitingServiceDestroy(uuid, timeout - waitServicePeriod, date);
+                    }, waitServicePeriod);
+                }
+            })
+            .catch((e: Error) => {
+                Tip('error', 'Destroy failed:' + e.message);
+                setLoading(false);
+                TipClear();
+            });
+    }
+
+    function destroy(record: ServiceVo) {
+        setId(record.id);
+        setLoading(true);
+        serviceApi
+            .destroy(record.id)
+            .then((resp) => {
+                waitingServiceDestroy(record.id, destroyTimeout, new Date());
+                refreshData();
+            })
+            .catch((e: Error) => {
+                Tip('error', 'Destroy failed:' + e.message);
+                setLoading(false);
+                TipClear();
+            });
+    }
 
     function updateCspFilters(resp: ServiceVo[]): void {
         const filters: ColumnFilterItem[] = [];
@@ -96,6 +174,7 @@ function ServiceList(): JSX.Element {
         });
         setCspFilters(filters);
     }
+
     function updateCategoryFilters(resp: ServiceVo[]): void {
         const filters: ColumnFilterItem[] = [];
         const categorySet = new Set<string>('');
@@ -170,8 +249,10 @@ function ServiceList(): JSX.Element {
 
     return (
         <div className={'services-content'}>
+            {tip}
             <div>
                 <Button
+                    disabled={loading ? true : false}
                     type='primary'
                     icon={<SyncOutlined />}
                     onClick={() => {
