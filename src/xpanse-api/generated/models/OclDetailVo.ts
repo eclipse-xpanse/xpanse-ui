@@ -182,7 +182,7 @@ export type OclDetailVoCategoryEnum =
     | 'storage'
     | 'network'
     | 'database'
-    | 'media_service'
+    | 'mediaService'
     | 'security'
     | 'middleware'
     | 'others';

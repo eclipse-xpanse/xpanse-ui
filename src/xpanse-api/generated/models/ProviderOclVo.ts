@@ -65,4 +65,4 @@ export class ProviderOclVo {
     public constructor() {}
 }
 
-export type ProviderOclVoNameEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';
+export type ProviderOclVoNameEnum = 'aws' | 'azure' | 'alicloud' | 'huawei' | 'openstack' | 'flexibleEngine';

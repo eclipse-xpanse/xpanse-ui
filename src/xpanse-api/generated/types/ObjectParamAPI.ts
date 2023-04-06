@@ -6,10 +6,8 @@
 import { Configuration } from '../configuration';
 import { CategoryOclVo } from '../models/CategoryOclVo';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
@@ -19,6 +17,8 @@ import { ObservableServiceApi } from './ObservableAPI';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 import { ObservableServiceVendorApi } from './ObservableAPI';
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { RegisteredServiceVo } from '../models/RegisteredServiceVo';
+import { ServiceDetailVo } from '../models/ServiceDetailVo';
 
 export interface AdminApiHealthRequest {}
 
@@ -117,7 +117,7 @@ export class ObjectServiceApi {
      * Get deployed service using id.
      * @param param the request object
      */
-    public serviceDetail(param: ServiceApiServiceDetailRequest, options?: Configuration): Promise<DeployServiceEntity> {
+    public serviceDetail(param: ServiceApiServiceDetailRequest, options?: Configuration): Promise<ServiceDetailVo> {
         return this.api.serviceDetail(param.id, options).toPromise();
     }
 
@@ -287,7 +287,7 @@ export class ObjectServiceVendorApi {
     public listRegisteredServices(
         param: ServiceVendorApiListRegisteredServicesRequest = {},
         options?: Configuration
-    ): Promise<Array<RegisterServiceEntity>> {
+    ): Promise<Array<RegisteredServiceVo>> {
         return this.api
             .listRegisteredServices(param.categoryName, param.cspName, param.serviceName, param.serviceVersion, options)
             .toPromise();

@@ -106,8 +106,8 @@ export type CreateRequestCategoryEnum =
     | 'storage'
     | 'network'
     | 'database'
-    | 'media_service'
+    | 'mediaService'
     | 'security'
     | 'middleware'
     | 'others';
-export type CreateRequestCspEnum = 'aws' | 'azure' | 'alibaba' | 'huawei' | 'openstack';
+export type CreateRequestCspEnum = 'aws' | 'azure' | 'alicloud' | 'huawei' | 'openstack' | 'flexibleEngine';

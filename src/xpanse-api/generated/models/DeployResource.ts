@@ -15,11 +15,26 @@
  * Do not edit the class manually.
  */
 
+/**
+ * The resource list of the deployed service.
+ */
 export class DeployResource {
-    'resourceId'?: string;
-    'name'?: string;
-    'kind'?: DeployResourceKindEnum;
-    'property'?: { [key: string]: string };
+    /**
+     * The id of the deployed resource.
+     */
+    'resourceId': string;
+    /**
+     * The name of the deployed resource.
+     */
+    'name': string;
+    /**
+     * The kind of the deployed resource.
+     */
+    'kind': DeployResourceKindEnum;
+    /**
+     * The property of the deployed resource.
+     */
+    'property': { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -57,4 +72,4 @@ export class DeployResource {
     public constructor() {}
 }
 
-export type DeployResourceKindEnum = 'vm' | 'container' | 'public_ip' | 'vpc';
+export type DeployResourceKindEnum = 'vm' | 'container' | 'publicIP' | 'vpc' | 'volume' | 'unknown';

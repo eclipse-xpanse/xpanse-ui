@@ -6,19 +6,20 @@
 import { Configuration } from '../configuration';
 import { CategoryOclVo } from '../models/CategoryOclVo';
 import { CreateRequest } from '../models/CreateRequest';
-import { DeployServiceEntity } from '../models/DeployServiceEntity';
 import { Ocl } from '../models/Ocl';
 import { OclDetailVo } from '../models/OclDetailVo';
-import { RegisterServiceEntity } from '../models/RegisterServiceEntity';
 import { Response } from '../models/Response';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
 import { ObservableAdminApi } from './ObservableAPI';
+
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
 import { ObservableServiceApi } from './ObservableAPI';
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
 import { ObservableServiceVendorApi } from './ObservableAPI';
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
+import { RegisteredServiceVo } from '../models/RegisteredServiceVo';
+import { ServiceDetailVo } from '../models/ServiceDetailVo';
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
 
@@ -78,7 +79,7 @@ export class PromiseServiceApi {
      * Get deployed service using id.
      * @param id Task id of deploy service
      */
-    public serviceDetail(id: string, _options?: Configuration): Promise<DeployServiceEntity> {
+    public serviceDetail(id: string, _options?: Configuration): Promise<ServiceDetailVo> {
         const result = this.api.serviceDetail(id, _options);
         return result.toPromise();
     }
@@ -151,7 +152,7 @@ export class PromiseServiceVendorApi {
         serviceName?: string,
         serviceVersion?: string,
         _options?: Configuration
-    ): Promise<Array<RegisterServiceEntity>> {
+    ): Promise<Array<RegisteredServiceVo>> {
         const result = this.api.listRegisteredServices(categoryName, cspName, serviceName, serviceVersion, _options);
         return result.toPromise();
     }
