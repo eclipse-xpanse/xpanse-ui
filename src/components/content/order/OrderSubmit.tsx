@@ -222,7 +222,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 <div className={'Line'} />
                 <div className={'order-param-item-row'}>
                     <div className={'order-param-item-left'} />
-                    <div className={'order-param-submit'}>
+                    <div className={'order-param-deploy'}>
                         <Button type='primary' loading={deploying} htmlType='submit' disabled={requestSubmitted}>
                             Deploy
                         </Button>
