@@ -32,7 +32,7 @@ export class DeployVariable {
      */
     'type': DeployVariableTypeEnum;
     /**
-     * The example value for the deploy variable
+     * The default value for the deploy variable
      */
     'example'?: string;
     /**
@@ -112,5 +112,5 @@ export class DeployVariable {
     public constructor() {}
 }
 
-export type DeployVariableKindEnum = 'fix_env' | 'fix_variable' | 'env' | 'variable';
+export type DeployVariableKindEnum = 'fix_env' | 'fix_variable' | 'env' | 'variable' | 'env_env' | 'env_variable';
 export type DeployVariableTypeEnum = 'string' | 'number' | 'boolean';

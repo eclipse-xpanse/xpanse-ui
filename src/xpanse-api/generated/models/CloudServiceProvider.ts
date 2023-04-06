@@ -22,7 +22,7 @@ import { Region } from './Region';
  */
 export class CloudServiceProvider {
     /**
-     * The Cloud Service Provider. valid values: aws, azure, alibaba, huawei
+     * The Cloud Service Provider.
      */
     'name': CloudServiceProviderNameEnum;
     /**
@@ -54,11 +54,4 @@ export class CloudServiceProvider {
     public constructor() {}
 }
 
-export type CloudServiceProviderNameEnum =
-    | 'aws'
-    | 'azure'
-    | 'alibaba'
-    | 'huawei'
-    | 'openstack'
-    | 'google'
-    | 'flexibleEngine';
+export type CloudServiceProviderNameEnum = 'aws' | 'azure' | 'alicloud' | 'huawei' | 'openstack' | 'flexibleEngine';

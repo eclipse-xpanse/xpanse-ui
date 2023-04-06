@@ -21,11 +21,11 @@ function Services(): JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const onClicked = function (cfg: string, latestVersion: string) {
+    const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(
             createServicePageRoute
-                .concat('?serviceName=', location.hash.split('#')[1])
-                .concat('&name=', cfg.replace(' ', ''))
+                .concat('?catalog=', location.hash.split('#')[1])
+                .concat('&serviceName=', serviceName)
                 .concat('&latestVersion=', latestVersion.replace(' ', ''))
         );
     };
@@ -85,7 +85,7 @@ function Services(): JSX.Element {
                                                 <div
                                                     key={index}
                                                     className={'service-type-option-detail'}
-                                                    onClick={() => onClicked(item.name, item.latestVersion)}
+                                                    onClick={() => onSelectService(item.name, item.latestVersion)}
                                                 >
                                                     <div className='service-type-option-image'>
                                                         <img

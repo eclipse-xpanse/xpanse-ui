@@ -19,15 +19,8 @@
  * The regions of the Cloud Service Provider
  */
 export class Region {
-    /**
-     * The name of the Region
-     */
     'name': string;
-
-    /**
-     * The area which the region belongs to, such as Asia, Europe, Africa
-     */
-    'area'?: string;
+    'area': string;
 
     static readonly discriminator: string | undefined = undefined;
 

@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { To, useLocation } from 'react-router-dom';
+import { To, useSearchParams } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     Billing,
@@ -14,7 +14,7 @@ import {
     Flavor,
     Ocl,
     Region,
-    RegisterServiceEntity,
+    RegisteredServiceVo,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
@@ -28,7 +28,7 @@ import { currencyMapper } from '../../utils/currency';
 function filterAreaList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, RegisterServiceEntity[]>
+    versionMapper: Map<string, RegisteredServiceVo[]>
 ): Area[] {
     let oclList: Ocl[] = [];
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
@@ -36,9 +36,7 @@ function filterAreaList(
         if (k === selectVersion) {
             const ocls: Ocl[] = [];
             for (const registerServiceEntity of v) {
-                if (registerServiceEntity.ocl instanceof Ocl) {
-                    ocls.push(registerServiceEntity.ocl);
-                }
+                ocls.push(registerServiceEntity.ocl);
             }
             oclList = ocls;
         }
@@ -74,9 +72,9 @@ function filterAreaList(
 }
 
 function CreateService(): JSX.Element {
-    const location = useLocation();
+    const [urlParams] = useSearchParams();
 
-    const versionMapper = useRef<Map<string, RegisterServiceEntity[]>>(new Map<string, RegisterServiceEntity[]>());
+    const versionMapper = useRef<Map<string, RegisteredServiceVo[]>>(new Map<string, RegisteredServiceVo[]>());
 
     const [categoryName, setCategoryName] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
@@ -101,20 +99,17 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
-        const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
-        const latestVersion = location.search.split('?')[1].split('&')[2].split('=')[1];
-        if (!categoryName || !serviceName) {
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+        const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
+        const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
+        if (categoryName === '' || serviceName === '') {
             return;
         }
         setCategoryName(categoryName);
         setServiceName(serviceName);
         void serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
             if (rsp.length > 0) {
-                const currentVersions: Map<string, RegisterServiceEntity[]> = new Map<
-                    string,
-                    RegisterServiceEntity[]
-                >();
+                const currentVersions: Map<string, RegisteredServiceVo[]> = new Map<string, RegisteredServiceVo[]>();
                 for (const registerServiceEntity of rsp) {
                     if (registerServiceEntity.version) {
                         if (!currentVersions.has(registerServiceEntity.version)) {
@@ -149,7 +144,7 @@ function CreateService(): JSX.Element {
                 return;
             }
         });
-    }, [location]);
+    }, [urlParams]);
 
     function getVersionList(): { value: string; label: string }[] {
         if (versionMapper.current.size <= 0) {
@@ -179,10 +174,8 @@ function CreateService(): JSX.Element {
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
                 const ocls: Ocl[] = [];
-                for (const registerServiceEntity of v) {
-                    if (registerServiceEntity.ocl instanceof Ocl) {
-                        ocls.push(registerServiceEntity.ocl);
-                    }
+                for (const registeredServiceVo of v) {
+                    ocls.push(registeredServiceVo.ocl);
                 }
                 oclList = ocls;
             }
@@ -242,10 +235,8 @@ function CreateService(): JSX.Element {
         const oclList: Ocl[] = [];
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
-                for (const registerServiceEntity of v) {
-                    if (registerServiceEntity.ocl instanceof Ocl) {
-                        oclList.push(registerServiceEntity.ocl);
-                    }
+                for (const registeredServiceVo of v) {
+                    oclList.push(registeredServiceVo.ocl);
                 }
             }
         });
@@ -267,6 +258,7 @@ function CreateService(): JSX.Element {
 
         return flavors;
     }
+
     function getBilling(selectVersion: string, csp: CloudServiceProviderNameEnum): Billing {
         let billing: Billing = {
             model: '' as string,
@@ -275,9 +267,9 @@ function CreateService(): JSX.Element {
         };
         versionMapper.current.forEach((v, k) => {
             if (selectVersion === k) {
-                v.forEach((registerServiceEntity) => {
-                    if (csp === registerServiceEntity.csp && registerServiceEntity.ocl) {
-                        billing = registerServiceEntity.ocl.billing;
+                v.forEach((registeredServiceVo) => {
+                    if (csp === registeredServiceVo.csp) {
+                        billing = registeredServiceVo.ocl.billing;
                     }
                 });
             }
