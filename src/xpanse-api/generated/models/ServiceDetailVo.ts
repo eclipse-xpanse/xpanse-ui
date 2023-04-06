@@ -31,6 +31,10 @@ export class ServiceDetailVo {
      */
     'name': string;
     /**
+     * Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated
+     */
+    'customerServiceName'?: string;
+    /**
      * The version of the service
      */
     'version': string;
@@ -59,6 +63,10 @@ export class ServiceDetailVo {
      * The resource list of the deployed service.
      */
     'deployResources'?: Array<DeployResource>;
+    /**
+     * The properties of the deployed service.
+     */
+    'deployedServiceProperties'?: { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -78,6 +86,12 @@ export class ServiceDetailVo {
         {
             name: 'name',
             baseName: 'name',
+            type: 'string',
+            format: '',
+        },
+        {
+            name: 'customerServiceName',
+            baseName: 'customerServiceName',
             type: 'string',
             format: '',
         },
@@ -127,6 +141,12 @@ export class ServiceDetailVo {
             name: 'deployResources',
             baseName: 'deployResources',
             type: 'Array<DeployResource>',
+            format: '',
+        },
+        {
+            name: 'deployedServiceProperties',
+            baseName: 'deployedServiceProperties',
+            type: '{ [key: string]: string; }',
             format: '',
         },
     ];
