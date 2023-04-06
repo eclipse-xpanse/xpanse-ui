@@ -60,8 +60,16 @@
 
 .order-param-submit {
     float: left;
+    width: 450px;
+    text-align: right;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.order-param-deploy {
+    float: left;
     width: 600px;
-    text-align: center;
+    text-align: right;
     margin-top: 15px;
     margin-bottom: 15px;
 }
