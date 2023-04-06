@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { To, useLocation } from 'react-router-dom';
+import { To, useSearchParams } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     Billing,
@@ -72,7 +72,7 @@ function filterAreaList(
 }
 
 function CreateService(): JSX.Element {
-    const location = useLocation();
+    const [urlParams] = useSearchParams();
 
     const versionMapper = useRef<Map<string, RegisteredServiceVo[]>>(new Map<string, RegisteredServiceVo[]>());
 
@@ -99,10 +99,10 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName = location.search.split('?')[1].split('&')[0].split('=')[1];
-        const serviceName = location.search.split('?')[1].split('&')[1].split('=')[1];
-        const latestVersion = location.search.split('?')[1].split('&')[2].split('=')[1];
-        if (!categoryName || !serviceName) {
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+        const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
+        const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
+        if (categoryName === '' || serviceName === '') {
             return;
         }
         setCategoryName(categoryName);
@@ -144,7 +144,7 @@ function CreateService(): JSX.Element {
                 return;
             }
         });
-    }, [location]);
+    }, [urlParams]);
 
     function getVersionList(): { value: string; label: string }[] {
         if (versionMapper.current.size <= 0) {
@@ -258,6 +258,7 @@ function CreateService(): JSX.Element {
 
         return flavors;
     }
+
     function getBilling(selectVersion: string, csp: CloudServiceProviderNameEnum): Billing {
         let billing: Billing = {
             model: '' as string,
