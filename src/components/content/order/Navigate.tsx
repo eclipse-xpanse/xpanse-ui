@@ -5,17 +5,18 @@
 
 import { useNavigate, To } from 'react-router-dom';
 import '../../../styles/service_order.css';
+import { OrderSubmitProps } from './OrderSubmit';
 
-function Navigate({ text, to }: { text: string; to: To }): JSX.Element {
+function Navigate({ text, to, props }: { text: string; to: To; props?: OrderSubmitProps }): JSX.Element {
     const navigate = useNavigate();
 
-    function goBack() {
-        navigate(to);
+    function goBack(props: OrderSubmitProps | undefined) {
+        navigate(to, { state: props });
     }
 
     return (
         <div>
-            <div onClick={goBack} className='order-navigate'>
+            <div onClick={() => goBack(props)} className='order-navigate'>
                 {text}
             </div>
         </div>
