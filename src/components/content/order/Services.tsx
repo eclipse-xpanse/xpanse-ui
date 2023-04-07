@@ -74,7 +74,7 @@ function Services(): JSX.Element {
                     <div className={'services-content-body'}>
                         {services.map((item, index) => {
                             return (
-                                <Row>
+                                <Row key={index}>
                                     <Col span={8} className={'services-content-body-col'}>
                                         <Space
                                             direction='vertical'
