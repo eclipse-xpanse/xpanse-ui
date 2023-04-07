@@ -20,6 +20,7 @@ export default function GoToSubmit({
     selectVersion,
     selectCsp,
     selectRegion,
+    selectArea,
     selectFlavor,
     versionMapper,
 }: {
@@ -28,6 +29,7 @@ export default function GoToSubmit({
     selectVersion: string;
     selectCsp: string;
     selectRegion: string;
+    selectArea: string;
     selectFlavor: string;
     versionMapper: Map<string, RegisteredServiceVo[]>;
 }): JSX.Element {
@@ -54,6 +56,7 @@ export default function GoToSubmit({
             name: serviceName,
             version: selectVersion,
             region: selectRegion,
+            area: selectArea,
             csp: selectCsp as CreateRequestCspEnum,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),

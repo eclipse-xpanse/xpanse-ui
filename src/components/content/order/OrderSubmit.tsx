@@ -20,6 +20,7 @@ import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 // 1 hour.
@@ -46,6 +47,7 @@ export interface OrderSubmitProps {
     name: string;
     version: string;
     region: string;
+    area: string;
     csp: CreateRequestCspEnum;
     flavor: string;
     params: DeployParam[];
@@ -194,10 +196,15 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             });
     }
 
+    const createServicePageUrl: string = createServicePageRoute
+        .concat('?catalog=', props.category)
+        .concat('&serviceName=', props.name)
+        .concat('&latestVersion=', props.version);
+
     return (
         <>
             <div>
-                <Navigate text={'<< Back'} to={-1 as To} />
+                <Navigate text={'<< Back'} to={createServicePageUrl as To} props={props} />
                 <div className={'Line'} />
                 <div className={'services-content'}>
                     <div className={'content-title'}>

@@ -4,7 +4,7 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { To, useSearchParams } from 'react-router-dom';
+import { To, useLocation, useSearchParams } from 'react-router-dom';
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     Billing,
@@ -24,6 +24,8 @@ import { Area } from '../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 import { sortVersion } from '../../utils/Sort';
 import { currencyMapper } from '../../utils/currency';
+import { servicesSubPageRoute } from '../../utils/constants';
+import { OrderSubmitProps } from './OrderSubmit';
 
 function filterAreaList(
     selectVersion: string,
@@ -73,6 +75,7 @@ function filterAreaList(
 
 function CreateService(): JSX.Element {
     const [urlParams] = useSearchParams();
+    const location = useLocation();
 
     const versionMapper = useRef<Map<string, RegisteredServiceVo[]>>(new Map<string, RegisteredServiceVo[]>());
 
@@ -102,49 +105,82 @@ function CreateService(): JSX.Element {
         const categoryName = decodeURI(urlParams.get('catalog') ?? '');
         const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
         const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
-        if (categoryName === '' || serviceName === '') {
+        if (categoryName === '' || serviceName === '' || latestVersion === '') {
             return;
         }
         setCategoryName(categoryName);
         setServiceName(serviceName);
-        void serviceVendorApi.listRegisteredServices(categoryName, '', serviceName, '').then((rsp) => {
-            if (rsp.length > 0) {
-                const currentVersions: Map<string, RegisteredServiceVo[]> = new Map<string, RegisteredServiceVo[]>();
-                for (const registerServiceEntity of rsp) {
-                    if (registerServiceEntity.version) {
-                        if (!currentVersions.has(registerServiceEntity.version)) {
-                            currentVersions.set(
-                                registerServiceEntity.version,
-                                rsp.filter((data) => data.version === registerServiceEntity.version)
-                            );
+        void serviceVendorApi
+            .listRegisteredServices(categoryName, '', serviceName, '')
+            .then((rsp) => {
+                if (rsp.length > 0) {
+                    const currentVersions: Map<string, RegisteredServiceVo[]> = new Map<
+                        string,
+                        RegisteredServiceVo[]
+                    >();
+                    for (const registerServiceEntity of rsp) {
+                        if (registerServiceEntity.version) {
+                            if (!currentVersions.has(registerServiceEntity.version)) {
+                                currentVersions.set(
+                                    registerServiceEntity.version,
+                                    rsp.filter((data) => data.version === registerServiceEntity.version)
+                                );
+                            }
                         }
                     }
+                    versionMapper.current = currentVersions;
+                    const currentVersionList = getVersionList();
+                    const currentCspList = getCspList(latestVersion);
+                    const currentFlavorList = getFlavorList(latestVersion);
+                    setVersionList(currentVersionList);
+                    setSelectVersion(latestVersion);
+                    setCspList(currentCspList);
+                    setFlavorList(currentFlavorList);
+                    let currentAreaList: Tab[] = getAreaList(latestVersion, currentCspList[0]);
+                    let currentRegionList: { value: string; label: string }[] = getRegionList(
+                        latestVersion,
+                        currentCspList[0],
+                        currentAreaList[0]?.key ?? ''
+                    );
+                    let currentBilling = getBilling(latestVersion, currentCspList[0]);
+                    let cspValue: CloudServiceProviderNameEnum = currentCspList[0];
+                    let areaValue: string = currentAreaList[0]?.key ?? '';
+                    let regionValue: string = currentRegionList[0]?.value ?? '';
+                    let flavorValue: string = currentFlavorList[0]?.value ?? '';
+                    let priceValue: string = currentFlavorList[0]?.price ?? '';
+                    if (location.state) {
+                        const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
+                        currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
+                        currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
+                        currentBilling = getBilling(latestVersion, serviceInfo.csp);
+                        cspValue = serviceInfo.csp as CloudServiceProviderNameEnum;
+                        areaValue = serviceInfo.area;
+                        regionValue = serviceInfo.region;
+                        flavorValue = serviceInfo.flavor;
+                        currentFlavorList.forEach((flavorItem) => {
+                            if (flavorItem.value === serviceInfo.flavor) {
+                                priceValue = flavorItem.price;
+                            }
+                        });
+                    }
+                    const currencyValue: string = currencyMapper[currentBilling.currency];
+                    setSelectCsp(cspValue);
+                    setAreaList(currentAreaList);
+                    setSelectArea(areaValue);
+                    setRegionList(currentRegionList);
+                    setSelectRegion(regionValue);
+                    setSelectFlavor(flavorValue);
+                    setPriceValue(priceValue);
+                    setCurrency(currencyValue);
+                } else {
+                    return;
                 }
-                versionMapper.current = currentVersions;
-
-                const currentVersionList = getVersionList();
-                const currentCspList = getCspList(latestVersion);
-                const currentAreaList = getAreaList(latestVersion, currentCspList[0]);
-                const currentRegionList = getRegionList(latestVersion, currentCspList[0], currentAreaList[0].key);
-                const currentFlavorList = getFlavorList(latestVersion);
-                const currentBilling = getBilling(latestVersion, currentCspList[0]);
-                setVersionList(currentVersionList);
-                setSelectVersion(latestVersion);
-                setCspList(currentCspList);
-                setSelectCsp(currentCspList[0]);
-                setAreaList(currentAreaList);
-                setSelectArea(currentAreaList[0].key);
-                setRegionList(currentRegionList);
-                setSelectRegion(currentRegionList[0].value);
-                setFlavorList(currentFlavorList);
-                setSelectFlavor(currentFlavorList[0].value);
-                setPriceValue(currentFlavorList[0].price);
-                setCurrency(currencyMapper[currentBilling.currency]);
-            } else {
-                return;
-            }
-        });
-    }, [urlParams]);
+            })
+            .catch((error: Error) => {
+                console.log(error.message);
+                versionMapper.current = new Map<string, RegisteredServiceVo[]>();
+            });
+    }, [location, urlParams]);
 
     function getVersionList(): { value: string; label: string }[] {
         if (versionMapper.current.size <= 0) {
@@ -155,9 +191,9 @@ function CreateService(): JSX.Element {
             versionSet.push(k);
         });
         const versions: { value: string; label: string }[] = [];
-        sortVersion(versionSet).forEach((verision) => {
+        sortVersion(versionSet).forEach((version) => {
             versionMapper.current.forEach((v, k) => {
-                if (verision === k) {
+                if (version === k) {
                     const versionItem = { value: k || '', label: k || '' };
                     versions.push(versionItem);
                 }
@@ -328,18 +364,20 @@ function CreateService(): JSX.Element {
         setSelectFlavor(value);
         const currentFlavorList = getFlavorList(selectVersion);
         const billing: Billing = getBilling(selectVersion, csp);
-        currentFlavorList.forEach((flaver) => {
-            if (value === flaver.value) {
-                setPriceValue(flaver.price);
+        currentFlavorList.forEach((flavor) => {
+            if (value === flavor.value) {
+                setPriceValue(flavor.price);
             }
         });
         setCurrency(currencyMapper[billing.currency]);
     }, []);
 
+    const servicePageUrl = servicesSubPageRoute + categoryName;
+
     return (
         <>
             <div>
-                <Navigate text={'<< Back'} to={-1 as To} />
+                <Navigate text={'<< Back'} to={servicePageUrl as To} props={undefined} />
                 <div className={'Line'} />
             </div>
             <div className={'services-content'}>
@@ -414,6 +452,7 @@ function CreateService(): JSX.Element {
                     selectVersion={selectVersion}
                     selectCsp={selectCsp}
                     selectRegion={selectRegion}
+                    selectArea={selectArea}
                     selectFlavor={selectFlavor}
                     versionMapper={versionMapper.current}
                 />
