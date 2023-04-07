@@ -29,6 +29,10 @@ export class ServiceVo {
      */
     'name': string;
     /**
+     * Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated
+     */
+    'customerServiceName'?: string;
+    /**
      * The version of the service
      */
     'version': string;
@@ -71,6 +75,12 @@ export class ServiceVo {
         {
             name: 'name',
             baseName: 'name',
+            type: 'string',
+            format: '',
+        },
+        {
+            name: 'customerServiceName',
+            baseName: 'customerServiceName',
             type: 'string',
             format: '',
         },
