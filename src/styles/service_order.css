@@ -4,12 +4,14 @@
     color: rgb(24, 120, 255);
     font-weight: bold;
     padding: 10px;
+    width: 80px;
 }
 
 .order-navigate:hover {
     cursor: pointer;
     font-weight: bold;
     text-shadow: 0 0 1px rgb(24, 120, 255);
+    width: 80px;
 }
 
 .Line {
