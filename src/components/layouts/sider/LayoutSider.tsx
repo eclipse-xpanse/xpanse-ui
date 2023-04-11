@@ -13,10 +13,11 @@ import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
 import { serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
 import { MenuInfo } from 'rc-menu/lib/interface';
+import MenuLoading from './MenuLoading';
 
 function LayoutSider(): JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
-    const [items, setItems] = useState<ItemType[]>([]);
+    const [items, setItems] = useState<ItemType[]>([MenuLoading()]);
     const navigate = useNavigate();
 
     const onClicked = function (cfg: MenuInfo): void {
