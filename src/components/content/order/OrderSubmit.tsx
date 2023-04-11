@@ -17,9 +17,11 @@ import {
 import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
-import { Alert, Button, Form } from 'antd';
+import { Alert, Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { createServicePageRoute } from '../../utils/constants';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -45,6 +47,7 @@ export interface OrderSubmitProps {
     name: string;
     version: string;
     region: string;
+    area: string;
     csp: CreateRequestCspEnum;
     flavor: string;
     params: DeployParam[];
@@ -55,6 +58,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
+    const [customerServiceName, setCustomerServiceName] = useState<string>('');
 
     function ResultDetails({ msg, uuid }: { msg: string; uuid: string }): JSX.Element {
         return (
@@ -72,7 +76,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 {' '}
                 <Alert
                     message={`Deployment Status`}
-                    description=<ResultDetails msg={msg} uuid={uuid} />
+                    description={<ResultDetails msg={msg} uuid={uuid} />}
                     showIcon
                     type={type}
                 />{' '}
@@ -162,13 +166,14 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
 
     function OnSubmit() {
         const createRequest = new CreateRequest();
-        createRequest.name = props.name;
+        createRequest.serviceName = props.name;
         createRequest.version = props.version;
         createRequest.category = props.category;
         createRequest.csp = props.csp;
         createRequest.region = props.region;
         createRequest.flavor = props.flavor;
         createRequest.property = {};
+        createRequest.customerServiceName = customerServiceName;
         for (const item of parameters) {
             if (item.kind === 'variable' || item.kind === 'env') {
                 createRequest.property[item.name] = item.value;
@@ -191,10 +196,15 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             });
     }
 
+    const createServicePageUrl: string = createServicePageRoute
+        .concat('?catalog=', props.category)
+        .concat('&serviceName=', props.name)
+        .concat('&latestVersion=', props.version);
+
     return (
         <>
             <div>
-                <Navigate text={'<< Back'} to={-1 as To} />
+                <Navigate text={'<< Back'} to={createServicePageUrl as To} props={props} />
                 <div className={'Line'} />
                 <div className={'services-content'}>
                     <div className={'content-title'}>
@@ -203,6 +213,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 </div>
             </div>
             <div>{tip}</div>
+            <div className={'order-param-item-left'} />
             <Form
                 layout='vertical'
                 autoComplete='off'
@@ -210,6 +221,26 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
             >
+                <Form.Item
+                    name={'Name'}
+                    label={'Name: Service Name'}
+                    rules={[{ required: true }, { type: 'string', min: 5 }]}
+                    colon={true}
+                >
+                    <Input
+                        name={'Name'}
+                        showCount
+                        placeholder={'customer defined name for service ordered'}
+                        maxLength={256}
+                        onChange={(e) => setCustomerServiceName(e.target.value)}
+                        className={'order-param-item-content'}
+                        suffix={
+                            <Tooltip title={'Customer defined name for the service instance created'}>
+                                <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                            </Tooltip>
+                        }
+                    />
+                </Form.Item>
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {parameters.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (

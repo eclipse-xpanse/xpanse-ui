@@ -22,6 +22,7 @@ function ServiceList(): JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
+    const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
@@ -34,6 +35,20 @@ function ServiceList(): JSX.Element {
             dataIndex: 'id',
         },
         {
+            title: 'Name',
+            dataIndex: 'customerServiceName',
+            filters: customerServiceNameFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: string | number | boolean, record) => {
+                if (record.customerServiceName !== undefined) {
+                    const customerServiceName = record.customerServiceName;
+                    return customerServiceName.startsWith(value.toString());
+                }
+                return false;
+            },
+        },
+        {
             title: 'Category',
             dataIndex: 'category',
             filters: categoryFilters,
@@ -42,7 +57,7 @@ function ServiceList(): JSX.Element {
             onFilter: (value: string | number | boolean, record) => record.category.startsWith(value.toString()),
         },
         {
-            title: 'Name',
+            title: 'Service',
             dataIndex: 'name',
             filters: nameFilters,
             filterMode: 'tree',
@@ -77,14 +92,14 @@ function ServiceList(): JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (text: string, record: ServiceVo, index) => {
+            render: (text: string, record: ServiceVo) => {
                 return (
                     <>
                         <Space size='middle'>
                             <Button
                                 type='primary'
                                 icon={<CopyOutlined />}
-                                disabled={record.serviceState === 'DEPLOY_SUCCESS' && !loading ? false : true}
+                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
                             >
                                 migrate
                             </Button>
@@ -93,7 +108,7 @@ function ServiceList(): JSX.Element {
                                 type='primary'
                                 icon={<CloseCircleOutlined />}
                                 onClick={() => destroy(record)}
-                                disabled={record.serviceState === 'DEPLOY_SUCCESS' && !loading ? false : true}
+                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
                             >
                                 destroy
                             </Button>
@@ -148,7 +163,7 @@ function ServiceList(): JSX.Element {
         setLoading(true);
         serviceApi
             .destroy(record.id)
-            .then((resp) => {
+            .then(() => {
                 waitingServiceDestroy(record.id, destroyTimeout, new Date());
                 refreshData();
             })
@@ -223,6 +238,24 @@ function ServiceList(): JSX.Element {
         setNameFilters(filters);
     }
 
+    function updateCustomerServiceNameFilters(resp: ServiceVo[]): void {
+        const filters: ColumnFilterItem[] = [];
+        const customerServiceNameSet = new Set<string>('');
+        resp.forEach((v) => {
+            if (v.customerServiceName) {
+                customerServiceNameSet.add(v.customerServiceName);
+            }
+        });
+        customerServiceNameSet.forEach((name) => {
+            const filter = {
+                text: name,
+                value: name,
+            };
+            filters.push(filter);
+        });
+        setCustomerServiceNameFilters(filters);
+    }
+
     function getServices(): void {
         void serviceApi.services().then((resp) => {
             const serviceList: ServiceVo[] = [];
@@ -232,6 +265,7 @@ function ServiceList(): JSX.Element {
                 updateNameFilters(resp);
                 updateCategoryFilters(resp);
                 updateCspFilters(resp);
+                updateCustomerServiceNameFilters(resp);
             } else {
                 setServiceVoList(serviceList);
             }
@@ -252,7 +286,7 @@ function ServiceList(): JSX.Element {
             {tip}
             <div>
                 <Button
-                    disabled={loading ? true : false}
+                    disabled={loading}
                     type='primary'
                     icon={<SyncOutlined />}
                     onClick={() => {

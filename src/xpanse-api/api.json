@@ -42,8 +42,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -52,8 +52,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -120,8 +120,8 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -130,8 +130,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -178,8 +178,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -188,8 +188,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -247,8 +247,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -257,8 +257,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -306,8 +306,8 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -316,8 +316,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -394,8 +394,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -404,8 +404,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -464,8 +464,8 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -474,8 +474,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -525,8 +525,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -535,8 +535,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -575,8 +575,8 @@
                 "description": "List the deployed services.",
                 "operationId": "services",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -585,8 +585,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -638,8 +638,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -648,8 +648,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -695,8 +695,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -705,8 +705,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -740,7 +740,8 @@
         },
         "/xpanse/service/openapi/{id}": {
             "get": {
-                "tags": ["Service"],
+                "tags": ["Service Vendor"],
+                "description": "API to get openapi of service deploy context",
                 "operationId": "openApi",
                 "parameters": [
                     {
@@ -753,8 +754,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -763,8 +764,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -813,8 +814,8 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -823,8 +824,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -865,8 +866,8 @@
                 "description": "Get category list.",
                 "operationId": "listCategories",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -875,8 +876,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -928,8 +929,8 @@
                 "tags": ["Admin"],
                 "operationId": "health",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -938,8 +939,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1199,16 +1200,18 @@
                 "type": "object",
                 "properties": {
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The name of the Region"
                     },
                     "area": {
-                        "type": "string"
+                        "type": "string",
+                        "description": "The area which the region belongs to, such as Asia, Europe, Africa"
                     }
                 },
                 "description": "The regions of the Cloud Service Provider"
             },
             "CreateRequest": {
-                "required": ["category", "csp", "flavor", "name", "region", "version"],
+                "required": ["category", "csp", "flavor", "region", "serviceName", "version"],
                 "type": "object",
                 "properties": {
                     "category": {
@@ -1227,9 +1230,13 @@
                             "others"
                         ]
                     },
-                    "name": {
+                    "serviceName": {
                         "type": "string",
-                        "description": "The name of the service"
+                        "description": "The name of the service ordered."
+                    },
+                    "customerServiceName": {
+                        "type": "string",
+                        "description": "Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated"
                     },
                     "version": {
                         "type": "string",
@@ -1295,6 +1302,10 @@
                     "name": {
                         "type": "string",
                         "description": "The name of the service"
+                    },
+                    "customerServiceName": {
+                        "type": "string",
+                        "description": "Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated"
                     },
                     "version": {
                         "type": "string",
@@ -1402,6 +1413,10 @@
                         "type": "string",
                         "description": "The name of the service"
                     },
+                    "customerServiceName": {
+                        "type": "string",
+                        "description": "Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated"
+                    },
                     "version": {
                         "type": "string",
                         "description": "The version of the service"
@@ -1448,6 +1463,14 @@
                         "items": {
                             "$ref": "#/components/schemas/DeployResource"
                         }
+                    },
+                    "deployedServiceProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string",
+                            "description": "The properties of the deployed service."
+                        },
+                        "description": "The properties of the deployed service."
                     }
                 }
             },
