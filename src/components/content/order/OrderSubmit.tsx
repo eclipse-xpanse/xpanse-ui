@@ -19,9 +19,9 @@ import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
-import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { serviceApi, serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { createServicePageRoute } from '../../utils/constants';
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -201,6 +201,26 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         .concat('&serviceName=', props.name)
         .concat('&latestVersion=', props.version);
 
+    function onclick() {
+        serviceVendorApi
+            .listRegisteredServices(props.category, props.csp, props.name, props.version)
+            .then((registeredServiceList) => {
+                console.log('registerId', registeredServiceList[0].id);
+                serviceApi
+                    .openApi(registeredServiceList[0].id)
+                    .then((resp) => {
+                        const newWindow = window.open();
+                        newWindow?.document.write(resp);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     return (
         <>
             <div>
@@ -209,6 +229,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 <div className={'services-content'}>
                     <div className={'content-title'}>
                         Service: {props.name}@{props.version}
+                        <button className={'content-title-api'} onClick={onclick}>
+                            API DOCUMENT
+                            <QuestionCircleOutlined />
+                        </button>
                     </div>
                 </div>
             </div>

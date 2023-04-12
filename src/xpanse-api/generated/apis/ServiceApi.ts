@@ -96,7 +96,7 @@ export class ServiceApiRequestFactory extends BaseAPIRequestFactory {
         }
 
         // Path Params
-        const localVarPath = '/xpanse/service/openapi/{id}'.replace('{' + 'id' + '}', encodeURIComponent(String(id)));
+        const localVarPath = '/xpanse/register/openapi/{id}'.replace('{' + 'id' + '}', encodeURIComponent(String(id)));
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
