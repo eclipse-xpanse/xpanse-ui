@@ -44,9 +44,9 @@ export class CreateRequest {
      */
     'flavor': string;
     /**
-     * The property of the Service
+     * The properties for the requested service
      */
-    'property'?: { [key: string]: string };
+    'serviceRequestProperties'?: { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -94,8 +94,8 @@ export class CreateRequest {
             format: '',
         },
         {
-            name: 'property',
-            baseName: 'property',
+            name: 'serviceRequestProperties',
+            baseName: 'serviceRequestProperties',
             type: '{ [key: string]: string; }',
             format: '',
         },

@@ -32,9 +32,9 @@ export class DeployResource {
      */
     'kind': DeployResourceKindEnum;
     /**
-     * The property of the deployed resource.
+     * The properties of the deployed resource.
      */
-    'property': { [key: string]: string };
+    'properties': { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -58,8 +58,8 @@ export class DeployResource {
             format: '',
         },
         {
-            name: 'property',
-            baseName: 'property',
+            name: 'properties',
+            baseName: 'properties',
             type: '{ [key: string]: string; }',
             format: '',
         },

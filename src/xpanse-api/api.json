@@ -77,7 +77,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/OclDetailVo"
+                                    "$ref": "#/components/schemas/RegisteredServiceVo"
                                 }
                             }
                         }
@@ -155,7 +155,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Response"
+                                    "$ref": "#/components/schemas/RegisteredServiceVo"
                                 }
                             }
                         }
@@ -282,7 +282,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/Response"
+                                    "$ref": "#/components/schemas/RegisteredServiceVo"
                                 }
                             }
                         }
@@ -434,6 +434,14 @@
                                         "$ref": "#/components/schemas/RegisteredServiceVo"
                                     }
                                 }
+                            },
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/RegisteredServiceVo"
+                                    }
+                                }
                             }
                         }
                     }
@@ -499,8 +507,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "uuid"
+                                    "$ref": "#/components/schemas/RegisteredServiceVo"
                                 }
                             }
                         }
@@ -560,8 +567,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "uuid"
+                                    "$ref": "#/components/schemas/RegisteredServiceVo"
                                 }
                             }
                         }
@@ -738,7 +744,7 @@
                 }
             }
         },
-        "/xpanse/service/openapi/{id}": {
+        "/xpanse/register/openapi/{id}": {
             "get": {
                 "tags": ["Service Vendor"],
                 "description": "API to get openapi of service deploy context",
@@ -787,9 +793,9 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": {
+                            "text/html": {
                                 "schema": {
-                                    "type": "string"
+                                    "type": "object"
                                 }
                             }
                         }
@@ -1034,7 +1040,7 @@
                 "description": "The cloud service provider of the managed service"
             },
             "DeployVariable": {
-                "required": ["description", "kind", "mandatory", "name", "type"],
+                "required": ["dataType", "description", "kind", "mandatory", "name"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -1042,30 +1048,28 @@
                         "description": "The name of the deploy variable"
                     },
                     "kind": {
-                        "type": "string",
-                        "description": "The kind of the deploy variable",
-                        "enum": ["fix_env", "fix_variable", "env", "variable", "env_env", "env_variable"]
+                        "$ref": "#/components/schemas/DeployVariableKind"
                     },
-                    "type": {
+                    "dataType": {
                         "type": "string",
                         "description": "The type of the deploy variable",
                         "enum": ["string", "number", "boolean"]
                     },
                     "example": {
                         "type": "string",
-                        "description": "The default value for the deploy variable"
+                        "description": "The default value of the deploy variable"
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description for the deploy variable"
+                        "description": "The description of the deploy variable"
                     },
                     "value": {
                         "type": "string",
-                        "description": "The value of the deploy variable"
+                        "description": "The value of the deploy variable. Value can be provided for default variables"
                     },
                     "mandatory": {
                         "type": "boolean",
-                        "description": "Indicate the variable if is mandatory"
+                        "description": "Indicates if the variable is mandatory"
                     },
                     "validator": {
                         "type": "string",
@@ -1074,16 +1078,21 @@
                 },
                 "description": "The variables for the deployment, which will be passed to the deployer"
             },
+            "DeployVariableKind": {
+                "type": "string",
+                "description": "- `fix_env`: Values for variable of this type are defined by the managed service provider \nin the OCL template. Runtime will inject it to deployer as environment variables. \nThis variable is not visible to the end user.\n- `fix_variable`: Values for variable of this type are defined by the managed service \nprovider in the OCL template. Runtime will inject it to deployer as usual variables. \nThis variable is not visible to the end user.\n- `env`: Value for a variable of this type can be provided by end user. \nIf marked as mandatory then end user must provide value to this variable. \nIf marked as optional and if end user does not provide it, \nthen the fallback value to this variable is read by runtime (it can read from other sources,\n e.g., OS env variables). This variable is injected as an environment \n variable to the deployer.\n- `variable`: Value for a variable of this type can be provided by end user. \nIf marked as mandatory then end user must provide value to this variable. \nIf marked as optional and if end user does not provide it, \nthen the fallback value to this variable is read by runtime (it can read from other sources,\n e.g., OS env variables). This variable is injected as a regular variable to the deployer.\n- `env_env`: Value to this variable is read by runtime \n(it can read from other sources, e.g., OS env variables) \nand injected as an environment variable to the deployer. \nEnd user cannot see or change this variable.\n- `env_variable`: Value to this variable is read by runtime \n(it can read from other sources, e.g., OS env variables) \nand injected as a regular variable to the deployer. \nEnd user cannot see or change this variable.",
+                "enum": ["fix_env", "fix_variable", "env", "variable", "env_env", "env_variable"]
+            },
             "Deployment": {
-                "required": ["context", "deployer", "kind"],
+                "required": ["deployer", "kind", "variables"],
                 "type": "object",
                 "properties": {
                     "kind": {
                         "type": "string",
-                        "description": "The type of the Deployment, valid values: terraform...",
+                        "description": "The type of the Deployer which will handle the service deployment",
                         "enum": ["terraform"]
                     },
-                    "context": {
+                    "variables": {
                         "type": "array",
                         "description": "The variables for the deployment, which will be passed to the deployer",
                         "items": {
@@ -1098,7 +1107,7 @@
                 "description": "The deployment of the managed service"
             },
             "Flavor": {
-                "required": ["fixedPrice", "name", "property"],
+                "required": ["fixedPrice", "name", "properties"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -1110,7 +1119,7 @@
                         "description": "The price of the flavor",
                         "format": "int32"
                     },
-                    "property": {
+                    "properties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string",
@@ -1210,6 +1219,121 @@
                 },
                 "description": "The regions of the Cloud Service Provider"
             },
+            "Link": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
+            "RegisteredServiceVo": {
+                "required": [
+                    "category",
+                    "createTime",
+                    "csp",
+                    "id",
+                    "lastModifiedTime",
+                    "name",
+                    "ocl",
+                    "serviceState",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "description": "ID of the registered service.",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the registered service."
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "Version of the registered service."
+                    },
+                    "csp": {
+                        "type": "string",
+                        "description": "Csp of the registered service.",
+                        "enum": ["aws", "azure", "alicloud", "huawei", "openstack", "flexibleEngine"]
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category of the registered service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "ocl": {
+                        "$ref": "#/components/schemas/Ocl"
+                    },
+                    "createTime": {
+                        "type": "string",
+                        "description": "createTime of the registered service.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "Last updateTime of the registered service.",
+                        "format": "date-time"
+                    },
+                    "serviceState": {
+                        "type": "string",
+                        "description": "State of service.",
+                        "enum": [
+                            "REGISTERED",
+                            "UPDATED",
+                            "DEPLOYING",
+                            "DEPLOY_SUCCESS",
+                            "DEPLOY_FAILED",
+                            "DESTROYING",
+                            "DESTROY_SUCCESS",
+                            "DESTROY_FAILED"
+                        ]
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        }
+                    }
+                }
+            },
             "CreateRequest": {
                 "required": ["category", "csp", "flavor", "region", "serviceName", "version"],
                 "type": "object",
@@ -1255,13 +1379,13 @@
                         "type": "string",
                         "description": "The flavor of the Service."
                     },
-                    "property": {
+                    "serviceRequestProperties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string",
-                            "description": "The property of the Service"
+                            "description": "The properties for the requested service"
                         },
-                        "description": "The property of the Service"
+                        "description": "The properties for the requested service"
                     }
                 }
             },
@@ -1347,7 +1471,7 @@
                 }
             },
             "DeployResource": {
-                "required": ["kind", "name", "property", "resourceId"],
+                "required": ["kind", "name", "properties", "resourceId"],
                 "type": "object",
                 "properties": {
                     "resourceId": {
@@ -1363,13 +1487,13 @@
                         "description": "The kind of the deployed resource.",
                         "enum": ["vm", "container", "publicIP", "vpc", "volume", "unknown"]
                     },
-                    "property": {
+                    "properties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string",
-                            "description": "The property of the deployed resource."
+                            "description": "The properties of the deployed resource."
                         },
-                        "description": "The property of the deployed resource."
+                        "description": "The properties of the deployed resource."
                     }
                 },
                 "description": "The resource list of the deployed service."
@@ -1474,80 +1598,20 @@
                     }
                 }
             },
-            "RegisteredServiceVo": {
-                "required": [
-                    "category",
-                    "createTime",
-                    "csp",
-                    "id",
-                    "lastModifiedTime",
-                    "name",
-                    "ocl",
-                    "serviceState",
-                    "version"
-                ],
+            "CategoryOclVo": {
+                "required": ["name", "versions"],
                 "type": "object",
                 "properties": {
-                    "id": {
-                        "type": "string",
-                        "description": "ID of the registered service.",
-                        "format": "uuid"
-                    },
                     "name": {
                         "type": "string",
                         "description": "Name of the registered service."
                     },
-                    "version": {
-                        "type": "string",
-                        "description": "Version of the registered service."
-                    },
-                    "csp": {
-                        "type": "string",
-                        "description": "Csp of the registered service.",
-                        "enum": ["aws", "azure", "alicloud", "huawei", "openstack", "flexibleEngine"]
-                    },
-                    "category": {
-                        "type": "string",
-                        "description": "ID of the registered service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "ocl": {
-                        "$ref": "#/components/schemas/Ocl"
-                    },
-                    "createTime": {
-                        "type": "string",
-                        "description": "Time of register service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "Time of update service.",
-                        "format": "date-time"
-                    },
-                    "serviceState": {
-                        "type": "string",
-                        "description": "State of service.",
-                        "enum": [
-                            "REGISTERED",
-                            "UPDATED",
-                            "DEPLOYING",
-                            "DEPLOY_SUCCESS",
-                            "DEPLOY_FAILED",
-                            "DESTROYING",
-                            "DESTROY_SUCCESS",
-                            "DESTROY_FAILED"
-                        ]
+                    "versions": {
+                        "type": "array",
+                        "description": "List of the registered service group by service version.",
+                        "items": {
+                            "$ref": "#/components/schemas/VersionOclVo"
+                        }
                     }
                 }
             },
@@ -1656,24 +1720,8 @@
                             "DESTROY_FAILED"
                         ]
                     }
-                }
-            },
-            "CategoryOclVo": {
-                "required": ["name", "versions"],
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "Name of the registered service."
-                    },
-                    "versions": {
-                        "type": "array",
-                        "description": "List of the registered service group by service version.",
-                        "items": {
-                            "$ref": "#/components/schemas/VersionOclVo"
-                        }
-                    }
-                }
+                },
+                "description": "The list of the registered services."
             },
             "ProviderOclVo": {
                 "required": ["details", "name", "regions"],
