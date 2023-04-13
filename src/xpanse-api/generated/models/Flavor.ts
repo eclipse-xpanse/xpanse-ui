@@ -30,7 +30,7 @@ export class Flavor {
     /**
      * The properties of the flavor
      */
-    'property': { [key: string]: string };
+    'properties': { [key: string]: string };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -48,8 +48,8 @@ export class Flavor {
             format: 'int32',
         },
         {
-            name: 'property',
-            baseName: 'property',
+            name: 'properties',
+            baseName: 'properties',
             type: '{ [key: string]: string; }',
             format: '',
         },

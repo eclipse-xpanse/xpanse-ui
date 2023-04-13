@@ -21,3 +21,5 @@ export * from './ServiceDetailVo';
 export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
+export * from './Link';
+export * from './DeployVariableKind';

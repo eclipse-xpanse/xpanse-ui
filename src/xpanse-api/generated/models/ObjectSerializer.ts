@@ -9,17 +9,19 @@ export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
 export * from './CreateRequest';
-export * from './DeployResourceEntity';
-export * from './DeployServiceEntity';
+export * from './DeployResource';
 export * from './DeployVariable';
+export * from './DeployVariableKind';
 export * from './Deployment';
 export * from './Flavor';
+export * from './Link';
 export * from './Ocl';
 export * from './OclDetailVo';
 export * from './ProviderOclVo';
 export * from './Region';
-export * from './RegisterServiceEntity';
+export * from './RegisteredServiceVo';
 export * from './Response';
+export * from './ServiceDetailVo';
 export * from './ServiceVo';
 export * from './SystemStatus';
 export * from './VersionOclVo';
@@ -29,7 +31,7 @@ import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
 import { CategoryOclVo } from './CategoryOclVo';
 import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from './CreateRequest';
-import { DeployVariable, DeployVariableKindEnum, DeployVariableTypeEnum } from './DeployVariable';
+import { DeployVariable } from './DeployVariable';
 import { Deployment, DeploymentKindEnum } from './Deployment';
 import { Flavor } from './Flavor';
 import { Ocl, OclCategoryEnum } from './Ocl';
@@ -42,6 +44,7 @@ import { SystemStatus, SystemStatusHealthStatusEnum } from './SystemStatus';
 import { VersionOclVo } from './VersionOclVo';
 import { DeployResource } from './DeployResource';
 import { RegisteredServiceVo } from './RegisteredServiceVo';
+import { Link } from './Link';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -60,8 +63,8 @@ let enumsMap: Set<string> = new Set<string>([
     'CreateRequestCategoryEnum',
     'CreateRequestCspEnum',
     'DeployResourceKindEnum',
-    'DeployVariableKindEnum',
-    'DeployVariableTypeEnum',
+    'DeployVariableDataTypeEnum',
+    'DeployVariableKind',
     'DeploymentKindEnum',
     'OclCategoryEnum',
     'OclDetailVoCategoryEnum',
@@ -88,6 +91,7 @@ let typeMap: { [index: string]: any } = {
     DeployVariable: DeployVariable,
     Deployment: Deployment,
     Flavor: Flavor,
+    Link: Link,
     Ocl: Ocl,
     OclDetailVo: OclDetailVo,
     ProviderOclVo: ProviderOclVo,
@@ -123,7 +127,7 @@ export class ObjectSerializer {
                 return expectedType; // the type does not have a discriminator. use it.
             } else {
                 if (data[discriminatorProperty]) {
-                    const discriminatorType = data[discriminatorProperty];
+                    var discriminatorType = data[discriminatorProperty];
                     if (typeMap[discriminatorType]) {
                         return discriminatorType; // use the type given in the discriminator
                     } else {

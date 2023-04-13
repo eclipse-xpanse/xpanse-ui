@@ -15,6 +15,7 @@
  */
 
 import { Ocl } from './Ocl';
+import { Link } from './Link';
 
 export class RegisteredServiceVo {
     /**
@@ -34,22 +35,23 @@ export class RegisteredServiceVo {
      */
     'csp': RegisteredServiceVoCspEnum;
     /**
-     * ID of the registered service.
+     * Category of the registered service.
      */
     'category': RegisteredServiceVoCategoryEnum;
     'ocl': Ocl;
     /**
-     * Time of register service.
+     * createTime of the registered service.
      */
     'createTime': Date;
     /**
-     * Time of update service.
+     * Last updateTime of the registered service.
      */
     'lastModifiedTime': Date;
     /**
      * State of service.
      */
     'serviceState': RegisteredServiceVoServiceStateEnum;
+    'links'?: Array<Link>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -106,6 +108,12 @@ export class RegisteredServiceVo {
             name: 'serviceState',
             baseName: 'serviceState',
             type: 'RegisteredServiceVoServiceStateEnum',
+            format: '',
+        },
+        {
+            name: 'links',
+            baseName: 'links',
+            type: 'Array<Link>',
             format: '',
         },
     ];

@@ -22,13 +22,13 @@ import { DeployVariable } from './DeployVariable';
  */
 export class Deployment {
     /**
-     * The type of the Deployment, valid values: terraform...
+     * The type of the Deployer which will handle the service deployment
      */
     'kind': DeploymentKindEnum;
     /**
      * The variables for the deployment, which will be passed to the deployer
      */
-    'context': Array<DeployVariable>;
+    'variables': Array<DeployVariable>;
     /**
      * The real deployer, something like terraform scripts...
      */
@@ -44,8 +44,8 @@ export class Deployment {
             format: '',
         },
         {
-            name: 'context',
-            baseName: 'context',
+            name: 'variables',
+            baseName: 'variables',
             type: 'Array<DeployVariable>',
             format: '',
         },

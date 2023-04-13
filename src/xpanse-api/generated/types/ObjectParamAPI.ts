@@ -107,13 +107,6 @@ export class ObjectServiceApi {
     }
 
     /**
-     * @param param the request object
-     */
-    public openApi(param: ServiceApiOpenApiRequest, options?: Configuration): Promise<string> {
-        return this.api.openApi(param.id, options).toPromise();
-    }
-
-    /**
      * Get deployed service using id.
      * @param param the request object
      */
@@ -302,6 +295,13 @@ export class ObjectServiceVendorApi {
         options?: Configuration
     ): Promise<Array<CategoryOclVo>> {
         return this.api.listRegisteredServicesTree(param.categoryName, options).toPromise();
+    }
+
+    /**
+     * @param param the request object
+     */
+    public openApi(param: ServiceApiOpenApiRequest, options?: Configuration): Promise<string> {
+        return this.api.openApi(param.id, options).toPromise();
     }
 
     /**

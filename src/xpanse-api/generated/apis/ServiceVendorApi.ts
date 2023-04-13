@@ -226,6 +226,34 @@ export class ServiceVendorApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
+     * API to get openapi of service deploy context
+     * @param id
+     */
+    public async openApi(id: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'id' is not null or undefined
+        if (id === null || id === undefined) {
+            throw new RequiredError('ServiceVendorApi', 'openApi', 'id');
+        }
+
+        // Path Params
+        const localVarPath = '/xpanse/register/openapi/{id}'.replace('{' + 'id' + '}', encodeURIComponent(String(id)));
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam('Accept', 'application/json, */*;q=0.8');
+
+        const defaultAuth: SecurityAuthentication | undefined =
+            _options?.authMethods?.default || this.configuration?.authMethods?.default;
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
      * Register new service using ocl model.
      * @param ocl
      */
@@ -348,16 +376,8 @@ export class ServiceVendorApiResponseProcessor {
      * @params response Response returned by the server for a request to detail
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async detail(response: ResponseContext): Promise<OclDetailVo> {
+    public async detail(response: ResponseContext): Promise<RegisteredServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -365,6 +385,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -375,21 +403,21 @@ export class ServiceVendorApiResponseProcessor {
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: OclDetailVo = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'OclDetailVo',
+                'RegisteredServiceVo',
                 ''
-            ) as OclDetailVo;
+            ) as RegisteredServiceVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: OclDetailVo = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'OclDetailVo',
+                'RegisteredServiceVo',
                 ''
-            ) as OclDetailVo;
+            ) as RegisteredServiceVo;
             return body;
         }
 
@@ -408,48 +436,48 @@ export class ServiceVendorApiResponseProcessor {
      * @params response Response returned by the server for a request to fetch
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async fetch(response: ResponseContext): Promise<string> {
+    public async fetch(response: ResponseContext): Promise<RegisteredServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 'Response',
-                'uuid'
+                ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 'Response',
-                'uuid'
+                ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: string = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
+                'RegisteredServiceVo',
+                ''
+            ) as RegisteredServiceVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: string = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
+                'RegisteredServiceVo',
+                ''
+            ) as RegisteredServiceVo;
             return body;
         }
 
@@ -468,16 +496,8 @@ export class ServiceVendorApiResponseProcessor {
      * @params response Response returned by the server for a request to fetchUpdate
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async fetchUpdate(response: ResponseContext): Promise<Response> {
+    public async fetchUpdate(response: ResponseContext): Promise<RegisteredServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -485,6 +505,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -495,21 +523,21 @@ export class ServiceVendorApiResponseProcessor {
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
+                'RegisteredServiceVo',
                 ''
-            ) as Response;
+            ) as RegisteredServiceVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Response = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
+                'RegisteredServiceVo',
                 ''
-            ) as Response;
+            ) as RegisteredServiceVo;
             return body;
         }
 
@@ -530,14 +558,6 @@ export class ServiceVendorApiResponseProcessor {
      */
     public async listCategories(response: ResponseContext): Promise<Array<string>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -545,6 +565,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -590,14 +618,6 @@ export class ServiceVendorApiResponseProcessor {
      */
     public async listRegisteredServices(response: ResponseContext): Promise<Array<RegisteredServiceVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -605,6 +625,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -650,14 +678,6 @@ export class ServiceVendorApiResponseProcessor {
      */
     public async listRegisteredServicesTree(response: ResponseContext): Promise<Array<CategoryOclVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -665,6 +685,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -705,51 +733,111 @@ export class ServiceVendorApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to register
+     * @params response Response returned by the server for a request to openApi
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async register(response: ResponseContext): Promise<string> {
+    public async openApi(response: ResponseContext): Promise<any> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 'Response',
-                'uuid'
+                ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 'Response',
-                'uuid'
+                ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: string = ObjectSerializer.deserialize(
+            const body: any = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
+                'any',
+                ''
+            ) as any;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: string = ObjectSerializer.deserialize(
+            const body: any = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
+                'any',
+                ''
+            ) as any;
+            return body;
+        }
+
+        throw new ApiException<string | Blob | undefined>(
+            response.httpStatusCode,
+            'Unknown API Status Code!',
+            await response.getBodyAsAny(),
+            response.headers
+        );
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to register
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+    public async register(response: ResponseContext): Promise<RegisteredServiceVo> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('404', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('500', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('200', response.httpStatusCode)) {
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'RegisteredServiceVo',
+                ''
+            ) as RegisteredServiceVo;
+            return body;
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'RegisteredServiceVo',
+                ''
+            ) as RegisteredServiceVo;
             return body;
         }
 
@@ -770,14 +858,6 @@ export class ServiceVendorApiResponseProcessor {
      */
     public async unregister(response: ResponseContext): Promise<Response> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -785,6 +865,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -828,16 +916,8 @@ export class ServiceVendorApiResponseProcessor {
      * @params response Response returned by the server for a request to update
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async update(response: ResponseContext): Promise<Response> {
+    public async update(response: ResponseContext): Promise<RegisteredServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('404', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -845,6 +925,14 @@ export class ServiceVendorApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
         }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -855,21 +943,21 @@ export class ServiceVendorApiResponseProcessor {
             throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
+                'RegisteredServiceVo',
                 ''
-            ) as Response;
+            ) as RegisteredServiceVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Response = ObjectSerializer.deserialize(
+            const body: RegisteredServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
+                'RegisteredServiceVo',
                 ''
-            ) as Response;
+            ) as RegisteredServiceVo;
             return body;
         }
 

@@ -15,6 +15,8 @@
  * Do not edit the class manually.
  */
 
+import { DeployVariableKind } from './DeployVariableKind';
+
 /**
  * The variables for the deployment, which will be passed to the deployer
  */
@@ -23,28 +25,25 @@ export class DeployVariable {
      * The name of the deploy variable
      */
     'name': string;
-    /**
-     * The kind of the deploy variable
-     */
-    'kind': DeployVariableKindEnum;
+    'kind': DeployVariableKind;
     /**
      * The type of the deploy variable
      */
-    'type': DeployVariableTypeEnum;
+    'dataType': DeployVariableDataTypeEnum;
     /**
-     * The default value for the deploy variable
+     * The default value of the deploy variable
      */
     'example'?: string;
     /**
-     * The description for the deploy variable
+     * The description of the deploy variable
      */
     'description': string;
     /**
-     * The value of the deploy variable
+     * The value of the deploy variable. Value can be provided for default variables
      */
     'value'?: string;
     /**
-     * Indicate the variable if is mandatory
+     * Indicates if the variable is mandatory
      */
     'mandatory': boolean;
     /**
@@ -64,13 +63,13 @@ export class DeployVariable {
         {
             name: 'kind',
             baseName: 'kind',
-            type: 'DeployVariableKindEnum',
+            type: 'DeployVariableKind',
             format: '',
         },
         {
-            name: 'type',
-            baseName: 'type',
-            type: 'DeployVariableTypeEnum',
+            name: 'dataType',
+            baseName: 'dataType',
+            type: 'DeployVariableDataTypeEnum',
             format: '',
         },
         {
@@ -112,5 +111,4 @@ export class DeployVariable {
     public constructor() {}
 }
 
-export type DeployVariableKindEnum = 'fix_env' | 'fix_variable' | 'env' | 'variable' | 'env_env' | 'env_variable';
-export type DeployVariableTypeEnum = 'string' | 'number' | 'boolean';
+export type DeployVariableDataTypeEnum = 'string' | 'number' | 'boolean';
