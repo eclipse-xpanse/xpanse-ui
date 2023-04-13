@@ -67,6 +67,7 @@ function RegisterPanel(): JSX.Element {
         files.current.pop();
         files.current.push(file);
         setYamlSyntaxValidationStatus('notStarted');
+        setRegisterRequestStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
     };
@@ -88,7 +89,8 @@ function RegisterPanel(): JSX.Element {
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
-            {ocl.current !== undefined ? (
+            {ocl.current !== undefined &&
+            (registerRequestStatus === 'completed' || registerRequestStatus === 'error') ? (
                 <RegisterResult
                     ocl={ocl.current}
                     registerRequestStatus={registerRequestStatus}

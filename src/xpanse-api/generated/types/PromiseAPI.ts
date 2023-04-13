@@ -99,7 +99,7 @@ export class PromiseServiceVendorApi {
      * Get registered service using id.
      * @param id id of registered service
      */
-    public detail(id: string, _options?: Configuration): Promise<OclDetailVo> {
+    public detail(id: string, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.detail(id, _options);
         return result.toPromise();
     }
@@ -108,7 +108,7 @@ export class PromiseServiceVendorApi {
      * Register new service with URL of Ocl file.
      * @param oclLocation URL of Ocl file
      */
-    public fetch(oclLocation: string, _options?: Configuration): Promise<string> {
+    public fetch(oclLocation: string, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.fetch(oclLocation, _options);
         return result.toPromise();
     }
@@ -118,7 +118,7 @@ export class PromiseServiceVendorApi {
      * @param id id of registered service
      * @param oclLocation URL of Ocl file
      */
-    public fetchUpdate(id: string, oclLocation: string, _options?: Configuration): Promise<Response> {
+    public fetchUpdate(id: string, oclLocation: string, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.fetchUpdate(id, oclLocation, _options);
         return result.toPromise();
     }
@@ -159,9 +159,10 @@ export class PromiseServiceVendorApi {
     }
 
     /**
+     * API to get openapi of service deploy context
      * @param id
      */
-    public openApi(id: string, _options?: Configuration): Promise<string> {
+    public openApi(id: string, _options?: Configuration): Promise<any> {
         const result = this.api.openApi(id, _options);
         return result.toPromise();
     }
@@ -170,7 +171,7 @@ export class PromiseServiceVendorApi {
      * Register new service using ocl model.
      * @param ocl
      */
-    public register(ocl: Ocl, _options?: Configuration): Promise<string> {
+    public register(ocl: Ocl, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.register(ocl, _options);
         return result.toPromise();
     }
@@ -189,7 +190,7 @@ export class PromiseServiceVendorApi {
      * @param id id of registered service
      * @param ocl
      */
-    public update(id: string, ocl: Ocl, _options?: Configuration): Promise<Response> {
+    public update(id: string, ocl: Ocl, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.update(id, ocl, _options);
         return result.toPromise();
     }

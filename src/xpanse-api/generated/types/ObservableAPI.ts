@@ -227,7 +227,7 @@ export class ObservableServiceVendorApi {
      * Get registered service using id.
      * @param id id of registered service
      */
-    public detail(id: string, _options?: Configuration): Observable<OclDetailVo> {
+    public detail(id: string, _options?: Configuration): Observable<RegisteredServiceVo> {
         const requestContextPromise = this.requestFactory.detail(id, _options);
 
         // build promise chain
@@ -259,7 +259,7 @@ export class ObservableServiceVendorApi {
      * Register new service with URL of Ocl file.
      * @param oclLocation URL of Ocl file
      */
-    public fetch(oclLocation: string, _options?: Configuration): Observable<string> {
+    public fetch(oclLocation: string, _options?: Configuration): Observable<RegisteredServiceVo> {
         const requestContextPromise = this.requestFactory.fetch(oclLocation, _options);
 
         // build promise chain
@@ -292,7 +292,7 @@ export class ObservableServiceVendorApi {
      * @param id id of registered service
      * @param oclLocation URL of Ocl file
      */
-    public fetchUpdate(id: string, oclLocation: string, _options?: Configuration): Observable<Response> {
+    public fetchUpdate(id: string, oclLocation: string, _options?: Configuration): Observable<RegisteredServiceVo> {
         const requestContextPromise = this.requestFactory.fetchUpdate(id, oclLocation, _options);
 
         // build promise chain
@@ -434,9 +434,10 @@ export class ObservableServiceVendorApi {
     }
 
     /**
+     * API to get openapi of service deploy context
      * @param id
      */
-    public openApi(id: string, _options?: Configuration): Observable<string> {
+    public openApi(id: string, _options?: Configuration): Observable<any> {
         const requestContextPromise = this.requestFactory.openApi(id, _options);
 
         // build promise chain
@@ -468,7 +469,7 @@ export class ObservableServiceVendorApi {
      * Register new service using ocl model.
      * @param ocl
      */
-    public register(ocl: Ocl, _options?: Configuration): Observable<string> {
+    public register(ocl: Ocl, _options?: Configuration): Observable<RegisteredServiceVo> {
         const requestContextPromise = this.requestFactory.register(ocl, _options);
 
         // build promise chain
@@ -533,7 +534,7 @@ export class ObservableServiceVendorApi {
      * @param id id of registered service
      * @param ocl
      */
-    public update(id: string, ocl: Ocl, _options?: Configuration): Observable<Response> {
+    public update(id: string, ocl: Ocl, _options?: Configuration): Observable<RegisteredServiceVo> {
         const requestContextPromise = this.requestFactory.update(id, ocl, _options);
 
         // build promise chain

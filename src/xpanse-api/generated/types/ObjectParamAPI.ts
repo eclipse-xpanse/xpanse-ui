@@ -59,15 +59,6 @@ export interface ServiceApiDestroyRequest {
     id: string;
 }
 
-export interface ServiceApiOpenApiRequest {
-    /**
-     *
-     * @type string
-     * @memberof ServiceApiopenApi
-     */
-    id: string;
-}
-
 export interface ServiceApiServiceDetailRequest {
     /**
      * Task id of deploy service
@@ -194,6 +185,15 @@ export interface ServiceVendorApiListRegisteredServicesTreeRequest {
     categoryName: string;
 }
 
+export interface ServiceVendorApiOpenApiRequest {
+    /**
+     *
+     * @type string
+     * @memberof ServiceVendorApiopenApi
+     */
+    id: string;
+}
+
 export interface ServiceVendorApiRegisterRequest {
     /**
      *
@@ -242,7 +242,7 @@ export class ObjectServiceVendorApi {
      * Get registered service using id.
      * @param param the request object
      */
-    public detail(param: ServiceVendorApiDetailRequest, options?: Configuration): Promise<OclDetailVo> {
+    public detail(param: ServiceVendorApiDetailRequest, options?: Configuration): Promise<RegisteredServiceVo> {
         return this.api.detail(param.id, options).toPromise();
     }
 
@@ -250,7 +250,7 @@ export class ObjectServiceVendorApi {
      * Register new service with URL of Ocl file.
      * @param param the request object
      */
-    public fetch(param: ServiceVendorApiFetchRequest, options?: Configuration): Promise<string> {
+    public fetch(param: ServiceVendorApiFetchRequest, options?: Configuration): Promise<RegisteredServiceVo> {
         return this.api.fetch(param.oclLocation, options).toPromise();
     }
 
@@ -258,7 +258,10 @@ export class ObjectServiceVendorApi {
      * Update registered service using id and ocl file url.
      * @param param the request object
      */
-    public fetchUpdate(param: ServiceVendorApiFetchUpdateRequest, options?: Configuration): Promise<Response> {
+    public fetchUpdate(
+        param: ServiceVendorApiFetchUpdateRequest,
+        options?: Configuration
+    ): Promise<RegisteredServiceVo> {
         return this.api.fetchUpdate(param.id, param.oclLocation, options).toPromise();
     }
 
@@ -298,9 +301,10 @@ export class ObjectServiceVendorApi {
     }
 
     /**
+     * API to get openapi of service deploy context
      * @param param the request object
      */
-    public openApi(param: ServiceApiOpenApiRequest, options?: Configuration): Promise<string> {
+    public openApi(param: ServiceVendorApiOpenApiRequest, options?: Configuration): Promise<any> {
         return this.api.openApi(param.id, options).toPromise();
     }
 
@@ -308,7 +312,7 @@ export class ObjectServiceVendorApi {
      * Register new service using ocl model.
      * @param param the request object
      */
-    public register(param: ServiceVendorApiRegisterRequest, options?: Configuration): Promise<string> {
+    public register(param: ServiceVendorApiRegisterRequest, options?: Configuration): Promise<RegisteredServiceVo> {
         return this.api.register(param.ocl, options).toPromise();
     }
 
@@ -324,7 +328,7 @@ export class ObjectServiceVendorApi {
      * Update registered service using id and ocl model.
      * @param param the request object
      */
-    public update(param: ServiceVendorApiUpdateRequest, options?: Configuration): Promise<Response> {
+    public update(param: ServiceVendorApiUpdateRequest, options?: Configuration): Promise<RegisteredServiceVo> {
         return this.api.update(param.id, param.ocl, options).toPromise();
     }
 }

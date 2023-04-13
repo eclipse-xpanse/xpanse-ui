@@ -4,10 +4,10 @@
  */
 
 import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
-import { Ocl } from '../../../xpanse-api/generated';
 import { UploadFile } from 'antd';
 import { ValidationStatus } from './ValidationStatus';
 import { MutableRefObject } from 'react';
+import { ApiException, Ocl, RegisteredServiceVo, Response } from '../../../xpanse-api/generated';
 
 export function registerService(
     ocl: Ocl,
@@ -17,14 +17,18 @@ export function registerService(
 ): void {
     serviceVendorApi
         .register(ocl)
-        .then(() => {
+        .then((registeredServiceVo: RegisteredServiceVo) => {
             file.status = 'success';
             setRegisterRequestStatus('completed');
-            registerResult.current = 'Service Registered Successfully';
+            registerResult.current = `ID - ${registeredServiceVo.id}`;
         })
         .catch((error: Error) => {
             file.status = 'error';
             setRegisterRequestStatus('error');
-            registerResult.current = error.message;
+            if (error instanceof ApiException && error.body instanceof Response) {
+                registerResult.current = error.body.message;
+            } else {
+                registerResult.current = error.message;
+            }
         });
 }
