@@ -62,11 +62,11 @@ export default function GoToSubmit({
             params: new Array<DeployParam>(),
         };
 
-        for (const param of service.deployment.context) {
+        for (const param of service.deployment.variables) {
             props.params.push({
                 name: param.name,
                 kind: param.kind,
-                type: param.type,
+                type: param.dataType,
                 example: param.example === undefined ? '' : param.example,
                 description: param.description,
                 value: param.value === undefined ? '' : param.value,

@@ -145,37 +145,6 @@ export class ObservableServiceApi {
     }
 
     /**
-     * @param id
-     */
-    public openApi(id: string, _options?: Configuration): Observable<string> {
-        const requestContextPromise = this.requestFactory.openApi(id, _options);
-
-        // build promise chain
-        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-        for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(
-                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
-            );
-        }
-
-        return middlewarePreObservable
-            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
-            .pipe(
-                mergeMap((response: ResponseContext) => {
-                    let middlewarePostObservable = of(response);
-                    for (let middleware of this.configuration.middleware) {
-                        middlewarePostObservable = middlewarePostObservable.pipe(
-                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
-                        );
-                    }
-                    return middlewarePostObservable.pipe(
-                        map((rsp: ResponseContext) => this.responseProcessor.openApi(rsp))
-                    );
-                })
-            );
-    }
-
-    /**
      * Get deployed service using id.
      * @param id Task id of deploy service
      */
@@ -459,6 +428,37 @@ export class ObservableServiceVendorApi {
                     }
                     return middlewarePostObservable.pipe(
                         map((rsp: ResponseContext) => this.responseProcessor.listRegisteredServicesTree(rsp))
+                    );
+                })
+            );
+    }
+
+    /**
+     * @param id
+     */
+    public openApi(id: string, _options?: Configuration): Observable<string> {
+        const requestContextPromise = this.requestFactory.openApi(id, _options);
+
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (let middleware of this.configuration.middleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
+        }
+
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.openApi(rsp))
                     );
                 })
             );

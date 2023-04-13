@@ -68,14 +68,6 @@ export class PromiseServiceApi {
     }
 
     /**
-     * @param id
-     */
-    public openApi(id: string, _options?: Configuration): Promise<string> {
-        const result = this.api.openApi(id, _options);
-        return result.toPromise();
-    }
-
-    /**
      * Get deployed service using id.
      * @param id Task id of deploy service
      */
@@ -163,6 +155,14 @@ export class PromiseServiceVendorApi {
      */
     public listRegisteredServicesTree(categoryName: string, _options?: Configuration): Promise<Array<CategoryOclVo>> {
         const result = this.api.listRegisteredServicesTree(categoryName, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * @param id
+     */
+    public openApi(id: string, _options?: Configuration): Promise<string> {
+        const result = this.api.openApi(id, _options);
         return result.toPromise();
     }
 

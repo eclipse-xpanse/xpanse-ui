@@ -20,6 +20,9 @@ import { CloudServiceProvider } from './CloudServiceProvider';
 import { Deployment } from './Deployment';
 import { Flavor } from './Flavor';
 
+/**
+ * The list of the registered services.
+ */
 export class OclDetailVo {
     /**
      * The catalog of the service

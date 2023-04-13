@@ -172,11 +172,11 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         createRequest.csp = props.csp;
         createRequest.region = props.region;
         createRequest.flavor = props.flavor;
-        createRequest.property = {};
+        createRequest.serviceRequestProperties = {};
         createRequest.customerServiceName = customerServiceName;
         for (const item of parameters) {
             if (item.kind === 'variable' || item.kind === 'env') {
-                createRequest.property[item.name] = item.value;
+                createRequest.serviceRequestProperties[item.name] = item.value;
             }
         }
         // Start deploying
