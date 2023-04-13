@@ -129,6 +129,7 @@ function RegisterPanel(): JSX.Element {
                     type={'primary'}
                     icon={<CloudUploadOutlined />}
                     onClick={sendRequestRequest}
+                    loading={registerRequestStatus === 'inProgress'}
                 >
                     Register
                 </Button>
