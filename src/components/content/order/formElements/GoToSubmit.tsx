@@ -37,8 +37,14 @@ export default function GoToSubmit({
 
     const gotoOrderSubmit = function () {
         let service: Ocl = new Ocl();
+        let registeredServiceId = '';
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
+                v.forEach((registerService) => {
+                    if (registerService.csp === selectCsp) {
+                        registeredServiceId = registerService.id;
+                    }
+                });
                 const oclList: Ocl[] = [];
                 for (const registeredServiceVo of v) {
                     oclList.push(registeredServiceVo.ocl);
@@ -52,6 +58,7 @@ export default function GoToSubmit({
         });
 
         const props: OrderSubmitProps = {
+            id: registeredServiceId,
             category: categoryName as CreateRequestCategoryEnum,
             name: serviceName,
             version: selectVersion,
