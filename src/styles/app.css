@@ -89,8 +89,21 @@
 .content-title {
     font-size: 20px;
     font-weight: bold;
+    width: 600px;
 }
 
 .menu-loading {
     padding-left: 50px;
+}
+
+.content-title-api {
+    font-size: 13px;
+    font-weight: bold;
+    float: right;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    padding: 0;
+    margin-top: 10px;
 }

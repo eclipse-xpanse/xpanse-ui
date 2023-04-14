@@ -22,6 +22,7 @@ import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { ApiDoc } from './ApiDoc';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -43,6 +44,7 @@ function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandl
 }
 
 export interface OrderSubmitProps {
+    id: string;
     category: CreateRequestCategoryEnum;
     name: string;
     version: string;
@@ -208,7 +210,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 <div className={'Line'} />
                 <div className={'services-content'}>
                     <div className={'content-title'}>
-                        Service: {props.name}@{props.version}
+                        <div className={'content-title-order'}>
+                            Service: {props.name}@{props.version}
+                            <ApiDoc id={props.id}></ApiDoc>
+                        </div>
                     </div>
                 </div>
             </div>
