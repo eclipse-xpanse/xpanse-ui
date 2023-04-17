@@ -22,10 +22,15 @@ function RegisterResult({
         return (
             <Alert
                 type={'success'}
-                message={`Service ${ocl.name} Registered Successfully`}
+                message={
+                    <>
+                        Service <b>{ocl.name}</b> Registered Successfully
+                    </>
+                }
                 closable={true}
                 onClose={onRemove}
                 className={'result'}
+                description={registerResult}
             />
         );
     } else if (registerRequestStatus === 'error') {

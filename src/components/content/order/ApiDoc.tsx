@@ -9,11 +9,9 @@ import '../../../styles/app.css';
 
 export function ApiDoc({ id }: { id: string }): JSX.Element {
     function onclick() {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
         serviceVendorApi
             .openApi(id)
-            .then((resp) => {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            .then((resp: string) => {
                 window.open(resp);
             })
             .catch((error) => {
