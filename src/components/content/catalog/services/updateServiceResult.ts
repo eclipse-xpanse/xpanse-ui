@@ -16,6 +16,7 @@ export function updateServiceResult(
     updateResult: MutableRefObject<string>,
     file: UploadFile
 ): void {
+    setUpdateRequestStatus('inProgress');
     serviceVendorApi
         .update(id, ocl)
         .then(() => {

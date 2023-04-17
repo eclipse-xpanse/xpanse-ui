@@ -180,6 +180,7 @@ function UpdateService({
                             type={'primary'}
                             icon={<CloudUploadOutlined />}
                             onClick={sendRequestRequest}
+                            loading={updateRequestStatus === 'inProgress'}
                         >
                             Update
                         </Button>

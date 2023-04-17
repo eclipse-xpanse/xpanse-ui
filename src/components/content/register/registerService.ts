@@ -15,6 +15,7 @@ export function registerService(
     registerResult: MutableRefObject<string>,
     file: UploadFile
 ): void {
+    setRegisterRequestStatus('inProgress');
     serviceVendorApi
         .register(ocl)
         .then((registeredServiceVo: RegisteredServiceVo) => {
