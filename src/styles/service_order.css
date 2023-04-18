@@ -232,3 +232,15 @@
 .version-drop-down {
     width: fit-content;
 }
+
+.content-title-api {
+    font-size: 13px;
+    font-weight: bold;
+    float: right;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    padding: 0;
+    margin-top: 10px;
+}

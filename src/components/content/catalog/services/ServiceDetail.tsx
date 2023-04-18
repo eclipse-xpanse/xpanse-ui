@@ -7,6 +7,7 @@ import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
+import { ApiDoc } from '../../order/ApiDoc';
 
 function ServiceDetail({
     serviceDetails,
@@ -35,6 +36,7 @@ function ServiceDetail({
                 <InfoCircleOutlined />
                 &nbsp;Basic Information
             </h3>
+
             <Descriptions bordered column={1}>
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
@@ -54,6 +56,9 @@ function ServiceDetail({
                             return flavor.name;
                         })
                         .join(',')}
+                </Descriptions.Item>
+                <Descriptions.Item label={'Service API'}>
+                    <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
                 </Descriptions.Item>
             </Descriptions>
         </>
