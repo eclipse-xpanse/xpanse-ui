@@ -364,7 +364,17 @@ export class ObservableServiceVendorApi {
      * @param serviceVersion version of the service
      */
     public listRegisteredServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,
@@ -552,7 +562,20 @@ export class ObservableServicesAvailableApi {
      * Get the available services by tree.
      * @param categoryName category of the service
      */
-    public getAvailableServicesTree(categoryName: string, _options?: Configuration): Observable<Array<CategoryOclVo>> {
+    public getAvailableServicesTree(
+        categoryName:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        _options?: Configuration
+    ): Observable<Array<CategoryOclVo>> {
         const requestContextPromise = this.requestFactory.getAvailableServicesTree(categoryName, _options);
 
         // build promise chain
@@ -588,7 +611,17 @@ export class ObservableServicesAvailableApi {
      * @param serviceVersion version of the service
      */
     public listAvailableServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,

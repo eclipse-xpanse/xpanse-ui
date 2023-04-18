@@ -10,7 +10,7 @@ import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
-import { CategoryOclVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { CategoryOclVo, ServiceVoCategoryEnum, VersionOclVo } from '../../../xpanse-api/generated';
 import { Empty, Tree } from 'antd';
 
 function Catalog(): JSX.Element {
@@ -22,12 +22,9 @@ function Catalog(): JSX.Element {
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
 
     useEffect(() => {
-        const path: string = location.hash.split('#')[1];
-        if (!path) {
-            return;
-        }
+        const category = location.hash.split('#')[1] as ServiceVoCategoryEnum;
         servicesAvailableApi
-            .getAvailableServicesTree(path)
+            .getAvailableServicesTree(category)
             .then((data) => {
                 const tData: DataNode[] = [];
                 const tExpandKeys: React.Key[] = [];

@@ -54,7 +54,20 @@ export class ServicesAvailableApiRequestFactory extends BaseAPIRequestFactory {
      * Get the available services by tree.
      * @param categoryName category of the service
      */
-    public async getAvailableServicesTree(categoryName: string, _options?: Configuration): Promise<RequestContext> {
+    public async getAvailableServicesTree(
+        categoryName:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        _options?: Configuration
+    ): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'categoryName' is not null or undefined
@@ -89,7 +102,17 @@ export class ServicesAvailableApiRequestFactory extends BaseAPIRequestFactory {
      * @param serviceVersion version of the service
      */
     public async listAvailableServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,
@@ -106,7 +129,14 @@ export class ServicesAvailableApiRequestFactory extends BaseAPIRequestFactory {
 
         // Query Params
         if (categoryName !== undefined) {
-            requestContext.setQueryParam('categoryName', ObjectSerializer.serialize(categoryName, 'string', ''));
+            requestContext.setQueryParam(
+                'categoryName',
+                ObjectSerializer.serialize(
+                    categoryName,
+                    "'ai' | 'compute' | 'container' | 'storage' | 'network' | 'database' | 'mediaService' | 'security' | 'middleware' | 'others'",
+                    ''
+                )
+            );
         }
 
         // Query Params

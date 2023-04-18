@@ -306,7 +306,19 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "ai",
+                                "compute",
+                                "container",
+                                "storage",
+                                "network",
+                                "database",
+                                "mediaService",
+                                "security",
+                                "middleware",
+                                "others"
+                            ]
                         }
                     },
                     {
@@ -759,7 +771,19 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "ai",
+                                "compute",
+                                "container",
+                                "storage",
+                                "network",
+                                "database",
+                                "mediaService",
+                                "security",
+                                "middleware",
+                                "others"
+                            ]
                         }
                     },
                     {
@@ -976,7 +1000,19 @@
                         "description": "category of the service",
                         "required": true,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "enum": [
+                                "ai",
+                                "compute",
+                                "container",
+                                "storage",
+                                "network",
+                                "database",
+                                "mediaService",
+                                "security",
+                                "middleware",
+                                "others"
+                            ]
                         }
                     }
                 ],
@@ -1144,11 +1180,15 @@
                     "resultType": {
                         "type": "string",
                         "description": "The result code of response.",
-                        "enum": ["success", "Runtime failure", "Parameters invalid"]
+                        "enum": ["Success", "Runtime Failure", "Parameters Invalid", "Terraform Script Invalid"]
                     },
                     "details": {
-                        "type": "string",
-                        "description": "Details of the error occurred"
+                        "type": "array",
+                        "description": "Details of the errors occurred",
+                        "items": {
+                            "type": "string",
+                            "description": "Details of the errors occurred"
+                        }
                     },
                     "success": {
                         "type": "boolean",

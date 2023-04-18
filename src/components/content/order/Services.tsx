@@ -12,7 +12,7 @@ import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../utils/Sort';
-import { VersionOclVo } from '../../../xpanse-api/generated';
+import { ServiceVoCategoryEnum, VersionOclVo } from '../../../xpanse-api/generated';
 
 function Services(): JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -39,10 +39,7 @@ function Services(): JSX.Element {
     }
 
     useEffect(() => {
-        const categoryName = location.hash.split('#')[1];
-        if (!categoryName) {
-            return;
-        }
+        const categoryName = location.hash.split('#')[1] as ServiceVoCategoryEnum;
         void servicesAvailableApi.getAvailableServicesTree(categoryName).then((rsp) => {
             const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
             if (rsp.length > 0) {

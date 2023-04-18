@@ -163,10 +163,20 @@ export interface ServiceVendorApiListCategoriesRequest {}
 export interface ServiceVendorApiListRegisteredServicesRequest {
     /**
      * category of the service
-     * @type string
+     * @type &#39;ai&#39; | &#39;compute&#39; | &#39;container&#39; | &#39;storage&#39; | &#39;network&#39; | &#39;database&#39; | &#39;mediaService&#39; | &#39;security&#39; | &#39;middleware&#39; | &#39;others&#39;
      * @memberof ServiceVendorApilistRegisteredServices
      */
-    categoryName?: string;
+    categoryName?:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
     /**
      * name of the service provider
      * @type string
@@ -319,19 +329,39 @@ export interface ServicesAvailableApiAvailableServiceDetailRequest {
 export interface ServicesAvailableApiGetAvailableServicesTreeRequest {
     /**
      * category of the service
-     * @type string
+     * @type &#39;ai&#39; | &#39;compute&#39; | &#39;container&#39; | &#39;storage&#39; | &#39;network&#39; | &#39;database&#39; | &#39;mediaService&#39; | &#39;security&#39; | &#39;middleware&#39; | &#39;others&#39;
      * @memberof ServicesAvailableApigetAvailableServicesTree
      */
-    categoryName: string;
+    categoryName:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
 }
 
 export interface ServicesAvailableApiListAvailableServicesRequest {
     /**
      * category of the service
-     * @type string
+     * @type &#39;ai&#39; | &#39;compute&#39; | &#39;container&#39; | &#39;storage&#39; | &#39;network&#39; | &#39;database&#39; | &#39;mediaService&#39; | &#39;security&#39; | &#39;middleware&#39; | &#39;others&#39;
      * @memberof ServicesAvailableApilistAvailableServices
      */
-    categoryName?: string;
+    categoryName?:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
     /**
      * name of the service provider
      * @type string

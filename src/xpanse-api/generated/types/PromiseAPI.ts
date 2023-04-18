@@ -152,7 +152,17 @@ export class PromiseServiceVendorApi {
      * @param serviceVersion version of the service
      */
     public listRegisteredServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,
@@ -215,7 +225,20 @@ export class PromiseServicesAvailableApi {
      * Get the available services by tree.
      * @param categoryName category of the service
      */
-    public getAvailableServicesTree(categoryName: string, _options?: Configuration): Promise<Array<CategoryOclVo>> {
+    public getAvailableServicesTree(
+        categoryName:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        _options?: Configuration
+    ): Promise<Array<CategoryOclVo>> {
         const result = this.api.getAvailableServicesTree(categoryName, _options);
         return result.toPromise();
     }
@@ -228,7 +251,17 @@ export class PromiseServicesAvailableApi {
      * @param serviceVersion version of the service
      */
     public listAvailableServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,
