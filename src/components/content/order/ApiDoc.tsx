@@ -7,7 +7,7 @@ import { LinkOutlined } from '@ant-design/icons';
 import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import '../../../styles/app.css';
 
-export function ApiDoc({ id }: { id: string }): JSX.Element {
+export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): JSX.Element {
     function onclick() {
         servicesAvailableApi
             .openApi(id)
@@ -19,7 +19,7 @@ export function ApiDoc({ id }: { id: string }): JSX.Element {
             });
     }
     return (
-        <button className={'content-title-api'} onClick={onclick}>
+        <button className={styleClass} onClick={onclick}>
             <LinkOutlined /> API Documentation
         </button>
     );

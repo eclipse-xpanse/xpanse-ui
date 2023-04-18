@@ -212,7 +212,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     <div className={'content-title'}>
                         <div className={'content-title-order'}>
                             Service: {props.name}@{props.version}
-                            <ApiDoc id={props.id}></ApiDoc>
+                            <ApiDoc id={props.id} styleClass={'content-title-api'}></ApiDoc>
                         </div>
                     </div>
                 </div>
