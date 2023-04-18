@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { RequestContext, HttpMethod } from './http/http';
+import { HttpMethod, RequestContext } from './http/http';
 
 export interface BaseServerConfiguration {
     makeRequestContext(endpoint: string, httpMethod: HttpMethod): RequestContext;

@@ -8,7 +8,7 @@ import '../../../styles/service_order.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../utils/constants';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../utils/Sort';
@@ -43,7 +43,7 @@ function Services(): JSX.Element {
         if (!categoryName) {
             return;
         }
-        void serviceVendorApi.listRegisteredServicesTree(categoryName).then((rsp) => {
+        void servicesAvailableApi.getAvailableServicesTree(categoryName).then((rsp) => {
             const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
             if (rsp.length > 0) {
                 rsp.forEach((item) => {

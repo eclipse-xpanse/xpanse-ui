@@ -19,13 +19,13 @@ export class Response {
     /**
      * The result code of response.
      */
-    'code': string;
+    'resultType': ResponseResultTypeEnum;
     /**
-     * The result message of response.
+     * Details of the error occurred
      */
-    'message': string;
+    'details': string;
     /**
-     * The success boolean of response.
+     * Describes if the request is successful
      */
     'success': boolean;
 
@@ -33,14 +33,14 @@ export class Response {
 
     static readonly attributeTypeMap: Array<{ name: string; baseName: string; type: string; format: string }> = [
         {
-            name: 'code',
-            baseName: 'code',
-            type: 'string',
+            name: 'resultType',
+            baseName: 'resultType',
+            type: 'ResponseResultTypeEnum',
             format: '',
         },
         {
-            name: 'message',
-            baseName: 'message',
+            name: 'details',
+            baseName: 'details',
             type: 'string',
             format: '',
         },
@@ -58,3 +58,5 @@ export class Response {
 
     public constructor() {}
 }
+
+export type ResponseResultTypeEnum = 'success' | 'Runtime failure' | 'Parameters invalid';

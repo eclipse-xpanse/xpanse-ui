@@ -257,7 +257,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
-        void serviceApi.services().then((resp) => {
+        void serviceApi.listDeployedServices().then((resp) => {
             const serviceList: ServiceVo[] = [];
             if (resp.length > 0) {
                 setServiceVoList(resp);

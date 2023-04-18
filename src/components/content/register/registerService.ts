@@ -27,7 +27,7 @@ export function registerService(
             file.status = 'error';
             setRegisterRequestStatus('error');
             if (error instanceof ApiException && error.body instanceof Response) {
-                registerResult.current = error.body.message;
+                registerResult.current = error.body.details;
             } else {
                 registerResult.current = error.message;
             }

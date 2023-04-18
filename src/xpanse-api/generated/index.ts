@@ -17,4 +17,5 @@ export {
     PromiseAdminApi as AdminApi,
     PromiseServiceApi as ServiceApi,
     PromiseServiceVendorApi as ServiceVendorApi,
+    PromiseServicesAvailableApi as ServicesAvailableApi,
 } from './types/PromiseAPI';
