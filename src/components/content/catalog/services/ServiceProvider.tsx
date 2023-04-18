@@ -56,7 +56,7 @@ function ServiceProvider({
             return v.cloudProvider.map((cloudProvider: ProviderOclVo) => {
                 const key = serviceName + '@' + cloudProvider.name;
                 detailMapper.set(key, cloudProvider.details[0]);
-                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.regions);
+                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.details[0].regions);
                 const areas: Area[] = [];
 
                 result.forEach((v, k) => {

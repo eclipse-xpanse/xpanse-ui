@@ -59,6 +59,7 @@ import {
     UserAvailableServiceVoServiceStateEnum,
 } from './UserAvailableServiceVo';
 import { VersionOclVo } from './VersionOclVo';
+import YAML from 'yaml';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -67,6 +68,7 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
     'application/json': Infinity,
     'application/octet-stream': 0,
     'application/x-www-form-urlencoded': 0,
+    'application/x-yaml': 0,
 };
 
 let enumsMap: Set<string> = new Set<string>([
@@ -308,6 +310,10 @@ export class ObjectSerializer {
             return JSON.stringify(data);
         }
 
+        if (mediaType === 'application/x-yaml') {
+            return YAML.stringify(data);
+        }
+
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.stringify.');
     }
 
@@ -329,6 +335,10 @@ export class ObjectSerializer {
 
         if (mediaType === 'text/html') {
             return rawData;
+        }
+
+        if (mediaType === 'application/yaml') {
+            return YAML.parse(rawData);
         }
 
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.parse.');
