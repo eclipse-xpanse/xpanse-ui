@@ -7,19 +7,30 @@ import { Configuration } from '../configuration';
 import { CategoryOclVo } from '../models/CategoryOclVo';
 import { CreateRequest } from '../models/CreateRequest';
 import { Ocl } from '../models/Ocl';
-import { OclDetailVo } from '../models/OclDetailVo';
+import { RegisteredServiceVo } from '../models/RegisteredServiceVo';
 import { Response } from '../models/Response';
+import { ServiceDetailVo } from '../models/ServiceDetailVo';
 import { ServiceVo } from '../models/ServiceVo';
 import { SystemStatus } from '../models/SystemStatus';
-import { ObservableAdminApi } from './ObservableAPI';
+import { UserAvailableServiceVo } from '../models/UserAvailableServiceVo';
+import {
+    ObservableAdminApi,
+    ObservableServiceApi,
+    ObservableServicesAvailableApi,
+    ObservableServiceVendorApi,
+} from './ObservableAPI';
 
 import { AdminApiRequestFactory, AdminApiResponseProcessor } from '../apis/AdminApi';
-import { ObservableServiceApi } from './ObservableAPI';
+
 import { ServiceApiRequestFactory, ServiceApiResponseProcessor } from '../apis/ServiceApi';
-import { ObservableServiceVendorApi } from './ObservableAPI';
+
 import { ServiceVendorApiRequestFactory, ServiceVendorApiResponseProcessor } from '../apis/ServiceVendorApi';
-import { RegisteredServiceVo } from '../models/RegisteredServiceVo';
-import { ServiceDetailVo } from '../models/ServiceDetailVo';
+
+import {
+    ServicesAvailableApiRequestFactory,
+    ServicesAvailableApiResponseProcessor,
+} from '../apis/ServicesAvailableApi';
+
 export class PromiseAdminApi {
     private api: ObservableAdminApi;
 
@@ -38,6 +49,7 @@ export class PromiseAdminApi {
         return result.toPromise();
     }
 }
+
 export class PromiseServiceApi {
     private api: ObservableServiceApi;
 
@@ -68,6 +80,14 @@ export class PromiseServiceApi {
     }
 
     /**
+     * List the deployed services.
+     */
+    public listDeployedServices(_options?: Configuration): Promise<Array<ServiceVo>> {
+        const result = this.api.listDeployedServices(_options);
+        return result.toPromise();
+    }
+
+    /**
      * Get deployed service using id.
      * @param id Task id of deploy service
      */
@@ -75,15 +95,8 @@ export class PromiseServiceApi {
         const result = this.api.serviceDetail(id, _options);
         return result.toPromise();
     }
-
-    /**
-     * List the deployed services.
-     */
-    public services(_options?: Configuration): Promise<Array<ServiceVo>> {
-        const result = this.api.services(_options);
-        return result.toPromise();
-    }
 }
+
 export class PromiseServiceVendorApi {
     private api: ObservableServiceVendorApi;
 
@@ -150,24 +163,6 @@ export class PromiseServiceVendorApi {
     }
 
     /**
-     * List registered service group by serviceName, serviceVersion, cspName with category.
-     * @param categoryName category of the service
-     */
-    public listRegisteredServicesTree(categoryName: string, _options?: Configuration): Promise<Array<CategoryOclVo>> {
-        const result = this.api.listRegisteredServicesTree(categoryName, _options);
-        return result.toPromise();
-    }
-
-    /**
-     * API to get openapi of service deploy context
-     * @param id
-     */
-    public openApi(id: string, _options?: Configuration): Promise<any> {
-        const result = this.api.openApi(id, _options);
-        return result.toPromise();
-    }
-
-    /**
      * Register new service using ocl model.
      * @param ocl
      */
@@ -192,6 +187,63 @@ export class PromiseServiceVendorApi {
      */
     public update(id: string, ocl: Ocl, _options?: Configuration): Promise<RegisteredServiceVo> {
         const result = this.api.update(id, ocl, _options);
+        return result.toPromise();
+    }
+}
+
+export class PromiseServicesAvailableApi {
+    private api: ObservableServicesAvailableApi;
+
+    public constructor(
+        configuration: Configuration,
+        requestFactory?: ServicesAvailableApiRequestFactory,
+        responseProcessor?: ServicesAvailableApiResponseProcessor
+    ) {
+        this.api = new ObservableServicesAvailableApi(configuration, requestFactory, responseProcessor);
+    }
+
+    /**
+     * Get available service by id.
+     * @param id The id of available service.
+     */
+    public availableServiceDetail(id: string, _options?: Configuration): Promise<UserAvailableServiceVo> {
+        const result = this.api.availableServiceDetail(id, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Get the available services by tree.
+     * @param categoryName category of the service
+     */
+    public getAvailableServicesTree(categoryName: string, _options?: Configuration): Promise<Array<CategoryOclVo>> {
+        const result = this.api.getAvailableServicesTree(categoryName, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * List the available services.
+     * @param categoryName category of the service
+     * @param cspName name of the service provider
+     * @param serviceName name of the service
+     * @param serviceVersion version of the service
+     */
+    public listAvailableServices(
+        categoryName?: string,
+        cspName?: string,
+        serviceName?: string,
+        serviceVersion?: string,
+        _options?: Configuration
+    ): Promise<Array<UserAvailableServiceVo>> {
+        const result = this.api.listAvailableServices(categoryName, cspName, serviceName, serviceVersion, _options);
+        return result.toPromise();
+    }
+
+    /**
+     * Get the API document of the available service.
+     * @param id
+     */
+    public openApi(id: string, _options?: Configuration): Promise<any> {
+        const result = this.api.openApi(id, _options);
         return result.toPromise();
     }
 }

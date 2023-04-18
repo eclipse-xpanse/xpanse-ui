@@ -11,88 +11,31 @@ import { ApiException } from './exception';
 import { isCodeInRange } from '../util';
 import { SecurityAuthentication } from '../auth/auth';
 
-import { CreateRequest } from '../models/CreateRequest';
+import { CategoryOclVo } from '../models/CategoryOclVo';
 import { Response } from '../models/Response';
-import { ServiceDetailVo } from '../models/ServiceDetailVo';
-import { ServiceVo } from '../models/ServiceVo';
+import { UserAvailableServiceVo } from '../models/UserAvailableServiceVo';
 
 /**
  * no description
  */
-export class ServiceApiRequestFactory extends BaseAPIRequestFactory {
+export class ServicesAvailableApiRequestFactory extends BaseAPIRequestFactory {
     /**
-     * Start a task to deploy registered service.
-     * @param createRequest
+     * Get available service by id.
+     * @param id The id of available service.
      */
-    public async deploy(createRequest: CreateRequest, _options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // verify required parameter 'createRequest' is not null or undefined
-        if (createRequest === null || createRequest === undefined) {
-            throw new RequiredError('ServiceApi', 'deploy', 'createRequest');
-        }
-
-        // Path Params
-        const localVarPath = '/xpanse/services/deploy';
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
-        requestContext.setHeaderParam('Accept', 'application/json, */*;q=0.8');
-
-        // Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType(['application/json']);
-        requestContext.setHeaderParam('Content-Type', contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(createRequest, 'CreateRequest', ''),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
-
-        const defaultAuth: SecurityAuthentication | undefined =
-            _options?.authMethods?.default || this.configuration?.authMethods?.default;
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * Start a task to destroy the deployed service using id.
-     * @param id
-     */
-    public async destroy(id: string, _options?: Configuration): Promise<RequestContext> {
+    public async availableServiceDetail(id: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
-            throw new RequiredError('ServiceApi', 'destroy', 'id');
+            throw new RequiredError('ServicesAvailableApi', 'availableServiceDetail', 'id');
         }
 
         // Path Params
-        const localVarPath = '/xpanse/services/destroy/{id}'.replace('{' + 'id' + '}', encodeURIComponent(String(id)));
-
-        // Make Request Context
-        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.DELETE);
-        requestContext.setHeaderParam('Accept', 'application/json, */*;q=0.8');
-
-        const defaultAuth: SecurityAuthentication | undefined =
-            _options?.authMethods?.default || this.configuration?.authMethods?.default;
-        if (defaultAuth?.applySecurityAuthentication) {
-            await defaultAuth?.applySecurityAuthentication(requestContext);
-        }
-
-        return requestContext;
-    }
-
-    /**
-     * List the deployed services.
-     */
-    public async listDeployedServices(_options?: Configuration): Promise<RequestContext> {
-        let _config = _options || this.configuration;
-
-        // Path Params
-        const localVarPath = '/xpanse/services/deployed';
+        const localVarPath = '/xpanse/services/available/{id}'.replace(
+            '{' + 'id' + '}',
+            encodeURIComponent(String(id))
+        );
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
@@ -108,19 +51,105 @@ export class ServiceApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Get deployed service using id.
-     * @param id Task id of deploy service
+     * Get the available services by tree.
+     * @param categoryName category of the service
      */
-    public async serviceDetail(id: string, _options?: Configuration): Promise<RequestContext> {
+    public async getAvailableServicesTree(categoryName: string, _options?: Configuration): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // verify required parameter 'categoryName' is not null or undefined
+        if (categoryName === null || categoryName === undefined) {
+            throw new RequiredError('ServicesAvailableApi', 'getAvailableServicesTree', 'categoryName');
+        }
+
+        // Path Params
+        const localVarPath = '/xpanse/services/available/category/{categoryName}'.replace(
+            '{' + 'categoryName' + '}',
+            encodeURIComponent(String(categoryName))
+        );
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam('Accept', 'application/json, */*;q=0.8');
+
+        const defaultAuth: SecurityAuthentication | undefined =
+            _options?.authMethods?.default || this.configuration?.authMethods?.default;
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * List the available services.
+     * @param categoryName category of the service
+     * @param cspName name of the service provider
+     * @param serviceName name of the service
+     * @param serviceVersion version of the service
+     */
+    public async listAvailableServices(
+        categoryName?: string,
+        cspName?: string,
+        serviceName?: string,
+        serviceVersion?: string,
+        _options?: Configuration
+    ): Promise<RequestContext> {
+        let _config = _options || this.configuration;
+
+        // Path Params
+        const localVarPath = '/xpanse/services/available';
+
+        // Make Request Context
+        const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam('Accept', 'application/json, */*;q=0.8');
+
+        // Query Params
+        if (categoryName !== undefined) {
+            requestContext.setQueryParam('categoryName', ObjectSerializer.serialize(categoryName, 'string', ''));
+        }
+
+        // Query Params
+        if (cspName !== undefined) {
+            requestContext.setQueryParam('cspName', ObjectSerializer.serialize(cspName, 'string', ''));
+        }
+
+        // Query Params
+        if (serviceName !== undefined) {
+            requestContext.setQueryParam('serviceName', ObjectSerializer.serialize(serviceName, 'string', ''));
+        }
+
+        // Query Params
+        if (serviceVersion !== undefined) {
+            requestContext.setQueryParam('serviceVersion', ObjectSerializer.serialize(serviceVersion, 'string', ''));
+        }
+
+        const defaultAuth: SecurityAuthentication | undefined =
+            _options?.authMethods?.default || this.configuration?.authMethods?.default;
+        if (defaultAuth?.applySecurityAuthentication) {
+            await defaultAuth?.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * Get the API document of the available service.
+     * @param id
+     */
+    public async openApi(id: string, _options?: Configuration): Promise<RequestContext> {
         let _config = _options || this.configuration;
 
         // verify required parameter 'id' is not null or undefined
         if (id === null || id === undefined) {
-            throw new RequiredError('ServiceApi', 'serviceDetail', 'id');
+            throw new RequiredError('ServicesAvailableApi', 'openApi', 'id');
         }
 
         // Path Params
-        const localVarPath = '/xpanse/services/deployed/{id}'.replace('{' + 'id' + '}', encodeURIComponent(String(id)));
+        const localVarPath = '/xpanse/services/available/{id}/openapi'.replace(
+            '{' + 'id' + '}',
+            encodeURIComponent(String(id))
+        );
 
         // Make Request Context
         const requestContext = _config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
@@ -136,135 +165,15 @@ export class ServiceApiRequestFactory extends BaseAPIRequestFactory {
     }
 }
 
-export class ServiceApiResponseProcessor {
+export class ServicesAvailableApiResponseProcessor {
     /**
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to deploy
+     * @params response Response returned by the server for a request to availableServiceDetail
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async deploy(response: ResponseContext): Promise<string> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
-        if (isCodeInRange('500', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('404', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                'uuid'
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
-        }
-        if (isCodeInRange('202', response.httpStatusCode)) {
-            const body: string = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
-            return body;
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: string = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'string',
-                'uuid'
-            ) as string;
-            return body;
-        }
-
-        throw new ApiException<string | Blob | undefined>(
-            response.httpStatusCode,
-            'Unknown API Status Code!',
-            await response.getBodyAsAny(),
-            response.headers
-        );
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to destroy
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-    public async destroy(response: ResponseContext): Promise<Response> {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
-        if (isCodeInRange('500', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
-        }
-        if (isCodeInRange('404', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
-        }
-        if (isCodeInRange('202', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            return body;
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            return body;
-        }
-
-        throw new ApiException<string | Blob | undefined>(
-            response.httpStatusCode,
-            'Unknown API Status Code!',
-            await response.getBodyAsAny(),
-            response.headers
-        );
-    }
-
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to listDeployedServices
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-    public async listDeployedServices(response: ResponseContext): Promise<Array<ServiceVo>> {
+    public async availableServiceDetail(response: ResponseContext): Promise<UserAvailableServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
         if (isCodeInRange('400', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -291,21 +200,21 @@ export class ServiceApiResponseProcessor {
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: Array<ServiceVo> = ObjectSerializer.deserialize(
+            const body: UserAvailableServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Array<ServiceVo>',
+                'UserAvailableServiceVo',
                 ''
-            ) as Array<ServiceVo>;
+            ) as UserAvailableServiceVo;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: Array<ServiceVo> = ObjectSerializer.deserialize(
+            const body: UserAvailableServiceVo = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'Array<ServiceVo>',
+                'UserAvailableServiceVo',
                 ''
-            ) as Array<ServiceVo>;
+            ) as UserAvailableServiceVo;
             return body;
         }
 
@@ -321,10 +230,10 @@ export class ServiceApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to serviceDetail
+     * @params response Response returned by the server for a request to getAvailableServicesTree
      * @throws ApiException if the response code was not in [200, 299]
      */
-    public async serviceDetail(response: ResponseContext): Promise<ServiceDetailVo> {
+    public async getAvailableServicesTree(response: ResponseContext): Promise<Array<CategoryOclVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
         if (isCodeInRange('400', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
@@ -351,21 +260,141 @@ export class ServiceApiResponseProcessor {
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
-            const body: ServiceDetailVo = ObjectSerializer.deserialize(
+            const body: Array<CategoryOclVo> = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'ServiceDetailVo',
+                'Array<CategoryOclVo>',
                 ''
-            ) as ServiceDetailVo;
+            ) as Array<CategoryOclVo>;
             return body;
         }
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: ServiceDetailVo = ObjectSerializer.deserialize(
+            const body: Array<CategoryOclVo> = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                'ServiceDetailVo',
+                'Array<CategoryOclVo>',
                 ''
-            ) as ServiceDetailVo;
+            ) as Array<CategoryOclVo>;
+            return body;
+        }
+
+        throw new ApiException<string | Blob | undefined>(
+            response.httpStatusCode,
+            'Unknown API Status Code!',
+            await response.getBodyAsAny(),
+            response.headers
+        );
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to listAvailableServices
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+    public async listAvailableServices(response: ResponseContext): Promise<Array<UserAvailableServiceVo>> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('500', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('404', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('200', response.httpStatusCode)) {
+            const body: Array<UserAvailableServiceVo> = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Array<UserAvailableServiceVo>',
+                ''
+            ) as Array<UserAvailableServiceVo>;
+            return body;
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: Array<UserAvailableServiceVo> = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Array<UserAvailableServiceVo>',
+                ''
+            ) as Array<UserAvailableServiceVo>;
+            return body;
+        }
+
+        throw new ApiException<string | Blob | undefined>(
+            response.httpStatusCode,
+            'Unknown API Status Code!',
+            await response.getBodyAsAny(),
+            response.headers
+        );
+    }
+
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to openApi
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+    public async openApi(response: ResponseContext): Promise<any> {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('500', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Internal Server Error', body, response.headers);
+        }
+        if (isCodeInRange('404', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('200', response.httpStatusCode)) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'any',
+                ''
+            ) as any;
+            return body;
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'any',
+                ''
+            ) as any;
             return body;
         }
 

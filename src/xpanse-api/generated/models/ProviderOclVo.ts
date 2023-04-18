@@ -15,8 +15,8 @@
  * Do not edit the class manually.
  */
 
-import { OclDetailVo } from './OclDetailVo';
 import { Region } from './Region';
+import { UserAvailableServiceVo } from './UserAvailableServiceVo';
 
 /**
  * List of the registered services group by service version.
@@ -31,9 +31,9 @@ export class ProviderOclVo {
      */
     'regions': Array<Region>;
     /**
-     * The list of the registered services.
+     * The list of the available services.
      */
-    'details': Array<OclDetailVo>;
+    'details': Array<UserAvailableServiceVo>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -53,7 +53,7 @@ export class ProviderOclVo {
         {
             name: 'details',
             baseName: 'details',
-            type: 'Array<OclDetailVo>',
+            type: 'Array<UserAvailableServiceVo>',
             format: '',
         },
     ];

@@ -9,7 +9,7 @@ import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { CategoryOclVo, VersionOclVo } from '../../../xpanse-api/generated';
 import { Empty, Tree } from 'antd';
 
@@ -26,8 +26,8 @@ function Catalog(): JSX.Element {
         if (!path) {
             return;
         }
-        serviceVendorApi
-            .listRegisteredServicesTree(path)
+        servicesAvailableApi
+            .getAvailableServicesTree(path)
             .then((data) => {
                 const tData: DataNode[] = [];
                 const tExpandKeys: React.Key[] = [];

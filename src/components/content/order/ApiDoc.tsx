@@ -4,12 +4,12 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import '../../../styles/app.css';
 
 export function ApiDoc({ id }: { id: string }): JSX.Element {
     function onclick() {
-        serviceVendorApi
+        servicesAvailableApi
             .openApi(id)
             .then((resp: string) => {
                 window.open(resp);

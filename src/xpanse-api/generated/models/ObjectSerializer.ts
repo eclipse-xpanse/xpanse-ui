@@ -3,8 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceDetailVo } from './ServiceDetailVo';
-
 export * from './Billing';
 export * from './CategoryOclVo';
 export * from './CloudServiceProvider';
@@ -16,7 +14,6 @@ export * from './Deployment';
 export * from './Flavor';
 export * from './Link';
 export * from './Ocl';
-export * from './OclDetailVo';
 export * from './ProviderOclVo';
 export * from './Region';
 export * from './RegisteredServiceVo';
@@ -24,27 +21,44 @@ export * from './Response';
 export * from './ServiceDetailVo';
 export * from './ServiceVo';
 export * from './SystemStatus';
+export * from './UserAvailableServiceVo';
 export * from './VersionOclVo';
 
-import YAML from 'yaml';
-import { Billing, BillingPeriodEnum, BillingCurrencyEnum } from './Billing';
+import { Billing, BillingCurrencyEnum, BillingPeriodEnum } from './Billing';
 import { CategoryOclVo } from './CategoryOclVo';
 import { CloudServiceProvider, CloudServiceProviderNameEnum } from './CloudServiceProvider';
 import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from './CreateRequest';
-import { DeployVariable } from './DeployVariable';
+import { DeployResource, DeployResourceKindEnum } from './DeployResource';
+import { DeployVariable, DeployVariableDataTypeEnum } from './DeployVariable';
+import { DeployVariableKind } from './DeployVariableKind';
 import { Deployment, DeploymentKindEnum } from './Deployment';
 import { Flavor } from './Flavor';
+import { Link } from './Link';
 import { Ocl, OclCategoryEnum } from './Ocl';
-import { OclDetailVo, OclDetailVoCategoryEnum, OclDetailVoServiceStateEnum } from './OclDetailVo';
 import { ProviderOclVo, ProviderOclVoNameEnum } from './ProviderOclVo';
 import { Region } from './Region';
-import { Response } from './Response';
+import {
+    RegisteredServiceVo,
+    RegisteredServiceVoCategoryEnum,
+    RegisteredServiceVoCspEnum,
+    RegisteredServiceVoServiceStateEnum,
+} from './RegisteredServiceVo';
+import { Response, ResponseResultTypeEnum } from './Response';
+import {
+    ServiceDetailVo,
+    ServiceDetailVoCategoryEnum,
+    ServiceDetailVoCspEnum,
+    ServiceDetailVoServiceStateEnum,
+} from './ServiceDetailVo';
 import { ServiceVo, ServiceVoCategoryEnum, ServiceVoCspEnum, ServiceVoServiceStateEnum } from './ServiceVo';
 import { SystemStatus, SystemStatusHealthStatusEnum } from './SystemStatus';
+import {
+    UserAvailableServiceVo,
+    UserAvailableServiceVoCategoryEnum,
+    UserAvailableServiceVoCspEnum,
+    UserAvailableServiceVoServiceStateEnum,
+} from './UserAvailableServiceVo';
 import { VersionOclVo } from './VersionOclVo';
-import { DeployResource } from './DeployResource';
-import { RegisteredServiceVo } from './RegisteredServiceVo';
-import { Link } from './Link';
 
 /* tslint:disable:no-unused-variable */
 let primitives = ['string', 'boolean', 'double', 'integer', 'long', 'float', 'number', 'any'];
@@ -53,7 +67,6 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
     'application/json': Infinity,
     'application/octet-stream': 0,
     'application/x-www-form-urlencoded': 0,
-    'application/x-yaml': 0,
 };
 
 let enumsMap: Set<string> = new Set<string>([
@@ -67,12 +80,11 @@ let enumsMap: Set<string> = new Set<string>([
     'DeployVariableKind',
     'DeploymentKindEnum',
     'OclCategoryEnum',
-    'OclDetailVoCategoryEnum',
-    'OclDetailVoServiceStateEnum',
     'ProviderOclVoNameEnum',
     'RegisteredServiceVoCspEnum',
     'RegisteredServiceVoCategoryEnum',
     'RegisteredServiceVoServiceStateEnum',
+    'ResponseResultTypeEnum',
     'ServiceDetailVoCategoryEnum',
     'ServiceDetailVoCspEnum',
     'ServiceDetailVoServiceStateEnum',
@@ -80,6 +92,9 @@ let enumsMap: Set<string> = new Set<string>([
     'ServiceVoCspEnum',
     'ServiceVoServiceStateEnum',
     'SystemStatusHealthStatusEnum',
+    'UserAvailableServiceVoCategoryEnum',
+    'UserAvailableServiceVoCspEnum',
+    'UserAvailableServiceVoServiceStateEnum',
 ]);
 
 let typeMap: { [index: string]: any } = {
@@ -93,7 +108,6 @@ let typeMap: { [index: string]: any } = {
     Flavor: Flavor,
     Link: Link,
     Ocl: Ocl,
-    OclDetailVo: OclDetailVo,
     ProviderOclVo: ProviderOclVo,
     Region: Region,
     RegisteredServiceVo: RegisteredServiceVo,
@@ -101,6 +115,7 @@ let typeMap: { [index: string]: any } = {
     ServiceDetailVo: ServiceDetailVo,
     ServiceVo: ServiceVo,
     SystemStatus: SystemStatus,
+    UserAvailableServiceVo: UserAvailableServiceVo,
     VersionOclVo: VersionOclVo,
 };
 
@@ -293,10 +308,6 @@ export class ObjectSerializer {
             return JSON.stringify(data);
         }
 
-        if (mediaType === 'application/x-yaml') {
-            return YAML.stringify(data);
-        }
-
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.stringify.');
     }
 
@@ -318,10 +329,6 @@ export class ObjectSerializer {
 
         if (mediaType === 'text/html') {
             return rawData;
-        }
-
-        if (mediaType === 'application/yaml') {
-            return YAML.parse(rawData);
         }
 
         throw new Error('The mediaType ' + mediaType + ' is not supported by ObjectSerializer.parse.');
