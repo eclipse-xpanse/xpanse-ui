@@ -21,9 +21,9 @@ export class Response {
      */
     'resultType': ResponseResultTypeEnum;
     /**
-     * Details of the error occurred
+     * Details of the errors occurred
      */
-    'details': string;
+    'details': Array<string>;
     /**
      * Describes if the request is successful
      */
@@ -41,7 +41,7 @@ export class Response {
         {
             name: 'details',
             baseName: 'details',
-            type: 'string',
+            type: 'Array<string>',
             format: '',
         },
         {
@@ -59,4 +59,4 @@ export class Response {
     public constructor() {}
 }
 
-export type ResponseResultTypeEnum = 'success' | 'Runtime failure' | 'Parameters invalid';
+export type ResponseResultTypeEnum = 'Success' | 'Runtime Failure' | 'Parameters Invalid' | 'Terraform Script Invalid';

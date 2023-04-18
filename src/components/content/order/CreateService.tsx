@@ -15,6 +15,7 @@ import {
     Ocl,
     Region,
     RegisteredServiceVo,
+    ServiceVoCategoryEnum,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
@@ -102,10 +103,10 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as ServiceVoCategoryEnum;
         const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
         const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
-        if (categoryName === '' || serviceName === '' || latestVersion === '') {
+        if (serviceName === '' || latestVersion === '') {
             return;
         }
         setCategoryName(categoryName);

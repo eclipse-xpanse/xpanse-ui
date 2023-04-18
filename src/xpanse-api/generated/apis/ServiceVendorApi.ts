@@ -152,7 +152,17 @@ export class ServiceVendorApiRequestFactory extends BaseAPIRequestFactory {
      * @param serviceVersion version of the service
      */
     public async listRegisteredServices(
-        categoryName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string,
@@ -169,7 +179,14 @@ export class ServiceVendorApiRequestFactory extends BaseAPIRequestFactory {
 
         // Query Params
         if (categoryName !== undefined) {
-            requestContext.setQueryParam('categoryName', ObjectSerializer.serialize(categoryName, 'string', ''));
+            requestContext.setQueryParam(
+                'categoryName',
+                ObjectSerializer.serialize(
+                    categoryName,
+                    "'ai' | 'compute' | 'container' | 'storage' | 'network' | 'database' | 'mediaService' | 'security' | 'middleware' | 'others'",
+                    ''
+                )
+            );
         }
 
         // Query Params
