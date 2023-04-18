@@ -6,6 +6,7 @@
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../../xpanse-api/generated';
 import { ValidationStatus } from '../../register/ValidationStatus';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function UpdateResult({
     ocl,
@@ -15,7 +16,7 @@ function UpdateResult({
 }: {
     ocl: Ocl;
     updateRequestStatus: ValidationStatus;
-    updateResult: string;
+    updateResult: string[];
     onRemove: () => void;
 }): JSX.Element {
     if (updateRequestStatus === 'completed') {
@@ -26,6 +27,7 @@ function UpdateResult({
                 closable={true}
                 onClose={onRemove}
                 className={'result'}
+                description={convertStringArrayToUnorderedList(updateResult)}
             />
         );
     } else if (updateRequestStatus === 'error') {
@@ -35,7 +37,7 @@ function UpdateResult({
                 closable={true}
                 showIcon={true}
                 message={`Service Update Failed`}
-                description={updateResult}
+                description={convertStringArrayToUnorderedList(updateResult)}
                 onClose={onRemove}
                 className={'result'}
                 action={

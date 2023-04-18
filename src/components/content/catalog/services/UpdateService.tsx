@@ -26,7 +26,7 @@ function UpdateService({
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<JSX.Element>(<></>);
-    const updateResult = useRef<string>('');
+    const updateResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [updateRequestStatus, setUpdateRequestStatus] = useState<ValidationStatus>('notStarted');
@@ -48,7 +48,7 @@ function UpdateService({
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
-        updateResult.current = '';
+        updateResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
         setUpdateRequestStatus('notStarted');
@@ -107,7 +107,7 @@ function UpdateService({
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
-        updateResult.current = '';
+        updateResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
         setUpdateRequestStatus('notStarted');

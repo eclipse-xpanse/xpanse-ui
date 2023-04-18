@@ -12,7 +12,7 @@ import { ApiException, Ocl, RegisteredServiceVo, Response } from '../../../xpans
 export function registerService(
     ocl: Ocl,
     setRegisterRequestStatus: (newState: ValidationStatus) => void,
-    registerResult: MutableRefObject<string>,
+    registerResult: MutableRefObject<string[]>,
     file: UploadFile
 ): void {
     setRegisterRequestStatus('inProgress');
@@ -21,15 +21,15 @@ export function registerService(
         .then((registeredServiceVo: RegisteredServiceVo) => {
             file.status = 'success';
             setRegisterRequestStatus('completed');
-            registerResult.current = `ID - ${registeredServiceVo.id}`;
+            registerResult.current = [`ID - ${registeredServiceVo.id}`];
         })
         .catch((error: Error) => {
             file.status = 'error';
             setRegisterRequestStatus('error');
             if (error instanceof ApiException && error.body instanceof Response) {
-                registerResult.current = error.body.details.join(',');
+                registerResult.current = error.body.details;
             } else {
-                registerResult.current = error.message;
+                registerResult.current = [error.message];
             }
         });
 }
