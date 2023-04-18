@@ -21,7 +21,7 @@ function RegisterPanel(): JSX.Element {
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<JSX.Element>(<></>);
-    const registerResult = useRef<string>('');
+    const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [registerRequestStatus, setRegisterRequestStatus] = useState<ValidationStatus>('notStarted');
@@ -76,7 +76,7 @@ function RegisterPanel(): JSX.Element {
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
-        registerResult.current = '';
+        registerResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
         setRegisterRequestStatus('notStarted');
