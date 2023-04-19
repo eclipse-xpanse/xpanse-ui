@@ -15,7 +15,7 @@ function WelcomeCard(): JSX.Element {
                 <div>Learn the fundamentals about Open Services Cloud and cloud providers supporting it.</div>
                 <Divider />
                 <SettingOutlined />{' '}
-                <a href='https://eclipse-xpanse.github.io/xpanse-website/'>OSC Configuration Language</a>
+                <a href='https://eclipse-xpanse.github.io/xpanse-website/docs/ocl'>OSC Configuration Language</a>
                 <div>Use the OSC Configuration Language to describe portable managed services.</div>
             </Card>
         </>
