@@ -6,8 +6,7 @@
 import {
     CreateRequestCategoryEnum,
     CreateRequestCspEnum,
-    Ocl,
-    RegisteredServiceVo,
+    UserAvailableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
@@ -31,27 +30,19 @@ export default function GoToSubmit({
     selectRegion: string;
     selectArea: string;
     selectFlavor: string;
-    versionMapper: Map<string, RegisteredServiceVo[]>;
+    versionMapper: Map<string, UserAvailableServiceVo[]>;
 }): JSX.Element {
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        let service: Ocl = new Ocl();
+        let service: UserAvailableServiceVo = new UserAvailableServiceVo();
         let registeredServiceId = '';
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 v.forEach((registerService) => {
                     if (registerService.csp === selectCsp) {
                         registeredServiceId = registerService.id;
-                    }
-                });
-                const oclList: Ocl[] = [];
-                for (const registeredServiceVo of v) {
-                    oclList.push(registeredServiceVo.ocl);
-                }
-                oclList.forEach((item) => {
-                    if (item.serviceVersion === selectVersion && item.cloudServiceProvider.name === selectCsp) {
-                        service = item;
+                        service = registerService;
                     }
                 });
             }
@@ -69,7 +60,7 @@ export default function GoToSubmit({
             params: new Array<DeployParam>(),
         };
 
-        for (const param of service.deployment.variables) {
+        for (const param of service.variables) {
             props.params.push({
                 name: param.name,
                 kind: param.kind,
