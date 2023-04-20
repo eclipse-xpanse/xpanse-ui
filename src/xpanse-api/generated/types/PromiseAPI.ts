@@ -80,19 +80,19 @@ export class PromiseServiceApi {
     }
 
     /**
-     * List the deployed services.
+     * Get deployed service details by id.
+     * @param id Task id of deployed service
      */
-    public listDeployedServices(_options?: Configuration): Promise<Array<ServiceVo>> {
-        const result = this.api.listDeployedServices(_options);
+    public getDeployedServiceDetailsById(id: string, _options?: Configuration): Promise<ServiceDetailVo> {
+        const result = this.api.getDeployedServiceDetailsById(id, _options);
         return result.toPromise();
     }
 
     /**
-     * Get deployed service using id.
-     * @param id Task id of deploy service
+     * List the deployed services.
      */
-    public serviceDetail(id: string, _options?: Configuration): Promise<ServiceDetailVo> {
-        const result = this.api.serviceDetail(id, _options);
+    public listDeployedServices(_options?: Configuration): Promise<Array<ServiceVo>> {
+        const result = this.api.listDeployedServices(_options);
         return result.toPromise();
     }
 }

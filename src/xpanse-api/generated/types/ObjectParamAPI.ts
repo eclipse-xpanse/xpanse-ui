@@ -67,16 +67,16 @@ export interface ServiceApiDestroyRequest {
     id: string;
 }
 
-export interface ServiceApiListDeployedServicesRequest {}
-
-export interface ServiceApiServiceDetailRequest {
+export interface ServiceApiGetDeployedServiceDetailsByIdRequest {
     /**
-     * Task id of deploy service
+     * Task id of deployed service
      * @type string
-     * @memberof ServiceApiserviceDetail
+     * @memberof ServiceApigetDeployedServiceDetailsById
      */
     id: string;
 }
+
+export interface ServiceApiListDeployedServicesRequest {}
 
 export class ObjectServiceApi {
     private api: ObservableServiceApi;
@@ -106,6 +106,17 @@ export class ObjectServiceApi {
     }
 
     /**
+     * Get deployed service details by id.
+     * @param param the request object
+     */
+    public getDeployedServiceDetailsById(
+        param: ServiceApiGetDeployedServiceDetailsByIdRequest,
+        options?: Configuration
+    ): Promise<ServiceDetailVo> {
+        return this.api.getDeployedServiceDetailsById(param.id, options).toPromise();
+    }
+
+    /**
      * List the deployed services.
      * @param param the request object
      */
@@ -114,14 +125,6 @@ export class ObjectServiceApi {
         options?: Configuration
     ): Promise<Array<ServiceVo>> {
         return this.api.listDeployedServices(options).toPromise();
-    }
-
-    /**
-     * Get deployed service using id.
-     * @param param the request object
-     */
-    public serviceDetail(param: ServiceApiServiceDetailRequest, options?: Configuration): Promise<ServiceDetailVo> {
-        return this.api.serviceDetail(param.id, options).toPromise();
     }
 }
 

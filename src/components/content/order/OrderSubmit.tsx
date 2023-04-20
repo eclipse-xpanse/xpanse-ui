@@ -142,7 +142,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             uuid
         );
         serviceApi
-            .serviceDetail(uuid)
+            .getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {

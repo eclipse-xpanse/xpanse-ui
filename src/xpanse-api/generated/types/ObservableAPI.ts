@@ -150,6 +150,38 @@ export class ObservableServiceApi {
     }
 
     /**
+     * Get deployed service details by id.
+     * @param id Task id of deployed service
+     */
+    public getDeployedServiceDetailsById(id: string, _options?: Configuration): Observable<ServiceDetailVo> {
+        const requestContextPromise = this.requestFactory.getDeployedServiceDetailsById(id, _options);
+
+        // build promise chain
+        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+        for (let middleware of this.configuration.middleware) {
+            middlewarePreObservable = middlewarePreObservable.pipe(
+                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
+            );
+        }
+
+        return middlewarePreObservable
+            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
+            .pipe(
+                mergeMap((response: ResponseContext) => {
+                    let middlewarePostObservable = of(response);
+                    for (let middleware of this.configuration.middleware) {
+                        middlewarePostObservable = middlewarePostObservable.pipe(
+                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
+                        );
+                    }
+                    return middlewarePostObservable.pipe(
+                        map((rsp: ResponseContext) => this.responseProcessor.getDeployedServiceDetailsById(rsp))
+                    );
+                })
+            );
+    }
+
+    /**
      * List the deployed services.
      */
     public listDeployedServices(_options?: Configuration): Observable<Array<ServiceVo>> {
@@ -175,38 +207,6 @@ export class ObservableServiceApi {
                     }
                     return middlewarePostObservable.pipe(
                         map((rsp: ResponseContext) => this.responseProcessor.listDeployedServices(rsp))
-                    );
-                })
-            );
-    }
-
-    /**
-     * Get deployed service using id.
-     * @param id Task id of deploy service
-     */
-    public serviceDetail(id: string, _options?: Configuration): Observable<ServiceDetailVo> {
-        const requestContextPromise = this.requestFactory.serviceDetail(id, _options);
-
-        // build promise chain
-        let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-        for (let middleware of this.configuration.middleware) {
-            middlewarePreObservable = middlewarePreObservable.pipe(
-                mergeMap((ctx: RequestContext) => middleware.pre(ctx))
-            );
-        }
-
-        return middlewarePreObservable
-            .pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx)))
-            .pipe(
-                mergeMap((response: ResponseContext) => {
-                    let middlewarePostObservable = of(response);
-                    for (let middleware of this.configuration.middleware) {
-                        middlewarePostObservable = middlewarePostObservable.pipe(
-                            mergeMap((rsp: ResponseContext) => middleware.post(rsp))
-                        );
-                    }
-                    return middlewarePostObservable.pipe(
-                        map((rsp: ResponseContext) => this.responseProcessor.serviceDetail(rsp))
                     );
                 })
             );

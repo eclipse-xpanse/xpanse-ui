@@ -150,7 +150,7 @@ function ServiceList(): JSX.Element {
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
         serviceApi
-            .serviceDetail(uuid)
+            .getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 if (response.serviceState === 'DESTROY_SUCCESS') {
                     Tip('success', 'Destroy success.');
@@ -188,7 +188,7 @@ function ServiceList(): JSX.Element {
 
     function getDeployedProperties(id: string): void {
         serviceApi
-            .serviceDetail(id)
+            .getDeployedServiceDetailsById(id)
             .then((response) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();
@@ -207,6 +207,7 @@ function ServiceList(): JSX.Element {
                 setIsModalOpen(true);
             })
             .catch((e: Error) => {
+                console.log(e.message);
                 setIsModalOpen(false);
             });
     }
