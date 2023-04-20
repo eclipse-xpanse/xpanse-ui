@@ -18,7 +18,12 @@ import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
+import {
+    CreateRequest,
+    CreateRequestCategoryEnum,
+    CreateRequestCspEnum,
+    ServiceDetailVo,
+} from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -142,8 +147,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             uuid
         );
         serviceApi
-            .serviceDetail(uuid)
-            .then((response) => {
+            .getDeployedServiceDetailsById(uuid)
+            .then((response: ServiceDetailVo) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
                     Tip('success', 'Deployment successful.', uuid);

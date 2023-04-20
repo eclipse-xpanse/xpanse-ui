@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ServiceVo } from '../../../xpanse-api/generated';
+import { ServiceDetailVo, ServiceVo } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
@@ -150,8 +150,8 @@ function ServiceList(): JSX.Element {
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
         serviceApi
-            .serviceDetail(uuid)
-            .then((response) => {
+            .getDeployedServiceDetailsById(uuid)
+            .then((response: ServiceDetailVo) => {
                 if (response.serviceState === 'DESTROY_SUCCESS') {
                     Tip('success', 'Destroy success.');
                     setLoading(false);
@@ -188,8 +188,8 @@ function ServiceList(): JSX.Element {
 
     function getDeployedProperties(id: string): void {
         serviceApi
-            .serviceDetail(id)
-            .then((response) => {
+            .getDeployedServiceDetailsById(id)
+            .then((response: ServiceDetailVo) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();
                 if (response.deployedServiceProperties) {
@@ -206,7 +206,7 @@ function ServiceList(): JSX.Element {
                 setRequestParams(requestMap);
                 setIsModalOpen(true);
             })
-            .catch((e: Error) => {
+            .catch((_: Error) => {
                 setIsModalOpen(false);
             });
     }
