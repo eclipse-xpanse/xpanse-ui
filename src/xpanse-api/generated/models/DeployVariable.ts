@@ -50,6 +50,10 @@ export class DeployVariable {
      * Validator of the variable
      */
     'validator'?: string;
+    /**
+     * The sensitive scope of the deploy variable
+     */
+    'scope': SensitiveScope;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -102,6 +106,12 @@ export class DeployVariable {
             type: 'string',
             format: '',
         },
+        {
+            name: 'scope',
+            baseName: 'scope',
+            type: 'SensitiveScope',
+            format: '',
+        },
     ];
 
     static getAttributeTypeMap() {
@@ -112,3 +122,4 @@ export class DeployVariable {
 }
 
 export type DeployVariableDataTypeEnum = 'string' | 'number' | 'boolean';
+export type SensitiveScope = 'none' | 'once' | 'always';

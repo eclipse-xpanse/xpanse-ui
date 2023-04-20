@@ -25,4 +25,5 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     validator: string;
+    scope: string;
 }
