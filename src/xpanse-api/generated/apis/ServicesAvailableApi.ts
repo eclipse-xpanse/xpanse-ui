@@ -205,14 +205,6 @@ export class ServicesAvailableApiResponseProcessor {
      */
     public async availableServiceDetail(response: ResponseContext): Promise<UserAvailableServiceVo> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -228,6 +220,22 @@ export class ServicesAvailableApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('422', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Unprocessable Entity', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: UserAvailableServiceVo = ObjectSerializer.deserialize(
@@ -265,14 +273,6 @@ export class ServicesAvailableApiResponseProcessor {
      */
     public async getAvailableServicesTree(response: ResponseContext): Promise<Array<CategoryOclVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -288,6 +288,22 @@ export class ServicesAvailableApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('422', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Unprocessable Entity', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: Array<CategoryOclVo> = ObjectSerializer.deserialize(
@@ -325,14 +341,6 @@ export class ServicesAvailableApiResponseProcessor {
      */
     public async listAvailableServices(response: ResponseContext): Promise<Array<UserAvailableServiceVo>> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -348,6 +356,22 @@ export class ServicesAvailableApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('422', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Unprocessable Entity', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: Array<UserAvailableServiceVo> = ObjectSerializer.deserialize(
@@ -385,14 +409,6 @@ export class ServicesAvailableApiResponseProcessor {
      */
     public async openApi(response: ResponseContext): Promise<any> {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers['content-type']);
-        if (isCodeInRange('400', response.httpStatusCode)) {
-            const body: Response = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                'Response',
-                ''
-            ) as Response;
-            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
-        }
         if (isCodeInRange('500', response.httpStatusCode)) {
             const body: Response = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
@@ -408,6 +424,22 @@ export class ServicesAvailableApiResponseProcessor {
                 ''
             ) as Response;
             throw new ApiException<Response>(response.httpStatusCode, 'Not Found', body, response.headers);
+        }
+        if (isCodeInRange('400', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Bad Request', body, response.headers);
+        }
+        if (isCodeInRange('422', response.httpStatusCode)) {
+            const body: Response = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                'Response',
+                ''
+            ) as Response;
+            throw new ApiException<Response>(response.httpStatusCode, 'Unprocessable Entity', body, response.headers);
         }
         if (isCodeInRange('200', response.httpStatusCode)) {
             const body: any = ObjectSerializer.deserialize(

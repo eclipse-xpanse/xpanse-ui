@@ -59,4 +59,10 @@ export class Response {
     public constructor() {}
 }
 
-export type ResponseResultTypeEnum = 'Success' | 'Runtime Failure' | 'Parameters Invalid' | 'Terraform Script Invalid';
+export type ResponseResultTypeEnum =
+    | 'Success'
+    | 'Runtime Failure'
+    | 'Parameters Invalid'
+    | 'Terraform Script Invalid'
+    | 'Unprocessable Entity'
+    | 'Response Not Valid';
