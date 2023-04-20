@@ -18,11 +18,17 @@ import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest, CreateRequestCategoryEnum, CreateRequestCspEnum } from '../../../xpanse-api/generated';
+import {
+    CreateRequest,
+    CreateRequestCategoryEnum,
+    CreateRequestCspEnum,
+    ServiceDetailVo,
+} from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
+import { convertMapToUnorderedList } from '../../utils/generateUnorderedList';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -62,17 +68,17 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
 
-    function ResultDetails({ msg, uuid }: { msg: string; uuid: string }): JSX.Element {
+    function ResultDetails({ msg, uuid }: { msg: string | JSX.Element; uuid: string }): JSX.Element {
         return (
             <>
-                {msg}
-                <br />
                 Request ID: <b>{uuid}</b>
+                <br />
+                {msg}
             </>
         );
     }
 
-    function Tip(type: 'error' | 'success', msg: string, uuid: string) {
+    function Tip(type: 'error' | 'success', msg: string | JSX.Element, uuid: string) {
         setTip(
             <div className={'submit-alert-tip'}>
                 {' '}
@@ -146,7 +152,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
-                    Tip('success', 'Deployment successful.', uuid);
+                    Tip('success', getSuccessMsg(response), uuid);
                 } else {
                     Tip('error', 'Deployment failed.', uuid);
                     setRequestSubmitted(false);
@@ -164,6 +170,25 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     setRequestSubmitted(false);
                 }
             });
+    }
+
+    function getSuccessMsg(response: ServiceDetailVo): string | JSX.Element {
+        const endPointMap = new Map<string, string>();
+        if (response.deployedServiceProperties) {
+            for (const key in response.deployedServiceProperties) {
+                endPointMap.set(key, response.deployedServiceProperties[key]);
+            }
+        }
+        if (endPointMap.size > 0) {
+            return (
+                <div>
+                    <span>{'Deployment Successful'}</span>
+                    <div>{convertMapToUnorderedList(endPointMap, 'Endpoint Information')}</div>
+                </div>
+            );
+        } else {
+            return <span>{'Deployment Successful'}</span>;
+        }
     }
 
     function OnSubmit() {
