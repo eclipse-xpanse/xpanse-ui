@@ -14,6 +14,7 @@ import {
     Flavor,
     Region,
     UserAvailableServiceVo,
+    UserAvailableServiceVoCategoryEnum,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
@@ -93,27 +94,7 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName:
-            | 'ai'
-            | 'compute'
-            | 'container'
-            | 'storage'
-            | 'network'
-            | 'database'
-            | 'mediaService'
-            | 'security'
-            | 'middleware'
-            | 'others' = decodeURI(urlParams.get('catalog') ?? '') as
-            | 'ai'
-            | 'compute'
-            | 'container'
-            | 'storage'
-            | 'network'
-            | 'database'
-            | 'mediaService'
-            | 'security'
-            | 'middleware'
-            | 'others';
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as UserAvailableServiceVoCategoryEnum;
         const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
         const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
         if (serviceName === '' || latestVersion === '') {
