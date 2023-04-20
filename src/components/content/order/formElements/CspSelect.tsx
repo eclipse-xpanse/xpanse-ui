@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CloudServiceProviderNameEnum } from '../../../../xpanse-api/generated';
 import { AlibabaLogo, AWSLogo, AzureLogo, FlexibleEngineLogo, HuaWeiLogo, OpenStackLogo } from '../CspLogo';
 import { Image } from 'antd';
+import { CloudServiceProvider } from '../../../../xpanse-api/generated';
 
 interface CSP {
     name: string;
@@ -13,13 +13,13 @@ interface CSP {
     logo?: string;
 }
 
-const cspMap = new Map<CloudServiceProviderNameEnum, CSP>([
-    ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
-    ['azure', { name: 'Azure', logo: AzureLogo }],
-    ['alicloud', { name: 'Alibaba', logo: AlibabaLogo }],
-    ['openstack', { name: 'Openstack', logo: OpenStackLogo }],
-    ['flexibleEngine', { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
-    ['aws', { name: 'aws', logo: AWSLogo }],
+const cspMap = new Map<CloudServiceProvider.name, CSP>([
+    [CloudServiceProvider.name.HUAWEI, { name: 'Huawei', logo: HuaWeiLogo }],
+    [CloudServiceProvider.name.AZURE, { name: 'Azure', logo: AzureLogo }],
+    [CloudServiceProvider.name.ALICLOUD, { name: 'Alibaba', logo: AlibabaLogo }],
+    [CloudServiceProvider.name.OPENSTACK, { name: 'Openstack', logo: OpenStackLogo }],
+    [CloudServiceProvider.name.FLEXIBLE_ENGINE, { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
+    [CloudServiceProvider.name.AWS, { name: 'aws', logo: AWSLogo }],
 ]);
 
 export default function CspSelect({
@@ -28,7 +28,7 @@ export default function CspSelect({
     onChangeHandler,
 }: {
     selectCsp: string;
-    cspList: CloudServiceProviderNameEnum[];
+    cspList: CloudServiceProvider.name[];
     onChangeHandler: (csp: string) => void;
 }): JSX.Element {
     return (

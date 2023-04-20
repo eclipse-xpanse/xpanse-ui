@@ -18,13 +18,7 @@ import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
-import {
-    CreateRequest,
-    CreateRequestCategoryEnum,
-    CreateRequestCspEnum,
-    ServiceDetailVo,
-} from '../../../xpanse-api/generated';
-import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
 import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
@@ -51,12 +45,12 @@ function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandl
 
 export interface OrderSubmitProps {
     id: string;
-    category: CreateRequestCategoryEnum;
+    category: CreateRequest.category;
     name: string;
     version: string;
     region: string;
     area: string;
-    csp: CreateRequestCspEnum;
+    csp: CreateRequest.csp;
     flavor: string;
     params: DeployParam[];
 }
@@ -147,8 +141,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]',
             uuid
         );
-        serviceApi
-            .getDeployedServiceDetailsById(uuid)
+        ServiceService.getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
@@ -192,25 +185,27 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     }
 
     function OnSubmit() {
-        const createRequest = new CreateRequest();
-        createRequest.serviceName = props.name;
-        createRequest.version = props.version;
-        createRequest.category = props.category;
-        createRequest.csp = props.csp;
-        createRequest.region = props.region;
-        createRequest.flavor = props.flavor;
-        createRequest.serviceRequestProperties = {};
-        createRequest.customerServiceName = customerServiceName;
+        const createRequest: CreateRequest = {
+            category: props.category,
+            csp: props.csp,
+            flavor: props.flavor,
+            region: props.region,
+            serviceName: props.name,
+            version: props.version,
+            customerServiceName: customerServiceName,
+        };
+        const serviceRequestProperties: Record<string, string> = {};
         for (const item of parameters) {
             if (item.kind === 'variable' || item.kind === 'env') {
-                createRequest.serviceRequestProperties[item.name] = item.value;
+                serviceRequestProperties[item.name] = item.value;
             }
         }
+        createRequest.serviceRequestProperties = serviceRequestProperties;
+
         // Start deploying
         setDeploying(true);
 
-        serviceApi
-            .deploy(createRequest)
+        ServiceService.deploy(createRequest)
             .then((uuid) => {
                 setRequestSubmitted(true);
                 Tip('success', 'Request accepted', uuid);

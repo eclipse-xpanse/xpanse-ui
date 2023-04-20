@@ -1,0 +1,229 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+import type { Ocl } from '../models/Ocl';
+import type { RegisteredServiceVo } from '../models/RegisteredServiceVo';
+import type { Response } from '../models/Response';
+
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
+
+export class ServiceVendorService {
+    /**
+     * Get registered service using id.
+     * @param id id of registered service
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static detail(id: string): CancelablePromise<RegisteredServiceVo> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/register/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Update registered service using id and ocl model.
+     * @param id id of registered service
+     * @param requestBody
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static update(id: string, requestBody: Ocl): CancelablePromise<RegisteredServiceVo> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/xpanse/services/register/{id}',
+            path: {
+                id: id,
+            },
+            body: requestBody,
+            mediaType: 'application/x-yaml',
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Unregister registered service using id.
+     * @param id id of registered service
+     * @returns Response OK
+     * @throws ApiError
+     */
+    public static unregister(id: string): CancelablePromise<Response> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/xpanse/services/register/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Update registered service using id and ocl file url.
+     * @param id id of registered service
+     * @param oclLocation URL of Ocl file
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static fetchUpdate(id: string, oclLocation: string): CancelablePromise<RegisteredServiceVo> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/xpanse/services/register/file/{id}',
+            path: {
+                id: id,
+            },
+            query: {
+                oclLocation: oclLocation,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * List registered service with query params.
+     * @param categoryName category of the service
+     * @param cspName name of the service provider
+     * @param serviceName name of the service
+     * @param serviceVersion version of the service
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static listRegisteredServices(
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: string,
+        serviceName?: string,
+        serviceVersion?: string
+    ): CancelablePromise<Array<RegisteredServiceVo>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/register',
+            query: {
+                categoryName: categoryName,
+                cspName: cspName,
+                serviceName: serviceName,
+                serviceVersion: serviceVersion,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Register new service using ocl model.
+     * @param requestBody
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static register(requestBody: Ocl): CancelablePromise<RegisteredServiceVo> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/xpanse/services/register',
+            body: requestBody,
+            mediaType: 'application/x-yaml',
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Register new service with URL of Ocl file.
+     * @param oclLocation URL of Ocl file
+     * @returns RegisteredServiceVo OK
+     * @throws ApiError
+     */
+    public static fetch(oclLocation: string): CancelablePromise<RegisteredServiceVo> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/xpanse/services/register/file',
+            query: {
+                oclLocation: oclLocation,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
+     * Get category list.
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static listCategories(): CancelablePromise<
+        Array<
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others'
+        >
+    > {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/categories',
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+}

@@ -4,15 +4,16 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
-import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import '../../../styles/app.css';
+import { Link, ServicesAvailableService } from '../../../xpanse-api/generated';
 
 export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): JSX.Element {
     function onclick() {
-        servicesAvailableApi
-            .openApi(id)
-            .then((resp: string) => {
-                window.open(resp);
+        ServicesAvailableService.openApi(id)
+            .then((link: Link) => {
+                if (link.href !== undefined) {
+                    window.open(link.href);
+                }
             })
             .catch((error) => {
                 console.error(error);

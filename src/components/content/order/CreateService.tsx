@@ -5,16 +5,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
-import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     Billing,
-    BillingCurrencyEnum,
-    BillingPeriodEnum,
-    CloudServiceProviderNameEnum,
+    CloudServiceProvider,
     Flavor,
     Region,
+    ServicesAvailableService,
     UserAvailableServiceVo,
-    UserAvailableServiceVoCategoryEnum,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
@@ -77,8 +74,8 @@ function CreateService(): JSX.Element {
     const [versionList, setVersionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectVersion, setSelectVersion] = useState<string>('');
 
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProviderNameEnum>('openstack');
-    const [cspList, setCspList] = useState<CloudServiceProviderNameEnum[]>(['openstack']);
+    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name>(CloudServiceProvider.name.OPENSTACK);
+    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([CloudServiceProvider.name.OPENSTACK]);
 
     const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
     const [selectArea, setSelectArea] = useState<string>('');
@@ -94,7 +91,7 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as UserAvailableServiceVoCategoryEnum;
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as UserAvailableServiceVo.category;
         const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
         const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
         if (serviceName === '' || latestVersion === '') {
@@ -102,8 +99,7 @@ function CreateService(): JSX.Element {
         }
         setCategoryName(categoryName);
         setServiceName(serviceName);
-        void servicesAvailableApi
-            .listAvailableServices(categoryName, '', serviceName, '')
+        void ServicesAvailableService.listAvailableServices(categoryName, '', serviceName, '')
             .then((rsp) => {
                 if (rsp.length > 0) {
                     const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
@@ -135,7 +131,7 @@ function CreateService(): JSX.Element {
                         currentAreaList[0]?.key ?? ''
                     );
                     let currentBilling = getBilling(latestVersion, currentCspList[0]);
-                    let cspValue: CloudServiceProviderNameEnum = currentCspList[0];
+                    let cspValue: CloudServiceProvider.name = currentCspList[0];
                     let areaValue: string = currentAreaList[0]?.key ?? '';
                     let regionValue: string = currentRegionList[0]?.value ?? '';
                     let flavorValue: string = currentFlavorList[0]?.value ?? '';
@@ -144,8 +140,8 @@ function CreateService(): JSX.Element {
                         const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
                         currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
                         currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
-                        currentBilling = getBilling(latestVersion, serviceInfo.csp);
-                        cspValue = serviceInfo.csp as CloudServiceProviderNameEnum;
+                        currentBilling = getBilling(latestVersion, serviceInfo.csp.toString());
+                        cspValue = serviceInfo.csp as unknown as CloudServiceProvider.name;
                         areaValue = serviceInfo.area;
                         regionValue = serviceInfo.region;
                         flavorValue = serviceInfo.flavor;
@@ -195,13 +191,13 @@ function CreateService(): JSX.Element {
         return versions;
     }
 
-    function getCspList(selectVersion: string): CloudServiceProviderNameEnum[] {
-        const cspList: CloudServiceProviderNameEnum[] = [];
+    function getCspList(selectVersion: string): CloudServiceProvider.name[] {
+        const cspList: CloudServiceProvider.name[] = [];
 
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
                 for (const userAvailableServiceVo of v) {
-                    cspList.push(userAvailableServiceVo.csp);
+                    cspList.push(userAvailableServiceVo.csp as unknown as CloudServiceProvider.name);
                 }
             }
         });
@@ -274,16 +270,16 @@ function CreateService(): JSX.Element {
         return flavors;
     }
 
-    function getBilling(selectVersion: string, csp: CloudServiceProviderNameEnum): Billing {
+    function getBilling(selectVersion: string, csp: string): Billing {
         let billing: Billing = {
             model: '' as string,
-            period: 'daily' as BillingPeriodEnum,
-            currency: 'euro' as BillingCurrencyEnum,
+            period: 'daily' as Billing.period,
+            currency: 'euro' as Billing.currency,
         };
         versionMapper.current.forEach((v, k) => {
             if (selectVersion === k) {
                 v.forEach((registeredServiceVo) => {
-                    if (csp === registeredServiceVo.csp) {
+                    if (csp === registeredServiceVo.csp.valueOf()) {
                         billing = registeredServiceVo.billing;
                     }
                 });
@@ -312,7 +308,7 @@ function CreateService(): JSX.Element {
         setCurrency(currencyMapper[billing.currency]);
     }, []);
 
-    const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum) => {
+    const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProvider.name) => {
         const currentAreaList = getAreaList(selectVersion, csp);
         const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0]?.key ?? '');
         const currentFlavorList = getFlavorList(selectVersion);
@@ -328,7 +324,7 @@ function CreateService(): JSX.Element {
         setCurrency(currencyMapper[billing.currency]);
     }, []);
 
-    const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum, key: string) => {
+    const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProvider.name, key: string) => {
         const currentRegionList = getRegionList(selectVersion, csp, key);
         setSelectArea(key);
         setRegionList(currentRegionList);
@@ -339,7 +335,7 @@ function CreateService(): JSX.Element {
         setSelectRegion(value);
     }, []);
 
-    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProviderNameEnum) => {
+    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProvider.name) => {
         setSelectFlavor(value);
         const currentFlavorList = getFlavorList(selectVersion);
         const billing: Billing = getBilling(selectVersion, csp);
@@ -374,7 +370,7 @@ function CreateService(): JSX.Element {
                     selectCsp={selectCsp}
                     cspList={cspList}
                     onChangeHandler={(csp) => {
-                        onChangeCloudProvider(selectVersion, csp as CloudServiceProviderNameEnum);
+                        onChangeCloudProvider(selectVersion, csp as CloudServiceProvider.name);
                     }}
                 />
                 <div className={'cloud-provider-tab-class content-title'}>

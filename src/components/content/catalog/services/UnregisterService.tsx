@@ -5,7 +5,7 @@
 
 import { MutableRefObject, useRef } from 'react';
 import { Button, Popconfirm } from 'antd';
-import { serviceVendorApi } from '../../../../xpanse-api/xpanseRestApiClient';
+import { ServiceVendorService } from '../../../../xpanse-api/generated';
 
 function UnregisterService({
     id,
@@ -16,8 +16,7 @@ function UnregisterService({
 }): JSX.Element {
     const unregisterResult = useRef<string>('');
     function unregisterServiceResult(): void {
-        serviceVendorApi
-            .unregister(id)
+        ServiceVendorService.unregister(id)
             .then(() => {
                 unregisterResult.current = 'completed';
                 onConfirmHandler('success', 'Service Unregistered Successfully', unregisterResult, id);
