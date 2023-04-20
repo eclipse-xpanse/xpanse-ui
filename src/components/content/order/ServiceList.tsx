@@ -4,14 +4,15 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Space, Table } from 'antd';
+import { Alert, Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ServiceVo } from '../../../xpanse-api/generated';
 import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { CloseCircleOutlined, CopyOutlined, SyncOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
+import { MyServiceDetails } from './MyServiceDetails';
 
 // 1 hour.
 const destroyTimeout: number = 3600000;
@@ -28,6 +29,9 @@ function ServiceList(): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [content, setContent] = useState<Map<string, string>>(new Map());
+    const [requestParams, setRequestParams] = useState<Map<string, string>>(new Map());
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -112,6 +116,14 @@ function ServiceList(): JSX.Element {
                             >
                                 destroy
                             </Button>
+                            <Button
+                                type='primary'
+                                icon={<ExpandAltOutlined />}
+                                onClick={() => getDeployedProperties(record.id)}
+                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                            >
+                                detail
+                            </Button>
                         </Space>
                     </>
                 );
@@ -171,6 +183,31 @@ function ServiceList(): JSX.Element {
                 Tip('error', 'Destroy failed:' + e.message);
                 setLoading(false);
                 TipClear();
+            });
+    }
+
+    function getDeployedProperties(id: string): void {
+        serviceApi
+            .serviceDetail(id)
+            .then((response) => {
+                const endPointMap = new Map<string, string>();
+                const requestMap = new Map<string, string>();
+                if (response.deployedServiceProperties) {
+                    for (const key in response.deployedServiceProperties) {
+                        endPointMap.set(key, response.deployedServiceProperties[key]);
+                    }
+                }
+                if (response.createRequest.serviceRequestProperties) {
+                    for (const key in response.createRequest.serviceRequestProperties) {
+                        requestMap.set(key, response.createRequest.serviceRequestProperties[key]);
+                    }
+                }
+                setContent(endPointMap);
+                setRequestParams(requestMap);
+                setIsModalOpen(true);
+            })
+            .catch((e: Error) => {
+                setIsModalOpen(false);
             });
     }
 
@@ -281,9 +318,17 @@ function ServiceList(): JSX.Element {
         getServices();
     }
 
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className={'services-content'}>
             {tip}
+            <Modal title={'Service Details'} width={700} footer={null} open={isModalOpen} onCancel={handleCancel}>
+                <MyServiceDetails endPointInfo={content} requestParamsInfo={requestParams} />
+            </Modal>
+
             <div>
                 <Button
                     disabled={loading}
