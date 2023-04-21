@@ -67,6 +67,7 @@ function LoginScreen(): JSX.Element {
                             type='password'
                             placeholder='password'
                             prefix={<LockOutlined className={'site-form-item-icon'} />}
+                            onPressEnter={loginForm.submit}
                         />
                     </Form.Item>
                 </Form>
