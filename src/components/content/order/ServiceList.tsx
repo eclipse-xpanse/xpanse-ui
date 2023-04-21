@@ -6,8 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ServiceVo } from '../../../xpanse-api/generated';
-import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/service_instance_list.css';
@@ -149,8 +148,7 @@ function ServiceList(): JSX.Element {
             'success',
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
-        serviceApi
-            .getDeployedServiceDetailsById(uuid)
+        ServiceService.getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 if (response.serviceState === 'DESTROY_SUCCESS') {
                     Tip('success', 'Destroy success.');
@@ -173,8 +171,7 @@ function ServiceList(): JSX.Element {
     function destroy(record: ServiceVo) {
         setId(record.id);
         setLoading(true);
-        serviceApi
-            .destroy(record.id)
+        ServiceService.destroy(record.id)
             .then(() => {
                 waitingServiceDestroy(record.id, destroyTimeout, new Date());
                 refreshData();
@@ -187,8 +184,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getDeployedProperties(id: string): void {
-        serviceApi
-            .getDeployedServiceDetailsById(id)
+        ServiceService.getDeployedServiceDetailsById(id)
             .then((response) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();
@@ -295,7 +291,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
-        void serviceApi.listDeployedServices().then((resp) => {
+        void ServiceService.listDeployedServices().then((resp) => {
             const serviceList: ServiceVo[] = [];
             if (resp.length > 0) {
                 setServiceVoList(resp);

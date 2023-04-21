@@ -3,11 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import {
-    CreateRequestCategoryEnum,
-    CreateRequestCspEnum,
-    UserAvailableServiceVo,
-} from '../../../../xpanse-api/generated';
+import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../OrderSubmit';
@@ -35,7 +31,7 @@ export default function GoToSubmit({
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        let service: UserAvailableServiceVo = new UserAvailableServiceVo();
+        let service: UserAvailableServiceVo | undefined;
         let registeredServiceId = '';
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
@@ -50,28 +46,30 @@ export default function GoToSubmit({
 
         const props: OrderSubmitProps = {
             id: registeredServiceId,
-            category: categoryName as CreateRequestCategoryEnum,
+            category: categoryName as CreateRequest.category,
             name: serviceName,
             version: selectVersion,
             region: selectRegion,
             area: selectArea,
-            csp: selectCsp as CreateRequestCspEnum,
+            csp: selectCsp as CreateRequest.csp,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),
         };
 
-        for (const param of service.variables) {
-            props.params.push({
-                name: param.name,
-                kind: param.kind,
-                type: param.dataType,
-                example: param.example === undefined ? '' : param.example,
-                description: param.description,
-                value: param.value === undefined ? '' : param.value,
-                mandatory: param.mandatory,
-                validator: param.validator === undefined ? '' : param.validator,
-                scope: param.scope,
-            });
+        if (service !== undefined) {
+            for (const param of service.variables) {
+                props.params.push({
+                    name: param.name,
+                    kind: param.kind,
+                    type: param.dataType,
+                    example: param.example === undefined ? '' : param.example,
+                    description: param.description,
+                    value: param.value === undefined ? '' : param.value,
+                    mandatory: param.mandatory,
+                    validator: param.validator === undefined ? '' : param.validator,
+                    scope: param.scope,
+                });
+            }
         }
 
         navigate('/order', {

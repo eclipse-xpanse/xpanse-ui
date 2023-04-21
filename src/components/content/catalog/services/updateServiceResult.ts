@@ -4,10 +4,10 @@
  */
 
 import { MutableRefObject } from 'react';
-import { ApiException, Ocl, Response } from '../../../../xpanse-api/generated';
-import { ValidationStatus } from '../../register/ValidationStatus';
+
 import { UploadFile } from 'antd';
-import { serviceVendorApi } from '../../../../xpanse-api/xpanseRestApiClient';
+import { ApiError, Ocl, ServiceVendorService, Response } from '../../../../xpanse-api/generated';
+import { ValidationStatus } from '../../register/ValidationStatus';
 
 export function updateServiceResult(
     id: string,
@@ -17,8 +17,7 @@ export function updateServiceResult(
     file: UploadFile
 ): void {
     setUpdateRequestStatus('inProgress');
-    serviceVendorApi
-        .update(id, ocl)
+    ServiceVendorService.update(id, ocl)
         .then(() => {
             file.status = 'success';
             setUpdateRequestStatus('completed');
@@ -27,8 +26,9 @@ export function updateServiceResult(
         .catch((error: Error) => {
             file.status = 'error';
             setUpdateRequestStatus('error');
-            if (error instanceof ApiException && error.body instanceof Response) {
-                updateResult.current = error.body.details;
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                updateResult.current = response.details;
             } else {
                 updateResult.current = [error.message];
             }

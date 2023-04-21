@@ -8,11 +8,10 @@ import '../../../styles/service_order.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../utils/constants';
-import { servicesAvailableApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../utils/Sort';
-import { ServiceVoCategoryEnum, VersionOclVo } from '../../../xpanse-api/generated';
+import { ServicesAvailableService, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 
 function Services(): JSX.Element {
@@ -42,8 +41,8 @@ function Services(): JSX.Element {
 
     useEffect(() => {
         setIsServicesLoaded(false);
-        const categoryName = location.hash.split('#')[1] as ServiceVoCategoryEnum;
-        void servicesAvailableApi.getAvailableServicesTree(categoryName).then((rsp) => {
+        const categoryName = location.hash.split('#')[1] as ServiceVo.category;
+        void ServicesAvailableService.getAvailableServicesTree(categoryName).then((rsp) => {
             const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
             if (rsp.length > 0) {
                 rsp.forEach((item) => {

@@ -3,19 +3,36 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-export * from './http/http';
-export * from './auth/auth';
-export * from './models/all';
-export { createConfiguration } from './configuration';
-export type { Configuration } from './configuration';
-export * from './apis/exception';
-export * from './servers';
-export { RequiredError } from './apis/baseapi';
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+export { ApiError } from './core/ApiError';
+export { CancelablePromise, CancelError } from './core/CancelablePromise';
+export { OpenAPI } from './core/OpenAPI';
+export type { OpenAPIConfig } from './core/OpenAPI';
 
-export type { PromiseMiddleware as Middleware } from './middleware';
-export {
-    PromiseAdminApi as AdminApi,
-    PromiseServiceApi as ServiceApi,
-    PromiseServiceVendorApi as ServiceVendorApi,
-    PromiseServicesAvailableApi as ServicesAvailableApi,
-} from './types/PromiseAPI';
+export { Billing } from './models/Billing';
+export type { CategoryOclVo } from './models/CategoryOclVo';
+export { CloudServiceProvider } from './models/CloudServiceProvider';
+export { CreateRequest } from './models/CreateRequest';
+export { Deployment } from './models/Deployment';
+export { DeployResource } from './models/DeployResource';
+export { DeployVariable } from './models/DeployVariable';
+export { DeployVariableKind } from './models/DeployVariableKind';
+export type { Flavor } from './models/Flavor';
+export type { Link } from './models/Link';
+export { Ocl } from './models/Ocl';
+export { ProviderOclVo } from './models/ProviderOclVo';
+export type { Region } from './models/Region';
+export { RegisteredServiceVo } from './models/RegisteredServiceVo';
+export { Response } from './models/Response';
+export { ServiceDetailVo } from './models/ServiceDetailVo';
+export { ServiceVo } from './models/ServiceVo';
+export { SystemStatus } from './models/SystemStatus';
+export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
+export type { VersionOclVo } from './models/VersionOclVo';
+
+export { AdminService } from './services/AdminService';
+export { ServiceService } from './services/ServiceService';
+export { ServicesAvailableService } from './services/ServicesAvailableService';
+export { ServiceVendorService } from './services/ServiceVendorService';
