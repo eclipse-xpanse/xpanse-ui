@@ -33,6 +33,7 @@ The following steps must be followed to generate new client and datamodels whene
 1. Copy the openapi file to [OpenApi JSON File](src/xpanse-api/api.json)
 2. Run the code generator as below
     ```shell
+        cd src/xpanse-api
         npx openapi-typescript-codegen --input api.json --output ./generated --exportSchemas false
     ```
     This step will generate all required models and client
