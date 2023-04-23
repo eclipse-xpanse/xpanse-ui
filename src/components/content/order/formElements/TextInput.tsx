@@ -23,7 +23,7 @@ export function TextInput({
                     label={item.name + ' :  ' + item.description}
                     rules={[{ required: item.mandatory }, { type: 'string', min: 2 }]}
                 >
-                    {item.scope === 'always' || item.scope === 'once' ? (
+                    {item.sensitiveScope === 'always' || item.sensitiveScope === 'once' ? (
                         <Input.Password
                             name={item.name}
                             placeholder={item.example}

@@ -67,7 +67,7 @@ export default function GoToSubmit({
                     value: param.value === undefined ? '' : param.value,
                     mandatory: param.mandatory,
                     validator: param.validator === undefined ? '' : param.validator,
-                    scope: param.scope,
+                    sensitiveScope: param.sensitiveScope,
                 });
             }
         }
