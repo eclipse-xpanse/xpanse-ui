@@ -26,5 +26,5 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     validator: string;
-    scope: DeployVariable.scope;
+    sensitiveScope: DeployVariable.sensitiveScope;
 }

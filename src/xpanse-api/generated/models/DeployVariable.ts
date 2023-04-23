@@ -45,7 +45,7 @@ export type DeployVariable = {
     /**
      * Sensitive scope of variable storage
      */
-    scope: DeployVariable.scope;
+    sensitiveScope: DeployVariable.sensitiveScope;
 };
 
 export namespace DeployVariable {
@@ -61,7 +61,7 @@ export namespace DeployVariable {
     /**
      * Sensitive scope of variable storage
      */
-    export enum scope {
+    export enum sensitiveScope {
         NONE = 'none',
         ONCE = 'once',
         ALWAYS = 'always',
