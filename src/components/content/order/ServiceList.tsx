@@ -12,6 +12,7 @@ import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } fr
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
+import { usernameKey } from '../../utils/constants';
 
 // 1 hour.
 const destroyTimeout: number = 3600000;
@@ -148,7 +149,8 @@ function ServiceList(): JSX.Element {
             'success',
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
-        ServiceService.getDeployedServiceDetailsById(uuid)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 if (response.serviceState === 'DESTROY_SUCCESS') {
                     Tip('success', 'Destroy success.');
@@ -184,7 +186,8 @@ function ServiceList(): JSX.Element {
     }
 
     function getDeployedProperties(id: string): void {
-        ServiceService.getDeployedServiceDetailsById(id)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ServiceService.getDeployedServiceDetailsById(id, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();

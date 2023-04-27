@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CreateRequest, DeployVariable, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../OrderSubmit';
@@ -67,7 +67,8 @@ export default function GoToSubmit({
                     value: param.value === undefined ? '' : param.value,
                     mandatory: param.mandatory,
                     validator: param.validator === undefined ? '' : param.validator,
-                    sensitiveScope: param.sensitiveScope,
+                    sensitiveScope:
+                        param.sensitiveScope === undefined ? DeployVariable.sensitiveScope.NONE : param.sensitiveScope,
                 });
             }
         }
