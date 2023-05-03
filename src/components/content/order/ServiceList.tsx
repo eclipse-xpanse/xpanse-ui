@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/service_instance_list.css';
@@ -102,7 +102,7 @@ function ServiceList(): JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<CopyOutlined />}
-                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 migrate
                             </Button>
@@ -111,7 +111,7 @@ function ServiceList(): JSX.Element {
                                 type='primary'
                                 icon={<CloseCircleOutlined />}
                                 onClick={() => destroy(record)}
-                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 destroy
                             </Button>
@@ -119,7 +119,7 @@ function ServiceList(): JSX.Element {
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
                                 onClick={() => getDeployedProperties(record.id)}
-                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 detail
                             </Button>
@@ -150,7 +150,7 @@ function ServiceList(): JSX.Element {
         );
         ServiceService.getDeployedServiceDetailsById(uuid)
             .then((response) => {
-                if (response.serviceState === 'DESTROY_SUCCESS') {
+                if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_SUCCESS) {
                     Tip('success', 'Destroy success.');
                     setLoading(false);
                     refreshData();

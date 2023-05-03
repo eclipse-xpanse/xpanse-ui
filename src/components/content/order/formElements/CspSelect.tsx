@@ -42,7 +42,11 @@ export default function CspSelect({
                                 onChangeHandler(item);
                             }}
                             key={index}
-                            className={selectCsp === item ? 'cloud-provider-select-hover' : 'cloud-provider-select'}
+                            className={
+                                selectCsp.valueOf() === item.valueOf()
+                                    ? 'cloud-provider-select-hover'
+                                    : 'cloud-provider-select'
+                            }
                         >
                             <Image
                                 width={200}

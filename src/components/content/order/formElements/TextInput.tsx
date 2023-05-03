@@ -6,6 +6,7 @@
 import { Form, Input, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
 import { DeployParam, TextInputEventHandler } from './CommonTypes';
+import { DeployVariable } from '../../../../xpanse-api/generated';
 
 export function TextInput({
     item,
@@ -23,7 +24,8 @@ export function TextInput({
                     label={item.name + ' :  ' + item.description}
                     rules={[{ required: item.mandatory }, { type: 'string', min: 2 }]}
                 >
-                    {item.sensitiveScope === 'always' || item.sensitiveScope === 'once' ? (
+                    {item.sensitiveScope === DeployVariable.sensitiveScope.ALWAYS ||
+                    item.sensitiveScope === DeployVariable.sensitiveScope.ONCE ? (
                         <Input.Password
                             name={item.name}
                             placeholder={item.example}
