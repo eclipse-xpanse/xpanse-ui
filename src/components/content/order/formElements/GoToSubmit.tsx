@@ -36,7 +36,7 @@ export default function GoToSubmit({
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 v.forEach((registerService) => {
-                    if (registerService.csp === selectCsp) {
+                    if (registerService.csp.valueOf() === selectCsp) {
                         registeredServiceId = registerService.id;
                         service = registerService;
                     }

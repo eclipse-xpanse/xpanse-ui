@@ -35,7 +35,7 @@ function filterAreaList(
             return [];
         }
         for (const userAvailableServiceVo of v) {
-            if (userAvailableServiceVo.csp === selectCsp) {
+            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
                 const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
                 for (const region of userAvailableServiceVo.regions) {
                     if (region.area && !areaRegions.has(region.area)) {

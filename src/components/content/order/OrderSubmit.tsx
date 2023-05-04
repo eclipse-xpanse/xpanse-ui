@@ -145,7 +145,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 setDeploying(false);
-                if (response.serviceState === 'DEPLOY_SUCCESS') {
+                if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
                     Tip('success', getSuccessMsg(response), uuid);
                 } else {
                     Tip('error', 'Deployment failed.', uuid);
