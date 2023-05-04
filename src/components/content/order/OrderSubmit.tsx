@@ -19,7 +19,7 @@ import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Alert, Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
-import { createServicePageRoute } from '../../utils/constants';
+import { createServicePageRoute, usernameKey } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
 import { convertMapToUnorderedList } from '../../utils/generateUnorderedList';
@@ -141,7 +141,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]',
             uuid
         );
-        ServiceService.getDeployedServiceDetailsById(uuid)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === 'DEPLOY_SUCCESS') {
@@ -193,6 +194,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             serviceName: props.name,
             version: props.version,
             customerServiceName: customerServiceName,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            userName: localStorage.getItem(usernameKey)!,
         };
         const serviceRequestProperties: Record<string, string> = {};
         for (const item of parameters) {

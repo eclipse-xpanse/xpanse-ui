@@ -13,6 +13,10 @@ export type ServiceVo = {
      */
     id: string;
     /**
+     * User who ordered the service
+     */
+    userName: string;
+    /**
      * The catalog of the service
      */
     category: ServiceVo.category;

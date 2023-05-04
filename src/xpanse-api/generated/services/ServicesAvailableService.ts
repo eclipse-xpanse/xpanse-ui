@@ -64,7 +64,7 @@ export class ServicesAvailableService {
      * @returns UserAvailableServiceVo OK
      * @throws ApiError
      */
-    public static availableServiceDetail(id: string): CancelablePromise<UserAvailableServiceVo> {
+    public static availableServiceDetails(id: string): CancelablePromise<UserAvailableServiceVo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/services/available/{id}',

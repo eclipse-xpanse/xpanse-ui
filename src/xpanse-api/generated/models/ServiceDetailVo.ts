@@ -16,6 +16,10 @@ export type ServiceDetailVo = {
      */
     id: string;
     /**
+     * User who ordered the service
+     */
+    userName: string;
+    /**
      * The catalog of the service
      */
     category: ServiceDetailVo.category;

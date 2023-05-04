@@ -38,7 +38,7 @@ export class ServiceService {
     }
 
     /**
-     * List the deployed services.
+     * Lists all deployed services.
      * @returns ServiceVo OK
      * @throws ApiError
      */
@@ -56,17 +56,41 @@ export class ServiceService {
     }
 
     /**
+     * List all deployed services by a user.
+     * @param userName User who deployed the service
+     * @returns ServiceVo OK
+     * @throws ApiError
+     */
+    public static getDeployedServicesByUser(userName: string): CancelablePromise<Array<ServiceVo>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/deployed/{userName}',
+            path: {
+                userName: userName,
+            },
+            errors: {
+                400: `Bad Request`,
+                404: `Not Found`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+            },
+        });
+    }
+
+    /**
      * Get deployed service details by id.
      * @param id Task id of deployed service
+     * @param userName User who deployed the service
      * @returns ServiceDetailVo OK
      * @throws ApiError
      */
-    public static getDeployedServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
+    public static getDeployedServiceDetailsById(id: string, userName: string): CancelablePromise<ServiceDetailVo> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/deployed/{id}/details',
+            url: '/xpanse/services/deployed/{id}/details/{userName}',
             path: {
                 id: id,
+                userName: userName,
             },
             errors: {
                 400: `Bad Request`,

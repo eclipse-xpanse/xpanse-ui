@@ -9,6 +9,10 @@
 
 export type CreateRequest = {
     /**
+     * User who ordered the service
+     */
+    userName: string;
+    /**
      * The category of the service
      */
     category: CreateRequest.category;

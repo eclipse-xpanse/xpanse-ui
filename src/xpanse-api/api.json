@@ -28,16 +28,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -74,16 +74,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -112,16 +112,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -157,16 +157,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -232,16 +232,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -274,16 +274,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -314,16 +314,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -349,16 +349,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "202": {
@@ -371,23 +371,23 @@
         "/xpanse/services/deployed": {
             "get": {
                 "tags": ["Service"],
-                "description": "List the deployed services.",
+                "description": "Lists all deployed services.",
                 "operationId": "listDeployedServices",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -401,7 +401,49 @@
                 }
             }
         },
-        "/xpanse/services/deployed/{id}/details": {
+        "/xpanse/services/deployed/{userName}": {
+            "get": {
+                "tags": ["Service"],
+                "description": "List all deployed services by a user.",
+                "operationId": "getDeployedServicesByUser",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "User who deployed the service",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ServiceVo" } }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/services/deployed/{id}/details/{userName}": {
             "get": {
                 "tags": ["Service"],
                 "description": "Get deployed service details by id.",
@@ -413,6 +455,13 @@
                         "description": "Task id of deployed service",
                         "required": true,
                         "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "path",
+                        "description": "User who deployed the service",
+                        "required": true,
+                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
@@ -420,16 +469,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -451,16 +500,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -545,16 +594,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -581,7 +630,7 @@
             "get": {
                 "tags": ["Services Available"],
                 "description": "Get available service by id.",
-                "operationId": "availableServiceDetail",
+                "operationId": "availableServiceDetails",
                 "parameters": [
                     {
                         "name": "id",
@@ -596,16 +645,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -628,21 +677,21 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
                         "description": "OK",
-                        "content": { "text/html": { "schema": { "$ref": "#/components/schemas/Link" } } }
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Link" } } }
                     }
                 }
             }
@@ -680,16 +729,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -712,16 +761,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
@@ -742,16 +791,16 @@
                         "description": "Internal Server Error",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "404": {
+                        "description": "Not Found",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
                         "description": "Bad Request",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "*/*": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "202": {
@@ -824,7 +873,7 @@
                 "description": "The cloud service provider of the managed service"
             },
             "DeployVariable": {
-                "required": ["dataType", "description", "kind", "mandatory", "name", "scope"],
+                "required": ["dataType", "description", "kind", "mandatory", "name"],
                 "type": "object",
                 "properties": {
                     "name": { "type": "string", "description": "The name of the deploy variable" },
@@ -842,7 +891,7 @@
                     },
                     "mandatory": { "type": "boolean", "description": "Indicates if the variable is mandatory" },
                     "validator": { "type": "string", "description": "Validator of the variable" },
-                    "scope": {
+                    "sensitiveScope": {
                         "type": "string",
                         "description": "Sensitive scope of variable storage",
                         "enum": ["none", "once", "always"]
@@ -1031,9 +1080,10 @@
                 }
             },
             "CreateRequest": {
-                "required": ["category", "csp", "flavor", "region", "serviceName", "version"],
+                "required": ["category", "csp", "flavor", "region", "serviceName", "userName", "version"],
                 "type": "object",
                 "properties": {
+                    "userName": { "type": "string", "description": "User who ordered the service" },
                     "category": {
                         "type": "string",
                         "description": "The category of the service",
@@ -1082,11 +1132,13 @@
                     "lastModifiedTime",
                     "name",
                     "serviceState",
+                    "userName",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
+                    "userName": { "type": "string", "description": "User who ordered the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -1173,11 +1225,13 @@
                     "lastModifiedTime",
                     "name",
                     "serviceState",
+                    "userName",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
+                    "userName": { "type": "string", "description": "User who ordered the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
