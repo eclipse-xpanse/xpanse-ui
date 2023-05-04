@@ -256,3 +256,7 @@
     padding: 0;
     margin-top: 10px;
 }
+
+.services-loading-error {
+    margin: 10px;
+}
