@@ -17,12 +17,14 @@ import {
 import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
-import { Alert, Button, Form, Input, Tooltip } from 'antd';
+import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
 import { createServicePageRoute, usernameKey } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
-import { convertMapToUnorderedList } from '../../utils/generateUnorderedList';
+import OrderSubmitResult from './OrderSubmitResult';
+import DeploymentSuccessful from './DeploymentSuccessful';
+import OrderSubmitFailed from './OrderSubmitFailed';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -61,30 +63,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
-
-    function ResultDetails({ msg, uuid }: { msg: string | JSX.Element; uuid: string }): JSX.Element {
-        return (
-            <>
-                Request ID: <b>{uuid}</b>
-                <br />
-                {msg}
-            </>
-        );
-    }
-
-    function Tip(type: 'error' | 'success', msg: string | JSX.Element, uuid: string) {
-        setTip(
-            <div className={'submit-alert-tip'}>
-                {' '}
-                <Alert
-                    message={`Deployment Status`}
-                    description={<ResultDetails msg={msg} uuid={uuid} />}
-                    showIcon
-                    type={type}
-                />{' '}
-            </div>
-        );
-    }
 
     function TipClear() {
         setTip(undefined);
@@ -136,19 +114,23 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     }
 
     function waitingServiceReady(uuid: string, timeout: number, date: Date) {
-        Tip(
-            'success',
-            'Deploying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]',
-            uuid
+        setTip(
+            OrderSubmitResult(
+                'Deploying, Please wait... [' +
+                    Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() +
+                    's]',
+                uuid,
+                'success'
+            )
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 setDeploying(false);
                 if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
-                    Tip('success', getSuccessMsg(response), uuid);
+                    setTip(OrderSubmitResult(DeploymentSuccessful(response), uuid, 'success'));
                 } else {
-                    Tip('error', 'Deployment failed.', uuid);
+                    setTip(OrderSubmitResult('Deployment failed.', uuid, 'error'));
                     setRequestSubmitted(false);
                 }
             })
@@ -164,25 +146,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     setRequestSubmitted(false);
                 }
             });
-    }
-
-    function getSuccessMsg(response: ServiceDetailVo): string | JSX.Element {
-        const endPointMap = new Map<string, string>();
-        if (response.deployedServiceProperties) {
-            for (const key in response.deployedServiceProperties) {
-                endPointMap.set(key, response.deployedServiceProperties[key]);
-            }
-        }
-        if (endPointMap.size > 0) {
-            return (
-                <div>
-                    <span>{'Deployment Successful'}</span>
-                    <div>{convertMapToUnorderedList(endPointMap, 'Endpoint Information')}</div>
-                </div>
-            );
-        } else {
-            return <span>{'Deployment Successful'}</span>;
-        }
     }
 
     function OnSubmit() {
@@ -211,12 +174,12 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         ServiceService.deploy(createRequest)
             .then((uuid) => {
                 setRequestSubmitted(true);
-                Tip('success', 'Request accepted', uuid);
+                setTip(OrderSubmitResult('Request accepted', uuid, 'success'));
                 waitingServiceReady(uuid, deployTimeout, new Date());
             })
-            .catch((error) => {
+            .catch((error: Error) => {
                 console.error(error);
-                Tip('error', 'Create service deploy failed.', '-');
+                setTip(OrderSubmitFailed(error));
                 setDeploying(false);
             });
     }
