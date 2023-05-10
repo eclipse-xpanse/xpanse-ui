@@ -21,6 +21,8 @@ export { DeployVariable } from './models/DeployVariable';
 export { DeployVariableKind } from './models/DeployVariableKind';
 export type { Flavor } from './models/Flavor';
 export type { Link } from './models/Link';
+export { Metric } from './models/Metric';
+export { MetricItem } from './models/MetricItem';
 export { Ocl } from './models/Ocl';
 export { ProviderOclVo } from './models/ProviderOclVo';
 export type { Region } from './models/Region';
@@ -33,6 +35,7 @@ export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
 export type { VersionOclVo } from './models/VersionOclVo';
 
 export { AdminService } from './services/AdminService';
+export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
 export { ServicesAvailableService } from './services/ServicesAvailableService';
 export { ServiceVendorService } from './services/ServiceVendorService';
