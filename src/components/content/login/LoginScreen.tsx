@@ -35,7 +35,7 @@ function LoginScreen(): JSX.Element {
                 mask={false}
                 title={
                     <Space>
-                        <Image width={50} src='./logo.png' preview={false} />
+                        <Image width={100} src='./logo.png' preview={false} />
                         Welcome to Xpanse
                     </Space>
                 }
@@ -45,6 +45,7 @@ function LoginScreen(): JSX.Element {
                 onOk={loginForm.submit}
                 onCancel={() => loginForm.resetFields()}
             >
+                <br />
                 <Form
                     name='login'
                     form={loginForm}
