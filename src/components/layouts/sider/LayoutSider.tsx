@@ -50,7 +50,7 @@ function LayoutSider(): JSX.Element {
         <Layout.Sider collapsible collapsed={collapsed} onCollapse={(newValue) => setCollapsed(newValue)}>
             <div className={'logo'}>
                 <Link to={homePageRoute}>
-                    <Image width={50} src='logo.png' preview={false} />
+                    <Image width={150} src='xpanse-black.png' preview={false} />
                 </Link>
             </div>
             <Menu items={items} mode='inline' theme='dark' onClick={onClicked} />
