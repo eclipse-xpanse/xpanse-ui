@@ -14,17 +14,21 @@ import { request as __request } from '../core/request';
 
 export class MonitorService {
     /**
-     * Get Monitor metric of the deployed service
+     * Get metrics of the deployed service.
      * @param id Id of the deployed service
+     * @param monitorResourceType Types of the monitor resource
      * @returns Metric OK
      * @throws ApiError
      */
-    public static getMetrics(id: string): CancelablePromise<Array<Metric>> {
+    public static getMetrics(id: string, monitorResourceType?: 'cpu' | 'mem'): CancelablePromise<Array<Metric>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/monitor/metric',
-            query: {
+            url: '/xpanse/monitor/metric/{id}',
+            path: {
                 id: id,
+            },
+            query: {
+                monitorResourceType: monitorResourceType,
             },
             errors: {
                 400: `Bad Request`,
