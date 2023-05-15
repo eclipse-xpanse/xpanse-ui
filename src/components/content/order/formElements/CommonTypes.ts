@@ -5,6 +5,7 @@
 
 import { ChangeEvent } from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { DeployVariable } from '../../../../xpanse-api/generated';
 
 export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 export type NumberInputEventHandler = (value: number | string | null) => void;
@@ -25,4 +26,5 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     validator: string;
+    sensitiveScope: DeployVariable.sensitiveScope;
 }

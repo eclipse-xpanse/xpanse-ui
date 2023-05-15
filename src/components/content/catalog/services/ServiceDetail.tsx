@@ -5,14 +5,15 @@
 
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { OclDetailVo } from '../../../../xpanse-api/generated';
+import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
+import { ApiDoc } from '../../order/ApiDoc';
 
 function ServiceDetail({
     serviceDetails,
     serviceAreas,
 }: {
-    serviceDetails: OclDetailVo;
+    serviceDetails: UserAvailableServiceVo;
     serviceAreas: Area[];
 }): JSX.Element {
     return (
@@ -35,18 +36,17 @@ function ServiceDetail({
                 <InfoCircleOutlined />
                 &nbsp;Basic Information
             </h3>
+
             <Descriptions bordered column={1}>
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
-                <Descriptions.Item label='Provider'>{serviceDetails.cloudServiceProvider.name}</Descriptions.Item>
-                <Descriptions.Item label='Service Version'>{serviceDetails.serviceVersion}</Descriptions.Item>
+                <Descriptions.Item label='Provider'>{serviceDetails.csp}</Descriptions.Item>
+                <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
                 <Descriptions.Item label='Billing Mode'>{serviceDetails.billing.model}</Descriptions.Item>
-                <Descriptions.Item label='Register Time'>{serviceDetails.createTime.toUTCString()}</Descriptions.Item>
-                <Descriptions.Item label='Update Time'>
-                    {serviceDetails.lastModifiedTime.toUTCString()}
-                </Descriptions.Item>
+                <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
+                <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>{serviceDetails.serviceState}</Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
                     {serviceDetails.flavors
@@ -54,6 +54,9 @@ function ServiceDetail({
                             return flavor.name;
                         })
                         .join(',')}
+                </Descriptions.Item>
+                <Descriptions.Item label={'Service API'}>
+                    <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
                 </Descriptions.Item>
             </Descriptions>
         </>

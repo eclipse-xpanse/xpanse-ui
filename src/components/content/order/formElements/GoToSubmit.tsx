@@ -3,12 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import {
-    CreateRequestCategoryEnum,
-    CreateRequestCspEnum,
-    Ocl,
-    RegisteredServiceVo,
-} from '../../../../xpanse-api/generated';
+import { CreateRequest, DeployVariable, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../OrderSubmit';
@@ -31,27 +26,19 @@ export default function GoToSubmit({
     selectRegion: string;
     selectArea: string;
     selectFlavor: string;
-    versionMapper: Map<string, RegisteredServiceVo[]>;
+    versionMapper: Map<string, UserAvailableServiceVo[]>;
 }): JSX.Element {
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        let service: Ocl = new Ocl();
+        let service: UserAvailableServiceVo | undefined;
         let registeredServiceId = '';
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 v.forEach((registerService) => {
-                    if (registerService.csp === selectCsp) {
+                    if (registerService.csp.valueOf() === selectCsp) {
                         registeredServiceId = registerService.id;
-                    }
-                });
-                const oclList: Ocl[] = [];
-                for (const registeredServiceVo of v) {
-                    oclList.push(registeredServiceVo.ocl);
-                }
-                oclList.forEach((item) => {
-                    if (item.serviceVersion === selectVersion && item.cloudServiceProvider.name === selectCsp) {
-                        service = item;
+                        service = registerService;
                     }
                 });
             }
@@ -59,27 +46,31 @@ export default function GoToSubmit({
 
         const props: OrderSubmitProps = {
             id: registeredServiceId,
-            category: categoryName as CreateRequestCategoryEnum,
+            category: categoryName as CreateRequest.category,
             name: serviceName,
             version: selectVersion,
             region: selectRegion,
             area: selectArea,
-            csp: selectCsp as CreateRequestCspEnum,
+            csp: selectCsp as CreateRequest.csp,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),
         };
 
-        for (const param of service.deployment.variables) {
-            props.params.push({
-                name: param.name,
-                kind: param.kind,
-                type: param.dataType,
-                example: param.example === undefined ? '' : param.example,
-                description: param.description,
-                value: param.value === undefined ? '' : param.value,
-                mandatory: param.mandatory,
-                validator: param.validator === undefined ? '' : param.validator,
-            });
+        if (service !== undefined) {
+            for (const param of service.variables) {
+                props.params.push({
+                    name: param.name,
+                    kind: param.kind,
+                    type: param.dataType,
+                    example: param.example === undefined ? '' : param.example,
+                    description: param.description,
+                    value: param.value === undefined ? '' : param.value,
+                    mandatory: param.mandatory,
+                    validator: param.validator === undefined ? '' : param.validator,
+                    sensitiveScope:
+                        param.sensitiveScope === undefined ? DeployVariable.sensitiveScope.NONE : param.sensitiveScope,
+                });
+            }
         }
 
         navigate('/order', {

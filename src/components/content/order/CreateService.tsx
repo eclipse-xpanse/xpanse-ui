@@ -5,16 +5,13 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import {
     Billing,
-    BillingCurrencyEnum,
-    BillingPeriodEnum,
-    CloudServiceProviderNameEnum,
+    CloudServiceProvider,
     Flavor,
-    Ocl,
     Region,
-    RegisteredServiceVo,
+    ServicesAvailableService,
+    UserAvailableServiceVo,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
@@ -30,46 +27,38 @@ import { OrderSubmitProps } from './OrderSubmit';
 function filterAreaList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, RegisteredServiceVo[]>
+    versionMapper: Map<string, UserAvailableServiceVo[]>
 ): Area[] {
-    let oclList: Ocl[] = [];
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     versionMapper.forEach((v, k) => {
-        if (k === selectVersion) {
-            const ocls: Ocl[] = [];
-            for (const registerServiceEntity of v) {
-                ocls.push(registerServiceEntity.ocl);
+        if (k !== selectVersion) {
+            return [];
+        }
+        for (const userAvailableServiceVo of v) {
+            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
+                const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
+                for (const region of userAvailableServiceVo.regions) {
+                    if (region.area && !areaRegions.has(region.area)) {
+                        areaRegions.set(
+                            region.area,
+                            userAvailableServiceVo.regions.filter((data) => data.area === region.area)
+                        );
+                    }
+                }
+                const areas: Area[] = [];
+                areaRegions.forEach((areaRegions, area) => {
+                    const regionNames: string[] = [];
+                    areaRegions.forEach((region) => {
+                        if (region.name) {
+                            regionNames.push(region.name);
+                        }
+                    });
+                    areas.push({ name: area, regions: regionNames });
+                });
+                areaMapper.set(userAvailableServiceVo.csp, areas);
             }
-            oclList = ocls;
         }
     });
-    oclList
-        .filter((v) => v.serviceVersion === selectVersion)
-        .forEach((v) => {
-            if (v.cloudServiceProvider.name !== selectCsp) {
-                return { key: '', label: '' };
-            }
-            const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
-            for (const region of v.cloudServiceProvider.regions) {
-                if (region.area && !areaRegions.has(region.area)) {
-                    areaRegions.set(
-                        region.area,
-                        v.cloudServiceProvider.regions.filter((data) => data.area === region.area)
-                    );
-                }
-            }
-            const areas: Area[] = [];
-            areaRegions.forEach((areaRegions, area) => {
-                const regionNames: string[] = [];
-                areaRegions.forEach((region) => {
-                    if (region.name) {
-                        regionNames.push(region.name);
-                    }
-                });
-                areas.push({ name: area, regions: regionNames });
-            });
-            areaMapper.set(v.cloudServiceProvider.name, areas);
-        });
     return areaMapper.get(selectCsp) ?? [];
 }
 
@@ -77,7 +66,7 @@ function CreateService(): JSX.Element {
     const [urlParams] = useSearchParams();
     const location = useLocation();
 
-    const versionMapper = useRef<Map<string, RegisteredServiceVo[]>>(new Map<string, RegisteredServiceVo[]>());
+    const versionMapper = useRef<Map<string, UserAvailableServiceVo[]>>(new Map<string, UserAvailableServiceVo[]>());
 
     const [categoryName, setCategoryName] = useState<string>('');
     const [serviceName, setServiceName] = useState<string>('');
@@ -85,8 +74,8 @@ function CreateService(): JSX.Element {
     const [versionList, setVersionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectVersion, setSelectVersion] = useState<string>('');
 
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProviderNameEnum>('openstack');
-    const [cspList, setCspList] = useState<CloudServiceProviderNameEnum[]>(['openstack']);
+    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name>(CloudServiceProvider.name.OPENSTACK);
+    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([CloudServiceProvider.name.OPENSTACK]);
 
     const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
     const [selectArea, setSelectArea] = useState<string>('');
@@ -102,21 +91,20 @@ function CreateService(): JSX.Element {
     const [currency, setCurrency] = useState<string>('');
 
     useEffect(() => {
-        const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as UserAvailableServiceVo.category;
         const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
         const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
-        if (categoryName === '' || serviceName === '' || latestVersion === '') {
+        if (serviceName === '' || latestVersion === '') {
             return;
         }
         setCategoryName(categoryName);
         setServiceName(serviceName);
-        void serviceVendorApi
-            .listRegisteredServices(categoryName, '', serviceName, '')
+        void ServicesAvailableService.listAvailableServices(categoryName, '', serviceName, '')
             .then((rsp) => {
                 if (rsp.length > 0) {
-                    const currentVersions: Map<string, RegisteredServiceVo[]> = new Map<
+                    const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
                         string,
-                        RegisteredServiceVo[]
+                        UserAvailableServiceVo[]
                     >();
                     for (const registerServiceEntity of rsp) {
                         if (registerServiceEntity.version) {
@@ -143,7 +131,7 @@ function CreateService(): JSX.Element {
                         currentAreaList[0]?.key ?? ''
                     );
                     let currentBilling = getBilling(latestVersion, currentCspList[0]);
-                    let cspValue: CloudServiceProviderNameEnum = currentCspList[0];
+                    let cspValue: CloudServiceProvider.name = currentCspList[0];
                     let areaValue: string = currentAreaList[0]?.key ?? '';
                     let regionValue: string = currentRegionList[0]?.value ?? '';
                     let flavorValue: string = currentFlavorList[0]?.value ?? '';
@@ -152,8 +140,8 @@ function CreateService(): JSX.Element {
                         const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
                         currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
                         currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
-                        currentBilling = getBilling(latestVersion, serviceInfo.csp);
-                        cspValue = serviceInfo.csp as CloudServiceProviderNameEnum;
+                        currentBilling = getBilling(latestVersion, serviceInfo.csp.toString());
+                        cspValue = serviceInfo.csp as unknown as CloudServiceProvider.name;
                         areaValue = serviceInfo.area;
                         regionValue = serviceInfo.region;
                         flavorValue = serviceInfo.flavor;
@@ -178,7 +166,7 @@ function CreateService(): JSX.Element {
             })
             .catch((error: Error) => {
                 console.log(error.message);
-                versionMapper.current = new Map<string, RegisteredServiceVo[]>();
+                versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
             });
     }, [location, urlParams]);
 
@@ -203,31 +191,20 @@ function CreateService(): JSX.Element {
         return versions;
     }
 
-    function getCspList(selectVersion: string) {
-        let oclList: Ocl[] = [];
-        const cspList: CloudServiceProviderNameEnum[] = [];
+    function getCspList(selectVersion: string): CloudServiceProvider.name[] {
+        const cspList: CloudServiceProvider.name[] = [];
 
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
-                const ocls: Ocl[] = [];
-                for (const registeredServiceVo of v) {
-                    ocls.push(registeredServiceVo.ocl);
+                for (const userAvailableServiceVo of v) {
+                    cspList.push(userAvailableServiceVo.csp as unknown as CloudServiceProvider.name);
                 }
-                oclList = ocls;
             }
         });
-
-        if (oclList.length > 0) {
-            oclList.forEach((item) => {
-                if (item.serviceVersion === selectVersion) {
-                    cspList.push(item.cloudServiceProvider.name);
-                }
-            });
-        }
         return cspList;
     }
 
-    function getAreaList(selectVersion: string, selectCsp: string) {
+    function getAreaList(selectVersion: string, selectCsp: string): Tab[] {
         const areaList: Area[] = filterAreaList(selectVersion, selectCsp, versionMapper.current);
         let areaItems: Tab[] = [];
         if (areaList.length > 0) {
@@ -246,7 +223,11 @@ function CreateService(): JSX.Element {
         return areaItems;
     }
 
-    function getRegionList(selectVersion: string, selectCsp: string, selectArea: string) {
+    function getRegionList(
+        selectVersion: string,
+        selectCsp: string,
+        selectArea: string
+    ): { value: string; label: string }[] {
         const areaList: Area[] = filterAreaList(selectVersion, selectCsp, versionMapper.current);
         let regions: { value: string; label: string }[] = [];
         if (areaList.length > 0) {
@@ -267,21 +248,15 @@ function CreateService(): JSX.Element {
         return regions;
     }
 
-    function getFlavorList(selectVersion: string) {
-        const oclList: Ocl[] = [];
+    function getFlavorList(selectVersion: string): { value: string; label: string; price: string }[] {
+        const flavorMapper = new Map<string, Flavor[]>();
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
-                for (const registeredServiceVo of v) {
-                    oclList.push(registeredServiceVo.ocl);
+                for (const userAvailableServiceVo of v) {
+                    flavorMapper.set(userAvailableServiceVo.version || '', userAvailableServiceVo.flavors);
                 }
             }
         });
-        const flavorMapper = new Map<string, Flavor[]>();
-        oclList
-            .filter((v) => v.serviceVersion === selectVersion)
-            .forEach((v) => {
-                flavorMapper.set(v.serviceVersion || '', v.flavors);
-            });
 
         const flavorList = flavorMapper.get(selectVersion) ?? [];
         const flavors: { value: string; label: string; price: string }[] = [];
@@ -295,17 +270,17 @@ function CreateService(): JSX.Element {
         return flavors;
     }
 
-    function getBilling(selectVersion: string, csp: CloudServiceProviderNameEnum): Billing {
+    function getBilling(selectVersion: string, csp: string): Billing {
         let billing: Billing = {
             model: '' as string,
-            period: 'daily' as BillingPeriodEnum,
-            currency: 'euro' as BillingCurrencyEnum,
+            period: 'daily' as Billing.period,
+            currency: 'euro' as Billing.currency,
         };
         versionMapper.current.forEach((v, k) => {
             if (selectVersion === k) {
                 v.forEach((registeredServiceVo) => {
-                    if (csp === registeredServiceVo.csp) {
-                        billing = registeredServiceVo.ocl.billing;
+                    if (csp === registeredServiceVo.csp.valueOf()) {
+                        billing = registeredServiceVo.billing;
                     }
                 });
             }
@@ -317,50 +292,50 @@ function CreateService(): JSX.Element {
         const currentVersion = value;
         const currentCspList = getCspList(currentVersion);
         const currentAreaList = getAreaList(currentVersion, currentCspList[0]);
-        const currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0].key);
+        const currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0]?.key ?? '');
         const currentFlavorList = getFlavorList(currentVersion);
         const billing: Billing = getBilling(currentVersion, currentCspList[0]);
         setSelectVersion(currentVersion);
         setCspList(currentCspList);
         setSelectCsp(currentCspList[0]);
         setAreaList(currentAreaList);
-        setSelectArea(currentAreaList[0].key);
+        setSelectArea(currentAreaList[0]?.key ?? '');
         setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0].value);
+        setSelectRegion(currentRegionList[0]?.value ?? '');
         setFlavorList(currentFlavorList);
-        setSelectFlavor(currentFlavorList[0].value);
+        setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
         setCurrency(currencyMapper[billing.currency]);
     }, []);
 
-    const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum) => {
+    const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProvider.name) => {
         const currentAreaList = getAreaList(selectVersion, csp);
-        const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0].key);
+        const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0]?.key ?? '');
         const currentFlavorList = getFlavorList(selectVersion);
         const billing: Billing = getBilling(selectVersion, csp);
         setSelectCsp(csp);
         setAreaList(currentAreaList);
-        setSelectArea(currentAreaList[0].key);
+        setSelectArea(currentAreaList[0]?.key ?? '');
         setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0].value);
+        setSelectRegion(currentRegionList[0]?.value ?? '');
         setFlavorList(currentFlavorList);
-        setSelectFlavor(currentFlavorList[0].value);
+        setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
         setCurrency(currencyMapper[billing.currency]);
     }, []);
 
-    const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProviderNameEnum, key: string) => {
+    const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProvider.name, key: string) => {
         const currentRegionList = getRegionList(selectVersion, csp, key);
         setSelectArea(key);
         setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0].value);
+        setSelectRegion(currentRegionList[0]?.value ?? '');
     }, []);
 
     const onChangeRegion = useCallback((value: string) => {
         setSelectRegion(value);
     }, []);
 
-    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProviderNameEnum) => {
+    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProvider.name) => {
         setSelectFlavor(value);
         const currentFlavorList = getFlavorList(selectVersion);
         const billing: Billing = getBilling(selectVersion, csp);
@@ -395,7 +370,7 @@ function CreateService(): JSX.Element {
                     selectCsp={selectCsp}
                     cspList={cspList}
                     onChangeHandler={(csp) => {
-                        onChangeCloudProvider(selectVersion, csp as CloudServiceProviderNameEnum);
+                        onChangeCloudProvider(selectVersion, csp as CloudServiceProvider.name);
                     }}
                 />
                 <div className={'cloud-provider-tab-class content-title'}>

@@ -4,28 +4,33 @@
  */
 
 import { MutableRefObject } from 'react';
-import { Ocl } from '../../../../xpanse-api/generated';
-import { ValidationStatus } from '../../register/ValidationStatus';
+
 import { UploadFile } from 'antd';
-import { serviceVendorApi } from '../../../../xpanse-api/xpanseRestApiClient';
+import { ApiError, Ocl, ServiceVendorService, Response } from '../../../../xpanse-api/generated';
+import { ValidationStatus } from '../../register/ValidationStatus';
 
 export function updateServiceResult(
     id: string,
     ocl: Ocl,
     setUpdateRequestStatus: (newState: ValidationStatus) => void,
-    updateResult: MutableRefObject<string>,
+    updateResult: MutableRefObject<string[]>,
     file: UploadFile
 ): void {
-    serviceVendorApi
-        .update(id, ocl)
+    setUpdateRequestStatus('inProgress');
+    ServiceVendorService.update(id, ocl)
         .then(() => {
             file.status = 'success';
             setUpdateRequestStatus('completed');
-            updateResult.current = 'Service updated Successfully';
+            updateResult.current = [`ID - ${id}`];
         })
         .catch((error: Error) => {
             file.status = 'error';
             setUpdateRequestStatus('error');
-            updateResult.current = error.message;
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                updateResult.current = response.details;
+            } else {
+                updateResult.current = [error.message];
+            }
         });
 }

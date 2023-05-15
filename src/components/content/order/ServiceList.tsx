@@ -4,14 +4,15 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Space, Table } from 'antd';
+import { Alert, Button, Modal, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ServiceVo } from '../../../xpanse-api/generated';
-import { serviceApi } from '../../../xpanse-api/xpanseRestApiClient';
+import { ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { CloseCircleOutlined, CopyOutlined, SyncOutlined } from '@ant-design/icons';
+import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
+import { MyServiceDetails } from './MyServiceDetails';
+import { usernameKey } from '../../utils/constants';
 
 // 1 hour.
 const destroyTimeout: number = 3600000;
@@ -28,6 +29,9 @@ function ServiceList(): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [content, setContent] = useState<Map<string, string>>(new Map());
+    const [requestParams, setRequestParams] = useState<Map<string, string>>(new Map());
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -99,7 +103,7 @@ function ServiceList(): JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<CopyOutlined />}
-                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 migrate
                             </Button>
@@ -108,9 +112,17 @@ function ServiceList(): JSX.Element {
                                 type='primary'
                                 icon={<CloseCircleOutlined />}
                                 onClick={() => destroy(record)}
-                                disabled={!(record.serviceState === 'DEPLOY_SUCCESS' && !loading)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 destroy
+                            </Button>
+                            <Button
+                                type='primary'
+                                icon={<ExpandAltOutlined />}
+                                onClick={() => getDeployedProperties(record.id)}
+                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
+                            >
+                                detail
                             </Button>
                         </Space>
                     </>
@@ -137,10 +149,10 @@ function ServiceList(): JSX.Element {
             'success',
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
-        serviceApi
-            .serviceDetail(uuid)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                if (response.serviceState === 'DESTROY_SUCCESS') {
+                if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_SUCCESS) {
                     Tip('success', 'Destroy success.');
                     setLoading(false);
                     refreshData();
@@ -161,8 +173,7 @@ function ServiceList(): JSX.Element {
     function destroy(record: ServiceVo) {
         setId(record.id);
         setLoading(true);
-        serviceApi
-            .destroy(record.id)
+        ServiceService.destroy(record.id)
             .then(() => {
                 waitingServiceDestroy(record.id, destroyTimeout, new Date());
                 refreshData();
@@ -171,6 +182,32 @@ function ServiceList(): JSX.Element {
                 Tip('error', 'Destroy failed:' + e.message);
                 setLoading(false);
                 TipClear();
+            });
+    }
+
+    function getDeployedProperties(id: string): void {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ServiceService.getDeployedServiceDetailsById(id, localStorage.getItem(usernameKey)!)
+            .then((response) => {
+                const endPointMap = new Map<string, string>();
+                const requestMap = new Map<string, string>();
+                if (response.deployedServiceProperties) {
+                    for (const key in response.deployedServiceProperties) {
+                        endPointMap.set(key, response.deployedServiceProperties[key]);
+                    }
+                }
+                if (response.createRequest.serviceRequestProperties) {
+                    for (const key in response.createRequest.serviceRequestProperties) {
+                        requestMap.set(key, response.createRequest.serviceRequestProperties[key]);
+                    }
+                }
+                setContent(endPointMap);
+                setRequestParams(requestMap);
+                setIsModalOpen(true);
+            })
+            .catch((e: Error) => {
+                console.log(e.message);
+                setIsModalOpen(false);
             });
     }
 
@@ -257,7 +294,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
-        void serviceApi.services().then((resp) => {
+        void ServiceService.listDeployedServices().then((resp) => {
             const serviceList: ServiceVo[] = [];
             if (resp.length > 0) {
                 setServiceVoList(resp);
@@ -281,9 +318,17 @@ function ServiceList(): JSX.Element {
         getServices();
     }
 
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <div className={'services-content'}>
             {tip}
+            <Modal title={'Service Details'} width={700} footer={null} open={isModalOpen} onCancel={handleCancel}>
+                <MyServiceDetails endPointInfo={content} requestParamsInfo={requestParams} />
+            </Modal>
+
             <div>
                 <Button
                     disabled={loading}

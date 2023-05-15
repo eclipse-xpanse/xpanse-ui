@@ -1,3 +1,6 @@
 .service-instance-list {
     margin-top: 15px;
 }
+.service-instance-list-detail {
+    font-weight: bold;
+}

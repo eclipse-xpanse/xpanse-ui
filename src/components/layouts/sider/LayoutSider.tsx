@@ -9,11 +9,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { homePageRoute, usernameKey } from '../../utils/constants';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
 import { serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import MenuLoading from './MenuLoading';
+import { ServiceVendorService } from '../../../xpanse-api/generated';
 
 function LayoutSider(): JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
@@ -26,8 +26,7 @@ function LayoutSider(): JSX.Element {
 
     useEffect(() => {
         if (localStorage.getItem(usernameKey) === 'csp') {
-            serviceVendorApi
-                .listCategories()
+            ServiceVendorService.listCategories()
                 .then((rsp) => {
                     setItems([catalogMenu(rsp), registerPanelMenu()]);
                 })
@@ -36,8 +35,7 @@ function LayoutSider(): JSX.Element {
                     setItems([catalogMenu([]), registerPanelMenu()]);
                 });
         } else {
-            serviceVendorApi
-                .listCategories()
+            ServiceVendorService.listCategories()
                 .then((rsp) => {
                     setItems([servicesMenu(rsp), serviceListMenu()]);
                 })
@@ -52,7 +50,7 @@ function LayoutSider(): JSX.Element {
         <Layout.Sider collapsible collapsed={collapsed} onCollapse={(newValue) => setCollapsed(newValue)}>
             <div className={'logo'}>
                 <Link to={homePageRoute}>
-                    <Image width={50} src='logo.png' preview={false} />
+                    <Image width={150} src='xpanse-black.png' preview={false} />
                 </Link>
             </div>
             <Menu items={items} mode='inline' theme='dark' onClick={onClicked} />

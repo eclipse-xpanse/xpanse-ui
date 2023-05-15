@@ -21,7 +21,7 @@ function RegisterPanel(): JSX.Element {
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<JSX.Element>(<></>);
-    const registerResult = useRef<string>('');
+    const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [registerRequestStatus, setRegisterRequestStatus] = useState<ValidationStatus>('notStarted');
@@ -67,6 +67,7 @@ function RegisterPanel(): JSX.Element {
         files.current.pop();
         files.current.push(file);
         setYamlSyntaxValidationStatus('notStarted');
+        setRegisterRequestStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
     };
@@ -75,7 +76,7 @@ function RegisterPanel(): JSX.Element {
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
-        registerResult.current = '';
+        registerResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
         setRegisterRequestStatus('notStarted');
@@ -88,7 +89,8 @@ function RegisterPanel(): JSX.Element {
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
-            {ocl.current !== undefined ? (
+            {ocl.current !== undefined &&
+            (registerRequestStatus === 'completed' || registerRequestStatus === 'error') ? (
                 <RegisterResult
                     ocl={ocl.current}
                     registerRequestStatus={registerRequestStatus}
@@ -129,6 +131,7 @@ function RegisterPanel(): JSX.Element {
                     type={'primary'}
                     icon={<CloudUploadOutlined />}
                     onClick={sendRequestRequest}
+                    loading={registerRequestStatus === 'inProgress'}
                 >
                     Register
                 </Button>

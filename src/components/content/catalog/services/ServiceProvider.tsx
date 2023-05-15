@@ -6,7 +6,7 @@
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Alert, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CategoryOclVo, OclDetailVo, ProviderOclVo, Region } from '../../../../xpanse-api/generated';
+import { CategoryOclVo, ProviderOclVo, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../utils/Area';
 import UpdateService from './UpdateService';
@@ -24,10 +24,10 @@ function ServiceProvider({
     confirmUnregister: (disabled: boolean) => void;
 }): JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<OclDetailVo | undefined>(undefined);
+    const [serviceDetails, setServiceDetails] = useState<UserAvailableServiceVo | undefined>(undefined);
     const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
 
-    const detailMapper: Map<string, OclDetailVo> = new Map<string, OclDetailVo>();
+    const detailMapper: Map<string, UserAvailableServiceVo> = new Map<string, UserAvailableServiceVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = serviceName.split('@');
     const updateStatusWhenUnregister = useRef<string>('');
@@ -56,7 +56,7 @@ function ServiceProvider({
             return v.cloudProvider.map((cloudProvider: ProviderOclVo) => {
                 const key = serviceName + '@' + cloudProvider.name;
                 detailMapper.set(key, cloudProvider.details[0]);
-                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.regions);
+                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.details[0].regions);
                 const areas: Area[] = [];
 
                 result.forEach((v, k) => {

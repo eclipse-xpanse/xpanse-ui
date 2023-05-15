@@ -4,24 +4,23 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
-import { serviceVendorApi } from '../../../xpanse-api/xpanseRestApiClient';
 import '../../../styles/app.css';
+import { Link, ServicesAvailableService } from '../../../xpanse-api/generated';
 
-export function ApiDoc({ id }: { id: string }): JSX.Element {
+export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): JSX.Element {
     function onclick() {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
-        serviceVendorApi
-            .openApi(id)
-            .then((resp) => {
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                window.open(resp);
+        ServicesAvailableService.openApi(id)
+            .then((link: Link) => {
+                if (link.href !== undefined) {
+                    window.open(link.href);
+                }
             })
             .catch((error) => {
                 console.error(error);
             });
     }
     return (
-        <button className={'content-title-api'} onClick={onclick}>
+        <button className={styleClass} onClick={onclick}>
             <LinkOutlined /> API Documentation
         </button>
     );

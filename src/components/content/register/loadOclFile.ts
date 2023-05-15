@@ -4,10 +4,10 @@
  */
 
 import { Ocl } from '../../../xpanse-api/generated';
-import { ObjectSerializer } from '../../../xpanse-api/generated/models/ObjectSerializer';
+import YAML from 'yaml';
 
 function loadOclFile(fileData: string): Ocl {
-    return ObjectSerializer.deserialize(ObjectSerializer.parse(fileData, 'application/yaml'), 'Ocl', '') as Ocl;
+    return YAML.parse(fileData) as Ocl;
 }
 
 export default loadOclFile;

@@ -5,27 +5,25 @@
 
 import { Button, Space } from 'antd';
 import { useState } from 'react';
-import { SystemStatus, SystemStatusHealthStatusEnum } from '../../../xpanse-api/generated';
+import { AdminService, SystemStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
-import { adminApi } from '../../../xpanse-api/xpanseRestApiClient';
 
 function SystemStatusBar(): JSX.Element {
-    const [healthState, setHealthState] = useState<SystemStatusHealthStatusEnum>('NOK');
+    const [healthState, setHealthState] = useState<SystemStatus.healthStatus>(SystemStatus.healthStatus.NOK);
     const [isReloadSystemStatus, setReloadSystemStatus] = useState<boolean>(false);
 
-    adminApi
-        .health()
+    AdminService.health()
         .then((systemStatus: SystemStatus) => setHealthState(systemStatus.healthStatus))
         .catch((error: unknown) => {
             console.error(error);
-            setHealthState('NOK');
+            setHealthState(SystemStatus.healthStatus.NOK);
         });
 
     return (
         <Space>
             <Button
                 className={'header-menu-button'}
-                icon={<SystemStatusIcon isSystemUp={healthState === 'OK'} />}
+                icon={<SystemStatusIcon isSystemUp={healthState === SystemStatus.healthStatus.OK} />}
                 onClick={() => setReloadSystemStatus(!isReloadSystemStatus)}
             >
                 System Status

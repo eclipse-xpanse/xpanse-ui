@@ -29,4 +29,5 @@
     max-height: 30vh;
     position: relative;
     overflow: auto;
+    max-width: 50vh;
 }

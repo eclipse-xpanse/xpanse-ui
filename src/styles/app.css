@@ -96,10 +96,9 @@
     padding-left: 50px;
 }
 
-.content-title-api {
+.service-api-doc-link {
     font-size: 13px;
     font-weight: bold;
-    float: right;
     background-color: transparent;
     border: none;
     cursor: pointer;

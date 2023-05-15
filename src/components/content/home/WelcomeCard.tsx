@@ -11,12 +11,14 @@ function WelcomeCard(): JSX.Element {
         <>
             <Card title='Welcome to Xpanse' bordered={true}>
                 <RocketOutlined />{' '}
-                <a href='https://eclipse-xpanse.github.io/xpanse-website/'>Getting started with OSC</a>
-                <div>Learn the fundamentals about Open Services Cloud and cloud providers supporting it.</div>
+                <a href='https://eclipse-xpanse.github.io/xpanse-website/'>Getting started with Xpanse</a>
+                <div>Learn the fundamentals about Xpanse and cloud providers supporting it.</div>
                 <Divider />
                 <SettingOutlined />{' '}
-                <a href='https://eclipse-xpanse.github.io/xpanse-website/'>OSC Configuration Language</a>
-                <div>Use the OSC Configuration Language to describe portable managed services.</div>
+                <a href='https://eclipse-xpanse.github.io/xpanse-website/docs/api'>
+                    Xpanse Service Description Language
+                </a>
+                <div>Use the Xpanse Service Description Language to describe portable managed services.</div>
             </Card>
         </>
     );
