@@ -3,9 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BarsOutlined, HddOutlined } from '@ant-design/icons';
+import { AreaChartOutlined, BarsOutlined, HddOutlined } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import {
+    monitorLabelName,
+    monitorPageRoute,
     myServicesLabelName,
     myServicesRoute,
     servicesLabelName,
@@ -38,5 +40,14 @@ export const serviceListMenu = (): ItemType => {
         label: <Link to={myServicesRoute}>{myServicesLabelName}</Link>,
         icon: <BarsOutlined />,
         title: 'MyServices',
+    };
+};
+
+export const monitorMenu = (): ItemType => {
+    return {
+        key: monitorPageRoute,
+        label: <Link to={monitorPageRoute}>{monitorLabelName}</Link>,
+        icon: <AreaChartOutlined />,
+        title: 'Monitor',
     };
 };
