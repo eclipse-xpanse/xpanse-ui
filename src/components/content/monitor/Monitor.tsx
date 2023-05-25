@@ -44,17 +44,19 @@ function Monitor(): JSX.Element {
                 const customerServiceNameList: { value: string; label: string }[] = [];
                 if (rsp.length > 0) {
                     rsp.forEach((serviceVo: ServiceVo) => {
-                        const customerServiceName: { value: string; label: string } = {
-                            value: serviceVo.customerServiceName ?? '',
-                            label: serviceVo.customerServiceName ?? '',
-                        };
-                        customerServiceNameList.push(customerServiceName);
-                        const serviceName: { value: string; label: string } = {
-                            value: serviceVo.name,
-                            label: serviceVo.name,
-                        };
+                        if (serviceVo.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS) {
+                            const customerServiceName: { value: string; label: string } = {
+                                value: serviceVo.customerServiceName ?? '',
+                                label: serviceVo.customerServiceName ?? '',
+                            };
+                            customerServiceNameList.push(customerServiceName);
+                            const serviceName: { value: string; label: string } = {
+                                value: serviceVo.name,
+                                label: serviceVo.name,
+                            };
 
-                        serviceNameList.push(serviceName);
+                            serviceNameList.push(serviceName);
+                        }
                     });
                     setDeployedServiceList(rsp);
                     setServiceNameList(serviceNameList);
@@ -116,6 +118,8 @@ function Monitor(): JSX.Element {
         void MonitorService.getMetrics(selectedServiceId)
             .then((rsp: Metric[]) => {
                 if (rsp.length > 0) {
+                    setTipMessage('');
+                    setTipType(undefined);
                     monitorMetricsQueue.enqueue(rsp);
                     showMonitorMetrics(monitorMetricsQueue);
                     startFetchMonitorMetricDataTimer(monitorMetricsQueue, selectedServiceId);
@@ -148,15 +152,23 @@ function Monitor(): JSX.Element {
     };
 
     const fetchMonitorMetricsData = (monitorMetricsQueue: Queue<Metric[]>, selectedServiceId: string) => {
-        void MonitorService.getMetrics(selectedServiceId).then((rsp: Metric[]) => {
-            if (rsp.length > 0) {
-                if (monitorMetricsQueue.isFull()) {
-                    monitorMetricsQueue.dequeue();
+        void MonitorService.getMetrics(selectedServiceId)
+            .then((rsp: Metric[]) => {
+                if (rsp.length > 0) {
+                    setTipType(undefined);
+                    setTipMessage('');
+                    if (monitorMetricsQueue.isFull()) {
+                        monitorMetricsQueue.dequeue();
+                    }
+                    monitorMetricsQueue.enqueue(rsp);
+                    showMonitorMetrics(monitorMetricsQueue);
                 }
-                monitorMetricsQueue.enqueue(rsp);
-                showMonitorMetrics(monitorMetricsQueue);
-            }
-        });
+            })
+            .catch(() => {
+                setTipType('error');
+                setTipMessage('Error while getting metrics of the deployed service.');
+                setIsQueryResultAvailable(true);
+            });
     };
 
     const showMonitorMetrics = (queue: Queue<Metric[]>) => {
@@ -223,6 +235,9 @@ function Monitor(): JSX.Element {
         form.resetFields();
         setTipType(undefined);
         setIsQueryResultAvailable(false);
+        if (refreshMonitorMetrics) {
+            clearInterval(refreshMonitorMetrics);
+        }
     };
 
     const onFinishFailed = () => {
