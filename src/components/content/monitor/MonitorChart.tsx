@@ -11,6 +11,7 @@ import { Col, Row } from 'antd';
 import moment from 'moment';
 import { MetricProps } from './metricProps';
 import * as echarts from 'echarts/core';
+import { Metric } from '../../../xpanse-api/generated';
 
 function MonitorChart({ monitorType, metricProps }: { monitorType: string; metricProps: MetricProps[] }): JSX.Element {
     const options: echarts.EChartsCoreOption[] = [];
@@ -70,7 +71,13 @@ function MonitorChart({ monitorType, metricProps }: { monitorType: string; metri
             title: {
                 left: 'center',
                 subtext: metricProps[0].vmName.concat(': ').concat(vmId),
-                text: metricProps[0].name.split('_')[0].concat(' usage(%)'),
+                text: metricProps[0].name
+                    .split('_')[0]
+                    .concat(
+                        ' usage (' +
+                            (metricProps[0].unit === Metric.unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                            ')'
+                    ),
                 padding: 0,
             },
             xAxis: {

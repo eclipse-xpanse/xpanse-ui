@@ -11,10 +11,14 @@ export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
+export { AbstractCredentialInfo } from './models/AbstractCredentialInfo';
 export { Billing } from './models/Billing';
 export type { CategoryOclVo } from './models/CategoryOclVo';
 export { CloudServiceProvider } from './models/CloudServiceProvider';
+export { CreateCredential } from './models/CreateCredential';
 export { CreateRequest } from './models/CreateRequest';
+export { CredentialDefinition } from './models/CredentialDefinition';
+export type { CredentialVariable } from './models/CredentialVariable';
 export { Deployment } from './models/Deployment';
 export { DeployResource } from './models/DeployResource';
 export { DeployVariable } from './models/DeployVariable';
@@ -35,6 +39,7 @@ export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
 export type { VersionOclVo } from './models/VersionOclVo';
 
 export { AdminService } from './services/AdminService';
+export { CredentialsManagementService } from './services/CredentialsManagementService';
 export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
 export { ServicesAvailableService } from './services/ServicesAvailableService';

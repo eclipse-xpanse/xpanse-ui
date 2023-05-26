@@ -206,16 +206,18 @@ function Monitor(): JSX.Element {
                 }
                 let metricProp: MetricProps = {
                     id: labelsMap.get('id') ?? '',
-                    name: metric.name ?? '',
+                    name: metric.name,
                     vmName: labelsMap.get('name') ?? '',
                     value: 0,
+                    unit: metric.unit,
                 };
                 if (metric.metrics) {
                     metricProp = {
                         id: labelsMap.get('id') ?? '',
-                        name: metric.name ?? '',
+                        name: metric.name,
                         vmName: labelsMap.get('name') ?? '',
                         value: metric.metrics[0].value ?? 0,
+                        unit: metric.unit,
                     };
                 }
                 metricProps.push(metricProp);
