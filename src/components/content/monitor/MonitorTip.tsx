@@ -6,14 +6,30 @@
 import { Alert } from 'antd';
 import React from 'react';
 
-export const MonitorTip = ({ type, msg }: { type: 'error' | 'success' | undefined; msg: string }): JSX.Element => {
+export const MonitorTip = ({
+    type,
+    msg,
+    onRemove,
+}: {
+    type: 'error' | 'success' | undefined;
+    msg: string;
+    onRemove: () => void;
+}): JSX.Element => {
     if (!type) {
         return <></>;
     }
+
     return (
-        <div className={'submit-alert-tip'}>
+        <div className={'monitor-tip-class'}>
             {' '}
-            <Alert message='Operating System Monitor:' description={msg} showIcon type={type} />{' '}
+            <Alert
+                className={''}
+                message='Operating System Monitor:'
+                description={msg}
+                type={type}
+                onClose={onRemove}
+                closable={true}
+            />{' '}
         </div>
     );
 };
