@@ -7,6 +7,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
+/**
+ * The list of the metric items.
+ */
 export type MetricItem = {
     labels?: Record<string, string>;
     type?: MetricItem.type;

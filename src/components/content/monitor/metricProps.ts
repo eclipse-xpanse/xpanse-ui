@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Metric } from '../../../xpanse-api/generated';
+
 export interface MetricProps {
     id: string;
 
@@ -11,6 +13,8 @@ export interface MetricProps {
     value: number;
 
     vmName: string;
+
+    unit: Metric.unit;
 }
 export const colColumnList: number[] = [2, 3, 4, 6, 8, 12];
 

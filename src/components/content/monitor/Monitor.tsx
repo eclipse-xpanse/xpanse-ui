@@ -272,9 +272,10 @@ function Monitor(): JSX.Element {
                 }
                 const metricProp: MetricProps = {
                     id: labelsMap.get('id') ?? '',
-                    name: metric.name ?? '',
+                    name: metric.name,
                     vmName: labelsMap.get('name') ?? '',
                     value: metric.metrics?.[0]?.value ?? 0,
+                    unit: metric.unit,
                 };
                 metricProps.push(metricProp);
             });

@@ -19,6 +19,7 @@ import {
     timePeriodList,
 } from './metricProps';
 import * as echarts from 'echarts/core';
+import { Metric } from '../../../xpanse-api/generated';
 
 function MonitorChart({
     monitorType,
@@ -47,7 +48,13 @@ function MonitorChart({
         currentMetricProps.forEach((metricProps, vmId) => {
             chartsTitle.push({
                 Id: vmId,
-                metricTitle: metricProps[0].name.split('_')[0].concat(' usage(%)'),
+                metricTitle: metricProps[0].name
+                    .split('_')[0]
+                    .concat(
+                        ' usage (' +
+                            (metricProps[0].unit === Metric.unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                            ') - '
+                    ),
                 metricSubTitle: metricProps[0].vmName,
             });
             const option: echarts.EChartsCoreOption = {
@@ -96,7 +103,15 @@ function MonitorChart({
                 },
                 series: [
                     {
-                        name: metricProps[0].name.split('_')[0].concat(' usage'),
+                        name: metricProps[0].name
+                            .split('_')[0]
+                            .concat(
+                                ' usage (' +
+                                    (metricProps[0].unit === Metric.unit.PERCENTAGE
+                                        ? '%'
+                                        : metricProps[0].unit.valueOf()) +
+                                    ') - '
+                            ),
                         type: 'line',
                         smooth: true,
                         symbol: 'none',
