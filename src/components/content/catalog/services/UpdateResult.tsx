@@ -23,7 +23,11 @@ function UpdateResult({
         return (
             <Alert
                 type={'success'}
-                message={`Service ${ocl.name} Updated Successfully`}
+                message={
+                    <>
+                        Service <b>${ocl.name}</b> Updated Successfully
+                    </>
+                }
                 closable={true}
                 onClose={onRemove}
                 className={'result'}
