@@ -8,10 +8,27 @@ import { Layout } from 'antd';
 import LayoutFooter from '../layouts/footer/LayoutFooter';
 import LayoutHeader from '../layouts/header/LayoutHeader';
 import LayoutSider from '../layouts/sider/LayoutSider';
-import { isAuthenticatedKey, loginPageRoute } from '../utils/constants';
+import { isAuthenticatedKey, loginPageRoute, usernameKey } from '../utils/constants';
+import NotAuthorized from './NotAuthorized';
 
 interface ProtectedRouteProperties {
     children: JSX.Element;
+    allowedRole: 'csp' | 'user' | 'all';
+}
+
+function getFullLayout(content: JSX.Element): JSX.Element {
+    return (
+        <Layout className={'layout'} hasSider={true}>
+            <LayoutSider />
+            <Layout>
+                <LayoutHeader />
+                <Layout.Content className={'site-layout'}>
+                    <div className={'site-layout-background'}>{content}</div>
+                </Layout.Content>
+                <LayoutFooter />
+            </Layout>
+        </Layout>
+    );
 }
 
 function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Element {
@@ -22,18 +39,13 @@ function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Elem
     ) {
         return <Navigate to={loginPageRoute} replace={true} state={{ from: location }} />;
     }
-    return (
-        <Layout className={'layout'} hasSider={true}>
-            <LayoutSider />
-            <Layout>
-                <LayoutHeader />
-                <Layout.Content className={'site-layout'}>
-                    <div className={'site-layout-background'}>{protectedRouteProperties.children}</div>
-                </Layout.Content>
-                <LayoutFooter />
-            </Layout>
-        </Layout>
-    );
+    if (
+        localStorage.getItem(usernameKey) !== protectedRouteProperties.allowedRole &&
+        protectedRouteProperties.allowedRole !== 'all'
+    ) {
+        return getFullLayout(<NotAuthorized />);
+    }
+    return getFullLayout(protectedRouteProperties.children);
 }
 
 export default Protected;

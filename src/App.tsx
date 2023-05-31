@@ -32,7 +32,7 @@ function App(): JSX.Element {
             <Route
                 path={homePageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'all'}>
                         <Home />
                     </Protected>
                 }
@@ -40,7 +40,7 @@ function App(): JSX.Element {
             <Route
                 path={registerPageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'csp'}>
                         <RegisterPanel />
                     </Protected>
                 }
@@ -48,7 +48,7 @@ function App(): JSX.Element {
             <Route
                 path={catalogPageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'csp'}>
                         <Catalog />
                     </Protected>
                 }
@@ -56,7 +56,7 @@ function App(): JSX.Element {
             <Route
                 path={orderPageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'user'}>
                         <OrderSubmitPage />
                     </Protected>
                 }
@@ -64,7 +64,7 @@ function App(): JSX.Element {
             <Route
                 path={servicesPageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'user'}>
                         <Services />
                     </Protected>
                 }
@@ -72,7 +72,7 @@ function App(): JSX.Element {
             <Route
                 path={myServicesRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'user'}>
                         <ServiceList />
                     </Protected>
                 }
@@ -80,7 +80,7 @@ function App(): JSX.Element {
             <Route
                 path={createServicePageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'user'}>
                         <CreateService />
                     </Protected>
                 }
@@ -88,7 +88,7 @@ function App(): JSX.Element {
             <Route
                 path={monitorPageRoute}
                 element={
-                    <Protected>
+                    <Protected allowedRole={'user'}>
                         <Monitor />
                     </Protected>
                 }

@@ -11,7 +11,7 @@ import { useForm } from 'antd/es/form/Form';
 import { Location } from '@remix-run/router';
 
 function LoginScreen(): JSX.Element {
-    const validUsers: string[] = ['csp', 'user', 'otc'];
+    const validUsers: string[] = ['csp', 'user'];
     const [loginForm] = useForm();
     const location: Location = useLocation();
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
