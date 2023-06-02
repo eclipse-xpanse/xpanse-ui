@@ -34,5 +34,6 @@ export namespace CloudServiceProvider {
         HUAWEI = 'huawei',
         OPENSTACK = 'openstack',
         FLEXIBLE_ENGINE = 'flexibleEngine',
+        GOOGLE = 'google',
     }
 }
