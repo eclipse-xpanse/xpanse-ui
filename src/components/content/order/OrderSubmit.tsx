@@ -25,6 +25,7 @@ import { ApiDoc } from './ApiDoc';
 import OrderSubmitResult from './OrderSubmitResult';
 import DeploymentSuccessful from './DeploymentSuccessful';
 import OrderSubmitFailed from './OrderSubmitFailed';
+import DeploymentFailed from './DeploymentFailed';
 
 // 1 hour.
 const deployTimeout: number = 3600000;
@@ -126,11 +127,16 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                setDeploying(false);
                 if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
                     setTip(OrderSubmitResult(DeploymentSuccessful(response), uuid, 'success'));
-                } else {
-                    setTip(OrderSubmitResult('Deployment failed.', uuid, 'error'));
+                    setDeploying(false);
+                } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOYING) {
+                    setTimeout(() => {
+                        waitingServiceReady(uuid, timeout - waitServicePeriod, date);
+                    }, waitServicePeriod);
+                } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_FAILED) {
+                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                    setTip(OrderSubmitResult(DeploymentFailed(response), uuid, 'error'));
                     setRequestSubmitted(false);
                 }
             })
