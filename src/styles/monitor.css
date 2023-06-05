@@ -1,0 +1,55 @@
+.monitor-service-select-title {
+    margin: 1% 0 1% 0;
+}
+
+.monitor-search-button-class {
+    margin-right: 1%;
+}
+
+.charts-position-class {
+    background: #ffffff;
+    margin: 1% 0 0 0;
+}
+
+.chart-title-class {
+    margin-left: 28%;
+    margin-right: 4%;
+}
+.chart-subtitle-class {
+    margin-left: 20%;
+    margin-right: 4%;
+}
+
+.chart-subtitle-hover-class {
+    border: none;
+}
+
+.monitor-search-loading-class {
+    text-align: center;
+    margin-top: 10%;
+}
+
+.monitor-tip-class {
+    margin: 0 0 2% 0;
+    width: 100%;
+}
+
+.chart-operation-class {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.chart-operation-class > div {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    margin-right: 10px;
+}
+
+@media (max-width: 600px) {
+    .chart-operation-class > div {
+        flex-basis: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}

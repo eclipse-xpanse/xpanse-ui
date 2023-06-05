@@ -4,13 +4,14 @@
  */
 
 import { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Alert, Tabs } from 'antd';
+import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import { CategoryOclVo, ProviderOclVo, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../utils/Area';
 import UpdateService from './UpdateService';
 import UnregisterService from './UnregisterService';
+import { cspMap } from '../../order/formElements/CspSelect';
 
 let lastServiceName: string = '';
 
@@ -72,7 +73,11 @@ function ServiceProvider({
                 areaMapper.set(key, areas);
                 const name = cloudProvider.name.toString();
                 return {
-                    label: name,
+                    label: (
+                        <div>
+                            <Image width={120} preview={false} src={cspMap.get(cloudProvider.name)?.logo} />
+                        </div>
+                    ),
                     key: name,
                     children: [],
                     disabled: unregisterTabsItemDisabled,

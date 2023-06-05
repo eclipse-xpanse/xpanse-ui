@@ -294,7 +294,11 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
-        void ServiceService.listDeployedServices().then((resp) => {
+        const userName: string | null = localStorage.getItem(usernameKey);
+        if (!userName) {
+            return;
+        }
+        void ServiceService.getDeployedServicesByUser(userName).then((resp) => {
             const serviceList: ServiceVo[] = [];
             if (resp.length > 0) {
                 setServiceVoList(resp);

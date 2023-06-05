@@ -19,3 +19,7 @@ export const myServicesLabelName: string = 'MyServices';
 export const servicesSubPageRoute: string = '/services#';
 export const servicesLabelName: string = 'Services';
 export const createServicePageRoute: string = '/createService';
+export const monitorPageRoute: string = '/monitor';
+export const monitorLabelName: string = 'Monitor';
+export const monitorMetricQueueSize: number = 50;
+export const fetchMonitorMetricDataTimeInterval: number = 5000;
