@@ -26,6 +26,7 @@ function ServiceList(): JSX.Element {
     const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
+    const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
@@ -92,6 +93,10 @@ function ServiceList(): JSX.Element {
         {
             title: 'ServiceState',
             dataIndex: 'serviceState',
+            filters: serviceStateFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
         },
         {
             title: 'Operation',
@@ -156,6 +161,11 @@ function ServiceList(): JSX.Element {
                     Tip('success', 'Destroy success.');
                     setLoading(false);
                     refreshData();
+                    TipClear();
+                } else if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_FAILED) {
+                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+                    Tip('error', 'Destroy failed:' + response.resultMessage);
+                    setLoading(false);
                     TipClear();
                 } else {
                     setTimeout(() => {
@@ -293,6 +303,22 @@ function ServiceList(): JSX.Element {
         setCustomerServiceNameFilters(filters);
     }
 
+    function updateServiceStateFilters(resp: ServiceVo[]): void {
+        const filters: ColumnFilterItem[] = [];
+        const serviceStateSet = new Set<string>('');
+        resp.forEach((v) => {
+            serviceStateSet.add(v.serviceState);
+        });
+        serviceStateSet.forEach((serviceState) => {
+            const filter = {
+                text: serviceState,
+                value: serviceState,
+            };
+            filters.push(filter);
+        });
+        setServiceStateFilters(filters);
+    }
+
     function getServices(): void {
         const userName: string | null = localStorage.getItem(usernameKey);
         if (!userName) {
@@ -307,6 +333,7 @@ function ServiceList(): JSX.Element {
                 updateCategoryFilters(resp);
                 updateCspFilters(resp);
                 updateCustomerServiceNameFilters(resp);
+                updateServiceStateFilters(resp);
             } else {
                 setServiceVoList(serviceList);
             }

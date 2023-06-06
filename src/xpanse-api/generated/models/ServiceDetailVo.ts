@@ -64,6 +64,11 @@ export type ServiceDetailVo = {
      * The properties of the deployed service.
      */
     deployedServiceProperties?: Record<string, string>;
+
+    /**
+     * The result message of the deployed service.
+     */
+    resultMessage?: string;
 };
 
 export namespace ServiceDetailVo {
