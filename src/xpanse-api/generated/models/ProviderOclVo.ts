@@ -33,11 +33,12 @@ export namespace ProviderOclVo {
      * The Cloud Service Provider.
      */
     export enum name {
+        HUAWEI = 'huawei',
+        FLEXIBLE_ENGINE = 'flexibleEngine',
+        OPENSTACK = 'openstack',
+        ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
-        ALICLOUD = 'alicloud',
-        HUAWEI = 'huawei',
-        OPENSTACK = 'openstack',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
+        GOOGLE = 'google',
     }
 }
