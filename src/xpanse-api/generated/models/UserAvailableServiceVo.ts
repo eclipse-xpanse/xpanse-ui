@@ -95,12 +95,13 @@ export namespace UserAvailableServiceVo {
      * The Cloud Service Provider of the available service.
      */
     export enum csp {
+        HUAWEI = 'huawei',
+        FLEXIBLE_ENGINE = 'flexibleEngine',
+        OPENSTACK = 'openstack',
+        ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
-        ALICLOUD = 'alicloud',
-        HUAWEI = 'huawei',
-        OPENSTACK = 'openstack',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
+        GOOGLE = 'google',
     }
 
     /**

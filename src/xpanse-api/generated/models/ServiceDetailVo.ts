@@ -64,7 +64,6 @@ export type ServiceDetailVo = {
      * The properties of the deployed service.
      */
     deployedServiceProperties?: Record<string, string>;
-
     /**
      * The result message of the deployed service.
      */
@@ -92,12 +91,13 @@ export namespace ServiceDetailVo {
      * The provider of the service
      */
     export enum csp {
+        HUAWEI = 'huawei',
+        FLEXIBLE_ENGINE = 'flexibleEngine',
+        OPENSTACK = 'openstack',
+        ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
-        ALICLOUD = 'alicloud',
-        HUAWEI = 'huawei',
-        OPENSTACK = 'openstack',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
+        GOOGLE = 'google',
     }
 
     /**

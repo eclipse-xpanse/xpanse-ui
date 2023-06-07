@@ -15,9 +15,9 @@ export type CredentialDefinition = {
      */
     csp: CredentialDefinition.csp;
     /**
-     * The userId of the credential.
+     * The user who create the credential.
      */
-    userName: string;
+    xpanseUser: string;
     /**
      * The name of the credential,this field is provided by  he the plugin of cloud service provider.
      */
@@ -41,12 +41,13 @@ export namespace CredentialDefinition {
      * The cloud service provider of the credential.
      */
     export enum csp {
+        HUAWEI = 'huawei',
+        FLEXIBLE_ENGINE = 'flexibleEngine',
+        OPENSTACK = 'openstack',
+        ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
-        ALICLOUD = 'alicloud',
-        HUAWEI = 'huawei',
-        OPENSTACK = 'openstack',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
+        GOOGLE = 'google',
     }
 
     /**
