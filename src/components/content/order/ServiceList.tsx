@@ -12,12 +12,8 @@ import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } fr
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
-import { usernameKey } from '../../utils/constants';
-
-// 1 hour.
-const destroyTimeout: number = 3600000;
-// 5 seconds.
-const waitServicePeriod: number = 3000;
+import { destroyTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
+import { MigratingServices } from './migrate/MigratingServices';
 
 function ServiceList(): JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -30,9 +26,14 @@ function ServiceList(): JSX.Element {
     const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
+    const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [content, setContent] = useState<Map<string, string>>(new Map());
     const [requestParams, setRequestParams] = useState<Map<string, string>>(new Map());
+    const [resultMessage, setResultMessage] = useState<Map<string, string>>(new Map());
+    const [title, setTitle] = useState<JSX.Element>(<></>);
+    const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
+    const [isMigrateModalClosable, setIsMigrateModalClosable] = useState<boolean>(true);
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -96,7 +97,7 @@ function ServiceList(): JSX.Element {
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: string | number | boolean, record) => record.serviceState.startsWith(value.toString()),
         },
         {
             title: 'Operation',
@@ -108,6 +109,9 @@ function ServiceList(): JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<CopyOutlined />}
+                                onClick={() => {
+                                    migrate(record);
+                                }}
                                 disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
                             >
                                 migrate
@@ -125,7 +129,7 @@ function ServiceList(): JSX.Element {
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
                                 onClick={() => getDeployedProperties(record.id)}
-                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
+                                disabled={loading}
                             >
                                 detail
                             </Button>
@@ -195,12 +199,25 @@ function ServiceList(): JSX.Element {
             });
     }
 
+    function migrate(record: ServiceVo): void {
+        setCurrentServiceVo(record);
+        setTitle(
+            <div className={'services-content'}>
+                <div className={'content-title'}>
+                    Service: {record.name}@{record.version}
+                </div>
+            </div>
+        );
+        setIsMigrateModalOpen(true);
+    }
+
     function getDeployedProperties(id: string): void {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(id, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();
+                const resultMessageMap = new Map<string, string>();
                 if (response.deployedServiceProperties) {
                     for (const key in response.deployedServiceProperties) {
                         endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -211,6 +228,11 @@ function ServiceList(): JSX.Element {
                         requestMap.set(key, response.createRequest.serviceRequestProperties[key]);
                     }
                 }
+                if (response.resultMessage) {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+                    resultMessageMap.set('Result message details', response.resultMessage);
+                }
+                setResultMessage(resultMessageMap);
                 setContent(endPointMap);
                 setRequestParams(requestMap);
                 setIsModalOpen(true);
@@ -221,13 +243,9 @@ function ServiceList(): JSX.Element {
             });
     }
 
-    function updateCspFilters(resp: ServiceVo[]): void {
+    function updateCspFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        const cspSet = new Set<string>('');
-        resp.forEach((v) => {
-            cspSet.add(v.csp);
-        });
-        cspSet.forEach((csp) => {
+        Object.values(ServiceVo.csp).forEach((csp) => {
             const filter = {
                 text: csp,
                 value: csp,
@@ -237,13 +255,21 @@ function ServiceList(): JSX.Element {
         setCspFilters(filters);
     }
 
-    function updateCategoryFilters(resp: ServiceVo[]): void {
+    function updateServiceStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        const categorySet = new Set<string>('');
-        resp.forEach((v) => {
-            categorySet.add(v.category);
+        Object.values(ServiceVo.serviceState).forEach((serviceStateItem) => {
+            const filter = {
+                text: serviceStateItem,
+                value: serviceStateItem,
+            };
+            filters.push(filter);
         });
-        categorySet.forEach((category) => {
+        setServiceStateFilters(filters);
+    }
+
+    function updateCategoryFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(ServiceVo.category).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -303,22 +329,6 @@ function ServiceList(): JSX.Element {
         setCustomerServiceNameFilters(filters);
     }
 
-    function updateServiceStateFilters(resp: ServiceVo[]): void {
-        const filters: ColumnFilterItem[] = [];
-        const serviceStateSet = new Set<string>('');
-        resp.forEach((v) => {
-            serviceStateSet.add(v.serviceState);
-        });
-        serviceStateSet.forEach((serviceState) => {
-            const filter = {
-                text: serviceState,
-                value: serviceState,
-            };
-            filters.push(filter);
-        });
-        setServiceStateFilters(filters);
-    }
-
     function getServices(): void {
         const userName: string | null = localStorage.getItem(usernameKey);
         if (!userName) {
@@ -330,10 +340,10 @@ function ServiceList(): JSX.Element {
                 setServiceVoList(resp);
                 updateVersionFilters(resp);
                 updateNameFilters(resp);
-                updateCategoryFilters(resp);
-                updateCspFilters(resp);
+                updateCategoryFilters();
+                updateCspFilters();
+                updateServiceStateFilters();
                 updateCustomerServiceNameFilters(resp);
-                updateServiceStateFilters(resp);
             } else {
                 setServiceVoList(serviceList);
             }
@@ -353,11 +363,48 @@ function ServiceList(): JSX.Element {
         setIsModalOpen(false);
     };
 
+    const handleCancelMigrateModel = () => {
+        refreshData();
+        setCurrentServiceVo(undefined);
+        setIsMigrateModalOpen(false);
+    };
+
+    const getMigrateModalCloseStatus = (isClose: boolean) => {
+        setIsMigrateModalClosable(isClose);
+    };
+
+    const getMigrateModalOpenStatus = (isOpen: boolean) => {
+        refreshData();
+        setCurrentServiceVo(undefined);
+        setIsMigrateModalOpen(isOpen);
+    };
+
     return (
         <div className={'services-content'}>
             {tip}
             <Modal title={'Service Details'} width={700} footer={null} open={isModalOpen} onCancel={handleCancel}>
-                <MyServiceDetails endPointInfo={content} requestParamsInfo={requestParams} />
+                <MyServiceDetails
+                    endPointInfo={content}
+                    requestParamsInfo={requestParams}
+                    resultMessage={resultMessage}
+                />
+            </Modal>
+            <Modal
+                open={isMigrateModalOpen}
+                title={title}
+                closable={isMigrateModalClosable}
+                maskClosable={false}
+                footer={null}
+                onCancel={() => handleCancelMigrateModel()}
+                width={'50wh'}
+                mask={true}
+                bodyStyle={{ height: '70vh' }}
+            >
+                <MigratingServices
+                    currentSelectedService={currentServiceVo}
+                    getMigrateModalCloseStatus={getMigrateModalCloseStatus}
+                    getMigrateModalOpenStatus={getMigrateModalOpenStatus}
+                />
             </Modal>
 
             <div>
