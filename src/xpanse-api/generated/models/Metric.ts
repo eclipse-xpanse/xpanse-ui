@@ -54,5 +54,7 @@ export namespace Metric {
         MB = 'mb',
         KB = 'kb',
         PERCENTAGE = 'percentage',
+        BIT_S = 'bit/s',
+        BYTE_S = 'Byte/s',
     }
 }
