@@ -17,10 +17,7 @@ export function convertStringArrayToUnorderedList(result: string[]): string | JS
 }
 
 export function convertMapToUnorderedList(result: Map<string, string>, title: string): string | JSX.Element {
-    if (result.size === 1) {
-        return <ul>{result}</ul>;
-    }
-    if (result.size > 1) {
+    if (result.size > 0) {
         const items: JSX.Element[] = [];
         result.forEach((v, k) =>
             items.push(

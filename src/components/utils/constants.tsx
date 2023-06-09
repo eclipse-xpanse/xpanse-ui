@@ -23,3 +23,11 @@ export const monitorPageRoute: string = '/monitor';
 export const monitorLabelName: string = 'Monitor';
 export const monitorMetricQueueSize: number = 50;
 export const fetchMonitorMetricDataTimeInterval: number = 5000;
+// 1 hour.
+export const deployTimeout: number = 3600000;
+// 5 seconds.
+export const waitServicePeriod: number = 5000;
+
+export const destroyTimeout: number = 3600000;
+
+export const migrationStepsInterval: number = 1;
