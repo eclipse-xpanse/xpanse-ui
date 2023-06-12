@@ -10,6 +10,7 @@ import { ChangeEvent, useState } from 'react';
 import {
     DeployParam,
     NumberInputEventHandler,
+    OperationType,
     ParamOnChangeHandler,
     SwitchOnChangeHandler,
     TextInputEventHandler,
@@ -19,20 +20,14 @@ import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
-import { createServicePageRoute, usernameKey } from '../../utils/constants';
+import { createServicePageRoute, deployTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
-import OrderSubmitResult from './OrderSubmitResult';
-import DeploymentSuccessful from './DeploymentSuccessful';
-import OrderSubmitFailed from './OrderSubmitFailed';
-import DeploymentFailed from './DeploymentFailed';
+import { ProcessingStatus } from './ProcessingStatus';
+import { OrderSubmitResult } from './OrderSubmitResult';
+import { OrderSubmitFailed } from './OrderSubmitFailed';
 
-// 1 hour.
-const deployTimeout: number = 3600000;
-// 5 seconds.
-const waitServicePeriod: number = 5000;
-
-function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
+export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
         return <TextInput item={item} onChangeHandler={onChangeHandler as TextInputEventHandler} />;
     }
@@ -128,7 +123,13 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
                 if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
-                    setTip(OrderSubmitResult(DeploymentSuccessful(response), uuid, 'success'));
+                    setTip(
+                        OrderSubmitResult(
+                            ProcessingStatus(response, OperationType.Deploy as OperationType),
+                            uuid,
+                            'success'
+                        )
+                    );
                     setDeploying(false);
                 } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOYING) {
                     setTimeout(() => {
@@ -136,7 +137,13 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     }, waitServicePeriod);
                 } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_FAILED) {
                     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                    setTip(OrderSubmitResult(DeploymentFailed(response), uuid, 'error'));
+                    setTip(
+                        OrderSubmitResult(
+                            ProcessingStatus(response, OperationType.Deploy as OperationType),
+                            uuid,
+                            'error'
+                        )
+                    );
                     setRequestSubmitted(false);
                 }
             })

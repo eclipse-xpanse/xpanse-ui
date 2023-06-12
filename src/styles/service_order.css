@@ -260,3 +260,56 @@
 .services-loading-error {
     margin: 10px;
 }
+
+.migrate-select-destination-class {
+    height: 80%;
+}
+
+.migrate-select-destination-next-class {
+    float: left;
+    width: 450px;
+    text-align: right;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.migrate-step-title-inner-class {
+    height: 13vh;
+}
+
+.migrate-step-title-inner-class-show-tip {
+    height: 25vh;
+}
+
+.migrate-step-content-inner-class {
+    height: 50vh;
+    overflow: auto;
+    margin-left: 10px;
+}
+
+.migrate-step-content-inner-class-show-tip {
+    height: 39vh;
+    overflow: auto;
+    margin-left: 10px;
+}
+
+.migrate-step-button-inner-class {
+    height: 4vh;
+    margin-left: 10px;
+    margin-top: 1%;
+}
+
+.migrate-export-import-data-class {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10%;
+}
+
+.migrate-steps-operation-button-clas {
+    width: 85px;
+}
+
+.migrate-show-deploy-class {
+    overflow: auto;
+}
