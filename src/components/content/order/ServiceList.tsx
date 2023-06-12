@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Modal, Space, Table } from 'antd';
+import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -116,15 +116,25 @@ function ServiceList(): JSX.Element {
                             >
                                 migrate
                             </Button>
-                            <Button
-                                loading={record.id === id ? loading : false}
-                                type='primary'
-                                icon={<CloseCircleOutlined />}
-                                onClick={() => destroy(record)}
-                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
+
+                            <Popconfirm
+                                title='Destroy the service'
+                                description='Are you sure to destroy the service?'
+                                okText='Yes'
+                                cancelText='No'
+                                onConfirm={() => destroy(record)}
                             >
-                                destroy
-                            </Button>
+                                <Button
+                                    loading={record.id === id ? loading : false}
+                                    type='primary'
+                                    icon={<CloseCircleOutlined />}
+                                    disabled={
+                                        !(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)
+                                    }
+                                >
+                                    destroy
+                                </Button>
+                            </Popconfirm>
                             <Button
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
@@ -190,7 +200,6 @@ function ServiceList(): JSX.Element {
         ServiceService.destroy(record.id)
             .then(() => {
                 waitingServiceDestroy(record.id, destroyTimeout, new Date());
-                refreshData();
             })
             .catch((e: Error) => {
                 Tip('error', 'Destroy failed:' + e.message);
