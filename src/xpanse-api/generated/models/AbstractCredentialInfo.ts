@@ -7,7 +7,30 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type AbstractCredentialInfo = {
+import type { CredentialDefinition } from './CredentialDefinition';
+
+export type AbstractCredentialInfo = CredentialDefinition & {
+    /**
+     * The cloud service provider of the credential.
+     */
+    csp?: AbstractCredentialInfo.csp;
+    /**
+     * The user who create the credential.
+     */
+    xpanseUser?: string;
+    /**
+     * The name of the credential,this field is provided by  he the plugin of cloud service provider.
+     */
+    name?: string;
+    /**
+     * The description of the credential,this field is provided by  he the plugin of cloud service provider.
+     */
+    description?: string;
+    /**
+     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
+     */
+    type?: AbstractCredentialInfo.type;
+} & {
     /**
      * The cloud service provider of the credential.
      */

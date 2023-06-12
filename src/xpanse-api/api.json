@@ -68,6 +68,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -80,16 +90,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -156,6 +156,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -168,16 +178,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -224,6 +224,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -236,16 +246,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -303,6 +303,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -315,16 +325,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -384,6 +384,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -396,16 +406,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -463,6 +463,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -475,16 +485,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -541,6 +541,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -553,16 +563,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -650,6 +650,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -662,16 +672,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -730,6 +730,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -742,16 +752,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -800,6 +800,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -812,16 +822,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -869,6 +869,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -881,16 +891,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -929,6 +929,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -941,16 +951,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1002,6 +1002,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1014,16 +1024,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1084,6 +1084,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1096,16 +1106,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1143,6 +1143,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1155,16 +1165,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1267,6 +1267,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1279,16 +1289,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1348,6 +1348,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1360,16 +1370,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1417,6 +1417,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1429,16 +1439,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1499,6 +1499,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1511,16 +1521,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1614,6 +1614,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1626,16 +1636,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1676,6 +1676,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1688,16 +1698,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1792,6 +1792,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1804,16 +1814,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1907,6 +1907,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1919,16 +1929,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1968,6 +1968,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1980,16 +1990,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2049,6 +2049,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2061,16 +2071,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2139,6 +2139,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2151,16 +2161,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2213,6 +2213,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2225,16 +2235,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2298,6 +2298,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2310,16 +2320,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2370,6 +2370,16 @@
                             }
                         }
                     },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "*/*": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2382,16 +2392,6 @@
                     },
                     "404": {
                         "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2842,6 +2842,9 @@
                     "value": {
                         "type": "string",
                         "description": "The value of the CredentialVariable, this field is filled by the user."
+                    },
+                    "mandatory": {
+                        "type": "boolean"
                     }
                 },
                 "description": "The variables list of the credential"
@@ -3427,30 +3430,38 @@
             "AbstractCredentialInfo": {
                 "required": ["csp", "description", "name", "type", "xpanseUser"],
                 "type": "object",
-                "properties": {
-                    "csp": {
-                        "type": "string",
-                        "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/CredentialDefinition"
                     },
-                    "xpanseUser": {
-                        "type": "string",
-                        "description": "The user who create the credential."
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                    {
+                        "type": "object",
+                        "properties": {
+                            "csp": {
+                                "type": "string",
+                                "description": "The cloud service provider of the credential.",
+                                "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            },
+                            "xpanseUser": {
+                                "type": "string",
+                                "description": "The user who create the credential."
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
+                            },
+                            "type": {
+                                "type": "string",
+                                "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            }
+                        }
                     }
-                }
+                ]
             }
         }
     }

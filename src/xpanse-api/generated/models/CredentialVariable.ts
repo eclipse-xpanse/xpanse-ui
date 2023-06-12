@@ -23,4 +23,5 @@ export type CredentialVariable = {
      * The value of the CredentialVariable, this field is filled by the user.
      */
     value: string;
+    mandatory?: boolean;
 };
