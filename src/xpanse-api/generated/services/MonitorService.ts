@@ -52,26 +52,6 @@ export class MonitorService {
     }
 
     /**
-     * Get metric types.
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static getMetricTypes(): CancelablePromise<
-        Array<'cpu' | 'mem' | 'vm_network_incoming' | 'vm_network_outgoing'>
-    > {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/monitor/metric/types',
-            errors: {
-                400: `Bad Request`,
-                404: `Not Found`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-            },
-        });
-    }
-
-    /**
      * Get metrics of the deployed service.
      * @param id Id of the deployed service
      * @param monitorResourceType Types of the monitor resource.
