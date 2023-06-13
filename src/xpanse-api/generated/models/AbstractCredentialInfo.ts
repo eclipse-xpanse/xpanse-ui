@@ -7,9 +7,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CredentialDefinition } from './CredentialDefinition';
+import type { CredentialVariables } from './CredentialVariables';
 
-export type AbstractCredentialInfo = CredentialDefinition & {
+export type AbstractCredentialInfo = CredentialVariables & {
     /**
      * The cloud service provider of the credential.
      */

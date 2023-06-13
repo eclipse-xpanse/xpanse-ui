@@ -24,4 +24,5 @@ export type CredentialVariable = {
      */
     value: string;
     mandatory?: boolean;
+    sensitive?: boolean;
 };
