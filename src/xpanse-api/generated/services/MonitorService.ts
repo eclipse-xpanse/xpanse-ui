@@ -58,6 +58,7 @@ export class MonitorService {
      * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
      * @param to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
      * @param granularity Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
+     * @param onlyLastKnownMetric Returns only the last known metric. When this parameter is set then all other query parameters are ignored.
      * @returns Metric OK
      * @throws ApiError
      */
@@ -66,7 +67,8 @@ export class MonitorService {
         monitorResourceType?: 'cpu' | 'mem' | 'vm_network_incoming' | 'vm_network_outgoing',
         from?: number,
         to?: number,
-        granularity?: number
+        granularity?: number,
+        onlyLastKnownMetric: boolean = false
     ): CancelablePromise<Array<Metric>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -79,6 +81,7 @@ export class MonitorService {
                 from: from,
                 to: to,
                 granularity: granularity,
+                onlyLastKnownMetric: onlyLastKnownMetric,
             },
             errors: {
                 400: `Bad Request`,
@@ -96,6 +99,7 @@ export class MonitorService {
      * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
      * @param to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
      * @param granularity Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
+     * @param onlyLastKnownMetric Returns only the last known metric. When this parameter is set then all other query parameters are ignored.
      * @returns Metric OK
      * @throws ApiError
      */
@@ -104,7 +108,8 @@ export class MonitorService {
         monitorResourceType?: 'cpu' | 'mem' | 'vm_network_incoming' | 'vm_network_outgoing',
         from?: number,
         to?: number,
-        granularity?: number
+        granularity?: number,
+        onlyLastKnownMetric?: boolean
     ): CancelablePromise<Array<Metric>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -117,6 +122,7 @@ export class MonitorService {
                 from: from,
                 to: to,
                 granularity: granularity,
+                onlyLastKnownMetric: onlyLastKnownMetric,
             },
             errors: {
                 400: `Bad Request`,
