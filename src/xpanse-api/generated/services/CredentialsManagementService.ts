@@ -8,7 +8,7 @@
 /* eslint-disable */
 import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
 import type { CreateCredential } from '../models/CreateCredential';
-import type { CredentialDefinition } from '../models/CredentialDefinition';
+import type { CredentialVariables } from '../models/CredentialVariables';
 import type { Link } from '../models/Link';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -133,14 +133,14 @@ export class CredentialsManagementService {
      * @param cspName The cloud service provider.
      * @param userName The name of user who provided the credential.
      * @param type The type of credential.
-     * @returns CredentialDefinition OK
+     * @returns CredentialVariables OK
      * @throws ApiError
      */
     public static getCredentialDefinitionsByCsp(
         cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         userName: string,
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
-    ): CancelablePromise<Array<CredentialDefinition>> {
+    ): CancelablePromise<Array<CredentialVariables>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/auth/csp/{cspName}/credentials',

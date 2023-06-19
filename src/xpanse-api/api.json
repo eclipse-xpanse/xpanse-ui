@@ -78,8 +78,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -88,8 +88,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -166,8 +166,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -176,8 +176,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -234,8 +234,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -244,8 +244,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -313,8 +313,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -323,8 +323,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -394,8 +394,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -404,8 +404,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -473,8 +473,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -483,8 +483,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -551,8 +551,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -561,8 +561,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -660,8 +660,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -670,8 +670,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -740,8 +740,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -750,8 +750,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -810,8 +810,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -820,8 +820,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -879,8 +879,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -889,8 +889,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -939,8 +939,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -949,8 +949,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1012,8 +1012,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1022,8 +1022,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1094,8 +1094,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1104,8 +1104,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1153,8 +1153,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1163,8 +1163,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1277,8 +1277,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1287,8 +1287,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1358,8 +1358,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1368,8 +1368,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1427,8 +1427,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1437,8 +1437,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1509,8 +1509,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1519,8 +1519,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1624,8 +1624,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1634,8 +1634,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1652,69 +1652,6 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/Metric"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/monitor/metric/types": {
-            "get": {
-                "tags": ["Monitor"],
-                "description": "Get metric types.",
-                "operationId": "getMetricTypes",
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string",
-                                        "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
                                     }
                                 }
                             }
@@ -1802,8 +1739,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1812,8 +1749,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1917,8 +1854,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1927,8 +1864,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1978,8 +1915,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -1988,8 +1925,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2059,8 +1996,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2069,8 +2006,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2149,8 +2086,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2159,8 +2096,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2176,7 +2113,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CredentialDefinition"
+                                        "$ref": "#/components/schemas/CredentialVariables"
                                     }
                                 }
                             }
@@ -2223,8 +2160,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2233,8 +2170,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2308,8 +2245,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2318,8 +2255,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2380,8 +2317,8 @@
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "400": {
+                        "description": "Bad Request",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2390,8 +2327,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
+                    "404": {
+                        "description": "Not Found",
                         "content": {
                             "*/*": {
                                 "schema": {
@@ -2842,6 +2779,12 @@
                     "value": {
                         "type": "string",
                         "description": "The value of the CredentialVariable, this field is filled by the user."
+                    },
+                    "mandatory": {
+                        "type": "boolean"
+                    },
+                    "sensitive": {
+                        "type": "boolean"
                     }
                 },
                 "description": "The variables list of the credential"
@@ -3389,7 +3332,7 @@
                     }
                 }
             },
-            "CredentialDefinition": {
+            "CredentialVariables": {
                 "required": ["csp", "description", "name", "type", "variables", "xpanseUser"],
                 "type": "object",
                 "properties": {
@@ -3427,30 +3370,38 @@
             "AbstractCredentialInfo": {
                 "required": ["csp", "description", "name", "type", "xpanseUser"],
                 "type": "object",
-                "properties": {
-                    "csp": {
-                        "type": "string",
-                        "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/CredentialVariables"
                     },
-                    "xpanseUser": {
-                        "type": "string",
-                        "description": "The user who create the credential."
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                    {
+                        "type": "object",
+                        "properties": {
+                            "csp": {
+                                "type": "string",
+                                "description": "The cloud service provider of the credential.",
+                                "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            },
+                            "xpanseUser": {
+                                "type": "string",
+                                "description": "The user who create the credential."
+                            },
+                            "name": {
+                                "type": "string",
+                                "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
+                            },
+                            "description": {
+                                "type": "string",
+                                "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
+                            },
+                            "type": {
+                                "type": "string",
+                                "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            }
+                        }
                     }
-                }
+                ]
             }
         }
     }

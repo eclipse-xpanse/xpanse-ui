@@ -9,11 +9,11 @@
 
 import type { CredentialVariable } from './CredentialVariable';
 
-export type CredentialDefinition = {
+export type CredentialVariables = {
     /**
      * The cloud service provider of the credential.
      */
-    csp: CredentialDefinition.csp;
+    csp: CredentialVariables.csp;
     /**
      * The user who create the credential.
      */
@@ -29,14 +29,14 @@ export type CredentialDefinition = {
     /**
      * The type of the credential,this field is provided by  he the plugin of cloud service provider.
      */
-    type: CredentialDefinition.type;
+    type: CredentialVariables.type;
     /**
      * The variables list of the credential.
      */
     variables: Array<CredentialVariable>;
 };
 
-export namespace CredentialDefinition {
+export namespace CredentialVariables {
     /**
      * The cloud service provider of the credential.
      */
