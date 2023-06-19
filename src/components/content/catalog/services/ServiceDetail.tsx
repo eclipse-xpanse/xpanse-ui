@@ -8,6 +8,7 @@ import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { ApiDoc } from '../../order/ApiDoc';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function ServiceDetail({
     serviceDetails,
@@ -49,11 +50,11 @@ function ServiceDetail({
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>{serviceDetails.serviceState}</Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
-                    {serviceDetails.flavors
-                        .map((flavor) => {
+                    {convertStringArrayToUnorderedList(
+                        serviceDetails.flavors.map((flavor) => {
                             return flavor.name;
                         })
-                        .join(',')}
+                    )}
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
                     <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
