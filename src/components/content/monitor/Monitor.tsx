@@ -192,9 +192,9 @@ function Monitor(): JSX.Element {
                     if (refreshMonitorMetrics) {
                         clearInterval(refreshMonitorMetrics);
                     }
-                    setTipType('error');
+                    setTipType('success');
                     setTipMessage('No metrics found for the selected service.');
-                    setIsQueryResultAvailable(true);
+                    setIsQueryResultAvailable(false);
                 }
             })
             .catch(() => {
@@ -206,8 +206,8 @@ function Monitor(): JSX.Element {
                     clearInterval(refreshMonitorMetrics);
                 }
                 setTipType('error');
-                setTipMessage('No metrics found for the selected service.');
-                setIsQueryResultAvailable(true);
+                setTipMessage('Error while fetching metrics data');
+                setIsQueryResultAvailable(false);
             });
     };
     const startFetchMonitorMetricDataTimer = () => {
@@ -281,7 +281,7 @@ function Monitor(): JSX.Element {
             });
             const chartItem: Tab = {
                 key: k,
-                label: <b>{k.split('_')[0]}</b>,
+                label: <b>{k.replaceAll('_', ' ')}</b>,
                 children: <MonitorChart monitorType={k} metricProps={metricProps} onAutoRefresh={autoRefreshHandler} />,
             };
             chartItems.push(chartItem);
