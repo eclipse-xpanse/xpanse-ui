@@ -145,6 +145,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         )
                     );
                     setRequestSubmitted(false);
+                    setDeploying(false);
                 }
             })
             .catch((error) => {
