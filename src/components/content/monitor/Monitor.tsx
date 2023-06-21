@@ -169,7 +169,7 @@ function Monitor(): JSX.Element {
     }, [monitorMetricsQueue]);
 
     const fetchMonitorMetricsData = (selectedServiceId: string) => {
-        void MonitorService.getMetrics(selectedServiceId)
+        void MonitorService.getMetricsByServiceId(selectedServiceId, undefined, undefined, undefined, undefined, true)
             .then((rsp: Metric[]) => {
                 if (rsp.length > 0) {
                     setIsLoading(false);
