@@ -33,5 +33,6 @@ export namespace Response {
         TERRAFORM_SCRIPT_INVALID = 'Terraform Script Invalid',
         UNPROCESSABLE_ENTITY = 'Unprocessable Entity',
         RESPONSE_NOT_VALID = 'Response Not Valid',
+        FAILURE_WHILE_CONNECTING_TO_BACKEND = 'Failure while connecting to backend',
     }
 }
