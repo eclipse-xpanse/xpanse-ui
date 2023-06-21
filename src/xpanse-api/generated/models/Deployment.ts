@@ -22,6 +22,10 @@ export type Deployment = {
      */
     variables: Array<DeployVariable>;
     /**
+     * The credential type to do the deployment
+     */
+    credentialType?: Deployment.credentialType;
+    /**
      * The real deployer, something like terraform scripts...
      */
     deployer: string;
@@ -33,5 +37,15 @@ export namespace Deployment {
      */
     export enum kind {
         TERRAFORM = 'terraform',
+    }
+
+    /**
+     * The credential type to do the deployment
+     */
+    export enum credentialType {
+        VARIABLES = 'variables',
+        HTTP_AUTHENTICATION = 'http_authentication',
+        API_KEY = 'api_key',
+        OAUTH2 = 'oauth2',
     }
 }
