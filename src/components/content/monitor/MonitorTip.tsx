@@ -9,10 +9,12 @@ import React from 'react';
 export const MonitorTip = ({
     type,
     msg,
+    description,
     onRemove,
 }: {
     type: 'error' | 'success' | undefined;
     msg: string;
+    description: string;
     onRemove: () => void;
 }): JSX.Element => {
     if (!type) {
@@ -23,9 +25,10 @@ export const MonitorTip = ({
         <div className={'monitor-tip-class'}>
             {' '}
             <Alert
+                showIcon={true}
                 className={''}
-                message='Operating System Monitor:'
-                description={msg}
+                message={msg}
+                description={description}
                 type={type}
                 onClose={onRemove}
                 closable={true}
