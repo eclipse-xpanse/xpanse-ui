@@ -192,7 +192,7 @@ export const MigratingServices = ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
+                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
                         MigrateSubmitResult(
                             ProcessingStatus(response, OperationType.Deploy as OperationType),
@@ -211,7 +211,7 @@ export const MigratingServices = ({
                     return () => {
                         clearTimeout(retryDeployTimer);
                     };
-                } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_FAILED) {
+                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
                     setTip(
                         MigrateSubmitResult(
                             ProcessingStatus(response, OperationType.Deploy as OperationType),
@@ -291,7 +291,7 @@ export const MigratingServices = ({
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_SUCCESS) {
+                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     setTip(
                         MigrateSubmitResult(
                             ProcessingStatus(response, OperationType.Destroy as OperationType),
@@ -308,7 +308,7 @@ export const MigratingServices = ({
                     return () => {
                         clearTimeout(retryDestroyTimer);
                     };
-                } else if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_FAILED) {
+                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED) {
                     setTip(
                         MigrateSubmitResult(
                             ProcessingStatus(response, OperationType.Destroy as OperationType),

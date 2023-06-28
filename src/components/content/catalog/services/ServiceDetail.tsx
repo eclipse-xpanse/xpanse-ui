@@ -48,7 +48,7 @@ function ServiceDetail({
                 <Descriptions.Item label='Billing Mode'>{serviceDetails.billing.model}</Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
-                <Descriptions.Item label='Status'>{serviceDetails.serviceState}</Descriptions.Item>
+                <Descriptions.Item label='Status'>{serviceDetails.serviceRegistrationState}</Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
                     {convertStringArrayToUnorderedList(
                         serviceDetails.flavors.map((flavor) => {

@@ -23,7 +23,6 @@ export class AdminService {
             url: '/xpanse/health',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
