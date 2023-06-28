@@ -6,26 +6,21 @@
 import 'echarts/lib/chart/bar';
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Spin, Tabs } from 'antd';
-import { Tab } from 'rc-tabs/lib/interface';
+import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Metric, MonitorService, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
-import { fetchMonitorMetricDataTimeInterval, monitorMetricQueueSize, usernameKey } from '../../utils/constants';
+import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { usernameKey } from '../../utils/constants';
 import { MonitorTip } from './MonitorTip';
-import { MetricProps } from './metricProps';
-import MonitorChart from './MonitorChart';
+import { MonitorChart } from './MonitorChart';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
     const [serviceId, setServiceId] = useState<string>('');
     const [deployedServiceList, setDeployedServiceList] = useState<ServiceVo[]>([]);
-    const [monitorMetricsQueue, setMonitorMetricsQueue] = useState<Metric[][]>(new Array(monitorMetricQueueSize));
-    const [refreshMonitorMetrics, setRefreshMonitorMetrics] = useState<number | undefined>(undefined);
-    const [monitorChartItems, setMonitorChartItems] = useState<Tab[]>([]);
-    const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [tipMessage, setTipMessage] = useState<string>('');
+    const [tipDescription, setTipDescription] = useState<string>('');
     const [isQueryResultAvailable, setIsQueryResultAvailable] = useState<boolean>(false);
     const [serviceNameList, setServiceNameList] = useState<{ value: string; label: string }[]>([
         { value: '', label: '' },
@@ -80,12 +75,19 @@ function Monitor(): JSX.Element {
                     setCustomerServiceNameList(customerServiceNameList);
                 }
             })
-            .catch(() => {
+            .catch((error: Error) => {
                 setDeployedServiceList([]);
                 setServiceNameList([]);
                 setCustomerServiceNameList([]);
                 setTipType('error');
-                setTipMessage('Error while fetching all deployed services.');
+                if (error instanceof ApiError && 'details' in error.body) {
+                    const response: Response = error.body as Response;
+                    setTipMessage(response.resultType.valueOf());
+                    setTipDescription(response.details.join());
+                } else {
+                    setTipMessage('Error while fetching all deployed services.');
+                    setTipDescription(error.message);
+                }
                 setIsQueryResultAvailable(true);
             });
     }, []);
@@ -115,11 +117,6 @@ function Monitor(): JSX.Element {
 
     const handleChangeCustomerServiceName = (selectCustomerServiceName: string) => {
         setServiceId('');
-        setIsAutoRefresh(false);
-        if (refreshMonitorMetrics) {
-            clearInterval(refreshMonitorMetrics);
-        }
-        setMonitorMetricsQueue([]);
         form.setFieldsValue({ serviceId: selectCustomerServiceName });
         if (customerServiceNameList.length > 0) {
             const currentCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] =
@@ -130,173 +127,22 @@ function Monitor(): JSX.Element {
 
     const onFinish = (values: { serviceName: string; customerServiceName: string; serviceId: string }) => {
         setServiceId('');
-        setIsAutoRefresh(false);
-        if (refreshMonitorMetrics) {
-            clearInterval(refreshMonitorMetrics);
-        }
-        setMonitorMetricsQueue([]);
         if (!values.serviceId) {
+            setTipType(undefined);
+            setTipMessage('');
+            setTipDescription('');
             return;
         }
-        setIsLoading(true);
-        setIsQueryResultAvailable(true);
+        setIsLoading(false);
+        setIsQueryResultAvailable(false);
         setServiceId(values.serviceId);
-        setIsAutoRefresh(true);
-    };
-    const autoRefreshHandler = (switchResult: boolean) => {
-        setIsAutoRefresh(switchResult);
-    };
-
-    useEffect(() => {
-        if (serviceId.length > 0) {
-            if (isAutoRefresh) {
-                startFetchMonitorMetricDataTimer();
-            } else {
-                if (refreshMonitorMetrics) {
-                    clearInterval(refreshMonitorMetrics);
-                }
-                return;
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceId, isAutoRefresh]);
-
-    useEffect(() => {
-        if (monitorMetricsQueue.length > 0) {
-            showMonitorMetrics(monitorMetricsQueue);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [monitorMetricsQueue]);
-
-    const fetchMonitorMetricsData = (selectedServiceId: string) => {
-        void MonitorService.getMetricsByServiceId(selectedServiceId, undefined, undefined, undefined, undefined, true)
-            .then((rsp: Metric[]) => {
-                if (rsp.length > 0) {
-                    setIsLoading(false);
-                    setIsQueryResultAvailable(false);
-                    setTipMessage('');
-                    setTipType(undefined);
-                    setMonitorMetricsQueue((prevQueue) => {
-                        const newQueue = [...prevQueue, rsp];
-                        if (newQueue.length > monitorMetricQueueSize) {
-                            newQueue.shift();
-                        }
-
-                        return newQueue;
-                    });
-                } else {
-                    setIsLoading(false);
-                    setServiceId('');
-                    setIsAutoRefresh(false);
-                    setMonitorMetricsQueue([]);
-                    if (refreshMonitorMetrics) {
-                        clearInterval(refreshMonitorMetrics);
-                    }
-                    setTipType('success');
-                    setTipMessage('No metrics found for the selected service.');
-                    setIsQueryResultAvailable(false);
-                }
-            })
-            .catch(() => {
-                setIsLoading(false);
-                setServiceId('');
-                setIsAutoRefresh(false);
-                setMonitorMetricsQueue([]);
-                if (refreshMonitorMetrics) {
-                    clearInterval(refreshMonitorMetrics);
-                }
-                setTipType('error');
-                setTipMessage('Error while fetching metrics data');
-                setIsQueryResultAvailable(false);
-            });
-    };
-    const startFetchMonitorMetricDataTimer = () => {
-        try {
-            const newFetchMonitorMetricDataTimer: number = window.setInterval(
-                () => fetchMonitorMetricsData(serviceId),
-                fetchMonitorMetricDataTimeInterval
-            );
-            setRefreshMonitorMetrics(newFetchMonitorMetricDataTimer);
-            return () => {
-                if (refreshMonitorMetrics) {
-                    clearInterval(refreshMonitorMetrics);
-                }
-            };
-        } catch (error) {
-            setIsLoading(false);
-            setServiceId('');
-            setIsAutoRefresh(false);
-            setMonitorMetricsQueue([]);
-            if (refreshMonitorMetrics) {
-                clearInterval(refreshMonitorMetrics);
-            }
-            setTipType('error');
-            setTipMessage('An exception occurred in the request metric timer.');
-            setIsQueryResultAvailable(true);
-        }
-    };
-
-    const showMonitorMetrics = (monitorMetricsQueue: Metric[][]) => {
-        if (monitorMetricsQueue.length === 0) {
-            return;
-        }
-        const metrics: Metric[] = [];
-        monitorMetricsQueue.forEach((item) => {
-            item.forEach((metric) => {
-                metrics.push(metric);
-            });
-        });
-        const currentMetrics: Map<string, Metric[]> = new Map<string, Metric[]>();
-        for (const metric of metrics) {
-            if (metric.name && !currentMetrics.has(metric.name)) {
-                currentMetrics.set(
-                    metric.name,
-                    metrics.filter((data: Metric) => data.name === metric.name)
-                );
-            }
-        }
-        const sortedCurrentMetrics = new Map([...currentMetrics.entries()].sort());
-        setMonitorChartItems(getMonitorChartItems(sortedCurrentMetrics));
-    };
-
-    const getMonitorChartItems = (currentMetrics: Map<string, Metric[]>) => {
-        const chartItems: Tab[] = [];
-        currentMetrics.forEach((v, k) => {
-            const metricProps: MetricProps[] = [];
-            v.forEach((metric: Metric) => {
-                const labelsMap = new Map<string, string>();
-                if (metric.labels) {
-                    for (const key in metric.labels) {
-                        labelsMap.set(key, metric.labels[key]);
-                    }
-                }
-                const metricProp: MetricProps = {
-                    id: labelsMap.get('id') ?? '',
-                    name: metric.name,
-                    vmName: labelsMap.get('name') ?? '',
-                    value: metric.metrics?.[0]?.value ?? 0,
-                    unit: metric.unit,
-                };
-                metricProps.push(metricProp);
-            });
-            const chartItem: Tab = {
-                key: k,
-                label: <b>{k.replaceAll('_', ' ')}</b>,
-                children: <MonitorChart monitorType={k} metricProps={metricProps} onAutoRefresh={autoRefreshHandler} />,
-            };
-            chartItems.push(chartItem);
-        });
-        return chartItems;
     };
     const onReset = () => {
         setServiceId('');
-        setIsAutoRefresh(false);
-        if (refreshMonitorMetrics) {
-            clearInterval(refreshMonitorMetrics);
-        }
         setTipType(undefined);
+        setTipMessage('');
+        setTipDescription('');
         setIsQueryResultAvailable(false);
-        setMonitorMetricsQueue([]);
         form.resetFields();
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: ServiceVo) => {
@@ -316,26 +162,31 @@ function Monitor(): JSX.Element {
     const onFinishFailed = () => {
         setIsLoading(false);
         setServiceId('');
-        setIsAutoRefresh(false);
-        setMonitorMetricsQueue([]);
-        if (refreshMonitorMetrics) {
-            clearInterval(refreshMonitorMetrics);
-        }
-        setTipType('error');
-        setTipMessage('An exception occurred while querying metrics.');
-        setIsQueryResultAvailable(true);
     };
 
     const onRemove = () => {
         setServiceId('');
-        setIsAutoRefresh(false);
-        setMonitorMetricsQueue([]);
-        if (refreshMonitorMetrics) {
-            clearInterval(refreshMonitorMetrics);
-        }
         form.resetFields();
         setTipType(undefined);
+        setTipMessage('');
+        setTipDescription('');
         setIsQueryResultAvailable(false);
+    };
+
+    const getTipInfo = (
+        serviceId: string,
+        isLoading: boolean,
+        tipType: 'error' | 'success' | undefined,
+        tipMessage: string,
+        tipDescription: string,
+        isQueryResultAvailable: boolean
+    ) => {
+        setServiceId(serviceId);
+        setIsLoading(isLoading);
+        setTipType(tipType);
+        setTipMessage(tipMessage);
+        setTipDescription(tipDescription);
+        setIsQueryResultAvailable(isQueryResultAvailable);
     };
 
     return (
@@ -346,7 +197,7 @@ function Monitor(): JSX.Element {
                     &nbsp; Operating System Monitor
                 </h3>
             </div>
-            <MonitorTip type={tipType} msg={tipMessage} onRemove={onRemove} />
+            <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
             <Form
                 name='basic'
                 form={form}
@@ -399,7 +250,7 @@ function Monitor(): JSX.Element {
                                 Search
                             </Button>{' '}
                             &nbsp;&nbsp;
-                            <Button htmlType='button' disabled={isQueryResultAvailable} onClick={onReset}>
+                            <Button htmlType='button' onClick={onReset}>
                                 Cancel
                             </Button>
                         </Form.Item>
@@ -414,7 +265,7 @@ function Monitor(): JSX.Element {
                         </div>
                     ) : (
                         <div>
-                            <Tabs defaultActiveKey='1' items={monitorChartItems} />
+                            <MonitorChart serviceId={serviceId} getTipInfo={getTipInfo} />
                         </div>
                     )}
                 </>

@@ -22,7 +22,8 @@ export const createServicePageRoute: string = '/createService';
 export const monitorPageRoute: string = '/monitor';
 export const monitorLabelName: string = 'Monitor';
 export const monitorMetricQueueSize: number = 50;
-export const fetchMonitorMetricDataTimeInterval: number = 5000;
+export const fetchOnlyLastKnownMonitorMetricDataTimeInterval: number = 5 * 1000;
+export const fetchMonitorMetricDataTimeInterval: number = 60 * 1000;
 // 1 hour.
 export const deployTimeout: number = 3600000;
 // 5 seconds.
