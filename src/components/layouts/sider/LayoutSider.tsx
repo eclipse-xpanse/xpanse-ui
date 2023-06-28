@@ -10,7 +10,7 @@ import { homePageRoute, usernameKey } from '../../utils/constants';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
-import { monitorMenu, serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
+import { credentialMenu, monitorMenu, serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import MenuLoading from './MenuLoading';
 import { ServiceVendorService } from '../../../xpanse-api/generated';
@@ -37,7 +37,7 @@ function LayoutSider(): JSX.Element {
         } else {
             ServiceVendorService.listCategories()
                 .then((rsp) => {
-                    setItems([servicesMenu(rsp), serviceListMenu(), monitorMenu()]);
+                    setItems([servicesMenu(rsp), serviceListMenu(), monitorMenu(), credentialMenu()]);
                 })
                 .catch((error: Error) => {
                     console.log(error.message);

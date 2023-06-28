@@ -17,6 +17,7 @@ import {
     myServicesRoute,
     servicesPageRoute,
     monitorPageRoute,
+    credentialPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Catalog from './components/content/catalog/Catalog';
@@ -25,6 +26,7 @@ import CreateService from './components/content/order/CreateService';
 import OrderSubmitPage from './components/content/order/OrderSubmit';
 import ServiceList from './components/content/order/ServiceList';
 import Monitor from './components/content/monitor/Monitor';
+import Credential from './components/content/credential/Credential';
 
 function App(): JSX.Element {
     return (
@@ -90,6 +92,14 @@ function App(): JSX.Element {
                 element={
                     <Protected allowedRole={'user'}>
                         <Monitor />
+                    </Protected>
+                }
+            />
+            <Route
+                path={credentialPageRoute}
+                element={
+                    <Protected allowedRole={'user'}>
+                        <Credential />
                     </Protected>
                 }
             />
