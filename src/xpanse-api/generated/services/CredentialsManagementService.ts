@@ -29,7 +29,6 @@ export class CredentialsManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -51,7 +50,6 @@ export class CredentialsManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -74,7 +72,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -102,7 +99,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -135,7 +131,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -160,7 +155,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -190,7 +184,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -223,7 +216,6 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,

@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { ApiError, Response, ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/service_instance_list.css';
@@ -14,6 +14,7 @@ import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { destroyTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
 import { MigratingServices } from './migrate/MigratingServices';
+import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function ServiceList(): JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -34,6 +35,7 @@ function ServiceList(): JSX.Element {
     const [title, setTitle] = useState<JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [isMigrateModalClosable, setIsMigrateModalClosable] = useState<boolean>(true);
+    const [servicesLoadingError, setServicesLoadingError] = useState<JSX.Element>(<></>);
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -97,7 +99,8 @@ function ServiceList(): JSX.Element {
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.serviceState.startsWith(value.toString()),
+            onFilter: (value: string | number | boolean, record) =>
+                record.serviceDeploymentState.startsWith(value.toString()),
         },
         {
             title: 'Operation',
@@ -112,7 +115,12 @@ function ServiceList(): JSX.Element {
                                 onClick={() => {
                                     migrate(record);
                                 }}
-                                disabled={!(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)}
+                                disabled={
+                                    !(
+                                        record.serviceDeploymentState ===
+                                            ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !loading
+                                    )
+                                }
                             >
                                 migrate
                             </Button>
@@ -129,7 +137,10 @@ function ServiceList(): JSX.Element {
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
                                     disabled={
-                                        !(record.serviceState === ServiceVo.serviceState.DEPLOY_SUCCESS && !loading)
+                                        !(
+                                            record.serviceDeploymentState ===
+                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !loading
+                                        )
                                     }
                                 >
                                     destroy
@@ -171,12 +182,12 @@ function ServiceList(): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_SUCCESS) {
+                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     Tip('success', 'Destroy success.');
                     setLoading(false);
                     refreshData();
                     TipClear();
-                } else if (response.serviceState === ServiceDetailVo.serviceState.DESTROY_FAILED) {
+                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED) {
                     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                     Tip('error', 'Destroy failed:' + response.resultMessage);
                     setLoading(false);
@@ -266,7 +277,7 @@ function ServiceList(): JSX.Element {
 
     function updateServiceStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceVo.serviceState).forEach((serviceStateItem) => {
+        Object.values(ServiceVo.serviceDeploymentState).forEach((serviceStateItem) => {
             const filter = {
                 text: serviceStateItem,
                 value: serviceStateItem,
@@ -343,20 +354,43 @@ function ServiceList(): JSX.Element {
         if (!userName) {
             return;
         }
-        void ServiceService.getDeployedServicesByUser(userName).then((resp) => {
-            const serviceList: ServiceVo[] = [];
-            if (resp.length > 0) {
-                setServiceVoList(resp);
-                updateVersionFilters(resp);
-                updateNameFilters(resp);
-                updateCategoryFilters();
-                updateCspFilters();
-                updateServiceStateFilters();
-                updateCustomerServiceNameFilters(resp);
-            } else {
-                setServiceVoList(serviceList);
-            }
-        });
+        void ServiceService.getDeployedServicesByUser(userName)
+            .then((resp) => {
+                const serviceList: ServiceVo[] = [];
+                if (resp.length > 0) {
+                    setServiceVoList(resp);
+                    updateVersionFilters(resp);
+                    updateNameFilters(resp);
+                    updateCategoryFilters();
+                    updateCspFilters();
+                    updateServiceStateFilters();
+                    updateCustomerServiceNameFilters(resp);
+                } else {
+                    setServiceVoList(serviceList);
+                }
+            })
+            .catch((error: Error) => {
+                if (error instanceof ApiError && 'details' in error.body) {
+                    const response: Response = error.body as Response;
+                    setServicesLoadingError(
+                        <Alert
+                            message={response.resultType.valueOf()}
+                            description={convertStringArrayToUnorderedList(response.details)}
+                            type={'error'}
+                            closable={true}
+                        />
+                    );
+                } else {
+                    setServicesLoadingError(
+                        <Alert
+                            message='Fetching Service Details Failed'
+                            description={error.message}
+                            type={'error'}
+                            closable={true}
+                        />
+                    );
+                }
+            });
     }
 
     useEffect(() => {
@@ -427,6 +461,7 @@ function ServiceList(): JSX.Element {
                 >
                     refresh
                 </Button>
+                {servicesLoadingError}
             </div>
             <div className={'service-instance-list'}>
                 <Table columns={columns} dataSource={serviceVoList} />

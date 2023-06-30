@@ -70,7 +70,7 @@ export type UserAvailableServiceVo = {
     /**
      * The state of the available service.
      */
-    serviceState: UserAvailableServiceVo.serviceState;
+    serviceRegistrationState: UserAvailableServiceVo.serviceRegistrationState;
     links?: Array<Link>;
 };
 
@@ -107,14 +107,8 @@ export namespace UserAvailableServiceVo {
     /**
      * The state of the available service.
      */
-    export enum serviceState {
+    export enum serviceRegistrationState {
         REGISTERED = 'REGISTERED',
         UPDATED = 'UPDATED',
-        DEPLOYING = 'DEPLOYING',
-        DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
-        DEPLOY_FAILED = 'DEPLOY_FAILED',
-        DESTROYING = 'DESTROYING',
-        DESTROY_SUCCESS = 'DESTROY_SUCCESS',
-        DESTROY_FAILED = 'DESTROY_FAILED',
     }
 }
