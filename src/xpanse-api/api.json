@@ -61,17 +61,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -81,17 +71,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -149,17 +149,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -169,17 +159,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -217,17 +217,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -237,17 +227,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -257,7 +257,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -296,17 +296,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -316,17 +306,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -346,23 +346,11 @@
                 }
             }
         },
-        "/xpanse/auth/csp/{cspName}/credential": {
+        "/xpanse/auth/csp/credential": {
             "put": {
                 "tags": ["Credentials Management"],
                 "description": "Update credential of the cloud service provider.",
                 "operationId": "updateCredential",
-                "parameters": [
-                    {
-                        "name": "cspName",
-                        "in": "path",
-                        "description": "The cloud service provider",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
-                        }
-                    }
-                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -377,17 +365,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -397,32 +375,35 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "boolean"
+                                    "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             },
@@ -430,18 +411,6 @@
                 "tags": ["Credentials Management"],
                 "description": "Add credential of the cloud service provider.",
                 "operationId": "addCredential",
-                "parameters": [
-                    {
-                        "name": "cspName",
-                        "in": "path",
-                        "description": "The cloud service provider.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
-                        }
-                    }
-                ],
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -456,17 +425,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -476,65 +435,7 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
                             "application/json": {
-                                "schema": {
-                                    "type": "boolean"
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "tags": ["Credentials Management"],
-                "description": "Delete credential of the cloud service provider and the user.",
-                "operationId": "deleteCredential",
-                "parameters": [
-                    {
-                        "name": "cspName",
-                        "in": "path",
-                        "description": "The cloud service provider.",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
-                        }
-                    },
-                    {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided credential.",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "*/*": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -544,42 +445,25 @@
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "boolean"
+                                    "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
+                    },
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
@@ -643,17 +527,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -663,17 +537,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -723,17 +607,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -743,17 +617,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -793,17 +677,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -813,17 +687,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -862,17 +746,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -882,17 +756,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -922,17 +806,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -942,17 +816,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -995,17 +879,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1015,17 +889,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1077,17 +961,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1097,17 +971,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1136,17 +1020,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1156,17 +1030,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1260,17 +1144,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1280,17 +1154,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1341,17 +1225,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1361,17 +1235,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1410,17 +1294,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1430,17 +1304,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1492,17 +1376,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1512,17 +1386,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1537,121 +1421,6 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/CategoryOclVo"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/monitor/metric/{id}": {
-            "get": {
-                "tags": ["Monitor"],
-                "description": "Get metrics of the deployed service.",
-                "operationId": "getMetrics",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "Id of the deployed service",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "monitorResourceType",
-                        "in": "query",
-                        "description": "Types of the monitor resource",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
-                        }
-                    },
-                    {
-                        "name": "from",
-                        "in": "query",
-                        "description": "Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.",
-                        "required": false,
-                        "schema": {
-                            "minimum": 0,
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
-                    {
-                        "name": "to",
-                        "in": "query",
-                        "description": "End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.",
-                        "required": false,
-                        "schema": {
-                            "minimum": 0,
-                            "type": "integer",
-                            "format": "int64"
-                        }
-                    },
-                    {
-                        "name": "granularity",
-                        "in": "query",
-                        "description": "Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "format": "int32"
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Not Found",
-                        "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/Metric"
                                     }
                                 }
                             }
@@ -1716,23 +1485,23 @@
                             "type": "integer",
                             "format": "int32"
                         }
+                    },
+                    {
+                        "name": "onlyLastKnownMetric",
+                        "in": "query",
+                        "description": "Returns only the last known metric. When this parameter is set then all other query parameters are ignored.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false
+                        }
                     }
                 ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1742,17 +1511,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1831,23 +1610,22 @@
                             "type": "integer",
                             "format": "int32"
                         }
+                    },
+                    {
+                        "name": "onlyLastKnownMetric",
+                        "in": "query",
+                        "description": "Returns only the last known metric. When this parameter is set then all other query parameters are ignored.",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean"
+                        }
                     }
                 ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1857,17 +1635,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1898,17 +1686,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1918,17 +1696,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1941,6 +1729,79 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/SystemStatus"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/auth/user/credentials": {
+            "get": {
+                "tags": ["Credentials Management"],
+                "description": "List all credentials of the user.",
+                "operationId": "getCredentialsByUser",
+                "parameters": [
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "The name of user who provided the credential.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AbstractCredentialInfo"
+                                    }
                                 }
                             }
                         }
@@ -1979,17 +1840,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -1999,17 +1850,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2033,7 +1894,7 @@
             "get": {
                 "tags": ["Credentials Management"],
                 "description": "List credentials of the cloud service provider and the user.",
-                "operationId": "getCredentialDefinitionsByCsp",
+                "operationId": "getCredentials",
                 "parameters": [
                     {
                         "name": "cspName",
@@ -2069,17 +1930,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2089,17 +1940,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2113,7 +1974,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/CredentialVariables"
+                                        "$ref": "#/components/schemas/AbstractCredentialInfo"
                                     }
                                 }
                             }
@@ -2143,17 +2004,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2163,17 +2014,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2228,17 +2089,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2248,17 +2099,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2300,17 +2161,7 @@
                     "500": {
                         "description": "Internal Server Error",
                         "content": {
-                            "*/*": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2320,17 +2171,27 @@
                     "400": {
                         "description": "Bad Request",
                         "content": {
-                            "*/*": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
-                            "*/*": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/Response"
                                 }
@@ -2349,6 +2210,89 @@
                     }
                 }
             }
+        },
+        "/xpanse/auth/csp/{cspName}/credential": {
+            "delete": {
+                "tags": ["Credentials Management"],
+                "description": "Delete credential of the cloud service provider and the user.",
+                "operationId": "deleteCredential",
+                "parameters": [
+                    {
+                        "name": "cspName",
+                        "in": "path",
+                        "description": "The cloud service provider.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "The name of user who provided credential.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "The type of credential.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -2362,11 +2306,29 @@
                         "description": "The result code of response.",
                         "enum": [
                             "Success",
-                            "Runtime Failure",
+                            "Runtime Error",
                             "Parameters Invalid",
                             "Terraform Script Invalid",
                             "Unprocessable Entity",
-                            "Response Not Valid"
+                            "Response Not Valid",
+                            "Failure while connecting to backend",
+                            "Credential Capability Not Found",
+                            "Credentials Not Found",
+                            "Credential Variables Not Complete",
+                            "Flavor Invalid",
+                            "Terraform Execution Failed",
+                            "Plugin Not Found",
+                            "Deployer Not Found",
+                            "Terraform Provider Not Found",
+                            "No Credential Definition Available",
+                            "Invalid Service State",
+                            "Resource Invalid For Monitoring",
+                            "Unhandled Exception",
+                            "Service Already Registered",
+                            "Icon Processing Failed",
+                            "Service Not Registered",
+                            "Service Deployment Not Found",
+                            "Resource Not Found"
                         ]
                     },
                     "details": {
@@ -2487,6 +2449,11 @@
                         "items": {
                             "$ref": "#/components/schemas/DeployVariable"
                         }
+                    },
+                    "credentialType": {
+                        "type": "string",
+                        "description": "The credential type to do the deployment",
+                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                     },
                     "deployer": {
                         "type": "string",
@@ -2649,7 +2616,7 @@
                     "lastModifiedTime",
                     "name",
                     "ocl",
-                    "serviceState",
+                    "serviceRegistrationState",
                     "version"
                 ],
                 "type": "object",
@@ -2701,19 +2668,10 @@
                         "description": "Last updateTime of the registered service.",
                         "format": "date-time"
                     },
-                    "serviceState": {
+                    "serviceRegistrationState": {
                         "type": "string",
                         "description": "State of service.",
-                        "enum": [
-                            "REGISTERED",
-                            "UPDATED",
-                            "DEPLOYING",
-                            "DEPLOY_SUCCESS",
-                            "DEPLOY_FAILED",
-                            "DESTROYING",
-                            "DESTROY_SUCCESS",
-                            "DESTROY_FAILED"
-                        ]
+                        "enum": ["REGISTERED", "UPDATED"]
                     },
                     "links": {
                         "type": "array",
@@ -2765,7 +2723,7 @@
                 }
             },
             "CredentialVariable": {
-                "required": ["description", "name", "value"],
+                "required": ["description", "isSensitive", "name", "value"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -2776,15 +2734,18 @@
                         "type": "string",
                         "description": "The description of the CredentialVariable,this field is provided by the plugin of cloud service provider."
                     },
+                    "isMandatory": {
+                        "type": "boolean",
+                        "description": "If the variable is mandatory. If is optional then the credential completeness check will ignore this variable. It is upto the plugin to decide what needs to be done if this optional credential variable is present.",
+                        "default": true
+                    },
+                    "isSensitive": {
+                        "type": "boolean",
+                        "description": "Defines if the particular variable contains sensitive data. For example the value is false for username and true for password variables respectively."
+                    },
                     "value": {
                         "type": "string",
                         "description": "The value of the CredentialVariable, this field is filled by the user."
-                    },
-                    "mandatory": {
-                        "type": "boolean"
-                    },
-                    "sensitive": {
-                        "type": "boolean"
                     }
                 },
                 "description": "The variables list of the credential"
@@ -2856,7 +2817,7 @@
                     "id",
                     "lastModifiedTime",
                     "name",
-                    "serviceState",
+                    "serviceDeploymentState",
                     "userName",
                     "version"
                 ],
@@ -2908,12 +2869,10 @@
                         "type": "string",
                         "description": "The flavor of the service"
                     },
-                    "serviceState": {
+                    "serviceDeploymentState": {
                         "type": "string",
                         "description": "The state of the service",
                         "enum": [
-                            "REGISTERED",
-                            "UPDATED",
                             "DEPLOYING",
                             "DEPLOY_SUCCESS",
                             "DEPLOY_FAILED",
@@ -2971,7 +2930,7 @@
                     "id",
                     "lastModifiedTime",
                     "name",
-                    "serviceState",
+                    "serviceDeploymentState",
                     "userName",
                     "version"
                 ],
@@ -3023,12 +2982,10 @@
                         "type": "string",
                         "description": "The flavor of the service"
                     },
-                    "serviceState": {
+                    "serviceDeploymentState": {
                         "type": "string",
                         "description": "The state of the service",
                         "enum": [
-                            "REGISTERED",
-                            "UPDATED",
                             "DEPLOYING",
                             "DEPLOY_SUCCESS",
                             "DEPLOY_FAILED",
@@ -3085,7 +3042,7 @@
                     "name",
                     "namespace",
                     "regions",
-                    "serviceState",
+                    "serviceRegistrationState",
                     "variables",
                     "version"
                 ],
@@ -3171,19 +3128,10 @@
                         "description": "The latest update time of the available service.",
                         "format": "date-time"
                     },
-                    "serviceState": {
+                    "serviceRegistrationState": {
                         "type": "string",
                         "description": "The state of the available service.",
-                        "enum": [
-                            "REGISTERED",
-                            "UPDATED",
-                            "DEPLOYING",
-                            "DEPLOY_SUCCESS",
-                            "DEPLOY_FAILED",
-                            "DESTROYING",
-                            "DESTROY_SUCCESS",
-                            "DESTROY_FAILED"
-                        ]
+                        "enum": ["REGISTERED", "UPDATED"]
                     },
                     "links": {
                         "type": "array",
@@ -3255,7 +3203,7 @@
                 "description": "List of the registered service group by service version."
             },
             "Metric": {
-                "required": ["name", "type", "unit"],
+                "required": ["monitorResourceType", "name", "type", "unit"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -3270,6 +3218,11 @@
                         "type": "string",
                         "description": "The type of the metric.",
                         "enum": ["counter", "gauge", "histogram", "summary"]
+                    },
+                    "monitorResourceType": {
+                        "type": "string",
+                        "description": "The resource type of the metric.",
+                        "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
                     },
                     "unit": {
                         "type": "string",
@@ -3332,41 +3285,6 @@
                     }
                 }
             },
-            "CredentialVariables": {
-                "required": ["csp", "description", "name", "type", "variables", "xpanseUser"],
-                "type": "object",
-                "properties": {
-                    "csp": {
-                        "type": "string",
-                        "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
-                    },
-                    "xpanseUser": {
-                        "type": "string",
-                        "description": "The user who create the credential."
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
-                    },
-                    "type": {
-                        "type": "string",
-                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
-                    },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables list of the credential.",
-                        "items": {
-                            "$ref": "#/components/schemas/CredentialVariable"
-                        }
-                    }
-                }
-            },
             "AbstractCredentialInfo": {
                 "required": ["csp", "description", "name", "type", "xpanseUser"],
                 "type": "object",
@@ -3402,6 +3320,41 @@
                         }
                     }
                 ]
+            },
+            "CredentialVariables": {
+                "required": ["csp", "description", "name", "type", "variables", "xpanseUser"],
+                "type": "object",
+                "properties": {
+                    "csp": {
+                        "type": "string",
+                        "description": "The cloud service provider of the credential.",
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                    },
+                    "xpanseUser": {
+                        "type": "string",
+                        "description": "The user who create the credential."
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
+                    },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                    },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables list of the credential.",
+                        "items": {
+                            "$ref": "#/components/schemas/CredentialVariable"
+                        }
+                    }
+                }
             }
         }
     }

@@ -23,6 +23,10 @@ export type Metric = {
      */
     type: Metric.type;
     /**
+     * The resource type of the metric.
+     */
+    monitorResourceType: Metric.monitorResourceType;
+    /**
      * The unit of the metric.
      */
     unit: Metric.unit;
@@ -45,6 +49,16 @@ export namespace Metric {
         GAUGE = 'gauge',
         HISTOGRAM = 'histogram',
         SUMMARY = 'summary',
+    }
+
+    /**
+     * The resource type of the metric.
+     */
+    export enum monitorResourceType {
+        CPU = 'cpu',
+        MEM = 'mem',
+        VM_NETWORK_INCOMING = 'vm_network_incoming',
+        VM_NETWORK_OUTGOING = 'vm_network_outgoing',
     }
 
     /**

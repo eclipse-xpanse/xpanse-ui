@@ -6,15 +6,13 @@
 import { Alert } from 'antd';
 import React from 'react';
 
-export const MonitorTip = ({
+export const CredentialTip = ({
     type,
     msg,
-    description,
     onRemove,
 }: {
     type: 'error' | 'success' | undefined;
     msg: string;
-    description: string;
     onRemove: () => void;
 }): JSX.Element => {
     if (!type) {
@@ -22,17 +20,9 @@ export const MonitorTip = ({
     }
 
     return (
-        <div className={'monitor-tip-class'}>
+        <div className={'credential-tip'}>
             {' '}
-            <Alert
-                showIcon={true}
-                className={''}
-                message={msg}
-                description={description}
-                type={type}
-                onClose={onRemove}
-                closable={true}
-            />{' '}
+            <Alert description={msg} type={type} onClose={onRemove} closable={true} />{' '}
         </div>
     );
 };

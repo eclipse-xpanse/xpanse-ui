@@ -8,7 +8,6 @@
 /* eslint-disable */
 import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
 import type { CreateCredential } from '../models/CreateCredential';
-import type { CredentialVariables } from '../models/CredentialVariables';
 import type { Link } from '../models/Link';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
@@ -18,85 +17,64 @@ import { request as __request } from '../core/request';
 export class CredentialsManagementService {
     /**
      * Update credential of the cloud service provider.
-     * @param cspName The cloud service provider
      * @param requestBody
-     * @returns boolean OK
+     * @returns void
      * @throws ApiError
      */
-    public static updateCredential(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
-        requestBody: CreateCredential
-    ): CancelablePromise<boolean> {
+    public static updateCredential(requestBody: CreateCredential): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/xpanse/auth/csp/{cspName}/credential',
-            path: {
-                cspName: cspName,
-            },
+            url: '/xpanse/auth/csp/credential',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
 
     /**
      * Add credential of the cloud service provider.
-     * @param cspName The cloud service provider.
      * @param requestBody
-     * @returns boolean OK
+     * @returns void
      * @throws ApiError
      */
-    public static addCredential(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
-        requestBody: CreateCredential
-    ): CancelablePromise<boolean> {
+    public static addCredential(requestBody: CreateCredential): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xpanse/auth/csp/{cspName}/credential',
-            path: {
-                cspName: cspName,
-            },
+            url: '/xpanse/auth/csp/credential',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
 
     /**
-     * Delete credential of the cloud service provider and the user.
-     * @param cspName The cloud service provider.
-     * @param userName The name of user who provided credential.
-     * @returns boolean OK
+     * List all credentials of the user.
+     * @param userName The name of user who provided the credential.
+     * @returns AbstractCredentialInfo OK
      * @throws ApiError
      */
-    public static deleteCredential(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
-        userName: string
-    ): CancelablePromise<boolean> {
+    public static getCredentialsByUser(userName: string): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/xpanse/auth/csp/{cspName}/credential',
-            path: {
-                cspName: cspName,
-            },
+            method: 'GET',
+            url: '/xpanse/auth/user/credentials',
             query: {
                 userName: userName,
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -121,9 +99,9 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -133,14 +111,14 @@ export class CredentialsManagementService {
      * @param cspName The cloud service provider.
      * @param userName The name of user who provided the credential.
      * @param type The type of credential.
-     * @returns CredentialVariables OK
+     * @returns AbstractCredentialInfo OK
      * @throws ApiError
      */
-    public static getCredentialDefinitionsByCsp(
+    public static getCredentials(
         cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         userName: string,
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
-    ): CancelablePromise<Array<CredentialVariables>> {
+    ): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/auth/csp/{cspName}/credentials',
@@ -153,9 +131,9 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -177,9 +155,9 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -206,9 +184,41 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Delete credential of the cloud service provider and the user.
+     * @param cspName The cloud service provider.
+     * @param userName The name of user who provided credential.
+     * @param type The type of credential.
+     * @returns void
+     * @throws ApiError
+     */
+    public static deleteCredential(
+        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
+        userName: string,
+        type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
+    ): CancelablePromise<void> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/xpanse/auth/csp/{cspName}/credential',
+            path: {
+                cspName: cspName,
+            },
+            query: {
+                userName: userName,
+                type: type,
+            },
+            errors: {
+                400: `Bad Request`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }

@@ -30,9 +30,9 @@ export class ServiceVendorService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -55,9 +55,9 @@ export class ServiceVendorService {
             mediaType: 'application/x-yaml',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -77,9 +77,9 @@ export class ServiceVendorService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -103,9 +103,9 @@ export class ServiceVendorService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -146,9 +146,9 @@ export class ServiceVendorService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -167,9 +167,9 @@ export class ServiceVendorService {
             mediaType: 'application/x-yaml',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -189,9 +189,9 @@ export class ServiceVendorService {
             },
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }
@@ -220,9 +220,9 @@ export class ServiceVendorService {
             url: '/xpanse/services/categories',
             errors: {
                 400: `Bad Request`,
-                404: `Not Found`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
+                502: `Bad Gateway`,
             },
         });
     }

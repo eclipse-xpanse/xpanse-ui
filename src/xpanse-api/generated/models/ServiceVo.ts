@@ -43,7 +43,7 @@ export type ServiceVo = {
     /**
      * The state of the service
      */
-    serviceState: ServiceVo.serviceState;
+    serviceDeploymentState: ServiceVo.serviceDeploymentState;
     /**
      * Time of register service.
      */
@@ -87,9 +87,7 @@ export namespace ServiceVo {
     /**
      * The state of the service
      */
-    export enum serviceState {
-        REGISTERED = 'REGISTERED',
-        UPDATED = 'UPDATED',
+    export enum serviceDeploymentState {
         DEPLOYING = 'DEPLOYING',
         DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
         DEPLOY_FAILED = 'DEPLOY_FAILED',

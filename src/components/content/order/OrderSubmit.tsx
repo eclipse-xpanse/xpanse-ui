@@ -122,7 +122,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
             .then((response) => {
-                if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_SUCCESS) {
+                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
                         OrderSubmitResult(
                             ProcessingStatus(response, OperationType.Deploy as OperationType),
@@ -131,11 +131,11 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         )
                     );
                     setDeploying(false);
-                } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOYING) {
+                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYING) {
                     setTimeout(() => {
                         waitingServiceReady(uuid, timeout - waitServicePeriod, date);
                     }, waitServicePeriod);
-                } else if (response.serviceState === ServiceDetailVo.serviceState.DEPLOY_FAILED) {
+                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
                     // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                     setTip(
                         OrderSubmitResult(

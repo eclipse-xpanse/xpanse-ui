@@ -43,3 +43,44 @@ $ npm run build
 ```
 
 Builds the app for production to the `build` folder. Contents can be copied to any webserver to host the frontend files.
+
+## Docker Image
+
+Docker image for the UI project is based on nginx base image. This because the project only serves static content.
+
+### Pre-requisites
+
+Before the docker image can be built, the following steps must be executed so that all dependent files are generated.
+
+```shell
+npm install && \
+npm run build
+```
+
+### Build Image
+
+To build the image, we must pass an `ENVIRONMENT` build argument which decides the environment for the which the app
+must run on. Valid values are `development` and `production` and default is the `development`.
+
+```shell
+docker build --build-arg "ENVIRONMENT=development" -t xpanse-ui -f docker/Dockerfile .
+```
+
+> Note: At the moment, the environment argument does not make a difference. This will be effective in the future.
+
+### Run UI Container
+
+Container runs the application on port `80` by default. If you want the application to be reachable on port 3000 for
+development purposes, then the container can be started as below.
+
+```shell
+docker run -d -p 3000:80 --name ui xpanse-ui
+```
+
+### Application Logs
+
+All logs from nginx is routed to stdout by default. Using the below command, all application logs can be viewed.
+
+```shell
+docker logs ui
+```

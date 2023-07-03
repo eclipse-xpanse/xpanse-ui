@@ -43,7 +43,7 @@ export type RegisteredServiceVo = {
     /**
      * State of service.
      */
-    serviceState: RegisteredServiceVo.serviceState;
+    serviceRegistrationState: RegisteredServiceVo.serviceRegistrationState;
     links?: Array<Link>;
 };
 
@@ -80,14 +80,8 @@ export namespace RegisteredServiceVo {
     /**
      * State of service.
      */
-    export enum serviceState {
+    export enum serviceRegistrationState {
         REGISTERED = 'REGISTERED',
         UPDATED = 'UPDATED',
-        DEPLOYING = 'DEPLOYING',
-        DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
-        DEPLOY_FAILED = 'DEPLOY_FAILED',
-        DESTROYING = 'DESTROYING',
-        DESTROY_SUCCESS = 'DESTROY_SUCCESS',
-        DESTROY_FAILED = 'DESTROY_FAILED',
     }
 }
