@@ -212,6 +212,10 @@
     box-sizing: border-box;
 }
 
+.select-cloud-provider-class {
+    width: 450px;
+}
+
 .region-flavor-content {
     font-size: 14px;
     font-weight: bold;
@@ -274,29 +278,28 @@
 }
 
 .migrate-step-title-inner-class {
-    height: 13vh;
+    height: 12%;
 }
 
 .migrate-step-title-inner-class-show-tip {
-    height: 25vh;
+    height: 20%;
 }
 
 .migrate-step-content-inner-class {
-    height: 50vh;
+    height: 50%;
     overflow: auto;
     margin-left: 10px;
 }
 
 .migrate-step-content-inner-class-show-tip {
-    height: 39vh;
+    height: 40%;
     overflow: auto;
     margin-left: 10px;
 }
 
 .migrate-step-button-inner-class {
-    height: 4vh;
+    height: 5%;
     margin-left: 10px;
-    margin-top: 1%;
 }
 
 .migrate-export-import-data-class {
@@ -304,12 +307,9 @@
     justify-content: center;
     align-items: center;
     margin-top: 10%;
-}
-
-.migrate-steps-operation-button-clas {
-    width: 85px;
+    margin-bottom: 21%;
 }
 
 .migrate-show-deploy-class {
-    overflow: auto;
+    height: 50%;
 }
