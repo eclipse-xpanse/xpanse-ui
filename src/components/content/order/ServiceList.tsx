@@ -94,7 +94,7 @@ function ServiceList(): JSX.Element {
         },
         {
             title: 'ServiceState',
-            dataIndex: 'serviceState',
+            dataIndex: 'serviceDeploymentState',
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
@@ -349,6 +349,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
+        setServicesLoadingError(<></>);
         const userName: string | null = localStorage.getItem(usernameKey);
         if (!userName) {
             return;
