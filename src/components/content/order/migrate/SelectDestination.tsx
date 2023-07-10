@@ -5,12 +5,12 @@
 
 import CspSelect from '../formElements/CspSelect';
 import { Billing, CloudServiceProvider, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
-import { Select, Space, Tabs } from 'antd';
+import { Button, Select, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
 import { currencyMapper } from '../../../utils/currency';
 import { Area } from '../../../utils/Area';
-import { filterAreaList, getBilling, getFlavorList, getRegionList } from '../formElements/CommonTypes';
+import { filterAreaList, getBilling, getFlavorList, getRegionList, MigrationSteps } from '../formElements/CommonTypes';
 
 export const SelectDestination = ({
     userAvailableServiceVoList,
@@ -19,6 +19,7 @@ export const SelectDestination = ({
     currentArea,
     currentRegion,
     currentFlavor,
+    getCurrentMigrationStep,
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
     getSelectedParameters: (
@@ -31,6 +32,7 @@ export const SelectDestination = ({
     currentArea: string;
     currentRegion: string;
     currentFlavor: string;
+    getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
 }): JSX.Element => {
     const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name>(CloudServiceProvider.name.OPENSTACK);
     const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([CloudServiceProvider.name.OPENSTACK]);
@@ -47,6 +49,23 @@ export const SelectDestination = ({
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
+
+    const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
+    const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.SelectADestination);
+
+    const prev = () => {
+        setCurrentMigrationStep(MigrationSteps.ExportServiceData);
+    };
+
+    const next = () => {
+        setIsPreviousDisabled(true);
+        setCurrentMigrationStep(MigrationSteps.DeployServiceOnTheNewDestination);
+    };
+
+    useEffect(() => {
+        getCurrentMigrationStep(currentMigrationStep);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentMigrationStep]);
 
     useEffect(() => {
         if (userAvailableServiceVoList.length > 0) {
@@ -205,6 +224,30 @@ export const SelectDestination = ({
                 <span className={'services-content-price-class'}>
                     {priceValue}&nbsp;{currency}
                 </span>
+            </div>
+            <div className={'migrate-step-button-inner-class'}>
+                <Space size={'large'}>
+                    {currentMigrationStep > MigrationSteps.ExportServiceData ? (
+                        <Button
+                            type='primary'
+                            className={'migrate-steps-operation-button-clas'}
+                            onClick={() => prev()}
+                            disabled={isPreviousDisabled}
+                        >
+                            Previous
+                        </Button>
+                    ) : (
+                        <></>
+                    )}
+
+                    {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
+                        <Button type='primary' className={'migrate-steps-operation-button-clas'} onClick={() => next()}>
+                            Next
+                        </Button>
+                    ) : (
+                        <></>
+                    )}
+                </Space>
             </div>
         </div>
     );

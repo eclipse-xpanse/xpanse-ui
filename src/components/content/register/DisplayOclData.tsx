@@ -129,6 +129,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                             <Descriptions.Item label='Flavors'>{<pre>{getFlavoursText(ocl)}</pre>}</Descriptions.Item>
                             <Descriptions.Item label='Billing'>{<pre>{getBillingText(ocl)}</pre>}</Descriptions.Item>
                             <Descriptions.Item label='Deployment'>{getDeploymentText(ocl)}</Descriptions.Item>
+                            <Descriptions.Item label='CredentialType'>
+                                {ocl.deployment.credentialType}
+                            </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                         </Descriptions>
                     </div>

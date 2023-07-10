@@ -204,3 +204,9 @@ export enum MigrationSteps {
     ImportServiceData = 3,
     DestroyTheOldService = 4,
 }
+
+export enum MigrationStatus {
+    Processing = 'process',
+    Finished = 'finish',
+    Failed = 'error',
+}

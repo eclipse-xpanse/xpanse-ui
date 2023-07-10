@@ -13,7 +13,7 @@ import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { destroyTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
-import { MigratingServices } from './migrate/MigratingServices';
+import { Migrate } from './migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function ServiceList(): JSX.Element {
@@ -34,7 +34,6 @@ function ServiceList(): JSX.Element {
     const [resultMessage, setResultMessage] = useState<Map<string, string>>(new Map());
     const [title, setTitle] = useState<JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
-    const [isMigrateModalClosable, setIsMigrateModalClosable] = useState<boolean>(true);
     const [servicesLoadingError, setServicesLoadingError] = useState<JSX.Element>(<></>);
 
     const columns: ColumnsType<ServiceVo> = [
@@ -95,7 +94,7 @@ function ServiceList(): JSX.Element {
         },
         {
             title: 'ServiceState',
-            dataIndex: 'serviceState',
+            dataIndex: 'serviceDeploymentState',
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
@@ -350,6 +349,7 @@ function ServiceList(): JSX.Element {
     }
 
     function getServices(): void {
+        setServicesLoadingError(<></>);
         const userName: string | null = localStorage.getItem(usernameKey);
         if (!userName) {
             return;
@@ -412,10 +412,6 @@ function ServiceList(): JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
-    const getMigrateModalCloseStatus = (isClose: boolean) => {
-        setIsMigrateModalClosable(isClose);
-    };
-
     const getMigrateModalOpenStatus = (isOpen: boolean) => {
         refreshData();
         setCurrentServiceVo(undefined);
@@ -435,17 +431,16 @@ function ServiceList(): JSX.Element {
             <Modal
                 open={isMigrateModalOpen}
                 title={title}
-                closable={isMigrateModalClosable}
+                closable={true}
                 maskClosable={false}
+                destroyOnClose={true}
                 footer={null}
                 onCancel={() => handleCancelMigrateModel()}
-                width={'50wh'}
+                width={1400}
                 mask={true}
-                bodyStyle={{ height: '70vh' }}
             >
-                <MigratingServices
+                <Migrate
                     currentSelectedService={currentServiceVo}
-                    getMigrateModalCloseStatus={getMigrateModalCloseStatus}
                     getMigrateModalOpenStatus={getMigrateModalOpenStatus}
                 />
             </Modal>

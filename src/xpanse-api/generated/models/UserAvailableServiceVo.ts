@@ -8,6 +8,7 @@
 /* eslint-disable */
 
 import type { Billing } from './Billing';
+import type { Deployment } from './Deployment';
 import type { DeployVariable } from './DeployVariable';
 import type { Flavor } from './Flavor';
 import type { Link } from './Link';
@@ -50,6 +51,7 @@ export type UserAvailableServiceVo = {
      * The icon of the available service.
      */
     icon: string;
+    deployment: Deployment;
     /**
      * The variables for the deployment, which will be passed to the deployer.
      */
