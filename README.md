@@ -84,3 +84,22 @@ All logs from nginx is routed to stdout by default. Using the below command, all
 ```shell
 docker logs ui
 ```
+
+### Unit Tests
+
+We use `jest` framework for unit testing React components.
+
+To add unit tests, add a folder called `__tests__` folder closet to the component under test. This is also the
+recommendation from `jest` framework. The framework automatically loads all tests under `__tests__` folder.
+
+#### Run Tests from Command Line
+
+Tests can be executed using the command below:
+
+```shell
+npm run test
+```
+
+#### Run Tests from IDE
+
+To run tests from IDE, ensure the [config file](jest.config.json) is passed to the executor.
