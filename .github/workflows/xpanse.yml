@@ -26,3 +26,5 @@ jobs:
             - name: Check Prettier Format
               working-directory: ./
               run: npx prettier --config .prettierrc --check .
+            - name: Run unit tests
+              run: npm run test
