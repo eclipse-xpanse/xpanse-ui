@@ -5,7 +5,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { usernameKey } from '../../utils/constants';
 import AddCredential from './AddCredential';
 import UpdateCredential from './UpdateCredential';
 import { CredentialTip } from './CredentialTip';
@@ -21,6 +20,8 @@ import {
     CredentialVariables,
     Response,
 } from '../../../xpanse-api/generated';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { getUserName } from '../../oidc/OidcConfig';
 
 function Credential(): JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -39,6 +40,8 @@ function Credential(): JSX.Element {
         variables: [],
         xpanseUser: '',
     });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
 
     const columns: ColumnsType<AbstractCredentialInfo> = [
         {
@@ -126,8 +129,8 @@ function Credential(): JSX.Element {
 
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
         const credentialVariables: CredentialVariables = abstractCredentialInfo;
-        const userName: string | null = localStorage.getItem(usernameKey);
-        if (userName === null) {
+        const userName: string | null = getUserName(idTokenPayload as object);
+        if (!userName) {
             return;
         }
         const credentialVariableList: CredentialVariable[] = credentialVariables.variables;
@@ -157,7 +160,7 @@ function Credential(): JSX.Element {
     };
 
     function getCredentials(): void {
-        const userName: string | null = localStorage.getItem(usernameKey);
+        const userName: string | null = getUserName(idTokenPayload as object);
         if (!userName) {
             return;
         }
@@ -177,6 +180,7 @@ function Credential(): JSX.Element {
 
     useEffect(() => {
         getCredentials();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const onCancel = () => {

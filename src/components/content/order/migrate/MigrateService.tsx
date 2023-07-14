@@ -28,9 +28,11 @@ import {
 import { currencyMapper } from '../../../utils/currency';
 import { OrderSubmitProps } from '../OrderSubmit';
 import { MigrateSubmitResult } from '../OrderSubmitResult';
-import { deployTimeout, destroyTimeout, usernameKey, waitServicePeriod } from '../../../utils/constants';
+import { deployTimeout, destroyTimeout, waitServicePeriod } from '../../../utils/constants';
 import { ProcessingStatus } from '../ProcessingStatus';
 import { MigrateSubmitFailed } from '../OrderSubmitFailed';
+import { getUserName } from '../../../oidc/OidcConfig';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
 
 export const MigrateService = ({
     userAvailableServiceVoList,
@@ -77,6 +79,8 @@ export const MigrateService = ({
         userAvailableServiceVoList,
         selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
 
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
@@ -160,7 +164,7 @@ export const MigrateService = ({
             )
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
@@ -258,7 +262,7 @@ export const MigrateService = ({
             )
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     setTip(

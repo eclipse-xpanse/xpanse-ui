@@ -9,9 +9,10 @@ import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
-import { usernameKey } from '../../utils/constants';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { getUserName } from '../../oidc/OidcConfig';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
@@ -29,8 +30,11 @@ function Monitor(): JSX.Element {
         { value: string; label: string; serviceName: string; id: string }[]
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
+
     useEffect(() => {
-        const userName: string | null = localStorage.getItem(usernameKey);
+        const userName: string | null = getUserName(idTokenPayload as object);
         if (!userName) {
             return;
         }
@@ -90,7 +94,7 @@ function Monitor(): JSX.Element {
                 }
                 setIsQueryResultAvailable(true);
             });
-    }, []);
+    }, [idTokenPayload]);
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
