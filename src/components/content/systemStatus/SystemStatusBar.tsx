@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Space } from 'antd';
+import { Button } from 'antd';
 import { useState } from 'react';
 import { AdminService, SystemStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
@@ -20,7 +20,7 @@ function SystemStatusBar(): JSX.Element {
         });
 
     return (
-        <Space>
+        <>
             <Button
                 className={'header-menu-button'}
                 icon={<SystemStatusIcon isSystemUp={healthState === SystemStatus.healthStatus.OK} />}
@@ -28,7 +28,7 @@ function SystemStatusBar(): JSX.Element {
             >
                 System Status
             </Button>
-        </Space>
+        </>
     );
 }
 

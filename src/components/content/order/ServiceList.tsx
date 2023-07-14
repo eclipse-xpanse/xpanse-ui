@@ -12,9 +12,11 @@ import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } fr
 import '../../../styles/service_instance_list.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
-import { destroyTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
+import { destroyTimeout, waitServicePeriod } from '../../utils/constants';
 import { Migrate } from './migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { getUserName } from '../../oidc/OidcConfig';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
 
 function ServiceList(): JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -35,6 +37,8 @@ function ServiceList(): JSX.Element {
     const [title, setTitle] = useState<JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<JSX.Element>(<></>);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -179,7 +183,7 @@ function ServiceList(): JSX.Element {
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     Tip('success', 'Destroy success.');
@@ -232,7 +236,7 @@ function ServiceList(): JSX.Element {
 
     function getDeployedProperties(id: string): void {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(id, localStorage.getItem(usernameKey)!)
+        ServiceService.getDeployedServiceDetailsById(id, getUserName(idTokenPayload as object)!)
             .then((response) => {
                 const endPointMap = new Map<string, string>();
                 const requestMap = new Map<string, string>();
@@ -350,7 +354,7 @@ function ServiceList(): JSX.Element {
 
     function getServices(): void {
         setServicesLoadingError(<></>);
-        const userName: string | null = localStorage.getItem(usernameKey);
+        const userName: string | null = getUserName(idTokenPayload as object);
         if (!userName) {
             return;
         }

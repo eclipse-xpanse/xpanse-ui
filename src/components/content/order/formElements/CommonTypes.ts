@@ -15,7 +15,8 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../OrderSubmit';
-import { usernameKey } from '../../../utils/constants';
+import { getUserName } from '../../../oidc/OidcConfig';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
 
 export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 export type NumberInputEventHandler = (value: number | string | null) => void;
@@ -169,6 +170,8 @@ export const getDeployParams = (
 };
 
 export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: string): CreateRequest => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,react-hooks/rules-of-hooks
+    const { idTokenPayload } = useOidcIdToken();
     const createRequest: CreateRequest = {
         category: props.category,
         csp: props.csp,
@@ -178,7 +181,7 @@ export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: s
         version: props.version,
         customerServiceName: customerServiceName,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        userName: localStorage.getItem(usernameKey)!,
+        userName: getUserName(idTokenPayload as object)!,
     };
 
     const serviceRequestProperties: Record<string, string> = {};

@@ -14,9 +14,10 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { ColumnsType } from 'antd/es/table';
-import { usernameKey } from '../../utils/constants';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
+import { getUserName } from '../../oidc/OidcConfig';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
 
 function UpdateCredential({
     createCredential,
@@ -31,6 +32,8 @@ function UpdateCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
 
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
@@ -44,8 +47,8 @@ function UpdateCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = localStorage.getItem(usernameKey);
-            if (userName === null) {
+            const userName: string | null = getUserName(idTokenPayload as object);
+            if (!userName) {
                 return;
             }
             createCredential.xpanseUser = userName;
