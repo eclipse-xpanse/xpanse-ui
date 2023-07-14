@@ -20,12 +20,14 @@ import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
-import { createServicePageRoute, deployTimeout, usernameKey, waitServicePeriod } from '../../utils/constants';
+import { createServicePageRoute, deployTimeout, waitServicePeriod } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
 import { ProcessingStatus } from './ProcessingStatus';
 import { OrderSubmitResult } from './OrderSubmitResult';
 import { OrderSubmitFailed } from './OrderSubmitFailed';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { getUserName } from '../../oidc/OidcConfig';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -59,6 +61,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
 
     function TipClear() {
         setTip(undefined);
@@ -119,8 +123,12 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 'success'
             )
         );
+        const userName: string | null = getUserName(idTokenPayload as object);
+        if (!userName) {
+            return;
+        }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, localStorage.getItem(usernameKey)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, userName)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
@@ -163,6 +171,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     }
 
     function OnSubmit() {
+        const userName: string | null = getUserName(idTokenPayload as object);
+        if (!userName) {
+            return;
+        }
         const createRequest: CreateRequest = {
             category: props.category,
             csp: props.csp,
@@ -172,7 +184,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             version: props.version,
             customerServiceName: customerServiceName,
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            userName: localStorage.getItem(usernameKey)!,
+            userName: userName,
         };
         const serviceRequestProperties: Record<string, string> = {};
         for (const item of parameters) {

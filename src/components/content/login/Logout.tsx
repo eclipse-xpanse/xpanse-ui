@@ -5,20 +5,13 @@
 
 import { PoweroffOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { loginPageRoute } from '../../utils/constants';
-
-function clearStorage(navigate: NavigateFunction): void {
-    localStorage.clear();
-    navigate(loginPageRoute);
-}
-
+import { useOidc } from '@axa-fr/react-oidc';
 function Logout(): JSX.Element {
-    const navigate = useNavigate();
+    const { logout } = useOidc();
     return (
         <Button
             type='link'
-            onClick={() => clearStorage(navigate)}
+            onClick={() => void logout(window.location.href.replace(window.location.hash, ''))}
             icon={<PoweroffOutlined />}
             block={true}
             size='small'
@@ -27,5 +20,4 @@ function Logout(): JSX.Element {
         </Button>
     );
 }
-
 export default Logout;
