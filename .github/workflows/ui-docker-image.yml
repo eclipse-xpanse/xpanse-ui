@@ -1,0 +1,52 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Huawei Inc.
+#
+name: ui-docker-image
+
+on:
+    workflow_dispatch:
+        inputs:
+            ReleaseVersion:
+                type: string
+                description: Enter the version of the Docker image
+
+env:
+    BOT_USER_NAME: eclipse-xpanse-bot
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Run install dependencies
+              run: npm install
+
+            - name: Build Application
+              run: npm run build
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v2
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Login to Github Packages
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ env.BOT_USER_NAME }}
+                  password: ${{ secrets.BOT_GITHUB_DOCKER_TOKEN }}
+
+            - name: Build Docker Image and Push
+              uses: docker/build-push-action@v4
+              with:
+                  context: .
+                  file: docker/Dockerfile
+                  push: true
+                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.ReleaseVersion }}
+                  labels: latest, ${{ env.CURRENT_VERSION }}

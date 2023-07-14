@@ -59,14 +59,11 @@ npm run build
 
 ### Build Image
 
-To build the image, we must pass an `ENVIRONMENT` build argument which decides the environment for the which the app
-must run on. Valid values are `development` and `production` and default is the `development`.
+TO build image, run the below command.
 
 ```shell
-docker build --build-arg "ENVIRONMENT=development" -t xpanse-ui -f docker/Dockerfile .
+docker build  -t xpanse-ui -f docker/Dockerfile .
 ```
-
-> Note: At the moment, the environment argument does not make a difference. This will be effective in the future.
 
 ### Run UI Container
 
