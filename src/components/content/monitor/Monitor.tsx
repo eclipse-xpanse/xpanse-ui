@@ -13,6 +13,7 @@ import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
@@ -30,11 +31,10 @@ function Monitor(): JSX.Element {
         { value: string; label: string; serviceName: string; id: string }[]
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     useEffect(() => {
-        const userName: string | null = getUserName(idTokenPayload as object);
+        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
         }
@@ -94,7 +94,7 @@ function Monitor(): JSX.Element {
                 }
                 setIsQueryResultAvailable(true);
             });
-    }, [idTokenPayload]);
+    }, [oidcIdToken.idTokenPayload]);
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];

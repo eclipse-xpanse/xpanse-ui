@@ -18,6 +18,7 @@ import {
 import { CredentialTip } from './CredentialTip';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function AddCredential({
     getCredentials,
@@ -33,8 +34,7 @@ function AddCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcToken: OidcIdToken = useOidcIdToken();
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
     };
@@ -107,15 +107,13 @@ function AddCredential({
             ellipsis: {
                 showTitle: false,
             },
-            render: (value, record) =>
+            render: (value: string, record) =>
                 record.isMandatory ? (
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     <Tooltip placement='topLeft' title={value}>
                         <span className={'add-credential-from-variables-value'}>*</span>
                         {value}
                     </Tooltip>
                 ) : (
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     <Tooltip placement='topLeft' title={value}>
                         {value}
                     </Tooltip>
@@ -124,7 +122,7 @@ function AddCredential({
         {
             title: 'value',
             dataIndex: 'value',
-            render: (value, record, index) =>
+            render: (value: string, record, index) =>
                 record.isMandatory ? (
                     <Form.Item
                         name='value'
@@ -175,8 +173,7 @@ function AddCredential({
             ellipsis: {
                 showTitle: false,
             },
-            render: (description) => (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            render: (description: string) => (
                 <Tooltip placement='topLeft' title={description}>
                     {description}
                 </Tooltip>
@@ -195,8 +192,7 @@ function AddCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            //const createCredential: CreateCredential = credentialVariables as CreateCredential;
-            const userName: string | null = getUserName(idTokenPayload as object);
+            const userName: string | null = getUserName(oidcToken.idTokenPayload as object);
             if (!userName) {
                 return;
             }
@@ -286,8 +282,7 @@ function AddCredential({
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />
                     </Form.Item>
-                    {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-                    {credentialVariableList && credentialVariableList.length > 0 ? (
+                    {credentialVariableList.length > 0 ? (
                         <Form.Item
                             label='Variables'
                             name='variables'

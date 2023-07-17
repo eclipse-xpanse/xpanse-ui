@@ -28,6 +28,7 @@ import { OrderSubmitResult } from './OrderSubmitResult';
 import { OrderSubmitFailed } from './OrderSubmitFailed';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -61,8 +62,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     function TipClear() {
         setTip(undefined);
@@ -123,11 +123,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                 'success'
             )
         );
-        const userName: string | null = getUserName(idTokenPayload as object);
+        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         ServiceService.getDeployedServiceDetailsById(uuid, userName)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
@@ -144,7 +143,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         waitingServiceReady(uuid, timeout - waitServicePeriod, date);
                     }, waitServicePeriod);
                 } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
-                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
                     setTip(
                         OrderSubmitResult(
                             ProcessingStatus(response, OperationType.Deploy as OperationType),
@@ -171,7 +169,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     }
 
     function OnSubmit() {
-        const userName: string | null = getUserName(idTokenPayload as object);
+        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
         }
@@ -183,7 +181,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             serviceName: props.name,
             version: props.version,
             customerServiceName: customerServiceName,
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             userName: userName,
         };
         const serviceRequestProperties: Record<string, string> = {};

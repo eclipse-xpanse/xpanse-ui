@@ -33,6 +33,7 @@ import { ProcessingStatus } from '../ProcessingStatus';
 import { MigrateSubmitFailed } from '../OrderSubmitFailed';
 import { getUserName } from '../../../oidc/OidcConfig';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 export const MigrateService = ({
     userAvailableServiceVoList,
@@ -79,8 +80,7 @@ export const MigrateService = ({
         userAvailableServiceVoList,
         selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
@@ -136,7 +136,7 @@ export const MigrateService = ({
             selectRegion,
             selectFlavor
         );
-        const createRequest: CreateRequest = getCreateRequest(props, customerServiceName);
+        const createRequest: CreateRequest = getCreateRequest(props, customerServiceName, oidcIdToken);
         ServiceService.deploy(createRequest)
             .then((uuid) => {
                 setTip(MigrateSubmitResult('Request accepted', uuid, 'success'));
@@ -163,8 +163,7 @@ export const MigrateService = ({
                 'success'
             )
         );
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(oidcIdToken.idTokenPayload as object))
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
@@ -261,8 +260,7 @@ export const MigrateService = ({
                 'success'
             )
         );
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(oidcIdToken.idTokenPayload as object))
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     setTip(
