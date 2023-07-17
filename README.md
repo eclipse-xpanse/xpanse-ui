@@ -5,17 +5,48 @@ service catalog and also for end users to deploy services from the service catal
 
 ## Development Setup
 
-Project is built using `ReactJS` library. As we use `TypeScript` here, we must ensure all objects have type explicity
+Project is built using `ReactJS` library. As we use `TypeScript` here, we must ensure all objects have its type explicit
 defined.
+
 GUI components are built using `antd` library.
+
+Authentication and authorization is built using `Zitadel`.
+
+### Configuration Properties
+
+All required configuration parameters required must be added to .env file [here](.env). Even if there is on valid
+default value, we can add just add empty value. This file serves as reference to all required properties
+
+We use two different ways of reading configuration properties for the application.
+
+#### .env Files
+
+1. Set values in the .env files. All default values are set in .env files. These are automatically loaded by `React` and
+   there is no need to do anything for this to be loaded.
+2. For non-default properties or to override the values is .env, we can set the values in new .env files and load them
+   using `env-cmd` framework which will automatically inject the variables. Example can be
+   found [here](package.json#L20)
+
+#### Environment Variables
+
+All variables can be overridden by setting environment variables and then running the npm start or build scripts.
 
 ### Starting local development server
 
 In the project directory, you can run the below command to start the local development server. This also additionally
 needs `nodejs` to be installed on the development machine.
 
+If there is a local development Zitadel instance, then we must set `REACT_APP_ZITADEL_CLIENT_ID` environment variable
+and then run the below command.
+
 ```shell
 $ npm run start
+```
+
+If you wish to use our central Zitadel testbed instance, then simply start the application with below command.
+
+```shell
+$ npm run start-with-zitadel-testbed
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -38,11 +69,17 @@ swagger json.
 
 ## Build for production
 
+The build must ensure that all configuration parameters are correctly set. We can either export the parameters as
+environment variables or add `.env` files and execute the build command as below.
+
 ```shell
 $ npm run build
 ```
 
 Builds the app for production to the `build` folder. Contents can be copied to any webserver to host the frontend files.
+
+> Note: Since the UI application is completely browser based, all configuration parameters must be injected directly to
+> the application at build time. No configuration can be updated at runtime.
 
 ## Docker Image
 
@@ -50,7 +87,7 @@ Docker image for the UI project is based on nginx base image. This because the p
 
 ### Pre-requisites
 
-Before the docker image can be built, the following steps must be executed so that all dependent files are generated.
+Before the docker image can be built, all requirements parameters must be set and then the following steps must be executed so that all dependent files are generated.
 
 ```shell
 npm install && \
@@ -59,14 +96,11 @@ npm run build
 
 ### Build Image
 
-To build the image, we must pass an `ENVIRONMENT` build argument which decides the environment for the which the app
-must run on. Valid values are `development` and `production` and default is the `development`.
+TO build image, run the below command.
 
 ```shell
-docker build --build-arg "ENVIRONMENT=development" -t xpanse-ui -f docker/Dockerfile .
+docker build  -t xpanse-ui -f docker/Dockerfile .
 ```
-
-> Note: At the moment, the environment argument does not make a difference. This will be effective in the future.
 
 ### Run UI Container
 
