@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+/* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -29,6 +30,7 @@ export class CredentialsManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -50,6 +52,7 @@ export class CredentialsManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -72,6 +75,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -99,6 +103,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -131,6 +136,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -155,6 +161,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -184,6 +191,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -216,6 +224,7 @@ export class CredentialsManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,

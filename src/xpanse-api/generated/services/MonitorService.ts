@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+/* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -47,6 +48,7 @@ export class MonitorService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
@@ -88,6 +90,7 @@ export class MonitorService {
             },
             errors: {
                 400: `Bad Request`,
+                403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
                 502: `Bad Gateway`,
