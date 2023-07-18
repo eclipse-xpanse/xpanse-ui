@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+/* generated using openapi-typescript-codegen -- do no edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -53,5 +54,7 @@ export namespace Response {
         RESOURCE_NOT_FOUND = 'Resource Not Found',
         DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
         SERVICE_UPDATE_NOT_ALLOWED = 'Service Update Not Allowed',
+        UNAUTHORIZED = 'Unauthorized',
+        ACCESS_DENIED = 'Access Denied',
     }
 }

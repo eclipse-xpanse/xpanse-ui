@@ -10,6 +10,7 @@ import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getRolesOfUser } from '../oidc/OidcConfig';
+import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 
 interface ProtectedRouteProperties {
     children: JSX.Element;
@@ -35,6 +36,7 @@ function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Elem
     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
     const { idTokenPayload } = useOidcIdToken();
 
+    updateApiConfig();
     const roles: string[] = getRolesOfUser(idTokenPayload as object);
 
     if (protectedRouteProperties.allowedRole === 'all' || roles.includes(protectedRouteProperties.allowedRole)) {
