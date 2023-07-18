@@ -5,6 +5,7 @@
     "type": "module",
     "dependencies": {
         "@ant-design/icons": "^5.0.1",
+        "@axa-fr/react-oidc": "^6.24.1",
         "antd": "^5.4.6",
         "echarts-for-react": "^3.0.2",
         "moment": "^2.29.4",
@@ -16,6 +17,8 @@
     },
     "scripts": {
         "start": "react-scripts start",
+        "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed react-scripts start",
+        "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed react-scripts build",
         "build": "react-scripts build",
         "test": "jest",
         "eject": "react-scripts eject"
@@ -40,7 +43,8 @@
             "@typescript-eslint/no-inferrable-types": "off"
         },
         "ignorePatterns": [
-            "src/xpanse-api/**"
+            "src/xpanse-api/**",
+            "/public/OidcServiceWorker.js"
         ],
         "root": true,
         "parser": "@typescript-eslint/parser",
@@ -79,7 +83,8 @@
         "prettier": "2.8.4",
         "react-scripts": "5.0.1",
         "ts-jest": "^29.1.1",
-        "typescript": "5.0.4"
+        "typescript": "5.0.4",
+        "env-cmd": "^10.1.0"
     },
     "overrides": {
         "react-scripts": {

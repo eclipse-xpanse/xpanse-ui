@@ -5,7 +5,6 @@
 
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import { usernameKey } from '../../utils/constants';
 import { Button, Form, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
@@ -17,6 +16,8 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { getUserName } from '../../oidc/OidcConfig';
 
 function AddCredential({
     getCredentials,
@@ -32,6 +33,8 @@ function AddCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
     };
@@ -193,8 +196,8 @@ function AddCredential({
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
             //const createCredential: CreateCredential = credentialVariables as CreateCredential;
-            const userName: string | null = localStorage.getItem(usernameKey);
-            if (userName === null) {
+            const userName: string | null = getUserName(idTokenPayload as object);
+            if (!userName) {
                 return;
             }
             createCredential.xpanseUser = userName;

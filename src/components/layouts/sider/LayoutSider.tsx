@@ -6,7 +6,7 @@
 import { Image, Layout, Menu } from 'antd';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { homePageRoute, usernameKey } from '../../utils/constants';
+import { homePageRoute, userRoleKey } from '../../utils/constants';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
@@ -25,7 +25,7 @@ function LayoutSider(): JSX.Element {
     };
 
     useEffect(() => {
-        if (localStorage.getItem(usernameKey) === 'csp') {
+        if (sessionStorage.getItem(userRoleKey) === 'csp') {
             ServiceVendorService.listCategories()
                 .then((rsp) => {
                     setItems([catalogMenu(rsp), registerPanelMenu()]);

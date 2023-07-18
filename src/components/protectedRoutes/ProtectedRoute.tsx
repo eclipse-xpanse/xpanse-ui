@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Navigate, useLocation } from 'react-router-dom';
 import { Layout } from 'antd';
 import LayoutFooter from '../layouts/footer/LayoutFooter';
 import LayoutHeader from '../layouts/header/LayoutHeader';
 import LayoutSider from '../layouts/sider/LayoutSider';
-import { isAuthenticatedKey, loginPageRoute, usernameKey } from '../utils/constants';
 import NotAuthorized from './NotAuthorized';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { getRolesOfUser } from '../oidc/OidcConfig';
 
 interface ProtectedRouteProperties {
     children: JSX.Element;
@@ -32,20 +32,15 @@ function getFullLayout(content: JSX.Element): JSX.Element {
 }
 
 function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Element {
-    const location = useLocation();
-    if (
-        !localStorage.getItem(isAuthenticatedKey) ||
-        localStorage.getItem(isAuthenticatedKey)?.toLowerCase() === 'false'
-    ) {
-        return <Navigate to={loginPageRoute} replace={true} state={{ from: location }} />;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { idTokenPayload } = useOidcIdToken();
+
+    const roles: string[] = getRolesOfUser(idTokenPayload as object);
+
+    if (protectedRouteProperties.allowedRole === 'all' || roles.includes(protectedRouteProperties.allowedRole)) {
+        return getFullLayout(protectedRouteProperties.children);
     }
-    if (
-        localStorage.getItem(usernameKey) !== protectedRouteProperties.allowedRole &&
-        protectedRouteProperties.allowedRole !== 'all'
-    ) {
-        return getFullLayout(<NotAuthorized />);
-    }
-    return getFullLayout(protectedRouteProperties.children);
+    return getFullLayout(<NotAuthorized />);
 }
 
 export default Protected;
