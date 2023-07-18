@@ -3,5 +3,6 @@
     "printWidth": 120,
     "tabWidth": 4,
     "jsxSingleQuote": true,
-    "endOfLine": "auto"
+    "endOfLine": "auto",
+    "trailingComma": "es5"
 }
