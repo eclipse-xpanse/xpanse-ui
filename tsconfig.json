@@ -17,5 +17,5 @@
         "jsx": "react-jsx"
     },
     "include": ["src"],
-    "exclude": ["node_modules/@axa-fr/react-oidc/src"]
+    "exclude": ["node_modules/@axa-fr/react-oidc/src", "build/"]
 }
