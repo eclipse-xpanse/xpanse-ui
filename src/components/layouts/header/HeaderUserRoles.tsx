@@ -11,6 +11,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Logout from '../../content/login/Logout';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { allowRoleList, getRolesOfUser, getUserName } from '../../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -39,14 +40,13 @@ export const HeaderUserRoles = (): JSX.Element => {
     const [currentRole, setCurrentRole] = useState<string>('');
     const [roleList, setRoleList] = useState<string[]>([]);
     const [menuProps, setMenuProps] = useState<MenuProps | undefined>(undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     useEffect(() => {
-        const userName: string = getUserName(idTokenPayload as object);
+        const userName: string = getUserName(oidcIdToken.idTokenPayload as object);
         setCurrentUser(userName);
 
-        const availableRolesToUser: string[] = getRolesOfUser(idTokenPayload as object);
+        const availableRolesToUser: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
         setRoleList(availableRolesToUser);
 
         const currentRole: string | null = sessionStorage.getItem(userRoleKey);
@@ -60,7 +60,7 @@ export const HeaderUserRoles = (): JSX.Element => {
                 }
             });
         }
-    }, [idTokenPayload]);
+    }, [oidcIdToken.idTokenPayload]);
 
     useEffect(() => {
         if (roleList.length === 0 || currentRole.length === 0) {

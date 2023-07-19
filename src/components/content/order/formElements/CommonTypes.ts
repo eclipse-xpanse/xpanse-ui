@@ -16,7 +16,7 @@ import {
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../OrderSubmit';
 import { getUserName } from '../../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 export type NumberInputEventHandler = (value: number | string | null) => void;
@@ -169,9 +169,11 @@ export const getDeployParams = (
     return props;
 };
 
-export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: string): CreateRequest => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment,react-hooks/rules-of-hooks
-    const { idTokenPayload } = useOidcIdToken();
+export const getCreateRequest = (
+    props: OrderSubmitProps,
+    customerServiceName: string,
+    oidcIdToken: OidcIdToken
+): CreateRequest => {
     const createRequest: CreateRequest = {
         category: props.category,
         csp: props.csp,
@@ -180,8 +182,7 @@ export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: s
         serviceName: props.name,
         version: props.version,
         customerServiceName: customerServiceName,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        userName: getUserName(idTokenPayload as object)!,
+        userName: getUserName(oidcIdToken.idTokenPayload as object),
     };
 
     const serviceRequestProperties: Record<string, string> = {};

@@ -44,7 +44,8 @@
         },
         "ignorePatterns": [
             "src/xpanse-api/**",
-            "/public/OidcServiceWorker.js"
+            "/public/OidcServiceWorker.js",
+            "build"
         ],
         "root": true,
         "parser": "@typescript-eslint/parser",
