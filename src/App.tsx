@@ -28,6 +28,7 @@ import Monitor from './components/content/monitor/Monitor';
 import Credential from './components/content/credential/Credential';
 import { OidcConfig } from './components/oidc/OidcConfig';
 import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
+import { NotFoundPage } from './components/notFound/NotFoundPage';
 
 function App(): JSX.Element {
     return (
@@ -133,6 +134,7 @@ function App(): JSX.Element {
                         </OidcSecure>
                     }
                 />
+                <Route path='*' element={<NotFoundPage />} />
             </Routes>
         </OidcProvider>
     );
