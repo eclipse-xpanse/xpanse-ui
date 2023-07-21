@@ -3,9 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CheckCircleTwoTone, CloseCircleTwoTone } from '@ant-design/icons';
+import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
 
-function SystemStatusIcon({ isSystemUp }: { isSystemUp: boolean }): JSX.Element {
+function SystemStatusIcon({
+    isSystemUp,
+    isStatusLoading,
+}: {
+    isSystemUp: boolean;
+    isStatusLoading: boolean;
+}): JSX.Element {
+    if (isStatusLoading) {
+        return <LoadingOutlined spin />;
+    }
     if (isSystemUp) {
         return <CheckCircleTwoTone twoToneColor='#52c41a' />;
     } else {

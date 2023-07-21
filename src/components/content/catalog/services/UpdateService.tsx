@@ -6,21 +6,21 @@
 import { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Ocl } from '../../../../xpanse-api/generated';
+import { ApiError, Ocl, RegisteredServiceVo, Response, ServiceVendorService } from '../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
 import YamlSyntaxValidationResult from '../../register/YamlSyntaxValidationResult';
-import { updateServiceResult } from './updateServiceResult';
 import { ValidationStatus } from '../../register/ValidationStatus';
 import loadOclFile from '../../register/loadOclFile';
 import OclSummaryDisplay from '../../register/OclSummaryDisplay';
+import { useMutation } from '@tanstack/react-query';
 
 function UpdateService({
     id,
-    updateStatusWhenUnregister,
+    unregisterStatus,
 }: {
     id: string;
-    updateStatusWhenUnregister: MutableRefObject<string>;
+    unregisterStatus: MutableRefObject<string>;
 }): JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -29,9 +29,26 @@ function UpdateService({
     const updateResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
-    const [updateRequestStatus, setUpdateRequestStatus] = useState<ValidationStatus>('notStarted');
-
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const updateServiceRequest = useMutation({
+        mutationFn: (ocl: Ocl) => {
+            return ServiceVendorService.update(id, ocl);
+        },
+        onSuccess: (registeredServiceVo: RegisteredServiceVo) => {
+            files.current[0].status = 'success';
+            updateResult.current = [`ID - ${registeredServiceVo.id}`];
+        },
+        onError: (error: Error) => {
+            files.current[0].status = 'error';
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                updateResult.current = response.details;
+            } else {
+                updateResult.current = [error.message];
+            }
+        },
+    });
 
     const showModal = () => {
         setIsModalOpen(true);
@@ -42,7 +59,7 @@ function UpdateService({
     };
 
     const handleCancel = () => {
-        if (updateRequestStatus === 'completed') {
+        if (updateServiceRequest.isSuccess) {
             window.location.reload();
         }
         files.current.pop();
@@ -51,9 +68,9 @@ function UpdateService({
         updateResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        setUpdateRequestStatus('notStarted');
         oclDisplayData.current = <></>;
         setIsModalOpen(false);
+        updateServiceRequest.reset();
     };
 
     function validateAndLoadYamlFile(uploadedFiles: UploadFile[]) {
@@ -88,7 +105,7 @@ function UpdateService({
     }
     const sendRequestRequest = () => {
         if (ocl.current) {
-            updateServiceResult(id, ocl.current, setUpdateRequestStatus, updateResult, files.current[0]);
+            updateServiceRequest.mutate(ocl.current);
         }
     };
 
@@ -101,7 +118,7 @@ function UpdateService({
     };
 
     const onRemove = () => {
-        if (updateRequestStatus === 'completed') {
+        if (updateServiceRequest.isSuccess) {
             return;
         }
         files.current.pop();
@@ -110,8 +127,8 @@ function UpdateService({
         updateResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        setUpdateRequestStatus('notStarted');
         oclDisplayData.current = <></>;
+        updateServiceRequest.reset();
     };
 
     return (
@@ -120,9 +137,7 @@ function UpdateService({
                 type='primary'
                 onClick={showModal}
                 style={{ marginLeft: '20px', marginTop: '20px' }}
-                disabled={
-                    updateStatusWhenUnregister.current === 'completed' || updateStatusWhenUnregister.current === 'error'
-                }
+                disabled={unregisterStatus.current === 'completed' || unregisterStatus.current === 'error'}
             >
                 Update
             </Button>
@@ -142,7 +157,7 @@ function UpdateService({
                     {ocl.current ? (
                         <UpdateResult
                             ocl={ocl.current}
-                            updateRequestStatus={updateRequestStatus}
+                            updateRequestStatus={updateServiceRequest.status}
                             updateResult={updateResult.current}
                             onRemove={onRemove}
                         />
@@ -172,15 +187,15 @@ function UpdateService({
                             size={'large'}
                             disabled={
                                 yamlSyntaxValidationStatus === 'notStarted' ||
-                                (updateRequestStatus === 'notStarted' && yamlSyntaxValidationStatus === 'error') ||
-                                updateRequestStatus === 'error' ||
-                                updateRequestStatus === 'completed' ||
+                                (updateServiceRequest.isIdle && yamlSyntaxValidationStatus === 'error') ||
+                                updateServiceRequest.isError ||
+                                updateServiceRequest.isSuccess ||
                                 oclValidationStatus === 'error'
                             }
                             type={'primary'}
                             icon={<CloudUploadOutlined />}
                             onClick={sendRequestRequest}
-                            loading={updateRequestStatus === 'inProgress'}
+                            loading={updateServiceRequest.isLoading}
                         >
                             Update
                         </Button>

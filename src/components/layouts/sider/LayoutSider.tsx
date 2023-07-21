@@ -13,7 +13,7 @@ import { catalogMenu } from '../../content/catalog/services/catalogMenu';
 import { credentialMenu, monitorMenu, serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import MenuLoading from './MenuLoading';
-import { ServiceVendorService } from '../../../xpanse-api/generated';
+import { RegisteredServiceVo } from '../../../xpanse-api/generated';
 
 function LayoutSider(): JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
@@ -24,27 +24,15 @@ function LayoutSider(): JSX.Element {
         navigate(cfg.key);
     };
 
+    const serviceCategories: string[] = Object.values(RegisteredServiceVo.category).filter((v) => isNaN(Number(v)));
+
     useEffect(() => {
         if (sessionStorage.getItem(userRoleKey) === 'csp') {
-            ServiceVendorService.listCategories()
-                .then((rsp) => {
-                    setItems([catalogMenu(rsp), registerPanelMenu()]);
-                })
-                .catch((error: Error) => {
-                    console.log(error.message);
-                    setItems([catalogMenu([]), registerPanelMenu()]);
-                });
+            setItems([catalogMenu(serviceCategories), registerPanelMenu()]);
         } else {
-            ServiceVendorService.listCategories()
-                .then((rsp) => {
-                    setItems([servicesMenu(rsp), serviceListMenu(), monitorMenu(), credentialMenu()]);
-                })
-                .catch((error: Error) => {
-                    console.log(error.message);
-                    setItems([]);
-                });
+            setItems([servicesMenu(serviceCategories), serviceListMenu(), monitorMenu(), credentialMenu()]);
         }
-    }, []);
+    }, [serviceCategories]);
 
     return (
         <Layout.Sider collapsible collapsed={collapsed} onCollapse={(newValue) => setCollapsed(newValue)}>

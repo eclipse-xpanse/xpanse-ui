@@ -5,8 +5,8 @@
 
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../xpanse-api/generated';
-import { ValidationStatus } from './ValidationStatus';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { MutationStatus } from '@tanstack/query-core/src/types';
 
 function RegisterResult({
     ocl,
@@ -15,11 +15,11 @@ function RegisterResult({
     onRemove,
 }: {
     ocl: Ocl;
-    registerRequestStatus: ValidationStatus;
+    registerRequestStatus: MutationStatus;
     registerResult: string[];
     onRemove: () => void;
 }): JSX.Element {
-    if (registerRequestStatus === 'completed') {
+    if (registerRequestStatus === 'success') {
         return (
             <Alert
                 type={'success'}

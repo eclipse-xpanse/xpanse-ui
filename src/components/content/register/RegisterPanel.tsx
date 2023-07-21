@@ -7,14 +7,14 @@ import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
-import { Ocl } from '../../../xpanse-api/generated';
+import { ApiError, Ocl, RegisteredServiceVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
 import RegisterResult from './RegisterResult';
 import OclSummaryDisplay from './OclSummaryDisplay';
 import loadOclFile from './loadOclFile';
-import { registerService } from './registerService';
 import YamlSyntaxValidationResult from './YamlSyntaxValidationResult';
 import { ValidationStatus } from './ValidationStatus';
+import { useMutation } from '@tanstack/react-query';
 
 function RegisterPanel(): JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -24,7 +24,25 @@ function RegisterPanel(): JSX.Element {
     const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
-    const [registerRequestStatus, setRegisterRequestStatus] = useState<ValidationStatus>('notStarted');
+
+    const registerRequest = useMutation({
+        mutationFn: (ocl: Ocl) => {
+            return ServiceVendorService.register(ocl);
+        },
+        onSuccess: (registeredServiceVo: RegisteredServiceVo) => {
+            files.current[0].status = 'success';
+            registerResult.current = [`ID - ${registeredServiceVo.id}`];
+        },
+        onError: (error: Error) => {
+            files.current[0].status = 'error';
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                registerResult.current = response.details;
+            } else {
+                registerResult.current = [error.message];
+            }
+        },
+    });
 
     function validateAndLoadYamlFile(uploadedFiles: UploadFile[]) {
         if (uploadedFiles.length > 0) {
@@ -59,7 +77,7 @@ function RegisterPanel(): JSX.Element {
 
     const sendRequestRequest = () => {
         if (ocl.current !== undefined) {
-            registerService(ocl.current, setRegisterRequestStatus, registerResult, files.current[0]);
+            registerRequest.mutate(ocl.current);
         }
     };
 
@@ -67,7 +85,6 @@ function RegisterPanel(): JSX.Element {
         files.current.pop();
         files.current.push(file);
         setYamlSyntaxValidationStatus('notStarted');
-        setRegisterRequestStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
     };
@@ -79,8 +96,8 @@ function RegisterPanel(): JSX.Element {
         registerResult.current = [];
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        setRegisterRequestStatus('notStarted');
         oclDisplayData.current = <></>;
+        registerRequest.reset();
     };
 
     return (
@@ -89,11 +106,10 @@ function RegisterPanel(): JSX.Element {
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
-            {ocl.current !== undefined &&
-            (registerRequestStatus === 'completed' || registerRequestStatus === 'error') ? (
+            {ocl.current !== undefined && !registerRequest.isLoading && !registerRequest.isIdle ? (
                 <RegisterResult
                     ocl={ocl.current}
-                    registerRequestStatus={registerRequestStatus}
+                    registerRequestStatus={registerRequest.status}
                     registerResult={registerResult.current}
                     onRemove={onRemove}
                 />
@@ -123,15 +139,15 @@ function RegisterPanel(): JSX.Element {
                     size={'large'}
                     disabled={
                         yamlSyntaxValidationStatus === 'notStarted' ||
-                        (registerRequestStatus === 'notStarted' && yamlSyntaxValidationStatus === 'error') ||
-                        registerRequestStatus === 'error' ||
-                        registerRequestStatus === 'completed' ||
+                        (registerRequest.isIdle && yamlSyntaxValidationStatus === 'error') ||
+                        registerRequest.isError ||
+                        registerRequest.isSuccess ||
                         oclValidationStatus === 'error'
                     }
                     type={'primary'}
                     icon={<CloudUploadOutlined />}
                     onClick={sendRequestRequest}
-                    loading={registerRequestStatus === 'inProgress'}
+                    loading={registerRequest.isLoading}
                 >
                     Register
                 </Button>
