@@ -9,8 +9,17 @@ import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
-import { CategoryOclVo, ServicesAvailableService, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
-import { Empty, Tree } from 'antd';
+import {
+    ApiError,
+    CategoryOclVo,
+    Response,
+    ServicesAvailableService,
+    ServiceVo,
+    VersionOclVo,
+} from '../../../xpanse-api/generated';
+import { Alert, Empty, Skeleton, Tree } from 'antd';
+import { useQuery } from '@tanstack/react-query';
+import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function Catalog(): JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
@@ -18,50 +27,77 @@ function Catalog(): JSX.Element {
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
     const location = useLocation();
+    const category = location.hash.split('#')[1] as ServiceVo.category;
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
+    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
+
+    const availableServicesQuery = useQuery({
+        queryKey: ['catalog', category],
+        queryFn: () => ServicesAvailableService.getAvailableServicesTree(category),
+        staleTime: 60000,
+    });
 
     useEffect(() => {
-        const category = location.hash.split('#')[1] as ServiceVo.category;
-        ServicesAvailableService.getAvailableServicesTree(category)
-            .then((data) => {
-                const tData: DataNode[] = [];
-                const tExpandKeys: React.Key[] = [];
-                if (data.length > 0) {
-                    setCategoryOclData(data);
-                    data.forEach((service) => {
-                        const dn: DataNode = {
-                            title: service.name,
-                            key: service.name || '',
-                            children: [],
-                        };
-                        const versionList: VersionOclVo[] = service.versions;
-                        versionList.forEach((v: VersionOclVo) => {
-                            dn.children?.push({
-                                title: v.version,
-                                key: service.name + '@' + v.version,
-                            });
-                            tExpandKeys.push(service.name + '@' + v.version);
-                        });
-                        tData.push(dn);
+        const tData: DataNode[] = [];
+        const tExpandKeys: React.Key[] = [];
+        const services: CategoryOclVo[] | undefined = availableServicesQuery.data;
+        if (services !== undefined && services.length > 0) {
+            setCategoryOclData(services);
+            services.forEach((service) => {
+                const dn: DataNode = {
+                    title: service.name,
+                    key: service.name || '',
+                    children: [],
+                };
+                const versionList: VersionOclVo[] = service.versions;
+                versionList.forEach((v: VersionOclVo) => {
+                    dn.children?.push({
+                        title: v.version,
+                        key: service.name + '@' + v.version,
                     });
-                    setTreeData(tData);
-                    setSelectKey(data[0].name + '@' + data[0].versions[0].version);
-                    setExpandKeys(tExpandKeys);
-                } else {
-                    setTreeData([]);
-                    setSelectKey('');
-                    setExpandKeys([]);
-                    setCategoryOclData([]);
-                }
-            })
-            .catch((error: Error) => {
-                console.log(error.message);
-                setTreeData([]);
-                setSelectKey('');
-                setExpandKeys([]);
-                setCategoryOclData([]);
+                    tExpandKeys.push(service.name + '@' + v.version);
+                });
+                tData.push(dn);
             });
-    }, [location]);
+            setTreeData(tData);
+            setSelectKey(services[0].name + '@' + services[0].versions[0].version);
+            setExpandKeys(tExpandKeys);
+        } else {
+            setTreeData([]);
+            setSelectKey('');
+            setExpandKeys([]);
+            setCategoryOclData([]);
+        }
+    }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
+
+    useEffect(() => {
+        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
+            const response: Response = availableServicesQuery.error.body as Response;
+            setLoadingError(
+                <Alert
+                    message={response.resultType.valueOf()}
+                    description={convertStringArrayToUnorderedList(response.details)}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        } else if (availableServicesQuery.error instanceof Error) {
+            setLoadingError(
+                <Alert
+                    message='Fetching Service Details Failed'
+                    description={availableServicesQuery.error.message}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        }
+        setTreeData([]);
+        setSelectKey('');
+        setExpandKeys([]);
+        setCategoryOclData([]);
+    }, [availableServicesQuery.error]);
 
     function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
@@ -83,6 +119,22 @@ function Catalog(): JSX.Element {
     const onConfirmUnregister = (disabled: boolean) => {
         setUnregisteredDisabled(disabled);
     };
+
+    if (availableServicesQuery.isError && loadingError !== undefined) {
+        return loadingError;
+    }
+
+    if (availableServicesQuery.isLoading) {
+        return (
+            <Skeleton
+                className={'catalog-skeleton'}
+                active={true}
+                loading={availableServicesQuery.isLoading}
+                paragraph={{ rows: 2, width: ['20%', '20%'] }}
+                title={{ width: '5%' }}
+            />
+        );
+    }
 
     return (
         <div className={'catalog-middleware'}>

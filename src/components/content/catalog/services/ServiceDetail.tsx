@@ -45,7 +45,7 @@ function ServiceDetail({
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
                 <Descriptions.Item label='Provider'>{serviceDetails.csp}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
-                <Descriptions.Item label='Billing Mode1'>{serviceDetails.billing.model}</Descriptions.Item>
+                <Descriptions.Item label='Billing Mode'>{serviceDetails.billing.model}</Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>{serviceDetails.serviceRegistrationState}</Descriptions.Item>

@@ -3,29 +3,28 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { MutableRefObject, useRef } from 'react';
 import { Button, Popconfirm } from 'antd';
 import { ServiceVendorService } from '../../../../xpanse-api/generated';
+import { useMutation } from '@tanstack/react-query';
 
 function UnregisterService({
     id,
     onConfirmHandler,
 }: {
     id: string;
-    onConfirmHandler: (type: string, message: string, unregisterResult: MutableRefObject<string>, id: string) => void;
+    onConfirmHandler: (message: string, unregisterResult: boolean, id: string) => void;
 }): JSX.Element {
-    const unregisterResult = useRef<string>('');
-    function unregisterServiceResult(): void {
-        ServiceVendorService.unregister(id)
-            .then(() => {
-                unregisterResult.current = 'completed';
-                onConfirmHandler('success', 'Service Unregistered Successfully', unregisterResult, id);
-            })
-            .catch((error: Error) => {
-                unregisterResult.current = 'error';
-                onConfirmHandler('error', 'Service Unregister Failed, '.concat(error.message), unregisterResult, id);
-            });
-    }
+    const unregisterRequest = useMutation({
+        mutationFn: () => {
+            return ServiceVendorService.unregister(id);
+        },
+        onSuccess: () => {
+            onConfirmHandler('Service Unregistered Successfully', true, id);
+        },
+        onError: (error: Error) => {
+            onConfirmHandler('Service Unregister Failed, '.concat(error.message), false, id);
+        },
+    });
 
     return (
         <div className={'update-unregister-btn-class'}>
@@ -34,12 +33,12 @@ function UnregisterService({
                 description='Are you sure to unregister this service?'
                 okText='Yes'
                 cancelText='No'
-                onConfirm={unregisterServiceResult}
+                onConfirm={() => unregisterRequest.mutate()}
             >
                 <Button
                     type='primary'
                     style={{ marginLeft: '50px', marginTop: '20px' }}
-                    disabled={unregisterResult.current === 'completed'}
+                    disabled={unregisterRequest.isSuccess}
                 >
                     Unregister
                 </Button>

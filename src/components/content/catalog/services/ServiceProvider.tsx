@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { MutableRefObject, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import { CategoryOclVo, ProviderOclVo, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
@@ -31,7 +31,7 @@ function ServiceProvider({
     const detailMapper: Map<string, UserAvailableServiceVo> = new Map<string, UserAvailableServiceVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = serviceName.split('@');
-    const updateStatusWhenUnregister = useRef<string>('');
+    const unregisterStatus = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
     const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
     const [unregisterTabsItemDisabled, setUnregisterTabsItemDisabled] = useState<boolean>(false);
@@ -115,21 +115,21 @@ function ServiceProvider({
         setActiveKey(key);
     };
 
-    function setUnregisterTipsInfo(type: 'error' | 'success', msg: string) {
+    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string) {
         setUnregisterTips(
             <div className={'submit-alert-tip'}>
                 {' '}
-                {type === 'success' ? (
+                {unregisterResult ? (
                     <Alert
                         message='Unregister:'
                         description={msg}
                         showIcon
-                        type={type}
+                        type={'success'}
                         closable={true}
                         onClose={onRemove}
                     />
                 ) : (
-                    <Alert message='Unregister:' description={msg} showIcon type={type} closable={true} />
+                    <Alert message='Unregister:' description={msg} showIcon type={'error'} closable={true} />
                 )}{' '}
             </div>
         );
@@ -137,20 +137,13 @@ function ServiceProvider({
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    const onConfirmUnregister = async (
-        type: string,
-        msg: string,
-        unregisterResult: MutableRefObject<string>,
-        id: string
-    ) => {
-        setUnregisterTipsInfo(type as 'success' | 'error', msg);
+    const onConfirmUnregister = async (msg: string, isUnregisterSuccessful: boolean, id: string) => {
+        setUnregisterTipsInfo(isUnregisterSuccessful, msg);
         setUnregisterServiceId(id);
-        updateStatusWhenUnregister.current = unregisterResult.current;
-        if (type.length > 0) {
-            confirmUnregister(true);
-            setUnregisterTabsItemDisabled(true);
-        }
-        if (type === 'success') {
+        unregisterStatus.current = isUnregisterSuccessful ? 'completed' : 'error';
+        confirmUnregister(true);
+        setUnregisterTabsItemDisabled(true);
+        if (isUnregisterSuccessful) {
             await sleep(500);
             window.location.reload();
         }
@@ -170,12 +163,12 @@ function ServiceProvider({
                         <>
                             <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
                             <div className={'update-unregister-btn-class'}>
-                                <UpdateService
+                                <UpdateService id={serviceDetails.id} unregisterStatus={unregisterStatus} />
+                                <UnregisterService
                                     id={serviceDetails.id}
-                                    updateStatusWhenUnregister={updateStatusWhenUnregister}
+                                    /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
+                                    onConfirmHandler={onConfirmUnregister}
                                 />
-                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
                             </div>
                         </>
                     ) : null}

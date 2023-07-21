@@ -6,6 +6,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.1.4",
         "@axa-fr/react-oidc": "^6.24.1",
+        "@tanstack/react-query": "^4.29.25",
         "antd": "^5.7.0",
         "echarts-for-react": "^3.0.2",
         "moment": "^2.29.4",
@@ -46,7 +47,8 @@
         "ignorePatterns": [
             "src/xpanse-api/**",
             "/public/OidcServiceWorker.js",
-            "build"
+            "build",
+            "node_modules"
         ],
         "root": true,
         "parser": "@typescript-eslint/parser",
@@ -67,6 +69,8 @@
         ]
     },
     "devDependencies": {
+        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@tanstack/eslint-plugin-query": "^4.29.25",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
