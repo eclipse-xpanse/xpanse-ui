@@ -6,7 +6,6 @@
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { MutationStatus } from '@tanstack/query-core/src/types';
 
 function UpdateResult({
     ocl,
@@ -15,7 +14,7 @@ function UpdateResult({
     onRemove,
 }: {
     ocl: Ocl;
-    updateRequestStatus: MutationStatus;
+    updateRequestStatus: string;
     updateResult: string[];
     onRemove: () => void;
 }): JSX.Element {
