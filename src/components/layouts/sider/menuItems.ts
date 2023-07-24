@@ -10,7 +10,7 @@ import {
     credentialMenu,
     healthCheckMenu,
     monitorMenu,
-    serviceListMenu,
+    myServicesMenu,
     servicesMenu,
 } from '../../content/order/ServicesMenu';
 import { RegisteredServiceVo } from '../../../xpanse-api/generated';
@@ -23,6 +23,6 @@ export function getMenuItems(): ItemType[] {
     } else if (sessionStorage.getItem(userRoleKey) === 'admin') {
         return [healthCheckMenu()];
     } else {
-        return [servicesMenu(serviceCategories), serviceListMenu(), monitorMenu(), credentialMenu()];
+        return [servicesMenu(serviceCategories), myServicesMenu(), monitorMenu(), credentialMenu()];
     }
 }

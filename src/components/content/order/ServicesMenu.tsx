@@ -3,7 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AreaChartOutlined, BarsOutlined, DashboardOutlined, HddOutlined, VerifiedOutlined } from '@ant-design/icons';
+import {
+    AreaChartOutlined,
+    CloudServerOutlined,
+    DashboardOutlined,
+    HddOutlined,
+    VerifiedOutlined,
+} from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import {
     credentialLabelName,
@@ -39,11 +45,11 @@ export const servicesMenu = (data: string[]): ItemType => {
     };
 };
 
-export const serviceListMenu = (): ItemType => {
+export const myServicesMenu = (): ItemType => {
     return {
         key: myServicesRoute,
         label: <Link to={myServicesRoute}>{myServicesLabelName}</Link>,
-        icon: <BarsOutlined />,
+        icon: <CloudServerOutlined />,
         title: 'MyServices',
     };
 };
