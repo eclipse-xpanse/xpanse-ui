@@ -30,7 +30,10 @@ function AddCredential({
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
     const [currentType, setCurrentType] = useState<CredentialVariables.type | undefined>(undefined);
+    const [currentName, setCurrentName] = useState<string>('');
     const [credentialTypeList, setCredentialTypeList] = useState<CredentialVariables.type[]>([]);
+    const [nameList, setNameList] = useState<string[]>([]);
+    const [credentialInfo, setCredentialInfo] = useState<CredentialVariables[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
@@ -42,13 +45,33 @@ function AddCredential({
     const clear = () => {
         setCurrentCsp(undefined);
         setCurrentType(undefined);
+        setNameList([]);
         setCredentialTypeList([]);
         setCredentialVariableList([]);
     };
 
     const handleCredentialTypeSelect = (type: CredentialVariables.type) => {
         setCurrentType(type);
-        form.setFieldsValue({ variables: [] });
+    };
+
+    const handleCredentialNameSelect = (name: string) => {
+        setCurrentName(name);
+        form.setFieldsValue({ name: name });
+        if (credentialInfo.length > 0) {
+            credentialInfo.forEach((credential: CredentialVariables) => {
+                if (credential.csp === currentCsp && credential.type === currentType && credential.name === name) {
+                    credential.variables.forEach((credentialVariable) => {
+                        credentialVariable.value = '';
+                        credentialVariableList.push(credentialVariable);
+                    });
+                    setCredentialVariableList(credentialVariableList);
+                    form.setFieldsValue({ variables: credentialVariableList });
+                }
+            });
+        } else {
+            setCredentialVariableList([]);
+            form.setFieldsValue({ variables: [] });
+        }
     };
 
     useEffect(() => {
@@ -73,27 +96,23 @@ function AddCredential({
         }
         void CredentialsManagementService.getCredentialCapabilitiesByCsp(currentCsp, currentType)
             .then((resp) => {
+                const names: string[] = [];
+                let credentialInfo: CredentialVariables[] = [];
                 if (resp.length > 0) {
-                    const credentialVariables: CredentialVariables = resp[0] as CredentialVariables;
-                    const credentialVariableList: CredentialVariable[] = [];
-                    credentialVariables.variables.forEach((credentialVariable) => {
-                        credentialVariable.value = '';
-                        credentialVariableList.push(credentialVariable);
+                    resp.forEach((credential: CredentialVariables) => {
+                        names.push(credential.name);
                     });
-                    setCredentialVariableList(credentialVariableList);
-                    form.setFieldsValue({ variables: credentialVariableList });
-                } else {
-                    setCredentialVariableList([]);
-                    form.setFieldsValue({ variables: [] });
+                    credentialInfo = resp;
                 }
+                setCredentialInfo(credentialInfo);
+                setNameList(names);
             })
             .catch((error: Error) => {
-                setCredentialVariableList([]);
-                form.setFieldsValue({ variables: [] });
+                setNameList([]);
                 console.log(error);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentCsp, currentType]);
+    }, [currentCsp, currentType, currentName]);
 
     function setVariablesValue(index: number, e: ChangeEvent<HTMLInputElement>) {
         credentialVariableList[index].value = e.target.value;
@@ -242,10 +261,6 @@ function AddCredential({
             >
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
                 <div className={'credential-from-input'}>
-                    <Form.Item label='Name' name='name' rules={[{ required: true }]}>
-                        <Input />
-                    </Form.Item>
-
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please Select Csp!' }]}>
                         <Select onSelect={handleCspSelect}>
                             {Object.values(CredentialVariables.csp).map((csp: CredentialVariables.csp) => {
@@ -268,6 +283,25 @@ function AddCredential({
                                     return (
                                         <Select.Option key={type} value={type}>
                                             {type}
+                                        </Select.Option>
+                                    );
+                                })}
+                            </Select>
+                        </Form.Item>
+                    ) : (
+                        <></>
+                    )}
+                    {nameList.length > 0 ? (
+                        <Form.Item
+                            label='Name'
+                            name='name'
+                            rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
+                        >
+                            <Select onSelect={handleCredentialNameSelect}>
+                                {nameList.map((name: string) => {
+                                    return (
+                                        <Select.Option key={name} value={name}>
+                                            {name}
                                         </Select.Option>
                                     );
                                 })}
