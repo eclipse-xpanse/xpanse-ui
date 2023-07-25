@@ -6,23 +6,27 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
+    ApiError,
     Billing,
     CloudServiceProvider,
     Flavor,
     Region,
+    Response,
     ServicesAvailableService,
     UserAvailableServiceVo,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from './formElements/CspSelect';
 import GoToSubmit from './formElements/GoToSubmit';
-import { Select, Space, Tabs } from 'antd';
+import { Alert, Select, Skeleton, Space, Tabs } from 'antd';
 import { Area } from '../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 import { sortVersion } from '../../utils/Sort';
 import { currencyMapper } from '../../utils/currency';
 import { servicesSubPageRoute } from '../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
+import { useQuery } from '@tanstack/react-query';
+import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function filterAreaList(
     selectVersion: string,
@@ -65,17 +69,15 @@ function filterAreaList(
 function CreateService(): JSX.Element {
     const [urlParams] = useSearchParams();
     const location = useLocation();
-
+    const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
+    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+    const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
     const versionMapper = useRef<Map<string, UserAvailableServiceVo[]>>(new Map<string, UserAvailableServiceVo[]>());
-
-    const [categoryName, setCategoryName] = useState<string>('');
-    const [serviceName, setServiceName] = useState<string>('');
-
     const [versionList, setVersionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectVersion, setSelectVersion] = useState<string>('');
 
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name>(CloudServiceProvider.name.OPENSTACK);
-    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([CloudServiceProvider.name.OPENSTACK]);
+    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name | undefined>(undefined);
+    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([]);
 
     const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
     const [selectArea, setSelectArea] = useState<string>('');
@@ -89,86 +91,111 @@ function CreateService(): JSX.Element {
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
+    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
+
+    const availableServicesQuery = useQuery({
+        queryKey: ['listAvailableServices', categoryName, serviceName],
+        queryFn: () =>
+            ServicesAvailableService.listAvailableServices(
+                categoryName as UserAvailableServiceVo.category,
+                '',
+                serviceName,
+                ''
+            ),
+        staleTime: 60000,
+    });
 
     useEffect(() => {
-        const categoryName = decodeURI(urlParams.get('catalog') ?? '') as UserAvailableServiceVo.category;
-        const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-        const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
-        if (serviceName === '' || latestVersion === '') {
-            return;
-        }
-        setCategoryName(categoryName);
-        setServiceName(serviceName);
-        void ServicesAvailableService.listAvailableServices(categoryName, '', serviceName, '')
-            .then((rsp) => {
-                if (rsp.length > 0) {
-                    const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
-                        string,
-                        UserAvailableServiceVo[]
-                    >();
-                    for (const registerServiceEntity of rsp) {
-                        if (registerServiceEntity.version) {
-                            if (!currentVersions.has(registerServiceEntity.version)) {
-                                currentVersions.set(
-                                    registerServiceEntity.version,
-                                    rsp.filter((data) => data.version === registerServiceEntity.version)
-                                );
-                            }
+        if (availableServicesQuery.data) {
+            const services: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+            if (services.length > 0) {
+                const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
+                    string,
+                    UserAvailableServiceVo[]
+                >();
+                for (const registerServiceEntity of services) {
+                    if (registerServiceEntity.version) {
+                        if (!currentVersions.has(registerServiceEntity.version)) {
+                            currentVersions.set(
+                                registerServiceEntity.version,
+                                services.filter((data) => data.version === registerServiceEntity.version)
+                            );
                         }
                     }
-                    versionMapper.current = currentVersions;
-                    const currentVersionList = getVersionList();
-                    const currentCspList = getCspList(latestVersion);
-                    const currentFlavorList = getFlavorList(latestVersion);
-                    setVersionList(currentVersionList);
-                    setSelectVersion(latestVersion);
-                    setCspList(currentCspList);
-                    setFlavorList(currentFlavorList);
-                    let currentAreaList: Tab[] = getAreaList(latestVersion, currentCspList[0]);
-                    let currentRegionList: { value: string; label: string }[] = getRegionList(
-                        latestVersion,
-                        currentCspList[0],
-                        currentAreaList[0]?.key ?? ''
-                    );
-                    let currentBilling = getBilling(latestVersion, currentCspList[0]);
-                    let cspValue: CloudServiceProvider.name = currentCspList[0];
-                    let areaValue: string = currentAreaList[0]?.key ?? '';
-                    let regionValue: string = currentRegionList[0]?.value ?? '';
-                    let flavorValue: string = currentFlavorList[0]?.value ?? '';
-                    let priceValue: string = currentFlavorList[0]?.price ?? '';
-                    if (location.state) {
-                        const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
-                        currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
-                        currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
-                        currentBilling = getBilling(latestVersion, serviceInfo.csp.toString());
-                        cspValue = serviceInfo.csp as unknown as CloudServiceProvider.name;
-                        areaValue = serviceInfo.area;
-                        regionValue = serviceInfo.region;
-                        flavorValue = serviceInfo.flavor;
-                        currentFlavorList.forEach((flavorItem) => {
-                            if (flavorItem.value === serviceInfo.flavor) {
-                                priceValue = flavorItem.price;
-                            }
-                        });
-                    }
-                    const currencyValue: string = currencyMapper[currentBilling.currency];
-                    setSelectCsp(cspValue);
-                    setAreaList(currentAreaList);
-                    setSelectArea(areaValue);
-                    setRegionList(currentRegionList);
-                    setSelectRegion(regionValue);
-                    setSelectFlavor(flavorValue);
-                    setPriceValue(priceValue);
-                    setCurrency(currencyValue);
-                } else {
-                    return;
                 }
-            })
-            .catch((error: Error) => {
-                console.log(error.message);
-                versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
-            });
-    }, [location, urlParams]);
+                versionMapper.current = currentVersions;
+                const currentVersionList = getVersionList();
+                const currentCspList = getCspList(latestVersion);
+                const currentFlavorList = getFlavorList(latestVersion);
+                setVersionList(currentVersionList);
+                setSelectVersion(latestVersion);
+                setCspList(currentCspList);
+                setFlavorList(currentFlavorList);
+                let currentAreaList: Tab[] = getAreaList(latestVersion, currentCspList[0]);
+                let currentRegionList: { value: string; label: string }[] = getRegionList(
+                    latestVersion,
+                    currentCspList[0],
+                    currentAreaList[0]?.key ?? ''
+                );
+                let currentBilling = getBilling(latestVersion, currentCspList[0]);
+                let cspValue: CloudServiceProvider.name = currentCspList[0];
+                let areaValue: string = currentAreaList[0]?.key ?? '';
+                let regionValue: string = currentRegionList[0]?.value ?? '';
+                let flavorValue: string = currentFlavorList[0]?.value ?? '';
+                let priceValue: string = currentFlavorList[0]?.price ?? '';
+                if (location.state) {
+                    const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
+                    currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
+                    currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
+                    currentBilling = getBilling(latestVersion, serviceInfo.csp.toString());
+                    cspValue = serviceInfo.csp as unknown as CloudServiceProvider.name;
+                    areaValue = serviceInfo.area;
+                    regionValue = serviceInfo.region;
+                    flavorValue = serviceInfo.flavor;
+                    currentFlavorList.forEach((flavorItem) => {
+                        if (flavorItem.value === serviceInfo.flavor) {
+                            priceValue = flavorItem.price;
+                        }
+                    });
+                }
+                const currencyValue: string = currencyMapper[currentBilling.currency];
+                setSelectCsp(cspValue);
+                setAreaList(currentAreaList);
+                setSelectArea(areaValue);
+                setRegionList(currentRegionList);
+                setSelectRegion(regionValue);
+                setSelectFlavor(flavorValue);
+                setPriceValue(priceValue);
+                setCurrency(currencyValue);
+            }
+        }
+    }, [availableServicesQuery.data, latestVersion, location.state]);
+
+    if (availableServicesQuery.error) {
+        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
+            const response: Response = availableServicesQuery.error.body as Response;
+            setLoadingError(
+                <Alert
+                    message={response.resultType.valueOf()}
+                    description={convertStringArrayToUnorderedList(response.details)}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        } else if (availableServicesQuery.error instanceof Error) {
+            setLoadingError(
+                <Alert
+                    message='Fetching Service Details Failed'
+                    description={availableServicesQuery.error.message}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        }
+        versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
+    }
 
     function getVersionList(): { value: string; label: string }[] {
         if (versionMapper.current.size <= 0) {
@@ -349,91 +376,107 @@ function CreateService(): JSX.Element {
 
     const servicePageUrl = servicesSubPageRoute + categoryName;
 
-    return (
-        <>
-            <div>
-                <Navigate text={'<< Back'} to={servicePageUrl as To} props={undefined} />
-                <div className={'Line'} />
-            </div>
-            <div className={'services-content'}>
-                <div className={'content-title'}>
-                    Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
-                    <Select
-                        value={selectVersion}
-                        className={'version-drop-down'}
-                        onChange={onChangeVersion}
-                        options={versionList}
-                    />
+    if (availableServicesQuery.isError && loadingError !== undefined) {
+        return loadingError;
+    }
+
+    if (selectCsp && cspList.length > 0) {
+        return (
+            <>
+                <div>
+                    <Navigate text={'<< Back'} to={servicePageUrl as To} props={undefined} />
+                    <div className={'Line'} />
                 </div>
-                <br />
-                <CspSelect
-                    selectCsp={selectCsp}
-                    cspList={cspList}
-                    onChangeHandler={(csp) => {
-                        onChangeCloudProvider(selectVersion, csp as CloudServiceProvider.name);
-                    }}
-                />
-                <div className={'cloud-provider-tab-class content-title'}>
-                    <Tabs
-                        type='card'
-                        size='middle'
-                        activeKey={selectArea}
-                        tabPosition={'top'}
-                        items={areaList}
-                        onChange={(area) => {
-                            onChangeAreaValue(selectVersion, selectCsp, area);
+                <div className={'services-content'}>
+                    <div className={'content-title'}>
+                        Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
+                        <Select
+                            value={selectVersion}
+                            className={'version-drop-down'}
+                            onChange={onChangeVersion}
+                            options={versionList}
+                        />
+                    </div>
+                    <br />
+                    <CspSelect
+                        selectCsp={selectCsp}
+                        cspList={cspList}
+                        onChangeHandler={(csp) => {
+                            onChangeCloudProvider(selectVersion, csp as CloudServiceProvider.name);
                         }}
                     />
-                </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    <Space wrap>
-                        <Select
-                            className={'select-box-class'}
-                            defaultValue={selectRegion}
-                            value={selectRegion}
-                            style={{ width: 450 }}
-                            onChange={onChangeRegion}
-                            options={regionList}
-                        />
-                    </Space>
-                </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    <Space wrap>
-                        <Select
-                            className={'select-box-class'}
-                            value={selectFlavor}
-                            style={{ width: 450 }}
-                            onChange={(value) => {
-                                onChangeFlavor(value, selectVersion, selectCsp);
+                    <div className={'cloud-provider-tab-class content-title'}>
+                        <Tabs
+                            type='card'
+                            size='middle'
+                            activeKey={selectArea}
+                            tabPosition={'top'}
+                            items={areaList}
+                            onChange={(area) => {
+                                onChangeAreaValue(selectVersion, selectCsp, area);
                             }}
-                            options={flavorList}
                         />
-                    </Space>
+                    </div>
+                    <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
+                    <div className={'cloud-provider-tab-class region-flavor-content'}>
+                        <Space wrap>
+                            <Select
+                                className={'select-box-class'}
+                                defaultValue={selectRegion}
+                                value={selectRegion}
+                                style={{ width: 450 }}
+                                onChange={onChangeRegion}
+                                options={regionList}
+                            />
+                        </Space>
+                    </div>
+                    <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
+                    <div className={'cloud-provider-tab-class region-flavor-content'}>
+                        <Space wrap>
+                            <Select
+                                className={'select-box-class'}
+                                value={selectFlavor}
+                                style={{ width: 450 }}
+                                onChange={(value) => {
+                                    onChangeFlavor(value, selectVersion, selectCsp);
+                                }}
+                                options={flavorList}
+                            />
+                        </Space>
+                    </div>
+                    <div className={'cloud-provider-tab-class region-flavor-content'}>
+                        Price:&nbsp;
+                        <span className={'services-content-price-class'}>
+                            {priceValue}&nbsp;{currency}
+                        </span>
+                    </div>
                 </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    Price:&nbsp;
-                    <span className={'services-content-price-class'}>
-                        {priceValue}&nbsp;{currency}
-                    </span>
+                <div>
+                    <div className={'Line'} />
+                    <GoToSubmit
+                        categoryName={categoryName}
+                        serviceName={serviceName}
+                        selectVersion={selectVersion}
+                        selectCsp={selectCsp}
+                        selectRegion={selectRegion}
+                        selectArea={selectArea}
+                        selectFlavor={selectFlavor}
+                        versionMapper={versionMapper.current}
+                    />
                 </div>
-            </div>
-            <div>
-                <div className={'Line'} />
-                <GoToSubmit
-                    categoryName={categoryName}
-                    serviceName={serviceName}
-                    selectVersion={selectVersion}
-                    selectCsp={selectCsp}
-                    selectRegion={selectRegion}
-                    selectArea={selectArea}
-                    selectFlavor={selectFlavor}
-                    versionMapper={versionMapper.current}
-                />
-            </div>
-        </>
-    );
+            </>
+        );
+    } else {
+        return (
+            <Skeleton
+                className={'catalog-skeleton'}
+                active={true}
+                loading={availableServicesQuery.isLoading}
+                paragraph={{ rows: 2, width: ['20%', '20%'] }}
+                title={{ width: '5%' }}
+            />
+        );
+    }
 }
 
 export default CreateService;
