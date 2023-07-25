@@ -17,6 +17,7 @@ import {
     servicesPageRoute,
     monitorPageRoute,
     credentialPageRoute,
+    healthCheckPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Catalog from './components/content/catalog/Catalog';
@@ -30,6 +31,7 @@ import { OidcConfig } from './components/oidc/OidcConfig';
 import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
 import { NotFoundPage } from './components/notFound/NotFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
 
 const queryClient = new QueryClient();
 
@@ -134,6 +136,16 @@ function App(): JSX.Element {
                             <OidcSecure>
                                 <Protected allowedRole={'user'}>
                                     <Credential />
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        path={healthCheckPageRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={'admin'}>
+                                    <HealthCheckStatus />
                                 </Protected>
                             </OidcSecure>
                         }

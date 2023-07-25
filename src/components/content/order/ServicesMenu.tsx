@@ -3,11 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AreaChartOutlined, BarsOutlined, HddOutlined, VerifiedOutlined } from '@ant-design/icons';
+import { AreaChartOutlined, BarsOutlined, DashboardOutlined, HddOutlined, VerifiedOutlined } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import {
     credentialLabelName,
     credentialPageRoute,
+    healthCheckLabelName,
+    healthCheckPageRoute,
     monitorLabelName,
     monitorPageRoute,
     myServicesLabelName,
@@ -17,6 +19,7 @@ import {
     servicesSubPageRoute,
 } from '../../utils/constants';
 import { Link } from 'react-router-dom';
+import React from 'react';
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {
@@ -60,5 +63,14 @@ export const credentialMenu = (): ItemType => {
         label: <Link to={credentialPageRoute}>{credentialLabelName}</Link>,
         icon: <VerifiedOutlined />,
         title: 'Credentials',
+    };
+};
+
+export const healthCheckMenu = (): ItemType => {
+    return {
+        key: healthCheckPageRoute,
+        label: <Link to={healthCheckPageRoute}>{healthCheckLabelName}</Link>,
+        icon: <DashboardOutlined />,
+        title: 'HealthCheck',
     };
 };

@@ -18,7 +18,7 @@ import { request as __request } from '../core/request';
 
 export class ServiceService {
     /**
-     * Start a task to deploy registered service.
+     * Start a task to deploy registered service.<br>**Required role: admin or user**
      * @param requestBody
      * @returns string Accepted
      * @throws ApiError
@@ -40,7 +40,7 @@ export class ServiceService {
     }
 
     /**
-     * Lists all deployed services.
+     * Lists all deployed services.<br>**Required role: admin or user**
      * @returns ServiceVo OK
      * @throws ApiError
      */
@@ -59,7 +59,7 @@ export class ServiceService {
     }
 
     /**
-     * List all deployed services by a user.
+     * List all deployed services by a user.<br>**Required role: admin or user**
      * @param userName User who deployed the service
      * @returns ServiceVo OK
      * @throws ApiError
@@ -82,7 +82,7 @@ export class ServiceService {
     }
 
     /**
-     * Get deployed service details by id.
+     * Get deployed service details by id.<br>**Required role: admin or user**
      * @param id Task id of deployed service
      * @param userName User who deployed the service
      * @returns ServiceDetailVo OK
@@ -107,7 +107,7 @@ export class ServiceService {
     }
 
     /**
-     * Start a task to destroy the deployed service using id.
+     * Start a task to destroy the deployed service using id.<br>**Required role: admin or user**
      * @param id
      * @returns Response Accepted
      * @throws ApiError

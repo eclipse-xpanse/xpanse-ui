@@ -9,7 +9,7 @@ export const onEvent = (configurationName: string, eventName: string, data: obje
     console.log(`oidc:${configurationName}:${eventName}`, data);
 };
 
-export const allowRoleList: string[] = ['csp', 'user', 'all'];
+export const allowRoleList: string[] = ['csp', 'user', 'admin'];
 
 export const OidcConfig: OidcConfiguration = {
     /*eslint-disable  @typescript-eslint/no-non-null-assertion */

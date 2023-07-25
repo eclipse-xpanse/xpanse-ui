@@ -56,5 +56,6 @@ export namespace Response {
         SERVICE_UPDATE_NOT_ALLOWED = 'Service Update Not Allowed',
         UNAUTHORIZED = 'Unauthorized',
         ACCESS_DENIED = 'Access Denied',
+        SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
     }
 }

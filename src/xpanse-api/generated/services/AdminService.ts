@@ -15,10 +15,11 @@ import { request as __request } from '../core/request';
 
 export class AdminService {
     /**
+     * Check health of API service and backend system.<br>**Required role: admin or csp or user**
      * @returns SystemStatus OK
      * @throws ApiError
      */
-    public static health(): CancelablePromise<SystemStatus> {
+    public static healthCheck(): CancelablePromise<SystemStatus> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/health',
