@@ -20,7 +20,6 @@ import {
     healthCheckPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
-import Catalog from './components/content/catalog/Catalog';
 import Services from './components/content/order/Services';
 import CreateService from './components/content/order/CreateService';
 import OrderSubmitPage from './components/content/order/OrderSubmit';
@@ -32,6 +31,7 @@ import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
 import { NotFoundPage } from './components/notFound/NotFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
+import CatalogMainPage from './components/content/catalog/CatalogMainMenu';
 
 const queryClient = new QueryClient();
 
@@ -75,7 +75,7 @@ function App(): JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={'csp'}>
-                                    <Catalog />
+                                    <CatalogMainPage />
                                 </Protected>
                             </OidcSecure>
                         }

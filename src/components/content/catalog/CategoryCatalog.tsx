@@ -8,7 +8,6 @@ import '../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
-import { useLocation } from 'react-router-dom';
 import {
     ApiError,
     CategoryOclVo,
@@ -21,13 +20,11 @@ import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
-function Catalog(): JSX.Element {
+function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
-    const location = useLocation();
-    const category = location.hash.split('#')[1] as ServiceVo.category;
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
     const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
 
@@ -174,4 +171,4 @@ function Catalog(): JSX.Element {
     );
 }
 
-export default Catalog;
+export default CategoryCatalog;
