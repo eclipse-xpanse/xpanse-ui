@@ -22,6 +22,7 @@ import {
 } from '../../../xpanse-api/generated';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function Credential(): JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -40,8 +41,7 @@ function Credential(): JSX.Element {
         variables: [],
         xpanseUser: '',
     });
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const columns: ColumnsType<AbstractCredentialInfo> = [
         {
@@ -129,7 +129,7 @@ function Credential(): JSX.Element {
 
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
         const credentialVariables: CredentialVariables = abstractCredentialInfo;
-        const userName: string | null = getUserName(idTokenPayload as object);
+        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
         }
@@ -160,7 +160,7 @@ function Credential(): JSX.Element {
     };
 
     function getCredentials(): void {
-        const userName: string | null = getUserName(idTokenPayload as object);
+        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
         }

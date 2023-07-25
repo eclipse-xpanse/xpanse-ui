@@ -5,7 +5,6 @@
 
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../xpanse-api/generated';
-import { ValidationStatus } from './ValidationStatus';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function RegisterResult({
@@ -15,11 +14,11 @@ function RegisterResult({
     onRemove,
 }: {
     ocl: Ocl;
-    registerRequestStatus: ValidationStatus;
+    registerRequestStatus: string;
     registerResult: string[];
     onRemove: () => void;
 }): JSX.Element {
-    if (registerRequestStatus === 'completed') {
+    if (registerRequestStatus === 'success') {
         return (
             <Alert
                 type={'success'}

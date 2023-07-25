@@ -10,6 +10,8 @@ import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getRolesOfUser } from '../oidc/OidcConfig';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 
 interface ProtectedRouteProperties {
     children: JSX.Element;
@@ -32,10 +34,10 @@ function getFullLayout(content: JSX.Element): JSX.Element {
 }
 
 function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
-    const roles: string[] = getRolesOfUser(idTokenPayload as object);
+    const roles: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
+    updateApiConfig();
 
     if (protectedRouteProperties.allowedRole === 'all' || roles.includes(protectedRouteProperties.allowedRole)) {
         return getFullLayout(protectedRouteProperties.children);

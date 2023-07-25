@@ -18,6 +18,7 @@ import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
 import { getUserName } from '../../oidc/OidcConfig';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function UpdateCredential({
     createCredential,
@@ -32,8 +33,7 @@ function UpdateCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
@@ -47,7 +47,7 @@ function UpdateCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = getUserName(idTokenPayload as object);
+            const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
             if (!userName) {
                 return;
             }
@@ -104,15 +104,13 @@ function UpdateCredential({
             ellipsis: {
                 showTitle: false,
             },
-            render: (value, record) =>
+            render: (value: string, record) =>
                 record.isMandatory ? (
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     <Tooltip placement='topLeft' title={value}>
                         <span className={'add-credential-from-variables-value'}>*</span>
                         {value}
                     </Tooltip>
                 ) : (
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                     <Tooltip placement='topLeft' title={value}>
                         {value}
                     </Tooltip>
@@ -121,7 +119,7 @@ function UpdateCredential({
         {
             title: 'value',
             dataIndex: 'value',
-            render: (value, record, index) =>
+            render: (value: string, record, index) =>
                 record.isMandatory ? (
                     <Form.Item
                         name='value'
@@ -178,8 +176,7 @@ function UpdateCredential({
             ellipsis: {
                 showTitle: false,
             },
-            render: (description) => (
-                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+            render: (description: string) => (
                 <Tooltip placement='topLeft' title={description}>
                     {description}
                 </Tooltip>

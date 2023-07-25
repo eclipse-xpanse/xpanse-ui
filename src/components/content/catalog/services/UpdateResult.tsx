@@ -5,7 +5,6 @@
 
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../../xpanse-api/generated';
-import { ValidationStatus } from '../../register/ValidationStatus';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function UpdateResult({
@@ -15,17 +14,17 @@ function UpdateResult({
     onRemove,
 }: {
     ocl: Ocl;
-    updateRequestStatus: ValidationStatus;
+    updateRequestStatus: string;
     updateResult: string[];
     onRemove: () => void;
 }): JSX.Element {
-    if (updateRequestStatus === 'completed') {
+    if (updateRequestStatus === 'success') {
         return (
             <Alert
                 type={'success'}
                 message={
                     <>
-                        Service <b>${ocl.name}</b> Updated Successfully
+                        Service <b>{ocl.name}</b> Updated Successfully
                     </>
                 }
                 closable={true}

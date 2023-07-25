@@ -45,3 +45,9 @@
 .catalog-middleware .update-unregister-btn-class {
     display: flex;
 }
+
+.catalog-skeleton {
+    margin: 30px;
+    position: absolute;
+    width: 80%;
+}
