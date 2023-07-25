@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class ServicesAvailableService {
     /**
-     * List the available services.
+     * List the available services.<br>**Required role: admin or user**
      * @param categoryName category of the service
      * @param cspName name of the service provider
      * @param serviceName name of the service
@@ -61,7 +61,7 @@ export class ServicesAvailableService {
     }
 
     /**
-     * Get available service by id.
+     * Get available service by id.<br>**Required role: admin or user**
      * @param id The id of available service.
      * @returns UserAvailableServiceVo OK
      * @throws ApiError
@@ -84,7 +84,7 @@ export class ServicesAvailableService {
     }
 
     /**
-     * Get the API document of the available service.
+     * Get the API document of the available service.<br>**Required role: admin or csp or user**
      * @param id
      * @returns Link OK
      * @throws ApiError
@@ -107,7 +107,7 @@ export class ServicesAvailableService {
     }
 
     /**
-     * Get the available services by tree.
+     * Get the available services by tree.<br>**Required role: admin or csp or user**
      * @param categoryName category of the service
      * @returns CategoryOclVo OK
      * @throws ApiError

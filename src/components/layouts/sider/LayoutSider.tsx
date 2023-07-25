@@ -10,7 +10,13 @@ import { homePageRoute, userRoleKey } from '../../utils/constants';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import { catalogMenu } from '../../content/catalog/services/catalogMenu';
-import { credentialMenu, monitorMenu, serviceListMenu, servicesMenu } from '../../content/order/ServicesMenu';
+import {
+    credentialMenu,
+    healthCheckMenu,
+    monitorMenu,
+    serviceListMenu,
+    servicesMenu,
+} from '../../content/order/ServicesMenu';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import MenuLoading from './MenuLoading';
 import { RegisteredServiceVo } from '../../../xpanse-api/generated';
@@ -29,6 +35,8 @@ function LayoutSider(): JSX.Element {
     useEffect(() => {
         if (sessionStorage.getItem(userRoleKey) === 'csp') {
             setItems([catalogMenu(serviceCategories), registerPanelMenu()]);
+        } else if (sessionStorage.getItem(userRoleKey) === 'admin') {
+            setItems([healthCheckMenu()]);
         } else {
             setItems([servicesMenu(serviceCategories), serviceListMenu(), monitorMenu(), credentialMenu()]);
         }

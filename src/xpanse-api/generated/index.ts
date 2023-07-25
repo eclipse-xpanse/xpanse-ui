@@ -13,6 +13,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { AbstractCredentialInfo } from './models/AbstractCredentialInfo';
+export { BackendSystemStatus } from './models/BackendSystemStatus';
 export { Billing } from './models/Billing';
 export type { CategoryOclVo } from './models/CategoryOclVo';
 export { CloudServiceProvider } from './models/CloudServiceProvider';
@@ -36,10 +37,12 @@ export { Response } from './models/Response';
 export { ServiceDetailVo } from './models/ServiceDetailVo';
 export { ServiceVo } from './models/ServiceVo';
 export { SystemStatus } from './models/SystemStatus';
+export type { TokenResponse } from './models/TokenResponse';
 export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
 export type { VersionOclVo } from './models/VersionOclVo';
 
 export { AdminService } from './services/AdminService';
+export { AuthManagementService } from './services/AuthManagementService';
 export { CredentialsManagementService } from './services/CredentialsManagementService';
 export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
