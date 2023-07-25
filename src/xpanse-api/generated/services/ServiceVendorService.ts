@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class ServiceVendorService {
     /**
-     * Get registered service using id.
+     * Get registered service using id.<br>**Required role: admin or csp**
      * @param id id of registered service
      * @returns RegisteredServiceVo OK
      * @throws ApiError
@@ -40,7 +40,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update registered service using id and ocl model.
+     * Update registered service using id and ocl model.<br>**Required role: admin or csp**
      * @param id id of registered service
      * @param requestBody
      * @returns RegisteredServiceVo OK
@@ -66,7 +66,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Unregister registered service using id.
+     * Unregister registered service using id.<br>**Required role: admin or csp**
      * @param id id of registered service
      * @returns Response OK
      * @throws ApiError
@@ -89,7 +89,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update registered service using id and ocl file url.
+     * Update registered service using id and ocl file url.<br>**Required role: admin or csp**
      * @param id id of registered service
      * @param oclLocation URL of Ocl file
      * @returns RegisteredServiceVo OK
@@ -116,7 +116,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * List registered service with query params.
+     * List registered service with query params.<br>**Required role: admin or csp**
      * @param categoryName category of the service
      * @param cspName name of the service provider
      * @param serviceName name of the service
@@ -160,7 +160,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service using ocl model.
+     * Register new service using ocl model.<br>**Required role: admin or csp**
      * @param requestBody
      * @returns RegisteredServiceVo OK
      * @throws ApiError
@@ -182,7 +182,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service with URL of Ocl file.
+     * Register new service with URL of Ocl file.<br>**Required role: admin or csp**
      * @param oclLocation URL of Ocl file
      * @returns RegisteredServiceVo OK
      * @throws ApiError
@@ -205,7 +205,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Get category list.
+     * Get category list.<br>**Required role: admin or csp**
      * @returns string OK
      * @throws ApiError
      */

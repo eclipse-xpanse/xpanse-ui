@@ -4,16 +4,12 @@
  */
 
 import { Button } from 'antd';
-import { AdminService, SystemStatus } from '../../../xpanse-api/generated';
+import { SystemStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
-import { useQuery } from '@tanstack/react-query';
+import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
 function SystemStatusBar(): JSX.Element {
-    const systemStatusQuery = useQuery({
-        queryKey: ['systemStatusQuery'],
-        queryFn: () => AdminService.health(),
-        staleTime: 60000, // one minute
-    });
+    const healthCheckQuery = useHealthCheckStatusQuery();
 
     return (
         <>
@@ -21,11 +17,11 @@ function SystemStatusBar(): JSX.Element {
                 className={'header-menu-button'}
                 icon={
                     <SystemStatusIcon
-                        isSystemUp={systemStatusQuery.data?.healthStatus === SystemStatus.healthStatus.OK}
-                        isStatusLoading={systemStatusQuery.isLoading}
+                        isSystemUp={healthCheckQuery.data?.healthStatus === SystemStatus.healthStatus.OK}
+                        isStatusLoading={healthCheckQuery.isLoading}
                     />
                 }
-                onClick={() => void systemStatusQuery.refetch()}
+                onClick={() => void healthCheckQuery.refetch()}
             >
                 System Status
             </Button>

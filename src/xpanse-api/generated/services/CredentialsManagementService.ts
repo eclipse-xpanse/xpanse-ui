@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class CredentialsManagementService {
     /**
-     * Update credential of the cloud service provider.
+     * Update credential of the cloud service provider.<br>**Required role: admin or user**
      * @param requestBody
      * @returns void
      * @throws ApiError
@@ -39,7 +39,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Add credential of the cloud service provider.
+     * Add credential of the cloud service provider.<br>**Required role: admin or user**
      * @param requestBody
      * @returns void
      * @throws ApiError
@@ -61,7 +61,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * List all credentials of the user.
+     * List all credentials of the user.<br>**Required role: admin or user**
      * @param userName The name of user who provided the credential.
      * @returns AbstractCredentialInfo OK
      * @throws ApiError
@@ -84,7 +84,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get the API document for adding credential of the Csp.
+     * Get the API document for adding credential of the Csp.<br>**Required role: admin or user**
      * @param cspName The cloud service provider.
      * @param type The type of credential.
      * @returns Link OK
@@ -112,7 +112,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * List credentials of the cloud service provider and the user.
+     * List credentials of the cloud service provider and the user.<br>**Required role: admin or user**
      * @param cspName The cloud service provider.
      * @param userName The name of user who provided the credential.
      * @param type The type of credential.
@@ -145,7 +145,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * List credential types provided by the cloud service provider.
+     * List credential types provided by the cloud service provider.<br>**Required role: admin or user**
      * @param cspName The cloud service provider.
      * @returns string OK
      * @throws ApiError
@@ -170,7 +170,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * List credential capabilities provided by the cloud service provider.
+     * List credential capabilities provided by the cloud service provider.<br>**Required role: admin or user**
      * @param cspName The cloud service provider.
      * @param type The type of credential.
      * @returns AbstractCredentialInfo OK
@@ -200,7 +200,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Delete credential of the cloud service provider and the user.
+     * Delete credential of the cloud service provider and the user.<br>**Required role: admin or user**
      * @param cspName The cloud service provider.
      * @param userName The name of user who provided credential.
      * @param type The type of credential.
