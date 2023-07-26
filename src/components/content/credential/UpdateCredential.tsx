@@ -196,17 +196,13 @@ function UpdateCredential({
             >
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
                 <div className={'credential-from-input'}>
-                    <Form.Item
-                        label='Name'
-                        name='name'
-                        rules={[{ required: true, message: 'Please input  credential name!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
                     <Form.Item label='Csp' name='csp'>
                         <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label='Type' name='type'>
+                        <Input disabled={true} />
+                    </Form.Item>
+                    <Form.Item label='Name' name='name'>
                         <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label='Description' name='description'>
