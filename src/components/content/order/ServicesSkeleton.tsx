@@ -12,8 +12,8 @@ function ServicesSkeleton() {
                 <Skeleton active={true} paragraph={{ rows: 0 }} />
             </div>
             <div className={'services-content-body'}>
-                {Array.from({ length: 9 }, () => (
-                    <Row key={0}>
+                {Array.from({ length: 9 }, (element, index) => (
+                    <Row key={index}>
                         <Col span={8} className={'services-content-body-col'}>
                             <Space direction='vertical' size='middle'>
                                 <div className={'service-type-option-detail-skeleton ant-skeleton-header'}>

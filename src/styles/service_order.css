@@ -313,3 +313,18 @@
 .migrate-show-deploy-class {
     height: 50%;
 }
+
+.timer-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-header {
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.timer-value {
+    font-size: 20px;
+}
