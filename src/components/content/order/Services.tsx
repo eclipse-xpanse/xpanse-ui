@@ -11,9 +11,10 @@ import { createServicePageRoute } from '../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../utils/Sort';
-import { ServicesAvailableService, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from './ServicesLoadingError';
+import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function Services(): JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(

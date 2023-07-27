@@ -40,7 +40,7 @@ export class AuthManagementService {
     }
 
     /**
-     * Get and redirect authorization url for user to authorize.
+     * Get and redirect authorization url for user to authenticate.
      * @returns any OK
      * @throws ApiError
      */
