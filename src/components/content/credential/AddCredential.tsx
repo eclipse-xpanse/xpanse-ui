@@ -30,21 +30,31 @@ function AddCredential({
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
     const [currentType, setCurrentType] = useState<CredentialVariables.type | undefined>(undefined);
-    const [currentName, setCurrentName] = useState<string>('');
+    const [currentName, setCurrentName] = useState<string | undefined>(undefined);
     const [credentialTypeList, setCredentialTypeList] = useState<CredentialVariables.type[]>([]);
     const [nameList, setNameList] = useState<string[]>([]);
-    const [credentialInfo, setCredentialInfo] = useState<CredentialVariables[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const oidcToken: OidcIdToken = useOidcIdToken();
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
+
+        setCurrentType(undefined);
+        form.setFieldsValue({ type: undefined });
+
+        setCurrentName(undefined);
+        setNameList([]);
+        form.setFieldsValue({ name: undefined });
+
+        setCredentialVariableList([]);
+        form.setFieldsValue({ variables: [] });
     };
 
     const clear = () => {
         setCurrentCsp(undefined);
         setCurrentType(undefined);
+        setCurrentName(undefined);
         setNameList([]);
         setCredentialTypeList([]);
         setCredentialVariableList([]);
@@ -52,26 +62,17 @@ function AddCredential({
 
     const handleCredentialTypeSelect = (type: CredentialVariables.type) => {
         setCurrentType(type);
+
+        setCurrentName(undefined);
+        form.setFieldsValue({ name: undefined });
+
+        setCredentialVariableList([]);
+        form.setFieldsValue({ variables: [] });
     };
 
     const handleCredentialNameSelect = (name: string) => {
         setCurrentName(name);
         form.setFieldsValue({ name: name });
-        if (credentialInfo.length > 0) {
-            credentialInfo.forEach((credential: CredentialVariables) => {
-                if (credential.csp === currentCsp && credential.type === currentType && credential.name === name) {
-                    credential.variables.forEach((credentialVariable) => {
-                        credentialVariable.value = '';
-                        credentialVariableList.push(credentialVariable);
-                    });
-                    setCredentialVariableList(credentialVariableList);
-                    form.setFieldsValue({ variables: credentialVariableList });
-                }
-            });
-        } else {
-            setCredentialVariableList([]);
-            form.setFieldsValue({ variables: [] });
-        }
     };
 
     useEffect(() => {
@@ -95,22 +96,37 @@ function AddCredential({
             return;
         }
         void CredentialsManagementService.getCredentialCapabilitiesByCsp(currentCsp, currentType)
-            .then((resp) => {
-                const names: string[] = [];
-                let credentialInfo: CredentialVariables[] = [];
+            .then((resp: CredentialVariables[]) => {
                 if (resp.length > 0) {
                     resp.forEach((credential: CredentialVariables) => {
                         names.push(credential.name);
+                        if (
+                            credential.csp === currentCsp &&
+                            credential.type === currentType &&
+                            credential.name === currentName
+                        ) {
+                            const credentialVariables: CredentialVariable[] = [];
+                            credential.variables.forEach((credentialVariable) => {
+                                credentialVariable.value = '';
+                                credentialVariables.push(credentialVariable);
+                            });
+                            setCredentialVariableList(credentialVariables);
+                            form.setFieldsValue({ variables: credentialVariables });
+                        }
                     });
-                    credentialInfo = resp;
+                    setNameList(names);
+                } else {
+                    setNameList([]);
+                    setCredentialVariableList([]);
+                    form.setFieldsValue({ variables: [] });
                 }
-                setCredentialInfo(credentialInfo);
-                setNameList(names);
             })
             .catch((error: Error) => {
-                setNameList([]);
                 console.log(error);
+                return [];
             });
+        const names: string[] = [];
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentCsp, currentType, currentName]);
 
