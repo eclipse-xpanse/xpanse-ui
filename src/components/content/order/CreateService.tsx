@@ -12,7 +12,6 @@ import {
     Flavor,
     Region,
     Response,
-    ServicesAvailableService,
     UserAvailableServiceVo,
 } from '../../../xpanse-api/generated';
 import Navigate from './Navigate';
@@ -27,6 +26,7 @@ import { servicesSubPageRoute } from '../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function filterAreaList(
     selectVersion: string,

@@ -203,36 +203,4 @@ export class ServiceVendorService {
             },
         });
     }
-
-    /**
-     * Get category list.<br>**Required role: admin or csp**
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static listCategories(): CancelablePromise<
-        Array<
-            | 'ai'
-            | 'compute'
-            | 'container'
-            | 'storage'
-            | 'network'
-            | 'database'
-            | 'mediaService'
-            | 'security'
-            | 'middleware'
-            | 'others'
-        >
-    > {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/services/categories',
-            errors: {
-                400: `Bad Request`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
 }

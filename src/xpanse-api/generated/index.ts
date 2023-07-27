@@ -46,5 +46,5 @@ export { AuthManagementService } from './services/AuthManagementService';
 export { CredentialsManagementService } from './services/CredentialsManagementService';
 export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
-export { ServicesAvailableService } from './services/ServicesAvailableService';
+export { ServiceCatalogService } from './services/ServiceCatalogService';
 export { ServiceVendorService } from './services/ServiceVendorService';
