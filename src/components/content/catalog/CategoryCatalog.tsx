@@ -8,17 +8,11 @@ import '../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined } from '@ant-design/icons';
-import {
-    ApiError,
-    CategoryOclVo,
-    Response,
-    ServicesAvailableService,
-    ServiceVo,
-    VersionOclVo,
-} from '../../../xpanse-api/generated';
+import { ApiError, CategoryOclVo, Response, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');

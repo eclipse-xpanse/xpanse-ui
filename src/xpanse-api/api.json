@@ -8,12 +8,14 @@
     "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
     "security": [{ "OAuth2 Flow": ["openid", "email", "profile"] }],
     "tags": [
+        { "name": "Credentials Management", "description": "APIs for managing user's cloud provider credentials" },
         { "name": "Admin", "description": "APIs for administrating Xpanse" },
-        { "name": "Services Available", "description": "APIs to query the available services." },
-        { "name": "Credentials Management", "description": "APIs to manage credentials for authentication." },
-        { "name": "Credentials Management", "description": "APIs for user manage credentials for authentication." },
+        {
+            "name": "Service Catalog",
+            "description": "APIs to query the services which are available for the user to order."
+        },
+        { "name": "Auth Management", "description": "APIs for user authentication and authorization." },
         { "name": "Service", "description": "APIs to manage the service instances" },
-        { "name": "Auth Management", "description": "APIs for user authentication." },
         { "name": "Service Vendor", "description": "APIs to manage register services." },
         { "name": "Monitor", "description": "APIs to get metrics of deployed services." }
     ],
@@ -37,16 +39,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -87,16 +89,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -129,16 +131,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -178,16 +180,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -206,7 +208,7 @@
         "/xpanse/auth/csp/credential": {
             "put": {
                 "tags": ["Credentials Management"],
-                "description": "Update credential of the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Update user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "updateCredential",
                 "requestBody": {
                     "content": {
@@ -219,16 +221,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -240,7 +242,7 @@
             },
             "post": {
                 "tags": ["Credentials Management"],
-                "description": "Add credential of the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Add user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "addCredential",
                 "requestBody": {
                     "content": {
@@ -253,16 +255,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -327,16 +329,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -373,16 +375,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -417,16 +419,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -456,16 +458,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -489,16 +491,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -535,16 +537,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -588,16 +590,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -613,64 +615,10 @@
                 }
             }
         },
-        "/xpanse/services/categories": {
-            "get": {
-                "tags": ["Service Vendor"],
-                "description": "Get category list.<br>**Required role: admin or csp**",
-                "operationId": "listCategories",
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string",
-                                        "enum": [
-                                            "ai",
-                                            "compute",
-                                            "container",
-                                            "storage",
-                                            "network",
-                                            "database",
-                                            "mediaService",
-                                            "security",
-                                            "middleware",
-                                            "others"
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
         "/xpanse/services/available": {
             "get": {
-                "tags": ["Services Available"],
-                "description": "List the available services.<br>**Required role: admin or user**",
+                "tags": ["Service Catalog"],
+                "description": "Returns the list of all registered services that are available for user to order.<br>**Required role: admin or user**",
                 "operationId": "listAvailableServices",
                 "parameters": [
                     {
@@ -721,16 +669,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -759,8 +707,8 @@
         },
         "/xpanse/services/available/{id}": {
             "get": {
-                "tags": ["Services Available"],
-                "description": "Get available service by id.<br>**Required role: admin or user**",
+                "tags": ["Service Catalog"],
+                "description": "Get deployable service by id.<br>**Required role: admin or user**",
                 "operationId": "availableServiceDetails",
                 "parameters": [
                     {
@@ -776,16 +724,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -803,7 +751,7 @@
         },
         "/xpanse/services/available/{id}/openapi": {
             "get": {
-                "tags": ["Services Available"],
+                "tags": ["Service Catalog"],
                 "description": "Get the API document of the available service.<br>**Required role: admin or csp or user**",
                 "operationId": "openApi",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
@@ -812,16 +760,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -837,7 +785,7 @@
         },
         "/xpanse/services/available/category/{categoryName}": {
             "get": {
-                "tags": ["Services Available"],
+                "tags": ["Service Catalog"],
                 "description": "Get the available services by tree.<br>**Required role: admin or csp or user**",
                 "operationId": "getAvailableServicesTree",
                 "parameters": [
@@ -868,16 +816,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -898,7 +846,7 @@
         "/xpanse/monitor/metric/service/{id}": {
             "get": {
                 "tags": ["Monitor"],
-                "description": "Get metrics of the deployed service.<br>**Required role: admin or user**",
+                "description": "Get metrics of all resources in a deployed service.<br>**Required role: admin or user**",
                 "operationId": "getMetricsByServiceId",
                 "parameters": [
                     {
@@ -952,16 +900,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -982,7 +930,7 @@
         "/xpanse/monitor/metric/resource/{id}": {
             "get": {
                 "tags": ["Monitor"],
-                "description": "Get metrics of the deployed resource.<br>**Required role: admin or user**",
+                "description": "Get metrics of a specific deployed resource.<br>**Required role: admin or user**",
                 "operationId": "getMetricsByResourceId",
                 "parameters": [
                     {
@@ -1036,16 +984,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1066,11 +1014,15 @@
         "/xpanse/health": {
             "get": {
                 "tags": ["Admin"],
-                "description": "Check health of API service and backend system.<br>**Required role: admin or csp or user**",
+                "description": "Check health of API service and backend systems.<br>**Required role: admin or csp or user**",
                 "operationId": "healthCheck",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
@@ -1079,10 +1031,6 @@
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1099,7 +1047,7 @@
         "/xpanse/auth/user/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List all credentials of the user.<br>**Required role: admin or user**",
+                "description": "Get all cloud provider credentials added by the user.<br>**Required role: admin or user**",
                 "operationId": "getCredentialsByUser",
                 "parameters": [
                     {
@@ -1115,16 +1063,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1148,7 +1096,7 @@
         "/xpanse/auth/csp/{cspName}/openapi/{type}": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get the API document for adding credential of the Csp.<br>**Required role: admin or user**",
+                "description": "Returns the OpenAPI document for adding a credential.<br>**Required role: admin or user**",
                 "operationId": "getCredentialOpenApi",
                 "parameters": [
                     {
@@ -1177,16 +1125,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1203,7 +1151,7 @@
         "/xpanse/auth/csp/{cspName}/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List credentials of the cloud service provider and the user.<br>**Required role: admin or user**",
+                "description": "Get all cloud provider credentials added by the user for a cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "getCredentials",
                 "parameters": [
                     {
@@ -1217,13 +1165,6 @@
                         }
                     },
                     {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided the credential.",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    },
-                    {
                         "name": "type",
                         "in": "query",
                         "description": "The type of credential.",
@@ -1232,11 +1173,22 @@
                             "type": "string",
                             "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                         }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "The name of user who provided the credential.",
+                        "required": true,
+                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
@@ -1245,10 +1197,6 @@
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1272,7 +1220,7 @@
         "/xpanse/auth/csp/{cspName}/credential/types": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List credential types provided by the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Get the credential types supported by the cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "getCredentialTypesByCsp",
                 "parameters": [
                     {
@@ -1291,16 +1239,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1327,13 +1275,13 @@
         "/xpanse/auth/csp/{cspName}/credential/capabilities": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List credential capabilities provided by the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Get the credential capabilities defined by the cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "getCredentialCapabilitiesByCsp",
                 "parameters": [
                     {
                         "name": "cspName",
                         "in": "path",
-                        "description": "The cloud service provider.",
+                        "description": "name of the cloud service provider.",
                         "required": true,
                         "schema": {
                             "type": "string",
@@ -1349,11 +1297,22 @@
                             "type": "string",
                             "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                         }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of credential.",
+                        "required": false,
+                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
@@ -1362,10 +1321,6 @@
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1412,16 +1367,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1440,11 +1395,15 @@
         "/auth/authorize": {
             "get": {
                 "tags": ["Auth Management"],
-                "description": "Get and redirect authorization url for user to authorize.",
+                "description": "Get and redirect authorization url for user to authenticate.",
                 "operationId": "authorize",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
@@ -1453,10 +1412,6 @@
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1478,16 +1433,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1504,7 +1459,7 @@
         "/xpanse/auth/csp/{cspName}/credential": {
             "delete": {
                 "tags": ["Credentials Management"],
-                "description": "Delete credential of the cloud service provider and the user.<br>**Required role: admin or user**",
+                "description": "Delete user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
                 "operationId": "deleteCredential",
                 "parameters": [
                     {
@@ -1518,13 +1473,6 @@
                         }
                     },
                     {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided credential.",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    },
-                    {
                         "name": "type",
                         "in": "query",
                         "description": "The type of credential.",
@@ -1533,11 +1481,29 @@
                             "type": "string",
                             "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                         }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of of credential.",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "userName",
+                        "in": "query",
+                        "description": "The name of user who provided credential.",
+                        "required": true,
+                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "400": {
@@ -1546,10 +1512,6 @@
                     },
                     "403": {
                         "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2368,7 +2330,7 @@
                             "xpanseUser": { "type": "string", "description": "The user who create the credential." },
                             "name": {
                                 "type": "string",
-                                "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
+                                "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
                             },
                             "description": {
                                 "type": "string",
@@ -2378,7 +2340,8 @@
                                 "type": "string",
                                 "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
                                 "enum": ["variables", "http_authentication", "api_key", "oauth2"]
-                            }
+                            },
+                            "uniqueKey": { "type": "string" }
                         }
                     }
                 ]
@@ -2395,7 +2358,7 @@
                     "xpanseUser": { "type": "string", "description": "The user who create the credential." },
                     "name": {
                         "type": "string",
-                        "description": "The name of the credential,this field is provided by  he the plugin of cloud service provider."
+                        "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
                     },
                     "description": {
                         "type": "string",
@@ -2410,7 +2373,8 @@
                         "type": "array",
                         "description": "The variables list of the credential.",
                         "items": { "$ref": "#/components/schemas/CredentialVariable" }
-                    }
+                    },
+                    "uniqueKey": { "type": "string" }
                 }
             },
             "TokenResponse": {

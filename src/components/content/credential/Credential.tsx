@@ -110,8 +110,9 @@ function Credential(): JSX.Element {
     const deleteCredential = (credentialVariables: CredentialVariables) => {
         void CredentialsManagementService.deleteCredential(
             credentialVariables.csp,
-            credentialVariables.xpanseUser,
-            credentialVariables.type
+            credentialVariables.type,
+            credentialVariables.name,
+            credentialVariables.xpanseUser
         )
             .then(() => {
                 getTipInfo('success', 'Deleting Credential Successful.');

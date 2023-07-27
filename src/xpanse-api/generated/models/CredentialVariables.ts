@@ -20,7 +20,7 @@ export type CredentialVariables = {
      */
     xpanseUser: string;
     /**
-     * The name of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.
      */
     name: string;
     /**
@@ -35,6 +35,7 @@ export type CredentialVariables = {
      * The variables list of the credential.
      */
     variables: Array<CredentialVariable>;
+    uniqueKey?: string;
 };
 
 export namespace CredentialVariables {

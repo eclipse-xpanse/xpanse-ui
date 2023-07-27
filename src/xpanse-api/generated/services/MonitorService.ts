@@ -15,7 +15,7 @@ import { request as __request } from '../core/request';
 
 export class MonitorService {
     /**
-     * Get metrics of the deployed service.<br>**Required role: admin or user**
+     * Get metrics of all resources in a deployed service.<br>**Required role: admin or user**
      * @param id Id of the deployed service
      * @param monitorResourceType Types of the monitor resource.
      * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
@@ -57,7 +57,7 @@ export class MonitorService {
     }
 
     /**
-     * Get metrics of the deployed resource.<br>**Required role: admin or user**
+     * Get metrics of a specific deployed resource.<br>**Required role: admin or user**
      * @param id Id of the deployed resource.
      * @param monitorResourceType Types of the monitor resource.
      * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.

@@ -4,12 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-    CloudServiceProvider,
-    ServicesAvailableService,
-    ServiceVo,
-    UserAvailableServiceVo,
-} from '../../../../xpanse-api/generated';
+import { CloudServiceProvider, ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
 import { Steps } from 'antd';
@@ -17,6 +12,7 @@ import { MigrateService } from './MigrateService';
 import { MigrationStatus, MigrationSteps } from '../formElements/CommonTypes';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
+import { ServicesAvailableService } from '../../../../xpanse-api/generated/services/ServicesAvailableService';
 
 export const Migrate = ({
     currentSelectedService,
