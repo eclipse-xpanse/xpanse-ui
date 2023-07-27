@@ -29,6 +29,9 @@ function AddCredential({
 }): JSX.Element {
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
+    const [disable, setDisable] = useState<boolean>(false);
+    const [typeDisabled, setTypeDisabled] = useState<boolean>(true);
+    const [nameDisable, setNameDisable] = useState<boolean>(true);
     const [currentType, setCurrentType] = useState<CredentialVariables.type | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
     const [credentialTypeList, setCredentialTypeList] = useState<CredentialVariables.type[]>([]);
@@ -39,16 +42,20 @@ function AddCredential({
     const oidcToken: OidcIdToken = useOidcIdToken();
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
+        setTypeDisabled(false);
+        setNameDisable(true);
 
         setCurrentType(undefined);
         form.setFieldsValue({ type: undefined });
 
         setCurrentName(undefined);
-        setNameList([]);
         form.setFieldsValue({ name: undefined });
 
         setCredentialVariableList([]);
         form.setFieldsValue({ variables: [] });
+
+        getTipInfo(undefined, '');
+        setDisable(false);
     };
 
     const clear = () => {
@@ -62,17 +69,24 @@ function AddCredential({
 
     const handleCredentialTypeSelect = (type: CredentialVariables.type) => {
         setCurrentType(type);
+        setNameDisable(false);
+        setDisable(false);
 
         setCurrentName(undefined);
         form.setFieldsValue({ name: undefined });
 
         setCredentialVariableList([]);
         form.setFieldsValue({ variables: [] });
+
+        getTipInfo(undefined, '');
     };
 
     const handleCredentialNameSelect = (name: string) => {
         setCurrentName(name);
         form.setFieldsValue({ name: name });
+
+        getTipInfo(undefined, '');
+        setDisable(false);
     };
 
     useEffect(() => {
@@ -235,13 +249,16 @@ function AddCredential({
             void CredentialsManagementService.addCredential(createCredential)
                 .then(() => {
                     getTipInfo('success', 'Adding Credential Successful.');
+                    setDisable(true);
                 })
                 .catch((error: Error) => {
                     if (error instanceof ApiError && 'details' in error.body) {
                         const response: Response = error.body as Response;
                         getTipInfo('error', response.details.join());
+                        setDisable(true);
                     } else {
                         getTipInfo('error', error.message);
+                        setDisable(true);
                     }
                 });
         }
@@ -251,10 +268,12 @@ function AddCredential({
         clear();
         form.resetFields();
         getTipInfo(undefined, '');
+        setTypeDisabled(true);
+        setNameDisable(true);
+        setDisable(false);
     };
 
     const onRemove = () => {
-        getTipInfo(undefined, '');
         onReset();
         onCancel();
         getCredentials();
@@ -288,44 +307,36 @@ function AddCredential({
                             })}
                         </Select>
                     </Form.Item>
-                    {currentCsp && currentCsp.length > 0 ? (
-                        <Form.Item
-                            label='Type'
-                            name='type'
-                            rules={[{ required: true, message: 'Please Select The Type of Credential!' }]}
-                        >
-                            <Select onSelect={handleCredentialTypeSelect}>
-                                {credentialTypeList.map((type: CredentialVariables.type) => {
-                                    return (
-                                        <Select.Option key={type} value={type}>
-                                            {type}
-                                        </Select.Option>
-                                    );
-                                })}
-                            </Select>
-                        </Form.Item>
-                    ) : (
-                        <></>
-                    )}
-                    {nameList.length > 0 ? (
-                        <Form.Item
-                            label='Name'
-                            name='name'
-                            rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
-                        >
-                            <Select onSelect={handleCredentialNameSelect}>
-                                {nameList.map((name: string) => {
-                                    return (
-                                        <Select.Option key={name} value={name}>
-                                            {name}
-                                        </Select.Option>
-                                    );
-                                })}
-                            </Select>
-                        </Form.Item>
-                    ) : (
-                        <></>
-                    )}
+                    <Form.Item
+                        label='Type'
+                        name='type'
+                        rules={[{ required: true, message: 'Please Select The Type of Credential!' }]}
+                    >
+                        <Select disabled={typeDisabled} onSelect={handleCredentialTypeSelect}>
+                            {credentialTypeList.map((type: CredentialVariables.type) => {
+                                return (
+                                    <Select.Option key={type} value={type}>
+                                        {type}
+                                    </Select.Option>
+                                );
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='Name'
+                        name='name'
+                        rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
+                    >
+                        <Select disabled={nameDisable} onSelect={handleCredentialNameSelect}>
+                            {nameList.map((name: string) => {
+                                return (
+                                    <Select.Option key={name} value={name}>
+                                        {name}
+                                    </Select.Option>
+                                );
+                            })}
+                        </Select>
+                    </Form.Item>
                     <Form.Item label='Description' name='description'>
                         <TextArea rows={4} />
                     </Form.Item>
@@ -350,7 +361,7 @@ function AddCredential({
                     )}
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' htmlType='submit'>
+                    <Button type='primary' disabled={disable} htmlType='submit'>
                         Add
                     </Button>
                     <Button htmlType='button' className={'add-credential-from-button-reset'} onClick={onReset}>
