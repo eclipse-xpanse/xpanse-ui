@@ -31,7 +31,7 @@ export function getRolesOfUser(oidcUserInfo: object): string[] {
             return Object.keys(oidcUserInfo['urn:zitadel:iam:org:project:roles']);
         }
     }
-    return [];
+    return ['user']; //default role when no roles are assigned.
 }
 
 export function getUserName(oidcUserInfo: object): string {

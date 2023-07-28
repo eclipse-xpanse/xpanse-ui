@@ -10,7 +10,6 @@ import { ChangeEvent, useState } from 'react';
 import {
     DeployParam,
     NumberInputEventHandler,
-    OperationType,
     ParamOnChangeHandler,
     SwitchOnChangeHandler,
     TextInputEventHandler,
@@ -19,16 +18,15 @@ import { TextInput } from './formElements/TextInput';
 import { NumberInput } from './formElements/NumberInput';
 import { Switch } from './formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest, ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
-import { createServicePageRoute, deployTimeout, waitServicePeriod } from '../../utils/constants';
+import { CreateRequest } from '../../../xpanse-api/generated';
+import { createServicePageRoute } from '../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from './ApiDoc';
-import { ProcessingStatus } from './ProcessingStatus';
-import { OrderSubmitResult } from './OrderSubmitResult';
-import { OrderSubmitFailed } from './OrderSubmitFailed';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
+import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -57,21 +55,18 @@ export interface OrderSubmitProps {
 }
 
 function OrderSubmit(props: OrderSubmitProps): JSX.Element {
-    const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
     const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
+    const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
     const oidcIdToken: OidcIdToken = useOidcIdToken();
-
-    function TipClear() {
-        setTip(undefined);
-    }
+    const submitDeploymentRequest = useDeployRequestSubmitQuery();
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
             return (event: ChangeEvent<HTMLInputElement>) => {
-                TipClear();
+                setIsShowDeploymentResult(false);
                 setParameters(
                     parameters.map((item) => {
                         if (item.name === parameter.name) {
@@ -84,7 +79,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         }
         if (parameter.type === 'number') {
             return (value: string | number | null) => {
-                TipClear();
+                setIsShowDeploymentResult(false);
                 setParameters(
                     parameters.map((item) => {
                         if (item.name === parameter.name) {
@@ -97,7 +92,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         }
         if (parameter.type === 'boolean') {
             return (checked: boolean) => {
-                TipClear();
+                setIsShowDeploymentResult(false);
                 setParameters(
                     parameters.map((item) => {
                         if (item.name === parameter.name) {
@@ -113,62 +108,9 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         };
     }
 
-    function waitingServiceReady(uuid: string, timeout: number, date: Date) {
-        setTip(
-            OrderSubmitResult(
-                'Deploying, Please wait... [' +
-                    Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() +
-                    's]',
-                uuid,
-                'success'
-            )
-        );
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        ServiceService.getDeployedServiceDetailsById(uuid, userName)
-            .then((response) => {
-                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
-                    setTip(
-                        OrderSubmitResult(
-                            ProcessingStatus(response, OperationType.Deploy as OperationType),
-                            uuid,
-                            'success'
-                        )
-                    );
-                    setDeploying(false);
-                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYING) {
-                    setTimeout(() => {
-                        waitingServiceReady(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
-                    setTip(
-                        OrderSubmitResult(
-                            ProcessingStatus(response, OperationType.Deploy as OperationType),
-                            uuid,
-                            'error'
-                        )
-                    );
-                    setRequestSubmitted(false);
-                    setDeploying(false);
-                }
-            })
-            .catch((error) => {
-                console.log('waitingServiceReady error', error);
-                if (timeout > 0) {
-                    setTimeout(() => {
-                        waitingServiceReady(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                } else {
-                    setDeploying(false);
-                    TipClear();
-                    setRequestSubmitted(false);
-                }
-            });
-    }
-
-    function OnSubmit() {
+    function onSubmit() {
+        setRequestSubmitted(true);
+        setDeploying(true);
         const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
         if (!userName) {
             return;
@@ -190,21 +132,8 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
-
-        // Start deploying
-        setDeploying(true);
-
-        ServiceService.deploy(createRequest)
-            .then((uuid) => {
-                setRequestSubmitted(true);
-                setTip(OrderSubmitResult('Request accepted', uuid, 'success'));
-                waitingServiceReady(uuid, deployTimeout, new Date());
-            })
-            .catch((error: Error) => {
-                console.error(error);
-                setTip(OrderSubmitFailed(error));
-                setDeploying(false);
-            });
+        submitDeploymentRequest.mutate(createRequest);
+        setIsShowDeploymentResult(true);
     }
 
     const createServicePageUrl: string = createServicePageRoute
@@ -226,12 +155,21 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     </div>
                 </div>
             </div>
-            <div>{tip}</div>
+            {isShowDeploymentResult ? (
+                <OrderSubmitStatusPolling
+                    uuid={submitDeploymentRequest.data}
+                    error={submitDeploymentRequest.error as Error}
+                    isLoading={submitDeploymentRequest.isLoading}
+                    userName={getUserName(oidcIdToken.idTokenPayload as object)}
+                    setIsDeploying={setDeploying}
+                    setRequestSubmitted={setRequestSubmitted}
+                />
+            ) : null}
             <div className={'order-param-item-left'} />
             <Form
                 layout='vertical'
                 autoComplete='off'
-                onFinish={OnSubmit}
+                onFinish={onSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
             >

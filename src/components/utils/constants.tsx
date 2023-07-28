@@ -35,6 +35,7 @@ export const fetchMonitorMetricDataTimeInterval: number = 60 * 1000;
 export const deployTimeout: number = 3600000;
 // 5 seconds.
 export const waitServicePeriod: number = 5000;
+export const deploymentStatusPollingInterval: number = 5000;
 
 export const destroyTimeout: number = 3600000;
 
