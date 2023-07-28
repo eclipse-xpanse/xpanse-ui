@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * SPDX-FileCopyrightText: Huawei Inc.
  */
-import '../../styles/service_instance_list.css';
+import '../../styles/my_services.css';
 
 export function convertStringArrayToUnorderedList(result: string[]): string | JSX.Element {
     if (result.length === 1) {

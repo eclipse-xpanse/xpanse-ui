@@ -9,16 +9,18 @@ import type { ColumnsType } from 'antd/es/table';
 import { ApiError, Response, ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
-import '../../../styles/service_instance_list.css';
+import '../../../styles/my_services.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { destroyTimeout, waitServicePeriod } from '../../utils/constants';
-import { Migrate } from './migrate/Migrate';
+import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { getUserName } from '../../oidc/OidcConfig';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { useQuery } from '@tanstack/react-query';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
-function ServiceList(): JSX.Element {
+function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
@@ -26,19 +28,68 @@ function ServiceList(): JSX.Element {
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
-    const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
+    const [tip, setTip] = useState<React.JSX.Element | undefined>(undefined);
     const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
+    const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
     const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [content, setContent] = useState<Map<string, string>>(new Map());
-    const [requestParams, setRequestParams] = useState<Map<string, string>>(new Map());
-    const [resultMessage, setResultMessage] = useState<Map<string, string>>(new Map());
-    const [title, setTitle] = useState<JSX.Element>(<></>);
+    const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
+    const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
-    const [servicesLoadingError, setServicesLoadingError] = useState<JSX.Element>(<></>);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { idTokenPayload } = useOidcIdToken();
+    const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
+    const userName = getUserName(oidcIdToken.idTokenPayload as object);
+
+    const getDeployedServicesByUserQuery = useQuery({
+        queryKey: ['getDeployedServicesByUser', userName],
+        queryFn: () => ServiceService.getDeployedServicesByUser(userName),
+        refetchOnWindowFocus: false,
+    });
+
+    useEffect(() => {
+        const serviceList: ServiceVo[] = [];
+        if (getDeployedServicesByUserQuery.data && getDeployedServicesByUserQuery.data.length > 0) {
+            setServiceVoList(getDeployedServicesByUserQuery.data);
+            updateVersionFilters(getDeployedServicesByUserQuery.data);
+            updateNameFilters(getDeployedServicesByUserQuery.data);
+            updateCategoryFilters();
+            updateCspFilters();
+            updateServiceStateFilters();
+            updateCustomerServiceNameFilters(getDeployedServicesByUserQuery.data);
+        } else {
+            setServiceVoList(serviceList);
+        }
+    }, [getDeployedServicesByUserQuery.data, getDeployedServicesByUserQuery.isSuccess]);
+
+    useEffect(() => {
+        if (getDeployedServicesByUserQuery.error) {
+            if (
+                getDeployedServicesByUserQuery.error instanceof ApiError &&
+                'details' in getDeployedServicesByUserQuery.error.body
+            ) {
+                const response: Response = getDeployedServicesByUserQuery.error.body as Response;
+                setServicesLoadingError(
+                    <Alert
+                        message={response.resultType.valueOf()}
+                        description={convertStringArrayToUnorderedList(response.details)}
+                        type={'error'}
+                        closable={true}
+                        className={'failure-alert'}
+                    />
+                );
+            } else {
+                setServicesLoadingError(
+                    <Alert
+                        message='Fetching Service Details Failed'
+                        description={(getDeployedServicesByUserQuery.error as Error).message}
+                        type={'error'}
+                        closable={true}
+                        className={'failure-alert'}
+                    />
+                );
+            }
+        }
+    }, [getDeployedServicesByUserQuery.error, getDeployedServicesByUserQuery.isError]);
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -152,7 +203,7 @@ function ServiceList(): JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
-                                onClick={() => getDeployedProperties(record.id)}
+                                onClick={() => handleMyServiceDetailsOpenModal(record.id)}
                                 disabled={loading}
                             >
                                 detail
@@ -183,7 +234,7 @@ function ServiceList(): JSX.Element {
             'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
         );
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(idTokenPayload as object)!)
+        ServiceService.getDeployedServiceDetailsById(uuid, userName)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     Tip('success', 'Destroy success.');
@@ -232,38 +283,6 @@ function ServiceList(): JSX.Element {
             </div>
         );
         setIsMigrateModalOpen(true);
-    }
-
-    function getDeployedProperties(id: string): void {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(id, getUserName(idTokenPayload as object)!)
-            .then((response) => {
-                const endPointMap = new Map<string, string>();
-                const requestMap = new Map<string, string>();
-                const resultMessageMap = new Map<string, string>();
-                if (response.deployedServiceProperties) {
-                    for (const key in response.deployedServiceProperties) {
-                        endPointMap.set(key, response.deployedServiceProperties[key]);
-                    }
-                }
-                if (response.createRequest.serviceRequestProperties) {
-                    for (const key in response.createRequest.serviceRequestProperties) {
-                        requestMap.set(key, response.createRequest.serviceRequestProperties[key]);
-                    }
-                }
-                if (response.resultMessage) {
-                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                    resultMessageMap.set('Result message details', response.resultMessage);
-                }
-                setResultMessage(resultMessageMap);
-                setContent(endPointMap);
-                setRequestParams(requestMap);
-                setIsModalOpen(true);
-            })
-            .catch((e: Error) => {
-                console.log(e.message);
-                setIsModalOpen(false);
-            });
     }
 
     function updateCspFilters(): void {
@@ -352,62 +371,18 @@ function ServiceList(): JSX.Element {
         setCustomerServiceNameFilters(filters);
     }
 
-    function getServices(): void {
-        setServicesLoadingError(<></>);
-        const userName: string | null = getUserName(idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        void ServiceService.getDeployedServicesByUser(userName)
-            .then((resp) => {
-                const serviceList: ServiceVo[] = [];
-                if (resp.length > 0) {
-                    setServiceVoList(resp);
-                    updateVersionFilters(resp);
-                    updateNameFilters(resp);
-                    updateCategoryFilters();
-                    updateCspFilters();
-                    updateServiceStateFilters();
-                    updateCustomerServiceNameFilters(resp);
-                } else {
-                    setServiceVoList(serviceList);
-                }
-            })
-            .catch((error: Error) => {
-                if (error instanceof ApiError && 'details' in error.body) {
-                    const response: Response = error.body as Response;
-                    setServicesLoadingError(
-                        <Alert
-                            message={response.resultType.valueOf()}
-                            description={convertStringArrayToUnorderedList(response.details)}
-                            type={'error'}
-                            closable={true}
-                        />
-                    );
-                } else {
-                    setServicesLoadingError(
-                        <Alert
-                            message='Fetching Service Details Failed'
-                            description={error.message}
-                            type={'error'}
-                            closable={true}
-                        />
-                    );
-                }
-            });
-    }
-
-    useEffect(() => {
-        getServices();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     function refreshData(): void {
-        getServices();
+        void getDeployedServicesByUserQuery.refetch();
     }
 
-    const handleCancel = () => {
-        setIsModalOpen(false);
+    const handleMyServiceDetailsOpenModal = (id: string) => {
+        setServiceIdInModal(id);
+        setIsMyServiceDetailsModalOpen(true);
+    };
+
+    const handleMyServiceDetailsModalClose = () => {
+        setServiceIdInModal('');
+        setIsMyServiceDetailsModalOpen(false);
     };
 
     const handleCancelMigrateModel = () => {
@@ -425,12 +400,14 @@ function ServiceList(): JSX.Element {
     return (
         <div className={'services-content'}>
             {tip}
-            <Modal title={'Service Details'} width={700} footer={null} open={isModalOpen} onCancel={handleCancel}>
-                <MyServiceDetails
-                    endPointInfo={content}
-                    requestParamsInfo={requestParams}
-                    resultMessage={resultMessage}
-                />
+            <Modal
+                title={'Service Details'}
+                width={700}
+                footer={null}
+                open={serviceIdInModal.length > 0 && isMyServiceDetailsModalOpen}
+                onCancel={handleMyServiceDetailsModalClose}
+            >
+                <MyServiceDetails serviceId={serviceIdInModal} />
             </Modal>
             <Modal
                 open={isMigrateModalOpen}
@@ -463,10 +440,14 @@ function ServiceList(): JSX.Element {
                 {servicesLoadingError}
             </div>
             <div className={'service-instance-list'}>
-                <Table columns={columns} dataSource={serviceVoList} />
+                <Table
+                    columns={columns}
+                    dataSource={serviceVoList}
+                    loading={getDeployedServicesByUserQuery.isLoading || getDeployedServicesByUserQuery.isRefetching}
+                />
             </div>
         </div>
     );
 }
 
-export default ServiceList;
+export default MyServices;
