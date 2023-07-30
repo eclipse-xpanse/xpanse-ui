@@ -1,12 +1,11 @@
-import { useQuery } from '@tanstack/react-query';
-import { ServiceDetailVo, ServiceService } from '../../../xpanse-api/generated';
-import { OrderSubmitResult } from './OrderSubmitResult';
-import { OrderSubmitFailed } from './OrderSubmitFailed';
-import { ProcessingStatus } from './ProcessingStatus';
-import { OperationType } from './formElements/CommonTypes';
+import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
+import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
+import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
+import { OperationType } from '../formElements/CommonTypes';
 import { useStopwatch } from 'react-timer-hook';
-import { useEffect } from 'react';
-import { deploymentStatusPollingInterval } from '../../utils/constants';
+import React, { useEffect } from 'react';
+import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 
 function OrderSubmitStatusPolling({
     uuid,
@@ -22,21 +21,12 @@ function OrderSubmitStatusPolling({
     userName: string;
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
-}): JSX.Element {
-    const getDeployedServiceDetailsByIdQuery = useQuery(
-        ['getDeployedServiceDetailsById', uuid, userName],
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        () => ServiceService.getDeployedServiceDetailsById(uuid!, userName),
-        {
-            refetchInterval: (data) =>
-                data?.serviceDeploymentState !== ServiceDetailVo.serviceDeploymentState.DEPLOYING
-                    ? false
-                    : deploymentStatusPollingInterval,
-            refetchIntervalInBackground: true,
-            refetchOnWindowFocus: false,
-            enabled: uuid !== undefined,
-        }
-    );
+}): React.JSX.Element {
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid!, userName, [
+        ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
+        ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+    ]);
 
     const stopWatch = useStopwatch({
         autoStart: true,
@@ -53,10 +43,8 @@ function OrderSubmitStatusPolling({
         }
         if (
             getDeployedServiceDetailsByIdQuery.data &&
-            ![
-                ServiceDetailVo.serviceDeploymentState.DEPLOYING,
-                ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
-            ].includes(getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState)
+            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
         ) {
             setIsDeploying(false);
             setRequestSubmitted(false);
@@ -82,12 +70,18 @@ function OrderSubmitStatusPolling({
             '-',
             'success',
             ServiceDetailVo.serviceDeploymentState.DEPLOYING,
-            stopWatch
+            stopWatch,
+            OperationType.Deploy
         );
     }
 
     if (error) {
-        return OrderSubmitFailed(error, ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED, stopWatch);
+        return OrderSubmitFailed(
+            error,
+            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+            stopWatch,
+            OperationType.Deploy
+        );
     }
 
     if (uuid && getDeployedServiceDetailsByIdQuery.error) {
@@ -96,7 +90,8 @@ function OrderSubmitStatusPolling({
             uuid,
             'error',
             ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
-            stopWatch
+            stopWatch,
+            OperationType.Deploy
         );
     }
 
@@ -110,7 +105,8 @@ function OrderSubmitStatusPolling({
             uuid,
             'success',
             getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState,
-            stopWatch
+            stopWatch,
+            OperationType.Deploy
         );
     }
 
@@ -120,7 +116,8 @@ function OrderSubmitStatusPolling({
             uuid,
             'success',
             ServiceDetailVo.serviceDeploymentState.DEPLOYING,
-            stopWatch
+            stopWatch,
+            OperationType.Deploy
         );
     }
 
@@ -139,7 +136,8 @@ function OrderSubmitStatusPolling({
                 uuid,
                 'success',
                 getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState,
-                stopWatch
+                stopWatch,
+                OperationType.Deploy
             );
         }
         if (
@@ -151,7 +149,8 @@ function OrderSubmitStatusPolling({
                 uuid,
                 'error',
                 getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState,
-                stopWatch
+                stopWatch,
+                OperationType.Deploy
             );
         }
     }

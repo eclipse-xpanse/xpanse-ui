@@ -136,7 +136,7 @@ export const Migrate = ({
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                 />
             ),
-            description: 'Migrate service to the new destination.',
+            description: 'Migrate service to the create destination.',
         },
     ];
 

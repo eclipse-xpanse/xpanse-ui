@@ -7,7 +7,7 @@ import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
-import { ApiDoc } from '../../order/ApiDoc';
+import { ApiDoc } from '../../common/ApiDoc';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function ServiceDetail({

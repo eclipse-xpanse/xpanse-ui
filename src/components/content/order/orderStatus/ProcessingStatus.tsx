@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceDetailVo } from '../../../xpanse-api/generated';
-import { convertMapToUnorderedList } from '../../utils/generateUnorderedList';
-import { OperationType } from './formElements/CommonTypes';
+import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { convertMapToUnorderedList } from '../../../utils/generateUnorderedList';
+import { OperationType } from '../formElements/CommonTypes';
 
 export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): JSX.Element => {
     const endPointMap = new Map<string, string>();

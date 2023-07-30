@@ -68,7 +68,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 description={convertStringArrayToUnorderedList(response.details)}
                 type={'error'}
                 closable={true}
-                className={'catalog-skeleton'}
+                className={'my-service-details-skeleton'}
             />
         );
     } else if (getDeployedServicesDetailsByIdQuery.error instanceof Error) {
@@ -78,7 +78,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 description={getDeployedServicesDetailsByIdQuery.error.message}
                 type={'error'}
                 closable={true}
-                className={'catalog-skeleton'}
+                className={'my-service-details-skeleton'}
             />
         );
     }

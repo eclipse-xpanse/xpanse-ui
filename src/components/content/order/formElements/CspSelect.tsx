@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AlibabaLogo, AWSLogo, AzureLogo, FlexibleEngineLogo, HuaWeiLogo, OpenStackLogo, GoogleLogo } from '../CspLogo';
+import { AlibabaLogo, AWSLogo, AzureLogo, FlexibleEngineLogo, HuaWeiLogo, OpenStackLogo, GoogleLogo } from './CspLogo';
 import { Image } from 'antd';
 import { CloudServiceProvider } from '../../../../xpanse-api/generated';
 
