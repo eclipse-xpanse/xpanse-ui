@@ -14,7 +14,7 @@ import {
     UserAvailableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
-import { OrderSubmitProps } from '../OrderSubmit';
+import { OrderSubmitProps } from '../create/OrderSubmit';
 import { getUserName } from '../../../oidc/OidcConfig';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 

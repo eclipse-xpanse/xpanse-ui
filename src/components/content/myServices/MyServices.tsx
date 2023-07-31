@@ -6,19 +6,20 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ApiError, Response, ServiceDetailVo, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
 import '../../../styles/my_services.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
-import { destroyTimeout, waitServicePeriod } from '../../utils/constants';
 import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { getUserName } from '../../oidc/OidcConfig';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { useQuery } from '@tanstack/react-query';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
+import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -28,9 +29,9 @@ function MyServices(): React.JSX.Element {
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
-    const [tip, setTip] = useState<React.JSX.Element | undefined>(undefined);
-    const [loading, setLoading] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
+    const [isDestroying, setIsDestroying] = useState<boolean>(false);
+    const [isDestroyingCompleted, setIsDestroyingCompleted] = useState<boolean>(false);
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
     const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
@@ -39,6 +40,7 @@ function MyServices(): React.JSX.Element {
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const oidcIdToken: OidcIdToken = useOidcIdToken();
     const userName = getUserName(oidcIdToken.idTokenPayload as object);
+    const serviceDestroyQuery = useDestroyRequestSubmitQuery();
 
     const getDeployedServicesByUserQuery = useQuery({
         queryKey: ['getDeployedServicesByUser', userName],
@@ -90,6 +92,14 @@ function MyServices(): React.JSX.Element {
             }
         }
     }, [getDeployedServicesByUserQuery.error, getDeployedServicesByUserQuery.isError]);
+
+    useEffect(() => {
+        if (isDestroyingCompleted) {
+            setId('');
+            refreshData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDestroyingCompleted]);
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -172,7 +182,7 @@ function MyServices(): React.JSX.Element {
                                 disabled={
                                     !(
                                         record.serviceDeploymentState ===
-                                            ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !loading
+                                            ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !isDestroying
                                     )
                                 }
                             >
@@ -187,13 +197,13 @@ function MyServices(): React.JSX.Element {
                                 onConfirm={() => destroy(record)}
                             >
                                 <Button
-                                    loading={record.id === id ? loading : false}
+                                    loading={record.id === id ? isDestroying : false}
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
                                     disabled={
                                         !(
                                             record.serviceDeploymentState ===
-                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !loading
+                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !isDestroying
                                         )
                                     }
                                 >
@@ -204,7 +214,7 @@ function MyServices(): React.JSX.Element {
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
                                 onClick={() => handleMyServiceDetailsOpenModal(record.id)}
-                                disabled={loading}
+                                disabled={isDestroying}
                             >
                                 detail
                             </Button>
@@ -215,62 +225,11 @@ function MyServices(): React.JSX.Element {
         },
     ];
 
-    function Tip(type: 'error' | 'success', msg: string) {
-        setTip(
-            <div className={'submit-alert-tip'}>
-                {' '}
-                <Alert message='Destroy:' description={msg} showIcon type={type} />{' '}
-            </div>
-        );
-    }
-
-    function TipClear() {
-        setTip(undefined);
-    }
-
-    function waitingServiceDestroy(uuid: string, timeout: number, date: Date) {
-        Tip(
-            'success',
-            'Destroying, Please wait... [' + Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() + 's]'
-        );
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ServiceService.getDeployedServiceDetailsById(uuid, userName)
-            .then((response) => {
-                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
-                    Tip('success', 'Destroy success.');
-                    setLoading(false);
-                    refreshData();
-                    TipClear();
-                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED) {
-                    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-                    Tip('error', 'Destroy failed:' + response.resultMessage);
-                    setLoading(false);
-                    TipClear();
-                } else {
-                    setTimeout(() => {
-                        waitingServiceDestroy(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                }
-            })
-            .catch((e: Error) => {
-                Tip('error', 'Destroy failed:' + e.message);
-                setLoading(false);
-                TipClear();
-            });
-    }
-
     function destroy(record: ServiceVo) {
+        setIsDestroying(true);
         setId(record.id);
-        setLoading(true);
-        ServiceService.destroy(record.id)
-            .then(() => {
-                waitingServiceDestroy(record.id, destroyTimeout, new Date());
-            })
-            .catch((e: Error) => {
-                Tip('error', 'Destroy failed:' + e.message);
-                setLoading(false);
-                TipClear();
-            });
+        setIsDestroyingCompleted(false);
+        serviceDestroyQuery.mutate(record.id);
     }
 
     function migrate(record: ServiceVo): void {
@@ -399,7 +358,16 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'services-content'}>
-            {tip}
+            {isDestroying && id.length > 0 ? (
+                <DestroyServiceStatusPolling
+                    uuid={id}
+                    error={serviceDestroyQuery.error as Error}
+                    isLoading={serviceDestroyQuery.isLoading}
+                    userName={userName}
+                    setIsDestroying={setIsDestroying}
+                    setIsDestroyingCompleted={setIsDestroyingCompleted}
+                />
+            ) : null}
             <Modal
                 title={'Service Details'}
                 width={700}
@@ -428,7 +396,7 @@ function MyServices(): React.JSX.Element {
 
             <div>
                 <Button
-                    disabled={loading}
+                    disabled={isDestroying}
                     type='primary'
                     icon={<SyncOutlined />}
                     onClick={() => {
@@ -444,6 +412,7 @@ function MyServices(): React.JSX.Element {
                     columns={columns}
                     dataSource={serviceVoList}
                     loading={getDeployedServicesByUserQuery.isLoading || getDeployedServicesByUserQuery.isRefetching}
+                    rowKey={'id'}
                 />
             </div>
         </div>

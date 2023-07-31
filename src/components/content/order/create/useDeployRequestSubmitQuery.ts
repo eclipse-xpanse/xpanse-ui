@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { CreateRequest, ServiceService } from '../../../xpanse-api/generated';
+import { CreateRequest, ServiceService } from '../../../../xpanse-api/generated';
 
 export function useDeployRequestSubmitQuery() {
     return useMutation({

@@ -26,11 +26,11 @@ import {
     OperationType,
 } from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
-import { OrderSubmitProps } from '../OrderSubmit';
-import { MigrateSubmitResult } from '../OrderSubmitResult';
+import { OrderSubmitProps } from '../create/OrderSubmit';
+import { MigrateSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { deployTimeout, destroyTimeout, waitServicePeriod } from '../../../utils/constants';
-import { ProcessingStatus } from '../ProcessingStatus';
-import { MigrateSubmitFailed } from '../OrderSubmitFailed';
+import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
+import { MigrateSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 import { getUserName } from '../../../oidc/OidcConfig';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
