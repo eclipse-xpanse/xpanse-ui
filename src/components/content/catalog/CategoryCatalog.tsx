@@ -14,18 +14,18 @@ import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
-function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.Element {
+function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
-    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
+    const [loadingError, setLoadingError] = useState<React.JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
         queryFn: () => ServicesAvailableService.getAvailableServicesTree(category),
-        staleTime: 60000,
+        refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
@@ -115,12 +115,12 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.El
         return loadingError;
     }
 
-    if (availableServicesQuery.isLoading) {
+    if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
         return (
             <Skeleton
                 className={'catalog-skeleton'}
                 active={true}
-                loading={availableServicesQuery.isLoading}
+                loading={true}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
                 title={{ width: '5%' }}
             />
