@@ -64,7 +64,7 @@ function MyServices(): React.JSX.Element {
     }, [getDeployedServicesByUserQuery.data, getDeployedServicesByUserQuery.isSuccess]);
 
     useEffect(() => {
-        if (getDeployedServicesByUserQuery.error) {
+        if (getDeployedServicesByUserQuery.error && getDeployedServicesByUserQuery.isError) {
             if (
                 getDeployedServicesByUserQuery.error instanceof ApiError &&
                 'details' in getDeployedServicesByUserQuery.error.body
@@ -90,6 +90,8 @@ function MyServices(): React.JSX.Element {
                     />
                 );
             }
+        } else {
+            setServicesLoadingError(<></>);
         }
     }, [getDeployedServicesByUserQuery.error, getDeployedServicesByUserQuery.isError]);
 
@@ -405,8 +407,8 @@ function MyServices(): React.JSX.Element {
                 >
                     refresh
                 </Button>
-                {servicesLoadingError}
             </div>
+            {servicesLoadingError}
             <div className={'service-instance-list'}>
                 <Table
                     columns={columns}
