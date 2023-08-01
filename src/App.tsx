@@ -20,10 +20,10 @@ import {
     healthCheckPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
-import Services from './components/content/order/Services';
-import CreateService from './components/content/order/CreateService';
-import OrderSubmitPage from './components/content/order/OrderSubmit';
-import ServiceList from './components/content/order/ServiceList';
+import Services from './components/content/order/services/Services';
+import CreateService from './components/content/order/create/CreateService';
+import OrderSubmitPage from './components/content/order/create/OrderSubmit';
+import MyServices from './components/content/myServices/MyServices';
 import Monitor from './components/content/monitor/Monitor';
 import Credential from './components/content/credential/Credential';
 import { OidcConfig } from './components/oidc/OidcConfig';
@@ -105,7 +105,7 @@ function App(): JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={'user'}>
-                                    <ServiceList />
+                                    <MyServices />
                                 </Protected>
                             </OidcSecure>
                         }

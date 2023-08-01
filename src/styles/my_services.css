@@ -1,0 +1,16 @@
+.service-instance-list {
+    margin-top: 15px;
+}
+.service-instance-list-detail {
+    font-weight: bold;
+}
+
+.failure-alert {
+    margin-top: 10px;
+}
+
+.my-service-details-skeleton {
+    margin: 30px;
+    position: relative;
+    width: 80%;
+}

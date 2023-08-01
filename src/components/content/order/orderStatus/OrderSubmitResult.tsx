@@ -6,16 +6,19 @@
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from './OrderSubmitResultDetails';
 import { StopwatchResult } from 'react-timer-hook';
-import { ServiceDetailVo } from '../../../xpanse-api/generated';
+import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import DeploymentTimer from './DeploymentTimer';
+import React from 'react';
+import { OperationType } from '../formElements/CommonTypes';
 
 export const OrderSubmitResult = (
-    msg: string | JSX.Element,
+    msg: string | React.JSX.Element,
     uuid: string,
     type: 'success' | 'error',
     deploymentStatus: ServiceDetailVo.serviceDeploymentState,
-    stopWatch: StopwatchResult
-): JSX.Element => {
+    stopWatch: StopwatchResult,
+    operationType: OperationType
+): React.JSX.Element => {
     return (
         <div className={'submit-alert-tip'}>
             {' '}
@@ -25,17 +28,23 @@ export const OrderSubmitResult = (
                 showIcon
                 closable={false}
                 type={type}
-                action={<DeploymentTimer stopWatch={stopWatch} deploymentStatus={deploymentStatus} />}
+                action={
+                    <DeploymentTimer
+                        stopWatch={stopWatch}
+                        deploymentStatus={deploymentStatus}
+                        operationType={operationType}
+                    />
+                }
             />{' '}
         </div>
     );
 };
 
 export const MigrateSubmitResult = (
-    msg: string | JSX.Element,
+    msg: string | React.JSX.Element,
     uuid: string,
     type: 'success' | 'error'
-): JSX.Element => {
+): React.JSX.Element => {
     return (
         <div className={'submit-alert-tip'}>
             {' '}

@@ -23,7 +23,7 @@ import {
     servicesLabelName,
     servicesPageRoute,
     servicesSubPageRoute,
-} from '../../utils/constants';
+} from '../../../utils/constants';
 import { Link } from 'react-router-dom';
 import React from 'react';
 

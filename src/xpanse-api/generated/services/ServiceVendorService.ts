@@ -160,7 +160,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service using ocl model.<br>**Required role: admin or csp**
+     * Register create service using ocl model.<br>**Required role: admin or csp**
      * @param requestBody
      * @returns RegisteredServiceVo OK
      * @throws ApiError
@@ -182,7 +182,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service with URL of Ocl file.<br>**Required role: admin or csp**
+     * Register create service with URL of Ocl file.<br>**Required role: admin or csp**
      * @param oclLocation URL of Ocl file
      * @returns RegisteredServiceVo OK
      * @throws ApiError
