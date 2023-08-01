@@ -51,3 +51,8 @@
     position: absolute;
     width: 80%;
 }
+
+.catalog-service-icon {
+    display: flex;
+    alignitems: center;
+}

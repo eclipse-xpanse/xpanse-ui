@@ -9,6 +9,7 @@ import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { ApiDoc } from '../../common/ApiDoc';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({
     serviceDetails,
@@ -39,6 +40,9 @@ function ServiceDetail({
             </h3>
 
             <Descriptions bordered column={1}>
+                <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
+                    <ShowIcon serviceDetails={serviceDetails} />
+                </Descriptions.Item>
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
