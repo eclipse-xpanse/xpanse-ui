@@ -8,12 +8,13 @@ import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { ApiError, Response, ServiceVo } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getUserName } from '../../oidc/OidcConfig';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
@@ -32,69 +33,72 @@ function Monitor(): JSX.Element {
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
     const oidcIdToken: OidcIdToken = useOidcIdToken();
+    const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
+
+    const deployedServiceQuery = useDeployedServicesByUserQuery(userName);
 
     useEffect(() => {
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        void ServiceService.getDeployedServicesByUser(userName)
-            .then((rsp: ServiceVo[]) => {
-                const serviceNameList: { value: string; label: string }[] = [];
-                const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
-                if (rsp.length > 0) {
-                    const serviceVoMap: Map<string, ServiceVo[]> = new Map<string, ServiceVo[]>();
-                    rsp.forEach((serviceVo: ServiceVo) => {
-                        if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
-                            if (!serviceVoMap.has(serviceVo.name)) {
-                                serviceVoMap.set(
-                                    serviceVo.name,
-                                    rsp.filter((data: ServiceVo) => data.name === serviceVo.name)
-                                );
-                            }
-                            const customerServiceName: {
-                                value: string;
-                                label: string;
-                                serviceName: string;
-                                id: string;
-                            } = {
-                                value: serviceVo.customerServiceName ?? '',
-                                label: serviceVo.customerServiceName ?? '',
-                                serviceName: serviceVo.name,
-                                id: serviceVo.id,
-                            };
-                            customerServiceNameList.push(customerServiceName);
-                        }
-                    });
-                    serviceVoMap.forEach((service, name) => {
-                        const serviceNameUnique: { value: string; label: string } = {
-                            value: name,
-                            label: name,
-                        };
-                        serviceNameList.push(serviceNameUnique);
-                    });
+        if (deployedServiceQuery.isSuccess) {
+            const serviceList: ServiceVo[] | undefined = deployedServiceQuery.data;
+            const serviceNameList: { value: string; label: string }[] = [];
+            const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
 
-                    setDeployedServiceList(rsp);
-                    setServiceNameList(serviceNameList);
-                    setCustomerServiceNameList(customerServiceNameList);
-                }
-            })
-            .catch((error: Error) => {
-                setDeployedServiceList([]);
-                setServiceNameList([]);
-                setCustomerServiceNameList([]);
-                setTipType('error');
-                if (error instanceof ApiError && 'details' in error.body) {
-                    const response: Response = error.body as Response;
-                    setTipMessage(response.resultType.valueOf());
-                    setTipDescription(response.details.join());
-                } else {
-                    setTipMessage('Error while fetching all deployed services.');
-                    setTipDescription(error.message);
-                }
-                setIsQueryResultAvailable(true);
-            });
-    }, [oidcIdToken.idTokenPayload]);
+            if (serviceList.length > 0) {
+                const serviceVoMap: Map<string, ServiceVo[]> = new Map<string, ServiceVo[]>();
+                serviceList.forEach((serviceVo: ServiceVo) => {
+                    if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+                        if (!serviceVoMap.has(serviceVo.name)) {
+                            serviceVoMap.set(
+                                serviceVo.name,
+                                serviceList.filter((data: ServiceVo) => data.name === serviceVo.name)
+                            );
+                        }
+                        const customerServiceName: {
+                            value: string;
+                            label: string;
+                            serviceName: string;
+                            id: string;
+                        } = {
+                            value: serviceVo.customerServiceName ?? '',
+                            label: serviceVo.customerServiceName ?? '',
+                            serviceName: serviceVo.name,
+                            id: serviceVo.id,
+                        };
+                        customerServiceNameList.push(customerServiceName);
+                    }
+                });
+                serviceVoMap.forEach((service, name) => {
+                    const serviceNameUnique: { value: string; label: string } = {
+                        value: name,
+                        label: name,
+                    };
+                    serviceNameList.push(serviceNameUnique);
+                });
+
+                setDeployedServiceList(serviceList);
+                setServiceNameList(serviceNameList);
+                setCustomerServiceNameList(customerServiceNameList);
+            }
+        }
+    }, [deployedServiceQuery.data, deployedServiceQuery.isSuccess]);
+
+    useEffect(() => {
+        if (deployedServiceQuery.isError) {
+            setDeployedServiceList([]);
+            setServiceNameList([]);
+            setCustomerServiceNameList([]);
+            setTipType('error');
+            setIsQueryResultAvailable(true);
+            if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
+                const response: Response = deployedServiceQuery.error.body as Response;
+                setTipMessage(response.resultType.valueOf());
+                setTipDescription(response.details.join());
+            } else if (deployedServiceQuery.error instanceof Error) {
+                setTipMessage('Error while fetching all deployed services.');
+                setTipDescription(deployedServiceQuery.error.message);
+            }
+        }
+    }, [deployedServiceQuery.isError, deployedServiceQuery.error]);
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
@@ -202,6 +206,7 @@ function Monitor(): JSX.Element {
                 </h3>
             </div>
             <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
+
             <Form
                 name='basic'
                 form={form}
