@@ -16,9 +16,6 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function AddCredential({
     getCredentials,
@@ -39,7 +36,6 @@ function AddCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const oidcToken: OidcIdToken = useOidcIdToken();
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
         setTypeDisabled(false);
@@ -241,11 +237,6 @@ function AddCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = getUserName(oidcToken.idTokenPayload as object);
-            if (!userName) {
-                return;
-            }
-            createCredential.xpanseUser = userName;
             void CredentialsManagementService.addCredential(createCredential)
                 .then(() => {
                     getTipInfo('success', 'Adding Credential Successful.');

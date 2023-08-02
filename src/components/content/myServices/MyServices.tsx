@@ -14,10 +14,7 @@ import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { getUserName } from '../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { useQuery } from '@tanstack/react-query';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 
@@ -38,13 +35,11 @@ function MyServices(): React.JSX.Element {
     const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-    const userName = getUserName(oidcIdToken.idTokenPayload as object);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
 
     const getDeployedServicesByUserQuery = useQuery({
-        queryKey: ['getDeployedServicesByUser', userName],
-        queryFn: () => ServiceService.getDeployedServicesByUser(userName),
+        queryKey: ['getDeployedServicesByUser'],
+        queryFn: () => ServiceService.listMyDeployedServices(),
         refetchOnWindowFocus: false,
     });
 
@@ -365,7 +360,6 @@ function MyServices(): React.JSX.Element {
                     uuid={id}
                     error={serviceDestroyQuery.error as Error}
                     isLoading={serviceDestroyQuery.isLoading}
-                    userName={userName}
                     setIsDestroying={setIsDestroying}
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
                 />

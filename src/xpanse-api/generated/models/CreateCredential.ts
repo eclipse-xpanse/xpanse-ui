@@ -16,10 +16,6 @@ export type CreateCredential = {
      */
     name: string;
     /**
-     * The user who create the credential.
-     */
-    xpanseUser: string;
-    /**
      * The cloud service provider of the credential.
      */
     csp: CreateCredential.csp;

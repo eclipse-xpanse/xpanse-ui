@@ -16,9 +16,9 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     csp?: AbstractCredentialInfo.csp;
     /**
-     * The user who create the credential.
+     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
      */
-    xpanseUser?: string;
+    type?: AbstractCredentialInfo.type;
     /**
      * The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.
      */
@@ -28,19 +28,18 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     description?: string;
     /**
-     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The id of user who create the credential.
      */
-    type?: AbstractCredentialInfo.type;
-    uniqueKey?: string;
+    userId?: string;
 } & {
     /**
      * The cloud service provider of the credential.
      */
     csp: AbstractCredentialInfo.csp;
     /**
-     * The user who create the credential.
+     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
      */
-    xpanseUser: string;
+    type: AbstractCredentialInfo.type;
     /**
      * The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.
      */
@@ -50,9 +49,9 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     description: string;
     /**
-     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The id of user who create the credential.
      */
-    type: AbstractCredentialInfo.type;
+    userId: string;
 };
 
 export namespace AbstractCredentialInfo {

@@ -11,18 +11,16 @@ function DestroyServiceStatusPolling({
     uuid,
     error,
     isLoading,
-    userName,
     setIsDestroying,
     setIsDestroyingCompleted,
 }: {
     uuid: string;
     error: Error | undefined;
     isLoading: boolean;
-    userName: string;
     setIsDestroying: (arg: boolean) => void;
     setIsDestroyingCompleted: (arg: boolean) => void;
 }): React.JSX.Element {
-    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, userName, [
+    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
     ]);

@@ -22,9 +22,6 @@ import { CreateRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/ApiDoc';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 
@@ -60,7 +57,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
@@ -111,10 +107,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     function onSubmit() {
         setRequestSubmitted(true);
         setDeploying(true);
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
         const createRequest: CreateRequest = {
             category: props.category,
             csp: props.csp,
@@ -123,7 +115,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             serviceName: props.name,
             version: props.version,
             customerServiceName: customerServiceName,
-            userName: userName,
         };
         const serviceRequestProperties: Record<string, string> = {};
         for (const item of parameters) {
@@ -160,7 +151,6 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     uuid={submitDeploymentRequest.data}
                     error={submitDeploymentRequest.error as Error}
                     isLoading={submitDeploymentRequest.isLoading}
-                    userName={getUserName(oidcIdToken.idTokenPayload as object)}
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}
                 />

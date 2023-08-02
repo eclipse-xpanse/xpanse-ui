@@ -4,19 +4,12 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
     uuid: string,
-    userName: string,
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
-    return useQuery(
-        ['getDeployedServiceDetailsById', uuid, userName],
-        () => ServiceService.getDeployedServiceDetailsById(uuid, userName),
-        {
-            refetchInterval: (data) =>
-                data && refetchUntilStates.includes(data.serviceDeploymentState)
-                    ? false
-                    : deploymentStatusPollingInterval,
-            refetchIntervalInBackground: true,
-            refetchOnWindowFocus: false,
-        }
-    );
+    return useQuery(['getDeployedServiceDetailsById', uuid], () => ServiceService.getDeployedServiceDetailsById(uuid), {
+        refetchInterval: (data) =>
+            data && refetchUntilStates.includes(data.serviceDeploymentState) ? false : deploymentStatusPollingInterval,
+        refetchIntervalInBackground: true,
+        refetchOnWindowFocus: false,
+    });
 }

@@ -57,5 +57,6 @@ export namespace Response {
         UNAUTHORIZED = 'Unauthorized',
         ACCESS_DENIED = 'Access Denied',
         SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
+        UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
     }
 }
