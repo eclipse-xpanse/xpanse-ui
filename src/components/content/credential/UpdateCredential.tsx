@@ -16,20 +16,26 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
+import { getUserName } from '../../oidc/OidcConfig';
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { useMutation, UseQueryResult } from '@tanstack/react-query';
 
 function UpdateCredential({
     createCredential,
-    getCredentials,
+    credentialsQuery,
     onUpdateCancel,
 }: {
     createCredential: CreateCredential;
-    getCredentials: () => void;
+    credentialsQuery: UseQueryResult<never[]>;
     onUpdateCancel: () => void;
 }): JSX.Element {
     const [form] = Form.useForm();
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
+    const [disable, setDisable] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
@@ -40,20 +46,31 @@ function UpdateCredential({
         form.setFieldsValue({ timeToLive: createCredential.timeToLive });
     };
 
+    const updateCredentialRequest = useMutation({
+        mutationFn: (createCredential: CreateCredential) => {
+            return CredentialsManagementService.updateCredential(createCredential);
+        },
+        onSuccess: () => {
+            getTipInfo('success', 'Updating Credential Successful.');
+            setDisable(true);
+        },
+        onError: (error: Error) => {
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                getTipInfo('error', response.details.join());
+            } else {
+                getTipInfo('error', error.message);
+            }
+        },
+    });
+
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            void CredentialsManagementService.updateCredential(createCredential)
-                .then(() => {
-                    getTipInfo('success', 'Updating Credential Successful.');
-                })
-                .catch((error: Error) => {
-                    if (error instanceof ApiError && 'details' in error.body) {
-                        const response: Response = error.body as Response;
-                        getTipInfo('error', response.details.join());
-                    } else {
-                        getTipInfo('error', error.message);
-                    }
-                });
+            const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
+            if (!userName) {
+                return;
+            }
+            updateCredentialRequest.mutate(createCredential);
         }
     };
 
@@ -73,7 +90,7 @@ function UpdateCredential({
     const onRemove = () => {
         getTipInfo(undefined, '');
         onUpdateCancel();
-        getCredentials();
+        void credentialsQuery.refetch();
     };
 
     const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
@@ -215,7 +232,7 @@ function UpdateCredential({
                     </Form.Item>
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' htmlType='submit'>
+                    <Button type='primary' disabled={disable} htmlType='submit'>
                         Update
                     </Button>
                     <Button
