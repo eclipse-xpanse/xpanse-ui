@@ -3,7 +3,7 @@ import { ServiceDetailVo, ServiceService } from '../../../../xpanse-api/generate
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
-    uuid: string,
+    uuid: string | undefined,
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
     return useQuery(
