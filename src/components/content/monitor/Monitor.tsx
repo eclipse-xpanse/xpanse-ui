@@ -11,9 +11,6 @@ import React, { useEffect, useState } from 'react';
 import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
@@ -31,14 +28,8 @@ function Monitor(): JSX.Element {
         { value: string; label: string; serviceName: string; id: string }[]
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-
     useEffect(() => {
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        void ServiceService.getDeployedServicesByUser(userName)
+        void ServiceService.listMyDeployedServices()
             .then((rsp: ServiceVo[]) => {
                 const serviceNameList: { value: string; label: string }[] = [];
                 const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
@@ -94,7 +85,7 @@ function Monitor(): JSX.Element {
                 }
                 setIsQueryResultAvailable(true);
             });
-    }, [oidcIdToken.idTokenPayload]);
+    });
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];

@@ -4,7 +4,12 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { CloudServiceProvider, ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    CloudServiceProvider,
+    ServiceVo,
+    UserAvailableServiceVo,
+    ServiceCatalogService,
+} from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
 import { Steps } from 'antd';
@@ -12,7 +17,6 @@ import { MigrateService } from './MigrateService';
 import { MigrationStatus, MigrationSteps } from '../formElements/CommonTypes';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
-import { ServicesAvailableService } from '../../../../xpanse-api/generated/services/ServicesAvailableService';
 
 export const Migrate = ({
     currentSelectedService,
@@ -42,7 +46,7 @@ export const Migrate = ({
         const categoryName = currentSelectedService.category;
         const serviceName = currentSelectedService.name;
         const serviceVersion = currentSelectedService.version;
-        void ServicesAvailableService.listAvailableServices(categoryName, '', serviceName, serviceVersion).then(
+        void ServiceCatalogService.listAvailableServices(categoryName, '', serviceName, serviceVersion).then(
             (rsp: UserAvailableServiceVo[]) => {
                 if (rsp.length > 0) {
                     setUserAvailableServiceVoList(rsp);

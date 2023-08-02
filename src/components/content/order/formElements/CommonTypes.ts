@@ -15,8 +15,6 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
-import { getUserName } from '../../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 export type NumberInputEventHandler = (value: number | string | null) => void;
@@ -169,11 +167,7 @@ export const getDeployParams = (
     return props;
 };
 
-export const getCreateRequest = (
-    props: OrderSubmitProps,
-    customerServiceName: string,
-    oidcIdToken: OidcIdToken
-): CreateRequest => {
+export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: string): CreateRequest => {
     const createRequest: CreateRequest = {
         category: props.category,
         csp: props.csp,
@@ -182,7 +176,6 @@ export const getCreateRequest = (
         serviceName: props.name,
         version: props.version,
         customerServiceName: customerServiceName,
-        userName: getUserName(oidcIdToken.idTokenPayload as object),
     };
 
     const serviceRequestProperties: Record<string, string> = {};

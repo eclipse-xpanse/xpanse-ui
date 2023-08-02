@@ -17,8 +17,8 @@ import { request as __request } from '../core/request';
 
 export class ServiceCatalogService {
     /**
-     * Returns the list of all registered services that are available for user to order.<br>**Required role: admin or user**
-     * @param categoryName category of the service
+     * Returns the list of all registered services that are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param categoryName name of category of the service
      * @param cspName name of the service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
@@ -26,17 +26,7 @@ export class ServiceCatalogService {
      * @throws ApiError
      */
     public static listAvailableServices(
-        categoryName?:
-            | 'ai'
-            | 'compute'
-            | 'container'
-            | 'storage'
-            | 'network'
-            | 'database'
-            | 'mediaService'
-            | 'security'
-            | 'middleware'
-            | 'others',
+        categoryName?: string,
         cspName?: string,
         serviceName?: string,
         serviceVersion?: string
@@ -61,7 +51,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get deployable service by id.<br>**Required role: admin or user**
+     * Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id The id of available service.
      * @returns UserAvailableServiceVo OK
      * @throws ApiError
@@ -84,7 +74,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the API document of the available service.<br>**Required role: admin or csp or user**
+     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
      * @param id
      * @returns Link OK
      * @throws ApiError
@@ -107,7 +97,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the available services by tree.<br>**Required role: admin or csp or user**
+     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
      * @param categoryName category of the service
      * @returns CategoryOclVo OK
      * @throws ApiError

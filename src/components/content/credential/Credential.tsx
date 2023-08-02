@@ -20,9 +20,6 @@ import {
     CredentialVariables,
     Response,
 } from '../../../xpanse-api/generated';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function Credential(): JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -39,18 +36,12 @@ function Credential(): JSX.Element {
         timeToLive: 0,
         type: '' as CredentialVariables.type,
         variables: [],
-        xpanseUser: '',
     });
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const columns: ColumnsType<AbstractCredentialInfo> = [
         {
             title: 'Csp',
             dataIndex: 'csp',
-        },
-        {
-            title: 'User',
-            dataIndex: 'xpanseUser',
         },
         {
             title: 'Name',
@@ -111,8 +102,7 @@ function Credential(): JSX.Element {
         void CredentialsManagementService.deleteCredential(
             credentialVariables.csp,
             credentialVariables.type,
-            credentialVariables.name,
-            credentialVariables.xpanseUser
+            credentialVariables.name
         )
             .then(() => {
                 getTipInfo('success', 'Deleting Credential Successful.');
@@ -130,10 +120,6 @@ function Credential(): JSX.Element {
 
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
         const credentialVariables: CredentialVariables = abstractCredentialInfo;
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
         const credentialVariableList: CredentialVariable[] = credentialVariables.variables;
         const credentialVariableLists: CredentialVariable[] = [];
         credentialVariableList.forEach((credentialVariable) => {
@@ -146,7 +132,6 @@ function Credential(): JSX.Element {
             name: credentialVariables.name,
             type: credentialVariables.type,
             csp: credentialVariables.csp,
-            xpanseUser: userName,
             description: credentialVariables.description,
             variables: credentialVariableLists,
             timeToLive: (abstractCredentialInfo as CreateCredential).timeToLive,
@@ -161,11 +146,7 @@ function Credential(): JSX.Element {
     };
 
     function getCredentials(): void {
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        void CredentialsManagementService.getCredentialsByUser(userName)
+        void CredentialsManagementService.getCredentialsByUser()
             .then((abstractCredentialInfoList) => {
                 if (abstractCredentialInfoList.length > 0) {
                     setAbstractCredentialInfoList(abstractCredentialInfoList);
