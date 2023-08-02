@@ -11,19 +11,16 @@ function OrderSubmitStatusPolling({
     uuid,
     error,
     isLoading,
-    userName,
     setIsDeploying,
     setRequestSubmitted,
 }: {
     uuid: string | undefined;
     error: Error | undefined;
     isLoading: boolean;
-    userName: string;
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
 }): React.JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid!, userName, [
+    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
         ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
     ]);

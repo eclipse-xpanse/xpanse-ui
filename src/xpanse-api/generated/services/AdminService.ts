@@ -15,7 +15,7 @@ import { request as __request } from '../core/request';
 
 export class AdminService {
     /**
-     * Check health of API service and backend systems.<br>**Required role: admin or csp or user**
+     * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
      * @returns SystemStatus OK
      * @throws ApiError
      */

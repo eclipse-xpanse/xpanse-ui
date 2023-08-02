@@ -3,13 +3,13 @@ import { ServiceDetailVo, ServiceService } from '../../../../xpanse-api/generate
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
-    uuid: string,
-    userName: string,
+    uuid: string | undefined,
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
     return useQuery(
-        ['getDeployedServiceDetailsById', uuid, userName],
-        () => ServiceService.getDeployedServiceDetailsById(uuid, userName),
+        ['getDeployedServiceDetailsById', uuid],
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        () => ServiceService.getDeployedServiceDetailsById(uuid!),
         {
             refetchInterval: (data) =>
                 data && refetchUntilStates.includes(data.serviceDeploymentState)
@@ -17,6 +17,7 @@ export function useServiceDetailsPollingQuery(
                     : deploymentStatusPollingInterval,
             refetchIntervalInBackground: true,
             refetchOnWindowFocus: false,
+            enabled: uuid !== undefined,
         }
     );
 }

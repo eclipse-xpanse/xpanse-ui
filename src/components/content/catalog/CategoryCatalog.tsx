@@ -7,12 +7,18 @@ import React, { useEffect, useState } from 'react';
 import '../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
-import { HomeOutlined } from '@ant-design/icons';
-import { ApiError, CategoryOclVo, Response, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { HomeOutlined, TagOutlined } from '@ant-design/icons';
+import {
+    ApiError,
+    CategoryOclVo,
+    Response,
+    ServiceVo,
+    VersionOclVo,
+    ServiceCatalogService,
+} from '../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
@@ -24,8 +30,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
 
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
-        queryFn: () => ServicesAvailableService.getAvailableServicesTree(category),
-        refetchOnWindowFocus: false,
+        queryFn: () => ServiceCatalogService.getAvailableServicesTree(category),
     });
 
     useEffect(() => {
@@ -45,6 +50,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
                     dn.children?.push({
                         title: v.version,
                         key: service.name + '@' + v.version,
+                        icon: <TagOutlined />,
                     });
                     tExpandKeys.push(service.name + '@' + v.version);
                 });
@@ -141,6 +147,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
                             &nbsp;Service Tree
                         </div>
                         <Tree
+                            showIcon={true}
                             defaultExpandAll={true}
                             autoExpandParent={true}
                             onSelect={onSelect}

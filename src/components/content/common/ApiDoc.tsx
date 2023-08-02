@@ -5,12 +5,11 @@
 
 import { LinkOutlined } from '@ant-design/icons';
 import '../../../styles/app.css';
-import { Link } from '../../../xpanse-api/generated';
-import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
+import { Link, ServiceCatalogService } from '../../../xpanse-api/generated';
 
 export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): JSX.Element {
     function onclick() {
-        ServicesAvailableService.openApi(id)
+        ServiceCatalogService.openApi(id)
             .then((link: Link) => {
                 if (link.href !== undefined) {
                     window.open(link.href);

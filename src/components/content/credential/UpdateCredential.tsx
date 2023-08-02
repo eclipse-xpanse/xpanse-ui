@@ -16,9 +16,6 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
-import { getUserName } from '../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 
 function UpdateCredential({
     createCredential,
@@ -33,12 +30,10 @@ function UpdateCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
         form.setFieldsValue({ csp: createCredential.csp });
-        form.setFieldsValue({ xpanseUser: createCredential.xpanseUser });
         form.setFieldsValue({ description: createCredential.description });
         form.setFieldsValue({ type: createCredential.type });
         form.setFieldsValue({ variables: createCredential.variables });
@@ -47,11 +42,6 @@ function UpdateCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-            if (!userName) {
-                return;
-            }
-            createCredential.xpanseUser = userName;
             void CredentialsManagementService.updateCredential(createCredential)
                 .then(() => {
                     getTipInfo('success', 'Updating Credential Successful.');

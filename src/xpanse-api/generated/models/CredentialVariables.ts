@@ -16,9 +16,9 @@ export type CredentialVariables = {
      */
     csp: CredentialVariables.csp;
     /**
-     * The user who create the credential.
+     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
      */
-    xpanseUser: string;
+    type: CredentialVariables.type;
     /**
      * The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.
      */
@@ -28,14 +28,13 @@ export type CredentialVariables = {
      */
     description: string;
     /**
-     * The type of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The id of user who create the credential.
      */
-    type: CredentialVariables.type;
+    userId: string;
     /**
      * The variables list of the credential.
      */
     variables: Array<CredentialVariable>;
-    uniqueKey?: string;
 };
 
 export namespace CredentialVariables {

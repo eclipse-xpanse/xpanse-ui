@@ -7,17 +7,12 @@ import '../../../styles/app.css';
 import { convertMapToUnorderedList, convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useQuery } from '@tanstack/react-query';
 import { ApiError, Response, ServiceService } from '../../../xpanse-api/generated';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-    const userName = getUserName(oidcIdToken.idTokenPayload as object);
     const getDeployedServicesDetailsByIdQuery = useQuery({
-        queryKey: ['getDeployedServiceDetailsById', serviceId, userName],
-        queryFn: () => ServiceService.getDeployedServiceDetailsById(serviceId, userName),
+        queryKey: ['getDeployedServiceDetailsById', serviceId],
+        queryFn: () => ServiceService.getDeployedServiceDetailsById(serviceId),
         refetchOnWindowFocus: false,
     });
 

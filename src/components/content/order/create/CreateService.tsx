@@ -13,6 +13,7 @@ import {
     Region,
     Response,
     UserAvailableServiceVo,
+    ServiceCatalogService,
 } from '../../../../xpanse-api/generated';
 import Navigate from './Navigate';
 import CspSelect from '../formElements/CspSelect';
@@ -26,7 +27,6 @@ import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { ServicesAvailableService } from '../../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function filterAreaList(
     selectVersion: string,
@@ -96,7 +96,7 @@ function CreateService(): React.JSX.Element {
     const availableServicesQuery = useQuery({
         queryKey: ['listAvailableServices', categoryName, serviceName],
         queryFn: () =>
-            ServicesAvailableService.listAvailableServices(
+            ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
                 '',
                 serviceName,
