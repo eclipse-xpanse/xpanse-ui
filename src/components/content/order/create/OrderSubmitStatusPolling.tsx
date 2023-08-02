@@ -20,8 +20,7 @@ function OrderSubmitStatusPolling({
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
 }): React.JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid!, [
+    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
         ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
     ]);
