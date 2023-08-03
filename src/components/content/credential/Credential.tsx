@@ -86,10 +86,6 @@ function Credential(): JSX.Element {
             dataIndex: 'csp',
         },
         {
-            title: 'User',
-            dataIndex: 'xpanseUser',
-        },
-        {
             title: 'Name',
             dataIndex: 'name',
         },
