@@ -6,7 +6,7 @@
 import { CreateRequest, DeployVariable, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
-import { OrderSubmitProps } from '../OrderSubmit';
+import { OrderSubmitProps } from '../create/OrderSubmit';
 import { useNavigate } from 'react-router-dom';
 
 export default function GoToSubmit({

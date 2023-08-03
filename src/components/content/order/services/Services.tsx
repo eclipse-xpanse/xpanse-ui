@@ -4,17 +4,16 @@
  */
 
 import { FormOutlined } from '@ant-design/icons';
-import '../../../styles/service_order.css';
+import '../../../../styles/service_order.css';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { createServicePageRoute } from '../../utils/constants';
+import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
-import { sortVersion } from '../../utils/Sort';
-import { ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { sortVersion } from '../../../utils/Sort';
+import { ServiceVo, VersionOclVo, ServiceCatalogService } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from './ServicesLoadingError';
-import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
 function Services(): JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -45,7 +44,7 @@ function Services(): JSX.Element {
     useEffect(() => {
         setIsServicesLoaded(false);
         const categoryName = location.hash.split('#')[1] as ServiceVo.category;
-        void ServicesAvailableService.getAvailableServicesTree(categoryName)
+        void ServiceCatalogService.getAvailableServicesTree(categoryName)
             .then((rsp) => {
                 const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
                 if (rsp.length > 0) {

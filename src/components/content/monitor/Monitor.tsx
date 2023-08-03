@@ -74,7 +74,6 @@ function Monitor(): JSX.Element {
                     };
                     serviceNameList.push(serviceNameUnique);
                 });
-
                 setDeployedServiceList(serviceList);
                 setServiceNameList(serviceNameList);
                 setCustomerServiceNameList(customerServiceNameList);
@@ -99,6 +98,7 @@ function Monitor(): JSX.Element {
             }
         }
     }, [deployedServiceQuery.isError, deployedServiceQuery.error]);
+
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];

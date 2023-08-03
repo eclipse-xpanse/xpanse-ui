@@ -23,7 +23,7 @@
         "/xpanse/services/register/{id}": {
             "get": {
                 "tags": ["Service Vendor"],
-                "description": "Get registered service using id.<br>**Required role: admin or csp**",
+                "description": "Get registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "detail",
                 "parameters": [
                     {
@@ -65,7 +65,7 @@
             },
             "put": {
                 "tags": ["Service Vendor"],
-                "description": "Update registered service using id and ocl model.<br>**Required role: admin or csp**",
+                "description": "Update registered service using id and ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "update",
                 "parameters": [
                     {
@@ -115,7 +115,7 @@
             },
             "delete": {
                 "tags": ["Service Vendor"],
-                "description": "Unregister registered service using id.<br>**Required role: admin or csp**",
+                "description": "Unregister registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "unregister",
                 "parameters": [
                     {
@@ -157,7 +157,7 @@
         "/xpanse/services/register/file/{id}": {
             "put": {
                 "tags": ["Service Vendor"],
-                "description": "Update registered service using id and ocl file url.<br>**Required role: admin or csp**",
+                "description": "Update registered service using id and ocl file url.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "fetchUpdate",
                 "parameters": [
                     {
@@ -208,7 +208,7 @@
         "/xpanse/auth/csp/credential": {
             "put": {
                 "tags": ["Credentials Management"],
-                "description": "Update user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "updateCredential",
                 "requestBody": {
                     "content": {
@@ -242,7 +242,7 @@
             },
             "post": {
                 "tags": ["Credentials Management"],
-                "description": "Add user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "addCredential",
                 "requestBody": {
                     "content": {
@@ -278,29 +278,15 @@
         "/xpanse/services/register": {
             "get": {
                 "tags": ["Service Vendor"],
-                "description": "List registered service with query params.<br>**Required role: admin or csp**",
+                "description": "List registered service with query params.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "listRegisteredServices",
                 "parameters": [
                     {
                         "name": "categoryName",
                         "in": "query",
-                        "description": "category of the service",
+                        "description": "name of category of the service",
                         "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
-                        }
+                        "schema": { "type": "string" }
                     },
                     {
                         "name": "cspName",
@@ -360,7 +346,7 @@
             },
             "post": {
                 "tags": ["Service Vendor"],
-                "description": "Register new service using ocl model.<br>**Required role: admin or csp**",
+                "description": "Register new service using ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "register",
                 "requestBody": {
                     "content": {
@@ -403,7 +389,7 @@
         "/xpanse/services/register/file": {
             "post": {
                 "tags": ["Service Vendor"],
-                "description": "Register new service with URL of Ocl file.<br>**Required role: admin or csp**",
+                "description": "Register new service with URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "fetch",
                 "parameters": [
                     {
@@ -447,7 +433,7 @@
         "/xpanse/services/deploy": {
             "post": {
                 "tags": ["Service"],
-                "description": "Start a task to deploy registered service.<br>**Required role: admin or user**",
+                "description": "Start a task to deploy registered service.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "deploy",
                 "requestBody": {
                     "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRequest" } } },
@@ -484,8 +470,8 @@
         "/xpanse/services/deployed": {
             "get": {
                 "tags": ["Service"],
-                "description": "Lists all deployed services.<br>**Required role: admin or user**",
-                "operationId": "listDeployedServices",
+                "description": "List all deployed services by a user.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "listMyDeployedServices",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
@@ -518,69 +504,16 @@
                 }
             }
         },
-        "/xpanse/services/deployed/{userName}": {
+        "/xpanse/services/deployed/{id}/details": {
             "get": {
                 "tags": ["Service"],
-                "description": "List all deployed services by a user.<br>**Required role: admin or user**",
-                "operationId": "getDeployedServicesByUser",
-                "parameters": [
-                    {
-                        "name": "userName",
-                        "in": "path",
-                        "description": "User who deployed the service",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/ServiceVo" } }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/deployed/{id}/details/{userName}": {
-            "get": {
-                "tags": ["Service"],
-                "description": "Get deployed service details by id.<br>**Required role: admin or user**",
+                "description": "Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getDeployedServiceDetailsById",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
                         "description": "Task id of deployed service",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    },
-                    {
-                        "name": "userName",
-                        "in": "path",
-                        "description": "User who deployed the service",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -618,29 +551,15 @@
         "/xpanse/services/available": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Returns the list of all registered services that are available for user to order.<br>**Required role: admin or user**",
+                "description": "Returns the list of all registered services that are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listAvailableServices",
                 "parameters": [
                     {
                         "name": "categoryName",
                         "in": "query",
-                        "description": "category of the service",
+                        "description": "name of category of the service",
                         "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
-                        }
+                        "schema": { "type": "string" }
                     },
                     {
                         "name": "cspName",
@@ -708,7 +627,7 @@
         "/xpanse/services/available/{id}": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Get deployable service by id.<br>**Required role: admin or user**",
+                "description": "Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "availableServiceDetails",
                 "parameters": [
                     {
@@ -752,7 +671,7 @@
         "/xpanse/services/available/{id}/openapi": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Get the API document of the available service.<br>**Required role: admin or csp or user**",
+                "description": "Get the API document of the available service.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>",
                 "operationId": "openApi",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
@@ -786,7 +705,7 @@
         "/xpanse/services/available/category/{categoryName}": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Get the available services by tree.<br>**Required role: admin or csp or user**",
+                "description": "Get the available services by tree.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>",
                 "operationId": "getAvailableServicesTree",
                 "parameters": [
                     {
@@ -846,7 +765,7 @@
         "/xpanse/monitor/metric/service/{id}": {
             "get": {
                 "tags": ["Monitor"],
-                "description": "Get metrics of all resources in a deployed service.<br>**Required role: admin or user**",
+                "description": "Get metrics of all resources in a deployed service.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getMetricsByServiceId",
                 "parameters": [
                     {
@@ -930,7 +849,7 @@
         "/xpanse/monitor/metric/resource/{id}": {
             "get": {
                 "tags": ["Monitor"],
-                "description": "Get metrics of a specific deployed resource.<br>**Required role: admin or user**",
+                "description": "Get metrics of a specific deployed resource.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getMetricsByResourceId",
                 "parameters": [
                     {
@@ -1014,7 +933,7 @@
         "/xpanse/health": {
             "get": {
                 "tags": ["Admin"],
-                "description": "Check health of API service and backend systems.<br>**Required role: admin or csp or user**",
+                "description": "Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>",
                 "operationId": "healthCheck",
                 "responses": {
                     "500": {
@@ -1047,17 +966,8 @@
         "/xpanse/auth/user/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get all cloud provider credentials added by the user.<br>**Required role: admin or user**",
+                "description": "Get all cloud provider credentials added by the user.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getCredentialsByUser",
-                "parameters": [
-                    {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided the credential.",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    }
-                ],
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
@@ -1096,7 +1006,7 @@
         "/xpanse/auth/csp/{cspName}/openapi/{type}": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Returns the OpenAPI document for adding a credential.<br>**Required role: admin or user**",
+                "description": "Returns the OpenAPI document for adding a credential.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getCredentialOpenApi",
                 "parameters": [
                     {
@@ -1151,7 +1061,7 @@
         "/xpanse/auth/csp/{cspName}/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get all cloud provider credentials added by the user for a cloud service provider.<br>**Required role: admin or user**",
+                "description": "Get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getCredentials",
                 "parameters": [
                     {
@@ -1173,13 +1083,6 @@
                             "type": "string",
                             "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                         }
-                    },
-                    {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided the credential.",
-                        "required": true,
-                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
@@ -1220,7 +1123,7 @@
         "/xpanse/auth/csp/{cspName}/credential/types": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get the credential types supported by the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Get the credential types supported by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getCredentialTypesByCsp",
                 "parameters": [
                     {
@@ -1275,7 +1178,7 @@
         "/xpanse/auth/csp/{cspName}/credential/capabilities": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get the credential capabilities defined by the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Get the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "getCredentialCapabilitiesByCsp",
                 "parameters": [
                     {
@@ -1425,7 +1328,7 @@
         "/xpanse/services/destroy/{id}": {
             "delete": {
                 "tags": ["Service"],
-                "description": "Start a task to destroy the deployed service using id.<br>**Required role: admin or user**",
+                "description": "Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "destroy",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
@@ -1459,7 +1362,7 @@
         "/xpanse/auth/csp/{cspName}/credential": {
             "delete": {
                 "tags": ["Credentials Management"],
-                "description": "Delete user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**",
+                "description": "Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "deleteCredential",
                 "parameters": [
                     {
@@ -1486,13 +1389,6 @@
                         "name": "name",
                         "in": "query",
                         "description": "The name of of credential.",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    },
-                    {
-                        "name": "userName",
-                        "in": "query",
-                        "description": "The name of user who provided credential.",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -1561,7 +1457,8 @@
                             "Service Update Not Allowed",
                             "Unauthorized",
                             "Access Denied",
-                            "Sensitive Field Encryption Or Decryption Failed Exception"
+                            "Sensitive Field Encryption Or Decryption Failed Exception",
+                            "Unsupported Enum Value"
                         ]
                     },
                     "details": {
@@ -1811,11 +1708,10 @@
                 }
             },
             "CreateCredential": {
-                "required": ["csp", "name", "timeToLive", "type", "variables", "xpanseUser"],
+                "required": ["csp", "name", "timeToLive", "type", "variables"],
                 "type": "object",
                 "properties": {
                     "name": { "type": "string", "description": "The name of the credential" },
-                    "xpanseUser": { "type": "string", "description": "The user who create the credential." },
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
@@ -1869,10 +1765,9 @@
                 "description": "The variables list of the credential"
             },
             "CreateRequest": {
-                "required": ["category", "csp", "flavor", "region", "serviceName", "userName", "version"],
+                "required": ["category", "csp", "flavor", "region", "serviceName", "version"],
                 "type": "object",
                 "properties": {
-                    "userName": { "type": "string", "description": "User who ordered the service" },
                     "category": {
                         "type": "string",
                         "description": "The category of the service",
@@ -1921,13 +1816,13 @@
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
-                    "userName",
+                    "userId",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
-                    "userName": { "type": "string", "description": "User who ordered the service" },
+                    "userId": { "type": "string", "description": "The id of the user who deployed the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -2012,13 +1907,13 @@
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
-                    "userName",
+                    "userId",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
-                    "userName": { "type": "string", "description": "User who ordered the service" },
+                    "userId": { "type": "string", "description": "The id of the user who deployed the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -2315,7 +2210,7 @@
                 }
             },
             "AbstractCredentialInfo": {
-                "required": ["csp", "description", "name", "type", "xpanseUser"],
+                "required": ["csp", "description", "name", "type", "userId"],
                 "type": "object",
                 "allOf": [
                     { "$ref": "#/components/schemas/CredentialVariables" },
@@ -2327,7 +2222,11 @@
                                 "description": "The cloud service provider of the credential.",
                                 "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
                             },
-                            "xpanseUser": { "type": "string", "description": "The user who create the credential." },
+                            "type": {
+                                "type": "string",
+                                "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            },
                             "name": {
                                 "type": "string",
                                 "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
@@ -2336,18 +2235,13 @@
                                 "type": "string",
                                 "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
                             },
-                            "type": {
-                                "type": "string",
-                                "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
-                                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
-                            },
-                            "uniqueKey": { "type": "string" }
+                            "userId": { "type": "string", "description": "The id of user who create the credential." }
                         }
                     }
                 ]
             },
             "CredentialVariables": {
-                "required": ["csp", "description", "name", "type", "variables", "xpanseUser"],
+                "required": ["csp", "description", "name", "type", "userId", "variables"],
                 "type": "object",
                 "properties": {
                     "csp": {
@@ -2355,7 +2249,11 @@
                         "description": "The cloud service provider of the credential.",
                         "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
                     },
-                    "xpanseUser": { "type": "string", "description": "The user who create the credential." },
+                    "type": {
+                        "type": "string",
+                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                    },
                     "name": {
                         "type": "string",
                         "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
@@ -2364,17 +2262,12 @@
                         "type": "string",
                         "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
                     },
-                    "type": {
-                        "type": "string",
-                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
-                    },
+                    "userId": { "type": "string", "description": "The id of user who create the credential." },
                     "variables": {
                         "type": "array",
                         "description": "The variables list of the credential.",
                         "items": { "$ref": "#/components/schemas/CredentialVariable" }
-                    },
-                    "uniqueKey": { "type": "string" }
+                    }
                 }
             },
             "TokenResponse": {
@@ -2397,8 +2290,8 @@
                 "type": "oauth2",
                 "flows": {
                     "authorizationCode": {
-                        "authorizationUrl": "https://iam.xpanse.site/oauth/v2/authorize",
-                        "tokenUrl": "https://iam.xpanse.site/oauth/v2/token",
+                        "authorizationUrl": "http://localhost:8080/oauth/v2/authorize",
+                        "tokenUrl": "http://localhost:8080/oauth/v2/token",
                         "scopes": { "openid": "", "email": "", "profile": "" }
                     }
                 }

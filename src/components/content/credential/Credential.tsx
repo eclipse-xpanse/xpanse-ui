@@ -20,9 +20,7 @@ import {
     CredentialVariables,
     Response,
 } from '../../../xpanse-api/generated';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 function Credential(): JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -39,9 +37,48 @@ function Credential(): JSX.Element {
         timeToLive: 0,
         type: '' as CredentialVariables.type,
         variables: [],
-        xpanseUser: '',
     });
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
+
+    const credentialsQuery = useQuery({
+        queryKey: ['credentialsQuery'],
+        queryFn: () => CredentialsManagementService.getCredentialsByUser(),
+        staleTime: 60000,
+    });
+
+    useEffect(() => {
+        const credentials: AbstractCredentialInfo[] | undefined = credentialsQuery.data;
+        if (credentials !== undefined && credentials.length > 0) {
+            setAbstractCredentialInfoList(credentials);
+        } else {
+            setAbstractCredentialInfoList([]);
+        }
+    }, [credentialsQuery.data, credentialsQuery.isSuccess]);
+
+    useEffect(() => {
+        setAbstractCredentialInfoList([]);
+    }, [credentialsQuery.error]);
+
+    const deleteCredentialRequest = useMutation({
+        mutationFn: (credentialVariables: CredentialVariables) => {
+            return CredentialsManagementService.deleteCredential(
+                credentialVariables.csp,
+                credentialVariables.type,
+                credentialVariables.name
+            );
+        },
+        onSuccess: () => {
+            void credentialsQuery.refetch();
+            getTipInfo('success', 'Deleting Credential Successful.');
+        },
+        onError: (error: Error) => {
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                getTipInfo('error', response.details.join());
+            } else {
+                getTipInfo('error', error.message);
+            }
+        },
+    });
 
     const columns: ColumnsType<AbstractCredentialInfo> = [
         {
@@ -83,7 +120,7 @@ function Credential(): JSX.Element {
                                 description='Are you sure to delete the Credential?'
                                 okText='Yes'
                                 cancelText='No'
-                                onConfirm={() => deleteCredential(record)}
+                                onConfirm={() => deleteCredentialRequest.mutate(record)}
                             >
                                 <Button type='primary' icon={<MinusCircleOutlined />}>
                                     Delete
@@ -107,33 +144,8 @@ function Credential(): JSX.Element {
         setIsAddOpen(true);
     };
 
-    const deleteCredential = (credentialVariables: CredentialVariables) => {
-        void CredentialsManagementService.deleteCredential(
-            credentialVariables.csp,
-            credentialVariables.type,
-            credentialVariables.name,
-            credentialVariables.xpanseUser
-        )
-            .then(() => {
-                getTipInfo('success', 'Deleting Credential Successful.');
-                getCredentials();
-            })
-            .catch((error: Error) => {
-                if (error instanceof ApiError && 'details' in error.body) {
-                    const response: Response = error.body as Response;
-                    getTipInfo('error', response.details.join());
-                } else {
-                    getTipInfo('error', error.message);
-                }
-            });
-    };
-
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
         const credentialVariables: CredentialVariables = abstractCredentialInfo;
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
         const credentialVariableList: CredentialVariable[] = credentialVariables.variables;
         const credentialVariableLists: CredentialVariable[] = [];
         credentialVariableList.forEach((credentialVariable) => {
@@ -146,7 +158,6 @@ function Credential(): JSX.Element {
             name: credentialVariables.name,
             type: credentialVariables.type,
             csp: credentialVariables.csp,
-            xpanseUser: userName,
             description: credentialVariables.description,
             variables: credentialVariableLists,
             timeToLive: (abstractCredentialInfo as CreateCredential).timeToLive,
@@ -160,38 +171,14 @@ function Credential(): JSX.Element {
         setCredentialDetails(credentialVariables.variables);
     };
 
-    function getCredentials(): void {
-        const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-        if (!userName) {
-            return;
-        }
-        void CredentialsManagementService.getCredentialsByUser(userName)
-            .then((abstractCredentialInfoList) => {
-                if (abstractCredentialInfoList.length > 0) {
-                    setAbstractCredentialInfoList(abstractCredentialInfoList);
-                } else {
-                    setAbstractCredentialInfoList([]);
-                }
-            })
-            .catch((error: Error) => {
-                setAbstractCredentialInfoList([]);
-                console.log(error);
-            });
-    }
-
-    useEffect(() => {
-        getCredentials();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
     const onCancel = () => {
         setIsAddOpen(false);
-        getCredentials();
+        void credentialsQuery.refetch();
     };
 
     const onUpdateCancel = () => {
         setIsUpdateOpen(false);
-        getCredentials();
+        void credentialsQuery.refetch();
     };
 
     const onDetailsCancel = () => {
@@ -220,7 +207,7 @@ function Credential(): JSX.Element {
                     destroyOnClose={true}
                     footer={[]}
                 >
-                    <AddCredential onCancel={onCancel} getCredentials={getCredentials} />
+                    <AddCredential onCancel={onCancel} credentialsQuery={credentialsQuery} />
                 </Modal>
                 <Modal
                     width={1000}
@@ -234,7 +221,7 @@ function Credential(): JSX.Element {
                     <UpdateCredential
                         createCredential={createCredential}
                         onUpdateCancel={onUpdateCancel}
-                        getCredentials={getCredentials}
+                        credentialsQuery={credentialsQuery}
                     />
                 </Modal>
                 <Modal
@@ -258,7 +245,11 @@ function Credential(): JSX.Element {
                 >
                     Add
                 </Button>
-                <Table columns={columns} dataSource={abstractCredentialInfoList} />
+                <Table
+                    columns={columns}
+                    loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}
+                    dataSource={abstractCredentialInfoList}
+                />
             </div>
         </div>
     );

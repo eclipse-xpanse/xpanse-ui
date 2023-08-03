@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceDetailVo } from '../../../xpanse-api/generated';
+import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 
 function DeploymentFailed(response: ServiceDetailVo): JSX.Element {
     return (

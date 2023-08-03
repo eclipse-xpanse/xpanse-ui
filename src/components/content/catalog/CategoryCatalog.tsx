@@ -7,25 +7,30 @@ import React, { useEffect, useState } from 'react';
 import '../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from './services/ServiceProvider';
-import { HomeOutlined } from '@ant-design/icons';
-import { ApiError, CategoryOclVo, Response, ServiceVo, VersionOclVo } from '../../../xpanse-api/generated';
+import { HomeOutlined, TagOutlined } from '@ant-design/icons';
+import {
+    ApiError,
+    CategoryOclVo,
+    Response,
+    ServiceVo,
+    VersionOclVo,
+    ServiceCatalogService,
+} from '../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
 
-function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.Element {
+function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
     const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
-    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
+    const [loadingError, setLoadingError] = useState<React.JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
-        queryFn: () => ServicesAvailableService.getAvailableServicesTree(category),
-        staleTime: 60000,
+        queryFn: () => ServiceCatalogService.getAvailableServicesTree(category),
     });
 
     useEffect(() => {
@@ -45,6 +50,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.El
                     dn.children?.push({
                         title: v.version,
                         key: service.name + '@' + v.version,
+                        icon: <TagOutlined />,
                     });
                     tExpandKeys.push(service.name + '@' + v.version);
                 });
@@ -115,12 +121,12 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.El
         return loadingError;
     }
 
-    if (availableServicesQuery.isLoading) {
+    if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
         return (
             <Skeleton
                 className={'catalog-skeleton'}
                 active={true}
-                loading={availableServicesQuery.isLoading}
+                loading={true}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
                 title={{ width: '5%' }}
             />
@@ -141,6 +147,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): JSX.El
                             &nbsp;Service Tree
                         </div>
                         <Tree
+                            showIcon={true}
                             defaultExpandAll={true}
                             autoExpandParent={true}
                             onSelect={onSelect}

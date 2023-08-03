@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
     ApiError,
@@ -13,20 +13,20 @@ import {
     Region,
     Response,
     UserAvailableServiceVo,
-} from '../../../xpanse-api/generated';
+    ServiceCatalogService,
+} from '../../../../xpanse-api/generated';
 import Navigate from './Navigate';
-import CspSelect from './formElements/CspSelect';
-import GoToSubmit from './formElements/GoToSubmit';
+import CspSelect from '../formElements/CspSelect';
+import GoToSubmit from '../formElements/GoToSubmit';
 import { Alert, Select, Skeleton, Space, Tabs } from 'antd';
-import { Area } from '../../utils/Area';
+import { Area } from '../../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
-import { sortVersion } from '../../utils/Sort';
-import { currencyMapper } from '../../utils/currency';
-import { servicesSubPageRoute } from '../../utils/constants';
+import { sortVersion } from '../../../utils/Sort';
+import { currencyMapper } from '../../../utils/currency';
+import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import { useQuery } from '@tanstack/react-query';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { ServicesAvailableService } from '../../../xpanse-api/generated/services/ServicesAvailableService';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function filterAreaList(
     selectVersion: string,
@@ -66,7 +66,7 @@ function filterAreaList(
     return areaMapper.get(selectCsp) ?? [];
 }
 
-function CreateService(): JSX.Element {
+function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const location = useLocation();
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
@@ -96,7 +96,7 @@ function CreateService(): JSX.Element {
     const availableServicesQuery = useQuery({
         queryKey: ['listAvailableServices', categoryName, serviceName],
         queryFn: () =>
-            ServicesAvailableService.listAvailableServices(
+            ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
                 '',
                 serviceName,

@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class CredentialsManagementService {
     /**
-     * Update user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**
+     * Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
      * @returns void
      * @throws ApiError
@@ -39,7 +39,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Add user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**
+     * Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
      * @returns void
      * @throws ApiError
@@ -61,18 +61,14 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get all cloud provider credentials added by the user.<br>**Required role: admin or user**
-     * @param userName The name of user who provided the credential.
+     * Get all cloud provider credentials added by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @returns AbstractCredentialInfo OK
      * @throws ApiError
      */
-    public static getCredentialsByUser(userName: string): CancelablePromise<Array<AbstractCredentialInfo>> {
+    public static getCredentialsByUser(): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/auth/user/credentials',
-            query: {
-                userName: userName,
-            },
             errors: {
                 400: `Bad Request`,
                 403: `Forbidden`,
@@ -84,7 +80,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Returns the OpenAPI document for adding a credential.<br>**Required role: admin or user**
+     * Returns the OpenAPI document for adding a credential.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.
      * @param type The type of credential.
      * @returns Link OK
@@ -112,16 +108,14 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get all cloud provider credentials added by the user for a cloud service provider.<br>**Required role: admin or user**
+     * Get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.
-     * @param userName The name of user who provided the credential.
      * @param type The type of credential.
      * @returns AbstractCredentialInfo OK
      * @throws ApiError
      */
     public static getCredentials(
         cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
-        userName: string,
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
@@ -132,7 +126,6 @@ export class CredentialsManagementService {
             },
             query: {
                 type: type,
-                userName: userName,
             },
             errors: {
                 400: `Bad Request`,
@@ -145,7 +138,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get the credential types supported by the cloud service provider.<br>**Required role: admin or user**
+     * Get the credential types supported by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.
      * @returns string OK
      * @throws ApiError
@@ -170,7 +163,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get the credential capabilities defined by the cloud service provider.<br>**Required role: admin or user**
+     * Get the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName name of the cloud service provider.
      * @param type The type of credential.
      * @param name The name of credential.
@@ -203,19 +196,17 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Delete user's credential for connecting to the cloud service provider.<br>**Required role: admin or user**
+     * Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.
      * @param type The type of credential.
      * @param name The name of of credential.
-     * @param userName The name of user who provided credential.
      * @returns void
      * @throws ApiError
      */
     public static deleteCredential(
         cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
-        name: string,
-        userName: string
+        name: string
     ): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
@@ -226,7 +217,6 @@ export class CredentialsManagementService {
             query: {
                 type: type,
                 name: name,
-                userName: userName,
             },
             errors: {
                 400: `Bad Request`,

@@ -26,14 +26,11 @@ import {
     OperationType,
 } from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
-import { OrderSubmitProps } from '../OrderSubmit';
-import { MigrateSubmitResult } from '../OrderSubmitResult';
+import { OrderSubmitProps } from '../create/OrderSubmit';
+import { MigrateSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { deployTimeout, destroyTimeout, waitServicePeriod } from '../../../utils/constants';
-import { ProcessingStatus } from '../ProcessingStatus';
-import { MigrateSubmitFailed } from '../OrderSubmitFailed';
-import { getUserName } from '../../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
+import { MigrateSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 
 export const MigrateService = ({
     userAvailableServiceVoList,
@@ -80,7 +77,6 @@ export const MigrateService = ({
         userAvailableServiceVoList,
         selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
@@ -136,7 +132,7 @@ export const MigrateService = ({
             selectRegion,
             selectFlavor
         );
-        const createRequest: CreateRequest = getCreateRequest(props, customerServiceName, oidcIdToken);
+        const createRequest: CreateRequest = getCreateRequest(props, customerServiceName);
         ServiceService.deploy(createRequest)
             .then((uuid) => {
                 setTip(MigrateSubmitResult('Request accepted', uuid, 'success'));
@@ -163,7 +159,7 @@ export const MigrateService = ({
                 'success'
             )
         );
-        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(oidcIdToken.idTokenPayload as object))
+        ServiceService.getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
                     setTip(
@@ -260,7 +256,7 @@ export const MigrateService = ({
                 'success'
             )
         );
-        ServiceService.getDeployedServiceDetailsById(uuid, getUserName(oidcIdToken.idTokenPayload as object))
+        ServiceService.getDeployedServiceDetailsById(uuid)
             .then((response) => {
                 if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
                     setTip(

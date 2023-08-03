@@ -12,7 +12,7 @@ import {
     monitorMenu,
     myServicesMenu,
     servicesMenu,
-} from '../../content/order/ServicesMenu';
+} from '../../content/order/services/ServicesMenu';
 import { RegisteredServiceVo } from '../../../xpanse-api/generated';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 
