@@ -16,12 +16,13 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
+import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
 function AddCredential({
-    getCredentials,
+    credentialsQuery,
     onCancel,
 }: {
-    getCredentials: () => void;
+    credentialsQuery: UseQueryResult<never[]>;
     onCancel: () => void;
 }): JSX.Element {
     const [form] = Form.useForm();
@@ -36,14 +37,84 @@ function AddCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+
+    const credentialTypesQuery = useQuery({
+        queryKey: ['credentialTypesQuery', currentCsp],
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        queryFn: () => CredentialsManagementService.getCredentialTypesByCsp(currentCsp!),
+        staleTime: 60000,
+        enabled: currentCsp !== undefined,
+    });
+
+    useEffect(() => {
+        const types = credentialTypesQuery.data;
+        if (types !== undefined && types.length > 0) {
+            setCredentialTypeList(types as CredentialVariables.type[]);
+        } else {
+            setCredentialTypeList([]);
+        }
+    }, [credentialTypesQuery.data, credentialTypesQuery.isSuccess]);
+
+    useEffect(() => {
+        setCredentialTypeList([]);
+    }, [credentialTypesQuery.error]);
+
+    const credentialCapabilitiesQuery = useQuery({
+        queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        queryFn: () => CredentialsManagementService.getCredentialCapabilitiesByCsp(currentCsp!, currentType),
+        staleTime: 60000,
+        enabled: currentCsp !== undefined && currentType !== undefined,
+    });
+
+    useEffect(() => {
+        const credentials = credentialCapabilitiesQuery.data;
+        const names: string[] = [];
+        if (credentials !== undefined && credentials.length > 0) {
+            credentials.forEach((credential: CredentialVariables) => {
+                names.push(credential.name);
+            });
+        }
+        setNameList(names);
+    }, [credentialCapabilitiesQuery.data, credentialCapabilitiesQuery.isSuccess]);
+
+    useEffect(() => {
+        setNameList([]);
+    }, [credentialCapabilitiesQuery.error]);
+
+    useEffect(() => {
+        const credentials = credentialCapabilitiesQuery.data;
+        const names: string[] = [];
+        if (credentials !== undefined && credentials.length > 0) {
+            credentials.forEach((credential: CredentialVariables) => {
+                names.push(credential.name);
+                if (
+                    credential.csp === currentCsp &&
+                    credential.type === currentType &&
+                    credential.name === currentName
+                ) {
+                    const credentialVariables: CredentialVariable[] = [];
+                    credential.variables.forEach((credentialVariable) => {
+                        credentialVariable.value = '';
+                        credentialVariables.push(credentialVariable);
+                    });
+                    setCredentialVariableList(credentialVariables);
+                    form.setFieldsValue({ variables: credentialVariables });
+                }
+            });
+        }
+        setNameList(names);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentCsp, currentType, currentName]);
+
     const handleCspSelect = (cspName: CredentialVariables.csp) => {
         setCurrentCsp(cspName);
-        setTypeDisabled(false);
-        setNameDisable(true);
 
+        setTypeDisabled(false);
         setCurrentType(undefined);
         form.setFieldsValue({ type: undefined });
 
+        setNameDisable(true);
         setCurrentName(undefined);
         form.setFieldsValue({ name: undefined });
 
@@ -52,22 +123,12 @@ function AddCredential({
 
         getTipInfo(undefined, '');
         setDisable(false);
-    };
-
-    const clear = () => {
-        setCurrentCsp(undefined);
-        setCurrentType(undefined);
-        setCurrentName(undefined);
-        setNameList([]);
-        setCredentialTypeList([]);
-        setCredentialVariableList([]);
     };
 
     const handleCredentialTypeSelect = (type: CredentialVariables.type) => {
         setCurrentType(type);
-        setNameDisable(false);
-        setDisable(false);
 
+        setNameDisable(false);
         setCurrentName(undefined);
         form.setFieldsValue({ name: undefined });
 
@@ -75,70 +136,18 @@ function AddCredential({
         form.setFieldsValue({ variables: [] });
 
         getTipInfo(undefined, '');
+        setDisable(false);
     };
 
     const handleCredentialNameSelect = (name: string) => {
         setCurrentName(name);
         form.setFieldsValue({ name: name });
 
+        setCredentialVariableList([]);
+
         getTipInfo(undefined, '');
         setDisable(false);
     };
-
-    useEffect(() => {
-        if (currentCsp === undefined) {
-            return;
-        }
-        void CredentialsManagementService.getCredentialTypesByCsp(currentCsp)
-            .then((resp) => {
-                if (resp.length > 0) {
-                    setCredentialTypeList(resp as CredentialVariables.type[]);
-                } else {
-                    setCredentialTypeList([]);
-                }
-            })
-            .catch((error: Error) => {
-                setCredentialTypeList([]);
-                console.log(error);
-            });
-
-        if (currentType === undefined) {
-            return;
-        }
-        void CredentialsManagementService.getCredentialCapabilitiesByCsp(currentCsp, currentType)
-            .then((resp: CredentialVariables[]) => {
-                if (resp.length > 0) {
-                    resp.forEach((credential: CredentialVariables) => {
-                        names.push(credential.name);
-                        if (
-                            credential.csp === currentCsp &&
-                            credential.type === currentType &&
-                            credential.name === currentName
-                        ) {
-                            const credentialVariables: CredentialVariable[] = [];
-                            credential.variables.forEach((credentialVariable) => {
-                                credentialVariable.value = '';
-                                credentialVariables.push(credentialVariable);
-                            });
-                            setCredentialVariableList(credentialVariables);
-                            form.setFieldsValue({ variables: credentialVariables });
-                        }
-                    });
-                    setNameList(names);
-                } else {
-                    setNameList([]);
-                    setCredentialVariableList([]);
-                    form.setFieldsValue({ variables: [] });
-                }
-            })
-            .catch((error: Error) => {
-                console.log(error);
-                return [];
-            });
-        const names: string[] = [];
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentCsp, currentType, currentName]);
 
     function setVariablesValue(index: number, e: ChangeEvent<HTMLInputElement>) {
         credentialVariableList[index].value = e.target.value;
@@ -239,6 +248,7 @@ function AddCredential({
         if (!isContainsEmpty(createCredential.variables)) {
             void CredentialsManagementService.addCredential(createCredential)
                 .then(() => {
+                    void credentialsQuery.refetch();
                     getTipInfo('success', 'Adding Credential Successful.');
                     setDisable(true);
                 })
@@ -255,6 +265,15 @@ function AddCredential({
         }
     };
 
+    const clear = () => {
+        setCurrentCsp(undefined);
+        setCurrentType(undefined);
+        setCurrentName(undefined);
+        setNameList([]);
+        setCredentialTypeList([]);
+        setCredentialVariableList([]);
+    };
+
     const onReset = () => {
         clear();
         form.resetFields();
@@ -267,7 +286,7 @@ function AddCredential({
     const onRemove = () => {
         onReset();
         onCancel();
-        getCredentials();
+        void credentialsQuery.refetch();
     };
 
     const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
@@ -318,7 +337,11 @@ function AddCredential({
                         name='name'
                         rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
                     >
-                        <Select disabled={nameDisable} onSelect={handleCredentialNameSelect}>
+                        <Select
+                            loading={credentialCapabilitiesQuery.isLoading || credentialCapabilitiesQuery.isRefetching}
+                            disabled={nameDisable}
+                            onSelect={handleCredentialNameSelect}
+                        >
                             {nameList.map((name: string) => {
                                 return (
                                     <Select.Option key={name} value={name}>
