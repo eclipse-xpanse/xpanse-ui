@@ -192,6 +192,7 @@ export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: s
 export enum OperationType {
     Deploy = 'deploy',
     Destroy = 'destroy',
+    Migrate = 'migrate',
 }
 
 export enum MigrationSteps {
