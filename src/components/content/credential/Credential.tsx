@@ -55,7 +55,12 @@ function Credential(): JSX.Element {
     }, [credentialsQuery.data, credentialsQuery.isSuccess]);
 
     useEffect(() => {
-        setAbstractCredentialInfoList([]);
+        if (credentialsQuery.error instanceof ApiError && 'details' in credentialsQuery.error.body) {
+            const response: Response = credentialsQuery.error.body as Response;
+            getTipInfo('error', response.details.join());
+        } else if (credentialsQuery.error instanceof Error) {
+            getTipInfo('error', credentialsQuery.error.message);
+        }
     }, [credentialsQuery.error]);
 
     const deleteCredentialRequest = useMutation({
