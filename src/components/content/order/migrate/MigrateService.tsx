@@ -8,7 +8,6 @@ import {
     Billing,
     CloudServiceProvider,
     CreateRequest,
-    ServiceDetailVo,
     ServiceService,
     ServiceVo,
     UserAvailableServiceVo,
@@ -23,14 +22,11 @@ import {
     getFlavorList,
     MigrationStatus,
     MigrationSteps,
-    OperationType,
 } from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
 import { OrderSubmitProps } from '../create/OrderSubmit';
-import { MigrateSubmitResult } from '../orderStatus/OrderSubmitResult';
-import { deployTimeout, destroyTimeout, waitServicePeriod } from '../../../utils/constants';
-import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
-import { MigrateSubmitFailed } from '../orderStatus/OrderSubmitFailed';
+import { useMutation } from '@tanstack/react-query';
+import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 
 export const MigrateService = ({
     userAvailableServiceVoList,
@@ -40,7 +36,6 @@ export const MigrateService = ({
     selectFlavor,
     getCurrentMigrationStep,
     deployParams,
-    getMigrateModalOpenStatus,
     currentSelectedService,
     getCurrentMigrationStepStatus,
 }: {
@@ -55,21 +50,17 @@ export const MigrateService = ({
     currentSelectedService: ServiceVo | undefined;
     getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
 }): JSX.Element => {
-    const [isNewServiceDeployed, setIsNewServiceDeployed] = useState<boolean>(false);
-    const [isMigrating, setIsMigrating] = useState<boolean>(false);
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
+    const [destroyUuid, setDestroyUuid] = useState<string>('');
+    const [isMigrateTipShow, setIsMigrateTipShow] = useState<boolean>(false);
+    const [migrating, setMigrating] = useState<boolean>(false);
+    const [migrateDisable, setMigrateDisable] = useState<boolean>(false);
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DestroyTheOldService
     );
     const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
         undefined
     );
-
-    const [tip, setTip] = useState<JSX.Element | undefined>(undefined);
-    const [isTipShowStatus, setIsTipShowStatus] = useState<boolean>(false);
-    let retryDeployTimer: number | undefined = undefined;
-    let retryDestroyTimer: number | undefined = undefined;
-
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: { value: string; label: string; price: string }[] =
         getFlavorList(userAvailableServiceVoList);
@@ -77,28 +68,12 @@ export const MigrateService = ({
         userAvailableServiceVoList,
         selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
-
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
         if (flavorItem.value === selectFlavor) {
             priceValue = flavorItem.price;
         }
     });
-
-    const prev = () => {
-        setCurrentMigrationStep(MigrationSteps.ImportServiceData);
-        getCurrentMigrationStep(MigrationSteps.ImportServiceData);
-    };
-
-    const TipClear = () => {
-        setTip(undefined);
-    };
-
-    const migrate = () => {
-        setIsMigrating(true);
-        setIsPreviousDisabled(true);
-        startMigrating();
-    };
 
     useEffect(() => {
         if (currentMigrationStepStatus === undefined) {
@@ -108,15 +83,17 @@ export const MigrateService = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentMigrationStepStatus]);
 
-    const startMigrating = () => {
-        if (currentSelectedService === undefined) {
-            return;
-        }
-        setCurrentMigrationStepStatus(MigrationStatus.Processing);
-        setIsMigrating(true);
+    const migrate = () => {
+        setMigrating(true);
+        setMigrateDisable(true);
         setIsPreviousDisabled(true);
-        setIsTipShowStatus(true);
-        if (deployParams === undefined) {
+        setCurrentMigrationStepStatus(MigrationStatus.Processing);
+        setIsMigrateTipShow(true);
+        startMigrating();
+    };
+
+    const startMigrating = () => {
+        if (currentSelectedService === undefined || deployParams === undefined) {
             return;
         }
         let customerServiceName = '';
@@ -133,194 +110,69 @@ export const MigrateService = ({
             selectFlavor
         );
         const createRequest: CreateRequest = getCreateRequest(props, customerServiceName);
-        ServiceService.deploy(createRequest)
-            .then((uuid) => {
-                setTip(MigrateSubmitResult('Request accepted', uuid, 'success'));
-                waitingServiceReady(uuid, deployTimeout, new Date());
-            })
-            .catch((error: Error) => {
-                console.error(error);
-                setIsNewServiceDeployed(false);
-                setIsPreviousDisabled(false);
-                setIsTipShowStatus(true);
-                setTip(MigrateSubmitFailed(error));
-                setCurrentMigrationStepStatus(MigrationStatus.Failed);
-                TipClear();
-            });
+        deployServiceRequest.mutate(createRequest);
     };
 
-    const waitingServiceReady = (uuid: string, timeout: number, date: Date) => {
-        setTip(
-            MigrateSubmitResult(
-                'Migrating, Please wait... [' +
-                    Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() +
-                    's]',
-                uuid,
-                'success'
-            )
-        );
-        ServiceService.getDeployedServiceDetailsById(uuid)
-            .then((response) => {
-                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
-                    setTip(
-                        MigrateSubmitResult(
-                            ProcessingStatus(response, OperationType.Deploy as OperationType),
-                            uuid,
-                            'success'
-                        )
-                    );
-                    setIsNewServiceDeployed(true);
-                    setIsPreviousDisabled(true);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Finished);
-                    TipClear();
-                    return () => {
-                        clearTimeout(retryDeployTimer);
-                    };
-                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
-                    setTip(
-                        MigrateSubmitResult(
-                            ProcessingStatus(response, OperationType.Deploy as OperationType),
-                            uuid,
-                            'error'
-                        )
-                    );
-                    setIsNewServiceDeployed(false);
-                    setIsMigrating(false);
-                    setIsPreviousDisabled(false);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Failed);
-                    return () => {
-                        clearTimeout(retryDeployTimer);
-                    };
-                } else {
-                    retryDeployTimer = window.setTimeout(() => {
-                        waitingServiceReady(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                }
-            })
-            .catch((error: Error) => {
-                console.log('waitingServiceReady error', error);
-                if (timeout > 0) {
-                    retryDeployTimer = window.setTimeout(() => {
-                        waitingServiceReady(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                } else {
-                    setTip(MigrateSubmitFailed(error));
-                    setIsNewServiceDeployed(false);
-                    setIsMigrating(false);
-                    setIsPreviousDisabled(false);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Failed);
-                    TipClear();
-                }
-            });
-    };
-
-    useEffect(() => {
-        if (isNewServiceDeployed) {
+    const deployServiceRequest = useMutation({
+        mutationFn: (createRequest: CreateRequest) => {
+            return ServiceService.deploy(createRequest);
+        },
+        onSuccess: () => {
             destroy();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isNewServiceDeployed]);
+        },
+        onError: (error: Error) => {
+            console.error(error);
+            setMigrating(false);
+            setMigrateDisable(false);
+            setIsPreviousDisabled(false);
+            setCurrentMigrationStepStatus(MigrationStatus.Failed);
+        },
+    });
 
     const destroy = () => {
-        setCurrentMigrationStepStatus(MigrationStatus.Processing);
         if (currentSelectedService === undefined) {
             return;
         }
-        setIsPreviousDisabled(true);
-        setIsTipShowStatus(true);
-        ServiceService.destroy(currentSelectedService.id)
-            .then(() => {
-                setTip(MigrateSubmitResult('Request accepted', currentSelectedService.id, 'success'));
-                waitingServiceDestroy(currentSelectedService.id, destroyTimeout, new Date());
-            })
-            .catch((error: Error) => {
-                console.log('waitingServiceDestroy error', error);
-                setTip(MigrateSubmitFailed(error));
-                setIsMigrating(false);
-                setIsPreviousDisabled(true);
-                setIsTipShowStatus(true);
-                TipClear();
-            });
+        setDestroyUuid(currentSelectedService.id);
+        destroyServiceRequest.mutate(currentSelectedService.id);
     };
 
-    const waitingServiceDestroy = (uuid: string, timeout: number, date: Date) => {
-        setTip(
-            MigrateSubmitResult(
-                'Destroying, Please wait... [' +
-                    Math.ceil((new Date().getTime() - date.getTime()) / 1000).toString() +
-                    's]',
-                uuid,
-                'success'
-            )
-        );
-        ServiceService.getDeployedServiceDetailsById(uuid)
-            .then((response) => {
-                if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
-                    setTip(
-                        MigrateSubmitResult(
-                            ProcessingStatus(response, OperationType.Destroy as OperationType),
-                            uuid,
-                            'success'
-                        )
-                    );
-                    setIsMigrating(true);
-                    setIsPreviousDisabled(true);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Finished);
-                    getMigrateModalOpenStatus(false);
-                    return () => {
-                        clearTimeout(retryDestroyTimer);
-                    };
-                } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED) {
-                    setTip(
-                        MigrateSubmitResult(
-                            ProcessingStatus(response, OperationType.Destroy as OperationType),
-                            uuid,
-                            'error'
-                        )
-                    );
-                    setIsMigrating(false);
-                    setIsPreviousDisabled(true);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Failed);
-                    return () => {
-                        clearTimeout(retryDestroyTimer);
-                    };
-                } else {
-                    retryDestroyTimer = window.setTimeout(() => {
-                        waitingServiceDestroy(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                }
-            })
-            .catch((error: Error) => {
-                console.log('waitingServiceDestroy error', error);
-                if (timeout > 0) {
-                    retryDestroyTimer = window.setTimeout(() => {
-                        waitingServiceDestroy(uuid, timeout - waitServicePeriod, date);
-                    }, waitServicePeriod);
-                } else {
-                    setTip(MigrateSubmitFailed(error));
-                    setIsMigrating(false);
-                    setIsPreviousDisabled(true);
-                    setIsTipShowStatus(true);
-                    setCurrentMigrationStepStatus(MigrationStatus.Failed);
-                    TipClear();
-                }
-            });
+    const destroyServiceRequest = useMutation({
+        mutationFn: (id: string) => {
+            return ServiceService.destroy(id);
+        },
+        onSuccess: () => {
+            setMigrating(false);
+            setCurrentMigrationStepStatus(MigrationStatus.Finished);
+        },
+        onError: (error: Error) => {
+            console.error(error);
+            setMigrating(false);
+            setMigrateDisable(false);
+            setIsPreviousDisabled(false);
+            setCurrentMigrationStepStatus(MigrationStatus.Failed);
+        },
+    });
+
+    const prev = () => {
+        setCurrentMigrationStep(MigrationSteps.ImportServiceData);
+        getCurrentMigrationStep(MigrationSteps.ImportServiceData);
     };
 
     return (
         <>
-            <div
-                className={
-                    isTipShowStatus ? 'migrate-step-title-inner-class-show-tip' : 'migrate-step-title-inner-class'
-                }
-            >
-                {tip}
-            </div>
+            {isMigrateTipShow ? (
+                <MigrateServiceStatusPolling
+                    deployUuid={deployServiceRequest.data}
+                    deployError={deployServiceRequest.error ?? undefined}
+                    destroyUuid={destroyUuid}
+                    destroyError={deployServiceRequest.error ?? undefined}
+                    isDeployLoading={deployServiceRequest.isLoading}
+                    isDesployLoading={deployServiceRequest.isLoading}
+                    setMigrating={setMigrating}
+                    setMigrateDisable={setMigrateDisable}
+                />
+            ) : null}
             <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
             <div className={'services-content-body'}>
                 <div className={'cloud-provider-select-hover'}>
@@ -396,7 +248,8 @@ export const MigrateService = ({
                             <Button
                                 type='primary'
                                 className={'migrate-steps-operation-button-clas'}
-                                disabled={isMigrating}
+                                loading={migrating}
+                                disabled={migrateDisable}
                             >
                                 Migrate
                             </Button>

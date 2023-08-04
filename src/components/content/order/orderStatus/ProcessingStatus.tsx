@@ -52,5 +52,25 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             );
         }
     }
+
+    if (operationType === (OperationType.Migrate as OperationType)) {
+        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
+            return (
+                <div>
+                    <span>{'Migrated Successfully'}</span>
+                </div>
+            );
+        } else if (
+            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
+            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+        ) {
+            return (
+                <div>
+                    <span>{'Migrated Failed.'}</span>
+                    <div>{response.resultMessage}</div>
+                </div>
+            );
+        }
+    }
     return <></>;
 };
