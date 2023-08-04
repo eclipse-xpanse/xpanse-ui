@@ -36,6 +36,7 @@ function AddCredential({
     const [nameList, setNameList] = useState<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
+    const [descriptionValue, setDescriptionValue] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
 
     const credentialTypesQuery = useQuery({
@@ -99,7 +100,9 @@ function AddCredential({
                         credentialVariables.push(credentialVariable);
                     });
                     setCredentialVariableList(credentialVariables);
+                    setDescriptionValue(credential.description);
                     form.setFieldsValue({ variables: credentialVariables });
+                    form.setFieldsValue({ description: credential.description });
                 }
             });
         }
@@ -120,6 +123,8 @@ function AddCredential({
 
         setCredentialVariableList([]);
         form.setFieldsValue({ variables: [] });
+        setDescriptionValue('');
+        form.setFieldsValue({ description: '' });
 
         getTipInfo(undefined, '');
         setDisable(false);
@@ -134,6 +139,8 @@ function AddCredential({
 
         setCredentialVariableList([]);
         form.setFieldsValue({ variables: [] });
+        setDescriptionValue('');
+        form.setFieldsValue({ description: '' });
 
         getTipInfo(undefined, '');
         setDisable(false);
@@ -272,6 +279,8 @@ function AddCredential({
         setNameList([]);
         setCredentialTypeList([]);
         setCredentialVariableList([]);
+        setDescriptionValue('');
+        form.setFieldsValue({ description: '' });
     };
 
     const onReset = () => {
@@ -352,7 +361,7 @@ function AddCredential({
                         </Select>
                     </Form.Item>
                     <Form.Item label='Description' name='description'>
-                        <TextArea rows={4} />
+                        <TextArea rows={4} disabled={true} value={descriptionValue} />
                     </Form.Item>
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />
