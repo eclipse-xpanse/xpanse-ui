@@ -117,16 +117,26 @@ export class ServiceVendorService {
 
     /**
      * List registered service with query params.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param categoryName name of category of the service
-     * @param cspName name of the service provider
+     * @param categoryName category of the service
+     * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      * @returns RegisteredServiceVo OK
      * @throws ApiError
      */
     public static listRegisteredServices(
-        categoryName?: string,
-        cspName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string
     ): CancelablePromise<Array<RegisteredServiceVo>> {

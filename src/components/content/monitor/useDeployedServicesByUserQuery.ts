@@ -6,10 +6,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { ServiceService } from '../../../xpanse-api/generated';
 
-export function useDeployedServicesByUserQuery(userName: string) {
+export function useDeployedServicesByUserQuery() {
     return useQuery({
-        queryKey: ['monitor', userName],
-        queryFn: () => ServiceService.getDeployedServicesByUser(userName),
-        staleTime: 60000,
+        queryKey: ['monitor'],
+        queryFn: () => ServiceService.listMyDeployedServices(),
+        refetchIntervalInBackground: false,
+        refetchOnWindowFocus: false,
     });
 }

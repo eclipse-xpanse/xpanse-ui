@@ -98,7 +98,7 @@ function CreateService(): React.JSX.Element {
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
-                '',
+                undefined,
                 serviceName,
                 ''
             ),

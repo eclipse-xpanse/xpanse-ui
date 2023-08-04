@@ -6,25 +6,21 @@
 import 'echarts/lib/chart/bar';
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
+import { Button, Col, Empty, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ApiError, Response, ServiceVo } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
     const [serviceId, setServiceId] = useState<string>('');
     const [deployedServiceList, setDeployedServiceList] = useState<ServiceVo[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipDescription, setTipDescription] = useState<string>('');
-    const [isQueryResultAvailable, setIsQueryResultAvailable] = useState<boolean>(false);
+    const [isQueryResultDisabled, setIsQueryResultDisabled] = useState<boolean>(false);
     const [serviceNameList, setServiceNameList] = useState<{ value: string; label: string }[]>([
         { value: '', label: '' },
     ]);
@@ -32,10 +28,7 @@ function Monitor(): JSX.Element {
         { value: string; label: string; serviceName: string; id: string }[]
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-    const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-
-    const deployedServiceQuery = useDeployedServicesByUserQuery(userName);
+    const deployedServiceQuery = useDeployedServicesByUserQuery();
 
     useEffect(() => {
         if (deployedServiceQuery.isSuccess) {
@@ -87,7 +80,7 @@ function Monitor(): JSX.Element {
             setServiceNameList([]);
             setCustomerServiceNameList([]);
             setTipType('error');
-            setIsQueryResultAvailable(true);
+            setIsQueryResultDisabled(true);
             if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
                 const response: Response = deployedServiceQuery.error.body as Response;
                 setTipMessage(response.resultType.valueOf());
@@ -98,7 +91,6 @@ function Monitor(): JSX.Element {
             }
         }
     }, [deployedServiceQuery.isError, deployedServiceQuery.error]);
-
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
@@ -141,8 +133,7 @@ function Monitor(): JSX.Element {
             setTipDescription('');
             return;
         }
-        setIsLoading(false);
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
         setServiceId(values.serviceId);
     };
     const onReset = () => {
@@ -150,7 +141,7 @@ function Monitor(): JSX.Element {
         setTipType(undefined);
         setTipMessage('');
         setTipDescription('');
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
         form.resetFields();
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: ServiceVo) => {
@@ -168,7 +159,6 @@ function Monitor(): JSX.Element {
     };
 
     const onFinishFailed = () => {
-        setIsLoading(false);
         setServiceId('');
     };
 
@@ -178,7 +168,7 @@ function Monitor(): JSX.Element {
         setTipType(undefined);
         setTipMessage('');
         setTipDescription('');
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
     };
 
     const getTipInfo = (
@@ -187,14 +177,13 @@ function Monitor(): JSX.Element {
         tipType: 'error' | 'success' | undefined,
         tipMessage: string,
         tipDescription: string,
-        isQueryResultAvailable: boolean
+        isQueryResultDisabled: boolean
     ) => {
         setServiceId(serviceId);
-        setIsLoading(isLoading);
         setTipType(tipType);
         setTipMessage(tipMessage);
         setTipDescription(tipDescription);
-        setIsQueryResultAvailable(isQueryResultAvailable);
+        setIsQueryResultDisabled(isQueryResultDisabled);
     };
 
     return (
@@ -220,7 +209,7 @@ function Monitor(): JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeServiceName}
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                             >
                                 {serviceNameList.map((item, _) => (
                                     <Select.Option key={item.value} value={item.value}>
@@ -235,7 +224,7 @@ function Monitor(): JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeCustomerServiceName}
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                             >
                                 {customerServiceNameList.map((item, _) => (
                                     <Select.Option key={item.id}>{item.value}</Select.Option>
@@ -253,7 +242,7 @@ function Monitor(): JSX.Element {
                             <Button
                                 type='primary'
                                 htmlType='submit'
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                                 className={'monitor-search-button-class'}
                             >
                                 Search
@@ -267,19 +256,13 @@ function Monitor(): JSX.Element {
                 </Row>
             </Form>
             {serviceId.length > 0 ? (
-                <>
-                    {isLoading ? (
-                        <div className={'monitor-search-loading-class'}>
-                            <Spin size='large' spinning={isLoading} />
-                        </div>
-                    ) : (
-                        <div>
-                            <MonitorChart serviceId={serviceId} getTipInfo={getTipInfo} />
-                        </div>
-                    )}
-                </>
+                <div>
+                    <MonitorChart serviceId={serviceId} getTipInfo={getTipInfo} />
+                </div>
             ) : (
-                <div></div>
+                <div className={'service-blank-class'}>
+                    <Empty description={'No services available.'} />
+                </div>
             )}
         </div>
     );

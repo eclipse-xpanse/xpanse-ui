@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Radio, RadioChangeEvent, Select, Switch } from 'antd';
+import { Radio, RadioChangeEvent, Select, Spin, Switch } from 'antd';
 import {
     chartsPerRowCountList,
     chartsPerRowWithTwo,
@@ -46,7 +46,7 @@ export const MonitorChart = ({
         tipType: 'error' | 'success' | undefined,
         tipMessage: string,
         tipDescription: string,
-        isQueryResultAvailable: boolean
+        isQueryResultDisabled: boolean
     ) => void;
 }): JSX.Element => {
     const [currentTime, setCurrentTime] = useState<Date | undefined>(undefined);
@@ -148,18 +148,6 @@ export const MonitorChart = ({
     });
 
     useEffect(() => {
-        if (isRefreshOnlyLastKnownMetric) {
-            void onlyLastKnownMetricQuery.refetch();
-        }
-    }, [isRefreshOnlyLastKnownMetric, onlyLastKnownMetricQuery]);
-
-    useEffect(() => {
-        if (isRefreshMetric) {
-            void monitorMetricQuery.refetch();
-        }
-    }, [isRefreshMetric, monitorMetricQuery]);
-
-    useEffect(() => {
         setIsRefreshOnlyLastKnownMetric(false);
         setIsRefreshMetric(false);
         if (serviceId.length === 0) {
@@ -185,10 +173,17 @@ export const MonitorChart = ({
     }, [serviceId, timePeriod, isAutoRefresh, activeMonitorMetricType]);
 
     useEffect(() => {
+        if (onlyLastKnownMetricQuery.isLoading) {
+            getTipInfo(serviceId, false, undefined, '', '', true);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [onlyLastKnownMetricQuery.isLoading, serviceId]);
+
+    useEffect(() => {
         if (onlyLastKnownMetricQuery.isSuccess) {
             const data: Metric[] | undefined = onlyLastKnownMetricQuery.data;
             if (data.length > 0) {
-                getTipInfo(serviceId, false, undefined, '', '', true);
+                getTipInfo(serviceId, false, undefined, '', '', false);
                 setOnlyLastKnownMonitorMetricsQueue((prevQueue: Metric[][] | undefined) => {
                     let newQueue: Metric[][];
 
@@ -206,7 +201,7 @@ export const MonitorChart = ({
             } else {
                 setIsAutoRefresh(false);
                 setOnlyLastKnownMonitorMetricsQueue([]);
-                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', true);
+                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', false);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -225,7 +220,7 @@ export const MonitorChart = ({
         if (monitorMetricQuery.isSuccess) {
             const rsp: Metric[] | undefined = monitorMetricQuery.data;
             if (rsp.length > 0) {
-                getTipInfo(serviceId, false, undefined, '', '', true);
+                getTipInfo(serviceId, false, undefined, '', '', false);
                 setMonitorMetricsQueue((prevQueue: MetricQueueParams[]) => {
                     let newQueue: MetricQueueParams[];
                     if (metricsIsEmpty(rsp)) {
@@ -267,7 +262,7 @@ export const MonitorChart = ({
             } else {
                 setIsAutoRefresh(false);
                 setMonitorMetricsQueue([]);
-                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', true);
+                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', false);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -291,7 +286,7 @@ export const MonitorChart = ({
             tipMessageInfo.current = 'Error while fetching metrics data.';
             tipDescriptionInfo.current = [error.message];
         }
-        getTipInfo('', false, 'error', tipMessageInfo.current, tipDescriptionInfo.current.join(), true);
+        getTipInfo('', false, 'error', tipMessageInfo.current, tipDescriptionInfo.current.join(), false);
     };
 
     useEffect(() => {
@@ -431,34 +426,46 @@ export const MonitorChart = ({
 
     return (
         <>
-            <div className={'chart-operation-class'}>
-                <div>
-                    <Radio.Group onChange={onChangeTimePeriod} value={timePeriod}>
-                        {timePeriodList.map((item, index) => (
-                            <Radio key={index} value={index + 1}>
-                                {item}
-                            </Radio>
-                        ))}
-                    </Radio.Group>
+            {onlyLastKnownMetricQuery.isLoading ? (
+                <div className={'monitor-search-loading-class'}>
+                    <Spin size='large' spinning={onlyLastKnownMetricQuery.isLoading} />
                 </div>
-                <br />
-                <br />
-                <br />
-                <div>
-                    Auto Refresh:&nbsp;
-                    <Switch checked={isAutoRefresh} onChange={onChangeAutoRefresh} />
-                    &nbsp;&nbsp;Charts per Row:&nbsp;
-                    <Select
-                        defaultValue={chartsPerRow}
-                        style={{ width: 55 }}
-                        onChange={handleChangeChartsPerRow}
-                        options={chartsPerRowOptions}
-                    />
-                </div>
-            </div>
-            <MonitorMetricsType getActiveMonitorMetricType={getActiveMonitorMetricType} />
+            ) : (
+                <>
+                    <div className={'chart-operation-class'}>
+                        <div>
+                            <Radio.Group onChange={onChangeTimePeriod} value={timePeriod}>
+                                {timePeriodList.map((item, index) => (
+                                    <Radio key={index} value={index + 1}>
+                                        {item}
+                                    </Radio>
+                                ))}
+                            </Radio.Group>
+                        </div>
+                        <br />
+                        <br />
+                        <br />
+                        <div>
+                            Auto Refresh:&nbsp;
+                            <Switch checked={isAutoRefresh} onChange={onChangeAutoRefresh} />
+                            &nbsp;&nbsp;Charts per Row:&nbsp;
+                            <Select
+                                defaultValue={chartsPerRow}
+                                style={{ width: 55 }}
+                                onChange={handleChangeChartsPerRow}
+                                options={chartsPerRowOptions}
+                            />
+                        </div>
+                    </div>
+                    <MonitorMetricsType getActiveMonitorMetricType={getActiveMonitorMetricType} />
 
-            <MetricOptionDataByChartsPerRow chartsPerRow={chartsPerRow} options={options} chartsTitle={chartsTitle} />
+                    <MetricOptionDataByChartsPerRow
+                        chartsPerRow={chartsPerRow}
+                        options={options}
+                        chartsTitle={chartsTitle}
+                    />
+                </>
+            )}
         </>
     );
 };
