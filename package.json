@@ -48,6 +48,7 @@
         "ignorePatterns": [
             "src/xpanse-api/**",
             "/public/OidcServiceWorker.js",
+            "/public/inject.js",
             "build",
             "node_modules"
         ],

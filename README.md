@@ -37,13 +37,3 @@ npm run test
 #### Run Tests from IDE
 
 To run tests from IDE, ensure the [config file](jest.config.json) is passed to the executor.
-
-### Code Format
-
-The project uses prettier to format code. The below command can be used to format the code.
-
-```shell
-npx prettier --config .prettierrc --write .
-```
-
-> Note: If any of the files are not formatted, then the es-lint will throw an error as part of the CI job.
