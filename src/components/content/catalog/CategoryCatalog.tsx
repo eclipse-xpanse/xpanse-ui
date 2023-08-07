@@ -31,6 +31,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
         queryFn: () => ServiceCatalogService.getAvailableServicesTree(category),
+        refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
