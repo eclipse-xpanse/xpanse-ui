@@ -12,4 +12,8 @@ for envrow in $(printenv); do
   fi
 done
 echo "};" >> "${INJECT_FILE_PATH}"
-[ -z "$@" ] && nginx -g 'daemon off;' || "$@"
+if [ "$#" -eq 0 ]
+  then nginx -g 'daemon off;'
+else
+  "$@"
+fi
