@@ -32,10 +32,11 @@ import { NotFoundPage } from './components/notFound/NotFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
 import CatalogMainPage from './components/content/catalog/CatalogMainMenu';
+import React from 'react';
 
 const queryClient = new QueryClient();
 
-function App(): JSX.Element {
+function App(): React.JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>
             <OidcProvider configuration={OidcConfig}>

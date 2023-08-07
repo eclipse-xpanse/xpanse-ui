@@ -4,6 +4,7 @@
  */
 
 import { OidcConfiguration } from '@axa-fr/react-oidc/dist/vanilla';
+import { env } from '../../config/config';
 
 export const onEvent = (configurationName: string, eventName: string, data: object) => {
     console.log(`oidc:${configurationName}:${eventName}`, data);
@@ -12,14 +13,12 @@ export const onEvent = (configurationName: string, eventName: string, data: obje
 export const allowRoleList: string[] = ['csp', 'user', 'admin'];
 
 export const OidcConfig: OidcConfiguration = {
-    /*eslint-disable  @typescript-eslint/no-non-null-assertion */
-    authority: process.env.REACT_APP_ZITADEL_AUTHORITY_NAME!,
-    client_id: process.env.REACT_APP_ZITADEL_CLIENT_ID!,
-    redirect_uri: window.location.origin + process.env.REACT_APP_ZITADEL_REDIRECT_URI!,
-    silent_redirect_uri: window.location.origin + process.env.REACT_APP_ZITADEL_SILENT_REDIRECT_URI!,
-    scope: process.env.REACT_APP_ZITADEL_SCOPE!,
+    authority: env.REACT_APP_ZITADEL_AUTHORITY_NAME ?? '',
+    client_id: env.REACT_APP_ZITADEL_CLIENT_ID ?? '',
+    redirect_uri: window.location.origin + (env.REACT_APP_ZITADEL_REDIRECT_URI ?? ''),
+    silent_redirect_uri: window.location.origin + (env.REACT_APP_ZITADEL_SILENT_REDIRECT_URI ?? ''),
+    scope: env.REACT_APP_ZITADEL_SCOPE ?? '',
     service_worker_only: false,
-    /*eslint-enable  @typescript-eslint/no-non-null-assertion */
 };
 
 export function getRolesOfUser(oidcUserInfo: object): string[] {

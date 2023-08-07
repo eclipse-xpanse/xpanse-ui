@@ -1,6 +1,13 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Huawei Inc.
+#
 FROM nginx:1.25.1-alpine
+WORKDIR /usr/share/nginx/html
+RUN apk add --no-cache bash
+COPY docker/nginx-entrypoint.sh /
 COPY build/ /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "bash", "/nginx-entrypoint.sh" ]
