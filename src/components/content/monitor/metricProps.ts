@@ -126,8 +126,8 @@ export const MonitorTypeList: string[] = [
     Metric.monitorResourceType.VM_NETWORK_OUTGOING.valueOf(),
 ];
 
-export const getMetricRequestParams = (currentTime: Date | undefined, totalSeconds: number): MetricRequestParams => {
-    const newCurrentTime = currentTime === undefined ? new Date() : currentTime;
+export const getMetricRequestParams = (totalSeconds: number): MetricRequestParams => {
+    const newCurrentTime = new Date();
     const to = newCurrentTime.getTime();
     newCurrentTime.setSeconds(newCurrentTime.getSeconds() - totalSeconds);
     const from = newCurrentTime.getTime();
@@ -200,7 +200,8 @@ export const getMetricProps = (metrics: Metric[]): MetricProps[] => {
                 labelsMap.set(key, metric.labels[key]);
             }
         }
-        if (metric.metrics === undefined) {
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (metric.metrics === undefined || metric.metrics === null) {
             const metricProp: MetricProps = {
                 id: labelsMap.get('id') ?? '',
                 name: metric.name,

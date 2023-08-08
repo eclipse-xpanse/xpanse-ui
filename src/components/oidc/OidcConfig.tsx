@@ -34,7 +34,6 @@ export function getRolesOfUser(oidcUserInfo: object): string[] {
 }
 
 export function getUserName(oidcUserInfo: object): string {
-    console.log(oidcUserInfo);
     if ('name' in oidcUserInfo) {
         if (typeof oidcUserInfo.name === 'string') {
             return oidcUserInfo.name;
