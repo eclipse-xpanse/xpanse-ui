@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import * as echarts from 'echarts/core';
 import { Button, Col, Row, Tooltip } from 'antd';
 import EChartsReact from 'echarts-for-react';

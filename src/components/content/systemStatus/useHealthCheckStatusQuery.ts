@@ -10,6 +10,6 @@ export function useHealthCheckStatusQuery() {
     return useQuery({
         queryKey: ['healthCheckQuery'],
         queryFn: () => AdminService.healthCheck(),
-        staleTime: 60000, // one minute
+        staleTime: 60000,
     });
 }

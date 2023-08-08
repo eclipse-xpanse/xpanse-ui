@@ -6,21 +6,25 @@
 import 'echarts/lib/chart/bar';
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
+import { Button, Col, Empty, Form, Input, Row, Select } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import { ApiError, Response, ServiceVo } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
+import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
+import { MetricTimePeriod } from './MetricTimePeriod';
+import { MetricIsAutoRefresh } from './MetricIsAutoRefresh';
+import { MetricChartsPerRow } from './MetricChartsPerRow';
+import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
     const [serviceId, setServiceId] = useState<string>('');
     const [deployedServiceList, setDeployedServiceList] = useState<ServiceVo[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipDescription, setTipDescription] = useState<string>('');
-    const [isQueryResultAvailable, setIsQueryResultAvailable] = useState<boolean>(false);
+    const [isQueryResultDisabled, setIsQueryResultDisabled] = useState<boolean>(false);
     const [serviceNameList, setServiceNameList] = useState<{ value: string; label: string }[]>([
         { value: '', label: '' },
     ]);
@@ -28,64 +32,76 @@ function Monitor(): JSX.Element {
         { value: string; label: string; serviceName: string; id: string }[]
     >([{ value: '', label: '', serviceName: '', id: '' }]);
 
-    useEffect(() => {
-        void ServiceService.listMyDeployedServices()
-            .then((rsp: ServiceVo[]) => {
-                const serviceNameList: { value: string; label: string }[] = [];
-                const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
-                if (rsp.length > 0) {
-                    const serviceVoMap: Map<string, ServiceVo[]> = new Map<string, ServiceVo[]>();
-                    rsp.forEach((serviceVo: ServiceVo) => {
-                        if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
-                            if (!serviceVoMap.has(serviceVo.name)) {
-                                serviceVoMap.set(
-                                    serviceVo.name,
-                                    rsp.filter((data: ServiceVo) => data.name === serviceVo.name)
-                                );
-                            }
-                            const customerServiceName: {
-                                value: string;
-                                label: string;
-                                serviceName: string;
-                                id: string;
-                            } = {
-                                value: serviceVo.customerServiceName ?? '',
-                                label: serviceVo.customerServiceName ?? '',
-                                serviceName: serviceVo.name,
-                                id: serviceVo.id,
-                            };
-                            customerServiceNameList.push(customerServiceName);
-                        }
-                    });
-                    serviceVoMap.forEach((service, name) => {
-                        const serviceNameUnique: { value: string; label: string } = {
-                            value: name,
-                            label: name,
-                        };
-                        serviceNameList.push(serviceNameUnique);
-                    });
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-                    setDeployedServiceList(rsp);
-                    setServiceNameList(serviceNameList);
-                    setCustomerServiceNameList(customerServiceNameList);
-                }
-            })
-            .catch((error: Error) => {
-                setDeployedServiceList([]);
-                setServiceNameList([]);
-                setCustomerServiceNameList([]);
-                setTipType('error');
-                if (error instanceof ApiError && 'details' in error.body) {
-                    const response: Response = error.body as Response;
-                    setTipMessage(response.resultType.valueOf());
-                    setTipDescription(response.details.join());
-                } else {
-                    setTipMessage('Error while fetching all deployed services.');
-                    setTipDescription(error.message);
-                }
-                setIsQueryResultAvailable(true);
-            });
-    });
+    const [timePeriod, setTimePeriod] = useState<number>(lastMinuteRadioButtonKeyId.valueOf());
+    const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
+    const [chartsPerRow, setChartsPerRow] = useState<string>(chartsPerRowWithTwo);
+    const [optionLength, setOptionLength] = useState<number>(0);
+
+    const deployedServiceQuery = useDeployedServicesByUserQuery();
+
+    useEffect(() => {
+        if (deployedServiceQuery.isSuccess) {
+            const serviceList: ServiceVo[] | undefined = deployedServiceQuery.data;
+            const serviceNameList: { value: string; label: string }[] = [];
+            const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
+            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+            if (serviceList !== undefined && serviceList.length > 0) {
+                const serviceVoMap: Map<string, ServiceVo[]> = new Map<string, ServiceVo[]>();
+                serviceList.forEach((serviceVo: ServiceVo) => {
+                    if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+                        if (!serviceVoMap.has(serviceVo.name)) {
+                            serviceVoMap.set(
+                                serviceVo.name,
+                                serviceList.filter((data: ServiceVo) => data.name === serviceVo.name)
+                            );
+                        }
+                        const customerServiceName: {
+                            value: string;
+                            label: string;
+                            serviceName: string;
+                            id: string;
+                        } = {
+                            value: serviceVo.customerServiceName ?? '',
+                            label: serviceVo.customerServiceName ?? '',
+                            serviceName: serviceVo.name,
+                            id: serviceVo.id,
+                        };
+                        customerServiceNameList.push(customerServiceName);
+                    }
+                });
+                serviceVoMap.forEach((service, name) => {
+                    const serviceNameUnique: { value: string; label: string } = {
+                        value: name,
+                        label: name,
+                    };
+                    serviceNameList.push(serviceNameUnique);
+                });
+                setDeployedServiceList(serviceList);
+                setServiceNameList(serviceNameList);
+                setCustomerServiceNameList(customerServiceNameList);
+            }
+        }
+    }, [deployedServiceQuery.data, deployedServiceQuery.isSuccess]);
+
+    useEffect(() => {
+        if (deployedServiceQuery.isError) {
+            setDeployedServiceList([]);
+            setServiceNameList([]);
+            setCustomerServiceNameList([]);
+            setTipType('error');
+            setIsQueryResultDisabled(true);
+            if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
+                const response: Response = deployedServiceQuery.error.body as Response;
+                setTipMessage(response.resultType.valueOf());
+                setTipDescription(response.details.join());
+            } else if (deployedServiceQuery.error instanceof Error) {
+                setTipMessage('Error while fetching all deployed services.');
+                setTipDescription(deployedServiceQuery.error.message);
+            }
+        }
+    }, [deployedServiceQuery.isError, deployedServiceQuery.error]);
 
     const handleChangeServiceName = (selectServiceName: string) => {
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
@@ -128,8 +144,7 @@ function Monitor(): JSX.Element {
             setTipDescription('');
             return;
         }
-        setIsLoading(false);
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
         setServiceId(values.serviceId);
     };
     const onReset = () => {
@@ -137,7 +152,7 @@ function Monitor(): JSX.Element {
         setTipType(undefined);
         setTipMessage('');
         setTipDescription('');
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
         form.resetFields();
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: ServiceVo) => {
@@ -155,7 +170,6 @@ function Monitor(): JSX.Element {
     };
 
     const onFinishFailed = () => {
-        setIsLoading(false);
         setServiceId('');
     };
 
@@ -165,7 +179,7 @@ function Monitor(): JSX.Element {
         setTipType(undefined);
         setTipMessage('');
         setTipDescription('');
-        setIsQueryResultAvailable(false);
+        setIsQueryResultDisabled(false);
     };
 
     const getTipInfo = (
@@ -174,14 +188,32 @@ function Monitor(): JSX.Element {
         tipType: 'error' | 'success' | undefined,
         tipMessage: string,
         tipDescription: string,
-        isQueryResultAvailable: boolean
+        isQueryResultDisabled: boolean
     ) => {
         setServiceId(serviceId);
-        setIsLoading(isLoading);
         setTipType(tipType);
         setTipMessage(tipMessage);
         setTipDescription(tipDescription);
-        setIsQueryResultAvailable(isQueryResultAvailable);
+        setIsQueryResultDisabled(isQueryResultDisabled);
+    };
+
+    const getTimePeriod = (currentTimePeriod: number) => {
+        setTimePeriod(currentTimePeriod);
+    };
+
+    const getIsAutoRefresh = (currentIsAutoRefresh: boolean) => {
+        setIsAutoRefresh(currentIsAutoRefresh);
+    };
+    const getMetricChartsPerRow = (currentMetricChartsPerRow: string) => {
+        setChartsPerRow(currentMetricChartsPerRow);
+    };
+
+    const getIsLoading = (isLoading: boolean) => {
+        setIsLoading(isLoading);
+    };
+
+    const getOptionLength = (currentOptionLength: number) => {
+        setOptionLength(currentOptionLength);
     };
 
     return (
@@ -206,7 +238,7 @@ function Monitor(): JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeServiceName}
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                             >
                                 {serviceNameList.map((item, _) => (
                                     <Select.Option key={item.value} value={item.value}>
@@ -221,7 +253,7 @@ function Monitor(): JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeCustomerServiceName}
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                             >
                                 {customerServiceNameList.map((item, _) => (
                                     <Select.Option key={item.id}>{item.value}</Select.Option>
@@ -239,7 +271,7 @@ function Monitor(): JSX.Element {
                             <Button
                                 type='primary'
                                 htmlType='submit'
-                                disabled={isQueryResultAvailable}
+                                disabled={isQueryResultDisabled}
                                 className={'monitor-search-button-class'}
                             >
                                 Search
@@ -252,20 +284,36 @@ function Monitor(): JSX.Element {
                     </Col>
                 </Row>
             </Form>
+            <div className={'chart-operation-class'}>
+                <MetricTimePeriod isLoading={isLoading} getTimePeriod={getTimePeriod} />
+                <br />
+                <br />
+                <br />
+                <div>
+                    <MetricIsAutoRefresh isLoading={isLoading} getIsAutoRefresh={getIsAutoRefresh} />
+                    <MetricChartsPerRow
+                        isLoading={isLoading}
+                        optionLength={optionLength}
+                        getMetricChartsPerRow={getMetricChartsPerRow}
+                    />
+                </div>
+            </div>
             {serviceId.length > 0 ? (
-                <>
-                    {isLoading ? (
-                        <div className={'monitor-search-loading-class'}>
-                            <Spin size='large' spinning={isLoading} />
-                        </div>
-                    ) : (
-                        <div>
-                            <MonitorChart serviceId={serviceId} getTipInfo={getTipInfo} />
-                        </div>
-                    )}
-                </>
+                <div>
+                    <MonitorChart
+                        serviceId={serviceId}
+                        timePeriod={timePeriod}
+                        isAutoRefresh={isAutoRefresh}
+                        chartsPerRow={chartsPerRow}
+                        getTipInfo={getTipInfo}
+                        getIsLoading={getIsLoading}
+                        getOptionLength={getOptionLength}
+                    />
+                </div>
             ) : (
-                <div></div>
+                <div className={'service-blank-class'}>
+                    <Empty description={'No services available.'} />
+                </div>
             )}
         </div>
     );
