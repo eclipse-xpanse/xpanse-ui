@@ -19,7 +19,8 @@ import {
     getBilling,
     getCreateRequest,
     getDeployParams,
-    getFlavorList,
+    getFlavorListByCsp,
+    getFlavorMapper,
     MigrationStatus,
     MigrationSteps,
 } from '../formElements/CommonTypes';
@@ -40,7 +41,7 @@ export const MigrateService = ({
     getCurrentMigrationStepStatus,
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
-    selectCsp: CloudServiceProvider.name | undefined;
+    selectCsp: string;
     selectArea: string;
     selectRegion: string;
     selectFlavor: string;
@@ -62,11 +63,13 @@ export const MigrateService = ({
         undefined
     );
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
-    const currentFlavorList: { value: string; label: string; price: string }[] =
-        getFlavorList(userAvailableServiceVoList);
+    const currentFlavorList: { value: string; label: string; price: string }[] = getFlavorListByCsp(
+        getFlavorMapper(userAvailableServiceVoList),
+        selectCsp
+    );
     const currentBilling: Billing = getBilling(
         userAvailableServiceVoList,
-        selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp
+        selectCsp.length === 0 ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
@@ -180,13 +183,17 @@ export const MigrateService = ({
                         width={200}
                         height={56}
                         src={
-                            cspMap.get(selectCsp === undefined ? CloudServiceProvider.name.OPENSTACK : selectCsp)?.logo
+                            cspMap.get(
+                                selectCsp.length === 0
+                                    ? CloudServiceProvider.name.OPENSTACK
+                                    : (selectCsp as CloudServiceProvider.name)
+                            )?.logo
                         }
                         alt={selectCsp}
                         preview={false}
                         fallback={
                             'https://img.shields.io/badge/-' +
-                            (selectCsp === undefined ? '' : selectCsp.toString()) +
+                            (selectCsp.length === 0 ? '' : selectCsp.toString()) +
                             '-gray'
                         }
                     />

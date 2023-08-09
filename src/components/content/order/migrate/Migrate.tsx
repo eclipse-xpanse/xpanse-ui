@@ -4,12 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-    CloudServiceProvider,
-    ServiceCatalogService,
-    ServiceVo,
-    UserAvailableServiceVo,
-} from '../../../../xpanse-api/generated';
+import { ServiceCatalogService, ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
 import { Steps } from 'antd';
@@ -32,7 +27,7 @@ export const Migrate = ({
     );
     const [userAvailableServiceVoList, setUserAvailableServiceVoList] = useState<UserAvailableServiceVo[]>([]);
 
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name | undefined>(undefined);
+    const [selectCsp, setSelectCsp] = useState<string>('');
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
@@ -70,16 +65,16 @@ export const Migrate = ({
     }, [listAvailableServices.data, listAvailableServices.isSuccess]);
 
     useEffect(() => {
-        if (!listAvailableServices.data || listAvailableServices.data.length <= 0) {
+        if (listAvailableServices.isError) {
             setCurrentMigrationStepStatus(MigrationStatus.Processing);
             setCurrentMigrationStep(MigrationSteps.ExportServiceData);
             setUserAvailableServiceVoList([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [listAvailableServices.error]);
+    }, [listAvailableServices.isError, listAvailableServices.error]);
 
     const getSelectedParameters = (
-        selectedCsp: CloudServiceProvider.name,
+        selectedCsp: string,
         selectedArea: string,
         selectedRegion: string,
         selectedFlavor: string
