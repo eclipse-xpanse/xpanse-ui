@@ -7,9 +7,9 @@ import { ChangeEvent } from 'react';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import {
     Billing,
-    CloudServiceProvider,
     CreateRequest,
     DeployVariable,
+    Flavor,
     Region,
     UserAvailableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -38,10 +38,24 @@ export interface DeployParam {
     sensitiveScope: DeployVariable.sensitiveScope;
 }
 
-export const getFlavorList = (rsp: UserAvailableServiceVo[]): { value: string; label: string; price: string }[] => {
-    const flavorList = rsp[0].flavors;
+export const getFlavorMapper = (rsp: UserAvailableServiceVo[]): Map<string, Flavor[]> => {
+    const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
+    rsp.forEach((userAvailableServiceVo) => {
+        flavorMapper.set(userAvailableServiceVo.csp, userAvailableServiceVo.flavors);
+    });
+    return flavorMapper;
+};
+
+export const getFlavorListByCsp = (
+    flavorMapper: Map<string, Flavor[]>,
+    csp: string
+): { value: string; label: string; price: string }[] => {
+    if (csp.length === 0) {
+        return [];
+    }
+    const flavorList: Flavor[] | undefined = flavorMapper.get(csp);
     const flavors: { value: string; label: string; price: string }[] = [];
-    if (flavorList.length > 0) {
+    if (flavorList !== undefined && flavorList.length > 0) {
         for (const flavor of flavorList) {
             const flavorItem = { value: flavor.name, label: flavor.name, price: flavor.fixedPrice.toString() };
             flavors.push(flavorItem);
@@ -50,22 +64,25 @@ export const getFlavorList = (rsp: UserAvailableServiceVo[]): { value: string; l
     return flavors;
 };
 
-export const getBilling = (rsp: UserAvailableServiceVo[], csp: string): Billing => {
+export const getBilling = (rsp: UserAvailableServiceVo[], csp: string | undefined): Billing => {
     let billing: Billing = {
         model: '' as string,
         period: 'daily' as Billing.period,
         currency: 'euro' as Billing.currency,
     };
     rsp.forEach((userAvailableServiceVo) => {
-        if (csp === userAvailableServiceVo.csp.valueOf()) {
+        if (csp !== undefined && csp === userAvailableServiceVo.csp.valueOf()) {
             billing = userAvailableServiceVo.billing;
         }
     });
     return billing;
 };
 
-export const filterAreaList = (rsp: UserAvailableServiceVo[], selectCsp: string): Area[] => {
+export const filterAreaList = (rsp: UserAvailableServiceVo[], selectCsp: string | undefined): Area[] => {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
+    if (selectCsp === undefined) {
+        return [];
+    }
     rsp.forEach((userAvailableServiceVo) => {
         if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
             const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
@@ -95,7 +112,7 @@ export const filterAreaList = (rsp: UserAvailableServiceVo[], selectCsp: string)
 
 export const getRegionList = (
     rsp: UserAvailableServiceVo[],
-    selectCsp: string,
+    selectCsp: string | undefined,
     selectArea: string
 ): { value: string; label: string }[] => {
     const areas: Area[] = filterAreaList(rsp, selectCsp);
@@ -120,7 +137,7 @@ export const getRegionList = (
 
 export const getDeployParams = (
     userAvailableServiceVoList: UserAvailableServiceVo[],
-    selectCsp: CloudServiceProvider.name | undefined,
+    selectCsp: string,
     selectArea: string,
     selectRegion: string,
     selectFlavor: string
@@ -129,7 +146,7 @@ export const getDeployParams = (
     let registeredServiceId = '';
 
     userAvailableServiceVoList.forEach((userAvailableServiceVo) => {
-        if (userAvailableServiceVo.csp.toString() === selectCsp?.toString()) {
+        if (userAvailableServiceVo.csp.toString() === selectCsp) {
             registeredServiceId = userAvailableServiceVo.id;
             service = userAvailableServiceVo;
         }

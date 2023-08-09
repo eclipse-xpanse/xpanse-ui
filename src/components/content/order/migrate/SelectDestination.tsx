@@ -10,7 +10,14 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
 import { currencyMapper } from '../../../utils/currency';
 import { Area } from '../../../utils/Area';
-import { filterAreaList, getBilling, getFlavorList, getRegionList, MigrationSteps } from '../formElements/CommonTypes';
+import {
+    filterAreaList,
+    getBilling,
+    getFlavorMapper,
+    getFlavorListByCsp,
+    getRegionList,
+    MigrationSteps,
+} from '../formElements/CommonTypes';
 
 export const SelectDestination = ({
     userAvailableServiceVoList,
@@ -23,19 +30,19 @@ export const SelectDestination = ({
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
     getSelectedParameters: (
-        selectedCsp: CloudServiceProvider.name,
+        selectedCsp: string,
         selectedArea: string,
         selectedRegion: string,
         selectedFlavor: string
     ) => void;
-    currentCsp: CloudServiceProvider.name | undefined;
+    currentCsp: string;
     currentArea: string;
     currentRegion: string;
     currentFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
 }): JSX.Element => {
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name>(CloudServiceProvider.name.OPENSTACK);
-    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([CloudServiceProvider.name.OPENSTACK]);
+    const [selectCsp, setSelectCsp] = useState<string>('');
+    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([]);
 
     const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
     const [selectArea, setSelectArea] = useState<string>('');
@@ -73,27 +80,29 @@ export const SelectDestination = ({
             userAvailableServiceVoList.forEach((v) => {
                 currentCspList.push(v.csp as unknown as CloudServiceProvider.name);
             });
-            setCspList(currentCspList);
-            const currentFlavorList = getFlavorList(userAvailableServiceVoList);
-            setFlavorList(currentFlavorList);
+            let cspValue: string = currentCspList[0];
 
-            let currentAreaList: Tab[] = getAreaList(userAvailableServiceVoList, currentCspList[0]);
+            let currentAreaList: Tab[] = getAreaList(userAvailableServiceVoList, cspValue);
+            let areaValue: string = currentAreaList[0]?.key ?? '';
+
             let currentRegionList: { value: string; label: string }[] = getRegionList(
                 userAvailableServiceVoList,
-                currentCspList[0],
-                currentAreaList[0]?.key ?? ''
+                cspValue,
+                areaValue
             );
-
-            let currentBilling = getBilling(userAvailableServiceVoList, currentCspList[0]);
-            let cspValue: CloudServiceProvider.name = currentCspList[0];
-            let areaValue: string = currentAreaList[0]?.key ?? '';
             let regionValue: string = currentRegionList[0]?.value ?? '';
+
+            const currentFlavorMapper = getFlavorMapper(userAvailableServiceVoList);
+            let currentFlavorList = getFlavorListByCsp(currentFlavorMapper, cspValue);
             let flavorValue: string = currentFlavorList[0]?.value ?? '';
             let priceValue: string = currentFlavorList[0]?.price ?? '';
 
-            if (currentCsp !== undefined && currentCsp.length > 0) {
+            let currentBilling = getBilling(userAvailableServiceVoList, cspValue);
+
+            if (currentCsp.length > 0) {
                 currentAreaList = getAreaList(userAvailableServiceVoList, currentCsp);
                 currentRegionList = getRegionList(userAvailableServiceVoList, currentCsp, currentArea);
+                currentFlavorList = getFlavorListByCsp(currentFlavorMapper, currentCsp);
                 currentBilling = getBilling(userAvailableServiceVoList, currentCsp);
                 cspValue = currentCsp;
                 areaValue = currentArea;
@@ -106,11 +115,13 @@ export const SelectDestination = ({
                 });
             }
             const currencyValue: string = currencyMapper[currentBilling.currency];
+            setCspList(currentCspList);
             setSelectCsp(cspValue);
             setAreaList(currentAreaList);
             setSelectArea(areaValue);
             setRegionList(currentRegionList);
             setSelectRegion(regionValue);
+            setFlavorList(currentFlavorList);
             setSelectFlavor(flavorValue);
             setPriceValue(priceValue);
             setCurrency(currencyValue);
@@ -144,13 +155,25 @@ export const SelectDestination = ({
         return areaItems;
     }
 
-    const onChangeCloudProvider = (csp: CloudServiceProvider.name) => {
+    const onChangeCloudProvider = (csp: string) => {
+        const currentAreaList = getAreaList(userAvailableServiceVoList, csp);
+        const currentRegionList = getRegionList(userAvailableServiceVoList, csp, currentAreaList[0]?.key ?? '');
+        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userAvailableServiceVoList), csp);
+        const billing: Billing = getBilling(userAvailableServiceVoList, csp);
         setSelectCsp(csp);
+        setAreaList(currentAreaList);
+        setSelectArea(currentAreaList[0]?.key ?? '');
+        setRegionList(currentRegionList);
+        setSelectRegion(currentRegionList[0]?.value ?? '');
+        setFlavorList(currentFlavorList);
+        setSelectFlavor(currentFlavorList[0]?.value ?? '');
+        setPriceValue(currentFlavorList[0].price);
+        setCurrency(currencyMapper[billing.currency]);
     };
 
-    const onChangeAreaValue = (csp: CloudServiceProvider.name, key: string) => {
-        const currentRegionList = getRegionList(userAvailableServiceVoList, csp, key);
-        setSelectArea(key);
+    const onChangeAreaValue = (area: string) => {
+        const currentRegionList = getRegionList(userAvailableServiceVoList, selectCsp, area);
+        setSelectArea(area);
         setRegionList(currentRegionList);
         setSelectRegion(currentRegionList[0]?.value ?? '');
     };
@@ -159,16 +182,17 @@ export const SelectDestination = ({
         setSelectRegion(value);
     };
 
-    const onChangeFlavor = (value: string, csp: CloudServiceProvider.name) => {
+    const onChangeFlavor = (value: string) => {
+        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userAvailableServiceVoList), selectCsp);
+        const billing: Billing = getBilling(userAvailableServiceVoList, selectCsp);
+
         setSelectFlavor(value);
-        const currentFlavorList = getFlavorList(userAvailableServiceVoList);
-        const billing: Billing = getBilling(userAvailableServiceVoList, csp);
+        setCurrency(currencyMapper[billing.currency]);
         currentFlavorList.forEach((flavor) => {
             if (value === flavor.value) {
                 setPriceValue(flavor.price);
             }
         });
-        setCurrency(currencyMapper[billing.currency]);
     };
 
     return (
@@ -177,7 +201,7 @@ export const SelectDestination = ({
                 selectCsp={selectCsp}
                 cspList={cspList}
                 onChangeHandler={(csp) => {
-                    onChangeCloudProvider(csp as CloudServiceProvider.name);
+                    onChangeCloudProvider(csp);
                 }}
             />
             <div className={'cloud-provider-tab-class content-title'}>
@@ -188,7 +212,7 @@ export const SelectDestination = ({
                     tabPosition={'top'}
                     items={areaList}
                     onChange={(area) => {
-                        onChangeAreaValue(selectCsp, area);
+                        onChangeAreaValue(area);
                     }}
                 />
             </div>
@@ -205,6 +229,7 @@ export const SelectDestination = ({
                     />
                 </Space>
             </div>
+
             <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <Space wrap>
@@ -213,7 +238,7 @@ export const SelectDestination = ({
                         value={selectFlavor}
                         style={{ width: 450 }}
                         onChange={(value) => {
-                            onChangeFlavor(value, selectCsp);
+                            onChangeFlavor(value);
                         }}
                         options={flavorList}
                     />
