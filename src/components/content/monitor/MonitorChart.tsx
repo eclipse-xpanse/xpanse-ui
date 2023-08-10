@@ -101,6 +101,8 @@ export const MonitorChart = ({
         refetchIntervalInBackground: isRefreshOnlyLastKnownMetric,
         refetchOnWindowFocus: false,
         enabled: isRefreshOnlyLastKnownMetric,
+        staleTime: 0,
+        cacheTime: 0,
     });
 
     const monitorMetricQueryKey = ['metric', serviceId, activeMonitorMetricType, timePeriod];
@@ -120,6 +122,8 @@ export const MonitorChart = ({
         refetchIntervalInBackground: isRefreshMonitorMetric,
         refetchOnWindowFocus: false,
         enabled: isRefreshMonitorMetric,
+        staleTime: 0,
+        cacheTime: 0,
     });
 
     useEffect(() => {
