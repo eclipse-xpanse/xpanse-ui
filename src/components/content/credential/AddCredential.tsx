@@ -16,7 +16,7 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 
 function AddCredential({
     credentialsQuery,
@@ -57,8 +57,18 @@ function AddCredential({
     }, [credentialTypesQuery.data, credentialTypesQuery.isSuccess]);
 
     useEffect(() => {
-        setCredentialTypeList([]);
-    }, [credentialTypesQuery.error]);
+        if (currentCsp !== undefined) {
+            if (credentialTypesQuery.error instanceof ApiError && 'details' in credentialTypesQuery.error.body) {
+                const response: Response = credentialTypesQuery.error.body as Response;
+                getTipInfo('error', response.details.join());
+            } else if (credentialTypesQuery.error instanceof Error) {
+                getTipInfo('error', credentialTypesQuery.error.message);
+            }
+            setDisable(true);
+        } else {
+            setCredentialTypeList([]);
+        }
+    }, [credentialTypesQuery.error, currentCsp]);
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
@@ -80,8 +90,42 @@ function AddCredential({
     }, [credentialCapabilitiesQuery.data, credentialCapabilitiesQuery.isSuccess]);
 
     useEffect(() => {
-        setNameList([]);
-    }, [credentialCapabilitiesQuery.error]);
+        if (currentCsp !== undefined && currentType !== undefined) {
+            if (
+                credentialCapabilitiesQuery.error instanceof ApiError &&
+                'details' in credentialCapabilitiesQuery.error.body
+            ) {
+                const response: Response = credentialCapabilitiesQuery.error.body as Response;
+                getTipInfo('error', response.details.join());
+            } else if (credentialCapabilitiesQuery.error instanceof Error) {
+                getTipInfo('error', credentialCapabilitiesQuery.error.message);
+            }
+            setDisable(true);
+        } else {
+            setNameList([]);
+        }
+    }, [credentialCapabilitiesQuery.error, currentCsp, currentType]);
+
+    const addCredentialRequest = useMutation({
+        mutationFn: (createCredential: CreateCredential) => {
+            return CredentialsManagementService.addCredential(createCredential);
+        },
+        onSuccess: () => {
+            void credentialsQuery.refetch();
+            getTipInfo('success', 'Adding Credential Successful.');
+            setDisable(true);
+        },
+        onError: (error: Error) => {
+            if (error instanceof ApiError && 'details' in error.body) {
+                const response: Response = error.body as Response;
+                getTipInfo('error', response.details.join());
+                setDisable(true);
+            } else {
+                getTipInfo('error', error.message);
+                setDisable(true);
+            }
+        },
+    });
 
     useEffect(() => {
         const credentials = credentialCapabilitiesQuery.data;
@@ -253,22 +297,7 @@ function AddCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            void CredentialsManagementService.addCredential(createCredential)
-                .then(() => {
-                    void credentialsQuery.refetch();
-                    getTipInfo('success', 'Adding Credential Successful.');
-                    setDisable(true);
-                })
-                .catch((error: Error) => {
-                    if (error instanceof ApiError && 'details' in error.body) {
-                        const response: Response = error.body as Response;
-                        getTipInfo('error', response.details.join());
-                        setDisable(true);
-                    } else {
-                        getTipInfo('error', error.message);
-                        setDisable(true);
-                    }
-                });
+            addCredentialRequest.mutate(createCredential);
         }
     };
 
@@ -361,7 +390,7 @@ function AddCredential({
                         </Select>
                     </Form.Item>
                     <Form.Item label='Description' name='description'>
-                        <TextArea rows={4} disabled={true} value={descriptionValue} />
+                        <TextArea rows={1} disabled={true} value={descriptionValue} />
                     </Form.Item>
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />

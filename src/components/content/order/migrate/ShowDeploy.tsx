@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CloudServiceProvider, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
 import { ApiDoc } from '../../common/ApiDoc';
@@ -22,7 +22,7 @@ export const ShowDeploy = ({
     currentDeployParams,
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
-    selectCsp: CloudServiceProvider.name | undefined;
+    selectCsp: string;
     selectArea: string;
     selectRegion: string;
     selectFlavor: string;

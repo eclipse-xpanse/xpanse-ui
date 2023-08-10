@@ -11,22 +11,6 @@ on:
                 type: string
                 description: Enter the version of the Docker image
                 required: true
-            ImageName:
-                type: string
-                description: Defines a unique tag for the docker image
-                required: true
-            BackendApiUrl:
-                type: string
-                description: URL to each the Xpanse API
-                required: true
-            OauthUrl:
-                type: string
-                description: Url of the Oauth Provider
-                required: true
-            OauthClientId:
-                type: string
-                description: ClientId of the the UI application on Oauth Provider
-                required: true
 
 env:
     BOT_USER_NAME: eclipse-xpanse-bot
@@ -45,10 +29,6 @@ jobs:
 
             - name: Build Application
               run: npm run build
-              env:
-                  REACT_APP_ZITADEL_AUTHORITY_NAME: ${{ github.event.inputs.OauthUrl }}
-                  REACT_APP_ZITADEL_CLIENT_ID: ${{ github.event.inputs.OauthClientId }}
-                  REACT_APP_XPANSE_API_URL: ${{ github.event.inputs.BackendApiUrl }}
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v2
@@ -69,5 +49,4 @@ jobs:
                   context: .
                   file: docker/Dockerfile
                   push: true
-                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.ReleaseVersion }},${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.ImageName }}
-                  labels: latest, ${{ env.CURRENT_VERSION }}
+                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.ReleaseVersion }}

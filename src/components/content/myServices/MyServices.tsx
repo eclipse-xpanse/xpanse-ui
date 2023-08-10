@@ -178,35 +178,52 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     !(
-                                        record.serviceDeploymentState ===
-                                            ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !isDestroying
+                                        (record.serviceDeploymentState ===
+                                            ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
+                                            record.serviceDeploymentState ===
+                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                        !isDestroying
                                     )
                                 }
                             >
                                 migrate
                             </Button>
-
-                            <Popconfirm
-                                title='Destroy the service'
-                                description='Are you sure to destroy the service?'
-                                okText='Yes'
-                                cancelText='No'
-                                onConfirm={() => destroy(record)}
-                            >
+                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ? (
                                 <Button
                                     loading={record.id === id ? isDestroying : false}
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
-                                    disabled={
-                                        !(
-                                            record.serviceDeploymentState ===
-                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS && !isDestroying
-                                        )
-                                    }
+                                    disabled={true}
                                 >
                                     destroy
                                 </Button>
-                            </Popconfirm>
+                            ) : (
+                                <Popconfirm
+                                    title='Destroy the service'
+                                    description='Are you sure to destroy the service?'
+                                    okText='Yes'
+                                    cancelText='No'
+                                    onConfirm={() => destroy(record)}
+                                >
+                                    <Button
+                                        loading={record.id === id ? isDestroying : false}
+                                        type='primary'
+                                        icon={<CloseCircleOutlined />}
+                                        disabled={
+                                            !(
+                                                (record.serviceDeploymentState ===
+                                                    ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
+                                                    record.serviceDeploymentState ===
+                                                        ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                                !isDestroying
+                                            )
+                                        }
+                                    >
+                                        destroy
+                                    </Button>
+                                </Popconfirm>
+                            )}
                             <Button
                                 type='primary'
                                 icon={<ExpandAltOutlined />}

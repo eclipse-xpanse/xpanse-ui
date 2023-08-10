@@ -66,6 +66,25 @@ function filterAreaList(
     return areaMapper.get(selectCsp) ?? [];
 }
 
+function filterFlavorList(
+    selectVersion: string,
+    selectCsp: string,
+    versionMapper: Map<string, UserAvailableServiceVo[]>
+): Map<string, Flavor[]> {
+    const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
+    versionMapper.forEach((v, k) => {
+        if (k !== selectVersion) {
+            return new Map<string, Flavor[]>();
+        }
+        for (const userAvailableServiceVo of v) {
+            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
+                flavorMapper.set(userAvailableServiceVo.csp, userAvailableServiceVo.flavors);
+            }
+        }
+    });
+    return flavorMapper;
+}
+
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const location = useLocation();
@@ -126,7 +145,7 @@ function CreateService(): React.JSX.Element {
                 versionMapper.current = currentVersions;
                 const currentVersionList = getVersionList();
                 const currentCspList = getCspList(latestVersion);
-                const currentFlavorList = getFlavorList(latestVersion);
+                const currentFlavorList = getFlavorList(latestVersion, currentCspList[0]);
                 setVersionList(currentVersionList);
                 setSelectVersion(latestVersion);
                 setCspList(currentCspList);
@@ -169,7 +188,7 @@ function CreateService(): React.JSX.Element {
                 setCurrency(currencyValue);
             }
         }
-    }, [availableServicesQuery.data, latestVersion, location.state]);
+    }, [availableServicesQuery.data, latestVersion, location.state, serviceName]);
 
     if (availableServicesQuery.error) {
         if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
@@ -275,17 +294,13 @@ function CreateService(): React.JSX.Element {
         return regions;
     }
 
-    function getFlavorList(selectVersion: string): { value: string; label: string; price: string }[] {
-        const flavorMapper = new Map<string, Flavor[]>();
-        versionMapper.current.forEach((v, k) => {
-            if (k === selectVersion) {
-                for (const userAvailableServiceVo of v) {
-                    flavorMapper.set(userAvailableServiceVo.version || '', userAvailableServiceVo.flavors);
-                }
-            }
-        });
+    function getFlavorList(
+        selectVersion: string,
+        selectCsp: string
+    ): { value: string; label: string; price: string }[] {
+        const flavorMapper = filterFlavorList(selectVersion, selectCsp, versionMapper.current);
 
-        const flavorList = flavorMapper.get(selectVersion) ?? [];
+        const flavorList = flavorMapper.get(selectCsp) ?? [];
         const flavors: { value: string; label: string; price: string }[] = [];
         if (flavorList.length > 0) {
             for (const flavor of flavorList) {
@@ -320,7 +335,7 @@ function CreateService(): React.JSX.Element {
         const currentCspList = getCspList(currentVersion);
         const currentAreaList = getAreaList(currentVersion, currentCspList[0]);
         const currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0]?.key ?? '');
-        const currentFlavorList = getFlavorList(currentVersion);
+        const currentFlavorList = getFlavorList(currentVersion, currentCspList[0]);
         const billing: Billing = getBilling(currentVersion, currentCspList[0]);
         setSelectVersion(currentVersion);
         setCspList(currentCspList);
@@ -338,7 +353,7 @@ function CreateService(): React.JSX.Element {
     const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProvider.name) => {
         const currentAreaList = getAreaList(selectVersion, csp);
         const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0]?.key ?? '');
-        const currentFlavorList = getFlavorList(selectVersion);
+        const currentFlavorList = getFlavorList(selectVersion, csp);
         const billing: Billing = getBilling(selectVersion, csp);
         setSelectCsp(csp);
         setAreaList(currentAreaList);
@@ -364,7 +379,7 @@ function CreateService(): React.JSX.Element {
 
     const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProvider.name) => {
         setSelectFlavor(value);
-        const currentFlavorList = getFlavorList(selectVersion);
+        const currentFlavorList = getFlavorList(selectVersion, csp);
         const billing: Billing = getBilling(selectVersion, csp);
         currentFlavorList.forEach((flavor) => {
             if (value === flavor.value) {

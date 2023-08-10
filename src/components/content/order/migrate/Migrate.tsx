@@ -4,12 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-    CloudServiceProvider,
-    ServiceVo,
-    UserAvailableServiceVo,
-    ServiceCatalogService,
-} from '../../../../xpanse-api/generated';
+import { ServiceCatalogService, ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
 import { Steps } from 'antd';
@@ -17,6 +12,7 @@ import { MigrateService } from './MigrateService';
 import { MigrationStatus, MigrationSteps } from '../formElements/CommonTypes';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
+import { useQuery } from '@tanstack/react-query';
 
 export const Migrate = ({
     currentSelectedService,
@@ -31,11 +27,28 @@ export const Migrate = ({
     );
     const [userAvailableServiceVoList, setUserAvailableServiceVoList] = useState<UserAvailableServiceVo[]>([]);
 
-    const [selectCsp, setSelectCsp] = useState<CloudServiceProvider.name | undefined>(undefined);
+    const [selectCsp, setSelectCsp] = useState<string>('');
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [deployParams, setDeployParams] = useState<Record<string, never> | undefined>(undefined);
+
+    const listAvailableServices = useQuery({
+        queryKey: [
+            'listAvailableServices',
+            currentSelectedService?.category,
+            currentSelectedService?.name,
+            currentSelectedService?.version,
+        ],
+        queryFn: () =>
+            ServiceCatalogService.listAvailableServices(
+                currentSelectedService?.category,
+                '',
+                currentSelectedService?.name,
+                currentSelectedService?.version
+            ),
+        refetchOnWindowFocus: false,
+    });
 
     useEffect(() => {
         setCurrentMigrationStepStatus(MigrationStatus.Processing);
@@ -43,23 +56,25 @@ export const Migrate = ({
         if (currentSelectedService === undefined) {
             return;
         }
-        const categoryName = currentSelectedService.category;
-        const serviceName = currentSelectedService.name;
-        const serviceVersion = currentSelectedService.version;
-        void ServiceCatalogService.listAvailableServices(categoryName, '', serviceName, serviceVersion).then(
-            (rsp: UserAvailableServiceVo[]) => {
-                if (rsp.length > 0) {
-                    setUserAvailableServiceVoList(rsp);
-                } else {
-                    return;
-                }
-            }
-        );
+        if (listAvailableServices.data && listAvailableServices.data.length > 0) {
+            setUserAvailableServiceVoList(listAvailableServices.data);
+        } else {
+            return;
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentSelectedService]);
+    }, [listAvailableServices.data, listAvailableServices.isSuccess]);
+
+    useEffect(() => {
+        if (listAvailableServices.isError) {
+            setCurrentMigrationStepStatus(MigrationStatus.Processing);
+            setCurrentMigrationStep(MigrationSteps.ExportServiceData);
+            setUserAvailableServiceVoList([]);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [listAvailableServices.isError, listAvailableServices.error]);
 
     const getSelectedParameters = (
-        selectedCsp: CloudServiceProvider.name,
+        selectedCsp: string,
         selectedArea: string,
         selectedRegion: string,
         selectedFlavor: string
