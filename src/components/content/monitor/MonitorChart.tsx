@@ -94,7 +94,7 @@ export const MonitorChart = ({
 
     const onlyLastKnownMetricQueryKey = ['onlyLastKnownMetric', serviceId];
     const onlyLastKnownMetricQueryFn = () =>
-        MonitorService.getMetricsByServiceId(serviceId, undefined, undefined, undefined, undefined, true);
+        MonitorService.getMetrics(serviceId, undefined, undefined, undefined, undefined, undefined, true);
 
     const onlyLastKnownMetricQuery = useQuery(onlyLastKnownMetricQueryKey, onlyLastKnownMetricQueryFn, {
         refetchInterval: isRefreshOnlyLastKnownMetric ? fetchOnlyLastKnownMonitorMetricDataTimeInterval : false,
@@ -105,8 +105,9 @@ export const MonitorChart = ({
 
     const monitorMetricQueryKey = ['metric', serviceId, activeMonitorMetricType, timePeriod];
     const monitorMetricQueryFn = () =>
-        MonitorService.getMetricsByServiceId(
+        MonitorService.getMetrics(
             serviceId,
+            undefined,
             activeMonitorMetricType as Metric.monitorResourceType,
             getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).from,
             getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).to,
