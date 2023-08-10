@@ -52,6 +52,7 @@ function Credential(): JSX.Element {
         } else {
             setAbstractCredentialInfoList([]);
         }
+        setTipType(undefined);
     }, [credentialsQuery.data, credentialsQuery.isSuccess]);
 
     useEffect(() => {
