@@ -42,7 +42,7 @@ function AddCredential({
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        queryFn: () => CredentialsManagementService.getCredentialTypesByCsp(currentCsp!),
+        queryFn: () => CredentialsManagementService.listCredentialTypes(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined,
     });
@@ -73,7 +73,7 @@ function AddCredential({
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        queryFn: () => CredentialsManagementService.getCredentialCapabilitiesByCsp(currentCsp!, currentType),
+        queryFn: () => CredentialsManagementService.listCredentialCapabilities(currentCsp!),
         staleTime: 60000,
         enabled: currentCsp !== undefined && currentType !== undefined,
     });

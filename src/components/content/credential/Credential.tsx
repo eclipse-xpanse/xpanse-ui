@@ -41,7 +41,7 @@ function Credential(): JSX.Element {
 
     const credentialsQuery = useQuery({
         queryKey: ['credentialsQuery'],
-        queryFn: () => CredentialsManagementService.getCredentialsByUser(),
+        queryFn: () => CredentialsManagementService.listCredentials(),
         staleTime: 60000,
     });
 
