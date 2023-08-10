@@ -16,6 +16,7 @@ import { MetricTimePeriod } from './MetricTimePeriod';
 import { MetricIsAutoRefresh } from './MetricIsAutoRefresh';
 import { MetricChartsPerRow } from './MetricChartsPerRow';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
+import { useLocation } from 'react-router-dom';
 
 function Monitor(): JSX.Element {
     const [form] = Form.useForm();
@@ -38,8 +39,24 @@ function Monitor(): JSX.Element {
     const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
     const [chartsPerRow, setChartsPerRow] = useState<string>(chartsPerRowWithTwo);
     const [optionLength, setOptionLength] = useState<number>(0);
-
     const deployedServiceQuery = useDeployedServicesByUserQuery();
+
+    const location = useLocation();
+
+    useEffect(() => {
+        if (location.state) {
+            const serviceVo: ServiceVo = location.state as ServiceVo;
+            form.setFieldsValue({ serviceName: serviceVo.name });
+            form.setFieldsValue({ customerServiceName: serviceVo.customerServiceName ?? undefined });
+            form.setFieldsValue({ serviceId: serviceVo.id });
+            onFinish({
+                serviceName: serviceVo.name,
+                customerServiceName: serviceVo.customerServiceName === undefined ? '' : serviceVo.customerServiceName,
+                serviceId: serviceVo.id,
+            });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.state]);
 
     useEffect(() => {
         if (deployedServiceQuery.isSuccess) {

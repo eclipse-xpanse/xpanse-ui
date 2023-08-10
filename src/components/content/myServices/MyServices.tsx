@@ -8,7 +8,13 @@ import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+    AreaChartOutlined,
+    CloseCircleOutlined,
+    CopyOutlined,
+    ExpandAltOutlined,
+    SyncOutlined,
+} from '@ant-design/icons';
 import '../../../styles/my_services.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
@@ -17,6 +23,7 @@ import { convertStringArrayToUnorderedList } from '../../utils/generateUnordered
 import { useQuery } from '@tanstack/react-query';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
+import { useNavigate } from 'react-router-dom';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -36,6 +43,8 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
+
+    const navigate = useNavigate();
 
     const getDeployedServicesByUserQuery = useQuery({
         queryKey: ['getDeployedServicesByUser'],
@@ -172,6 +181,24 @@ function MyServices(): React.JSX.Element {
                         <Space size='middle'>
                             <Button
                                 type='primary'
+                                icon={<AreaChartOutlined />}
+                                onClick={() => {
+                                    onMonitor(record);
+                                }}
+                                disabled={
+                                    !(
+                                        (record.serviceDeploymentState ===
+                                            ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
+                                            record.serviceDeploymentState ===
+                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                        !isDestroying
+                                    )
+                                }
+                            >
+                                monitor
+                            </Button>
+                            <Button
+                                type='primary'
                                 icon={<CopyOutlined />}
                                 onClick={() => {
                                     migrate(record);
@@ -256,6 +283,12 @@ function MyServices(): React.JSX.Element {
             </div>
         );
         setIsMigrateModalOpen(true);
+    }
+
+    function onMonitor(record: ServiceVo): void {
+        navigate('/monitor', {
+            state: record,
+        });
     }
 
     function updateCspFilters(): void {
