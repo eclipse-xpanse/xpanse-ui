@@ -16,9 +16,6 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
-import { getUserName } from '../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 
 function UpdateCredential({
@@ -35,8 +32,6 @@ function UpdateCredential({
     const [tipMessage, setTipMessage] = useState<string>('');
     const [disable, setDisable] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
         form.setFieldsValue({ csp: createCredential.csp });
@@ -66,10 +61,6 @@ function UpdateCredential({
 
     const submit = (createCredential: CreateCredential) => {
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-            if (!userName) {
-                return;
-            }
             updateCredentialRequest.mutate(createCredential);
         }
     };
