@@ -208,7 +208,7 @@
         "/xpanse/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listCredentials",
                 "parameters": [
                     {
@@ -1095,7 +1095,7 @@
         "/xpanse/credentials/capabilities": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "List the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listCredentialCapabilities",
                 "parameters": [
                     {

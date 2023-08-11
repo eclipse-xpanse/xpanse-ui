@@ -6,22 +6,23 @@
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CategoryOclVo, ProviderOclVo, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CloudServiceProvider, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../utils/Area';
 import UpdateService from './UpdateService';
 import UnregisterService from './UnregisterService';
 import { cspMap } from '../../order/formElements/CspSelect';
+import { getCspMapper, getVersionMapper } from './catalogProps';
 
 let lastServiceName: string = '';
 
 function ServiceProvider({
     categoryOclData,
-    serviceName,
+    currentServiceName,
     confirmUnregister,
 }: {
-    categoryOclData: CategoryOclVo[];
-    serviceName: string;
+    categoryOclData: Map<string, UserAvailableServiceVo[]>;
+    currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
 }): JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
@@ -30,7 +31,7 @@ function ServiceProvider({
 
     const detailMapper: Map<string, UserAvailableServiceVo> = new Map<string, UserAvailableServiceVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
-    const [name, version] = serviceName.split('@');
+    const [name, version] = currentServiceName.split('@');
     const unregisterStatus = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
     const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
@@ -49,42 +50,56 @@ function ServiceProvider({
         return map;
     }
 
-    const items: Tab[] = categoryOclData
-        .filter((service: CategoryOclVo) => service.name === name)
-        .flatMap((service: CategoryOclVo) => service.versions)
-        .filter((v) => v.version === version)
-        .flatMap((v) => {
-            return v.cloudProvider.map((cloudProvider: ProviderOclVo) => {
-                const key = serviceName + '@' + cloudProvider.name;
-                detailMapper.set(key, cloudProvider.details[0]);
-                const result: Map<string, Region[]> = groupRegionsByArea(cloudProvider.details[0].regions);
-                const areas: Area[] = [];
+    const getCspTabs = (categoryOclData: Map<string, UserAvailableServiceVo[]>): Tab[] => {
+        const items: Tab[] = [];
+        categoryOclData.forEach((serviceList, serviceName) => {
+            if (serviceName === name) {
+                const versionMapper = getVersionMapper(serviceName, serviceList);
+                versionMapper.forEach((versionList, versionName) => {
+                    if (versionName === version) {
+                        const cspMapper = getCspMapper(serviceName, versionName, versionList);
+                        cspMapper.forEach((cspList, cspName) => {
+                            const key = currentServiceName + '@' + cspName;
+                            detailMapper.set(key, cspList[0]);
+                            const result: Map<string, Region[]> = groupRegionsByArea(cspList[0].regions);
+                            const areas: Area[] = [];
 
-                result.forEach((v, k) => {
-                    const regions: string[] = [];
+                            result.forEach((v, k) => {
+                                const regions: string[] = [];
 
-                    v.forEach((region) => {
-                        regions.push(region.name);
-                    });
-                    const area: Area = { name: k, regions: regions };
-                    areas.push(area);
+                                v.forEach((region) => {
+                                    regions.push(region.name);
+                                });
+                                const area: Area = { name: k, regions: regions };
+                                areas.push(area);
+                            });
+
+                            areaMapper.set(key, areas);
+                            const name = cspName.toString();
+                            const item: Tab = {
+                                label: (
+                                    <div>
+                                        <Image
+                                            width={120}
+                                            preview={false}
+                                            src={cspMap.get(cspName as CloudServiceProvider.name)?.logo}
+                                        />
+                                    </div>
+                                ),
+                                key: name,
+                                children: [],
+                                disabled: unregisterTabsItemDisabled,
+                            };
+                            items.push(item);
+                        });
+                    }
                 });
-
-                areaMapper.set(key, areas);
-                const name = cloudProvider.name.toString();
-                return {
-                    label: (
-                        <div>
-                            <Image width={120} preview={false} src={cspMap.get(cloudProvider.name)?.logo} />
-                        </div>
-                    ),
-                    key: name,
-                    children: [],
-                    disabled: unregisterTabsItemDisabled,
-                };
-            });
+            }
         });
+        return items;
+    };
 
+    const items: Tab[] = getCspTabs(categoryOclData);
     function updateServiceDetails(serviceKey: string): void {
         const areas = areaMapper.get(serviceKey);
         const details = detailMapper.get(serviceKey);
@@ -96,18 +111,18 @@ function ServiceProvider({
         }
     }
     useEffect(() => {
-        if (items.length > 0 && lastServiceName !== serviceName) {
-            updateServiceDetails(serviceName + '@' + items[0].key);
+        if (items.length > 0 && lastServiceName !== currentServiceName) {
+            updateServiceDetails(currentServiceName + '@' + items[0].key);
             setActiveKey(items[0]?.key);
-        } else if (items.length > 0 && lastServiceName === serviceName) {
+        } else if (items.length > 0 && lastServiceName === currentServiceName) {
             setActiveKey(items[0]?.key);
         }
-        lastServiceName = serviceName;
+        lastServiceName = currentServiceName;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceName]);
+    }, [currentServiceName]);
 
     useEffect(() => {
-        updateServiceDetails(serviceName + '@' + activeKey);
+        updateServiceDetails(currentServiceName + '@' + activeKey);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [activeKey]);
 
@@ -155,7 +170,7 @@ function ServiceProvider({
 
     return (
         <>
-            {serviceName.length > 0 && categoryOclData.length > 0 ? (
+            {currentServiceName.length > 0 ? (
                 <>
                     {serviceDetails !== undefined && unregisterServiceId === serviceDetails.id ? unregisterTips : ''}
                     <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />

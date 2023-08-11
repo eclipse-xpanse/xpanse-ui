@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class CredentialsManagementService {
     /**
-     * Get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+     * List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.
      * @param type The type of credential.
      * @returns AbstractCredentialInfo OK
@@ -148,7 +148,7 @@ export class CredentialsManagementService {
     }
 
     /**
-     * Get the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+     * List the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName name of the cloud service provider.
      * @param type The type of credential.
      * @param name The name of credential.
