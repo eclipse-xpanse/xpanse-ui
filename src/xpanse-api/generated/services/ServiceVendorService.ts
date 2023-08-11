@@ -17,7 +17,7 @@ import { request as __request } from '../core/request';
 
 export class ServiceVendorService {
     /**
-     * Get service template using id.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Get service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
      * @returns ServiceTemplateVo OK
      * @throws ApiError
@@ -40,7 +40,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
      * @param requestBody
      * @returns ServiceTemplateVo OK
@@ -66,7 +66,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Delete service template using id.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Delete service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
      * @returns Response OK
      * @throws ApiError
@@ -89,7 +89,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
      * @param oclLocation URL of Ocl file
      * @returns ServiceTemplateVo OK
@@ -116,7 +116,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * List service templates with query params.<br>Required role:<b> admin</b> or <b>csp</b>
+     * List service templates with query params.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param categoryName category of the service
      * @param cspName name of the cloud service provider
      * @param serviceName name of the service
@@ -160,7 +160,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param requestBody
      * @returns ServiceTemplateVo OK
      * @throws ApiError
@@ -182,7 +182,7 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param oclLocation URL of Ocl file
      * @returns ServiceTemplateVo OK
      * @throws ApiError
