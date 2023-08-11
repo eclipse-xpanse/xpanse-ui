@@ -10,7 +10,7 @@ export const onEvent = (configurationName: string, eventName: string, data: obje
     console.log(`oidc:${configurationName}:${eventName}`, data);
 };
 
-export const allowRoleList: string[] = ['csp', 'user', 'admin'];
+export const allowRoleList: string[] = ['isv', 'user', 'admin'];
 
 export const OidcConfig: OidcConfiguration = {
     authority: env.REACT_APP_ZITADEL_AUTHORITY_NAME ?? '',
@@ -22,15 +22,23 @@ export const OidcConfig: OidcConfiguration = {
 };
 
 export function getRolesOfUser(oidcUserInfo: object): string[] {
+    let availableRoleList: string[] = [];
     if ('urn:zitadel:iam:org:project:roles' in oidcUserInfo) {
         if (
             typeof oidcUserInfo['urn:zitadel:iam:org:project:roles'] === 'object' &&
             oidcUserInfo['urn:zitadel:iam:org:project:roles'] !== null
         ) {
-            return Object.keys(oidcUserInfo['urn:zitadel:iam:org:project:roles']);
+            const roleList: string[] = Object.keys(oidcUserInfo['urn:zitadel:iam:org:project:roles']);
+            availableRoleList = roleList.filter((element, index, array) => {
+                return allowRoleList.includes(element);
+            });
         }
     }
-    return ['user']; //default role when no roles are assigned.
+
+    if (availableRoleList.length === 0) {
+        availableRoleList.push('user'); // default role when no roles are assigned.
+    }
+    return availableRoleList;
 }
 
 export function getUserName(oidcUserInfo: object): string {

@@ -15,7 +15,7 @@ import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 
 interface ProtectedRouteProperties {
     children: JSX.Element;
-    allowedRole: 'csp' | 'user' | 'admin' | 'all';
+    allowedRole: 'isv' | 'user' | 'admin' | 'all';
 }
 
 function getFullLayout(content: JSX.Element): JSX.Element {
