@@ -65,7 +65,7 @@ function App(): React.JSX.Element {
                         path={registerPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'csp'}>
+                                <Protected allowedRole={'isv'}>
                                     <RegisterPanel />
                                 </Protected>
                             </OidcSecure>
@@ -75,7 +75,7 @@ function App(): React.JSX.Element {
                         path={catalogPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'csp'}>
+                                <Protected allowedRole={'isv'}>
                                     <CatalogMainPage />
                                 </Protected>
                             </OidcSecure>
