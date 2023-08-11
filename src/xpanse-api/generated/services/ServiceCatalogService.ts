@@ -84,7 +84,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
+     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param id
      * @returns Link OK
      * @throws ApiError
@@ -107,7 +107,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
+     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param categoryName category of the service
      * @returns CategoryOclVo OK
      * @throws ApiError

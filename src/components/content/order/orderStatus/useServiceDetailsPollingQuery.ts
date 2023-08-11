@@ -7,9 +7,9 @@ export function useServiceDetailsPollingQuery(
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
     return useQuery(
-        ['getDeployedServiceDetailsById', uuid],
+        ['getServiceDetailsById', uuid],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        () => ServiceService.getDeployedServiceDetailsById(uuid!),
+        () => ServiceService.getServiceDetailsById(uuid!),
         {
             refetchInterval: (data) =>
                 data && refetchUntilStates.includes(data.serviceDeploymentState)

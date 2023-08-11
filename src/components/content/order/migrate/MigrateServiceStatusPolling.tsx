@@ -30,7 +30,7 @@ function MigrateServiceStatusPolling({
     setMigrating: (arg: boolean) => void;
     setMigrateDisable: (arg: boolean) => void;
 }): React.JSX.Element {
-    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(deployUuid, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(deployUuid, [
         ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
     ]);
@@ -46,16 +46,16 @@ function MigrateServiceStatusPolling({
 
     useEffect(() => {
         if (
-            getDeployedServiceDetailsByIdQuery.data &&
-            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+            getServiceDetailsByIdQuery.data &&
+            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
                 ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
         ) {
             setMigrating(false);
             setMigrateDisable(true);
         }
         if (
-            getDeployedServiceDetailsByIdQuery.data &&
-            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+            getServiceDetailsByIdQuery.data &&
+            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
                 ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
         ) {
             setMigrating(false);
@@ -71,12 +71,7 @@ function MigrateServiceStatusPolling({
             setMigrating(false);
             setMigrateDisable(true);
         }
-    }, [
-        getDestroyedServiceDetailsByIdQuery.data,
-        getDeployedServiceDetailsByIdQuery.data,
-        setMigrateDisable,
-        setMigrating,
-    ]);
+    }, [getDestroyedServiceDetailsByIdQuery.data, getServiceDetailsByIdQuery.data, setMigrateDisable, setMigrating]);
 
     useEffect(() => {
         if (deployError || destroyError) {
@@ -86,16 +81,11 @@ function MigrateServiceStatusPolling({
     }, [deployError, destroyError, setMigrateDisable, setMigrating]);
 
     useEffect(() => {
-        if (getDeployedServiceDetailsByIdQuery.error || getDestroyedServiceDetailsByIdQuery.error) {
+        if (getServiceDetailsByIdQuery.error || getDestroyedServiceDetailsByIdQuery.error) {
             setMigrating(false);
             setMigrateDisable(true);
         }
-    }, [
-        getDeployedServiceDetailsByIdQuery.error,
-        getDestroyedServiceDetailsByIdQuery.error,
-        setMigrateDisable,
-        setMigrating,
-    ]);
+    }, [getServiceDetailsByIdQuery.error, getDestroyedServiceDetailsByIdQuery.error, setMigrateDisable, setMigrating]);
 
     if (isDeployLoading) {
         return OrderSubmitResult(
@@ -119,9 +109,9 @@ function MigrateServiceStatusPolling({
         );
     }
 
-    if (deployError && getDeployedServiceDetailsByIdQuery.data !== undefined && deployUuid !== undefined) {
+    if (deployError && getServiceDetailsByIdQuery.data !== undefined && deployUuid !== undefined) {
         return OrderSubmitResult(
-            ProcessingStatus(getDeployedServiceDetailsByIdQuery.data, OperationType.Migrate),
+            ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Migrate),
             deployUuid,
             'error',
             ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
@@ -141,7 +131,7 @@ function MigrateServiceStatusPolling({
         );
     }
 
-    if (deployUuid && getDeployedServiceDetailsByIdQuery.error) {
+    if (deployUuid && getServiceDetailsByIdQuery.error) {
         return OrderSubmitResult(
             'Migrating status polling failed. Please visit MyServices page to check the status of the request.',
             deployUuid,
@@ -163,9 +153,9 @@ function MigrateServiceStatusPolling({
         );
     }
 
-    if (deployUuid && getDeployedServiceDetailsByIdQuery.data) {
+    if (deployUuid && getServiceDetailsByIdQuery.data) {
         if (
-            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
             ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
         ) {
             return OrderSubmitResult(
@@ -218,7 +208,7 @@ function MigrateServiceStatusPolling({
             );
         }
 
-    if (getDeployedServiceDetailsByIdQuery.isSuccess && getDestroyedServiceDetailsByIdQuery.isSuccess) {
+    if (getServiceDetailsByIdQuery.isSuccess && getDestroyedServiceDetailsByIdQuery.isSuccess) {
         setMigrating(false);
         setMigrateDisable(true);
         return OrderSubmitResult(
@@ -231,7 +221,7 @@ function MigrateServiceStatusPolling({
         );
     }
 
-    if (deployUuid !== undefined && getDeployedServiceDetailsByIdQuery.data === undefined) {
+    if (deployUuid !== undefined && getServiceDetailsByIdQuery.data === undefined) {
         return OrderSubmitResult(
             'Request accepted',
             deployUuid,

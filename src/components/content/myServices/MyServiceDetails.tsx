@@ -10,53 +10,47 @@ import { ApiError, Response, ServiceService } from '../../../xpanse-api/generate
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
-    const getDeployedServicesDetailsByIdQuery = useQuery({
-        queryKey: ['getDeployedServiceDetailsById', serviceId],
-        queryFn: () => ServiceService.getDeployedServiceDetailsById(serviceId),
+    const getServiceDetailsByIdQuery = useQuery({
+        queryKey: ['getServiceDetailsById', serviceId],
+        queryFn: () => ServiceService.getServiceDetailsById(serviceId),
         refetchOnWindowFocus: false,
     });
 
-    if (getDeployedServicesDetailsByIdQuery.isSuccess) {
+    if (getServiceDetailsByIdQuery.isSuccess) {
         const endPointMap = new Map<string, string>();
         const requestMap = new Map<string, string>();
         const resultMessageMap = new Map<string, string>();
-        if (getDeployedServicesDetailsByIdQuery.data.deployedServiceProperties) {
-            for (const key in getDeployedServicesDetailsByIdQuery.data.deployedServiceProperties) {
-                endPointMap.set(key, getDeployedServicesDetailsByIdQuery.data.deployedServiceProperties[key]);
+        if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
+            for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
+                endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
             }
         }
-        if (getDeployedServicesDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
-            for (const key in getDeployedServicesDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
-                requestMap.set(
-                    key,
-                    getDeployedServicesDetailsByIdQuery.data.createRequest.serviceRequestProperties[key]
-                );
+        if (getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
+            for (const key in getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
+                requestMap.set(key, getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties[key]);
             }
         }
-        if (getDeployedServicesDetailsByIdQuery.data.resultMessage) {
-            resultMessageMap.set('Result message details', getDeployedServicesDetailsByIdQuery.data.resultMessage);
+        if (getServiceDetailsByIdQuery.data.resultMessage) {
+            resultMessageMap.set('Result message details', getServiceDetailsByIdQuery.data.resultMessage);
         }
 
         return <>{getContent(endPointMap, requestMap, resultMessageMap)}</>;
     }
 
-    if (getDeployedServicesDetailsByIdQuery.isLoading) {
+    if (getServiceDetailsByIdQuery.isLoading) {
         return (
             <Skeleton
                 className={'my-service-details-skeleton'}
                 active={true}
-                loading={getDeployedServicesDetailsByIdQuery.isLoading}
+                loading={getServiceDetailsByIdQuery.isLoading}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
                 title={{ width: '5%' }}
             />
         );
     }
 
-    if (
-        getDeployedServicesDetailsByIdQuery.error instanceof ApiError &&
-        'details' in getDeployedServicesDetailsByIdQuery.error.body
-    ) {
-        const response: Response = getDeployedServicesDetailsByIdQuery.error.body as Response;
+    if (getServiceDetailsByIdQuery.error instanceof ApiError && 'details' in getServiceDetailsByIdQuery.error.body) {
+        const response: Response = getServiceDetailsByIdQuery.error.body as Response;
         return (
             <Alert
                 message={response.resultType.valueOf()}
@@ -66,11 +60,11 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 className={'my-service-details-skeleton'}
             />
         );
-    } else if (getDeployedServicesDetailsByIdQuery.error instanceof Error) {
+    } else if (getServiceDetailsByIdQuery.error instanceof Error) {
         return (
             <Alert
                 message='Fetching Service Details Failed'
-                description={getDeployedServicesDetailsByIdQuery.error.message}
+                description={getServiceDetailsByIdQuery.error.message}
                 type={'error'}
                 closable={true}
                 className={'my-service-details-skeleton'}
