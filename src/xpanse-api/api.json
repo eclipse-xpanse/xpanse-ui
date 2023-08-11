@@ -9,6 +9,7 @@
     "security": [{ "OAuth2 Flow": ["openid", "email", "profile"] }],
     "tags": [
         { "name": "Credentials Management", "description": "APIs for managing user's cloud provider credentials" },
+        { "name": "Service Vendor", "description": "APIs to manage service templates." },
         { "name": "Admin", "description": "APIs for administrating Xpanse" },
         {
             "name": "Service Catalog",
@@ -16,20 +17,19 @@
         },
         { "name": "Auth Management", "description": "APIs for user authentication and authorization." },
         { "name": "Service", "description": "APIs to manage the service instances" },
-        { "name": "Service Vendor", "description": "APIs to manage register services." },
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
     "paths": {
-        "/xpanse/services/register/{id}": {
+        "/xpanse/service_templates/{id}": {
             "get": {
                 "tags": ["Service Vendor"],
-                "description": "Get registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>",
-                "operationId": "detail",
+                "description": "Get service template using id.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "operationId": "details",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id of registered service",
+                        "description": "id of service template",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -58,20 +58,20 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/RegisteredServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
                         }
                     }
                 }
             },
             "put": {
                 "tags": ["Service Vendor"],
-                "description": "Update registered service using id and ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "description": "Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "update",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id of registered service",
+                        "description": "id of service template",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -108,20 +108,20 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/RegisteredServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
                         }
                     }
                 }
             },
             "delete": {
                 "tags": ["Service Vendor"],
-                "description": "Unregister registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "description": "Delete service template using id.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "unregister",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id of registered service",
+                        "description": "id of service template",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -154,16 +154,16 @@
                 }
             }
         },
-        "/xpanse/services/register/file/{id}": {
+        "/xpanse/service_templates/file/{id}": {
             "put": {
                 "tags": ["Service Vendor"],
-                "description": "Update registered service using id and ocl file url.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "description": "Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "fetchUpdate",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "id of registered service",
+                        "description": "id of service template",
                         "required": true,
                         "schema": { "type": "string" }
                     },
@@ -199,7 +199,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/RegisteredServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
                         }
                     }
                 }
@@ -208,7 +208,7 @@
         "/xpanse/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listCredentials",
                 "parameters": [
                     {
@@ -392,11 +392,48 @@
                 }
             }
         },
-        "/xpanse/services/register": {
+        "/xpanse/services/deploy": {
+            "post": {
+                "tags": ["Service"],
+                "description": "Start a task to deploy registered service.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "deploy",
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRequest" } } },
+                    "required": true
+                },
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "202": {
+                        "description": "Accepted",
+                        "content": { "application/json": { "schema": { "type": "string", "format": "uuid" } } }
+                    }
+                }
+            }
+        },
+        "/xpanse/service_templates": {
             "get": {
                 "tags": ["Service Vendor"],
-                "description": "List registered service with query params.<br>Required role:<b> admin</b> or <b>csp</b>",
-                "operationId": "listRegisteredServices",
+                "description": "List service templates with query params.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "operationId": "listServiceTemplates",
                 "parameters": [
                     {
                         "name": "categoryName",
@@ -471,7 +508,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/RegisteredServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/ServiceTemplateVo" }
                                 }
                             }
                         }
@@ -480,7 +517,7 @@
             },
             "post": {
                 "tags": ["Service Vendor"],
-                "description": "Register new service using ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "description": "Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "register",
                 "requestBody": {
                     "content": {
@@ -514,16 +551,16 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/RegisteredServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
                         }
                     }
                 }
             }
         },
-        "/xpanse/services/register/file": {
+        "/xpanse/service_templates/file": {
             "post": {
                 "tags": ["Service Vendor"],
-                "description": "Register new service with URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>",
+                "description": "Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>",
                 "operationId": "fetch",
                 "parameters": [
                     {
@@ -558,45 +595,8 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/RegisteredServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
                         }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/deploy": {
-            "post": {
-                "tags": ["Service"],
-                "description": "Start a task to deploy registered service.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "deploy",
-                "requestBody": {
-                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRequest" } } },
-                    "required": true
-                },
-                "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "202": {
-                        "description": "Accepted",
-                        "content": { "application/json": { "schema": { "type": "string", "format": "uuid" } } }
                     }
                 }
             }
@@ -1095,7 +1095,7 @@
         "/xpanse/credentials/capabilities": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Get the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "List the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listCredentialCapabilities",
                 "parameters": [
                     {
@@ -1361,13 +1361,13 @@
                             "Invalid Service State",
                             "Resource Invalid For Monitoring",
                             "Unhandled Exception",
-                            "Service Already Registered",
+                            "Service Template Already Registered",
                             "Icon Processing Failed",
-                            "Service Not Registered",
+                            "Service Template Not Registered",
                             "Service Deployment Not Found",
                             "Resource Not Found",
                             "Deployment Variable Invalid",
-                            "Service Update Not Allowed",
+                            "Service Template Update Not Allowed",
                             "Unauthorized",
                             "Access Denied",
                             "Sensitive Field Encryption Or Decryption Failed Exception",
@@ -1563,7 +1563,7 @@
                     "name": { "type": "string" }
                 }
             },
-            "RegisteredServiceVo": {
+            "ServiceTemplateVo": {
                 "required": [
                     "category",
                     "createTime",
