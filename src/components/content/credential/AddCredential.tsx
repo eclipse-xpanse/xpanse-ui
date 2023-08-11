@@ -38,6 +38,7 @@ function AddCredential({
     const [tipMessage, setTipMessage] = useState<string>('');
     const [descriptionValue, setDescriptionValue] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+    const [addloading, setAddLoading] = useState<boolean>(false);
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
@@ -114,8 +115,10 @@ function AddCredential({
             void credentialsQuery.refetch();
             getTipInfo('success', 'Adding Credential Successful.');
             setDisable(true);
+            setAddLoading(false);
         },
         onError: (error: Error) => {
+            setAddLoading(false);
             if (error instanceof ApiError && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
@@ -296,6 +299,7 @@ function AddCredential({
     };
 
     const submit = (createCredential: CreateCredential) => {
+        setAddLoading(true);
         if (!isContainsEmpty(createCredential.variables)) {
             addCredentialRequest.mutate(createCredential);
         }
@@ -360,7 +364,11 @@ function AddCredential({
                         name='type'
                         rules={[{ required: true, message: 'Please Select The Type of Credential!' }]}
                     >
-                        <Select disabled={typeDisabled} onSelect={handleCredentialTypeSelect}>
+                        <Select
+                            loading={credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching}
+                            disabled={typeDisabled}
+                            onSelect={handleCredentialTypeSelect}
+                        >
                             {credentialTypeList.map((type: CredentialVariables.type) => {
                                 return (
                                     <Select.Option key={type} value={type}>
@@ -413,7 +421,7 @@ function AddCredential({
                     )}
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' disabled={disable} htmlType='submit'>
+                    <Button type='primary' loading={addloading} disabled={disable} htmlType='submit'>
                         Add
                     </Button>
                     <Button htmlType='button' className={'add-credential-from-button-reset'} onClick={onReset}>

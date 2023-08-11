@@ -31,6 +31,7 @@ function UpdateCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [disable, setDisable] = useState<boolean>(false);
+    const [updateLoading, setUpdateLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
@@ -48,8 +49,10 @@ function UpdateCredential({
         onSuccess: () => {
             getTipInfo('success', 'Updating Credential Successful.');
             setDisable(true);
+            setUpdateLoading(false);
         },
         onError: (error: Error) => {
+            setUpdateLoading(false);
             if (error instanceof ApiError && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
@@ -60,6 +63,7 @@ function UpdateCredential({
     });
 
     const submit = (createCredential: CreateCredential) => {
+        setUpdateLoading(true);
         if (!isContainsEmpty(createCredential.variables)) {
             updateCredentialRequest.mutate(createCredential);
         }
@@ -204,7 +208,7 @@ function UpdateCredential({
                         <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label='Description' name='description'>
-                        <TextArea rows={4} />
+                        <TextArea rows={1} disabled={true} />
                     </Form.Item>
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />
@@ -223,7 +227,7 @@ function UpdateCredential({
                     </Form.Item>
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' disabled={disable} htmlType='submit'>
+                    <Button type='primary' loading={updateLoading} disabled={disable} htmlType='submit'>
                         Update
                     </Button>
                     <Button
