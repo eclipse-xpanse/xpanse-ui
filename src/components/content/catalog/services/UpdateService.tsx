@@ -6,7 +6,7 @@
 import { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { ApiError, Ocl, RegisteredServiceVo, Response, ServiceVendorService } from '../../../../xpanse-api/generated';
+import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
 import YamlSyntaxValidationResult from '../../register/YamlSyntaxValidationResult';
@@ -35,9 +35,9 @@ function UpdateService({
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.update(id, ocl);
         },
-        onSuccess: (registeredServiceVo: RegisteredServiceVo) => {
+        onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
             files.current[0].status = 'success';
-            updateResult.current = [`ID - ${registeredServiceVo.id}`];
+            updateResult.current = [`ID - ${serviceTemplateVo.id}`];
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';

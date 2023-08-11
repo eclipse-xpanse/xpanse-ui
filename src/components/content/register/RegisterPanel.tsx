@@ -7,7 +7,7 @@ import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
-import { ApiError, Ocl, RegisteredServiceVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
+import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
 import RegisterResult from './RegisterResult';
 import OclSummaryDisplay from './OclSummaryDisplay';
@@ -29,9 +29,9 @@ function RegisterPanel(): JSX.Element {
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.register(ocl);
         },
-        onSuccess: (registeredServiceVo: RegisteredServiceVo) => {
+        onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
             files.current[0].status = 'success';
-            registerResult.current = [`ID - ${registeredServiceVo.id}`];
+            registerResult.current = [`ID - ${serviceTemplateVo.id}`];
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';

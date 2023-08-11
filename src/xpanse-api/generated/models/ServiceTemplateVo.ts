@@ -11,7 +11,7 @@
 import type { Link } from './Link';
 import type { Ocl } from './Ocl';
 
-export type RegisteredServiceVo = {
+export type ServiceTemplateVo = {
     /**
      * ID of the registered service.
      */
@@ -27,11 +27,11 @@ export type RegisteredServiceVo = {
     /**
      * Csp of the registered service.
      */
-    csp: RegisteredServiceVo.csp;
+    csp: ServiceTemplateVo.csp;
     /**
      * Category of the registered service.
      */
-    category: RegisteredServiceVo.category;
+    category: ServiceTemplateVo.category;
     ocl: Ocl;
     /**
      * createTime of the registered service.
@@ -44,11 +44,11 @@ export type RegisteredServiceVo = {
     /**
      * State of service.
      */
-    serviceRegistrationState: RegisteredServiceVo.serviceRegistrationState;
+    serviceRegistrationState: ServiceTemplateVo.serviceRegistrationState;
     links?: Array<Link>;
 };
 
-export namespace RegisteredServiceVo {
+export namespace ServiceTemplateVo {
     /**
      * Csp of the registered service.
      */
