@@ -83,6 +83,7 @@ export namespace ServiceVo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 
     /**

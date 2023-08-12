@@ -105,6 +105,7 @@ export namespace UserAvailableServiceVo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 
     /**

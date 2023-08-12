@@ -37,7 +37,7 @@ export class ServiceCatalogService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
         serviceName?: string,
         serviceVersion?: string
     ): CancelablePromise<Array<UserAvailableServiceVo>> {

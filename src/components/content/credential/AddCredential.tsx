@@ -365,7 +365,10 @@ function AddCredential({
                         rules={[{ required: true, message: 'Please Select The Type of Credential!' }]}
                     >
                         <Select
-                            loading={credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching}
+                            loading={
+                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
+                                credentialTypesQuery.fetchStatus !== 'idle'
+                            }
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
                         >
@@ -384,7 +387,10 @@ function AddCredential({
                         rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
                     >
                         <Select
-                            loading={credentialCapabilitiesQuery.isLoading || credentialCapabilitiesQuery.isRefetching}
+                            loading={
+                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
+                                credentialTypesQuery.fetchStatus !== 'idle'
+                            }
                             disabled={nameDisable}
                             onSelect={handleCredentialNameSelect}
                         >
