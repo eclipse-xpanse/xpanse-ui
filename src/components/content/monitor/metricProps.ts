@@ -18,7 +18,7 @@ export interface MetricProps {
     timeStamp: number;
 }
 
-export interface MetricRequestParams {
+interface MetricRequestParams {
     from: number;
 
     to: number;
@@ -33,12 +33,12 @@ export interface MetricQueueParams {
 export const chartsPerRowCountList: string[] = ['2', '3', '4', '6', '8', '12'];
 export const chartsPerRowWithTwo: string = '2';
 export const lastMinuteRadioButtonKeyId: number = 1;
-export const lastHourRadioButtonKeyId: number = 2;
-export const threeHoursRadioButtonKeyId: number = 3;
-export const twelveHoursRadioButtonKeyId: number = 4;
-export const twentyFourHoursRadioButtonKeyId: number = 5;
-export const sevenDaysRadioButtonKeyId: number = 6;
-export const thirtyDaysRadioButtonKeyId: number = 7;
+const lastHourRadioButtonKeyId: number = 2;
+const threeHoursRadioButtonKeyId: number = 3;
+const twelveHoursRadioButtonKeyId: number = 4;
+const twentyFourHoursRadioButtonKeyId: number = 5;
+const sevenDaysRadioButtonKeyId: number = 6;
+const thirtyDaysRadioButtonKeyId: number = 7;
 
 export const timePeriodList: string[] = [
     'Last minute',

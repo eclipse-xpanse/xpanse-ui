@@ -6,18 +6,14 @@ export function useServiceDetailsPollingQuery(
     uuid: string | undefined,
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
-    return useQuery(
-        ['getServiceDetailsById', uuid],
+    return useQuery({
+        queryKey: ['getServiceDetailsById', uuid],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        () => ServiceService.getServiceDetailsById(uuid!),
-        {
-            refetchInterval: (data) =>
-                data && refetchUntilStates.includes(data.serviceDeploymentState)
-                    ? false
-                    : deploymentStatusPollingInterval,
-            refetchIntervalInBackground: true,
-            refetchOnWindowFocus: false,
-            enabled: uuid !== undefined,
-        }
-    );
+        queryFn: () => ServiceService.getServiceDetailsById(uuid!),
+        refetchInterval: (data) =>
+            data && refetchUntilStates.includes(data.serviceDeploymentState) ? false : deploymentStatusPollingInterval,
+        refetchIntervalInBackground: true,
+        refetchOnWindowFocus: false,
+        enabled: uuid !== undefined,
+    });
 }

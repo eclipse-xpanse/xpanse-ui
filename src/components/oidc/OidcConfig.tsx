@@ -3,12 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { OidcConfiguration } from '@axa-fr/react-oidc/dist/vanilla';
 import { env } from '../../config/config';
-
-export const onEvent = (configurationName: string, eventName: string, data: object) => {
-    console.log(`oidc:${configurationName}:${eventName}`, data);
-};
+import { OidcConfiguration } from '@axa-fr/react-oidc';
 
 export const allowRoleList: string[] = ['isv', 'user', 'admin'];
 
@@ -29,7 +25,7 @@ export function getRolesOfUser(oidcUserInfo: object): string[] {
             oidcUserInfo['urn:zitadel:iam:org:project:roles'] !== null
         ) {
             const roleList: string[] = Object.keys(oidcUserInfo['urn:zitadel:iam:org:project:roles']);
-            availableRoleList = roleList.filter((element, index, array) => {
+            availableRoleList = roleList.filter((element) => {
                 return allowRoleList.includes(element);
             });
         }
@@ -45,15 +41,6 @@ export function getUserName(oidcUserInfo: object): string {
     if ('name' in oidcUserInfo) {
         if (typeof oidcUserInfo.name === 'string') {
             return oidcUserInfo.name;
-        }
-    }
-    return '';
-}
-
-export function getUserId(oidcUserInfo: object): string {
-    if ('sub' in oidcUserInfo) {
-        if (typeof oidcUserInfo.sub === 'string') {
-            return oidcUserInfo.sub;
         }
     }
     return '';

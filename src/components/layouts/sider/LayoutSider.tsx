@@ -4,13 +4,13 @@
  */
 
 import { Image, Layout, Menu } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { homePageRoute } from '../../utils/constants';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { getMenuItems } from './menuItems';
 
-function LayoutSider(): JSX.Element {
+function LayoutSider(): React.JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
     const navigate = useNavigate();
 

@@ -113,7 +113,7 @@ function CreateService(): React.JSX.Element {
     const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useQuery({
-        queryKey: ['listAvailableServices', categoryName, serviceName],
+        queryKey: ['listAvailableServices', categoryName, serviceName, selectCsp],
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
