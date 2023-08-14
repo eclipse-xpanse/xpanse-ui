@@ -8,8 +8,8 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Ocl } from '../models/Ocl';
-import type { RegisteredServiceVo } from '../models/RegisteredServiceVo';
 import type { Response } from '../models/Response';
+import type { ServiceTemplateVo } from '../models/ServiceTemplateVo';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -17,15 +17,15 @@ import { request as __request } from '../core/request';
 
 export class ServiceVendorService {
     /**
-     * Get registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param id id of registered service
-     * @returns RegisteredServiceVo OK
+     * Get service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static detail(id: string): CancelablePromise<RegisteredServiceVo> {
+    public static details(id: string): CancelablePromise<ServiceTemplateVo> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/register/{id}',
+            url: '/xpanse/service_templates/{id}',
             path: {
                 id: id,
             },
@@ -40,16 +40,16 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update registered service using id and ocl model.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param id id of registered service
+     * Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
      * @param requestBody
-     * @returns RegisteredServiceVo OK
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static update(id: string, requestBody: Ocl): CancelablePromise<RegisteredServiceVo> {
+    public static update(id: string, requestBody: Ocl): CancelablePromise<ServiceTemplateVo> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/xpanse/services/register/{id}',
+            url: '/xpanse/service_templates/{id}',
             path: {
                 id: id,
             },
@@ -66,15 +66,15 @@ export class ServiceVendorService {
     }
 
     /**
-     * Unregister registered service using id.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param id id of registered service
+     * Delete service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
      * @returns Response OK
      * @throws ApiError
      */
     public static unregister(id: string): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/xpanse/services/register/{id}',
+            url: '/xpanse/service_templates/{id}',
             path: {
                 id: id,
             },
@@ -89,16 +89,16 @@ export class ServiceVendorService {
     }
 
     /**
-     * Update registered service using id and ocl file url.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param id id of registered service
+     * Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
      * @param oclLocation URL of Ocl file
-     * @returns RegisteredServiceVo OK
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static fetchUpdate(id: string, oclLocation: string): CancelablePromise<RegisteredServiceVo> {
+    public static fetchUpdate(id: string, oclLocation: string): CancelablePromise<ServiceTemplateVo> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/xpanse/services/register/file/{id}',
+            url: '/xpanse/service_templates/file/{id}',
             path: {
                 id: id,
             },
@@ -116,23 +116,33 @@ export class ServiceVendorService {
     }
 
     /**
-     * List registered service with query params.<br>Required role:<b> admin</b> or <b>csp</b>
-     * @param categoryName name of category of the service
-     * @param cspName name of the service provider
+     * List service templates with query params.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param categoryName category of the service
+     * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
-     * @returns RegisteredServiceVo OK
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static listRegisteredServices(
-        categoryName?: string,
-        cspName?: string,
+    public static listServiceTemplates(
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string
-    ): CancelablePromise<Array<RegisteredServiceVo>> {
+    ): CancelablePromise<Array<ServiceTemplateVo>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/register',
+            url: '/xpanse/service_templates',
             query: {
                 categoryName: categoryName,
                 cspName: cspName,
@@ -150,15 +160,15 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service using ocl model.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param requestBody
-     * @returns RegisteredServiceVo OK
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static register(requestBody: Ocl): CancelablePromise<RegisteredServiceVo> {
+    public static register(requestBody: Ocl): CancelablePromise<ServiceTemplateVo> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xpanse/services/register',
+            url: '/xpanse/service_templates',
             body: requestBody,
             mediaType: 'application/x-yaml',
             errors: {
@@ -172,15 +182,15 @@ export class ServiceVendorService {
     }
 
     /**
-     * Register new service with URL of Ocl file.<br>Required role:<b> admin</b> or <b>csp</b>
+     * Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param oclLocation URL of Ocl file
-     * @returns RegisteredServiceVo OK
+     * @returns ServiceTemplateVo OK
      * @throws ApiError
      */
-    public static fetch(oclLocation: string): CancelablePromise<RegisteredServiceVo> {
+    public static fetch(oclLocation: string): CancelablePromise<ServiceTemplateVo> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xpanse/services/register/file',
+            url: '/xpanse/service_templates/file',
             query: {
                 oclLocation: oclLocation,
             },

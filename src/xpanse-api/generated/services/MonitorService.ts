@@ -15,8 +15,9 @@ import { request as __request } from '../core/request';
 
 export class MonitorService {
     /**
-     * Get metrics of all resources in a deployed service.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id Id of the deployed service
+     * Get metrics of a deployed service or a resource.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param serviceId Id of the deployed service
+     * @param resourceId Id of resource in the deployed service
      * @param monitorResourceType Types of the monitor resource.
      * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
      * @param to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
@@ -25,8 +26,9 @@ export class MonitorService {
      * @returns Metric OK
      * @throws ApiError
      */
-    public static getMetricsByServiceId(
-        id: string,
+    public static getMetrics(
+        serviceId: string,
+        resourceId?: string,
         monitorResourceType?: 'cpu' | 'mem' | 'vm_network_incoming' | 'vm_network_outgoing',
         from?: number,
         to?: number,
@@ -35,53 +37,10 @@ export class MonitorService {
     ): CancelablePromise<Array<Metric>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/monitor/metric/service/{id}',
-            path: {
-                id: id,
-            },
+            url: '/xpanse/metrics',
             query: {
-                monitorResourceType: monitorResourceType,
-                from: from,
-                to: to,
-                granularity: granularity,
-                onlyLastKnownMetric: onlyLastKnownMetric,
-            },
-            errors: {
-                400: `Bad Request`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
-    /**
-     * Get metrics of a specific deployed resource.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id Id of the deployed resource.
-     * @param monitorResourceType Types of the monitor resource.
-     * @param from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
-     * @param to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
-     * @param granularity Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
-     * @param onlyLastKnownMetric Returns only the last known metric. When this parameter is set then all other query parameters are ignored.
-     * @returns Metric OK
-     * @throws ApiError
-     */
-    public static getMetricsByResourceId(
-        id: string,
-        monitorResourceType?: 'cpu' | 'mem' | 'vm_network_incoming' | 'vm_network_outgoing',
-        from?: number,
-        to?: number,
-        granularity?: number,
-        onlyLastKnownMetric?: boolean
-    ): CancelablePromise<Array<Metric>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/monitor/metric/resource/{id}',
-            path: {
-                id: id,
-            },
-            query: {
+                serviceId: serviceId,
+                resourceId: resourceId,
                 monitorResourceType: monitorResourceType,
                 from: from,
                 to: to,

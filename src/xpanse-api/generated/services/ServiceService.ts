@@ -18,17 +18,48 @@ import { request as __request } from '../core/request';
 
 export class ServiceService {
     /**
-     * Start a task to deploy registered service.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param requestBody
-     * @returns string Accepted
+     * List all deployed services by a user.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param categoryName category of the service
+     * @param cspName name of the cloud service provider
+     * @param serviceName name of the service
+     * @param serviceVersion version of the service
+     * @param serviceState deployment state of the service
+     * @returns ServiceVo OK
      * @throws ApiError
      */
-    public static deploy(requestBody: CreateRequest): CancelablePromise<string> {
+    public static listDeployedServices(
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
+        serviceName?: string,
+        serviceVersion?: string,
+        serviceState?:
+            | 'DEPLOYING'
+            | 'DEPLOY_SUCCESS'
+            | 'DEPLOY_FAILED'
+            | 'DESTROYING'
+            | 'DESTROY_SUCCESS'
+            | 'DESTROY_FAILED'
+    ): CancelablePromise<Array<ServiceVo>> {
         return __request(OpenAPI, {
-            method: 'POST',
-            url: '/xpanse/services/deploy',
-            body: requestBody,
-            mediaType: 'application/json',
+            method: 'GET',
+            url: '/xpanse/services',
+            query: {
+                categoryName: categoryName,
+                cspName: cspName,
+                serviceName: serviceName,
+                serviceVersion: serviceVersion,
+                serviceState: serviceState,
+            },
             errors: {
                 400: `Bad Request`,
                 403: `Forbidden`,
@@ -40,14 +71,17 @@ export class ServiceService {
     }
 
     /**
-     * List all deployed services by a user.<br>Required role:<b> admin</b> or <b>user</b>
-     * @returns ServiceVo OK
+     * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param requestBody
+     * @returns string Accepted
      * @throws ApiError
      */
-    public static listMyDeployedServices(): CancelablePromise<Array<ServiceVo>> {
+    public static deploy(requestBody: CreateRequest): CancelablePromise<string> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/services/deployed',
+            method: 'POST',
+            url: '/xpanse/services',
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 403: `Forbidden`,
@@ -64,10 +98,10 @@ export class ServiceService {
      * @returns ServiceDetailVo OK
      * @throws ApiError
      */
-    public static getDeployedServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
+    public static getServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/deployed/{id}/details',
+            url: '/xpanse/services/{id}',
             path: {
                 id: id,
             },
@@ -90,7 +124,7 @@ export class ServiceService {
     public static destroy(id: string): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'DELETE',
-            url: '/xpanse/services/destroy/{id}',
+            url: '/xpanse/services/{id}',
             path: {
                 id: id,
             },

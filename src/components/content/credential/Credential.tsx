@@ -41,7 +41,7 @@ function Credential(): JSX.Element {
 
     const credentialsQuery = useQuery({
         queryKey: ['credentialsQuery'],
-        queryFn: () => CredentialsManagementService.getCredentialsByUser(),
+        queryFn: () => CredentialsManagementService.listCredentials(),
         staleTime: 60000,
     });
 
@@ -52,6 +52,7 @@ function Credential(): JSX.Element {
         } else {
             setAbstractCredentialInfoList([]);
         }
+        getTipInfo(undefined, '');
     }, [credentialsQuery.data, credentialsQuery.isSuccess]);
 
     useEffect(() => {
@@ -72,8 +73,8 @@ function Credential(): JSX.Element {
             );
         },
         onSuccess: () => {
-            void credentialsQuery.refetch();
             getTipInfo('success', 'Deleting Credential Successful.');
+            void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
             if (error instanceof ApiError && 'details' in error.body) {
@@ -143,6 +144,7 @@ function Credential(): JSX.Element {
 
     const addCredential = () => {
         setIsAddOpen(true);
+        getTipInfo(undefined, '');
     };
 
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
@@ -165,25 +167,30 @@ function Credential(): JSX.Element {
         };
         setCreateCredential(createCredential);
         setIsUpdateOpen(true);
+        getTipInfo(undefined, '');
     };
 
     const details = (credentialVariables: CredentialVariables) => {
         setIsDetailsOpen(true);
+        getTipInfo(undefined, '');
         setCredentialDetails(credentialVariables.variables);
     };
 
     const onCancel = () => {
         setIsAddOpen(false);
+        onRemove();
         void credentialsQuery.refetch();
     };
 
     const onUpdateCancel = () => {
         setIsUpdateOpen(false);
+        onRemove();
         void credentialsQuery.refetch();
     };
 
     const onDetailsCancel = () => {
         setIsDetailsOpen(false);
+        onRemove();
     };
 
     const onRemove = () => {

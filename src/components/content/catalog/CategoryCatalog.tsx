@@ -10,61 +10,70 @@ import ServiceProvider from './services/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
 import {
     ApiError,
-    CategoryOclVo,
     Response,
     ServiceVo,
-    VersionOclVo,
     ServiceCatalogService,
+    UserAvailableServiceVo,
 } from '../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { getServiceMapper, getVersionMapper } from './services/catalogProps';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
-    const [categoryOclData, setCategoryOclData] = useState<CategoryOclVo[]>([]);
+    const [categoryOclData, setCategoryOclData] = useState<Map<string, UserAvailableServiceVo[]>>(
+        new Map<string, UserAvailableServiceVo[]>()
+    );
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
     const [loadingError, setLoadingError] = useState<React.JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
-        queryFn: () => ServiceCatalogService.getAvailableServicesTree(category),
+        queryFn: () => ServiceCatalogService.listAvailableServices(category),
         refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
-        const tData: DataNode[] = [];
+        const categoryTreeData: DataNode[] = [];
         const tExpandKeys: React.Key[] = [];
-        const services: CategoryOclVo[] | undefined = availableServicesQuery.data;
-        if (services !== undefined && services.length > 0) {
-            setCategoryOclData(services);
-            services.forEach((service) => {
-                const dn: DataNode = {
-                    title: service.name,
-                    key: service.name || '',
+        const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
+            const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
+            const serviceNameList: string[] = Array.from(serviceMapper.keys());
+            setCategoryOclData(serviceMapper);
+            serviceNameList.forEach((serviceName: string) => {
+                const dataNode: DataNode = {
+                    title: serviceName,
+                    key: serviceName || '',
                     children: [],
                 };
-                const versionList: VersionOclVo[] = service.versions;
-                versionList.forEach((v: VersionOclVo) => {
-                    dn.children?.push({
-                        title: v.version,
-                        key: service.name + '@' + v.version,
+                const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+                    serviceName,
+                    userAvailableServiceList
+                );
+                const versionList: string[] = Array.from(versionMapper.keys());
+
+                versionList.forEach((versionName: string) => {
+                    dataNode.children?.push({
+                        title: versionName,
+                        key: serviceName + '@' + versionName,
                         icon: <TagOutlined />,
                     });
-                    tExpandKeys.push(service.name + '@' + v.version);
+                    tExpandKeys.push(serviceName + '@' + versionName);
                 });
-                tData.push(dn);
+                categoryTreeData.push(dataNode);
             });
-            setTreeData(tData);
-            setSelectKey(services[0].name + '@' + services[0].versions[0].version);
+            setTreeData(categoryTreeData);
+            setSelectKey(tExpandKeys[0]);
             setExpandKeys(tExpandKeys);
         } else {
             setTreeData([]);
             setSelectKey('');
             setExpandKeys([]);
-            setCategoryOclData([]);
+            setCategoryOclData(new Map<string, UserAvailableServiceVo[]>());
         }
     }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
 
@@ -94,7 +103,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         setTreeData([]);
         setSelectKey('');
         setExpandKeys([]);
-        setCategoryOclData([]);
+        setCategoryOclData(new Map<string, UserAvailableServiceVo[]>());
     }, [availableServicesQuery.error]);
 
     function isParentTreeSelected(selectKey: React.Key): boolean {
@@ -163,7 +172,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
                         <div className={'left-title-class'}>Cloud Provider</div>
                         <ServiceProvider
                             categoryOclData={categoryOclData}
-                            serviceName={selectKey.toString()}
+                            currentServiceName={selectKey.toString()}
                             confirmUnregister={onConfirmUnregister}
                         />
                     </div>

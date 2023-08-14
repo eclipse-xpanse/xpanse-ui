@@ -16,9 +16,6 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
-import { getUserName } from '../../oidc/OidcConfig';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 
 function UpdateCredential({
@@ -34,9 +31,8 @@ function UpdateCredential({
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [disable, setDisable] = useState<boolean>(false);
+    const [updateLoading, setUpdateLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
         form.setFieldsValue({ csp: createCredential.csp });
@@ -53,8 +49,10 @@ function UpdateCredential({
         onSuccess: () => {
             getTipInfo('success', 'Updating Credential Successful.');
             setDisable(true);
+            setUpdateLoading(false);
         },
         onError: (error: Error) => {
+            setUpdateLoading(false);
             if (error instanceof ApiError && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
@@ -65,11 +63,8 @@ function UpdateCredential({
     });
 
     const submit = (createCredential: CreateCredential) => {
+        setUpdateLoading(true);
         if (!isContainsEmpty(createCredential.variables)) {
-            const userName: string | null = getUserName(oidcIdToken.idTokenPayload as object);
-            if (!userName) {
-                return;
-            }
             updateCredentialRequest.mutate(createCredential);
         }
     };
@@ -213,7 +208,7 @@ function UpdateCredential({
                         <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label='Description' name='description'>
-                        <TextArea rows={4} />
+                        <TextArea rows={1} disabled={true} />
                     </Form.Item>
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />
@@ -232,7 +227,7 @@ function UpdateCredential({
                     </Form.Item>
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' disabled={disable} htmlType='submit'>
+                    <Button type='primary' loading={updateLoading} disabled={disable} htmlType='submit'>
                         Update
                     </Button>
                     <Button

@@ -18,16 +18,26 @@ import { request as __request } from '../core/request';
 export class ServiceCatalogService {
     /**
      * Returns the list of all registered services that are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param categoryName name of category of the service
-     * @param cspName name of the service provider
+     * @param categoryName category of the service
+     * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      * @returns UserAvailableServiceVo OK
      * @throws ApiError
      */
     public static listAvailableServices(
-        categoryName?: string,
-        cspName?: string,
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string
     ): CancelablePromise<Array<UserAvailableServiceVo>> {
@@ -74,7 +84,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
+     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param id
      * @returns Link OK
      * @throws ApiError
@@ -97,7 +107,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>csp</b> or <b>user</b>
+     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param categoryName category of the service
      * @returns CategoryOclVo OK
      * @throws ApiError

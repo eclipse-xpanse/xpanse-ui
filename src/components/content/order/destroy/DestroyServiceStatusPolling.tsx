@@ -20,7 +20,7 @@ function DestroyServiceStatusPolling({
     setIsDestroying: (arg: boolean) => void;
     setIsDestroyingCompleted: (arg: boolean) => void;
 }): React.JSX.Element {
-    const getDeployedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
     ]);
@@ -31,16 +31,16 @@ function DestroyServiceStatusPolling({
 
     useEffect(() => {
         if (
-            getDeployedServiceDetailsByIdQuery.data &&
+            getServiceDetailsByIdQuery.data &&
             [
                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
                 ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-            ].includes(getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState)
+            ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             setIsDestroying(false);
             setIsDestroyingCompleted(true);
         }
-    }, [getDeployedServiceDetailsByIdQuery.data, setIsDestroyingCompleted, setIsDestroying]);
+    }, [getServiceDetailsByIdQuery.data, setIsDestroyingCompleted, setIsDestroying]);
 
     useEffect(() => {
         if (error) {
@@ -50,11 +50,11 @@ function DestroyServiceStatusPolling({
     }, [error, setIsDestroyingCompleted, setIsDestroying]);
 
     useEffect(() => {
-        if (getDeployedServiceDetailsByIdQuery.error) {
+        if (getServiceDetailsByIdQuery.error) {
             setIsDestroying(false);
             setIsDestroyingCompleted(true);
         }
-    }, [getDeployedServiceDetailsByIdQuery.error, setIsDestroyingCompleted, setIsDestroying]);
+    }, [getServiceDetailsByIdQuery.error, setIsDestroyingCompleted, setIsDestroying]);
 
     if (isLoading) {
         return OrderSubmitResult(
@@ -76,7 +76,7 @@ function DestroyServiceStatusPolling({
         );
     }
 
-    if (uuid && getDeployedServiceDetailsByIdQuery.error) {
+    if (uuid && getServiceDetailsByIdQuery.error) {
         return OrderSubmitResult(
             'Destroy status polling failed. Please visit MyServices page to check the status of the request.',
             uuid,
@@ -87,12 +87,12 @@ function DestroyServiceStatusPolling({
         );
     }
 
-    if (uuid && getDeployedServiceDetailsByIdQuery.data)
+    if (uuid && getServiceDetailsByIdQuery.data)
         if (
             ![
                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
                 ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-            ].includes(getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState)
+            ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             return OrderSubmitResult(
                 'Destroying, Please wait...',
@@ -103,32 +103,32 @@ function DestroyServiceStatusPolling({
                 OperationType.Destroy
             );
         } else if (
-            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
             ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS
         ) {
             return OrderSubmitResult(
-                ProcessingStatus(getDeployedServiceDetailsByIdQuery.data, OperationType.Destroy),
+                ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Destroy),
                 uuid,
                 'success',
-                getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                getServiceDetailsByIdQuery.data.serviceDeploymentState,
                 stopWatch,
                 OperationType.Destroy
             );
         } else if (
-            getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
             ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
         ) {
             return OrderSubmitResult(
-                ProcessingStatus(getDeployedServiceDetailsByIdQuery.data, OperationType.Destroy),
+                ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Destroy),
                 uuid,
                 'error',
-                getDeployedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                getServiceDetailsByIdQuery.data.serviceDeploymentState,
                 stopWatch,
                 OperationType.Destroy
             );
         }
 
-    if (getDeployedServiceDetailsByIdQuery.data === undefined) {
+    if (getServiceDetailsByIdQuery.data === undefined) {
         return OrderSubmitResult(
             'Request accepted',
             uuid,

@@ -8,7 +8,13 @@ import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { CloseCircleOutlined, CopyOutlined, ExpandAltOutlined, SyncOutlined } from '@ant-design/icons';
+import {
+    AreaChartOutlined,
+    CloseCircleOutlined,
+    CopyOutlined,
+    ExpandAltOutlined,
+    SyncOutlined,
+} from '@ant-design/icons';
 import '../../../styles/my_services.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
@@ -17,6 +23,7 @@ import { convertStringArrayToUnorderedList } from '../../utils/generateUnordered
 import { useQuery } from '@tanstack/react-query';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
+import { useNavigate } from 'react-router-dom';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -37,34 +44,36 @@ function MyServices(): React.JSX.Element {
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
 
-    const getDeployedServicesByUserQuery = useQuery({
-        queryKey: ['getDeployedServicesByUser'],
-        queryFn: () => ServiceService.listMyDeployedServices(),
+    const navigate = useNavigate();
+
+    const listDeployedServicesQuery = useQuery({
+        queryKey: ['listDeployedServices'],
+        queryFn: () => ServiceService.listDeployedServices(undefined, undefined, undefined, undefined, undefined),
         refetchOnWindowFocus: false,
     });
 
     useEffect(() => {
         const serviceList: ServiceVo[] = [];
-        if (getDeployedServicesByUserQuery.data && getDeployedServicesByUserQuery.data.length > 0) {
-            setServiceVoList(getDeployedServicesByUserQuery.data);
-            updateVersionFilters(getDeployedServicesByUserQuery.data);
-            updateNameFilters(getDeployedServicesByUserQuery.data);
+        if (listDeployedServicesQuery.data && listDeployedServicesQuery.data.length > 0) {
+            setServiceVoList(listDeployedServicesQuery.data);
+            updateVersionFilters(listDeployedServicesQuery.data);
+            updateNameFilters(listDeployedServicesQuery.data);
             updateCategoryFilters();
             updateCspFilters();
             updateServiceStateFilters();
-            updateCustomerServiceNameFilters(getDeployedServicesByUserQuery.data);
+            updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
         } else {
             setServiceVoList(serviceList);
         }
-    }, [getDeployedServicesByUserQuery.data, getDeployedServicesByUserQuery.isSuccess]);
+    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess]);
 
     useEffect(() => {
-        if (getDeployedServicesByUserQuery.error && getDeployedServicesByUserQuery.isError) {
+        if (listDeployedServicesQuery.error && listDeployedServicesQuery.isError) {
             if (
-                getDeployedServicesByUserQuery.error instanceof ApiError &&
-                'details' in getDeployedServicesByUserQuery.error.body
+                listDeployedServicesQuery.error instanceof ApiError &&
+                'details' in listDeployedServicesQuery.error.body
             ) {
-                const response: Response = getDeployedServicesByUserQuery.error.body as Response;
+                const response: Response = listDeployedServicesQuery.error.body as Response;
                 setServicesLoadingError(
                     <Alert
                         message={response.resultType.valueOf()}
@@ -78,7 +87,7 @@ function MyServices(): React.JSX.Element {
                 setServicesLoadingError(
                     <Alert
                         message='Fetching Service Details Failed'
-                        description={(getDeployedServicesByUserQuery.error as Error).message}
+                        description={(listDeployedServicesQuery.error as Error).message}
                         type={'error'}
                         closable={true}
                         className={'failure-alert'}
@@ -88,7 +97,7 @@ function MyServices(): React.JSX.Element {
         } else {
             setServicesLoadingError(<></>);
         }
-    }, [getDeployedServicesByUserQuery.error, getDeployedServicesByUserQuery.isError]);
+    }, [listDeployedServicesQuery.error, listDeployedServicesQuery.isError]);
 
     useEffect(() => {
         if (isDestroyingCompleted) {
@@ -170,6 +179,24 @@ function MyServices(): React.JSX.Element {
                 return (
                     <>
                         <Space size='middle'>
+                            <Button
+                                type='primary'
+                                icon={<AreaChartOutlined />}
+                                onClick={() => {
+                                    onMonitor(record);
+                                }}
+                                disabled={
+                                    !(
+                                        (record.serviceDeploymentState ===
+                                            ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
+                                            record.serviceDeploymentState ===
+                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                        !isDestroying
+                                    )
+                                }
+                            >
+                                monitor
+                            </Button>
                             <Button
                                 type='primary'
                                 icon={<CopyOutlined />}
@@ -256,6 +283,12 @@ function MyServices(): React.JSX.Element {
             </div>
         );
         setIsMigrateModalOpen(true);
+    }
+
+    function onMonitor(record: ServiceVo): void {
+        navigate('/monitor', {
+            state: record,
+        });
     }
 
     function updateCspFilters(): void {
@@ -345,7 +378,7 @@ function MyServices(): React.JSX.Element {
     }
 
     function refreshData(): void {
-        void getDeployedServicesByUserQuery.refetch();
+        void listDeployedServicesQuery.refetch();
     }
 
     const handleMyServiceDetailsOpenModal = (id: string) => {
@@ -424,7 +457,7 @@ function MyServices(): React.JSX.Element {
                 <Table
                     columns={columns}
                     dataSource={serviceVoList}
-                    loading={getDeployedServicesByUserQuery.isLoading || getDeployedServicesByUserQuery.isRefetching}
+                    loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
                     rowKey={'id'}
                 />
             </div>
