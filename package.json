@@ -120,7 +120,7 @@
         "ignoreDependencies": [
             "eslint-config-prettier",
             "@babel/plugin-proposal-private-property-in-object",
-            "openapi-typescript-codeden"
+            "openapi-typescript-codegen"
         ]
     }
 }
