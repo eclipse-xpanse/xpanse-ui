@@ -39,16 +39,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -89,16 +89,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -131,16 +131,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -180,16 +180,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -218,7 +218,16 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -237,16 +246,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -281,16 +290,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -315,16 +324,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -346,7 +355,16 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -372,16 +390,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -426,7 +444,16 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -466,16 +493,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -505,16 +532,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -562,7 +589,16 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -585,16 +621,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -631,16 +667,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -675,16 +711,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -719,16 +755,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -753,16 +789,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -810,7 +846,16 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -833,16 +878,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -888,16 +933,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -924,16 +969,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -980,16 +1025,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1071,16 +1116,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1108,16 +1153,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1144,7 +1189,16 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -1163,16 +1217,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1199,7 +1253,16 @@
                         "required": true,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     },
                     {
@@ -1225,16 +1288,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1268,7 +1331,16 @@
                         "required": false,
                         "schema": {
                             "type": "string",
-                            "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
                         }
                     }
                 ],
@@ -1277,16 +1349,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1336,16 +1408,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1371,16 +1443,16 @@
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "400": {
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1467,7 +1539,7 @@
                     "name": {
                         "type": "string",
                         "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "regions": {
                         "type": "array",
@@ -1643,7 +1715,7 @@
                     "csp": {
                         "type": "string",
                         "description": "Csp of the registered service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "category": {
                         "type": "string",
@@ -1688,7 +1760,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "description": { "type": "string", "description": "The description of the credential" },
                     "type": {
@@ -1767,7 +1839,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceRequestProperties": {
@@ -1821,7 +1893,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -1912,7 +1984,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -1997,7 +2069,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "regions": {
                         "type": "array",
@@ -2056,7 +2128,7 @@
                     "name": {
                         "type": "string",
                         "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "regions": {
                         "type": "array",
@@ -2193,7 +2265,16 @@
                             "csp": {
                                 "type": "string",
                                 "description": "The cloud service provider of the credential.",
-                                "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                                "enum": [
+                                    "huawei",
+                                    "flexibleEngine",
+                                    "openstack",
+                                    "alicloud",
+                                    "aws",
+                                    "azure",
+                                    "google",
+                                    "scs"
+                                ]
                             },
                             "type": {
                                 "type": "string",
@@ -2220,7 +2301,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
                     },
                     "type": {
                         "type": "string",

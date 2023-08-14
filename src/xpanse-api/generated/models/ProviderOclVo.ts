@@ -41,5 +41,6 @@ export namespace ProviderOclVo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 }
