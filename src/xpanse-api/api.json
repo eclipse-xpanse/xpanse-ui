@@ -17,6 +17,10 @@
         },
         { "name": "Auth Management", "description": "APIs for user authentication and authorization." },
         { "name": "Service", "description": "APIs to manage the service instances" },
+        {
+            "name": "Service Catalog",
+            "description": "APIs to query service templates which are available for the user to order."
+        },
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
     "paths": {
@@ -43,12 +47,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -93,12 +97,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -135,12 +139,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -184,12 +188,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -250,12 +254,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -294,12 +298,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -328,12 +332,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -394,12 +398,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -497,12 +501,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -536,12 +540,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -625,12 +629,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -671,12 +675,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -715,12 +719,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -759,12 +763,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -793,12 +797,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -808,246 +812,6 @@
                     "202": {
                         "description": "Accepted",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/available": {
-            "get": {
-                "tags": ["Service Catalog"],
-                "description": "Returns the list of all registered services that are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listAvailableServices",
-                "parameters": [
-                    {
-                        "name": "categoryName",
-                        "in": "query",
-                        "description": "category of the service",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "cspName",
-                        "in": "query",
-                        "description": "name of the cloud service provider",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "alicloud",
-                                "aws",
-                                "azure",
-                                "google",
-                                "scs"
-                            ]
-                        }
-                    },
-                    {
-                        "name": "serviceName",
-                        "in": "query",
-                        "description": "name of the service",
-                        "required": false,
-                        "schema": { "type": "string" }
-                    },
-                    {
-                        "name": "serviceVersion",
-                        "in": "query",
-                        "description": "version of the service",
-                        "required": false,
-                        "schema": { "type": "string" }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
-                                }
-                            },
-                            "application/hal+json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/available/{id}": {
-            "get": {
-                "tags": ["Service Catalog"],
-                "description": "Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "availableServiceDetails",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "The id of available service.",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/UserAvailableServiceVo" } }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/available/{id}/openapi": {
-            "get": {
-                "tags": ["Service Catalog"],
-                "description": "Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
-                "operationId": "openApi",
-                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Link" } } }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/available/category/{categoryName}": {
-            "get": {
-                "tags": ["Service Catalog"],
-                "description": "Get the available services by tree.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
-                "operationId": "getAvailableServicesTree",
-                "parameters": [
-                    {
-                        "name": "categoryName",
-                        "in": "path",
-                        "description": "category of the service",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/CategoryOclVo" } }
-                            }
-                        }
                     }
                 }
             }
@@ -1120,12 +884,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1157,12 +921,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1221,12 +985,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1292,12 +1056,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1353,12 +1117,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1378,6 +1142,186 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/xpanse/catalog/services": {
+            "get": {
+                "tags": ["Service Catalog"],
+                "description": "List of all registered services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "listAvailableServices",
+                "parameters": [
+                    {
+                        "name": "categoryName",
+                        "in": "query",
+                        "description": "category of the service",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "ai",
+                                "compute",
+                                "container",
+                                "storage",
+                                "network",
+                                "database",
+                                "mediaService",
+                                "security",
+                                "middleware",
+                                "others"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "cspName",
+                        "in": "query",
+                        "description": "name of the cloud service provider",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google",
+                                "scs"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "serviceName",
+                        "in": "query",
+                        "description": "name of the service",
+                        "required": false,
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "serviceVersion",
+                        "in": "query",
+                        "description": "version of the service",
+                        "required": false,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                }
+                            },
+                            "application/hal+json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/catalog/services/{id}": {
+            "get": {
+                "tags": ["Service Catalog"],
+                "description": "Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "availableServiceDetails",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "The id of available service.",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": { "schema": { "$ref": "#/components/schemas/UserAvailableServiceVo" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/catalog/services/{id}/openapi": {
+            "get": {
+                "tags": ["Service Catalog"],
+                "description": "Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
+                "operationId": "openApi",
+                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Link" } } }
                     }
                 }
             }
@@ -1412,12 +1356,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1447,12 +1391,12 @@
                         "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2026,136 +1970,6 @@
                     "resultMessage": { "type": "string", "description": "The result message of the deployed service." }
                 }
             },
-            "UserAvailableServiceVo": {
-                "required": [
-                    "billing",
-                    "category",
-                    "createTime",
-                    "csp",
-                    "deployment",
-                    "description",
-                    "flavors",
-                    "icon",
-                    "id",
-                    "lastModifiedTime",
-                    "name",
-                    "namespace",
-                    "regions",
-                    "serviceRegistrationState",
-                    "variables",
-                    "version"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
-                    "category": {
-                        "type": "string",
-                        "description": "The catalog of the available service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "name": { "type": "string", "description": "The name of the available service." },
-                    "version": { "type": "string", "description": "The version of the available service." },
-                    "csp": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Region" }
-                    },
-                    "description": { "type": "string", "description": "The description of the available service." },
-                    "namespace": { "type": "string", "description": "The namespace of the available service." },
-                    "icon": { "type": "string", "description": "The icon of the available service." },
-                    "deployment": { "$ref": "#/components/schemas/Deployment" },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables for the deployment, which will be passed to the deployer.",
-                        "items": { "$ref": "#/components/schemas/DeployVariable" }
-                    },
-                    "flavors": {
-                        "type": "array",
-                        "description": "The flavors of the available service.",
-                        "items": { "$ref": "#/components/schemas/Flavor" }
-                    },
-                    "billing": { "$ref": "#/components/schemas/Billing" },
-                    "createTime": {
-                        "type": "string",
-                        "description": "The registration time of the service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "The latest update time of the available service.",
-                        "format": "date-time"
-                    },
-                    "serviceRegistrationState": {
-                        "type": "string",
-                        "description": "The state of the available service.",
-                        "enum": ["REGISTERED", "UPDATED"]
-                    },
-                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
-                }
-            },
-            "CategoryOclVo": {
-                "required": ["name", "versions"],
-                "type": "object",
-                "properties": {
-                    "name": { "type": "string", "description": "Name of the registered service." },
-                    "versions": {
-                        "type": "array",
-                        "description": "List of the registered service group by service version.",
-                        "items": { "$ref": "#/components/schemas/VersionOclVo" }
-                    }
-                }
-            },
-            "ProviderOclVo": {
-                "required": ["details", "name", "regions"],
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Region" }
-                    },
-                    "details": {
-                        "type": "array",
-                        "description": "The list of the available services.",
-                        "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
-                    }
-                },
-                "description": "List of the registered services group by service version."
-            },
-            "VersionOclVo": {
-                "required": ["cloudProvider", "version"],
-                "type": "object",
-                "properties": {
-                    "version": { "type": "string", "description": "Version of the registered service." },
-                    "cloudProvider": {
-                        "type": "array",
-                        "description": "List of the registered services group by service version.",
-                        "items": { "$ref": "#/components/schemas/ProviderOclVo" }
-                    }
-                },
-                "description": "List of the registered service group by service version."
-            },
             "Metric": {
                 "required": ["monitorResourceType", "name", "type", "unit"],
                 "type": "object",
@@ -2322,6 +2136,89 @@
                         "description": "The variables list of the credential.",
                         "items": { "$ref": "#/components/schemas/CredentialVariable" }
                     }
+                }
+            },
+            "UserAvailableServiceVo": {
+                "required": [
+                    "billing",
+                    "category",
+                    "createTime",
+                    "csp",
+                    "deployment",
+                    "description",
+                    "flavors",
+                    "icon",
+                    "id",
+                    "lastModifiedTime",
+                    "name",
+                    "namespace",
+                    "regions",
+                    "serviceRegistrationState",
+                    "variables",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
+                    "category": {
+                        "type": "string",
+                        "description": "The catalog of the available service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "name": { "type": "string", "description": "The name of the available service." },
+                    "version": { "type": "string", "description": "The version of the available service." },
+                    "csp": {
+                        "type": "string",
+                        "description": "The Cloud Service Provider of the available service.",
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                    },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the available service." },
+                    "namespace": { "type": "string", "description": "The namespace of the available service." },
+                    "icon": { "type": "string", "description": "The icon of the available service." },
+                    "deployment": { "$ref": "#/components/schemas/Deployment" },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the available service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
+                    "createTime": {
+                        "type": "string",
+                        "description": "The registration time of the service.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "The latest update time of the available service.",
+                        "format": "date-time"
+                    },
+                    "serviceRegistrationState": {
+                        "type": "string",
+                        "description": "The state of the available service.",
+                        "enum": ["REGISTERED", "UPDATED"]
+                    },
+                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },
             "TokenResponse": {
