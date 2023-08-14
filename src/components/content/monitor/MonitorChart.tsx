@@ -21,15 +21,14 @@ import {
 import React, { useEffect, useRef, useState } from 'react';
 import { MonitorMetricsType } from './MonitorMetricsType';
 import { ApiError, Metric, MonitorService, Response } from '../../../xpanse-api/generated';
-import * as echarts from 'echarts/core';
 import {
     fetchMonitorMetricDataTimeInterval,
     fetchOnlyLastKnownMonitorMetricDataTimeInterval,
     monitorMetricQueueSize,
 } from '../../utils/constants';
-import moment from 'moment';
 import { MetricOptionDataByChartsPerRow } from './MetricOptionDataByChartsPerRow';
 import { useQuery } from '@tanstack/react-query';
+import { EChartsCoreOption } from 'echarts';
 
 export const MonitorChart = ({
     serviceId,
@@ -54,7 +53,7 @@ export const MonitorChart = ({
     ) => void;
     getIsLoading: (isLoading: boolean) => void;
     getOptionLength: (optionLength: number) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<string>(
         Metric.monitorResourceType.CPU.valueOf()
     );
@@ -68,7 +67,7 @@ export const MonitorChart = ({
     const [monitorMetricsQueue, setMonitorMetricsQueue] = useState<MetricQueueParams[]>([]);
 
     const [chartsTitle, setChartsTitle] = useState<{ Id: string; metricTitle: string; metricSubTitle: string }[]>([]);
-    const [options, setOptions] = useState<echarts.EChartsCoreOption[]>([]);
+    const [options, setOptions] = useState<EChartsCoreOption[]>([]);
 
     const tipMessageInfo = useRef<string>('');
     const tipDescriptionInfo = useRef<string[]>([]);
@@ -96,7 +95,9 @@ export const MonitorChart = ({
     const onlyLastKnownMetricQueryFn = () =>
         MonitorService.getMetrics(serviceId, undefined, undefined, undefined, undefined, undefined, true);
 
-    const onlyLastKnownMetricQuery = useQuery(onlyLastKnownMetricQueryKey, onlyLastKnownMetricQueryFn, {
+    const onlyLastKnownMetricQuery = useQuery({
+        queryKey: onlyLastKnownMetricQueryKey,
+        queryFn: onlyLastKnownMetricQueryFn,
         refetchInterval: isRefreshOnlyLastKnownMetric ? fetchOnlyLastKnownMonitorMetricDataTimeInterval : false,
         refetchIntervalInBackground: isRefreshOnlyLastKnownMetric,
         refetchOnWindowFocus: false,
@@ -117,7 +118,9 @@ export const MonitorChart = ({
             false
         );
 
-    const monitorMetricQuery = useQuery(monitorMetricQueryKey, monitorMetricQueryFn, {
+    const monitorMetricQuery = useQuery({
+        queryKey: monitorMetricQueryKey,
+        queryFn: monitorMetricQueryFn,
         refetchInterval: isRefreshMonitorMetric ? fetchMonitorMetricDataTimeInterval : false,
         refetchIntervalInBackground: isRefreshMonitorMetric,
         refetchOnWindowFocus: false,
@@ -294,7 +297,7 @@ export const MonitorChart = ({
 
         const currentMetricProps: Map<string, MetricProps[]> = getCurrentMetricProps(metricProps);
         const currentChartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
-        const currentOptions: echarts.EChartsCoreOption[] = [];
+        const currentOptions: EChartsCoreOption[] = [];
 
         currentMetricProps.forEach((metricProps, vmId) => {
             currentChartsTitle.push({
@@ -308,7 +311,7 @@ export const MonitorChart = ({
                     ),
                 metricSubTitle: metricProps[0].vmName,
             });
-            const option: echarts.EChartsCoreOption = {
+            const option: EChartsCoreOption = {
                 tooltip: {
                     trigger: 'axis',
                     position: function (pt: number[]) {
@@ -320,11 +323,6 @@ export const MonitorChart = ({
                             show: true,
                         },
                     },
-                    valueFormatter: function (params: number) {
-                        return `${params} ${
-                            metricProps[0].unit === Metric.unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()
-                        }`;
-                    },
                 },
                 xAxis: {
                     type: 'time',
@@ -333,11 +331,6 @@ export const MonitorChart = ({
                         show: true,
                         fontSize: 10,
                         rotate: 40,
-                        formatter: function (value: Date) {
-                            const date = moment(value).format('YYYY-MM-DD');
-                            const time = moment(value).format('HH:mm:ss');
-                            return date + '\n' + time;
-                        },
                     },
                     axisTick: {
                         show: true,

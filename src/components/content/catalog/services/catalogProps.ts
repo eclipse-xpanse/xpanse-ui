@@ -1,20 +1,4 @@
-import { Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
-
-export interface CategoryOclParam {
-    name: string;
-    versions: VersionOclParam[];
-}
-
-export interface VersionOclParam {
-    version: string;
-    cloudProvider: ProviderOclParam[];
-}
-
-export interface ProviderOclParam {
-    name: UserAvailableServiceVo.csp;
-    regions: Region[];
-    details: UserAvailableServiceVo[];
-}
+import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 
 export const getServiceMapper = (
     userAvailableServiceList: UserAvailableServiceVo[]

@@ -4,7 +4,7 @@
  */
 
 import { Select } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { chartsPerRowCountList, chartsPerRowWithTwo } from './metricProps';
 
 export const MetricChartsPerRow = ({
@@ -15,7 +15,7 @@ export const MetricChartsPerRow = ({
     isLoading: boolean;
     optionLength: number;
     getMetricChartsPerRow: (currentMetricChartsPerRow: string) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [chartsPerRow, setChartsPerRow] = useState<string>(chartsPerRowWithTwo);
     const [chartsPerRowOptions, setChartsPerRowOptions] = useState<{ value: string; label: string }[]>([]);
     const handleChangeChartsPerRow = (value: string) => {

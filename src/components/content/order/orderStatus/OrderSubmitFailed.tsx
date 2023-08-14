@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { MigrateSubmitResult, OrderSubmitResult } from './OrderSubmitResult';
+import { OrderSubmitResult } from './OrderSubmitResult';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { ApiError, Response, ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { StopwatchResult } from 'react-timer-hook';
@@ -44,11 +44,3 @@ export function OrderSubmitFailed(
         operationType
     );
 }
-
-export const MigrateSubmitFailed = (error: Error): React.JSX.Element => {
-    if (error instanceof ApiError && 'details' in error.body) {
-        const response: Response = error.body as Response;
-        return MigrateSubmitResult(getOrderSubmissionFailedDisplay(response.details), '-', 'error');
-    }
-    return MigrateSubmitResult(getOrderSubmissionFailedDisplay([error.message]), '-', 'error');
-};
