@@ -10,7 +10,13 @@ import UpdateCredential from './UpdateCredential';
 import { CredentialTip } from './CredentialTip';
 import CredentialDetails from './CredentialDetails';
 import { Button, Modal, Popconfirm, Space, Table } from 'antd';
-import { FullscreenOutlined, InfoCircleOutlined, MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import {
+    FullscreenOutlined,
+    InfoCircleOutlined,
+    MinusCircleOutlined,
+    PlusCircleOutlined,
+    SyncOutlined,
+} from '@ant-design/icons';
 import {
     AbstractCredentialInfo,
     ApiError,
@@ -26,6 +32,7 @@ function Credential(): JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [isRefresh, setIsRefresh] = useState(false);
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [abstractCredentialInfoList, setAbstractCredentialInfoList] = useState<AbstractCredentialInfo[]>([]);
@@ -74,6 +81,7 @@ function Credential(): JSX.Element {
         },
         onSuccess: () => {
             getTipInfo('success', 'Deleting Credential Successful.');
+            setIsRefresh(false);
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
@@ -144,7 +152,13 @@ function Credential(): JSX.Element {
 
     const addCredential = () => {
         setIsAddOpen(true);
+        setIsRefresh(false);
         getTipInfo(undefined, '');
+    };
+
+    const refresh = () => {
+        setIsRefresh(true);
+        void credentialsQuery.refetch();
     };
 
     const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
@@ -166,6 +180,7 @@ function Credential(): JSX.Element {
             timeToLive: (abstractCredentialInfo as CreateCredential).timeToLive,
         };
         setCreateCredential(createCredential);
+        setIsRefresh(false);
         setIsUpdateOpen(true);
         getTipInfo(undefined, '');
     };
@@ -178,12 +193,14 @@ function Credential(): JSX.Element {
 
     const onCancel = () => {
         setIsAddOpen(false);
+        setIsRefresh(false);
         onRemove();
         void credentialsQuery.refetch();
     };
 
     const onUpdateCancel = () => {
         setIsUpdateOpen(false);
+        setIsRefresh(false);
         onRemove();
         void credentialsQuery.refetch();
     };
@@ -245,6 +262,15 @@ function Credential(): JSX.Element {
                 </Modal>
             </div>
             <div>
+                <Button
+                    className={'add-credential-from-button'}
+                    type='primary'
+                    loading={isRefresh && (credentialsQuery.isLoading || credentialsQuery.isRefetching)}
+                    icon={<SyncOutlined />}
+                    onClick={() => refresh()}
+                >
+                    refresh
+                </Button>
                 <Button
                     className={'add-credential-from-button'}
                     type='primary'
