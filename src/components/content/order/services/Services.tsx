@@ -5,7 +5,7 @@
 
 import { FormOutlined } from '@ant-design/icons';
 import '../../../../styles/service_order.css';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
@@ -17,7 +17,7 @@ import ServicesLoadingError from './ServicesLoadingError';
 import { useQuery } from '@tanstack/react-query';
 import { getServiceMapper, getVersionMapper } from '../../catalog/services/catalogProps';
 
-function Services(): JSX.Element {
+function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
         []
     );
@@ -78,6 +78,12 @@ function Services(): JSX.Element {
             setIsServicesLoadSuccessful(false);
         }
     }, [availableServicesQuery.isError]);
+
+    useEffect(() => {
+        if (availableServicesQuery.isLoading) {
+            setIsServicesLoaded(false);
+        }
+    }, [availableServicesQuery.isLoading]);
 
     return (
         <>

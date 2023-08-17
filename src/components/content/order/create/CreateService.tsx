@@ -117,11 +117,11 @@ function CreateService(): React.JSX.Element {
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
-                selectCsp,
+                undefined,
                 serviceName,
                 ''
             ),
-        staleTime: 60000,
+        enabled: categoryName.length > 0 && serviceName.length > 0,
     });
 
     useEffect(() => {
