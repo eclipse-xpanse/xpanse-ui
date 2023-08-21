@@ -8,26 +8,22 @@ import {
     Billing,
     CloudServiceProvider,
     CreateRequest,
-    ServiceService,
     ServiceVo,
     UserAvailableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { cspMap } from '../formElements/CspSelect';
 import {
     getBilling,
-    getCreateRequest,
-    getDeployParams,
     getFlavorListByCsp,
     getFlavorMapper,
     MigrationStatus,
     MigrationSteps,
 } from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
-import { OrderSubmitProps } from '../create/OrderSubmit';
-import { useMutation } from '@tanstack/react-query';
-import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
+import { MigrateServiceStatusPolling } from './MigrateServiceStatusPolling';
+import { useDeployRequestSubmitQuery } from '../create/useDeployRequestSubmitQuery';
 
 export const MigrateService = ({
     userAvailableServiceVoList,
@@ -46,22 +42,18 @@ export const MigrateService = ({
     selectRegion: string;
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    deployParams: Record<string, never> | undefined;
-    getMigrateModalOpenStatus: (isMigrateModalOpen: boolean) => void;
+    deployParams: CreateRequest | undefined;
     currentSelectedService: ServiceVo | undefined;
     getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
-    const [destroyUuid, setDestroyUuid] = useState<string>('');
-    const [isMigrateTipShow, setIsMigrateTipShow] = useState<boolean>(false);
-    const [migrating, setMigrating] = useState<boolean>(false);
-    const [migrateDisable, setMigrateDisable] = useState<boolean>(false);
+    const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
+    const [isMigrating, setIsMigrating] = useState<boolean>(false);
+    const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DestroyTheOldService
     );
-    const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
-        undefined
-    );
+
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: { value: string; label: string; price: string }[] = getFlavorListByCsp(
         getFlavorMapper(userAvailableServiceVoList),
@@ -78,84 +70,17 @@ export const MigrateService = ({
         }
     });
 
-    useEffect(() => {
-        if (currentMigrationStepStatus === undefined) {
-            return;
-        }
-        getCurrentMigrationStepStatus(currentMigrationStepStatus);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentMigrationStepStatus]);
+    const deployServiceRequest = useDeployRequestSubmitQuery();
 
     const migrate = () => {
-        setMigrating(true);
-        setMigrateDisable(true);
-        setIsPreviousDisabled(true);
-        setCurrentMigrationStepStatus(MigrationStatus.Processing);
-        setIsMigrateTipShow(true);
-        startMigrating();
-    };
-
-    const startMigrating = () => {
-        if (currentSelectedService === undefined || deployParams === undefined) {
-            return;
+        if (deployParams !== undefined) {
+            setIsMigrating(true);
+            setRequestSubmitted(true);
+            setIsPreviousDisabled(true);
+            deployServiceRequest.mutate(deployParams);
+            setIsShowDeploymentResult(true);
         }
-        let customerServiceName = '';
-        Object.keys(deployParams).forEach(function (key) {
-            if (key === 'Name') {
-                customerServiceName = deployParams[key];
-            }
-        });
-        const props: OrderSubmitProps = getDeployParams(
-            userAvailableServiceVoList,
-            selectCsp,
-            selectArea,
-            selectRegion,
-            selectFlavor
-        );
-        const createRequest: CreateRequest = getCreateRequest(props, customerServiceName);
-        deployServiceRequest.mutate(createRequest);
     };
-
-    const deployServiceRequest = useMutation({
-        mutationFn: (createRequest: CreateRequest) => {
-            return ServiceService.deploy(createRequest);
-        },
-        onSuccess: () => {
-            destroy();
-        },
-        onError: (error: Error) => {
-            console.error(error);
-            setMigrating(false);
-            setMigrateDisable(false);
-            setIsPreviousDisabled(false);
-            setCurrentMigrationStepStatus(MigrationStatus.Failed);
-        },
-    });
-
-    const destroy = () => {
-        if (currentSelectedService === undefined) {
-            return;
-        }
-        setDestroyUuid(currentSelectedService.id);
-        destroyServiceRequest.mutate(currentSelectedService.id);
-    };
-
-    const destroyServiceRequest = useMutation({
-        mutationFn: (id: string) => {
-            return ServiceService.destroy(id);
-        },
-        onSuccess: () => {
-            setMigrating(false);
-            setCurrentMigrationStepStatus(MigrationStatus.Finished);
-        },
-        onError: (error: Error) => {
-            console.error(error);
-            setMigrating(false);
-            setMigrateDisable(false);
-            setIsPreviousDisabled(false);
-            setCurrentMigrationStepStatus(MigrationStatus.Failed);
-        },
-    });
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
@@ -164,16 +89,18 @@ export const MigrateService = ({
 
     return (
         <>
-            {isMigrateTipShow ? (
+            {isShowDeploymentResult ? (
                 <MigrateServiceStatusPolling
-                    deployUuid={deployServiceRequest.data}
-                    deployError={deployServiceRequest.error ?? undefined}
-                    destroyUuid={destroyUuid}
-                    destroyError={deployServiceRequest.error ?? undefined}
+                    currentSelectedService={currentSelectedService}
+                    deployData={deployServiceRequest.data}
+                    isDeploySuccess={deployServiceRequest.isSuccess}
+                    isDeployError={deployServiceRequest.isError}
+                    deployError={deployServiceRequest.error as Error}
                     isDeployLoading={deployServiceRequest.isLoading}
-                    isDesployLoading={deployServiceRequest.isLoading}
-                    setMigrating={setMigrating}
-                    setMigrateDisable={setMigrateDisable}
+                    setIsMigrating={setIsMigrating}
+                    setRequestSubmitted={setRequestSubmitted}
+                    setIsPreviousDisabled={setIsPreviousDisabled}
+                    getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                 />
             ) : null}
             <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
@@ -255,8 +182,8 @@ export const MigrateService = ({
                             <Button
                                 type='primary'
                                 className={'migrate-steps-operation-button-clas'}
-                                loading={migrating}
-                                disabled={migrateDisable}
+                                loading={isMigrating}
+                                disabled={requestSubmitted}
                             >
                                 Migrate
                             </Button>

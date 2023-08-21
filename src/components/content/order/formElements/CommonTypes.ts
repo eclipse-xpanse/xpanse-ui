@@ -178,28 +178,6 @@ export const getDeployParams = (
     return props;
 };
 
-export const getCreateRequest = (props: OrderSubmitProps, customerServiceName: string): CreateRequest => {
-    const createRequest: CreateRequest = {
-        category: props.category,
-        csp: props.csp,
-        flavor: props.flavor,
-        region: props.region,
-        serviceName: props.name,
-        version: props.version,
-        customerServiceName: customerServiceName,
-    };
-
-    const serviceRequestProperties: Record<string, string> = {};
-    for (const item of props.params) {
-        if (item.kind === 'variable' || item.kind === 'env') {
-            serviceRequestProperties[item.name] = item.value;
-        }
-    }
-
-    createRequest.serviceRequestProperties = serviceRequestProperties;
-    return createRequest;
-};
-
 export enum OperationType {
     Deploy = 'deploy',
     Destroy = 'destroy',

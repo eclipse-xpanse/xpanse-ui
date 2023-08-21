@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { StopwatchResult } from 'react-timer-hook';
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { useEffect } from 'react';
@@ -15,7 +20,11 @@ function DeploymentTimer({
 }) {
     useEffect(() => {
         if (operationType === OperationType.Deploy) {
-            if (stopWatch.isRunning && deploymentStatus !== ServiceDetailVo.serviceDeploymentState.DEPLOYING) {
+            if (
+                stopWatch.isRunning &&
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED ||
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS)
+            ) {
                 stopWatch.pause();
             }
             if (!stopWatch.isRunning && deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYING) {
@@ -27,6 +36,27 @@ function DeploymentTimer({
                 stopWatch.isRunning &&
                 (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS ||
                     deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED)
+            ) {
+                stopWatch.pause();
+            }
+            if (!stopWatch.isRunning && deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROYING) {
+                stopWatch.reset();
+            }
+        }
+
+        if (operationType === OperationType.Migrate) {
+            if (
+                stopWatch.isRunning &&
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED ||
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS)
+            ) {
+                stopWatch.pause();
+            }
+            if (
+                !stopWatch.isRunning &&
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYING ||
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROYING)
             ) {
                 stopWatch.reset();
             }
