@@ -3,247 +3,503 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useServiceDestroyDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { ServiceDetailVo, ServiceVo } from '../../../../xpanse-api/generated';
 import { useStopwatch } from 'react-timer-hook';
-import React, { useEffect } from 'react';
-import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
-import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import React, { useEffect, useState } from 'react';
 import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
+import { MigrationStatus, OperationType } from '../formElements/CommonTypes';
+import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
-import { OperationType } from '../formElements/CommonTypes';
+import { useDestroyRequestSubmitQuery } from '../destroy/useDestroyRequestSubmitQuery';
 
-function MigrateServiceStatusPolling({
-    deployUuid,
+export const MigrateServiceStatusPolling = ({
+    currentSelectedService,
+    deployData,
+    isDeploySuccess,
+    isDeployError,
     deployError,
-    destroyUuid,
-    destroyError,
     isDeployLoading,
-    isDesployLoading,
-    setMigrating,
-    setMigrateDisable,
+    setIsMigrating,
+    setRequestSubmitted,
+    setIsPreviousDisabled,
+    getCurrentMigrationStepStatus,
 }: {
-    deployUuid: string | undefined;
+    currentSelectedService: ServiceVo | undefined;
+    deployData: string | undefined;
+    isDeploySuccess: boolean;
+    isDeployError: boolean;
     deployError: Error | undefined;
-    destroyUuid: string;
-    destroyError: Error | undefined;
     isDeployLoading: boolean;
-    isDesployLoading: boolean;
-    setMigrating: (arg: boolean) => void;
-    setMigrateDisable: (arg: boolean) => void;
-}): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(deployUuid, [
-        ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
-        ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
-    ]);
-
-    const getDestroyedServiceDetailsByIdQuery = useServiceDetailsPollingQuery(destroyUuid, [
-        ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-        ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-    ]);
-
+    setIsMigrating: (arg: boolean) => void;
+    setRequestSubmitted: (arg: boolean) => void;
+    setIsPreviousDisabled: (arg: boolean) => void;
+    getCurrentMigrationStepStatus: (srg: MigrationStatus) => void;
+}): React.JSX.Element => {
+    const [deployUuid, setDeployUuid] = useState<string>('');
+    const [destroyUuid, setDestroyUuid] = useState<string>('');
+    const [isDeployDetailsStartQuerying, setIsDeployDetailsStartQuerying] = useState<boolean>(false);
+    const [isDestroyDetailsStartQuerying, setIsDestroyDetailsStartQuerying] = useState<boolean>(false);
+    const [isDestroyLoading, setIsDestroyLoading] = useState<boolean>(false);
+    const [isDestroySuccess, setIsDestroySuccess] = useState<boolean>(false);
+    const [isDestroyError, setIsDestroyError] = useState<boolean>(false);
+    const [destroyError, setDestroyError] = useState<Error | undefined>(undefined);
+    const [deployStatus, setDeployStatus] = useState<ServiceDetailVo.serviceDeploymentState | undefined>(undefined);
     const stopWatch = useStopwatch({
         autoStart: true,
     });
 
+    const getServiceDetailsByIdQuery = useServiceDestroyDetailsPollingQuery(deployUuid, isDeployDetailsStartQuerying, [
+        ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
+        ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+    ]);
+
+    const getDestroyedServiceDetailsByIdQuery = useServiceDestroyDetailsPollingQuery(
+        destroyUuid,
+        isDestroyDetailsStartQuerying,
+        [ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS, ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED]
+    );
+
+    const destroyServiceRequest = useDestroyRequestSubmitQuery();
+
+    //deploy
     useEffect(() => {
-        if (
-            getServiceDetailsByIdQuery.data &&
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
-        ) {
-            setMigrating(false);
-            setMigrateDisable(true);
+        if (isDeployError) {
+            setIsMigrating(false);
+            setRequestSubmitted(false);
+            setIsPreviousDisabled(false);
+            getCurrentMigrationStepStatus(MigrationStatus.Failed);
+            setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED);
         }
-        if (
-            getServiceDetailsByIdQuery.data &&
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
-        ) {
-            setMigrating(false);
-            setMigrateDisable(false);
-        }
-        if (
-            getDestroyedServiceDetailsByIdQuery.data &&
-            [
-                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-            ].includes(getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState)
-        ) {
-            setMigrating(false);
-            setMigrateDisable(true);
-        }
-    }, [getDestroyedServiceDetailsByIdQuery.data, getServiceDetailsByIdQuery.data, setMigrateDisable, setMigrating]);
+    }, [isDeployError, setIsMigrating, setRequestSubmitted, setIsPreviousDisabled, getCurrentMigrationStepStatus]);
 
     useEffect(() => {
-        if (deployError || destroyError) {
-            setMigrating(false);
-            setMigrateDisable(true);
+        if (isDeployLoading) {
+            getCurrentMigrationStepStatus(MigrationStatus.Processing);
+            setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOYING);
         }
-    }, [deployError, destroyError, setMigrateDisable, setMigrating]);
+    }, [isDeployLoading, getCurrentMigrationStepStatus]);
 
     useEffect(() => {
-        if (getServiceDetailsByIdQuery.error || getDestroyedServiceDetailsByIdQuery.error) {
-            setMigrating(false);
-            setMigrateDisable(true);
+        if (isDeploySuccess && deployData !== undefined && deployData.length > 0) {
+            setDeployUuid(deployData);
+            setIsDeployDetailsStartQuerying(true);
         }
-    }, [getServiceDetailsByIdQuery.error, getDestroyedServiceDetailsByIdQuery.error, setMigrateDisable, setMigrating]);
+    }, [isDeploySuccess, deployData]);
+
+    useEffect(() => {
+        if (isDeploySuccess && getServiceDetailsByIdQuery.isError) {
+            setIsMigrating(false);
+            setRequestSubmitted(false);
+            setIsPreviousDisabled(false);
+            setIsDeployDetailsStartQuerying(false);
+            getCurrentMigrationStepStatus(MigrationStatus.Failed);
+            setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED);
+        }
+    }, [
+        isDeploySuccess,
+        getServiceDetailsByIdQuery.isError,
+        setIsMigrating,
+        setIsPreviousDisabled,
+        setRequestSubmitted,
+        getCurrentMigrationStepStatus,
+    ]);
+
+    useEffect(() => {
+        if (getServiceDetailsByIdQuery.isSuccess) {
+            const deployDetailData: ServiceDetailVo = getServiceDetailsByIdQuery.data;
+            if (deployDetailData.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+                setIsMigrating(true);
+                setRequestSubmitted(true);
+                setIsPreviousDisabled(true);
+                setIsDeployDetailsStartQuerying(false);
+                setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS);
+            } else if (
+                deployDetailData.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+            ) {
+                setIsMigrating(false);
+                setRequestSubmitted(false);
+                setIsPreviousDisabled(false);
+                setIsDeployDetailsStartQuerying(false);
+                getCurrentMigrationStepStatus(MigrationStatus.Failed);
+                setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED);
+            }
+        }
+    }, [
+        getServiceDetailsByIdQuery.isSuccess,
+        getServiceDetailsByIdQuery.data,
+        setIsMigrating,
+        setRequestSubmitted,
+        setIsPreviousDisabled,
+        currentSelectedService,
+        getCurrentMigrationStepStatus,
+    ]);
+
+    useEffect(() => {
+        if (
+            currentSelectedService !== undefined &&
+            isDeploySuccess &&
+            deployStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
+        ) {
+            setDestroyUuid(currentSelectedService.id);
+        }
+    }, [currentSelectedService, isDeploySuccess, deployStatus]);
+
+    useEffect(() => {
+        if (destroyUuid.length > 0) {
+            destroyServiceRequest.mutate(destroyUuid);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [destroyUuid]);
+
+    //destroy
+    useEffect(() => {
+        if (destroyServiceRequest.isError && destroyServiceRequest.error) {
+            setIsDestroyError(destroyServiceRequest.isError);
+            setDestroyError(destroyServiceRequest.error as Error);
+            setIsMigrating(false);
+            setRequestSubmitted(false);
+            setIsPreviousDisabled(false);
+            getCurrentMigrationStepStatus(MigrationStatus.Failed);
+        }
+    }, [
+        destroyServiceRequest.isError,
+        destroyServiceRequest.error,
+        setIsMigrating,
+        setRequestSubmitted,
+        setIsPreviousDisabled,
+        getCurrentMigrationStepStatus,
+    ]);
+
+    useEffect(() => {
+        if (destroyServiceRequest.isLoading) {
+            setIsDestroyLoading(true);
+        }
+    }, [destroyServiceRequest.isLoading]);
+
+    useEffect(() => {
+        if (destroyServiceRequest.isSuccess) {
+            setIsDestroyLoading(false);
+            setIsDestroySuccess(true);
+            setIsDestroyDetailsStartQuerying(true);
+        }
+    }, [destroyServiceRequest.isSuccess]);
+
+    useEffect(() => {
+        if (getDestroyedServiceDetailsByIdQuery.isError) {
+            setIsDestroyLoading(false);
+            setIsMigrating(false);
+            setRequestSubmitted(false);
+            setIsPreviousDisabled(false);
+            setIsDestroyDetailsStartQuerying(false);
+            getCurrentMigrationStepStatus(MigrationStatus.Failed);
+        }
+    }, [
+        isDestroySuccess,
+        getDestroyedServiceDetailsByIdQuery.isError,
+        setIsMigrating,
+        setIsPreviousDisabled,
+        setRequestSubmitted,
+        getCurrentMigrationStepStatus,
+    ]);
+
+    useEffect(() => {
+        if (isDestroySuccess && getDestroyedServiceDetailsByIdQuery.isSuccess) {
+            const destroyDetailData: ServiceDetailVo = getDestroyedServiceDetailsByIdQuery.data;
+            if (destroyDetailData.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
+                setIsMigrating(true);
+                setRequestSubmitted(true);
+                setIsPreviousDisabled(true);
+                setIsDestroyLoading(false);
+                setIsDestroyDetailsStartQuerying(false);
+                getCurrentMigrationStepStatus(MigrationStatus.Finished);
+            } else if (
+                destroyDetailData.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
+            ) {
+                setIsMigrating(false);
+                setRequestSubmitted(false);
+                setIsPreviousDisabled(false);
+                setIsDestroyLoading(false);
+                setIsDestroyDetailsStartQuerying(false);
+                getCurrentMigrationStepStatus(MigrationStatus.Failed);
+            }
+        }
+    }, [
+        isDestroySuccess,
+        getDestroyedServiceDetailsByIdQuery.isSuccess,
+        getDestroyedServiceDetailsByIdQuery.data,
+        setIsMigrating,
+        setRequestSubmitted,
+        setIsPreviousDisabled,
+        getCurrentMigrationStepStatus,
+    ]);
 
     if (isDeployLoading) {
         return OrderSubmitResult(
             'Request submission in-progress',
-            destroyUuid,
+            '-',
             'success',
             ServiceDetailVo.serviceDeploymentState.DEPLOYING,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Migrate
         );
-    }
-
-    if (isDesployLoading) {
-        return OrderSubmitResult(
-            'Request submission in-progress',
-            destroyUuid,
-            'success',
-            ServiceDetailVo.serviceDeploymentState.DESTROYING,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (deployError && getServiceDetailsByIdQuery.data !== undefined && deployUuid !== undefined) {
-        return OrderSubmitResult(
-            ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Migrate),
-            deployUuid,
-            'error',
+    } else if (isDeployError && deployError) {
+        return OrderSubmitFailed(
+            deployError,
             ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Migrate
         );
-    }
-
-    if (destroyError && getDestroyedServiceDetailsByIdQuery.data !== undefined) {
-        return OrderSubmitResult(
-            ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
-            destroyUuid,
-            'error',
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (deployUuid && getServiceDetailsByIdQuery.error) {
-        return OrderSubmitResult(
-            'Migrating status polling failed. Please visit MyServices page to check the status of the request.',
-            deployUuid,
-            'error',
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
-            stopWatch,
-            OperationType.Deploy
-        );
-    }
-
-    if (destroyUuid && getDestroyedServiceDetailsByIdQuery.error) {
-        return OrderSubmitResult(
-            'Migrating status polling failed. Please visit MyServices page to check the status of the request.',
-            destroyUuid,
-            'error',
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (deployUuid && getServiceDetailsByIdQuery.data) {
-        if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
-        ) {
+    } else if (deployUuid.length > 0 && isDeploySuccess) {
+        if (deployUuid.length > 0 && getServiceDetailsByIdQuery.isError) {
             return OrderSubmitResult(
-                'Migrating status polling failed. Please visit MyServices page to check the status of the request.',
+                'Migrate status polling failed. Please visit MyServices page to check the status of the request.',
                 deployUuid,
                 'error',
                 ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
                 stopWatch,
-                OperationType.Deploy
+                OperationType.Migrate
             );
-        }
-    }
+        } else if (deployUuid.length > 0 && getServiceDetailsByIdQuery.isLoading) {
+            return OrderSubmitResult(
+                'Request accepted',
+                deployUuid,
+                'success',
+                ServiceDetailVo.serviceDeploymentState.DEPLOYING,
+                stopWatch,
+                OperationType.Migrate
+            );
+        } else if (deployUuid.length > 0 && getServiceDetailsByIdQuery.isSuccess) {
+            if (
+                getServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOYING
+            ) {
+                return OrderSubmitResult(
+                    'Migrating, Please wait...',
+                    deployUuid,
+                    'success',
+                    getServiceDetailsByIdQuery.data.serviceDeploymentState,
+                    stopWatch,
+                    OperationType.Migrate
+                );
+            } else if (
+                getServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+            ) {
+                return OrderSubmitResult(
+                    ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Migrate),
+                    deployUuid,
+                    'error',
+                    getServiceDetailsByIdQuery.data.serviceDeploymentState,
+                    stopWatch,
+                    OperationType.Migrate
+                );
+            } else if (
+                getServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
+            ) {
+                if (destroyUuid.length > 0 && isDestroyLoading) {
+                    if (isDestroyError && destroyError) {
+                        return OrderSubmitFailed(
+                            destroyError,
+                            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
+                            stopWatch,
+                            OperationType.Migrate
+                        );
+                    }
 
-    if (destroyUuid && getDestroyedServiceDetailsByIdQuery.data)
-        if (
-            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROYING
-        ) {
+                    if (destroyUuid.length > 0 && isDestroySuccess) {
+                        if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isLoading) {
+                            return OrderSubmitResult(
+                                'Migrating, Please wait...',
+                                destroyUuid,
+                                'success',
+                                ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        } else if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isError) {
+                            return OrderSubmitResult(
+                                'Migrate status polling failed. Please visit MyServices page to check the status of the request.',
+                                destroyUuid,
+                                'error',
+                                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        } else if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isSuccess) {
+                            if (
+                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                                ServiceDetailVo.serviceDeploymentState.DESTROYING
+                            ) {
+                                return OrderSubmitResult(
+                                    'Migrating, Please wait...',
+                                    destroyUuid,
+                                    'success',
+                                    ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                                    stopWatch,
+                                    OperationType.Migrate
+                                );
+                            } else if (
+                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS
+                            ) {
+                                return OrderSubmitResult(
+                                    ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
+                                    destroyUuid,
+                                    'success',
+                                    getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                    stopWatch,
+                                    OperationType.Migrate
+                                );
+                            } else if (
+                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
+                            ) {
+                                return OrderSubmitResult(
+                                    ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
+                                    destroyUuid,
+                                    'error',
+                                    getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                    stopWatch,
+                                    OperationType.Migrate
+                                );
+                            }
+                            return OrderSubmitResult(
+                                'Migrating, Please wait...',
+                                destroyUuid,
+                                'success',
+                                ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        }
+                        return OrderSubmitResult(
+                            'Migrating, Please wait...',
+                            destroyUuid,
+                            'success',
+                            ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                            stopWatch,
+                            OperationType.Migrate
+                        );
+                    }
+                    return OrderSubmitResult(
+                        'Migrating, Please wait...',
+                        destroyUuid,
+                        'success',
+                        ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                        stopWatch,
+                        OperationType.Migrate
+                    );
+                } else if (isDestroyError && destroyError) {
+                    return OrderSubmitFailed(
+                        destroyError,
+                        ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
+                        stopWatch,
+                        OperationType.Migrate
+                    );
+                } else if (destroyUuid.length > 0 && isDestroySuccess) {
+                    if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isLoading) {
+                        return OrderSubmitResult(
+                            'Migrating, Please wait...',
+                            destroyUuid,
+                            'success',
+                            ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                            stopWatch,
+                            OperationType.Migrate
+                        );
+                    } else if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isError) {
+                        return OrderSubmitResult(
+                            'Migrate status polling failed. Please visit MyServices page to check the status of the request.',
+                            destroyUuid,
+                            'error',
+                            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
+                            stopWatch,
+                            OperationType.Migrate
+                        );
+                    } else if (destroyUuid.length > 0 && getDestroyedServiceDetailsByIdQuery.isSuccess) {
+                        if (
+                            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                            ServiceDetailVo.serviceDeploymentState.DESTROYING
+                        ) {
+                            return OrderSubmitResult(
+                                'Migrating, Please wait...',
+                                destroyUuid,
+                                'success',
+                                ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        } else if (
+                            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS
+                        ) {
+                            return OrderSubmitResult(
+                                ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
+                                destroyUuid,
+                                'success',
+                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        } else if (
+                            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
+                            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
+                        ) {
+                            return OrderSubmitResult(
+                                ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
+                                destroyUuid,
+                                'error',
+                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                stopWatch,
+                                OperationType.Migrate
+                            );
+                        }
+                        return OrderSubmitResult(
+                            'Migrating, Please wait...',
+                            destroyUuid,
+                            'success',
+                            ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                            stopWatch,
+                            OperationType.Migrate
+                        );
+                    }
+                    return OrderSubmitResult(
+                        'Migrating, Please wait...',
+                        destroyUuid,
+                        'success',
+                        ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                        stopWatch,
+                        OperationType.Migrate
+                    );
+                }
+                return OrderSubmitResult(
+                    'Migrating, Please wait...',
+                    deployUuid,
+                    'success',
+                    ServiceDetailVo.serviceDeploymentState.DEPLOYING,
+                    stopWatch,
+                    OperationType.Migrate
+                );
+            }
             return OrderSubmitResult(
                 'Migrating, Please wait...',
-                destroyUuid,
+                deployUuid,
                 'success',
-                ServiceDetailVo.serviceDeploymentState.DESTROYING,
+                ServiceDetailVo.serviceDeploymentState.DEPLOYING,
                 stopWatch,
-                OperationType.Destroy
-            );
-        } else if (
-            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS
-        ) {
-            return OrderSubmitResult(
-                ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
-                destroyUuid,
-                'success',
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-                stopWatch,
-                OperationType.Destroy
-            );
-        } else if (
-            getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
-        ) {
-            return OrderSubmitResult(
-                ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
-                destroyUuid,
-                'error',
-                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                stopWatch,
-                OperationType.Destroy
+                OperationType.Migrate
             );
         }
-
-    if (getServiceDetailsByIdQuery.isSuccess && getDestroyedServiceDetailsByIdQuery.isSuccess) {
-        setMigrating(false);
-        setMigrateDisable(true);
         return OrderSubmitResult(
-            'Request accepted',
-            destroyUuid,
-            'success',
-            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (deployUuid !== undefined && getServiceDetailsByIdQuery.data === undefined) {
-        return OrderSubmitResult(
-            'Request accepted',
+            'Migrating, Please wait...',
             deployUuid,
             'success',
             ServiceDetailVo.serviceDeploymentState.DEPLOYING,
             stopWatch,
-            OperationType.Deploy
-        );
-    }
-
-    if (getDestroyedServiceDetailsByIdQuery.data === undefined) {
-        return OrderSubmitResult(
-            'Request accepted',
-            destroyUuid,
-            'success',
-            ServiceDetailVo.serviceDeploymentState.DESTROYING,
-            stopWatch,
-            OperationType.Destroy
+            OperationType.Migrate
         );
     }
 
     return <></>;
-}
-
-export default MigrateServiceStatusPolling;
+};

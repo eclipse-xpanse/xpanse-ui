@@ -54,7 +54,7 @@ function MyServices(): React.JSX.Element {
 
     useEffect(() => {
         const serviceList: ServiceVo[] = [];
-        if (listDeployedServicesQuery.data && listDeployedServicesQuery.data.length > 0) {
+        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
             setServiceVoList(listDeployedServicesQuery.data);
             updateVersionFilters(listDeployedServicesQuery.data);
             updateNameFilters(listDeployedServicesQuery.data);
@@ -68,7 +68,7 @@ function MyServices(): React.JSX.Element {
     }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess]);
 
     useEffect(() => {
-        if (listDeployedServicesQuery.error && listDeployedServicesQuery.isError) {
+        if (listDeployedServicesQuery.isError) {
             if (
                 listDeployedServicesQuery.error instanceof ApiError &&
                 'details' in listDeployedServicesQuery.error.body
@@ -186,13 +186,12 @@ function MyServices(): React.JSX.Element {
                                     onMonitor(record);
                                 }}
                                 disabled={
-                                    !(
-                                        (record.serviceDeploymentState ===
-                                            ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
-                                            record.serviceDeploymentState ===
-                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
-                                        !isDestroying
-                                    )
+                                    isDestroying ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
                             >
                                 monitor
@@ -204,13 +203,12 @@ function MyServices(): React.JSX.Element {
                                     migrate(record);
                                 }}
                                 disabled={
-                                    !(
-                                        (record.serviceDeploymentState ===
-                                            ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
-                                            record.serviceDeploymentState ===
-                                                ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
-                                        !isDestroying
-                                    )
+                                    isDestroying ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
                             >
                                 migrate
@@ -397,12 +395,6 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
-    const getMigrateModalOpenStatus = (isOpen: boolean) => {
-        refreshData();
-        setCurrentServiceVo(undefined);
-        setIsMigrateModalOpen(isOpen);
-    };
-
     return (
         <div className={'services-content'}>
             {isDestroying && id.length > 0 ? (
@@ -434,10 +426,7 @@ function MyServices(): React.JSX.Element {
                 width={1400}
                 mask={true}
             >
-                <Migrate
-                    currentSelectedService={currentServiceVo}
-                    getMigrateModalOpenStatus={getMigrateModalOpenStatus}
-                />
+                <Migrate currentSelectedService={currentServiceVo} />
             </Modal>
 
             <div>

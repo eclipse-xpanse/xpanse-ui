@@ -4,7 +4,12 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ServiceCatalogService, ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    CreateRequest,
+    ServiceCatalogService,
+    ServiceVo,
+    UserAvailableServiceVo,
+} from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
 import { Steps } from 'antd';
@@ -14,13 +19,7 @@ import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
 import { useQuery } from '@tanstack/react-query';
 
-export const Migrate = ({
-    currentSelectedService,
-    getMigrateModalOpenStatus,
-}: {
-    currentSelectedService: ServiceVo | undefined;
-    getMigrateModalOpenStatus: (isMigrateModalOpen: boolean) => void;
-}): JSX.Element => {
+export const Migrate = ({ currentSelectedService }: { currentSelectedService: ServiceVo | undefined }): JSX.Element => {
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
     const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
         undefined
@@ -31,7 +30,7 @@ export const Migrate = ({
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
-    const [deployParams, setDeployParams] = useState<Record<string, never> | undefined>(undefined);
+    const [deployParams, setDeployParams] = useState<CreateRequest | undefined>(undefined);
 
     const listAvailableServices = useQuery({
         queryKey: [
@@ -71,7 +70,6 @@ export const Migrate = ({
             setCurrentMigrationStep(MigrationSteps.ExportServiceData);
             setUserAvailableServiceVoList([]);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [listAvailableServices.isError, listAvailableServices.error]);
 
     const getSelectedParameters = (
@@ -86,7 +84,7 @@ export const Migrate = ({
         setSelectFlavor(selectedFlavor);
     };
 
-    const getDeployParameters = (values: Record<string, never>) => {
+    const getDeployParameters = (values: CreateRequest) => {
         setDeployParams(values);
     };
 
@@ -151,7 +149,6 @@ export const Migrate = ({
                     selectFlavor={selectFlavor}
                     getCurrentMigrationStep={getCurrentMigrationStep}
                     deployParams={deployParams}
-                    getMigrateModalOpenStatus={getMigrateModalOpenStatus}
                     currentSelectedService={currentSelectedService}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                 />
