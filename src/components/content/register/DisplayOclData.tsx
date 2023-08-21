@@ -3,13 +3,15 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import React from 'react';
 import { Ocl } from '../../../xpanse-api/generated';
 import { Button, Descriptions, Tag, Image, Popover } from 'antd';
 import YAML from 'yaml';
+import { cspMap } from '../order/formElements/CspSelect';
 
-function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
+function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
-    const getFlavoursText = (ocl: Ocl): JSX.Element => {
+    const getFlavoursText = (ocl: Ocl): React.JSX.Element => {
         // These warnings must be suppressed because the Ocl object here is created from the import file and the data not necessarily contains all the mandatory fields.
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (ocl.flavors) {
@@ -99,10 +101,13 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): JSX.Element | string {
                             <div>
                                 <b>Cloud Service Provider</b>
                                 <br />
-                                <Tag className={'ocl-display-tag'} color='cyan'>
-                                    {ocl.cloudServiceProvider.name}
-                                </Tag>
-                                <br />
+                                <div className={'ocl-display-tag'}>
+                                    <Image
+                                        width={120}
+                                        preview={false}
+                                        src={cspMap.get(ocl.cloudServiceProvider.name)?.logo}
+                                    />
+                                </div>
                                 <br />
                             </div>
                             <div>
