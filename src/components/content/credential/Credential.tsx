@@ -9,7 +9,7 @@ import AddCredential from './AddCredential';
 import UpdateCredential from './UpdateCredential';
 import { CredentialTip } from './CredentialTip';
 import CredentialDetails from './CredentialDetails';
-import { Button, Modal, Popconfirm, Space, Table } from 'antd';
+import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import {
     FullscreenOutlined,
     InfoCircleOutlined,
@@ -20,6 +20,7 @@ import {
 import {
     AbstractCredentialInfo,
     ApiError,
+    CloudServiceProvider,
     CreateCredential,
     CredentialsManagementService,
     CredentialVariable,
@@ -27,8 +28,9 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import { cspMap } from '../order/formElements/CspSelect';
 
-function Credential(): JSX.Element {
+function Credential(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -98,6 +100,17 @@ function Credential(): JSX.Element {
         {
             title: 'Csp',
             dataIndex: 'csp',
+            render: (csp: AbstractCredentialInfo.csp, _) => {
+                return (
+                    <Space size='middle'>
+                        <Image
+                            width={100}
+                            preview={false}
+                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
+                        />
+                    </Space>
+                );
+            },
         },
         {
             title: 'Name',

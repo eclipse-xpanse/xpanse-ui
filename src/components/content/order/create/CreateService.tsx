@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
     ApiError,
@@ -113,7 +113,7 @@ function CreateService(): React.JSX.Element {
     const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useQuery({
-        queryKey: ['listAvailableServices', categoryName, serviceName, selectCsp],
+        queryKey: ['listAvailableServices', categoryName, serviceName],
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 categoryName as UserAvailableServiceVo.category,
@@ -125,7 +125,7 @@ function CreateService(): React.JSX.Element {
     });
 
     useEffect(() => {
-        if (availableServicesQuery.data) {
+        if (availableServicesQuery.isSuccess) {
             const services: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
             if (services.length > 0) {
                 const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
@@ -143,9 +143,10 @@ function CreateService(): React.JSX.Element {
                     }
                 }
                 versionMapper.current = currentVersions;
-                const currentVersionList = getVersionList();
+                const currentVersionList = getVersionList(currentVersions);
+                // const currentCspList = getCspList(sortVersion(Array.from(currentVersions.keys()))[0]);
                 const currentCspList = getCspList(latestVersion);
-                const currentFlavorList = getFlavorList(latestVersion, currentCspList[0]);
+                let currentFlavorList = getFlavorList(latestVersion, currentCspList[0]);
                 setVersionList(currentVersionList);
                 setSelectVersion(latestVersion);
                 setCspList(currentCspList);
@@ -164,9 +165,10 @@ function CreateService(): React.JSX.Element {
                 let priceValue: string = currentFlavorList[0]?.price ?? '';
                 if (location.state) {
                     const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
-                    currentAreaList = getAreaList(latestVersion, serviceInfo.csp);
-                    currentRegionList = getRegionList(latestVersion, serviceInfo.csp, serviceInfo.area);
-                    currentBilling = getBilling(latestVersion, serviceInfo.csp.toString());
+                    currentAreaList = getAreaList(serviceInfo.version, serviceInfo.csp);
+                    currentRegionList = getRegionList(serviceInfo.version, serviceInfo.csp, serviceInfo.area);
+                    currentFlavorList = getFlavorList(serviceInfo.version, serviceInfo.csp.toString());
+                    currentBilling = getBilling(serviceInfo.version, serviceInfo.csp.toString());
                     cspValue = serviceInfo.csp as unknown as CloudServiceProvider.name;
                     areaValue = serviceInfo.area;
                     regionValue = serviceInfo.region;
@@ -188,42 +190,43 @@ function CreateService(): React.JSX.Element {
                 setCurrency(currencyValue);
             }
         }
-    }, [availableServicesQuery.data, latestVersion, location.state, serviceName]);
+    }, [availableServicesQuery.isSuccess, availableServicesQuery.data, latestVersion, location.state, serviceName]);
 
-    if (availableServicesQuery.error) {
-        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
-            const response: Response = availableServicesQuery.error.body as Response;
-            setLoadingError(
-                <Alert
-                    message={response.resultType.valueOf()}
-                    description={convertStringArrayToUnorderedList(response.details)}
-                    type={'error'}
-                    closable={true}
-                    className={'catalog-skeleton'}
-                />
-            );
-        } else if (availableServicesQuery.error instanceof Error) {
-            setLoadingError(
-                <Alert
-                    message='Fetching Service Details Failed'
-                    description={availableServicesQuery.error.message}
-                    type={'error'}
-                    closable={true}
-                    className={'catalog-skeleton'}
-                />
-            );
+    useEffect(() => {
+        if (availableServicesQuery.isError) {
+            if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
+                const response: Response = availableServicesQuery.error.body as Response;
+                setLoadingError(
+                    <Alert
+                        message={response.resultType.valueOf()}
+                        description={convertStringArrayToUnorderedList(response.details)}
+                        type={'error'}
+                        closable={true}
+                        className={'catalog-skeleton'}
+                    />
+                );
+            } else if (availableServicesQuery.error instanceof Error) {
+                setLoadingError(
+                    <Alert
+                        message='Fetching Service Details Failed'
+                        description={availableServicesQuery.error.message}
+                        type={'error'}
+                        closable={true}
+                        className={'catalog-skeleton'}
+                    />
+                );
+            }
+            versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
         }
-        versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
-    }
+    }, [availableServicesQuery.isError, availableServicesQuery.error]);
 
-    function getVersionList(): { value: string; label: string }[] {
-        if (versionMapper.current.size <= 0) {
+    function getVersionList(
+        currentVersions: Map<string, UserAvailableServiceVo[]>
+    ): { value: string; label: string }[] {
+        if (currentVersions.size <= 0) {
             return [{ value: '', label: '' }];
         }
-        const versionSet: string[] = [];
-        versionMapper.current.forEach((v, k) => {
-            versionSet.push(k);
-        });
+        const versionSet: string[] = Array.from(currentVersions.keys());
         const versions: { value: string; label: string }[] = [];
         sortVersion(versionSet).forEach((version) => {
             versionMapper.current.forEach((v, k) => {
@@ -330,8 +333,7 @@ function CreateService(): React.JSX.Element {
         return billing;
     }
 
-    const onChangeVersion = useCallback((value: string) => {
-        const currentVersion = value;
+    const onChangeVersion = (currentVersion: string) => {
         const currentCspList = getCspList(currentVersion);
         const currentAreaList = getAreaList(currentVersion, currentCspList[0]);
         const currentRegionList = getRegionList(currentVersion, currentCspList[0], currentAreaList[0]?.key ?? '');
@@ -348,9 +350,9 @@ function CreateService(): React.JSX.Element {
         setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
         setCurrency(currencyMapper[billing.currency]);
-    }, []);
+    };
 
-    const onChangeCloudProvider = useCallback((selectVersion: string, csp: CloudServiceProvider.name) => {
+    const onChangeCloudProvider = (selectVersion: string, csp: CloudServiceProvider.name) => {
         const currentAreaList = getAreaList(selectVersion, csp);
         const currentRegionList = getRegionList(selectVersion, csp, currentAreaList[0]?.key ?? '');
         const currentFlavorList = getFlavorList(selectVersion, csp);
@@ -364,20 +366,20 @@ function CreateService(): React.JSX.Element {
         setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
         setCurrency(currencyMapper[billing.currency]);
-    }, []);
+    };
 
-    const onChangeAreaValue = useCallback((selectVersion: string, csp: CloudServiceProvider.name, key: string) => {
+    const onChangeAreaValue = (selectVersion: string, csp: CloudServiceProvider.name, key: string) => {
         const currentRegionList = getRegionList(selectVersion, csp, key);
         setSelectArea(key);
         setRegionList(currentRegionList);
         setSelectRegion(currentRegionList[0]?.value ?? '');
-    }, []);
+    };
 
-    const onChangeRegion = useCallback((value: string) => {
+    const onChangeRegion = (value: string) => {
         setSelectRegion(value);
-    }, []);
+    };
 
-    const onChangeFlavor = useCallback((value: string, selectVersion: string, csp: CloudServiceProvider.name) => {
+    const onChangeFlavor = (value: string, selectVersion: string, csp: CloudServiceProvider.name) => {
         setSelectFlavor(value);
         const currentFlavorList = getFlavorList(selectVersion, csp);
         const billing: Billing = getBilling(selectVersion, csp);
@@ -387,7 +389,7 @@ function CreateService(): React.JSX.Element {
             }
         });
         setCurrency(currencyMapper[billing.currency]);
-    }, []);
+    };
 
     const servicePageUrl = servicesSubPageRoute + categoryName;
 

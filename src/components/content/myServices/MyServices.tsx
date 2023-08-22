@@ -4,9 +4,16 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Modal, Popconfirm, Space, Table } from 'antd';
+import { Alert, Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ApiError, Response, ServiceService, ServiceVo } from '../../../xpanse-api/generated';
+import {
+    AbstractCredentialInfo,
+    ApiError,
+    CloudServiceProvider,
+    Response,
+    ServiceService,
+    ServiceVo,
+} from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     AreaChartOutlined,
@@ -24,6 +31,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import { useNavigate } from 'react-router-dom';
+import { cspMap } from '../order/formElements/CspSelect';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -158,6 +166,17 @@ function MyServices(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            render: (csp: AbstractCredentialInfo.csp, _) => {
+                return (
+                    <Space size='middle'>
+                        <Image
+                            width={100}
+                            preview={false}
+                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
+                        />
+                    </Space>
+                );
+            },
         },
         {
             title: 'Flavor',
