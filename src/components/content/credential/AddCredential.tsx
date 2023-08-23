@@ -42,7 +42,6 @@ function AddCredential({
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         queryFn: () => CredentialsManagementService.listCredentialTypes(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined,
