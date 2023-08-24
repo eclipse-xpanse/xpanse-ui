@@ -5,69 +5,14 @@
 
 import React from 'react';
 import { Ocl } from '../../../xpanse-api/generated';
-import { Button, Descriptions, Tag, Image, Popover } from 'antd';
-import YAML from 'yaml';
+import { Descriptions, Image, Tag } from 'antd';
 import { cspMap } from '../order/formElements/CspSelect';
+import { DeploymentText } from './DeploymentText';
+import { FlavoursText } from './FlavorsText';
+import { BillingText } from './BillingText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
-    const getFlavoursText = (ocl: Ocl): React.JSX.Element => {
-        // These warnings must be suppressed because the Ocl object here is created from the import file and the data not necessarily contains all the mandatory fields.
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (ocl.flavors) {
-            const yamlDocument = new YAML.Document();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            yamlDocument.contents = ocl.flavors;
-            return (
-                <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Flavors'} trigger='hover'>
-                    <Button
-                        className={'ocl-data-hover'}
-                        type={'link'}
-                    >{`Available in ${ocl.flavors.length} flavor(s)`}</Button>
-                </Popover>
-            );
-        }
-        return <></>;
-    };
-
-    const getBillingText = (ocl: Ocl): JSX.Element => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (ocl.billing) {
-            const yamlDocument = new YAML.Document();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            yamlDocument.contents = ocl.billing;
-            return (
-                <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Billing'} trigger='hover'>
-                    <Button className={'ocl-data-hover'} type={'link'}>{`${ocl.billing.model}`}</Button>
-                </Popover>
-            );
-        }
-        return <></>;
-    };
-
-    const getDeploymentText = (ocl: Ocl): JSX.Element => {
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (ocl.deployment) {
-            const yamlDocument = new YAML.Document();
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-expect-error
-            yamlDocument.contents = ocl.deployment;
-            return (
-                <Popover
-                    content={<pre className={'deployment-script'}>{yamlDocument.toString()}</pre>}
-                    title={'Deployment'}
-                    trigger='hover'
-                >
-                    <Button className={'ocl-data-hover'} type={'link'}>
-                        {ocl.deployment.kind}
-                    </Button>
-                </Popover>
-            );
-        }
-        return <></>;
-    };
 
     try {
         return (
@@ -131,11 +76,17 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             </Descriptions.Item>
                             <Descriptions.Item label='Version'>{ocl.serviceVersion}</Descriptions.Item>
                             <Descriptions.Item label='Namespace'>{ocl.namespace}</Descriptions.Item>
-                            <Descriptions.Item label='Flavors'>{<pre>{getFlavoursText(ocl)}</pre>}</Descriptions.Item>
-                            <Descriptions.Item label='Billing'>{<pre>{getBillingText(ocl)}</pre>}</Descriptions.Item>
-                            <Descriptions.Item label='Deployment'>{getDeploymentText(ocl)}</Descriptions.Item>
+                            <Descriptions.Item label='Flavors'>
+                                <FlavoursText flavors={ocl.flavors} />
+                            </Descriptions.Item>
+                            <Descriptions.Item label='Billing'>
+                                <BillingText billing={ocl.billing} />
+                            </Descriptions.Item>
+                            <Descriptions.Item label='Deployment'>
+                                <DeploymentText deployment={ocl.deployment} />
+                            </Descriptions.Item>
                             <Descriptions.Item label='CredentialType'>
-                                {ocl.deployment.credentialType}
+                                {ocl.deployment.credentialType ? ocl.deployment.credentialType : ''}
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                         </Descriptions>

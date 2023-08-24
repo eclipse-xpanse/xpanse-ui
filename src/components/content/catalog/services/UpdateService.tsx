@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { MutableRefObject, useRef, useState } from 'react';
+import React, { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../../xpanse-api/generated';
@@ -12,7 +12,7 @@ import UpdateResult from './UpdateResult';
 import YamlSyntaxValidationResult from '../../register/YamlSyntaxValidationResult';
 import { ValidationStatus } from '../../register/ValidationStatus';
 import loadOclFile from '../../register/loadOclFile';
-import OclSummaryDisplay from '../../register/OclSummaryDisplay';
+import OclSummaryDisplay from '../../common/OclSummaryDisplay';
 import { useMutation } from '@tanstack/react-query';
 
 function UpdateService({
@@ -21,11 +21,11 @@ function UpdateService({
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
-}): JSX.Element {
+}): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
-    const oclDisplayData = useRef<JSX.Element>(<></>);
+    const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const updateResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
