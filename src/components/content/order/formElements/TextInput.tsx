@@ -7,6 +7,7 @@ import { Form, Input, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
 import { DeployParam, TextInputEventHandler } from './CommonTypes';
 import { DeployVariable } from '../../../../xpanse-api/generated';
+import React from 'react';
 
 export function TextInput({
     item,
@@ -14,7 +15,7 @@ export function TextInput({
 }: {
     item: DeployParam;
     onChangeHandler: TextInputEventHandler;
-}): JSX.Element {
+}): React.JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

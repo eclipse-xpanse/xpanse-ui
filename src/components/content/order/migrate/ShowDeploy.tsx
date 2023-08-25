@@ -10,6 +10,8 @@ import { ApiDoc } from '../../common/ApiDoc';
 import { Button, Form, Input, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import React, { ChangeEvent, useEffect, useState } from 'react';
+import { useOrderPropsStore } from '../../../store/OrderStore';
+import { shallow } from 'zustand/shallow';
 
 export const ShowDeploy = ({
     userAvailableServiceVoList,
@@ -19,7 +21,6 @@ export const ShowDeploy = ({
     selectFlavor,
     getCurrentMigrationStep,
     getDeployParameters,
-    currentDeployParams,
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
     selectCsp: string;
@@ -28,8 +29,7 @@ export const ShowDeploy = ({
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     getDeployParameters: (createRequest: CreateRequest) => void;
-    currentDeployParams: CreateRequest | undefined;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(userAvailableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
 
@@ -38,22 +38,40 @@ export const ShowDeploy = ({
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DeployServiceOnTheNewDestination
     );
+    const [oldCustomerServiceName, deployParams, deployProps] = useOrderPropsStore((state) => [
+        state.oldCustomerServiceName,
+        state.deployParams,
+        state.deployProps,
+    ]);
+    const [setParams] = useOrderPropsStore((state) => [state.setParams], shallow);
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.SelectADestination);
     };
 
     useEffect(() => {
+        if (deployProps !== undefined && props.name === deployProps.name) {
+            const fieldsToUpdate: Record<string, string> = {};
+            if (oldCustomerServiceName.length > 0) {
+                fieldsToUpdate.Name = oldCustomerServiceName;
+            }
+
+            if (deployParams.length > 0) {
+                setParameters(deployParams);
+                for (const item of deployParams) {
+                    fieldsToUpdate[item.name] = item.value;
+                }
+            }
+            form.setFieldsValue(fieldsToUpdate);
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [oldCustomerServiceName, deployParams, deployProps]);
+
+    useEffect(() => {
         getCurrentMigrationStep(currentMigrationStep);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentMigrationStep]);
-
-    useEffect(() => {
-        if (currentDeployParams) {
-            form.setFieldsValue({ Name: currentDeployParams.customerServiceName });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentDeployParams]);
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
@@ -120,6 +138,7 @@ export const ShowDeploy = ({
         createRequest.serviceRequestProperties = serviceRequestProperties;
         getDeployParameters(createRequest);
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
+        setParams(customerServiceName, props, parameters);
     };
 
     return (
