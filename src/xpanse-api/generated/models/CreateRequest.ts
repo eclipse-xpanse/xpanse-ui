@@ -71,5 +71,6 @@ export namespace CreateRequest {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 }

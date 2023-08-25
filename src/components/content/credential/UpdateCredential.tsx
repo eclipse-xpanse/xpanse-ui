@@ -3,11 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Form, Input, InputNumber, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
 import {
     ApiError,
+    CloudServiceProvider,
     CreateCredential,
     CredentialsManagementService,
     CredentialVariable,
@@ -17,6 +18,7 @@ import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
+import { cspMap } from '../order/formElements/CspSelect';
 
 function UpdateCredential({
     createCredential,
@@ -26,7 +28,7 @@ function UpdateCredential({
     createCredential: CreateCredential;
     credentialsQuery: UseQueryResult<never[]>;
     onUpdateCancel: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
     const [form] = Form.useForm();
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
@@ -199,7 +201,11 @@ function UpdateCredential({
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
                 <div className={'credential-from-input'}>
                     <Form.Item label='Csp' name='csp'>
-                        <Input disabled={true} />
+                        <Image
+                            width={100}
+                            preview={false}
+                            src={cspMap.get(createCredential.csp.valueOf() as CloudServiceProvider.name)?.logo}
+                        />
                     </Form.Item>
                     <Form.Item label='Type' name='type'>
                         <Input disabled={true} />

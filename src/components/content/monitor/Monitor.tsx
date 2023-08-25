@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import 'echarts/lib/chart/bar';
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Form, Input, Row, Select } from 'antd';

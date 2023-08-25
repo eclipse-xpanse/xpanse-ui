@@ -13,13 +13,13 @@ describe('Test Home Page', () => {
         expect(screen.getByText('Getting started with Xpanse')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Getting started with Xpanse' })).toHaveAttribute(
             'href',
-            'https://eclipse-xpanse.github.io/xpanse-website/'
+            'https://eclipse.dev/xpanse'
         );
 
         expect(screen.getByText('Xpanse Service Description Language')).toBeInTheDocument();
         expect(screen.getByRole('link', { name: 'Xpanse Service Description Language' })).toHaveAttribute(
             'href',
-            'https://eclipse-xpanse.github.io/xpanse-website/docs/api'
+            'https://eclipse.dev/xpanse/docs/api'
         );
     });
 });

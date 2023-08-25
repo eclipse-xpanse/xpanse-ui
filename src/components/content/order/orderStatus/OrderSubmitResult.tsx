@@ -39,21 +39,3 @@ export const OrderSubmitResult = (
         </div>
     );
 };
-
-export const MigrateSubmitResult = (
-    msg: string | React.JSX.Element,
-    uuid: string,
-    type: 'success' | 'error'
-): React.JSX.Element => {
-    return (
-        <div className={'submit-alert-tip'}>
-            {' '}
-            <Alert
-                message={`Processing Status`}
-                description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
-                showIcon
-                type={type}
-            />{' '}
-        </div>
-    );
-};

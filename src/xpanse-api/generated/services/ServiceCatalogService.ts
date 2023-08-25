@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CategoryOclVo } from '../models/CategoryOclVo';
 import type { Link } from '../models/Link';
 import type { UserAvailableServiceVo } from '../models/UserAvailableServiceVo';
 
@@ -17,7 +16,7 @@ import { request as __request } from '../core/request';
 
 export class ServiceCatalogService {
     /**
-     * Returns the list of all registered services that are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>
+     * List of all registered services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>
      * @param categoryName category of the service
      * @param cspName name of the cloud service provider
      * @param serviceName name of the service
@@ -37,13 +36,13 @@ export class ServiceCatalogService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
         serviceName?: string,
         serviceVersion?: string
     ): CancelablePromise<Array<UserAvailableServiceVo>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/available',
+            url: '/xpanse/catalog/services',
             query: {
                 categoryName: categoryName,
                 cspName: cspName,
@@ -69,7 +68,7 @@ export class ServiceCatalogService {
     public static availableServiceDetails(id: string): CancelablePromise<UserAvailableServiceVo> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/available/{id}',
+            url: '/xpanse/catalog/services/{id}',
             path: {
                 id: id,
             },
@@ -92,44 +91,9 @@ export class ServiceCatalogService {
     public static openApi(id: string): CancelablePromise<Link> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/services/available/{id}/openapi',
+            url: '/xpanse/catalog/services/{id}/openapi',
             path: {
                 id: id,
-            },
-            errors: {
-                400: `Bad Request`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
-    /**
-     * Get the available services by tree.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
-     * @param categoryName category of the service
-     * @returns CategoryOclVo OK
-     * @throws ApiError
-     */
-    public static getAvailableServicesTree(
-        categoryName:
-            | 'ai'
-            | 'compute'
-            | 'container'
-            | 'storage'
-            | 'network'
-            | 'database'
-            | 'mediaService'
-            | 'security'
-            | 'middleware'
-            | 'others'
-    ): CancelablePromise<Array<CategoryOclVo>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/services/available/category/{categoryName}',
-            path: {
-                categoryName: categoryName,
             },
             errors: {
                 400: `Bad Request`,

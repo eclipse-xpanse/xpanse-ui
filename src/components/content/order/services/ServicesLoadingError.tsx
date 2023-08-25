@@ -4,8 +4,9 @@
  */
 
 import { Alert } from 'antd';
+import React from 'react';
 
-function ServicesLoadingError(): JSX.Element {
+function ServicesLoadingError(): React.JSX.Element {
     return (
         <div>
             <br />

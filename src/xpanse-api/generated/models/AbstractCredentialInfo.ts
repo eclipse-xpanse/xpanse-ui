@@ -66,6 +66,7 @@ export namespace AbstractCredentialInfo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 
     /**

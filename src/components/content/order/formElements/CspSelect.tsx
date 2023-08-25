@@ -3,7 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AlibabaLogo, AWSLogo, AzureLogo, FlexibleEngineLogo, HuaWeiLogo, OpenStackLogo, GoogleLogo } from './CspLogo';
+import {
+    AlibabaLogo,
+    AWSLogo,
+    AzureLogo,
+    FlexibleEngineLogo,
+    HuaWeiLogo,
+    OpenStackLogo,
+    GoogleLogo,
+    ScsLogo,
+} from './CspLogo';
 import { Image } from 'antd';
 import { CloudServiceProvider } from '../../../../xpanse-api/generated';
 
@@ -21,6 +30,7 @@ export const cspMap = new Map<CloudServiceProvider.name, CSP>([
     [CloudServiceProvider.name.FLEXIBLE_ENGINE, { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
     [CloudServiceProvider.name.AWS, { name: 'aws', logo: AWSLogo }],
     [CloudServiceProvider.name.GOOGLE, { name: 'Google', logo: GoogleLogo }],
+    [CloudServiceProvider.name.SCS, { name: 'SCS', logo: ScsLogo }],
 ]);
 
 export default function CspSelect({

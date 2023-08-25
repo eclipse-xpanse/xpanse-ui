@@ -5,10 +5,11 @@
 
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import { Button, Form, Input, InputNumber, Select, Table, Tooltip } from 'antd';
+import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
     ApiError,
+    CloudServiceProvider,
     CreateCredential,
     CredentialsManagementService,
     CredentialVariable,
@@ -17,6 +18,7 @@ import {
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { cspMap } from '../order/formElements/CspSelect';
 
 function AddCredential({
     credentialsQuery,
@@ -24,7 +26,7 @@ function AddCredential({
 }: {
     credentialsQuery: UseQueryResult<never[]>;
     onCancel: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
     const [disable, setDisable] = useState<boolean>(false);
@@ -38,11 +40,10 @@ function AddCredential({
     const [tipMessage, setTipMessage] = useState<string>('');
     const [descriptionValue, setDescriptionValue] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const [addloading, setAddLoading] = useState<boolean>(false);
+    const [addLoading, setAddLoading] = useState<boolean>(false);
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         queryFn: () => CredentialsManagementService.listCredentialTypes(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined,
@@ -349,11 +350,16 @@ function AddCredential({
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
                 <div className={'credential-from-input'}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please Select Csp!' }]}>
-                        <Select onSelect={handleCspSelect}>
+                        <Select onSelect={handleCspSelect} size={'large'}>
                             {Object.values(CredentialVariables.csp).map((csp: CredentialVariables.csp) => {
                                 return (
-                                    <Select.Option key={csp} value={csp}>
-                                        {csp}
+                                    <Select.Option key={csp} value={csp} className={'credential-select-option-csp'}>
+                                        <Image
+                                            className={'custom-select'}
+                                            width={100}
+                                            preview={false}
+                                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
+                                        />
                                     </Select.Option>
                                 );
                             })}
@@ -365,7 +371,10 @@ function AddCredential({
                         rules={[{ required: true, message: 'Please Select The Type of Credential!' }]}
                     >
                         <Select
-                            loading={credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching}
+                            loading={
+                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
+                                credentialTypesQuery.fetchStatus !== 'idle'
+                            }
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
                         >
@@ -384,7 +393,10 @@ function AddCredential({
                         rules={[{ required: true, message: 'Please Select The Name of Credential!' }]}
                     >
                         <Select
-                            loading={credentialCapabilitiesQuery.isLoading || credentialCapabilitiesQuery.isRefetching}
+                            loading={
+                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
+                                credentialTypesQuery.fetchStatus !== 'idle'
+                            }
                             disabled={nameDisable}
                             onSelect={handleCredentialNameSelect}
                         >
@@ -421,7 +433,7 @@ function AddCredential({
                     )}
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' loading={addloading} disabled={disable} htmlType='submit'>
+                    <Button type='primary' loading={addLoading} disabled={disable} htmlType='submit'>
                         Add
                     </Button>
                     <Button htmlType='button' className={'add-credential-from-button-reset'} onClick={onReset}>

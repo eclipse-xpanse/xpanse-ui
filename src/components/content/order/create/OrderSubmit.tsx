@@ -206,7 +206,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     );
 }
 
-export function OrderSubmitPage(): JSX.Element {
+function OrderSubmitPage(): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     return OrderSubmit(useLocation().state.props);
 }

@@ -5,7 +5,7 @@ import AWSLogo from '../../../../img/Aws_Logo.png';
 import OpenStackLogo from '../../../../img/OpenStack_Logo.png';
 import GoogleLogo from '../../../../img/Google_Logo.png';
 import FlexibleEngineLogo from '../../../../img/FlexibleEngine_Logo.png';
-import XpanseLogo from '../../../../img/Eclipse_Xpanse_Logo.png';
+import ScsLogo from '../../../../img/scs.png';
 
 export { HuaWeiLogo };
 export { AlibabaLogo };
@@ -14,4 +14,4 @@ export { AWSLogo };
 export { OpenStackLogo };
 export { GoogleLogo };
 export { FlexibleEngineLogo };
-export { XpanseLogo };
+export { ScsLogo };

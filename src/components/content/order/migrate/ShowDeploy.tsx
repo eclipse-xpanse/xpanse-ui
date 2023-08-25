@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
 import { ApiDoc } from '../../common/ApiDoc';
@@ -27,8 +27,8 @@ export const ShowDeploy = ({
     selectRegion: string;
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    getDeployParameters: (values: Record<string, never>) => void;
-    currentDeployParams: Record<string, never> | undefined;
+    getDeployParameters: (createRequest: CreateRequest) => void;
+    currentDeployParams: CreateRequest | undefined;
 }): JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(userAvailableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
@@ -50,11 +50,7 @@ export const ShowDeploy = ({
 
     useEffect(() => {
         if (currentDeployParams) {
-            Object.keys(currentDeployParams).forEach(function (key) {
-                if (key === 'Name') {
-                    form.setFieldsValue({ Name: currentDeployParams[key] });
-                }
-            });
+            form.setFieldsValue({ Name: currentDeployParams.customerServiceName });
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentDeployParams]);
@@ -105,8 +101,24 @@ export const ShowDeploy = ({
         setCustomerServiceName(e.target.value);
     };
 
-    const handleFinish = (values: Record<string, never>) => {
-        getDeployParameters(values);
+    const handleFinish = () => {
+        const createRequest: CreateRequest = {
+            category: props.category,
+            csp: props.csp,
+            flavor: props.flavor,
+            region: props.region,
+            serviceName: props.name,
+            version: props.version,
+            customerServiceName: customerServiceName,
+        };
+        const serviceRequestProperties: Record<string, string> = {};
+        for (const item of parameters) {
+            if (item.kind === 'variable' || item.kind === 'env') {
+                serviceRequestProperties[item.name] = item.value;
+            }
+        }
+        createRequest.serviceRequestProperties = serviceRequestProperties;
+        getDeployParameters(createRequest);
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
     };
 

@@ -99,6 +99,7 @@ export namespace ServiceDetailVo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 
     /**

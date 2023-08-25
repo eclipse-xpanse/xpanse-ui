@@ -49,6 +49,7 @@ export namespace CredentialVariables {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+        SCS = 'scs',
     }
 
     /**
