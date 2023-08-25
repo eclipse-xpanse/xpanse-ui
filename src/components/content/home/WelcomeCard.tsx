@@ -11,11 +11,16 @@ function WelcomeCard(): React.JSX.Element {
     return (
         <>
             <Card title='Welcome to Xpanse' bordered={true}>
-                <RocketOutlined /> <a href='https://eclipse.dev/xpanse'>Getting started with Xpanse</a>
+                <RocketOutlined />{' '}
+                <a href='https://eclipse.dev/xpanse' target='_blank' rel='noopener noreferrer'>
+                    Getting started with Xpanse
+                </a>
                 <div>Learn the fundamentals about Xpanse and cloud providers supporting it.</div>
                 <Divider />
                 <SettingOutlined />{' '}
-                <a href='https://eclipse.dev/xpanse/docs/api'>Xpanse Service Description Language</a>
+                <a href='https://eclipse.dev/xpanse/docs/api' target='_blank' rel='noopener noreferrer'>
+                    Xpanse Service Description Language
+                </a>
                 <div>Use the Xpanse Service Description Language to describe portable managed services.</div>
             </Card>
         </>

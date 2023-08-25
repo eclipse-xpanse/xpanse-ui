@@ -10,7 +10,7 @@ import { RcFile } from 'antd/es/upload';
 import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
 import RegisterResult from './RegisterResult';
-import OclSummaryDisplay from './OclSummaryDisplay';
+import OclSummaryDisplay from '../common/OclSummaryDisplay';
 import loadOclFile from './loadOclFile';
 import YamlSyntaxValidationResult from './YamlSyntaxValidationResult';
 import { ValidationStatus } from './ValidationStatus';
