@@ -6,11 +6,12 @@
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { convertMapToUnorderedList } from '../../../utils/generateUnorderedList';
 import { OperationType } from '../formElements/CommonTypes';
+import React from 'react';
 
-export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): JSX.Element => {
+export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -26,7 +27,7 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             } else {
                 return <span>{'Deployment Successful'}</span>;
             }
-        } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED) {
+        } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
             return (
                 <div>
                     <span>{'Deployment Failed.'}</span>
@@ -37,7 +38,7 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
     }
 
     if (operationType === (OperationType.Destroy as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
+        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Destroyed Successfully'}</span>
@@ -54,7 +55,7 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
     }
 
     if (operationType === (OperationType.Migrate as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS) {
+        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Migrated Successfully'}</span>
@@ -62,7 +63,7 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             );
         } else if (
             response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
-            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
         ) {
             return (
                 <div>

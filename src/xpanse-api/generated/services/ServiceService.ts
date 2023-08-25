@@ -43,12 +43,12 @@ export class ServiceService {
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:
-            | 'DEPLOYING'
-            | 'DEPLOY_SUCCESS'
-            | 'DEPLOY_FAILED'
-            | 'DESTROYING'
-            | 'DESTROY_SUCCESS'
-            | 'DESTROY_FAILED'
+            | 'deploying'
+            | 'deployment successful'
+            | 'deployment failed'
+            | 'destroying'
+            | 'destroy successful'
+            | 'destroy failed'
     ): CancelablePromise<Array<ServiceVo>> {
         return __request(OpenAPI, {
             method: 'GET',
