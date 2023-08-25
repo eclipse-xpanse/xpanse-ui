@@ -54,5 +54,10 @@
 
 .catalog-service-icon {
     display: flex;
-    alignitems: center;
+    align-items: center;
 }
+
+.catalog-service-status-size {
+    font-size: 14px;
+}
+

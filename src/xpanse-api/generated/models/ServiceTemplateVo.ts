@@ -83,7 +83,7 @@ export namespace ServiceTemplateVo {
      * State of service.
      */
     export enum serviceRegistrationState {
-        REGISTERED = 'REGISTERED',
-        UPDATED = 'UPDATED',
+        REGISTERED = 'registered',
+        UPDATED = 'updated',
     }
 }

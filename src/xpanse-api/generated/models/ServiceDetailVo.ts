@@ -106,11 +106,11 @@ export namespace ServiceDetailVo {
      * The state of the service
      */
     export enum serviceDeploymentState {
-        DEPLOYING = 'DEPLOYING',
-        DEPLOY_SUCCESS = 'DEPLOY_SUCCESS',
-        DEPLOY_FAILED = 'DEPLOY_FAILED',
-        DESTROYING = 'DESTROYING',
-        DESTROY_SUCCESS = 'DESTROY_SUCCESS',
-        DESTROY_FAILED = 'DESTROY_FAILED',
+        DEPLOYING = 'deploying',
+        DEPLOYMENT_SUCCESSFUL = 'deployment successful',
+        DEPLOYMENT_FAILED = 'deployment failed',
+        DESTROYING = 'destroying',
+        DESTROY_SUCCESSFUL = 'destroy successful',
+        DESTROY_FAILED = 'destroy failed',
     }
 }

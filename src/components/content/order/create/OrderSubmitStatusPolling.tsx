@@ -21,8 +21,8 @@ function OrderSubmitStatusPolling({
     setRequestSubmitted: (arg: boolean) => void;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
-        ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS,
-        ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+        ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+        ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
     ]);
 
     const stopWatch = useStopwatch({
@@ -33,7 +33,7 @@ function OrderSubmitStatusPolling({
         if (
             getServiceDetailsByIdQuery.data &&
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
+                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
         ) {
             setIsDeploying(false);
             setRequestSubmitted(true);
@@ -41,7 +41,7 @@ function OrderSubmitStatusPolling({
         if (
             getServiceDetailsByIdQuery.data &&
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
         ) {
             setIsDeploying(false);
             setRequestSubmitted(false);
@@ -75,7 +75,7 @@ function OrderSubmitStatusPolling({
     if (error) {
         return OrderSubmitFailed(
             error,
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
             stopWatch,
             OperationType.Deploy
         );
@@ -86,7 +86,7 @@ function OrderSubmitStatusPolling({
             'Deployment status polling failed. Please visit MyServices page to check the status of the request.',
             uuid,
             'error',
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED,
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
             stopWatch,
             OperationType.Deploy
         );
@@ -124,7 +124,7 @@ function OrderSubmitStatusPolling({
     ) {
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),
@@ -137,7 +137,7 @@ function OrderSubmitStatusPolling({
         }
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),

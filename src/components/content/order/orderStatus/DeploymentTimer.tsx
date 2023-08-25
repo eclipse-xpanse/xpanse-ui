@@ -22,8 +22,8 @@ function DeploymentTimer({
         if (operationType === OperationType.Deploy) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_SUCCESS)
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL)
             ) {
                 stopWatch.pause();
             }
@@ -34,7 +34,7 @@ function DeploymentTimer({
         if (operationType === OperationType.Destroy) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                     deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED)
             ) {
                 stopWatch.pause();
@@ -47,9 +47,9 @@ function DeploymentTimer({
         if (operationType === OperationType.Migrate) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOY_FAILED ||
+                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
                     deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS)
+                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL)
             ) {
                 stopWatch.pause();
             }

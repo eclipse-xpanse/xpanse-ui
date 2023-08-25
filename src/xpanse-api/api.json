@@ -482,12 +482,12 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "DEPLOYING",
-                                "DEPLOY_SUCCESS",
-                                "DEPLOY_FAILED",
-                                "DESTROYING",
-                                "DESTROY_SUCCESS",
-                                "DESTROY_FAILED"
+                                "deploying",
+                                "deployment successful",
+                                "deployment failed",
+                                "destroying",
+                                "destroy successful",
+                                "destroy failed"
                             ]
                         }
                     }
@@ -1504,7 +1504,7 @@
                         "description": "The type of the deploy variable",
                         "enum": ["string", "number", "boolean"]
                     },
-                    "example": { "type": "string", "description": "The default value of the deploy variable" },
+                    "example": { "type": "string", "description": "The example value of the deploy variable" },
                     "description": { "type": "string", "description": "The description of the deploy variable" },
                     "value": {
                         "type": "string",
@@ -1691,7 +1691,7 @@
                     "serviceRegistrationState": {
                         "type": "string",
                         "description": "State of service.",
-                        "enum": ["REGISTERED", "UPDATED"]
+                        "enum": ["registered", "updated"]
                     },
                     "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
@@ -1844,12 +1844,12 @@
                         "type": "string",
                         "description": "The state of the service",
                         "enum": [
-                            "DEPLOYING",
-                            "DEPLOY_SUCCESS",
-                            "DEPLOY_FAILED",
-                            "DESTROYING",
-                            "DESTROY_SUCCESS",
-                            "DESTROY_FAILED"
+                            "deploying",
+                            "deployment successful",
+                            "deployment failed",
+                            "destroying",
+                            "destroy successful",
+                            "destroy failed"
                         ]
                     },
                     "createTime": {
@@ -1935,12 +1935,12 @@
                         "type": "string",
                         "description": "The state of the service",
                         "enum": [
-                            "DEPLOYING",
-                            "DEPLOY_SUCCESS",
-                            "DEPLOY_FAILED",
-                            "DESTROYING",
-                            "DESTROY_SUCCESS",
-                            "DESTROY_FAILED"
+                            "deploying",
+                            "deployment successful",
+                            "deployment failed",
+                            "destroying",
+                            "destroy successful",
+                            "destroy failed"
                         ]
                     },
                     "createTime": {
@@ -2216,7 +2216,7 @@
                     "serviceRegistrationState": {
                         "type": "string",
                         "description": "The state of the available service.",
-                        "enum": ["REGISTERED", "UPDATED"]
+                        "enum": ["registered", "updated"]
                     },
                     "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }

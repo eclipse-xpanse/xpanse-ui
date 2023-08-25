@@ -17,7 +17,7 @@ import { MetricChartsPerRow } from './MetricChartsPerRow';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
 import { useLocation } from 'react-router-dom';
 
-function Monitor(): JSX.Element {
+function Monitor(): React.JSX.Element {
     const [form] = Form.useForm();
     const [serviceId, setServiceId] = useState<string>('');
     const [deployedServiceList, setDeployedServiceList] = useState<ServiceVo[]>([]);
@@ -66,7 +66,7 @@ function Monitor(): JSX.Element {
             if (serviceList !== undefined && serviceList.length > 0) {
                 const serviceVoMap: Map<string, ServiceVo[]> = new Map<string, ServiceVo[]>();
                 serviceList.forEach((serviceVo: ServiceVo) => {
-                    if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+                    if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                         if (!serviceVoMap.has(serviceVo.name)) {
                             serviceVoMap.set(
                                 serviceVo.name,
@@ -87,7 +87,7 @@ function Monitor(): JSX.Element {
                         customerServiceNameList.push(customerServiceName);
                     }
                 });
-                serviceVoMap.forEach((service, name) => {
+                serviceVoMap.forEach((_, name) => {
                     const serviceNameUnique: { value: string; label: string } = {
                         value: name,
                         label: name,
@@ -127,7 +127,7 @@ function Monitor(): JSX.Element {
             deployedServiceList.forEach((serviceVo: ServiceVo) => {
                 if (
                     serviceVo.name === selectServiceName &&
-                    serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS
+                    serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
                 ) {
                     const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                         value: serviceVo.customerServiceName ?? '',
@@ -172,7 +172,7 @@ function Monitor(): JSX.Element {
         form.resetFields();
         const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: ServiceVo) => {
-            if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) {
+            if (serviceVo.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                     value: serviceVo.customerServiceName ?? '',
                     label: serviceVo.customerServiceName ?? '',

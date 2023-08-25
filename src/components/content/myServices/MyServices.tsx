@@ -33,6 +33,7 @@ import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPo
 import { useNavigate } from 'react-router-dom';
 import { useOrderPropsStore } from '../../store/OrderStore';
 import { cspMap } from '../order/formElements/CspSelect';
+import { MyServiceStatus } from './MyServiceStatus';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -192,6 +193,7 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
+            render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
         },
         {
             title: 'Operation',
@@ -208,9 +210,9 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
+                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
@@ -225,17 +227,18 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
                             >
                                 migrate
                             </Button>
-                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
-                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ? (
+                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ? (
                                 <Button
                                     loading={record.id === id ? isDestroying : false}
                                     type='primary'
@@ -261,7 +264,7 @@ function MyServices(): React.JSX.Element {
                                                 (record.serviceDeploymentState ===
                                                     ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
                                                     record.serviceDeploymentState ===
-                                                        ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) &&
                                                 !isDestroying
                                             )
                                         }
