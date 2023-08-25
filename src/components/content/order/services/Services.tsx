@@ -16,6 +16,7 @@ import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from './ServicesLoadingError';
 import { useQuery } from '@tanstack/react-query';
 import { getServiceMapper, getVersionMapper } from '../../catalog/services/catalogProps';
+import { useOrderPropsStore } from '../../../store/OrderStore';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -25,6 +26,12 @@ function Services(): React.JSX.Element {
     const [isServicesLoadSuccessful, setIsServicesLoadSuccessful] = useState<boolean>(true);
     const navigate = useNavigate();
     const location = useLocation();
+    const [removeAllParams] = useOrderPropsStore((state) => [state.removeAllParams]);
+
+    useEffect(() => {
+        removeAllParams();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(

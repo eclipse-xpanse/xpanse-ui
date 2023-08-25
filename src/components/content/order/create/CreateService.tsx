@@ -144,7 +144,6 @@ function CreateService(): React.JSX.Element {
                 }
                 versionMapper.current = currentVersions;
                 const currentVersionList = getVersionList(currentVersions);
-                // const currentCspList = getCspList(sortVersion(Array.from(currentVersions.keys()))[0]);
                 const currentCspList = getCspList(latestVersion);
                 let currentFlavorList = getFlavorList(latestVersion, currentCspList[0]);
                 setVersionList(currentVersionList);

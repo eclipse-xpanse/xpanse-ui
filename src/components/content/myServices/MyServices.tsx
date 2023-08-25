@@ -31,6 +31,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import { useNavigate } from 'react-router-dom';
+import { useOrderPropsStore } from '../../store/OrderStore';
 import { cspMap } from '../order/formElements/CspSelect';
 
 function MyServices(): React.JSX.Element {
@@ -51,6 +52,7 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
+    const [removeAllParams] = useOrderPropsStore((state) => [state.removeAllParams]);
 
     const navigate = useNavigate();
 
@@ -409,6 +411,7 @@ function MyServices(): React.JSX.Element {
     };
 
     const handleCancelMigrateModel = () => {
+        removeAllParams();
         refreshData();
         setCurrentServiceVo(undefined);
         setIsMigrateModalOpen(false);

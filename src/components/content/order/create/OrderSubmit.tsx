@@ -6,7 +6,7 @@
 import Navigate from './Navigate';
 import '../../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 import {
     DeployParam,
     NumberInputEventHandler,
@@ -24,6 +24,8 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
+import { useOrderPropsStore } from '../../../store/OrderStore';
+import { shallow } from 'zustand/shallow';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -51,13 +53,38 @@ export interface OrderSubmitProps {
     params: DeployParam[];
 }
 
-function OrderSubmit(props: OrderSubmitProps): JSX.Element {
+function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
+    const [form] = Form.useForm();
     const [parameters, setParameters] = useState<DeployParam[]>(props.params);
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const [customerServiceName, setCustomerServiceName] = useState<string>('');
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
+    const [oldCustomerServiceName, deployParams, deployProps] = useOrderPropsStore((state) => [
+        state.oldCustomerServiceName,
+        state.deployParams,
+        state.deployProps,
+    ]);
+    const [setParams] = useOrderPropsStore((state) => [state.setParams], shallow);
+
+    const getInitialValues = (): Record<string, string> | undefined => {
+        if (deployProps === undefined) {
+            return undefined;
+        }
+        const fieldsToUpdate: Record<string, string> = {};
+        if (props.name === deployProps.name) {
+            if (oldCustomerServiceName.length > 0) {
+                fieldsToUpdate.Name = oldCustomerServiceName;
+            }
+            if (deployParams.length > 0) {
+                for (const item of deployParams) {
+                    fieldsToUpdate[item.name] = item.value;
+                }
+            }
+        }
+        return fieldsToUpdate;
+    };
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
@@ -71,6 +98,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         return item;
                     })
                 );
+                setParams(customerServiceName, props, parameters);
             };
         }
         if (parameter.type === 'number') {
@@ -84,6 +112,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         return item;
                     })
                 );
+                setParams(customerServiceName, props, parameters);
             };
         }
         if (parameter.type === 'boolean') {
@@ -97,6 +126,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         return item;
                     })
                 );
+                setParams(customerServiceName, props, parameters);
             };
         }
         return (value: unknown) => {
@@ -125,6 +155,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
         createRequest.serviceRequestProperties = serviceRequestProperties;
         submitDeploymentRequest.mutate(createRequest);
         setIsShowDeploymentResult(true);
+        setParams(customerServiceName, props, parameters);
     }
 
     const createServicePageUrl: string = createServicePageRoute
@@ -157,11 +188,14 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             ) : null}
             <div className={'order-param-item-left'} />
             <Form
+                form={form}
                 layout='vertical'
                 autoComplete='off'
+                initialValues={getInitialValues()}
                 onFinish={onSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
+                disabled={requestSubmitted}
             >
                 <Form.Item
                     name={'Name'}
@@ -174,7 +208,10 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         showCount
                         placeholder={'customer defined name for service ordered'}
                         maxLength={256}
-                        onChange={(e) => setCustomerServiceName(e.target.value)}
+                        onChange={(e) => {
+                            setCustomerServiceName(e.target.value);
+                            setParams(e.target.value, props, parameters);
+                        }}
                         className={'order-param-item-content'}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
