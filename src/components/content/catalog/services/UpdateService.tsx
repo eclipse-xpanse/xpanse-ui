@@ -147,7 +147,7 @@ function UpdateService({
                 open={isModalOpen}
                 onOk={() => handleOk()}
                 onCancel={handleCancel}
-                width={1000}
+                width={'80em'}
             >
                 <div className={'register-content'}>
                     <div className={'content-title'}>
