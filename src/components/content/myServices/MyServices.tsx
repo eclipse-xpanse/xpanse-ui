@@ -210,7 +210,8 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
                                     record.serviceDeploymentState ===
                                         ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
