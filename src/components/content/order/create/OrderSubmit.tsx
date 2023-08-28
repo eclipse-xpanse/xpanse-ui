@@ -19,7 +19,7 @@ import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest } from '../../../../xpanse-api/generated';
-import { createServicePageRoute } from '../../../utils/constants';
+import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
@@ -54,7 +54,6 @@ export interface OrderSubmitProps {
 
 function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
     console.log('rendering');
-    const CUSTOMER_SERVICE_NAME_FIELD: string = 'Name';
     const [form] = Form.useForm();
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
