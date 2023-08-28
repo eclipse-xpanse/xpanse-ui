@@ -35,14 +35,13 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         queryKey: [
             'listAvailableServices',
             currentSelectedService?.category,
-            currentSelectedService?.csp,
             currentSelectedService?.name,
             currentSelectedService?.version,
         ],
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 currentSelectedService?.category,
-                currentSelectedService?.csp,
+                undefined,
                 currentSelectedService?.name,
                 currentSelectedService?.version
             ),
