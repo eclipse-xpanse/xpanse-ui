@@ -33,13 +33,14 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
 import CatalogMainPage from './components/content/catalog/CatalogMainMenu';
 import React from 'react';
+import { SessionLost } from './components/content/login/SessionLost';
 
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>
-            <OidcProvider configuration={OidcConfig}>
+            <OidcProvider configuration={OidcConfig} sessionLostComponent={SessionLost}>
                 <Routes>
                     <Route
                         path={homePageRoute}
