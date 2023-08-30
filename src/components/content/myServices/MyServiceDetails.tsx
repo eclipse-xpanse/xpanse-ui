@@ -4,11 +4,12 @@
  */
 
 import '../../../styles/app.css';
-import { convertMapToUnorderedList, convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, Response, ServiceService } from '../../../xpanse-api/generated';
+import { ApiError, DeployResource, Response, ServiceService } from '../../../xpanse-api/generated';
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
+import { ServiceDetailsContent } from './ServiceDetailsContent';
 export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useQuery({
         queryKey: ['getServiceDetailsById', serviceId],
@@ -20,6 +21,8 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
         const endPointMap = new Map<string, string>();
         const requestMap = new Map<string, string>();
         const resultMessageMap = new Map<string, string>();
+        let deployResourceMap: DeployResource[] = [];
+        console.log('getServiceDetailsByIdQuery.data********:  ', getServiceDetailsByIdQuery.data);
         if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
             for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
                 endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
@@ -33,8 +36,19 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
         if (getServiceDetailsByIdQuery.data.resultMessage) {
             resultMessageMap.set('Result message details', getServiceDetailsByIdQuery.data.resultMessage);
         }
-
-        return <>{getContent(endPointMap, requestMap, resultMessageMap)}</>;
+        if (getServiceDetailsByIdQuery.data.deployResources) {
+            deployResourceMap = getServiceDetailsByIdQuery.data.deployResources;
+        }
+        return (
+            <>
+                <ServiceDetailsContent
+                    content={endPointMap}
+                    requestParams={requestMap}
+                    resultMessage={resultMessageMap}
+                    deployResources={deployResourceMap}
+                />
+            </>
+        );
     }
 
     if (getServiceDetailsByIdQuery.isLoading) {
@@ -70,30 +84,6 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 className={'my-service-details-skeleton'}
             />
         );
-    }
-
-    function getContent(
-        content: Map<string, string>,
-        requestParams: Map<string, string>,
-        resultMessage: Map<string, string>
-    ): string | React.JSX.Element {
-        const items: React.JSX.Element[] = [];
-        if (content.size > 0) {
-            const endPointInfo: string | React.JSX.Element = convertMapToUnorderedList(content, 'Endpoint Information');
-            items.push(endPointInfo as React.JSX.Element);
-        }
-        if (requestParams.size > 0) {
-            const requestParam: string | React.JSX.Element = convertMapToUnorderedList(
-                requestParams,
-                'Request Parameters'
-            );
-            items.push(requestParam as React.JSX.Element);
-        }
-        if (resultMessage.size > 0) {
-            const result: string | React.JSX.Element = convertMapToUnorderedList(resultMessage, 'Result Message');
-            items.push(result as React.JSX.Element);
-        }
-        return <span>{items}</span>;
     }
 
     return <></>;

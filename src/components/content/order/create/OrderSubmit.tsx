@@ -93,6 +93,7 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
     function onSubmit() {
         setRequestSubmitted(true);
         setDeploying(true);
+        setIsShowDeploymentResult(true);
         const createRequest: CreateRequest = {
             category: props.category,
             csp: props.csp,
@@ -110,7 +111,6 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
         submitDeploymentRequest.mutate(createRequest);
-        setIsShowDeploymentResult(true);
     }
 
     const createServicePageUrl: string = createServicePageRoute
