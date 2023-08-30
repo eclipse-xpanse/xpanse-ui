@@ -4,9 +4,9 @@
  */
 
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
-import { convertMapToUnorderedList } from '../../../utils/generateUnorderedList';
 import { OperationType } from '../formElements/CommonTypes';
 import React from 'react';
+import { convertMapToDetailsList } from '../../common/convertMapToDetailsList';
 
 export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
@@ -19,10 +19,12 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             }
             if (endPointMap.size > 0) {
                 return (
-                    <div>
+                    <>
                         <span>{'Deployment Successful'}</span>
-                        <div>{convertMapToUnorderedList(endPointMap, 'Endpoint Information')}</div>
-                    </div>
+                        <div className={'service-instance-detail-position'}>
+                            {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
+                        </div>
+                    </>
                 );
             } else {
                 return <span>{'Deployment Successful'}</span>;
