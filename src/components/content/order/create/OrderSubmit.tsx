@@ -21,7 +21,7 @@ import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { ApiDoc } from '../../common/ApiDoc';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';

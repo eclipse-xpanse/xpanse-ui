@@ -15,7 +15,7 @@ import { ServiceVo, ServiceCatalogService, UserAvailableServiceVo } from '../../
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from './ServicesLoadingError';
 import { useQuery } from '@tanstack/react-query';
-import { getServiceMapper, getVersionMapper } from '../../catalog/services/catalogProps';
+import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
 
 function Services(): React.JSX.Element {

@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import { ValidationStatus } from './ValidationStatus';
+import React from 'react';
 
 function YamlSyntaxValidationResult({
     validationResult,
@@ -12,7 +13,7 @@ function YamlSyntaxValidationResult({
 }: {
     validationResult: string;
     yamlSyntaxValidationStatus: ValidationStatus;
-}): JSX.Element {
+}): React.JSX.Element {
     if (yamlSyntaxValidationStatus === 'completed') {
         return <Alert type={'info'} showIcon={true} message={validationResult} />;
     } else {

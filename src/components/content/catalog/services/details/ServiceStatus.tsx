@@ -1,4 +1,9 @@
-import { ServiceTemplateVo } from '../../../../xpanse-api/generated';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import { ServiceTemplateVo } from '../../../../../xpanse-api/generated';
 import serviceRegistrationState = ServiceTemplateVo.serviceRegistrationState;
 import { Tag } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';

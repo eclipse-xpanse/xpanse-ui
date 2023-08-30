@@ -5,8 +5,8 @@
 
 import DisplayOclData from './DisplayOclData';
 import { Alert, UploadFile } from 'antd';
-import { Ocl } from '../../../xpanse-api/generated';
-import { ValidationStatus } from '../register/ValidationStatus';
+import { Ocl } from '../../../../xpanse-api/generated';
+import { ValidationStatus } from './ValidationStatus';
 import React from 'react';
 
 function OclSummaryDisplay(

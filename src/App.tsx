@@ -31,7 +31,7 @@ import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
 import { NotFoundPage } from './components/notFound/NotFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
-import CatalogMainPage from './components/content/catalog/CatalogMainMenu';
+import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
 import React from 'react';
 import { SessionLost } from './components/content/login/SessionLost';
 

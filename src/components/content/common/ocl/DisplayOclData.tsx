@@ -4,9 +4,9 @@
  */
 
 import React from 'react';
-import { Ocl } from '../../../xpanse-api/generated';
+import { Ocl } from '../../../../xpanse-api/generated';
 import { Descriptions, Image, Tag } from 'antd';
-import { cspMap } from '../order/formElements/CspSelect';
+import { cspMap } from '../../order/formElements/CspSelect';
 import { DeploymentText } from './DeploymentText';
 import { FlavoursText } from './FlavorsText';
 import { BillingText } from './BillingText';
