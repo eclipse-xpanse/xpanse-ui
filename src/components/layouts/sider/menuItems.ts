@@ -4,17 +4,17 @@
  */
 
 import { userRoleKey } from '../../utils/constants';
-import { catalogMenu } from '../../content/catalog/services/catalogMenu';
-import registerPanelMenu from '../../content/register/registerPanelMenu';
+import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import {
     credentialMenu,
     healthCheckMenu,
     monitorMenu,
     myServicesMenu,
     servicesMenu,
-} from '../../content/order/services/ServicesMenu';
+} from '../../content/order/services/servicesMenu';
 import { ServiceTemplateVo } from '../../../xpanse-api/generated';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
+import registerPanelMenu from '../../content/register/registerPanelMenu';
 
 export function getMenuItems(): ItemType[] {
     const serviceCategories: string[] = Object.values(ServiceTemplateVo.category).filter((v) => isNaN(Number(v)));

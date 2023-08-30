@@ -5,14 +5,14 @@
 
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
-import { Area } from '../../../utils/Area';
-import { ApiDoc } from '../../common/ApiDoc';
+import { UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import { Area } from '../../../../utils/Area';
+import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
 import React from 'react';
-import { DeploymentText } from '../../common/DeploymentText';
-import { FlavoursText } from '../../common/FlavorsText';
-import { BillingText } from '../../common/BillingText';
+import { DeploymentText } from '../../../common/ocl/DeploymentText';
+import { FlavoursText } from '../../../common/ocl/FlavorsText';
+import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceStatus } from './ServiceStatus';
 
 function ServiceDetail({
@@ -43,7 +43,7 @@ function ServiceDetail({
                 &nbsp;Basic Information
             </h3>
 
-            <Descriptions bordered column={1}>
+            <Descriptions bordered column={2}>
                 <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
                     <ShowIcon serviceDetails={serviceDetails} />
                 </Descriptions.Item>
@@ -51,7 +51,6 @@ function ServiceDetail({
                     {serviceDetails.description}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
-                <Descriptions.Item label='Provider'>{serviceDetails.csp}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>

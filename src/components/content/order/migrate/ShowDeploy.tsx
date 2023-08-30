@@ -6,7 +6,7 @@
 import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
-import { ApiDoc } from '../../common/ApiDoc';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';

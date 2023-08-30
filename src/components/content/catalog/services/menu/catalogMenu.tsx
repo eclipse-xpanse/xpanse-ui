@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { catalogLabelName, catalogPageRoute, catalogSubPageRoute } from '../../../utils/constants';
+import { catalogLabelName, catalogPageRoute, catalogSubPageRoute } from '../../../../utils/constants';
 import { BarsOutlined } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 

@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Billing } from '../../../xpanse-api/generated';
+import { Billing } from '../../../../xpanse-api/generated';
 import YAML from 'yaml';
 import { Button, Popover } from 'antd';
 import React from 'react';
