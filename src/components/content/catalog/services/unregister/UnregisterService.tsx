@@ -4,8 +4,9 @@
  */
 
 import { Button, Popconfirm } from 'antd';
-import { ServiceVendorService } from '../../../../xpanse-api/generated';
+import { ServiceVendorService } from '../../../../../xpanse-api/generated';
 import { useMutation } from '@tanstack/react-query';
+import React from 'react';
 
 function UnregisterService({
     id,
@@ -13,7 +14,7 @@ function UnregisterService({
 }: {
     id: string;
     onConfirmHandler: (message: string, unregisterResult: boolean, id: string) => void;
-}): JSX.Element {
+}): React.JSX.Element {
     const unregisterRequest = useMutation({
         mutationFn: () => {
             return ServiceVendorService.unregister(id);

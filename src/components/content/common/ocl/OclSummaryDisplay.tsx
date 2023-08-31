@@ -5,14 +5,15 @@
 
 import DisplayOclData from './DisplayOclData';
 import { Alert, UploadFile } from 'antd';
-import { Ocl } from '../../../xpanse-api/generated';
+import { Ocl } from '../../../../xpanse-api/generated';
 import { ValidationStatus } from './ValidationStatus';
+import React from 'react';
 
 function OclSummaryDisplay(
     setOclValidationStatus: (newState: ValidationStatus) => void,
     ocl: Ocl,
     file: UploadFile
-): JSX.Element {
+): React.JSX.Element {
     const oclTableData = DisplayOclData({ ocl: ocl });
     if (typeof oclTableData === 'string') {
         file.status = 'error';

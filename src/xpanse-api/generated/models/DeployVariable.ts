@@ -24,7 +24,7 @@ export type DeployVariable = {
      */
     dataType: DeployVariable.dataType;
     /**
-     * The default value of the deploy variable
+     * The example value of the deploy variable
      */
     example?: string;
     /**

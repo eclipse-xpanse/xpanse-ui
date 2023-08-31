@@ -1,0 +1,37 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import React from 'react';
+import { DeployResource } from '../../../xpanse-api/generated';
+import { DeployedResources } from './DeployedResources';
+import { convertMapToDetailsList } from '../common/convertMapToDetailsList';
+
+export function ServiceDetailsContent({
+    content,
+    requestParams,
+    resultMessage,
+    deployResources,
+}: {
+    content: Map<string, string>;
+    requestParams: Map<string, string>;
+    resultMessage: Map<string, string>;
+    deployResources: DeployResource[];
+}): React.JSX.Element {
+    const items: React.JSX.Element[] = [];
+    if (content.size > 0) {
+        items.push(convertMapToDetailsList(content, 'Endpoint Information'));
+    }
+    if (requestParams.size > 0) {
+        items.push(convertMapToDetailsList(requestParams, 'Request Parameters'));
+    }
+    if (resultMessage.size > 0) {
+        items.push(convertMapToDetailsList(resultMessage, 'Result Message'));
+    }
+    if (deployResources.length > 0) {
+        items.push(DeployedResources(deployResources, 'Deployed Resources'));
+    }
+
+    return <span>{items}</span>;
+}

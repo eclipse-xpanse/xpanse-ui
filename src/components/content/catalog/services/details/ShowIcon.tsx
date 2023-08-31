@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
 
 export function ShowIcon({ serviceDetails }: { serviceDetails: UserAvailableServiceVo }): JSX.Element {
     return (

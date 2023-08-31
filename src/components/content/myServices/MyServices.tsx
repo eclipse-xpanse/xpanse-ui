@@ -32,6 +32,8 @@ import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequest
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import { useNavigate } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
+import { MyServiceStatus } from './MyServiceStatus';
+import { useOrderFormStore } from '../order/store/OrderFormStore';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -51,6 +53,7 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
+    const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
     const navigate = useNavigate();
 
@@ -190,6 +193,7 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
+            render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
         },
         {
             title: 'Operation',
@@ -206,9 +210,10 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
@@ -223,17 +228,18 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
+                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                                    record.serviceDeploymentState ===
+                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
                                     record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
                                 }
                             >
                                 migrate
                             </Button>
-                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESS ||
-                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOY_FAILED ? (
+                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ? (
                                 <Button
                                     loading={record.id === id ? isDestroying : false}
                                     type='primary'
@@ -259,7 +265,7 @@ function MyServices(): React.JSX.Element {
                                                 (record.serviceDeploymentState ===
                                                     ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
                                                     record.serviceDeploymentState ===
-                                                        ServiceVo.serviceDeploymentState.DEPLOY_SUCCESS) &&
+                                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) &&
                                                 !isDestroying
                                             )
                                         }
@@ -395,6 +401,7 @@ function MyServices(): React.JSX.Element {
     }
 
     function refreshData(): void {
+        clearFormVariables();
         void listDeployedServicesQuery.refetch();
     }
 
@@ -409,6 +416,7 @@ function MyServices(): React.JSX.Element {
     };
 
     const handleCancelMigrateModel = () => {
+        clearFormVariables();
         refreshData();
         setCurrentServiceVo(undefined);
         setIsMigrateModalOpen(false);

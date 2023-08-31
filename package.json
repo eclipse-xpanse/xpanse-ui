@@ -16,7 +16,8 @@
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.14.1",
         "react-timer-hook": "^3.0.7",
-        "yaml": "^2.2.2"
+        "yaml": "^2.2.2",
+        "zustand": "^4.4.1"
     },
     "scripts": {
         "start": "react-scripts start",

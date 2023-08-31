@@ -4,9 +4,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import '../../../styles/catalog.css';
+import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
-import ServiceProvider from './services/ServiceProvider';
+import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
 import {
     ApiError,
@@ -14,11 +14,11 @@ import {
     ServiceVo,
     ServiceCatalogService,
     UserAvailableServiceVo,
-} from '../../../xpanse-api/generated';
+} from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { useQuery } from '@tanstack/react-query';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { getServiceMapper, getVersionMapper } from './services/catalogProps';
+import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
+import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
@@ -143,41 +143,43 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         );
     }
 
+    if (availableServicesQuery.isSuccess && availableServicesQuery.data.length === 0) {
+        return (
+            <div className={'service-blank-class'}>
+                <Empty description={'No services available.'} />
+            </div>
+        );
+    }
+
     return (
         <div className={'catalog-middleware'}>
-            {treeData.length === 0 || isParentTreeSelected(selectKey) || selectKey === '' ? (
-                <div className={'service-blank-class'}>
-                    <Empty description={'No services available.'} />
-                </div>
-            ) : (
-                <div className={'container'}>
-                    <div className={'left-class'}>
-                        <div className={'left-title-class'}>
-                            <HomeOutlined />
-                            &nbsp;Service Tree
-                        </div>
-                        <Tree
-                            showIcon={true}
-                            defaultExpandAll={true}
-                            autoExpandParent={true}
-                            onSelect={onSelect}
-                            selectedKeys={[selectKey]}
-                            expandedKeys={expandKeys}
-                            treeData={treeData}
-                            disabled={unregisteredDisabled}
-                        />
+            <div className={'container'}>
+                <div className={'left-class'}>
+                    <div className={'left-title-class'}>
+                        <HomeOutlined />
+                        &nbsp;Service Tree
                     </div>
-                    <div className={'middle-class'} />
-                    <div className={'right-class'}>
-                        <div className={'left-title-class'}>Cloud Provider</div>
-                        <ServiceProvider
-                            categoryOclData={categoryOclData}
-                            currentServiceName={selectKey.toString()}
-                            confirmUnregister={onConfirmUnregister}
-                        />
-                    </div>
+                    <Tree
+                        showIcon={true}
+                        defaultExpandAll={true}
+                        autoExpandParent={true}
+                        onSelect={onSelect}
+                        selectedKeys={[selectKey]}
+                        expandedKeys={expandKeys}
+                        treeData={treeData}
+                        disabled={unregisteredDisabled}
+                    />
                 </div>
-            )}
+                <div className={'middle-class'} />
+                <div className={'right-class'}>
+                    <div className={'left-title-class'}>Cloud Provider</div>
+                    <ServiceProvider
+                        categoryOclData={categoryOclData}
+                        currentServiceName={selectKey.toString()}
+                        confirmUnregister={onConfirmUnregister}
+                    />
+                </div>
+            </div>
         </div>
     );
 }

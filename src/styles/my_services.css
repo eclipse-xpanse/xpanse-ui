@@ -5,6 +5,11 @@
     font-weight: bold;
 }
 
+.service-instance-detail-position {
+    display: flex;
+    alignitems: center;
+}
+
 .failure-alert {
     margin-top: 10px;
 }
@@ -13,4 +18,15 @@
     margin: 30px;
     position: relative;
     width: 80%;
+}
+
+.my-service-status-size {
+    font-size: 14px;
+}
+.show-details {
+    width: 55%;
+    height: 55%;
+}
+.details-content {
+    margin-bottom: 15px;
 }

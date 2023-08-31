@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Ocl } from '../../../xpanse-api/generated';
+import { Ocl } from '../../../../xpanse-api/generated';
 import YAML from 'yaml';
 
 function loadOclFile(fileData: string): Ocl {

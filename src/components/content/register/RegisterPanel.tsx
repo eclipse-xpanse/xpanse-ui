@@ -10,10 +10,10 @@ import { RcFile } from 'antd/es/upload';
 import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
 import RegisterResult from './RegisterResult';
-import OclSummaryDisplay from './OclSummaryDisplay';
-import loadOclFile from './loadOclFile';
-import YamlSyntaxValidationResult from './YamlSyntaxValidationResult';
-import { ValidationStatus } from './ValidationStatus';
+import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
+import loadOclFile from '../common/ocl/loadOclFile';
+import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
+import { ValidationStatus } from '../common/ocl/ValidationStatus';
 import { useMutation } from '@tanstack/react-query';
 
 function RegisterPanel(): JSX.Element {

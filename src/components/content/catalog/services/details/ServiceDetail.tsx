@@ -5,11 +5,15 @@
 
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
-import { Area } from '../../../utils/Area';
-import { ApiDoc } from '../../common/ApiDoc';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import { Area } from '../../../../utils/Area';
+import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
+import React from 'react';
+import { DeploymentText } from '../../../common/ocl/DeploymentText';
+import { FlavoursText } from '../../../common/ocl/FlavorsText';
+import { BillingText } from '../../../common/ocl/BillingText';
+import { ServiceStatus } from './ServiceStatus';
 
 function ServiceDetail({
     serviceDetails,
@@ -17,7 +21,7 @@ function ServiceDetail({
 }: {
     serviceDetails: UserAvailableServiceVo;
     serviceAreas: Area[];
-}): JSX.Element {
+}): React.JSX.Element {
     return (
         <>
             <div className={'catalog-detail-class'}>
@@ -39,7 +43,7 @@ function ServiceDetail({
                 &nbsp;Basic Information
             </h3>
 
-            <Descriptions bordered column={1}>
+            <Descriptions bordered column={2}>
                 <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
                     <ShowIcon serviceDetails={serviceDetails} />
                 </Descriptions.Item>
@@ -47,20 +51,21 @@ function ServiceDetail({
                     {serviceDetails.description}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
-                <Descriptions.Item label='Provider'>{serviceDetails.csp}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
-                <Descriptions.Item label='Billing Mode'>{serviceDetails.billing.model}</Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
-                <Descriptions.Item label='Status'>{serviceDetails.serviceRegistrationState}</Descriptions.Item>
-                {/* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */}
+                <Descriptions.Item label='Status'>
+                    <ServiceStatus serviceStatus={serviceDetails.serviceRegistrationState} />
+                </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
+                <Descriptions.Item label='Deployment'>
+                    <DeploymentText deployment={serviceDetails.deployment} />
+                </Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
-                    {convertStringArrayToUnorderedList(
-                        serviceDetails.flavors.map((flavor) => {
-                            return flavor.name;
-                        })
-                    )}
+                    <FlavoursText flavors={serviceDetails.flavors} />
+                </Descriptions.Item>
+                <Descriptions.Item label='Billing'>
+                    <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
                     <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />

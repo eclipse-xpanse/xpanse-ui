@@ -6,10 +6,12 @@
 import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
-import { ApiDoc } from '../../common/ApiDoc';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useOrderFormStore } from '../store/OrderFormStore';
+import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 
 export const ShowDeploy = ({
     userAvailableServiceVoList,
@@ -19,7 +21,6 @@ export const ShowDeploy = ({
     selectFlavor,
     getCurrentMigrationStep,
     getDeployParameters,
-    currentDeployParams,
 }: {
     userAvailableServiceVoList: UserAvailableServiceVo[];
     selectCsp: string;
@@ -28,16 +29,16 @@ export const ShowDeploy = ({
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     getDeployParameters: (createRequest: CreateRequest) => void;
-    currentDeployParams: CreateRequest | undefined;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(userAvailableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
 
-    const [parameters, setParameters] = useState<DeployParam[]>(props.params);
-    const [customerServiceName, setCustomerServiceName] = useState('');
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DeployServiceOnTheNewDestination
     );
+    const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
+    const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
+    useEffect(() => useOrderFormStore.subscribe((state) => (deployParamsRef.current = state.deployParams)), []);
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.SelectADestination);
@@ -48,58 +49,26 @@ export const ShowDeploy = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentMigrationStep]);
 
-    useEffect(() => {
-        if (currentDeployParams) {
-            form.setFieldsValue({ Name: currentDeployParams.customerServiceName });
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentDeployParams]);
-
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
             return (event: ChangeEvent<HTMLInputElement>) => {
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: event.target.value };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(event.target.name, event.target.value);
             };
         }
         if (parameter.type === 'number') {
             return (value: string | number | null) => {
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: value as string };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(parameter.name, value as string);
             };
         }
         if (parameter.type === 'boolean') {
             return (checked: boolean) => {
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: checked ? 'true' : 'false' };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(parameter.name, checked ? 'true' : 'false');
             };
         }
         return (value: unknown) => {
             console.log(value);
         };
     }
-
-    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setCustomerServiceName(e.target.value);
-    };
 
     const handleFinish = () => {
         const createRequest: CreateRequest = {
@@ -109,12 +78,12 @@ export const ShowDeploy = ({
             region: props.region,
             serviceName: props.name,
             version: props.version,
-            customerServiceName: customerServiceName,
+            customerServiceName: deployParamsRef.current.Name,
         };
         const serviceRequestProperties: Record<string, string> = {};
-        for (const item of parameters) {
-            if (item.kind === 'variable' || item.kind === 'env') {
-                serviceRequestProperties[item.name] = item.value;
+        for (const variable in deployParamsRef.current) {
+            if (variable !== CUSTOMER_SERVICE_NAME_FIELD) {
+                serviceRequestProperties[variable] = deployParamsRef.current[variable];
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
@@ -138,6 +107,7 @@ export const ShowDeploy = ({
                     layout='vertical'
                     autoComplete='off'
                     form={form}
+                    initialValues={deployParamsRef.current}
                     onFinish={handleFinish}
                     validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                     key='deploy'
@@ -159,12 +129,13 @@ export const ShowDeploy = ({
                                     <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
                                 </Tooltip>
                             }
-                            value={customerServiceName}
-                            onChange={handleNameChange}
+                            onChange={(e) => {
+                                cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, String(e.target.value));
+                            }}
                         />
                     </Form.Item>
                     <div>
-                        {parameters.map((item) =>
+                        {props.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
                                 <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
                             ) : (

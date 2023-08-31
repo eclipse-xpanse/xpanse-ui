@@ -25,7 +25,6 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         undefined
     );
     const [userAvailableServiceVoList, setUserAvailableServiceVoList] = useState<UserAvailableServiceVo[]>([]);
-
     const [selectCsp, setSelectCsp] = useState<string>('');
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
@@ -36,14 +35,13 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         queryKey: [
             'listAvailableServices',
             currentSelectedService?.category,
-            currentSelectedService?.csp,
             currentSelectedService?.name,
             currentSelectedService?.version,
         ],
         queryFn: () =>
             ServiceCatalogService.listAvailableServices(
                 currentSelectedService?.category,
-                currentSelectedService?.csp,
+                undefined,
                 currentSelectedService?.name,
                 currentSelectedService?.version
             ),
@@ -99,7 +97,12 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
     const steps = [
         {
             title: 'Export data',
-            content: <ExportServiceData getCurrentMigrationStep={getCurrentMigrationStep} />,
+            content: (
+                <ExportServiceData
+                    isQueryLoading={listAvailableServices.isLoading}
+                    getCurrentMigrationStep={getCurrentMigrationStep}
+                />
+            ),
             description: 'Export service data.',
         },
         {
@@ -128,7 +131,6 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
                     selectFlavor={selectFlavor}
                     getCurrentMigrationStep={getCurrentMigrationStep}
                     getDeployParameters={getDeployParameters}
-                    currentDeployParams={deployParams}
                 />
             ),
             description: 'Prepare deployment parameters.',

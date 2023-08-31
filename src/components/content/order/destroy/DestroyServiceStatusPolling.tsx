@@ -22,7 +22,7 @@ function DestroyServiceStatusPolling({
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-        ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
+        ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
     ]);
 
     const stopWatch = useStopwatch({
@@ -34,7 +34,7 @@ function DestroyServiceStatusPolling({
             getServiceDetailsByIdQuery.data &&
             [
                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
+                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             setIsDestroying(false);
@@ -91,7 +91,7 @@ function DestroyServiceStatusPolling({
         if (
             ![
                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS,
+                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             return OrderSubmitResult(
@@ -104,7 +104,7 @@ function DestroyServiceStatusPolling({
             );
         } else if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESS
+            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Destroy),

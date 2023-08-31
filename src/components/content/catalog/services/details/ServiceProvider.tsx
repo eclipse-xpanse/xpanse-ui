@@ -6,13 +6,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CloudServiceProvider, Region, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CloudServiceProvider, Region, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Area } from '../../../utils/Area';
-import UpdateService from './UpdateService';
-import UnregisterService from './UnregisterService';
-import { cspMap } from '../../order/formElements/CspSelect';
-import { getCspMapper, getVersionMapper } from './catalogProps';
+import { Area } from '../../../../utils/Area';
+import UpdateService from '../update/UpdateService';
+import UnregisterService from '../unregister/UnregisterService';
+import { cspMap } from '../../../order/formElements/CspSelect';
+import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 
 let lastServiceName: string = '';
 

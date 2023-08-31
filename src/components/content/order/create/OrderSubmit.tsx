@@ -6,7 +6,7 @@
 import Navigate from './Navigate';
 import '../../../../styles/service_order.css';
 import { To, useLocation } from 'react-router-dom';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
     DeployParam,
     NumberInputEventHandler,
@@ -19,11 +19,12 @@ import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest } from '../../../../xpanse-api/generated';
-import { createServicePageRoute } from '../../../utils/constants';
+import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { ApiDoc } from '../../common/ApiDoc';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
+import { useOrderFormStore } from '../store/OrderFormStore';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -51,52 +52,36 @@ export interface OrderSubmitProps {
     params: DeployParam[];
 }
 
-function OrderSubmit(props: OrderSubmitProps): JSX.Element {
-    const [parameters, setParameters] = useState<DeployParam[]>(props.params);
+function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
+    console.log('rendering');
+    const [form] = Form.useForm();
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
-    const [customerServiceName, setCustomerServiceName] = useState<string>('');
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
+    const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
+
+    // Avoid re-rendering of the component when variables are added to store.
+    const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
+    useEffect(() => useOrderFormStore.subscribe((state) => (deployParamsRef.current = state.deployParams)), []);
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
             return (event: ChangeEvent<HTMLInputElement>) => {
                 setIsShowDeploymentResult(false);
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: event.target.value };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(event.target.name, event.target.value);
             };
         }
         if (parameter.type === 'number') {
             return (value: string | number | null) => {
                 setIsShowDeploymentResult(false);
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: value as string };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(parameter.name, value as string);
             };
         }
         if (parameter.type === 'boolean') {
             return (checked: boolean) => {
                 setIsShowDeploymentResult(false);
-                setParameters(
-                    parameters.map((item) => {
-                        if (item.name === parameter.name) {
-                            return { ...item, value: checked ? 'true' : 'false' };
-                        }
-                        return item;
-                    })
-                );
+                cacheFormVariable(parameter.name, checked ? 'true' : 'false');
             };
         }
         return (value: unknown) => {
@@ -107,6 +92,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     function onSubmit() {
         setRequestSubmitted(true);
         setDeploying(true);
+        setIsShowDeploymentResult(true);
         const createRequest: CreateRequest = {
             category: props.category,
             csp: props.csp,
@@ -114,17 +100,16 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             region: props.region,
             serviceName: props.name,
             version: props.version,
-            customerServiceName: customerServiceName,
+            customerServiceName: deployParamsRef.current.Name,
         };
         const serviceRequestProperties: Record<string, string> = {};
-        for (const item of parameters) {
-            if (item.kind === 'variable' || item.kind === 'env') {
-                serviceRequestProperties[item.name] = item.value;
+        for (const variable in deployParamsRef.current) {
+            if (variable !== CUSTOMER_SERVICE_NAME_FIELD) {
+                serviceRequestProperties[variable] = deployParamsRef.current[variable];
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
         submitDeploymentRequest.mutate(createRequest);
-        setIsShowDeploymentResult(true);
     }
 
     const createServicePageUrl: string = createServicePageRoute
@@ -157,11 +142,14 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
             ) : null}
             <div className={'order-param-item-left'} />
             <Form
+                form={form}
                 layout='vertical'
                 autoComplete='off'
+                initialValues={deployParamsRef.current}
                 onFinish={onSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
+                disabled={requestSubmitted}
             >
                 <Form.Item
                     name={'Name'}
@@ -174,7 +162,9 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                         showCount
                         placeholder={'customer defined name for service ordered'}
                         maxLength={256}
-                        onChange={(e) => setCustomerServiceName(e.target.value)}
+                        onChange={(e) => {
+                            cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
+                        }}
                         className={'order-param-item-content'}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
@@ -184,7 +174,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
                     />
                 </Form.Item>
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
-                    {parameters.map((item) =>
+                    {props.params.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
                             <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
                         ) : (
@@ -206,7 +196,7 @@ function OrderSubmit(props: OrderSubmitProps): JSX.Element {
     );
 }
 
-function OrderSubmitPage(): JSX.Element {
+function OrderSubmitPage(): React.JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
     return OrderSubmit(useLocation().state.props);
 }

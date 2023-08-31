@@ -15,7 +15,8 @@ import { ServiceVo, ServiceCatalogService, UserAvailableServiceVo } from '../../
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from './ServicesLoadingError';
 import { useQuery } from '@tanstack/react-query';
-import { getServiceMapper, getVersionMapper } from '../../catalog/services/catalogProps';
+import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
+import { useOrderFormStore } from '../store/OrderFormStore';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -25,6 +26,12 @@ function Services(): React.JSX.Element {
     const [isServicesLoadSuccessful, setIsServicesLoadSuccessful] = useState<boolean>(true);
     const navigate = useNavigate();
     const location = useLocation();
+    const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
+
+    useEffect(() => {
+        clearFormVariables();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(

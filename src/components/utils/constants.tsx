@@ -29,3 +29,4 @@ export const monitorMetricQueueSize: number = 50;
 export const fetchOnlyLastKnownMonitorMetricDataTimeInterval: number = 5 * 1000;
 export const fetchMonitorMetricDataTimeInterval: number = 60 * 1000;
 export const deploymentStatusPollingInterval: number = 5000;
+export const CUSTOMER_SERVICE_NAME_FIELD: string = 'Name';

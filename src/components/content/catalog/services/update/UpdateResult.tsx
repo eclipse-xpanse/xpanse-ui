@@ -4,8 +4,9 @@
  */
 
 import { Alert, Button } from 'antd';
-import { Ocl } from '../../../../xpanse-api/generated';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { Ocl } from '../../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
+import React from 'react';
 
 function UpdateResult({
     ocl,
@@ -17,7 +18,7 @@ function UpdateResult({
     updateRequestStatus: string;
     updateResult: string[];
     onRemove: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
     if (updateRequestStatus === 'success') {
         return (
             <Alert
