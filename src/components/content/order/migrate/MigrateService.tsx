@@ -163,7 +163,9 @@ export const MigrateService = ({
                         <Button
                             type='primary'
                             className={'migrate-steps-operation-button-clas'}
-                            onClick={() => prev()}
+                            onClick={() => {
+                                prev();
+                            }}
                             disabled={isPreviousDisabled}
                         >
                             Previous

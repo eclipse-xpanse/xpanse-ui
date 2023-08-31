@@ -41,7 +41,9 @@ export const ExportServiceData = ({
                                 <Button
                                     type='primary'
                                     className={'migrate-steps-operation-button-clas'}
-                                    onClick={() => next()}
+                                    onClick={() => {
+                                        next();
+                                    }}
                                 >
                                     Next
                                 </Button>

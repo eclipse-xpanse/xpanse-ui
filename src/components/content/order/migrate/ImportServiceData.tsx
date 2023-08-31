@@ -33,7 +33,13 @@ export const ImportServiceData = ({
             <div className={'migrate-step-button-inner-class'}>
                 <Space size={'large'}>
                     {currentMigrationStep > MigrationSteps.ExportServiceData ? (
-                        <Button type='primary' className={'migrate-steps-operation-button-clas'} onClick={() => prev()}>
+                        <Button
+                            type='primary'
+                            className={'migrate-steps-operation-button-clas'}
+                            onClick={() => {
+                                prev();
+                            }}
+                        >
                             Previous
                         </Button>
                     ) : (
@@ -41,7 +47,13 @@ export const ImportServiceData = ({
                     )}
 
                     {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
-                        <Button type='primary' className={'migrate-steps-operation-button-clas'} onClick={() => next()}>
+                        <Button
+                            type='primary'
+                            className={'migrate-steps-operation-button-clas'}
+                            onClick={() => {
+                                next();
+                            }}
+                        >
                             Next
                         </Button>
                     ) : (

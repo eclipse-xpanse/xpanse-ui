@@ -256,7 +256,9 @@ export const SelectDestination = ({
                         <Button
                             type='primary'
                             className={'migrate-steps-operation-button-clas'}
-                            onClick={() => prev()}
+                            onClick={() => {
+                                prev();
+                            }}
                             disabled={isPreviousDisabled}
                         >
                             Previous
@@ -266,7 +268,13 @@ export const SelectDestination = ({
                     )}
 
                     {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
-                        <Button type='primary' className={'migrate-steps-operation-button-clas'} onClick={() => next()}>
+                        <Button
+                            type='primary'
+                            className={'migrate-steps-operation-button-clas'}
+                            onClick={() => {
+                                next();
+                            }}
+                        >
                             Next
                         </Button>
                     ) : (

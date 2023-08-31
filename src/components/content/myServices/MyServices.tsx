@@ -254,7 +254,9 @@ function MyServices(): React.JSX.Element {
                                     description='Are you sure to destroy the service?'
                                     okText='Yes'
                                     cancelText='No'
-                                    onConfirm={() => destroy(record)}
+                                    onConfirm={() => {
+                                        destroy(record);
+                                    }}
                                 >
                                     <Button
                                         loading={record.id === id ? isDestroying : false}
@@ -277,7 +279,9 @@ function MyServices(): React.JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<ExpandAltOutlined />}
-                                onClick={() => handleMyServiceDetailsOpenModal(record.id)}
+                                onClick={() => {
+                                    handleMyServiceDetailsOpenModal(record.id);
+                                }}
                                 disabled={isDestroying}
                             >
                                 detail
@@ -449,7 +453,9 @@ function MyServices(): React.JSX.Element {
                 maskClosable={false}
                 destroyOnClose={true}
                 footer={null}
-                onCancel={() => handleCancelMigrateModel()}
+                onCancel={() => {
+                    handleCancelMigrateModel();
+                }}
                 width={1400}
                 mask={true}
             >

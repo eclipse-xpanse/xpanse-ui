@@ -114,9 +114,9 @@ function Services(): React.JSX.Element {
                                                         <div
                                                             key={index}
                                                             className={'service-type-option-detail'}
-                                                            onClick={() =>
-                                                                onSelectService(item.name, item.latestVersion)
-                                                            }
+                                                            onClick={() => {
+                                                                onSelectService(item.name, item.latestVersion);
+                                                            }}
                                                         >
                                                             <div className='service-type-option-image'>
                                                                 <img
