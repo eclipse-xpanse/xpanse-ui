@@ -123,7 +123,11 @@ export const HeaderUserRoles = (): JSX.Element => {
                 )}
             >
                 {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a onClick={(e) => e.preventDefault()}>
+                <a
+                    onClick={(e) => {
+                        e.preventDefault();
+                    }}
+                >
                     <Space>
                         <UserOutlined />
                         {currentUser} &nbsp;

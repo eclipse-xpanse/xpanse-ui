@@ -164,13 +164,12 @@ export const getDeployParams = (
                 name: param.name,
                 kind: param.kind,
                 type: param.dataType,
-                example: param.example === undefined ? '' : param.example,
+                example: param.example ?? '',
                 description: param.description,
-                value: param.value === undefined ? '' : param.value,
+                value: param.value ?? '',
                 mandatory: param.mandatory,
-                validator: param.validator === undefined ? '' : param.validator,
-                sensitiveScope:
-                    param.sensitiveScope === undefined ? DeployVariable.sensitiveScope.NONE : param.sensitiveScope,
+                validator: param.validator ?? '',
+                sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
             });
         }
     }

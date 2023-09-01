@@ -131,11 +131,17 @@ function Credential(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (text: string, record: AbstractCredentialInfo) => {
+            render: (_text: string, record: AbstractCredentialInfo) => {
                 return (
                     <>
                         <Space size='middle'>
-                            <Button type='primary' icon={<FullscreenOutlined />} onClick={() => details(record)}>
+                            <Button
+                                type='primary'
+                                icon={<FullscreenOutlined />}
+                                onClick={() => {
+                                    details(record);
+                                }}
+                            >
                                 Details
                             </Button>
                             <Popconfirm
@@ -143,7 +149,9 @@ function Credential(): React.JSX.Element {
                                 description='Are you sure to delete the Credential?'
                                 okText='Yes'
                                 cancelText='No'
-                                onConfirm={() => deleteCredentialRequest.mutate(record)}
+                                onConfirm={() => {
+                                    deleteCredentialRequest.mutate(record);
+                                }}
                             >
                                 <Button type='primary' icon={<MinusCircleOutlined />}>
                                     Delete
@@ -152,7 +160,9 @@ function Credential(): React.JSX.Element {
                             <Button
                                 type='primary'
                                 icon={<InfoCircleOutlined />}
-                                onClick={() => updateCredential(record)}
+                                onClick={() => {
+                                    updateCredential(record);
+                                }}
                             >
                                 Update
                             </Button>
@@ -280,7 +290,9 @@ function Credential(): React.JSX.Element {
                     type='primary'
                     loading={isRefresh && (credentialsQuery.isLoading || credentialsQuery.isRefetching)}
                     icon={<SyncOutlined />}
-                    onClick={() => refresh()}
+                    onClick={() => {
+                        refresh();
+                    }}
                 >
                     refresh
                 </Button>
@@ -288,7 +300,9 @@ function Credential(): React.JSX.Element {
                     className={'add-credential-from-button'}
                     type='primary'
                     icon={<PlusCircleOutlined />}
-                    onClick={() => addCredential()}
+                    onClick={() => {
+                        addCredential();
+                    }}
                 >
                     Add
                 </Button>

@@ -4,10 +4,10 @@
     "private": true,
     "type": "module",
     "dependencies": {
-        "@ant-design/icons": "^5.1.4",
-        "@axa-fr/react-oidc": "^6.24.1",
-        "@tanstack/react-query": "^4.29.25",
-        "antd": "^5.7.0",
+        "@ant-design/icons": "^5.2.5",
+        "@axa-fr/react-oidc": "^7.3.4",
+        "@tanstack/react-query": "^4.33.0",
+        "antd": "^5.8.5",
         "echarts": "5.4.3",
         "echarts-for-react": "^3.0.2",
         "rc-menu": "~9.10.0",
@@ -16,7 +16,7 @@
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.14.1",
         "react-timer-hook": "^3.0.7",
-        "yaml": "^2.2.2",
+        "yaml": "^2.3.2",
         "zustand": "^4.4.1"
     },
     "scripts": {
@@ -32,9 +32,9 @@
             "react-app",
             "react-app/jest",
             "eslint:recommended",
-            "plugin:@typescript-eslint/recommended",
-            "plugin:@typescript-eslint/recommended-requiring-type-checking",
-            "plugin:@typescript-eslint/strict",
+            "plugin:@typescript-eslint/recommended-type-checked",
+            "plugin:@typescript-eslint/stylistic-type-checked",
+            "plugin:@typescript-eslint/strict-type-checked",
             "plugin:prettier/recommended"
         ],
         "plugins": [
@@ -62,7 +62,7 @@
         "root": true,
         "parser": "@typescript-eslint/parser",
         "parserOptions": {
-            "project": "tsconfig.json"
+            "project": true
         }
     },
     "browserslist": {
@@ -86,10 +86,10 @@
         "@types/node": "^16.18.12",
         "@types/react": "^18.2.0",
         "@types/react-dom": "^18.2.0",
-        "@typescript-eslint/eslint-plugin": "^5.59.2",
-        "@typescript-eslint/parser": "^5.59.2",
+        "@typescript-eslint/eslint-plugin": "^6.5.0",
+        "@typescript-eslint/parser": "^6.5.0",
         "env-cmd": "^10.1.0",
-        "eslint": "^8.45.0",
+        "eslint": "^8.48.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-config-react-app": "7.0.1",
         "eslint-plugin-prettier": "^5.0.0",
@@ -99,14 +99,17 @@
         "jest-environment-jsdom": "^29.6.1",
         "knip": "^2.19.5",
         "openapi-typescript-codegen": "^0.25.0",
-        "prettier": "3.0.0",
+        "prettier": "3.0.3",
         "react-scripts": "5.0.1",
         "ts-jest": "^29.1.1",
-        "typescript": "5.1.6"
+        "typescript": "5.2.2"
     },
     "overrides": {
         "react-scripts": {
             "typescript": "^5"
+        },
+        "eslint-config-react-app": {
+            "@typescript-eslint/eslint-plugin": "^6.5.0"
         }
     },
     "knip": {
