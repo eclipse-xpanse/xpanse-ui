@@ -10,6 +10,7 @@
 import type { Ocl } from '../models/Ocl';
 import type { Response } from '../models/Response';
 import type { ServiceTemplateVo } from '../models/ServiceTemplateVo';
+import type { UserAvailableServiceVo } from '../models/UserAvailableServiceVo';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -121,7 +122,7 @@ export class ServiceVendorService {
      * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
-     * @returns ServiceTemplateVo OK
+     * @returns UserAvailableServiceVo OK
      * @throws ApiError
      */
     public static listServiceTemplates(
@@ -139,7 +140,7 @@ export class ServiceVendorService {
         cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
         serviceName?: string,
         serviceVersion?: string
-    ): CancelablePromise<Array<ServiceTemplateVo>> {
+    ): CancelablePromise<Array<UserAvailableServiceVo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/service_templates',

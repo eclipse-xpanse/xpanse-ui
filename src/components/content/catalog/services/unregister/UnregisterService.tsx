@@ -34,7 +34,9 @@ function UnregisterService({
                 description='Are you sure to unregister this service?'
                 okText='Yes'
                 cancelText='No'
-                onConfirm={() => unregisterRequest.mutate()}
+                onConfirm={() => {
+                    unregisterRequest.mutate();
+                }}
             >
                 <Button
                     type='primary'

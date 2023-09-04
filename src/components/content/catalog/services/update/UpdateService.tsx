@@ -145,7 +145,9 @@ function UpdateService({
                 title=''
                 footer={null}
                 open={isModalOpen}
-                onOk={() => handleOk()}
+                onOk={() => {
+                    handleOk();
+                }}
                 onCancel={handleCancel}
                 width={'80em'}
             >

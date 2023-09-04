@@ -19,7 +19,13 @@ function LayoutSider(): React.JSX.Element {
     };
 
     return (
-        <Layout.Sider collapsible collapsed={collapsed} onCollapse={(newValue) => setCollapsed(newValue)}>
+        <Layout.Sider
+            collapsible
+            collapsed={collapsed}
+            onCollapse={(newValue) => {
+                setCollapsed(newValue);
+            }}
+        >
             <div className={'logo'}>
                 <Link to={homePageRoute}>
                     <Image width={150} src='xpanse-black.png' preview={false} />

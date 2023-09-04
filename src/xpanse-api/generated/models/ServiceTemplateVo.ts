@@ -32,6 +32,10 @@ export type ServiceTemplateVo = {
      * Category of the registered service.
      */
     category: ServiceTemplateVo.category;
+    /**
+     * Namespace of the user who registered service template.
+     */
+    namespace: string;
     ocl: Ocl;
     /**
      * createTime of the registered service.

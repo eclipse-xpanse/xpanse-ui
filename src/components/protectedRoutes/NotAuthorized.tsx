@@ -9,7 +9,13 @@ function NotAuthorized(): JSX.Element {
             status='warning'
             title='User not authorized to view this page'
             extra={
-                <Button type='primary' key='console' onClick={() => navigate(-1)}>
+                <Button
+                    type='primary'
+                    key='console'
+                    onClick={() => {
+                        navigate(-1);
+                    }}
+                >
                     Go Back
                 </Button>
             }

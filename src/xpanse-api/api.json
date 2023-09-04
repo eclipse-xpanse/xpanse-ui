@@ -6,7 +6,9 @@
         "version": "1.0.0-SNAPSHOT"
     },
     "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
-    "security": [{ "OAuth2 Flow": ["openid", "email", "profile"] }],
+    "security": [
+        { "OAuth2 Flow": ["openid", "profile", "urn:zitadel:iam:org:project:roles", "urn:zitadel:iam:user:metadata"] }
+    ],
     "tags": [
         { "name": "Credentials Management", "description": "APIs for managing user's cloud provider credentials" },
         { "name": "Service Vendor", "description": "APIs to manage service templates." },
@@ -487,7 +489,8 @@
                                 "deployment failed",
                                 "destroying",
                                 "destroy successful",
-                                "destroy failed"
+                                "destroy failed",
+                                "manual cleanup required"
                             ]
                         }
                     }
@@ -647,7 +650,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/ServiceTemplateVo" }
+                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
                                 }
                             }
                         }
@@ -1406,6 +1409,40 @@
                     "200": { "description": "OK" }
                 }
             }
+        },
+        "/xpanse/services/purge/{id}": {
+            "delete": {
+                "tags": ["Service"],
+                "description": "Start a task to purge the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "purge",
+                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "202": {
+                        "description": "Accepted",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -1647,6 +1684,7 @@
                     "id",
                     "lastModifiedTime",
                     "name",
+                    "namespace",
                     "ocl",
                     "serviceRegistrationState",
                     "version"
@@ -1676,6 +1714,10 @@
                             "middleware",
                             "others"
                         ]
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "Namespace of the user who registered service template."
                     },
                     "ocl": { "$ref": "#/components/schemas/Ocl" },
                     "createTime": {
@@ -1849,7 +1891,8 @@
                             "deployment failed",
                             "destroying",
                             "destroy successful",
-                            "destroy failed"
+                            "destroy failed",
+                            "manual cleanup required"
                         ]
                     },
                     "createTime": {
@@ -1940,7 +1983,8 @@
                             "deployment failed",
                             "destroying",
                             "destroy successful",
-                            "destroy failed"
+                            "destroy failed",
+                            "manual cleanup required"
                         ]
                     },
                     "createTime": {
@@ -1968,6 +2012,89 @@
                         "description": "The properties of the deployed service."
                     },
                     "resultMessage": { "type": "string", "description": "The result message of the deployed service." }
+                }
+            },
+            "UserAvailableServiceVo": {
+                "required": [
+                    "billing",
+                    "category",
+                    "createTime",
+                    "csp",
+                    "deployment",
+                    "description",
+                    "flavors",
+                    "icon",
+                    "id",
+                    "lastModifiedTime",
+                    "name",
+                    "namespace",
+                    "regions",
+                    "serviceRegistrationState",
+                    "variables",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
+                    "category": {
+                        "type": "string",
+                        "description": "The catalog of the available service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "name": { "type": "string", "description": "The name of the available service." },
+                    "version": { "type": "string", "description": "The version of the available service." },
+                    "csp": {
+                        "type": "string",
+                        "description": "The Cloud Service Provider of the available service.",
+                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                    },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the available service." },
+                    "namespace": { "type": "string", "description": "The namespace of the available service." },
+                    "icon": { "type": "string", "description": "The icon of the available service." },
+                    "deployment": { "$ref": "#/components/schemas/Deployment" },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the available service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
+                    "createTime": {
+                        "type": "string",
+                        "description": "The registration time of the service.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "The latest update time of the available service.",
+                        "format": "date-time"
+                    },
+                    "serviceRegistrationState": {
+                        "type": "string",
+                        "description": "The state of the available service.",
+                        "enum": ["registered", "updated"]
+                    },
+                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },
             "Metric": {
@@ -2138,89 +2265,6 @@
                     }
                 }
             },
-            "UserAvailableServiceVo": {
-                "required": [
-                    "billing",
-                    "category",
-                    "createTime",
-                    "csp",
-                    "deployment",
-                    "description",
-                    "flavors",
-                    "icon",
-                    "id",
-                    "lastModifiedTime",
-                    "name",
-                    "namespace",
-                    "regions",
-                    "serviceRegistrationState",
-                    "variables",
-                    "version"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
-                    "category": {
-                        "type": "string",
-                        "description": "The catalog of the available service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "name": { "type": "string", "description": "The name of the available service." },
-                    "version": { "type": "string", "description": "The version of the available service." },
-                    "csp": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Region" }
-                    },
-                    "description": { "type": "string", "description": "The description of the available service." },
-                    "namespace": { "type": "string", "description": "The namespace of the available service." },
-                    "icon": { "type": "string", "description": "The icon of the available service." },
-                    "deployment": { "$ref": "#/components/schemas/Deployment" },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables for the deployment, which will be passed to the deployer.",
-                        "items": { "$ref": "#/components/schemas/DeployVariable" }
-                    },
-                    "flavors": {
-                        "type": "array",
-                        "description": "The flavors of the available service.",
-                        "items": { "$ref": "#/components/schemas/Flavor" }
-                    },
-                    "billing": { "$ref": "#/components/schemas/Billing" },
-                    "createTime": {
-                        "type": "string",
-                        "description": "The registration time of the service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "The latest update time of the available service.",
-                        "format": "date-time"
-                    },
-                    "serviceRegistrationState": {
-                        "type": "string",
-                        "description": "The state of the available service.",
-                        "enum": ["registered", "updated"]
-                    },
-                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
-                }
-            },
             "TokenResponse": {
                 "required": ["access_token", "expires_in", "id_token", "token_type"],
                 "type": "object",
@@ -2241,12 +2285,13 @@
                 "type": "oauth2",
                 "flows": {
                     "authorizationCode": {
-                        "authorizationUrl": "https://iam.xpanse.site/oauth/v2/authorize",
-                        "tokenUrl": "https://iam.xpanse.site/oauth/v2/token",
+                        "authorizationUrl": "https://xpanse.com/oauth/v2/authorize",
+                        "tokenUrl": "https://xpanse.com/oauth/v2/token",
                         "scopes": {
-                            "openid": "mandatory must be selected",
-                            "profile": "mandatory must be selected",
-                            "email": ""
+                            "openid": "mandatory must be selected.",
+                            "profile": "mandatory must be selected.",
+                            "urn:zitadel:iam:org:project:roles": "mandatory must be selected.",
+                            "urn:zitadel:iam:user:metadata": "mandatory must be selected."
                         }
                     }
                 }

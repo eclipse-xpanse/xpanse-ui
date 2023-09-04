@@ -50,7 +50,7 @@ function Monitor(): React.JSX.Element {
             form.setFieldsValue({ serviceId: serviceVo.id });
             onFinish({
                 serviceName: serviceVo.name,
-                customerServiceName: serviceVo.customerServiceName === undefined ? '' : serviceVo.customerServiceName,
+                customerServiceName: serviceVo.customerServiceName ?? '',
                 serviceId: serviceVo.id,
             });
         }

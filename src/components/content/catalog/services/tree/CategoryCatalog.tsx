@@ -12,7 +12,7 @@ import {
     ApiError,
     Response,
     ServiceVo,
-    ServiceCatalogService,
+    ServiceVendorService,
     UserAvailableServiceVo,
 } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
@@ -32,7 +32,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
 
     const availableServicesQuery = useQuery({
         queryKey: ['catalog', category],
-        queryFn: () => ServiceCatalogService.listAvailableServices(category),
+        queryFn: () => ServiceVendorService.listServiceTemplates(category),
         refetchOnWindowFocus: false,
     });
 

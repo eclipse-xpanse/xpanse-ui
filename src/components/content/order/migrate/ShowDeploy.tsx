@@ -149,7 +149,9 @@ export const ShowDeploy = ({
                                 <Button
                                     type='primary'
                                     className={'migrate-steps-operation-button-clas'}
-                                    onClick={() => prev()}
+                                    onClick={() => {
+                                        prev();
+                                    }}
                                 >
                                     Previous
                                 </Button>

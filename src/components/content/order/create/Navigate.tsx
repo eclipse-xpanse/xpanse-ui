@@ -23,7 +23,12 @@ function Navigate({ text, to, props }: { text: string; to: To; props?: OrderSubm
 
     return (
         <div>
-            <div onClick={() => goBack(props)} className='order-navigate'>
+            <div
+                onClick={() => {
+                    goBack(props);
+                }}
+                className='order-navigate'
+            >
                 {text}
             </div>
         </div>

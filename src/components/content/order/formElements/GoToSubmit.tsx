@@ -8,6 +8,7 @@ import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 
 export default function GoToSubmit({
     categoryName,
@@ -27,7 +28,7 @@ export default function GoToSubmit({
     selectArea: string;
     selectFlavor: string;
     versionMapper: Map<string, UserAvailableServiceVo[]>;
-}): JSX.Element {
+}): React.JSX.Element {
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
@@ -62,13 +63,12 @@ export default function GoToSubmit({
                     name: param.name,
                     kind: param.kind,
                     type: param.dataType,
-                    example: param.example === undefined ? '' : param.example,
+                    example: param.example ?? '',
                     description: param.description,
-                    value: param.value === undefined ? '' : param.value,
+                    value: param.value ?? '',
                     mandatory: param.mandatory,
-                    validator: param.validator === undefined ? '' : param.validator,
-                    sensitiveScope:
-                        param.sensitiveScope === undefined ? DeployVariable.sensitiveScope.NONE : param.sensitiveScope,
+                    validator: param.validator ?? '',
+                    sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
                 });
             }
         }
