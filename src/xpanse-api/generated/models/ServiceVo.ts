@@ -96,5 +96,6 @@ export namespace ServiceVo {
         DESTROYING = 'destroying',
         DESTROY_SUCCESSFUL = 'destroy successful',
         DESTROY_FAILED = 'destroy failed',
+        MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
     }
 }
