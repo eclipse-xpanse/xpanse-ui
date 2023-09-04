@@ -112,7 +112,7 @@ export namespace UserAvailableServiceVo {
      * The state of the available service.
      */
     export enum serviceRegistrationState {
-        REGISTERED = 'REGISTERED',
-        UPDATED = 'UPDATED',
+        REGISTERED = 'registered',
+        UPDATED = 'updated',
     }
 }
