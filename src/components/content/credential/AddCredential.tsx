@@ -8,6 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import {
+    AdminService,
     ApiError,
     CloudServiceProvider,
     CreateCredential,
@@ -28,6 +29,7 @@ function AddCredential({
     credentialsQuery: UseQueryResult<never[]>;
     onCancel: () => void;
 }): React.JSX.Element {
+    const active = true;
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
     const [disable, setDisable] = useState<boolean>(false);
@@ -35,6 +37,7 @@ function AddCredential({
     const [nameDisable, setNameDisable] = useState<boolean>(true);
     const [currentType, setCurrentType] = useState<CredentialVariables.type | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
+    const [activeCspList, setActiveCspList] = useState<CredentialVariables.csp[]>([]);
     const [credentialTypeList, setCredentialTypeList] = useState<CredentialVariables.type[]>([]);
     const [nameList, setNameList] = useState<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
@@ -42,6 +45,12 @@ function AddCredential({
     const [descriptionValue, setDescriptionValue] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [addLoading, setAddLoading] = useState<boolean>(false);
+
+    const getCspsQuery = useQuery({
+        queryKey: ['getCspsQuery', active],
+        queryFn: () => AdminService.getCsps(active),
+        staleTime: 60000,
+    });
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
@@ -60,18 +69,13 @@ function AddCredential({
     }, [credentialTypesQuery.data, credentialTypesQuery.isSuccess]);
 
     useEffect(() => {
-        if (currentCsp !== undefined) {
-            if (credentialTypesQuery.error instanceof ApiError && 'details' in credentialTypesQuery.error.body) {
-                const response: Response = credentialTypesQuery.error.body as Response;
-                getTipInfo('error', response.details.join());
-            } else if (credentialTypesQuery.error instanceof Error) {
-                getTipInfo('error', credentialTypesQuery.error.message);
-            }
-            setDisable(true);
+        const csps = getCspsQuery.data;
+        if (csps !== undefined && csps.length > 0) {
+            setActiveCspList(csps as CredentialVariables.csp[]);
         } else {
-            setCredentialTypeList([]);
+            setActiveCspList([]);
         }
-    }, [credentialTypesQuery.error, currentCsp]);
+    }, [getCspsQuery.data, getCspsQuery.isSuccess]);
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
@@ -358,7 +362,7 @@ function AddCredential({
                 <div className={'credential-from-input'}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please Select Csp!' }]}>
                         <Select onSelect={handleCspSelect} size={'large'}>
-                            {Object.values(CredentialVariables.csp).map((csp: CredentialVariables.csp) => {
+                            {activeCspList.map((csp: CredentialVariables.csp) => {
                                 return (
                                     <Select.Option key={csp} value={csp} className={'credential-select-option-csp'}>
                                         <Image
