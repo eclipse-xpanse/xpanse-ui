@@ -19,6 +19,7 @@ import {
 import { CredentialTip } from './CredentialTip';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { cspMap } from '../order/formElements/CspSelect';
+import { CredentialApiDoc } from './CredentialApiDoc';
 
 function AddCredential({
     credentialsQuery,
@@ -339,6 +340,12 @@ function AddCredential({
 
     return (
         <div className={'credential-from'}>
+            <CredentialApiDoc
+                csp={currentCsp ?? CredentialVariables.csp.HUAWEI}
+                credentialType={currentType ?? CredentialVariables.type.VARIABLES}
+                styleClass={'add-credential-api-doc'}
+            />
+
             <Form
                 form={form}
                 labelCol={{ span: 4 }}
