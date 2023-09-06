@@ -4,8 +4,8 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
-import '../../../../styles/app.css';
-import { CredentialsManagementService, CredentialVariables, Link } from '../../../../xpanse-api/generated';
+import '../../../styles/app.css';
+import { CredentialsManagementService, CredentialVariables, Link } from '../../../xpanse-api/generated';
 
 export function CredentialApiDoc({
     csp,
