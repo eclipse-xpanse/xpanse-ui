@@ -943,6 +943,67 @@
                 }
             }
         },
+        "/xpanse/csp": {
+            "get": {
+                "tags": ["Admin"],
+                "description": "List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
+                "operationId": "getCsps",
+                "parameters": [
+                    {
+                        "name": "active",
+                        "in": "query",
+                        "description": "Whether only list cloud service provider with active plugin.",
+                        "required": true,
+                        "schema": { "type": "boolean" }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string",
+                                        "enum": [
+                                            "huawei",
+                                            "flexibleEngine",
+                                            "openstack",
+                                            "alicloud",
+                                            "aws",
+                                            "azure",
+                                            "google",
+                                            "scs"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/xpanse/credentials/openapi/{csp}/{type}": {
             "get": {
                 "tags": ["Credentials Management"],
@@ -1484,7 +1545,8 @@
                             "Unauthorized",
                             "Access Denied",
                             "Sensitive Field Encryption Or Decryption Failed Exception",
-                            "Unsupported Enum Value"
+                            "Unsupported Enum Value",
+                            "Metrics Data Not Ready"
                         ]
                     },
                     "details": {
@@ -2160,7 +2222,7 @@
                     "backendSystemType": {
                         "type": "string",
                         "description": "The type of backend system.",
-                        "enum": ["IdentityProvider", "Database"]
+                        "enum": ["IdentityProvider", "Database", "Terraform Boot"]
                     },
                     "name": { "type": "string", "description": "The name of backend system." },
                     "healthStatus": {

@@ -19,6 +19,7 @@ import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
 import { cspMap } from '../order/formElements/CspSelect';
+import { CredentialApiDoc } from './CredentialApiDoc';
 
 function UpdateCredential({
     createCredential,
@@ -190,6 +191,11 @@ function UpdateCredential({
 
     return (
         <div className={'credential-from'}>
+            <CredentialApiDoc
+                csp={createCredential.csp}
+                credentialType={createCredential.type}
+                styleClass={'update-credential-api-doc'}
+            />
             <Form
                 form={form}
                 labelCol={{ span: 4 }}

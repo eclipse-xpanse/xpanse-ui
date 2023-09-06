@@ -41,6 +41,7 @@ export namespace BackendSystemStatus {
     export enum backendSystemType {
         IDENTITY_PROVIDER = 'IdentityProvider',
         DATABASE = 'Database',
+        TERRAFORM_BOOT = 'Terraform Boot',
     }
 
     /**
