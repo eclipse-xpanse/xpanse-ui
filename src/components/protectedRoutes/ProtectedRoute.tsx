@@ -12,13 +12,14 @@ import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { getRolesOfUser } from '../oidc/OidcConfig';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
+import React from 'react';
 
 interface ProtectedRouteProperties {
-    children: JSX.Element;
+    children: React.JSX.Element;
     allowedRole: 'isv' | 'user' | 'admin' | 'all';
 }
 
-function getFullLayout(content: JSX.Element): JSX.Element {
+function getFullLayout(content: React.JSX.Element): React.JSX.Element {
     return (
         <Layout className={'layout'} hasSider={true}>
             <LayoutSider />
@@ -33,7 +34,7 @@ function getFullLayout(content: JSX.Element): JSX.Element {
     );
 }
 
-function Protected(protectedRouteProperties: ProtectedRouteProperties): JSX.Element {
+function Protected(protectedRouteProperties: ProtectedRouteProperties): React.JSX.Element {
     const oidcIdToken: OidcIdToken = useOidcIdToken();
 
     const roles: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
