@@ -58,5 +58,6 @@ export namespace Response {
         ACCESS_DENIED = 'Access Denied',
         SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
         UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
+        METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
     }
 }

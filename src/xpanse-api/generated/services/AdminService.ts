@@ -32,4 +32,31 @@ export class AdminService {
             },
         });
     }
+
+    /**
+     * List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+     * @param active Whether only list cloud service provider with active plugin.
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getCsps(
+        active: boolean
+    ): CancelablePromise<
+        Array<'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs'>
+    > {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/csp',
+            query: {
+                active: active,
+            },
+            errors: {
+                400: `Bad Request`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
 }
