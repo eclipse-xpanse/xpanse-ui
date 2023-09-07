@@ -56,6 +56,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
             availableRolesToUser.forEach((role) => {
                 if (allowRoleList.includes(role)) {
                     sessionStorage.setItem(userRoleKey, role);
+                    setCurrentRole(role);
                     return;
                 }
             });
