@@ -328,3 +328,7 @@
 .timer-value {
     font-size: 20px;
 }
+
+.purge-btn-class {
+    width: 101px;
+}

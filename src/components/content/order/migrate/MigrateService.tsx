@@ -177,9 +177,9 @@ export const MigrateService = ({
                         <Popconfirm
                             title='Migrate service'
                             description='Are you sure to migrate service?'
-                            okText='Yes'
-                            cancelText='No'
-                            onConfirm={migrate}
+                            okText='No'
+                            cancelText='Yes'
+                            onCancel={migrate}
                         >
                             <Button
                                 type='primary'
