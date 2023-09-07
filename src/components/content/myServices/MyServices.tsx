@@ -19,7 +19,8 @@ import {
     AreaChartOutlined,
     CloseCircleOutlined,
     CopyOutlined,
-    ExpandAltOutlined,
+    DeleteOutlined,
+    InfoCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
 import '../../../styles/my_services.css';
@@ -34,6 +35,8 @@ import { useNavigate } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
 import { useOrderFormStore } from '../order/store/OrderFormStore';
+import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPolling';
+import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -46,6 +49,8 @@ function MyServices(): React.JSX.Element {
     const [id, setId] = useState<string>('');
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
     const [isDestroyingCompleted, setIsDestroyingCompleted] = useState<boolean>(false);
+    const [isPurging, setIsPurging] = useState<boolean>(false);
+    const [isPurgingCompleted, setIsPurgingCompleted] = useState<boolean>(false);
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
     const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
@@ -53,6 +58,7 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
+    const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
     const navigate = useNavigate();
@@ -117,6 +123,14 @@ function MyServices(): React.JSX.Element {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isDestroyingCompleted]);
+
+    useEffect(() => {
+        if (isPurgingCompleted) {
+            setId('');
+            refreshData();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isPurgingCompleted]);
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -240,21 +254,31 @@ function MyServices(): React.JSX.Element {
                             </Button>
                             {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                             record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ? (
-                                <Button
-                                    loading={record.id === id ? isDestroying : false}
-                                    type='primary'
-                                    icon={<CloseCircleOutlined />}
-                                    disabled={true}
+                                <Popconfirm
+                                    title='Purge the service'
+                                    description='Are you sure to purge the service?'
+                                    cancelText='Yes'
+                                    okText='No'
+                                    onCancel={() => {
+                                        purge(record);
+                                    }}
                                 >
-                                    destroy
-                                </Button>
+                                    <Button
+                                        className={'purge-btn-class'}
+                                        loading={record.id === id ? isPurging : false}
+                                        type='primary'
+                                        icon={<DeleteOutlined />}
+                                    >
+                                        purge
+                                    </Button>
+                                </Popconfirm>
                             ) : (
                                 <Popconfirm
                                     title='Destroy the service'
                                     description='Are you sure to destroy the service?'
-                                    okText='Yes'
-                                    cancelText='No'
-                                    onConfirm={() => {
+                                    cancelText='Yes'
+                                    okText='No'
+                                    onCancel={() => {
                                         destroy(record);
                                     }}
                                 >
@@ -278,13 +302,13 @@ function MyServices(): React.JSX.Element {
                             )}
                             <Button
                                 type='primary'
-                                icon={<ExpandAltOutlined />}
+                                icon={<InfoCircleOutlined />}
                                 onClick={() => {
                                     handleMyServiceDetailsOpenModal(record.id);
                                 }}
                                 disabled={isDestroying}
                             >
-                                detail
+                                details
                             </Button>
                         </Space>
                     </>
@@ -293,7 +317,14 @@ function MyServices(): React.JSX.Element {
         },
     ];
 
-    function destroy(record: ServiceVo) {
+    const purge = (record: ServiceVo): void => {
+        setIsPurging(true);
+        setIsPurgingCompleted(false);
+        setId(record.id);
+        servicePurgeQuery.mutate(record.id);
+    };
+
+    function destroy(record: ServiceVo): void {
         setIsDestroying(true);
         setId(record.id);
         setIsDestroyingCompleted(false);
@@ -437,6 +468,16 @@ function MyServices(): React.JSX.Element {
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
                 />
             ) : null}
+            {isPurging && id.length > 0 ? (
+                <PurgeServiceStatusPolling
+                    uuid={id}
+                    isError={servicePurgeQuery.isError}
+                    error={servicePurgeQuery.error as Error}
+                    isSuccess={servicePurgeQuery.isSuccess}
+                    setIsPurging={setIsPurging}
+                    setIsPurgingCompleted={setIsPurgingCompleted}
+                />
+            ) : null}
             <Modal
                 title={'Service Details'}
                 width={700}
@@ -453,9 +494,7 @@ function MyServices(): React.JSX.Element {
                 maskClosable={false}
                 destroyOnClose={true}
                 footer={null}
-                onCancel={() => {
-                    handleCancelMigrateModel();
-                }}
+                onCancel={handleCancelMigrateModel}
                 width={1400}
                 mask={true}
             >

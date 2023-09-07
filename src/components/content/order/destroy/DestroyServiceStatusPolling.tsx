@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { useStopwatch } from 'react-timer-hook';
 import React, { useEffect } from 'react';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
