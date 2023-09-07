@@ -30,11 +30,13 @@ function ServiceDetail({
                     &nbsp;Available Regions
                 </h3>
                 <Space size={[0, 8]} wrap>
-                    {serviceAreas.map((area) => (
-                        <Tag color='orange'>
-                            {area.name}:&nbsp;{area.regions.join(', ')}
-                        </Tag>
-                    ))}
+                    {serviceAreas.map((area) =>
+                        area.regions.map((region) => (
+                            <Tag className={'ocl-display-tag'} color='orange'>
+                                {area.name} : {region}
+                            </Tag>
+                        ))
+                    )}
                 </Space>
                 <Divider />
             </div>
