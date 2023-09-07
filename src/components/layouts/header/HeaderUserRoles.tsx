@@ -31,7 +31,7 @@ function getItem(
     } as MenuItem;
 }
 
-export const HeaderUserRoles = (): JSX.Element => {
+export const HeaderUserRoles = (): React.JSX.Element => {
     const navigate = useNavigate();
     const location = useLocation();
     const { useToken } = theme;
@@ -85,6 +85,7 @@ export const HeaderUserRoles = (): JSX.Element => {
             selectedKeys: [currentRole],
             defaultOpenKeys: ['switchRole'],
             mode: 'vertical',
+            style: menuStyle,
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [roleList, currentRole]);
@@ -114,7 +115,7 @@ export const HeaderUserRoles = (): JSX.Element => {
                 menu={menuProps}
                 dropdownRender={(menu) => (
                     <div style={contentStyle}>
-                        {React.cloneElement(menu as React.ReactElement, { style: menuStyle })}
+                        {menu}
                         <Divider style={{ margin: 0 }} />
                         <Space style={{ padding: 8 }}>
                             <Logout />
