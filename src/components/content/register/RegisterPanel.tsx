@@ -5,7 +5,7 @@
 
 import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
@@ -16,11 +16,11 @@ import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult
 import { ValidationStatus } from '../common/ocl/ValidationStatus';
 import { useMutation } from '@tanstack/react-query';
 
-function RegisterPanel(): JSX.Element {
+function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
-    const oclDisplayData = useRef<JSX.Element>(<></>);
+    const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
