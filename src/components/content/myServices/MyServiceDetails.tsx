@@ -22,7 +22,6 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
         const requestMap = new Map<string, string>();
         const resultMessageMap = new Map<string, string>();
         let deployResourceMap: DeployResource[] = [];
-        console.log('getServiceDetailsByIdQuery.data********:  ', getServiceDetailsByIdQuery.data);
         if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
             for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
                 endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
