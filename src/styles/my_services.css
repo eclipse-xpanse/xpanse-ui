@@ -1,6 +1,7 @@
 .service-instance-list {
     margin-top: 15px;
 }
+
 .service-instance-list-detail {
     font-weight: bold;
 }
@@ -23,10 +24,16 @@
 .my-service-status-size {
     font-size: 14px;
 }
+
 .show-details {
     width: 55%;
     height: 55%;
 }
+
 .details-content {
     margin-bottom: 15px;
+}
+
+.show-details-typography-copy {
+    color: rgba(0, 0, 0, 0.45) !important;
 }
