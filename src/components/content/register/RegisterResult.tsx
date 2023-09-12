@@ -6,6 +6,7 @@
 import { Alert, Button } from 'antd';
 import { Ocl } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import React from 'react';
 
 function RegisterResult({
     ocl,
@@ -17,7 +18,7 @@ function RegisterResult({
     registerRequestStatus: string;
     registerResult: string[];
     onRemove: () => void;
-}): JSX.Element {
+}): React.JSX.Element {
     if (registerRequestStatus === 'success') {
         return (
             <Alert

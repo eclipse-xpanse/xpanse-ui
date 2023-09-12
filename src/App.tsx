@@ -18,6 +18,9 @@ import {
     monitorPageRoute,
     credentialPageRoute,
     healthCheckPageRoute,
+    registerFailedRoute,
+    registerInvalidRoute,
+    registerSuccessfulRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Services from './components/content/order/services/Services';
@@ -34,7 +37,6 @@ import { HealthCheckStatus } from './components/content/systemStatus/HealthCheck
 import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
 import React from 'react';
 import { SessionLost } from './components/content/login/SessionLost';
-
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
@@ -62,16 +64,20 @@ function App(): React.JSX.Element {
                             </OidcSecure>
                         }
                     />
-                    <Route
-                        path={registerPageRoute}
-                        element={
-                            <OidcSecure>
-                                <Protected allowedRole={'isv'}>
-                                    <RegisterPanel />
-                                </Protected>
-                            </OidcSecure>
-                        }
-                    />
+                    {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
+                        (path) => (
+                            <Route
+                                path={path}
+                                element={
+                                    <OidcSecure>
+                                        <Protected allowedRole={'isv'}>
+                                            <RegisterPanel />
+                                        </Protected>
+                                    </OidcSecure>
+                                }
+                            />
+                        )
+                    )}
                     <Route
                         path={catalogPageRoute}
                         element={
