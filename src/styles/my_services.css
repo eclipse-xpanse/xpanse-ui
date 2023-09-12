@@ -7,7 +7,6 @@
 
 .service-instance-detail-position {
     display: flex;
-    alignitems: center;
 }
 
 .failure-alert {
@@ -25,7 +24,7 @@
 }
 .show-details {
     width: 80%;
-    height: 55%;
+    padding: 0;
 }
 .details-content {
     margin-bottom: 15px;
