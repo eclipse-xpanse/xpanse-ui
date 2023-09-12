@@ -53,7 +53,6 @@ export interface OrderSubmitProps {
 }
 
 function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
-    console.log('rendering');
     const [form] = Form.useForm();
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
