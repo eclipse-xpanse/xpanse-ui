@@ -7,7 +7,7 @@
 
 .service-instance-detail-position {
     display: flex;
-    alignitems: center;
+    align-items: center;
 }
 
 .failure-alert {
