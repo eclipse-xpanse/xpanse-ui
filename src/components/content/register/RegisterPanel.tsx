@@ -5,16 +5,23 @@
 
 import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
-import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../xpanse-api/generated';
+import { ApiError, Ocl, Response, ServiceTemplateVo, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
-import RegisterResult from './RegisterResult';
 import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
 import loadOclFile from '../common/ocl/loadOclFile';
-import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
 import { ValidationStatus } from '../common/ocl/ValidationStatus';
 import { useMutation } from '@tanstack/react-query';
+import { useLocation, useNavigate } from 'react-router-dom';
+import {
+    registerFailedRoute,
+    registerInvalidRoute,
+    registerPageRoute,
+    registerSuccessfulRoute,
+} from '../../utils/constants';
+import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
+import RegisterResult from './RegisterResult';
 
 function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -24,6 +31,8 @@ function RegisterPanel(): React.JSX.Element {
     const registerResult = useRef<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const registerRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
@@ -32,6 +41,7 @@ function RegisterPanel(): React.JSX.Element {
         onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
             files.current[0].status = 'success';
             registerResult.current = [`ID - ${serviceTemplateVo.id}`];
+            navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
@@ -41,8 +51,17 @@ function RegisterPanel(): React.JSX.Element {
             } else {
                 registerResult.current = [error.message];
             }
+            navigate(registerFailedRoute);
         },
     });
+
+    // useEffect to route to /register URI when a user reloads the failed URI. Hence, this must be run only during component's first render.
+    useEffect(() => {
+        if (location.pathname.includes(registerFailedRoute) || location.pathname.includes(registerSuccessfulRoute)) {
+            navigate(registerPageRoute);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     function validateAndLoadYamlFile(uploadedFiles: UploadFile[]) {
         if (uploadedFiles.length > 0) {
@@ -69,6 +88,7 @@ function RegisterPanel(): React.JSX.Element {
                         } else {
                             console.log(e);
                         }
+                        navigate(registerInvalidRoute);
                     }
                 }
             };
@@ -98,6 +118,7 @@ function RegisterPanel(): React.JSX.Element {
         setOclValidationStatus('notStarted');
         oclDisplayData.current = <></>;
         registerRequest.reset();
+        navigate(registerPageRoute);
     };
 
     return (

@@ -30,3 +30,6 @@ export const fetchOnlyLastKnownMonitorMetricDataTimeInterval: number = 5 * 1000;
 export const fetchMonitorMetricDataTimeInterval: number = 60 * 1000;
 export const deploymentStatusPollingInterval: number = 5000;
 export const CUSTOMER_SERVICE_NAME_FIELD: string = 'Name';
+export const registerFailedRoute: string = '/register/failed';
+export const registerInvalidRoute: string = '/register/invalid';
+export const registerSuccessfulRoute: string = '/register/successful';
