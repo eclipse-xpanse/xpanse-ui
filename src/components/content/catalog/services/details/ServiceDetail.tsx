@@ -56,6 +56,9 @@ function ServiceDetail({
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
+                <Descriptions.Item label='Namespace'>
+                    <Tag color='cyan'>{serviceDetails.namespace}</Tag>
+                </Descriptions.Item>
                 <Descriptions.Item label='Status'>
                     <ServiceStatus serviceStatus={serviceDetails.serviceRegistrationState} />
                 </Descriptions.Item>

@@ -75,7 +75,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 {ocl.category ? ocl.category : PLACE_HOLDER_UNKNOWN_VALUE}
                             </Descriptions.Item>
                             <Descriptions.Item label='Version'>{ocl.serviceVersion}</Descriptions.Item>
-                            <Descriptions.Item label='Namespace'>{ocl.namespace}</Descriptions.Item>
+                            <Descriptions.Item label='Namespace'>
+                                <Tag color='cyan'>{ocl.namespace}</Tag>
+                            </Descriptions.Item>
                             <Descriptions.Item label='Flavors'>
                                 <FlavoursText flavors={ocl.flavors} />
                             </Descriptions.Item>
