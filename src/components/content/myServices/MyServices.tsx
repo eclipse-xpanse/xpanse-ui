@@ -218,6 +218,16 @@ function MyServices(): React.JSX.Element {
                         <Space size='middle'>
                             <Button
                                 type='primary'
+                                icon={<InfoCircleOutlined />}
+                                onClick={() => {
+                                    handleMyServiceDetailsOpenModal(record.id);
+                                }}
+                                disabled={isDestroying}
+                            >
+                                details
+                            </Button>
+                            <Button
+                                type='primary'
                                 icon={<AreaChartOutlined />}
                                 onClick={() => {
                                     onMonitor(record);
@@ -300,16 +310,6 @@ function MyServices(): React.JSX.Element {
                                     </Button>
                                 </Popconfirm>
                             )}
-                            <Button
-                                type='primary'
-                                icon={<InfoCircleOutlined />}
-                                onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record.id);
-                                }}
-                                disabled={isDestroying}
-                            >
-                                details
-                            </Button>
                         </Space>
                     </>
                 );

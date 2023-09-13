@@ -16,7 +16,7 @@ export function ServiceDetailsContent({
 }: {
     content: Map<string, string>;
     requestParams: Map<string, string>;
-    resultMessage: Map<string, string>;
+    resultMessage: React.JSX.Element | undefined;
     deployResources: DeployResource[];
 }): React.JSX.Element {
     const items: React.JSX.Element[] = [];
@@ -26,8 +26,8 @@ export function ServiceDetailsContent({
     if (requestParams.size > 0) {
         items.push(convertMapToDetailsList(requestParams, 'Request Parameters'));
     }
-    if (resultMessage.size > 0) {
-        items.push(convertMapToDetailsList(resultMessage, 'Result Message'));
+    if (resultMessage !== undefined) {
+        items.push(resultMessage);
     }
     if (deployResources.length > 0) {
         items.push(DeployedResources(deployResources, 'Deployed Resources'));
