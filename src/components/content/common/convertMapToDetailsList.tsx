@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Input, Typography } from 'antd';
-import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { CheckOutlined, CopyOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
 export function convertMapToDetailsList(content: Map<string, string>, title: string): React.JSX.Element {
     if (content.size > 0) {
@@ -18,7 +18,15 @@ export function convertMapToDetailsList(content: Map<string, string>, title: str
                         <div className={'service-instance-list-detail '}>{k}:&nbsp;&nbsp;</div>
                         {title.includes('Endpoint Information') ? (
                             <div className={'show-details'}>
-                                <Paragraph copyable={{ text: v }}>
+                                <Paragraph
+                                    copyable={{
+                                        text: v,
+                                        icon: [
+                                            <CopyOutlined className={'show-details-typography-copy'} />,
+                                            <CheckOutlined className={'show-details-typography-copy'} />,
+                                        ],
+                                    }}
+                                >
                                     <Input.Password
                                         readOnly={true}
                                         bordered={false}
