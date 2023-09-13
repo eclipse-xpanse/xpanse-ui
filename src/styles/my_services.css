@@ -36,3 +36,12 @@
 .show-details-typography-copy {
     color: rgba(0, 0, 0, 0.45) !important;
 }
+
+.deployment-details-with-scroll {
+    max-height: 30vh;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-width: 100%;
+    margin-left: 14px;
+}
