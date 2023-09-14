@@ -1,8 +1,13 @@
 import { Button, Result } from 'antd';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { homePageRoute } from '../utils/constants';
 
-function NotAuthorized(): JSX.Element {
+function NotAuthorized(): React.JSX.Element {
     const navigate = useNavigate();
+    const backHome = () => {
+        navigate(homePageRoute);
+    };
 
     return (
         <Result
@@ -13,10 +18,10 @@ function NotAuthorized(): JSX.Element {
                     type='primary'
                     key='console'
                     onClick={() => {
-                        navigate(-1);
+                        backHome();
                     }}
                 >
-                    Go Back
+                    Back Home
                 </Button>
             }
         />
