@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
+import { Alert, Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
     AbstractCredentialInfo,
@@ -514,14 +514,16 @@ function MyServices(): React.JSX.Element {
                 </Button>
             </div>
             {servicesLoadingError}
-            <div className={'service-instance-list'}>
-                <Table
-                    columns={columns}
-                    dataSource={serviceVoList}
-                    loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
-                    rowKey={'id'}
-                />
-            </div>
+            <Row>
+                <div className={'service-instance-list'}>
+                    <Table
+                        columns={columns}
+                        dataSource={serviceVoList}
+                        loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
+                        rowKey={'id'}
+                    />
+                </div>
+            </Row>
         </div>
     );
 }

@@ -228,11 +228,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -365,11 +365,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -454,11 +454,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -600,11 +600,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -990,11 +990,11 @@
                                             "huawei",
                                             "flexibleEngine",
                                             "openstack",
+                                            "scs",
                                             "alicloud",
                                             "aws",
                                             "azure",
-                                            "google",
-                                            "scs"
+                                            "google"
                                         ]
                                     }
                                 }
@@ -1021,11 +1021,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1085,11 +1085,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1163,11 +1163,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     }
@@ -1248,11 +1248,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1583,7 +1583,7 @@
                     "name": {
                         "type": "string",
                         "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "regions": {
                         "type": "array",
@@ -1760,7 +1760,7 @@
                     "csp": {
                         "type": "string",
                         "description": "Csp of the registered service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "category": {
                         "type": "string",
@@ -1809,7 +1809,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "description": { "type": "string", "description": "The description of the credential" },
                     "type": {
@@ -1888,7 +1888,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceRequestProperties": {
@@ -1942,7 +1942,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -2034,7 +2034,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -2120,7 +2120,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "regions": {
                         "type": "array",
@@ -2273,11 +2273,11 @@
                                     "huawei",
                                     "flexibleEngine",
                                     "openstack",
+                                    "scs",
                                     "alicloud",
                                     "aws",
                                     "azure",
-                                    "google",
-                                    "scs"
+                                    "google"
                                 ]
                             },
                             "type": {
@@ -2305,7 +2305,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "type": {
                         "type": "string",
