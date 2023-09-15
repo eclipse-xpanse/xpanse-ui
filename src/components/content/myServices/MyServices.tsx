@@ -200,6 +200,16 @@ function MyServices(): React.JSX.Element {
             dataIndex: 'flavor',
         },
         {
+            title: 'Created On',
+            dataIndex: 'createTime',
+            defaultSortOrder: 'descend',
+            sorter: (serviceVoA, serviceVoB) => {
+                const dateA = new Date(serviceVoA.createTime);
+                const dateB = new Date(serviceVoB.createTime);
+                return dateA.getTime() - dateB.getTime();
+            },
+        },
+        {
             title: 'ServiceState',
             dataIndex: 'serviceDeploymentState',
             filters: serviceStateFilters,
