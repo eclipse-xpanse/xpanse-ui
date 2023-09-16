@@ -20,6 +20,7 @@
 
 .site-layout .site-layout-background {
     background: #fff;
+    overflow: auto;
 }
 
 [data-theme='dark'] .site-layout .site-layout-background {
