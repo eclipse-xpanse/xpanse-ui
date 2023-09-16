@@ -8,19 +8,14 @@ import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
-import {
-    ApiError,
-    Response,
-    ServiceVo,
-    ServiceVendorService,
-    UserAvailableServiceVo,
-} from '../../../../../xpanse-api/generated';
+import { ApiError, Response, ServiceVo, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
-import { useQuery } from '@tanstack/react-query';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
+import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
+    console.log('CategoryCatalog');
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
@@ -30,11 +25,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
     const [loadingError, setLoadingError] = useState<React.JSX.Element | undefined>(undefined);
 
-    const availableServicesQuery = useQuery({
-        queryKey: ['catalog', category],
-        queryFn: () => ServiceVendorService.listServiceTemplates(category),
-        refetchOnWindowFocus: false,
-    });
+    const availableServicesQuery = useAvailableServiceTemplatesQuery(category);
 
     useEffect(() => {
         const categoryTreeData: DataNode[] = [];
@@ -177,6 +168,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
                         categoryOclData={categoryOclData}
                         currentServiceName={selectKey.toString()}
                         confirmUnregister={onConfirmUnregister}
+                        category={category}
                     />
                 </div>
             </div>

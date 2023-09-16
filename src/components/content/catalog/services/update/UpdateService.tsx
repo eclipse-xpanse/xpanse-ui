@@ -6,21 +6,31 @@
 import React, { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../../../xpanse-api/generated';
+import {
+    ApiError,
+    Ocl,
+    ServiceTemplateVo,
+    Response,
+    ServiceVendorService,
+    ServiceVo,
+} from '../../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
 import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
 import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
 import loadOclFile from '../../../common/ocl/loadOclFile';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 function UpdateService({
     id,
     unregisterStatus,
+    category,
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
+    category: ServiceVo.category;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -30,7 +40,7 @@ function UpdateService({
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.update(id, ocl);
@@ -60,7 +70,7 @@ function UpdateService({
 
     const handleCancel = () => {
         if (updateServiceRequest.isSuccess) {
-            window.location.reload();
+            void queryClient.refetchQueries(getQueryKey(category));
         }
         files.current.pop();
         ocl.current = undefined;
