@@ -40,9 +40,9 @@ export type DeployVariable = {
      */
     mandatory: boolean;
     /**
-     * Validator of the variable
+     * valueSchema of the variable
      */
-    validator?: string;
+    valueSchema?: Record<string, Record<string, any>>;
     /**
      * Sensitive scope of variable storage
      */

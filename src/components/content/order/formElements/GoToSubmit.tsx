@@ -67,7 +67,6 @@ export default function GoToSubmit({
                     description: param.description,
                     value: param.value ?? '',
                     mandatory: param.mandatory,
-                    validator: param.validator ?? '',
                     sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
                 });
             }

@@ -28,7 +28,6 @@ export interface DeployParam {
     description: string;
     value: string;
     mandatory: boolean;
-    validator: string;
     sensitiveScope: DeployVariable.sensitiveScope;
 }
 
@@ -168,7 +167,6 @@ export const getDeployParams = (
                 description: param.description,
                 value: param.value ?? '',
                 mandatory: param.mandatory,
-                validator: param.validator ?? '',
                 sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
             });
         }
