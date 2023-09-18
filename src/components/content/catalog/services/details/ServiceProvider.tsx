@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import { CloudServiceProvider, Region, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
@@ -24,7 +24,7 @@ function ServiceProvider({
     categoryOclData: Map<string, UserAvailableServiceVo[]>;
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
-}): JSX.Element {
+}): React.JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<UserAvailableServiceVo | undefined>(undefined);
     const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
