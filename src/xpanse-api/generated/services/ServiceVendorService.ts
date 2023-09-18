@@ -137,7 +137,7 @@ export class ServiceVendorService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string
     ): CancelablePromise<Array<UserAvailableServiceVo>> {

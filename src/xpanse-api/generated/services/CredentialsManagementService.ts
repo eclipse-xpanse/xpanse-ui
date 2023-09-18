@@ -24,7 +24,7 @@ export class CredentialsManagementService {
      * @throws ApiError
      */
     public static listCredentials(
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
@@ -97,7 +97,7 @@ export class CredentialsManagementService {
      * @throws ApiError
      */
     public static deleteCredential(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
         name: string
     ): CancelablePromise<void> {
@@ -127,7 +127,7 @@ export class CredentialsManagementService {
      * @throws ApiError
      */
     public static getCredentialOpenApi(
-        csp: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        csp: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
     ): CancelablePromise<Link> {
         return __request(OpenAPI, {
@@ -156,7 +156,7 @@ export class CredentialsManagementService {
      * @throws ApiError
      */
     public static listCredentialCapabilities(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
         name?: string
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
@@ -185,7 +185,7 @@ export class CredentialsManagementService {
      * @throws ApiError
      */
     public static listCredentialTypes(
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs'
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'
     ): CancelablePromise<Array<'variables' | 'http_authentication' | 'api_key' | 'oauth2'>> {
         return __request(OpenAPI, {
             method: 'GET',

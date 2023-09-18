@@ -39,7 +39,7 @@ export class ServiceService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:

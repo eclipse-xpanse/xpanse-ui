@@ -63,11 +63,11 @@ export type UserAvailableServiceVo = {
     flavors: Array<Flavor>;
     billing: Billing;
     /**
-     * The registration time of the service.
+     * createTime of the registered service.
      */
     createTime: string;
     /**
-     * The latest update time of the available service.
+     * Last updateTime of the registered service.
      */
     lastModifiedTime: string;
     /**
@@ -101,11 +101,11 @@ export namespace UserAvailableServiceVo {
         HUAWEI = 'huawei',
         FLEXIBLE_ENGINE = 'flexibleEngine',
         OPENSTACK = 'openstack',
+        SCS = 'scs',
         ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
-        SCS = 'scs',
     }
 
     /**

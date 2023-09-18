@@ -42,7 +42,7 @@ export class AdminService {
     public static getCsps(
         active: boolean
     ): CancelablePromise<
-        Array<'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs'>
+        Array<'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'>
     > {
         return __request(OpenAPI, {
             method: 'GET',
