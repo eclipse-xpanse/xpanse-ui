@@ -55,6 +55,14 @@ function RegisterPanel(): React.JSX.Element {
         },
     });
 
+    // useEffect to clean up state when 'register panel' is clicked after registration has failed.
+    useEffect(() => {
+        if (location.pathname === registerPageRoute) {
+            onRemove();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
+
     // useEffect to route to /register URI when a user reloads the failed URI. Hence, this must be run only during component's first render.
     useEffect(() => {
         if (location.pathname.includes(registerFailedRoute) || location.pathname.includes(registerSuccessfulRoute)) {

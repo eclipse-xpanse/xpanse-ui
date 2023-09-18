@@ -66,14 +66,14 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             if (endPointMap.size > 0) {
                 return (
                     <>
-                        <span>{'Migrated Successful'}</span>
+                        <span>{'Migrated Successfully'}</span>
                         <div className={'service-instance-detail-position'}>
                             {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                         </div>
                     </>
                 );
             } else {
-                return <span>{'Migrated Successful'}</span>;
+                return <span>{'Migrated Successfully'}</span>;
             }
         } else if (
             response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||

@@ -45,6 +45,7 @@ export const MigrateServiceStatusPolling = ({
     const [isDestroyError, setIsDestroyError] = useState<boolean>(false);
     const [destroyError, setDestroyError] = useState<Error | undefined>(undefined);
     const [deployStatus, setDeployStatus] = useState<ServiceDetailVo.serviceDeploymentState | undefined>(undefined);
+    const [migrateSuccessResponse, setMigrateSuccessResponse] = useState<ServiceDetailVo | undefined>(undefined);
     const stopWatch = useStopwatch({
         autoStart: true,
     });
@@ -117,6 +118,7 @@ export const MigrateServiceStatusPolling = ({
                 setIsMigrating(true);
                 setRequestSubmitted(true);
                 setIsPreviousDisabled(true);
+                setMigrateSuccessResponse(getServiceDetailsByIdQuery.data);
                 setIsDeployDetailsStartQuerying(false);
                 setDeployStatus(ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL);
             } else if (
@@ -351,14 +353,16 @@ export const MigrateServiceStatusPolling = ({
                                 getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
                                 ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
                             ) {
-                                return OrderSubmitResult(
-                                    ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
-                                    destroyUuid,
-                                    'success',
-                                    getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
-                                    stopWatch,
-                                    OperationType.Migrate
-                                );
+                                if (migrateSuccessResponse !== undefined) {
+                                    return OrderSubmitResult(
+                                        ProcessingStatus(migrateSuccessResponse, OperationType.Migrate),
+                                        deployUuid,
+                                        'success',
+                                        getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                        stopWatch,
+                                        OperationType.Migrate
+                                    );
+                                }
                             } else if (
                                 getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
                                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
@@ -441,14 +445,16 @@ export const MigrateServiceStatusPolling = ({
                             getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
                             ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
                         ) {
-                            return OrderSubmitResult(
-                                ProcessingStatus(getDestroyedServiceDetailsByIdQuery.data, OperationType.Migrate),
-                                destroyUuid,
-                                'success',
-                                getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
-                                stopWatch,
-                                OperationType.Migrate
-                            );
+                            if (migrateSuccessResponse !== undefined) {
+                                return OrderSubmitResult(
+                                    ProcessingStatus(migrateSuccessResponse, OperationType.Migrate),
+                                    deployUuid,
+                                    'success',
+                                    getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState,
+                                    stopWatch,
+                                    OperationType.Migrate
+                                );
+                            }
                         } else if (
                             getDestroyedServiceDetailsByIdQuery.data.serviceDeploymentState ===
                             ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
