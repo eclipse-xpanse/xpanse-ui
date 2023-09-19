@@ -6,7 +6,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CloudServiceProvider, Region, ServiceVo, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import {
+    ApiError,
+    CloudServiceProvider,
+    Region,
+    Response,
+    ServiceVo,
+    UserAvailableServiceVo,
+} from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../../utils/Area';
 import UpdateService from '../update/UpdateService';
@@ -134,21 +141,41 @@ function ServiceProvider({
         setActiveKey(key);
     };
 
-    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string) {
+    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
         setUnregisterTips(
             <div className={'submit-alert-tip'}>
                 {' '}
                 {unregisterResult ? (
                     <Alert
                         message='Unregister:'
-                        description={msg}
+                        description={msg as string}
                         showIcon
                         type={'success'}
                         closable={true}
                         onClose={onRemove}
                     />
                 ) : (
-                    <Alert message='Unregister:' description={msg} showIcon type={'error'} closable={true} />
+                    <div>
+                        {msg instanceof ApiError && 'details' in msg.body ? (
+                            <Alert
+                                message='Unregister:'
+                                description={(msg.body as Response).details}
+                                showIcon
+                                type={'error'}
+                                closable={true}
+                                onClose={onRemove}
+                            />
+                        ) : (
+                            <Alert
+                                message='Unregister:'
+                                description={(msg as Error).message}
+                                showIcon
+                                type={'error'}
+                                closable={true}
+                                onClose={onRemove}
+                            />
+                        )}
+                    </div>
                 )}{' '}
             </div>
         );
@@ -156,7 +183,7 @@ function ServiceProvider({
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    const onConfirmUnregister = async (msg: string, isUnregisterSuccessful: boolean, id: string) => {
+    const onConfirmUnregister = async (msg: string | Error, isUnregisterSuccessful: boolean, id: string) => {
         setUnregisterTipsInfo(isUnregisterSuccessful, msg);
         setUnregisterServiceId(id);
         unregisterStatus.current = isUnregisterSuccessful ? 'completed' : 'error';
