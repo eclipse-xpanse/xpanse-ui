@@ -7,8 +7,9 @@ import { Space } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import SystemStatusBar from '../../content/systemStatus/SystemStatusBar';
 import { HeaderUserRoles } from './HeaderUserRoles';
+import React from 'react';
 
-function LayoutHeader(): JSX.Element {
+function LayoutHeader(): React.JSX.Element {
     return (
         <Header style={{ width: '100%', background: '#ffffff' }}>
             <div className={'header-menu'}>

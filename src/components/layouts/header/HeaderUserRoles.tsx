@@ -109,7 +109,6 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
         navigate(origin);
-        window.location.reload();
     };
 
     return (
