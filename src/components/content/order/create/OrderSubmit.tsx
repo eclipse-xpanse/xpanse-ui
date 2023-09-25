@@ -103,7 +103,7 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
         };
         const serviceRequestProperties: Record<string, string> = {};
         for (const variable in deployParamsRef.current) {
-            if (variable !== CUSTOMER_SERVICE_NAME_FIELD) {
+            if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
                 serviceRequestProperties[variable] = deployParamsRef.current[variable];
             }
         }
