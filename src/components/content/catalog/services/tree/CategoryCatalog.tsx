@@ -15,7 +15,6 @@ import { getServiceMapper, getVersionMapper } from '../../../common/catalog/cata
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 
 function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
-    console.log('CategoryCatalog');
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);

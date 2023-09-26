@@ -13,7 +13,7 @@ function UnregisterService({
     onConfirmHandler,
 }: {
     id: string;
-    onConfirmHandler: (message: string, unregisterResult: boolean, id: string) => void;
+    onConfirmHandler: (message: string | Error, unregisterResult: boolean, id: string) => void;
 }): React.JSX.Element {
     const unregisterRequest = useMutation({
         mutationFn: () => {
@@ -23,7 +23,7 @@ function UnregisterService({
             onConfirmHandler('Service Unregistered Successfully', true, id);
         },
         onError: (error: Error) => {
-            onConfirmHandler('Service Unregister Failed, '.concat(error.message), false, id);
+            onConfirmHandler(error, false, id);
         },
     });
 
@@ -32,9 +32,9 @@ function UnregisterService({
             <Popconfirm
                 title='Unregister the service'
                 description='Are you sure to unregister this service?'
-                okText='Yes'
-                cancelText='No'
-                onConfirm={() => {
+                cancelText='Yes'
+                okText='No'
+                onCancel={() => {
                     unregisterRequest.mutate();
                 }}
             >

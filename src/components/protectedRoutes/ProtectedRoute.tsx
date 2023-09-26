@@ -8,11 +8,9 @@ import LayoutFooter from '../layouts/footer/LayoutFooter';
 import LayoutHeader from '../layouts/header/LayoutHeader';
 import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { getRolesOfUser } from '../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 import React from 'react';
+import { userRoleKey } from '../utils/constants';
 
 interface ProtectedRouteProperties {
     children: React.JSX.Element;
@@ -35,12 +33,13 @@ function getFullLayout(content: React.JSX.Element): React.JSX.Element {
 }
 
 function Protected(protectedRouteProperties: ProtectedRouteProperties): React.JSX.Element {
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
-
-    const roles: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
     updateApiConfig();
+    const currentRole: string | null = sessionStorage.getItem(userRoleKey);
 
-    if (protectedRouteProperties.allowedRole === 'all' || roles.includes(protectedRouteProperties.allowedRole)) {
+    if (
+        protectedRouteProperties.allowedRole === 'all' ||
+        (currentRole !== null && protectedRouteProperties.allowedRole === currentRole)
+    ) {
         return getFullLayout(protectedRouteProperties.children);
     }
     return getFullLayout(<NotAuthorized />);
