@@ -113,31 +113,30 @@ export const HeaderUserRoles = (): React.JSX.Element => {
     };
 
     return (
-        <Space align='baseline'>
-            <Dropdown
-                menu={menuProps}
-                dropdownRender={(menu) => (
-                    <div style={contentStyle}>
-                        {menu}
-                        <Divider style={{ margin: 0 }} />
-                        <Space style={{ padding: 8 }}>
-                            <Logout />
-                        </Space>
-                    </div>
-                )}
-            >
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                <a
-                    onClick={(e) => {
-                        e.preventDefault();
-                    }}
-                >
-                    <Space>
-                        <UserOutlined />
-                        {currentUser} &nbsp;
+        <Dropdown
+            menu={menuProps}
+            dropdownRender={(menu) => (
+                <div style={contentStyle} className={'user-role-content'}>
+                    {menu}
+                    <Divider style={{ margin: 0 }} />
+                    <Space style={{ padding: 8 }}>
+                        <Logout />
                     </Space>
-                </a>
-            </Dropdown>
-        </Space>
+                </div>
+            )}
+        >
+            {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+            <a
+                onClick={(e) => {
+                    e.preventDefault();
+                }}
+                className={'user-name-drop-class'}
+            >
+                <div className={'user-name-class'}>
+                    <UserOutlined />
+                    {currentUser} &nbsp;&nbsp;
+                </div>
+            </a>
+        </Dropdown>
     );
 };

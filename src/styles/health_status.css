@@ -1,3 +1,63 @@
 .health-status-title {
     margin: 1% 0 1% 0;
 }
+.system-status-class {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1%;
+}
+@media screen and (max-width: 768px) {
+    .system-status-class {
+        justify-content: flex-start;
+        width: 1%;
+        height: 1%;
+    }
+}
+.user-role-class {
+    display: flex;
+    flex-direction: row;
+    margin-top: 1%;
+}
+@media screen and (max-width: 768px) {
+    .user-role-class {
+        justify-content: flex-start;
+        width: 1%;
+        height: 1%;
+    }
+}
+
+.user-role-content {
+    display: flex;
+    flex-direction: row;
+}
+@media screen and (max-width: 768px) {
+    .user-role-content {
+        justify-content: flex-start;
+    }
+}
+
+.user-name-class {
+    display: flex;
+    flex-direction: row;
+}
+@media screen and (max-width: 768px) {
+    .user-name-class {
+        justify-content: flex-start;
+        width: 1%;
+        height: 1%;
+        font-size: 5%;
+    }
+}
+.user-name-drop-class {
+    width: 3% !important;
+    height: 2% !important;
+    line-height: 0 !important;
+}
+@media screen and (max-width: 768px) {
+    .user-name-drop-class {
+        justify-content: flex-start;
+        width: 1% !important;
+        height: 1% !important;
+        font-size: 2% !important;
+    }
+}

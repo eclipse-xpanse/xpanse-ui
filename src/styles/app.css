@@ -52,11 +52,19 @@
 
 .header-menu {
     display: flex;
+    justify-content: space-between;
+    alignitems: center;
     flex-direction: row;
-    column-gap: 30px;
-    justify-content: flex-end;
-    align-items: center;
-    margin-left: 100px;
+    margin-left: 80%;
+}
+
+@media screen and (max-width: 768px) {
+    .header-menu {
+        margin-left: -50px !important;
+        justify-content: flex-start;
+        flex-direction: column;
+        margin-top: -20px;
+    }
 }
 
 .header-menu-button {

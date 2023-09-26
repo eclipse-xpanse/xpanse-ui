@@ -12,7 +12,7 @@ function SystemStatusBar(): JSX.Element {
     const healthCheckQuery = useHealthCheckStatusQuery();
 
     return (
-        <>
+        <div className={'system-status-class'}>
             <Button
                 className={'header-menu-button'}
                 icon={
@@ -25,7 +25,7 @@ function SystemStatusBar(): JSX.Element {
             >
                 System Status
             </Button>
-        </>
+        </div>
     );
 }
 

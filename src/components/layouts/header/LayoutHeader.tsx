@@ -3,19 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Space } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import SystemStatusBar from '../../content/systemStatus/SystemStatusBar';
 import { HeaderUserRoles } from './HeaderUserRoles';
+import React from 'react';
+import '../../../styles/layout_header_footer.css';
 
-function LayoutHeader(): JSX.Element {
+function LayoutHeader(): React.JSX.Element {
     return (
-        <Header style={{ width: '100%', background: '#ffffff' }}>
+        <Header className={'layout-header-class'}>
             <div className={'header-menu'}>
-                <Space align='baseline'>
-                    <SystemStatusBar />
-                    <HeaderUserRoles />
-                </Space>
+                <SystemStatusBar />
+                <HeaderUserRoles />
             </div>
         </Header>
     );

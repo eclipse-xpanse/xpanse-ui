@@ -8,6 +8,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { homePageRoute } from '../../utils/constants';
 import { MenuInfo } from 'rc-menu/lib/interface';
+import '../../../styles/layout_header_footer.css';
 import { getMenuItems } from './menuItems';
 
 function LayoutSider(): React.JSX.Element {
@@ -25,6 +26,7 @@ function LayoutSider(): React.JSX.Element {
             onCollapse={(newValue) => {
                 setCollapsed(newValue);
             }}
+            className={`header-sider-class ${collapsed ? 'collapsed-sider' : ''}`}
         >
             <div className={'logo'}>
                 <Link to={homePageRoute}>

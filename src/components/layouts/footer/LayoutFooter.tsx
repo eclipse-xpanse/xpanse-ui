@@ -5,9 +5,11 @@
 
 import { Layout } from 'antd';
 import { footerText } from '../../utils/constants';
+import '../../../styles/layout_header_footer.css';
+import React from 'react';
 
-function LayoutFooter(): JSX.Element {
-    return <Layout.Footer>{footerText}</Layout.Footer>;
+function LayoutFooter(): React.JSX.Element {
+    return <Layout.Footer className={'header-footer-class'}>{footerText}</Layout.Footer>;
 }
 
 export default LayoutFooter;

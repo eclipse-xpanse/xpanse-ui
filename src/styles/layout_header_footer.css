@@ -1,0 +1,27 @@
+.layout-header-class {
+    width: 100%;
+    background: #ffffff;
+    display: flex;
+    alignitems: center;
+}
+
+.header-footer-class {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    alignitems: center;
+    height: 100px;
+}
+
+.header-sider-class {
+    width: 100%;
+    min-width: 20%;
+    max-width: 100%;
+    transition: width 0.2s;
+}
+
+@media (max-width: 768px) {
+    .header-sider-class {
+        width: 30%;
+    }
+}
