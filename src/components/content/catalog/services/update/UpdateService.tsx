@@ -100,13 +100,12 @@ function UpdateService({
                             files.current[0]
                         );
                     } catch (e: unknown) {
+                        files.current[0].status = 'error';
+                        setYamlSyntaxValidationStatus('error');
                         if (e instanceof Error) {
-                            console.log(e);
-                            files.current[0].status = 'error';
                             yamlValidationResult.current = e.message;
-                            setYamlSyntaxValidationStatus('error');
                         } else {
-                            console.log(e);
+                            yamlValidationResult.current = 'unhandled error occurred';
                         }
                     }
                 }

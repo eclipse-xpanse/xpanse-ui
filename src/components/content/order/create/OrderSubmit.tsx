@@ -83,8 +83,9 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
                 cacheFormVariable(parameter.name, checked ? 'true' : 'false');
             };
         }
-        return (value: unknown) => {
-            console.log(value);
+        return (event: ChangeEvent<HTMLInputElement>) => {
+            setIsShowDeploymentResult(false);
+            cacheFormVariable(event.target.name, event.target.value);
         };
     }
 
