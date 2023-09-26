@@ -6,18 +6,15 @@
 import { LinkOutlined } from '@ant-design/icons';
 import '../../../../styles/app.css';
 import { Link, ServiceCatalogService } from '../../../../xpanse-api/generated';
+import React from 'react';
 
-export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): JSX.Element {
+export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): React.JSX.Element {
     function onclick() {
-        ServiceCatalogService.openApi(id)
-            .then((link: Link) => {
-                if (link.href !== undefined) {
-                    window.open(link.href);
-                }
-            })
-            .catch((error) => {
-                console.error(error);
-            });
+        void ServiceCatalogService.openApi(id).then((link: Link) => {
+            if (link.href !== undefined) {
+                window.open(link.href);
+            }
+        });
     }
     return (
         <button className={styleClass} onClick={onclick}>

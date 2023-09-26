@@ -100,7 +100,6 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
         if (error instanceof Error) {
             return error.message;
         } else {
-            console.log(error);
             return 'Unhandled Exception';
         }
     }

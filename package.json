@@ -49,7 +49,8 @@
             "no-undef": "off",
             "@typescript-eslint/no-inferrable-types": "off",
             "@tanstack/query/exhaustive-deps": "error",
-            "@tanstack/query/prefer-query-object-syntax": "error"
+            "@tanstack/query/prefer-query-object-syntax": "error",
+            "no-console": "error"
         },
         "ignorePatterns": [
             "src/xpanse-api/**",
