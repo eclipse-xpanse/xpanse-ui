@@ -1,6 +1,6 @@
 {
-    "name": "ui",
-    "version": "1.0.0",
+    "name": "xpanse-ui",
+    "version": "0.0.0",
     "private": true,
     "type": "module",
     "dependencies": {
@@ -102,6 +102,7 @@
         "openapi-typescript-codegen": "^0.25.0",
         "prettier": "3.0.3",
         "react-scripts": "5.0.1",
+        "release-it": "^16.2.1",
         "ts-jest": "^29.1.1",
         "typescript": "5.2.2"
     },
@@ -125,7 +126,29 @@
         "ignoreDependencies": [
             "eslint-config-prettier",
             "@babel/plugin-proposal-private-property-in-object",
-            "openapi-typescript-codegen"
+            "openapi-typescript-codegen",
+            "release-it"
+        ],
+        "ignoreBinaries": [
+            "zip"
         ]
+    },
+    "release-it": {
+        "github": {
+            "release": true,
+            "autoGenerate": true,
+            "assets": [
+                "*.zip"
+            ]
+        },
+        "npm": {
+            "publish": false
+        },
+        "hooks": {
+            "after:bump": [
+                "npm run build",
+                "zip -r -q xpanse-ui-${version}.zip build"
+            ]
+        }
     }
 }
