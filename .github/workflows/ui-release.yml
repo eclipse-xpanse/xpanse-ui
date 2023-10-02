@@ -20,6 +20,7 @@ env:
     BOT_EMAIL_ID: xpanse-bot@eclipse.org
     REGISTRY: ghcr.io
     IMAGE_NAME: ${{ github.repository }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
     build:
@@ -33,7 +34,7 @@ jobs:
               uses: actions/checkout@v3
               with:
                   fetch-depth: 0
-                  token: ${{ secrets.BOT_GITHUB_TOKEN }}
+                  token: ${{ secrets.GITHUB_TOKEN }}
 
             - name: git config
               run: |
@@ -61,9 +62,11 @@ jobs:
 
             - name: Release application
               working-directory: ./
-              run: release-it ${{github.event.inputs.ReleaseType}} --ci
-              env:
-                  GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+              run: npx release-it ${{github.event.inputs.ReleaseType}} --ci
+
+            - name: Set current version env variable
+              run: |
+                  echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
             - name: Set up QEMU
               uses: docker/setup-qemu-action@v2
@@ -90,6 +93,6 @@ jobs:
                   context: .
                   file: docker/Dockerfile
                   push: true
-                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.event.inputs.ReleaseVersion }}
+                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CURRENT_VERSION }}
                   labels: ${{ steps.meta.outputs.labels }}
                   provenance: false
