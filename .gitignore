@@ -14,3 +14,4 @@ node_modules
 .history
 *.db
 build
+*.zip

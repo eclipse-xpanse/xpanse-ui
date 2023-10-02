@@ -136,7 +136,6 @@
     "release-it": {
         "github": {
             "release": true,
-            "autoGenerate": true,
             "assets": [
                 "*.zip"
             ]
@@ -145,6 +144,9 @@
             "publish": false
         },
         "hooks": {
+            "before:init": [
+                "git update-index -q --refresh"
+            ],
             "after:bump": [
                 "npm run build",
                 "zip -r -q xpanse-ui-${version}.zip build"
