@@ -15,7 +15,7 @@ import {
     UserAvailableServiceVo,
     ServiceCatalogService,
 } from '../../../../xpanse-api/generated';
-import Navigate from './Navigate';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from '../formElements/GoToSubmit';
 import { Alert, Select, Skeleton, Space, Tabs } from 'antd';
@@ -400,7 +400,7 @@ function CreateService(): React.JSX.Element {
         return (
             <>
                 <div>
-                    <Navigate text={'<< Back'} to={servicePageUrl as To} props={undefined} />
+                    <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
                     <div className={'Line'} />
                 </div>
                 <div className={'services-content'}>

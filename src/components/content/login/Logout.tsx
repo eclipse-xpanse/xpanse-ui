@@ -7,12 +7,15 @@ import { PoweroffOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useOidc } from '@axa-fr/react-oidc';
 import React from 'react';
-import { createServicePageRoute, homePageRoute, registerPageRoute } from '../../utils/constants';
+import { createServicePageRoute, homePageRoute, orderPageRoute, registerPageRoute } from '../../utils/constants';
 function Logout(): React.JSX.Element {
     const { logout } = useOidc();
 
     function getRedirectUri() {
-        if (window.location.pathname.startsWith(createServicePageRoute)) {
+        if (
+            window.location.pathname.startsWith(createServicePageRoute) ||
+            window.location.pathname.startsWith(orderPageRoute)
+        ) {
             // Create service URL contains dynamic url. So, redirect back to the home page.
             return homePageRoute;
         }

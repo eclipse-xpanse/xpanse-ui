@@ -9,6 +9,7 @@ import { Button } from 'antd';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
+import { orderPageRoute } from '../../../utils/constants';
 
 export default function GoToSubmit({
     categoryName,
@@ -72,10 +73,8 @@ export default function GoToSubmit({
             }
         }
 
-        navigate('/order', {
-            state: {
-                props: props,
-            },
+        navigate(orderPageRoute, {
+            state: props,
         });
     };
 

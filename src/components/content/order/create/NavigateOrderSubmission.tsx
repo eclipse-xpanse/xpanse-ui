@@ -10,7 +10,15 @@ import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { servicesSubPageRoute } from '../../../utils/constants';
 
-function Navigate({ text, to, props }: { text: string; to: To; props?: OrderSubmitProps }): React.JSX.Element {
+function NavigateOrderSubmission({
+    text,
+    to,
+    props,
+}: {
+    text: string;
+    to: To;
+    props?: OrderSubmitProps;
+}): React.JSX.Element {
     const navigate = useNavigate();
     const [resetFormCache] = useOrderFormStore((state) => [state.clearFormVariables]);
     function goBack(props: OrderSubmitProps | undefined) {
@@ -35,4 +43,4 @@ function Navigate({ text, to, props }: { text: string; to: To; props?: OrderSubm
     );
 }
 
-export default Navigate;
+export default NavigateOrderSubmission;
