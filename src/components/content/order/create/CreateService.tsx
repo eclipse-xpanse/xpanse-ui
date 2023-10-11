@@ -6,27 +6,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
-    ApiError,
     Billing,
     CloudServiceProvider,
     Flavor,
     Region,
-    Response,
     UserAvailableServiceVo,
-    ServiceCatalogService,
 } from '../../../../xpanse-api/generated';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from '../formElements/GoToSubmit';
-import { Alert, Select, Skeleton, Space, Tabs } from 'antd';
+import { Select, Skeleton, Space, Tabs } from 'antd';
 import { Area } from '../../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 import { sortVersion } from '../../../utils/Sort';
 import { currencyMapper } from '../../../utils/currency';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
-import { useQuery } from '@tanstack/react-query';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import ServicesLoadingError from '../query/ServicesLoadingError';
+import useAvailableServicesQuery from '../query/useAvailableServicesQuery';
 
 function filterAreaList(
     selectVersion: string,
@@ -110,19 +107,11 @@ function CreateService(): React.JSX.Element {
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
-    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
 
-    const availableServicesQuery = useQuery({
-        queryKey: ['listAvailableServices', categoryName, serviceName],
-        queryFn: () =>
-            ServiceCatalogService.listAvailableServices(
-                categoryName as UserAvailableServiceVo.category,
-                undefined,
-                serviceName,
-                ''
-            ),
-        enabled: categoryName.length > 0 && serviceName.length > 0,
-    });
+    const availableServicesQuery = useAvailableServicesQuery(
+        categoryName as UserAvailableServiceVo.category,
+        serviceName
+    );
 
     useEffect(() => {
         if (availableServicesQuery.isSuccess) {
@@ -190,34 +179,6 @@ function CreateService(): React.JSX.Element {
             }
         }
     }, [availableServicesQuery.isSuccess, availableServicesQuery.data, latestVersion, location.state, serviceName]);
-
-    useEffect(() => {
-        if (availableServicesQuery.isError) {
-            if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
-                const response: Response = availableServicesQuery.error.body as Response;
-                setLoadingError(
-                    <Alert
-                        message={response.resultType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={true}
-                        className={'catalog-skeleton'}
-                    />
-                );
-            } else if (availableServicesQuery.error instanceof Error) {
-                setLoadingError(
-                    <Alert
-                        message='Fetching Service Details Failed'
-                        description={availableServicesQuery.error.message}
-                        type={'error'}
-                        closable={true}
-                        className={'catalog-skeleton'}
-                    />
-                );
-            }
-            versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
-        }
-    }, [availableServicesQuery.isError, availableServicesQuery.error]);
 
     function getVersionList(
         currentVersions: Map<string, UserAvailableServiceVo[]>
@@ -392,11 +353,23 @@ function CreateService(): React.JSX.Element {
 
     const servicePageUrl = servicesSubPageRoute + categoryName;
 
-    if (availableServicesQuery.isError && loadingError !== undefined) {
-        return loadingError;
+    if (availableServicesQuery.isError) {
+        versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
+        return <ServicesLoadingError error={availableServicesQuery.error} />;
     }
 
-    if (selectCsp && cspList.length > 0) {
+    if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
+        return (
+            <Skeleton
+                className={'catalog-skeleton'}
+                active={true}
+                paragraph={{ rows: 2, width: ['20%', '20%'] }}
+                title={{ width: '5%' }}
+            />
+        );
+    }
+
+    if (selectCsp) {
         return (
             <>
                 <div>
@@ -482,17 +455,9 @@ function CreateService(): React.JSX.Element {
                 </div>
             </>
         );
-    } else {
-        return (
-            <Skeleton
-                className={'catalog-skeleton'}
-                active={true}
-                loading={availableServicesQuery.isLoading}
-                paragraph={{ rows: 2, width: ['20%', '20%'] }}
-                title={{ width: '5%' }}
-            />
-        );
     }
+
+    return <></>;
 }
 
 export default CreateService;
