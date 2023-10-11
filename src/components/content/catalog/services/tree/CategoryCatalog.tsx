@@ -22,7 +22,6 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         new Map<string, UserAvailableServiceVo[]>()
     );
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
-    const [loadingError, setLoadingError] = useState<React.JSX.Element | undefined>(undefined);
 
     const availableServicesQuery = useAvailableServiceTemplatesQuery(category);
 
@@ -67,35 +66,6 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         }
     }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
 
-    useEffect(() => {
-        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
-            const response: Response = availableServicesQuery.error.body as Response;
-            setLoadingError(
-                <Alert
-                    message={response.resultType.valueOf()}
-                    description={convertStringArrayToUnorderedList(response.details)}
-                    type={'error'}
-                    closable={true}
-                    className={'catalog-skeleton'}
-                />
-            );
-        } else if (availableServicesQuery.error instanceof Error) {
-            setLoadingError(
-                <Alert
-                    message='Fetching Service Details Failed'
-                    description={availableServicesQuery.error.message}
-                    type={'error'}
-                    closable={true}
-                    className={'catalog-skeleton'}
-                />
-            );
-        }
-        setTreeData([]);
-        setSelectKey('');
-        setExpandKeys([]);
-        setCategoryOclData(new Map<string, UserAvailableServiceVo[]>());
-    }, [availableServicesQuery.error]);
-
     function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
         treeData.forEach((dataNode: DataNode) => {
@@ -117,8 +87,29 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         setUnregisteredDisabled(disabled);
     };
 
-    if (availableServicesQuery.isError && loadingError !== undefined) {
-        return loadingError;
+    if (availableServicesQuery.isError) {
+        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
+            const response: Response = availableServicesQuery.error.body as Response;
+            return (
+                <Alert
+                    message={response.resultType.valueOf()}
+                    description={convertStringArrayToUnorderedList(response.details)}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        } else {
+            return (
+                <Alert
+                    message='Fetching Service Details Failed'
+                    description={(availableServicesQuery.error as Error).message}
+                    type={'error'}
+                    closable={true}
+                    className={'catalog-skeleton'}
+                />
+            );
+        }
     }
 
     if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
@@ -133,7 +124,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         );
     }
 
-    if (availableServicesQuery.isSuccess && availableServicesQuery.data.length === 0) {
+    if (availableServicesQuery.data.length === 0) {
         return (
             <div className={'service-blank-class'}>
                 <Empty description={'No services available.'} />
