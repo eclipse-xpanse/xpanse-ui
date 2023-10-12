@@ -11,12 +11,12 @@ import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
-import { ServiceVo, ServiceCatalogService, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
-import ServicesLoadingError from './ServicesLoadingError';
-import { useQuery } from '@tanstack/react-query';
+import ServicesLoadingError from '../query/ServicesLoadingError';
 import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import useAvailableServicesQuery from '../query/useAvailableServicesQuery';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -40,11 +40,10 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const availableServicesQuery = useQuery({
-        queryKey: ['catalog', location.hash.split('#')[1] as ServiceVo.category],
-        queryFn: () => ServiceCatalogService.listAvailableServices(location.hash.split('#')[1] as ServiceVo.category),
-        refetchOnWindowFocus: false,
-    });
+    const availableServicesQuery = useAvailableServicesQuery(
+        location.hash.split('#')[1] as ServiceVo.category,
+        undefined
+    );
 
     useEffect(() => {
         const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
@@ -70,7 +69,7 @@ function Services(): React.JSX.Element {
     }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
 
     if (availableServicesQuery.isError) {
-        return <ServicesLoadingError />;
+        return <ServicesLoadingError error={availableServicesQuery.error} />;
     }
 
     if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
