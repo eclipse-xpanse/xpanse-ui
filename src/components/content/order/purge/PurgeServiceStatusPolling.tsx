@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { ApiError, Response, ServiceService } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
-import { Alert, notification } from 'antd';
+import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 export function PurgeServiceStatusPolling({
@@ -31,7 +31,7 @@ export function PurgeServiceStatusPolling({
         refetchInterval: uuid.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
         enabled: uuid.length > 0 && isRefetch,
     });
-    const [api, contextHolder] = notification.useNotification();
+
     useEffect(() => {
         if (isError) {
             setIsRefetch(false);
@@ -92,12 +92,21 @@ export function PurgeServiceStatusPolling({
                     </div>
                 );
             } else {
-                api.success({
-                    message: 'Notification Title',
-                    description:
-                        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-                });
-                return contextHolder;
+                return (
+                    <div className={'submit-alert-tip'}>
+                        {' '}
+                        <Alert
+                            message={'Processing Status'}
+                            description={
+                                <OrderSubmitResultDetails msg={`Service ${uuid} purged successfully`} uuid={uuid} />
+                            }
+                            showIcon
+                            closable={true}
+                            onClose={onClose}
+                            type={'success'}
+                        />{' '}
+                    </div>
+                );
             }
         }
     }
