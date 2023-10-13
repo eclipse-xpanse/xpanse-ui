@@ -5,7 +5,7 @@
 
 import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Key, useEffect, useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
 import { ApiError, Ocl, Response, ServiceTemplateVo, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
@@ -22,6 +22,7 @@ import {
 } from '../../utils/constants';
 import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
 import RegisterResult from './RegisterResult';
+import { UploadFileStatus } from 'antd/es/upload/interface';
 
 function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -39,7 +40,7 @@ function RegisterPanel(): React.JSX.Element {
             return ServiceVendorService.register(ocl);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
-            files.current[0].status = 'success';
+            files.current[0].status = 'success' as UploadFileStatus;
             registerResult.current = [`ID - ${serviceTemplateVo.id}`];
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
         },
@@ -79,7 +80,7 @@ function RegisterPanel(): React.JSX.Element {
                 if (e.target) {
                     try {
                         ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'success';
+                        files.current[0].status = 'success' as UploadFileStatus;
                         yamlValidationResult.current = 'YAML Syntax Valid';
                         setYamlSyntaxValidationStatus('completed');
                         oclDisplayData.current = OclSummaryDisplay(

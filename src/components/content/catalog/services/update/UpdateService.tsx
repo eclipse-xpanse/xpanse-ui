@@ -22,6 +22,7 @@ import loadOclFile from '../../../common/ocl/loadOclFile';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
+import { UploadFileStatus } from 'antd/es/upload/interface';
 
 function UpdateService({
     id,
@@ -46,7 +47,7 @@ function UpdateService({
             return ServiceVendorService.update(id, ocl);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
-            files.current[0].status = 'success';
+            files.current[0].status = 'success' as UploadFileStatus;
             updateResult.current = [`ID - ${serviceTemplateVo.id}`];
         },
         onError: (error: Error) => {
@@ -91,7 +92,7 @@ function UpdateService({
                 if (e.target) {
                     try {
                         ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'success';
+                        files.current[0].status = 'success' as UploadFileStatus;
                         yamlValidationResult.current = 'YAML Syntax Valid';
                         setYamlSyntaxValidationStatus('completed');
                         oclDisplayData.current = OclSummaryDisplay(

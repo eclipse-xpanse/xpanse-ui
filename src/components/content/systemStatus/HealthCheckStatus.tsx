@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { Key, useEffect, useState } from 'react';
 import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
@@ -73,7 +73,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: Key | boolean, record) => {
                 const name = record.name;
                 return name.startsWith(value.toString());
             },
@@ -87,7 +87,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: backendSystemTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: Key | boolean, record) => {
                 const backendSystemType = record.backendSystemType;
                 return backendSystemType.startsWith(value.toString());
             },
@@ -115,7 +115,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: healthStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: Key | boolean, record) => {
                 const healthStatus = record.healthStatus;
                 return healthStatus.startsWith(value.toString());
             },

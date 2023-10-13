@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { Key, useEffect, useState } from 'react';
 import { Alert, Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -143,7 +143,7 @@ function MyServices(): React.JSX.Element {
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
                     return customerServiceName.startsWith(value.toString());
@@ -157,7 +157,7 @@ function MyServices(): React.JSX.Element {
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.category.startsWith(value.toString()),
+            onFilter: (value: Key | boolean, record) => record.category.startsWith(value.toString()),
         },
         {
             title: 'Service',
@@ -165,7 +165,7 @@ function MyServices(): React.JSX.Element {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
+            onFilter: (value: Key | boolean, record) => record.name.startsWith(value.toString()),
         },
         {
             title: 'Version',
@@ -173,7 +173,7 @@ function MyServices(): React.JSX.Element {
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.version.startsWith(value.toString()),
+            onFilter: (value: Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
         },
         {
@@ -182,7 +182,7 @@ function MyServices(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: AbstractCredentialInfo.csp, _) => {
                 return (
                     <Space size='middle'>
@@ -215,8 +215,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) =>
-                record.serviceDeploymentState.startsWith(value.toString()),
+            onFilter: (value: Key | boolean, record) => record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
         },
         {

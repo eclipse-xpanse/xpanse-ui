@@ -8,6 +8,7 @@ import { Alert, UploadFile } from 'antd';
 import { Ocl } from '../../../../xpanse-api/generated';
 import { ValidationStatus } from './ValidationStatus';
 import React from 'react';
+import { UploadFileStatus } from 'antd/es/upload/interface';
 
 function OclSummaryDisplay(
     setOclValidationStatus: (newState: ValidationStatus) => void,
@@ -26,7 +27,7 @@ function OclSummaryDisplay(
             />
         );
     } else {
-        file.status = 'success';
+        file.status = 'success' as UploadFileStatus;
         setOclValidationStatus('completed');
         return oclTableData;
     }

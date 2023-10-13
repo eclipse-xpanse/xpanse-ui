@@ -109,9 +109,6 @@
     "overrides": {
         "react-scripts": {
             "typescript": "^5"
-        },
-        "eslint-config-react-app": {
-            "@typescript-eslint/eslint-plugin": "^6.5.0"
         }
     },
     "knip": {
