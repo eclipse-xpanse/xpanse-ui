@@ -8,7 +8,7 @@ import {
     CreateRequest,
     ServiceCatalogService,
     ServiceVo,
-    UserAvailableServiceVo,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { ShowDeploy } from './ShowDeploy';
@@ -24,7 +24,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
     const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
         undefined
     );
-    const [userAvailableServiceVoList, setUserAvailableServiceVoList] = useState<UserAvailableServiceVo[]>([]);
+    const [userOrderableServiceVoList, setUserOrderableServiceVoList] = useState<UserOrderableServiceVo[]>([]);
     const [selectCsp, setSelectCsp] = useState<string>('');
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
@@ -55,7 +55,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             return;
         }
         if (listAvailableServices.data && listAvailableServices.data.length > 0) {
-            setUserAvailableServiceVoList(listAvailableServices.data);
+            setUserOrderableServiceVoList(listAvailableServices.data);
         } else {
             return;
         }
@@ -66,7 +66,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         if (listAvailableServices.isError) {
             setCurrentMigrationStepStatus(MigrationStatus.Processing);
             setCurrentMigrationStep(MigrationSteps.ExportServiceData);
-            setUserAvailableServiceVoList([]);
+            setUserOrderableServiceVoList([]);
         }
     }, [listAvailableServices.isError, listAvailableServices.error]);
 
@@ -109,7 +109,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             title: 'Select a destination',
             content: (
                 <SelectDestination
-                    userAvailableServiceVoList={userAvailableServiceVoList}
+                    userOrderableServiceVoList={userOrderableServiceVoList}
                     getSelectedParameters={getSelectedParameters}
                     currentCsp={selectCsp}
                     currentArea={selectArea}
@@ -124,7 +124,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             title: 'Prepare deployment parameters',
             content: (
                 <ShowDeploy
-                    userAvailableServiceVoList={userAvailableServiceVoList}
+                    userOrderableServiceVoList={userOrderableServiceVoList}
                     selectCsp={selectCsp}
                     selectArea={selectArea}
                     selectRegion={selectRegion}
@@ -144,7 +144,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             title: 'Migrate',
             content: (
                 <MigrateService
-                    userAvailableServiceVoList={userAvailableServiceVoList}
+                    userOrderableServiceVoList={userOrderableServiceVoList}
                     selectCsp={selectCsp}
                     selectArea={selectArea}
                     selectRegion={selectRegion}

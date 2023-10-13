@@ -32,11 +32,11 @@ export { Ocl } from './models/Ocl';
 export type { Region } from './models/Region';
 export { Response } from './models/Response';
 export { ServiceDetailVo } from './models/ServiceDetailVo';
-export { ServiceTemplateVo } from './models/ServiceTemplateVo';
+export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { ServiceVo } from './models/ServiceVo';
 export { SystemStatus } from './models/SystemStatus';
 export type { TokenResponse } from './models/TokenResponse';
-export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
+export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 
 export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';

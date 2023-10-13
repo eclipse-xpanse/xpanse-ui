@@ -11,12 +11,12 @@ import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
-import { ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceVo, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from '../query/ServicesLoadingError';
-import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
+import { getUserOrderableServiceMapper, getUserOrderableVersionMapper } from '../../common/catalog/userServiceProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
-import useAvailableServicesQuery from '../query/useAvailableServicesQuery';
+import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -40,18 +40,19 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const availableServicesQuery = useAvailableServicesQuery(
+    const availableServicesQuery = userOrderableServicesQuery(
         location.hash.split('#')[1] as ServiceVo.category,
         undefined
     );
 
     useEffect(() => {
-        const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        const userAvailableServiceList: UserOrderableServiceVo[] | undefined = availableServicesQuery.data;
         const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
         if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
+            const serviceMapper: Map<string, UserOrderableServiceVo[]> =
+                getUserOrderableServiceMapper(userAvailableServiceList);
             serviceMapper.forEach((availableServicesList, serviceName) => {
-                const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+                const versionMapper: Map<string, UserOrderableServiceVo[]> = getUserOrderableVersionMapper(
                     serviceName,
                     userAvailableServiceList
                 );

@@ -4,7 +4,7 @@
  */
 
 import CspSelect from '../formElements/CspSelect';
-import { Billing, CloudServiceProvider, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { Billing, CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Select, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
@@ -20,7 +20,7 @@ import {
 } from '../formElements/CommonTypes';
 
 export const SelectDestination = ({
-    userAvailableServiceVoList,
+    userOrderableServiceVoList,
     getSelectedParameters,
     currentCsp,
     currentArea,
@@ -28,7 +28,7 @@ export const SelectDestination = ({
     currentFlavor,
     getCurrentMigrationStep,
 }: {
-    userAvailableServiceVoList: UserAvailableServiceVo[];
+    userOrderableServiceVoList: UserOrderableServiceVo[];
     getSelectedParameters: (
         selectedCsp: string,
         selectedArea: string,
@@ -75,35 +75,35 @@ export const SelectDestination = ({
     }, [currentMigrationStep]);
 
     useEffect(() => {
-        if (userAvailableServiceVoList.length > 0) {
+        if (userOrderableServiceVoList.length > 0) {
             const currentCspList: CloudServiceProvider.name[] = [];
-            userAvailableServiceVoList.forEach((v) => {
+            userOrderableServiceVoList.forEach((v) => {
                 currentCspList.push(v.csp as unknown as CloudServiceProvider.name);
             });
             let cspValue: string = currentCspList[0];
 
-            let currentAreaList: Tab[] = getAreaList(userAvailableServiceVoList, cspValue);
+            let currentAreaList: Tab[] = getAreaList(userOrderableServiceVoList, cspValue);
             let areaValue: string = currentAreaList[0]?.key ?? '';
 
             let currentRegionList: { value: string; label: string }[] = getRegionList(
-                userAvailableServiceVoList,
+                userOrderableServiceVoList,
                 cspValue,
                 areaValue
             );
             let regionValue: string = currentRegionList[0]?.value ?? '';
 
-            const currentFlavorMapper = getFlavorMapper(userAvailableServiceVoList);
+            const currentFlavorMapper = getFlavorMapper(userOrderableServiceVoList);
             let currentFlavorList = getFlavorListByCsp(currentFlavorMapper, cspValue);
             let flavorValue: string = currentFlavorList[0]?.value ?? '';
             let priceValue: string = currentFlavorList[0]?.price ?? '';
 
-            let currentBilling = getBilling(userAvailableServiceVoList, cspValue);
+            let currentBilling = getBilling(userOrderableServiceVoList, cspValue);
 
             if (currentCsp.length > 0) {
-                currentAreaList = getAreaList(userAvailableServiceVoList, currentCsp);
-                currentRegionList = getRegionList(userAvailableServiceVoList, currentCsp, currentArea);
+                currentAreaList = getAreaList(userOrderableServiceVoList, currentCsp);
+                currentRegionList = getRegionList(userOrderableServiceVoList, currentCsp, currentArea);
                 currentFlavorList = getFlavorListByCsp(currentFlavorMapper, currentCsp);
-                currentBilling = getBilling(userAvailableServiceVoList, currentCsp);
+                currentBilling = getBilling(userOrderableServiceVoList, currentCsp);
                 cspValue = currentCsp;
                 areaValue = currentArea;
                 regionValue = currentRegion;
@@ -127,7 +127,7 @@ export const SelectDestination = ({
             setCurrency(currencyValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userAvailableServiceVoList, currentCsp, currentArea, currentRegion, currentFlavor]);
+    }, [userOrderableServiceVoList, currentCsp, currentArea, currentRegion, currentFlavor]);
 
     useEffect(() => {
         if (selectCsp.length > 0 && selectArea.length > 0 && selectRegion.length > 0 && selectFlavor.length > 0) {
@@ -136,7 +136,7 @@ export const SelectDestination = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectCsp, selectArea, selectRegion, selectFlavor]);
 
-    function getAreaList(rsp: UserAvailableServiceVo[], selectCsp: string): Tab[] {
+    function getAreaList(rsp: UserOrderableServiceVo[], selectCsp: string): Tab[] {
         const areas: Area[] = filterAreaList(rsp, selectCsp);
         let areaItems: Tab[] = [];
         if (areas.length > 0) {
@@ -156,10 +156,10 @@ export const SelectDestination = ({
     }
 
     const onChangeCloudProvider = (csp: string) => {
-        const currentAreaList = getAreaList(userAvailableServiceVoList, csp);
-        const currentRegionList = getRegionList(userAvailableServiceVoList, csp, currentAreaList[0]?.key ?? '');
-        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userAvailableServiceVoList), csp);
-        const billing: Billing = getBilling(userAvailableServiceVoList, csp);
+        const currentAreaList = getAreaList(userOrderableServiceVoList, csp);
+        const currentRegionList = getRegionList(userOrderableServiceVoList, csp, currentAreaList[0]?.key ?? '');
+        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userOrderableServiceVoList), csp);
+        const billing: Billing = getBilling(userOrderableServiceVoList, csp);
         setSelectCsp(csp);
         setAreaList(currentAreaList);
         setSelectArea(currentAreaList[0]?.key ?? '');
@@ -172,7 +172,7 @@ export const SelectDestination = ({
     };
 
     const onChangeAreaValue = (area: string) => {
-        const currentRegionList = getRegionList(userAvailableServiceVoList, selectCsp, area);
+        const currentRegionList = getRegionList(userOrderableServiceVoList, selectCsp, area);
         setSelectArea(area);
         setRegionList(currentRegionList);
         setSelectRegion(currentRegionList[0]?.value ?? '');
@@ -183,8 +183,8 @@ export const SelectDestination = ({
     };
 
     const onChangeFlavor = (value: string) => {
-        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userAvailableServiceVoList), selectCsp);
-        const billing: Billing = getBilling(userAvailableServiceVoList, selectCsp);
+        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userOrderableServiceVoList), selectCsp);
+        const billing: Billing = getBilling(userOrderableServiceVoList, selectCsp);
 
         setSelectFlavor(value);
         setCurrency(currencyMapper[billing.currency]);

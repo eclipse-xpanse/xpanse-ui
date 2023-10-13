@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, DeployVariable, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CreateRequest, DeployVariable, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../create/OrderSubmit';
@@ -28,12 +28,12 @@ export default function GoToSubmit({
     selectRegion: string;
     selectArea: string;
     selectFlavor: string;
-    versionMapper: Map<string, UserAvailableServiceVo[]>;
+    versionMapper: Map<string, UserOrderableServiceVo[]>;
 }): React.JSX.Element {
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        let service: UserAvailableServiceVo | undefined;
+        let service: UserOrderableServiceVo | undefined;
         let registeredServiceId = '';
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {

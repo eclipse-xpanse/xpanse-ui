@@ -28,9 +28,9 @@ export type CredentialVariables = {
      */
     description: string;
     /**
-     * The id of user who create the credential.
+     * The id of user who created the credential.
      */
-    userId: string;
+    userId?: string;
     /**
      * The variables list of the credential.
      */

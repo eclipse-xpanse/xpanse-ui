@@ -9,13 +9,12 @@
 /* eslint-disable */
 
 import type { Billing } from './Billing';
-import type { Deployment } from './Deployment';
 import type { DeployVariable } from './DeployVariable';
 import type { Flavor } from './Flavor';
 import type { Link } from './Link';
 import type { Region } from './Region';
 
-export type UserAvailableServiceVo = {
+export type UserOrderableServiceVo = {
     /**
      * The id of the available service.
      */
@@ -23,7 +22,7 @@ export type UserAvailableServiceVo = {
     /**
      * The catalog of the available service.
      */
-    category: UserAvailableServiceVo.category;
+    category: UserOrderableServiceVo.category;
     /**
      * The name of the available service.
      */
@@ -35,7 +34,7 @@ export type UserAvailableServiceVo = {
     /**
      * The Cloud Service Provider of the available service.
      */
-    csp: UserAvailableServiceVo.csp;
+    csp: UserOrderableServiceVo.csp;
     /**
      * The regions of the Cloud Service Provider.
      */
@@ -45,14 +44,9 @@ export type UserAvailableServiceVo = {
      */
     description: string;
     /**
-     * The namespace of the available service.
-     */
-    namespace: string;
-    /**
      * The icon of the available service.
      */
     icon: string;
-    deployment: Deployment;
     /**
      * The variables for the deployment, which will be passed to the deployer.
      */
@@ -62,22 +56,10 @@ export type UserAvailableServiceVo = {
      */
     flavors: Array<Flavor>;
     billing: Billing;
-    /**
-     * createTime of the registered service.
-     */
-    createTime: string;
-    /**
-     * Last updateTime of the registered service.
-     */
-    lastModifiedTime: string;
-    /**
-     * The state of the available service.
-     */
-    serviceRegistrationState: UserAvailableServiceVo.serviceRegistrationState;
     links?: Array<Link>;
 };
 
-export namespace UserAvailableServiceVo {
+export namespace UserOrderableServiceVo {
     /**
      * The catalog of the available service.
      */
@@ -106,13 +88,5 @@ export namespace UserAvailableServiceVo {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
-    }
-
-    /**
-     * The state of the available service.
-     */
-    export enum serviceRegistrationState {
-        REGISTERED = 'registered',
-        UPDATED = 'updated',
     }
 }

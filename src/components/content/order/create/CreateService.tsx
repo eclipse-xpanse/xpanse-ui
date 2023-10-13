@@ -10,7 +10,7 @@ import {
     CloudServiceProvider,
     Flavor,
     Region,
-    UserAvailableServiceVo,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
@@ -23,26 +23,26 @@ import { currencyMapper } from '../../../utils/currency';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import ServicesLoadingError from '../query/ServicesLoadingError';
-import useAvailableServicesQuery from '../query/useAvailableServicesQuery';
+import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 
 function filterAreaList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, UserAvailableServiceVo[]>
+    versionMapper: Map<string, UserOrderableServiceVo[]>
 ): Area[] {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     versionMapper.forEach((v, k) => {
         if (k !== selectVersion) {
             return [];
         }
-        for (const userAvailableServiceVo of v) {
-            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
+        for (const userOrderableServiceVo of v) {
+            if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
                 const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
-                for (const region of userAvailableServiceVo.regions) {
+                for (const region of userOrderableServiceVo.regions) {
                     if (region.area && !areaRegions.has(region.area)) {
                         areaRegions.set(
                             region.area,
-                            userAvailableServiceVo.regions.filter((data) => data.area === region.area)
+                            userOrderableServiceVo.regions.filter((data) => data.area === region.area)
                         );
                     }
                 }
@@ -56,7 +56,7 @@ function filterAreaList(
                     });
                     areas.push({ name: area, regions: regionNames });
                 });
-                areaMapper.set(userAvailableServiceVo.csp, areas);
+                areaMapper.set(userOrderableServiceVo.csp, areas);
             }
         }
     });
@@ -66,16 +66,16 @@ function filterAreaList(
 function filterFlavorList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, UserAvailableServiceVo[]>
+    versionMapper: Map<string, UserOrderableServiceVo[]>
 ): Map<string, Flavor[]> {
     const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
     versionMapper.forEach((v, k) => {
         if (k !== selectVersion) {
             return new Map<string, Flavor[]>();
         }
-        for (const userAvailableServiceVo of v) {
-            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
-                flavorMapper.set(userAvailableServiceVo.csp, userAvailableServiceVo.flavors);
+        for (const userOrderableServiceVo of v) {
+            if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
+                flavorMapper.set(userOrderableServiceVo.csp, userOrderableServiceVo.flavors);
             }
         }
     });
@@ -88,7 +88,7 @@ function CreateService(): React.JSX.Element {
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const categoryName = decodeURI(urlParams.get('catalog') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const versionMapper = useRef<Map<string, UserAvailableServiceVo[]>>(new Map<string, UserAvailableServiceVo[]>());
+    const versionMapper = useRef<Map<string, UserOrderableServiceVo[]>>(new Map<string, UserOrderableServiceVo[]>());
     const [versionList, setVersionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectVersion, setSelectVersion] = useState<string>('');
 
@@ -108,18 +108,18 @@ function CreateService(): React.JSX.Element {
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
 
-    const availableServicesQuery = useAvailableServicesQuery(
-        categoryName as UserAvailableServiceVo.category,
+    const availableServicesQuery = userOrderableServicesQuery(
+        categoryName as UserOrderableServiceVo.category,
         serviceName
     );
 
     useEffect(() => {
         if (availableServicesQuery.isSuccess) {
-            const services: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+            const services: UserOrderableServiceVo[] | undefined = availableServicesQuery.data;
             if (services.length > 0) {
-                const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
+                const currentVersions: Map<string, UserOrderableServiceVo[]> = new Map<
                     string,
-                    UserAvailableServiceVo[]
+                    UserOrderableServiceVo[]
                 >();
                 for (const registerServiceEntity of services) {
                     if (registerServiceEntity.version) {
@@ -181,7 +181,7 @@ function CreateService(): React.JSX.Element {
     }, [availableServicesQuery.isSuccess, availableServicesQuery.data, latestVersion, location.state, serviceName]);
 
     function getVersionList(
-        currentVersions: Map<string, UserAvailableServiceVo[]>
+        currentVersions: Map<string, UserOrderableServiceVo[]>
     ): { value: string; label: string }[] {
         if (currentVersions.size <= 0) {
             return [{ value: '', label: '' }];
@@ -205,8 +205,8 @@ function CreateService(): React.JSX.Element {
 
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
-                for (const userAvailableServiceVo of v) {
-                    cspList.push(userAvailableServiceVo.csp as unknown as CloudServiceProvider.name);
+                for (const userOrderableServiceVo of v) {
+                    cspList.push(userOrderableServiceVo.csp as unknown as CloudServiceProvider.name);
                 }
             }
         });
@@ -354,7 +354,7 @@ function CreateService(): React.JSX.Element {
     const servicePageUrl = servicesSubPageRoute + categoryName;
 
     if (availableServicesQuery.isError) {
-        versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
+        versionMapper.current = new Map<string, UserOrderableServiceVo[]>();
         return <ServicesLoadingError error={availableServicesQuery.error} />;
     }
 
