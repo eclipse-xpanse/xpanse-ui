@@ -41,7 +41,6 @@ function Services(): React.JSX.Element {
     };
 
     const availableServicesQuery = userOrderableServicesQuery(
-        location.hash.split('#')[1] as ServiceVo.category,
         undefined
     );
 
