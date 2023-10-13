@@ -35,6 +35,7 @@ export { ServiceDetailVo } from './models/ServiceDetailVo';
 export { ServiceTemplateVo } from './models/ServiceTemplateVo';
 export { ServiceVo } from './models/ServiceVo';
 export { SystemStatus } from './models/SystemStatus';
+export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserAvailableServiceVo } from './models/UserAvailableServiceVo';
 
@@ -45,3 +46,4 @@ export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
 export { ServiceCatalogService } from './services/ServiceCatalogService';
 export { ServiceVendorService } from './services/ServiceVendorService';
+export { WebhookService } from './services/WebhookService';
