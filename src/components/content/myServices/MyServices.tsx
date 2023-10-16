@@ -222,7 +222,7 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (text: string, record: ServiceVo) => {
+            render: (_text: string, record: ServiceVo) => {
                 return (
                     <>
                         <Space size='middle'>
@@ -232,7 +232,6 @@ function MyServices(): React.JSX.Element {
                                 onClick={() => {
                                     handleMyServiceDetailsOpenModal(record.id);
                                 }}
-                                disabled={isDestroying}
                             >
                                 details
                             </Button>
@@ -262,6 +261,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
+                                    isPurging ||
                                     record.serviceDeploymentState ===
                                         ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
                                     record.serviceDeploymentState ===
@@ -288,7 +288,7 @@ function MyServices(): React.JSX.Element {
                                         loading={record.id === id ? !isPurgingCompleted : false}
                                         type='primary'
                                         icon={<DeleteOutlined />}
-                                        disabled={isPurging}
+                                        disabled={isPurging || isDestroying}
                                     >
                                         purge
                                     </Button>
@@ -308,13 +308,12 @@ function MyServices(): React.JSX.Element {
                                         type='primary'
                                         icon={<CloseCircleOutlined />}
                                         disabled={
-                                            !(
-                                                (record.serviceDeploymentState ===
-                                                    ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
-                                                    record.serviceDeploymentState ===
-                                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) &&
-                                                !isDestroying
-                                            )
+                                            (record.serviceDeploymentState !==
+                                                ServiceVo.serviceDeploymentState.DESTROY_FAILED &&
+                                                record.serviceDeploymentState !==
+                                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                                            isDestroying ||
+                                            isPurging
                                         }
                                     >
                                         destroy
