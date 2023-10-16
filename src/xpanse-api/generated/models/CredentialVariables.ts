@@ -28,9 +28,9 @@ export type CredentialVariables = {
      */
     description: string;
     /**
-     * The id of user who create the credential.
+     * The id of user who created the credential.
      */
-    userId: string;
+    userId?: string;
     /**
      * The variables list of the credential.
      */
@@ -45,11 +45,11 @@ export namespace CredentialVariables {
         HUAWEI = 'huawei',
         FLEXIBLE_ENGINE = 'flexibleEngine',
         OPENSTACK = 'openstack',
+        SCS = 'scs',
         ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
-        SCS = 'scs',
     }
 
     /**

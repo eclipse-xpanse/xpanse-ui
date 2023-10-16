@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Space, Table, TableProps } from 'antd';
+import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
 import { DashboardOutlined } from '@ant-design/icons';
@@ -40,7 +40,6 @@ export const HealthCheckStatus = (): JSX.Element => {
 
     useEffect(() => {
         if (healthCheckQuery.isError) {
-            console.error(healthCheckQuery.error);
             setBackendSystemStatusList([]);
             if (healthCheckQuery.error instanceof ApiError && 'details' in healthCheckQuery.error.body) {
                 const response: Response = healthCheckQuery.error.body as Response;
@@ -194,9 +193,7 @@ export const HealthCheckStatus = (): JSX.Element => {
         });
         setHealthStatusFilters(filters);
     };
-    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
-        console.log('params', pagination, filters, sorter, extra);
-    };
+
     return (
         <>
             <div className={'services-content'}>
@@ -207,7 +204,7 @@ export const HealthCheckStatus = (): JSX.Element => {
                     </h3>
                 </div>
                 {healthCheckError}
-                <Table columns={columns} dataSource={backendSystemStatusList} onChange={onChange} />
+                <Table columns={columns} dataSource={backendSystemStatusList} />
             </div>
         </>
     );

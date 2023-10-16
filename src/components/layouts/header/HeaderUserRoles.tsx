@@ -50,17 +50,19 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         setRoleList(availableRolesToUser);
 
         const currentRole: string | null = sessionStorage.getItem(userRoleKey);
-        if (currentRole !== null) {
+        // we must take the previously selected role if available.
+        if (currentRole !== null && availableRolesToUser.includes(currentRole)) {
             setCurrentRole(currentRole);
-        } else {
-            availableRolesToUser.forEach((role) => {
-                if (allowRoleList.includes(role)) {
-                    sessionStorage.setItem(userRoleKey, role);
-                    setCurrentRole(role);
-                    return;
-                }
-            });
+            return;
         }
+        // if no role is already cached, then take the first valid role from the list of available roles for the user.
+        availableRolesToUser.forEach((role) => {
+            if (allowRoleList.includes(role)) {
+                sessionStorage.setItem(userRoleKey, role);
+                setCurrentRole(role);
+                return;
+            }
+        });
     }, [oidcIdToken.idTokenPayload]);
 
     useEffect(() => {
@@ -107,7 +109,6 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
         navigate(origin);
-        window.location.reload();
     };
 
     return (

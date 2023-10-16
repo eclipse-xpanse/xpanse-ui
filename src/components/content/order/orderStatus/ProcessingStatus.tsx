@@ -58,11 +58,23 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
 
     if (operationType === (OperationType.Migrate as OperationType)) {
         if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
-            return (
-                <div>
-                    <span>{'Migrated Successfully'}</span>
-                </div>
-            );
+            if (response.deployedServiceProperties) {
+                for (const key in response.deployedServiceProperties) {
+                    endPointMap.set(key, response.deployedServiceProperties[key]);
+                }
+            }
+            if (endPointMap.size > 0) {
+                return (
+                    <>
+                        <span>{'Migrated Successfully'}</span>
+                        <div className={'service-instance-detail-position'}>
+                            {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
+                        </div>
+                    </>
+                );
+            } else {
+                return <span>{'Migrated Successfully'}</span>;
+            }
         } else if (
             response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
             response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED

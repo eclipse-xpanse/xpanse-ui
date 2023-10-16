@@ -1,6 +1,6 @@
 {
-    "name": "ui",
-    "version": "1.0.0",
+    "name": "xpanse-ui",
+    "version": "1.0.4",
     "private": true,
     "type": "module",
     "dependencies": {
@@ -49,7 +49,8 @@
             "no-undef": "off",
             "@typescript-eslint/no-inferrable-types": "off",
             "@tanstack/query/exhaustive-deps": "error",
-            "@tanstack/query/prefer-query-object-syntax": "error"
+            "@tanstack/query/prefer-query-object-syntax": "error",
+            "no-console": "error"
         },
         "ignorePatterns": [
             "src/xpanse-api/**",
@@ -101,6 +102,7 @@
         "openapi-typescript-codegen": "^0.25.0",
         "prettier": "3.0.3",
         "react-scripts": "5.0.1",
+        "release-it": "^16.2.1",
         "ts-jest": "^29.1.1",
         "typescript": "5.2.2"
     },
@@ -125,6 +127,30 @@
             "eslint-config-prettier",
             "@babel/plugin-proposal-private-property-in-object",
             "openapi-typescript-codegen"
+        ],
+        "ignoreBinaries": [
+            "zip"
         ]
+    },
+    "release-it": {
+        "github": {
+            "release": true,
+            "releaseNotes": "git log --no-merges --pretty=format:\"* %s %h\" ${latestTag}...main",
+            "assets": [
+                "*.zip"
+            ]
+        },
+        "npm": {
+            "publish": false
+        },
+        "hooks": {
+            "before:init": [
+                "git update-index -q --refresh"
+            ],
+            "after:bump": [
+                "npm run build",
+                "zip -r -q xpanse-ui-${version}.zip build"
+            ]
+        }
     }
 }

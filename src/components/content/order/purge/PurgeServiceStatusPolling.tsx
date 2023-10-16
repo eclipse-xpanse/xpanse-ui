@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ApiError, Response, ServiceService } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
@@ -14,38 +14,41 @@ export function PurgeServiceStatusPolling({
     uuid,
     isError,
     error,
-    isSuccess,
-    setIsPurging,
     setIsPurgingCompleted,
+    getPurgeCloseStatus,
 }: {
     uuid: string;
     isError: boolean;
     error: Error | undefined;
-    isSuccess: boolean;
-    setIsPurging: (arg: boolean) => void;
     setIsPurgingCompleted: (arg: boolean) => void;
+    getPurgeCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element {
+    const [isRefetch, setIsRefetch] = useState<boolean>(true);
     const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getServiceDetailsById', uuid],
+        queryKey: ['getPurgeServiceDetailsById', uuid],
         queryFn: () => ServiceService.getServiceDetailsById(uuid),
         refetchOnWindowFocus: false,
-        refetchInterval: uuid.length > 0 && isSuccess ? deploymentStatusPollingInterval : false,
-        enabled: uuid.length > 0 && isSuccess,
+        refetchInterval: uuid.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
+        enabled: uuid.length > 0 && isRefetch,
     });
 
     useEffect(() => {
         if (isError) {
-            setIsPurging(false);
+            setIsRefetch(false);
             setIsPurgingCompleted(true);
         }
-    }, [isError, setIsPurgingCompleted, setIsPurging]);
+    }, [isError, setIsPurgingCompleted]);
 
     useEffect(() => {
         if (getServiceDetailsByIdQuery.isError) {
-            setIsPurging(false);
+            setIsRefetch(false);
             setIsPurgingCompleted(true);
         }
-    }, [getServiceDetailsByIdQuery.isError, getServiceDetailsByIdQuery.error, setIsPurging, setIsPurgingCompleted]);
+    }, [getServiceDetailsByIdQuery.isError, setIsPurgingCompleted]);
+
+    const onClose = () => {
+        getPurgeCloseStatus(true);
+    };
 
     if (isError) {
         if (error instanceof ApiError && 'details' in error.body) {
@@ -59,6 +62,7 @@ export function PurgeServiceStatusPolling({
                             description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
                             showIcon
                             closable={true}
+                            onClose={onClose}
                             type={'error'}
                         />{' '}
                     </div>
@@ -82,7 +86,24 @@ export function PurgeServiceStatusPolling({
                             description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
                             showIcon
                             closable={true}
+                            onClose={onClose}
                             type={'error'}
+                        />{' '}
+                    </div>
+                );
+            } else {
+                return (
+                    <div className={'submit-alert-tip'}>
+                        {' '}
+                        <Alert
+                            message={'Processing Status'}
+                            description={
+                                <OrderSubmitResultDetails msg={`Service ${uuid} purged successfully`} uuid={uuid} />
+                            }
+                            showIcon
+                            closable={true}
+                            onClose={onClose}
+                            type={'success'}
                         />{' '}
                     </div>
                 );

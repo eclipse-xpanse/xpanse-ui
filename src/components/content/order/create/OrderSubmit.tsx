@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import Navigate from './Navigate';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
-import { To, useLocation } from 'react-router-dom';
+import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
     DeployParam,
@@ -19,7 +19,7 @@ import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { CreateRequest } from '../../../../xpanse-api/generated';
-import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
+import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
@@ -52,7 +52,7 @@ export interface OrderSubmitProps {
     params: DeployParam[];
 }
 
-function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
+function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [form] = Form.useForm();
     const [deploying, setDeploying] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
@@ -62,7 +62,13 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
 
     // Avoid re-rendering of the component when variables are added to store.
     const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
+    const navigate = useNavigate();
     useEffect(() => useOrderFormStore.subscribe((state) => (deployParamsRef.current = state.deployParams)), []);
+
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (state === undefined || state === null) {
+        navigate(homePageRoute);
+    }
 
     function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
         if (parameter.type === 'string') {
@@ -83,8 +89,9 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
                 cacheFormVariable(parameter.name, checked ? 'true' : 'false');
             };
         }
-        return (value: unknown) => {
-            console.log(value);
+        return (event: ChangeEvent<HTMLInputElement>) => {
+            setIsShowDeploymentResult(false);
+            cacheFormVariable(event.target.name, event.target.value);
         };
     }
 
@@ -93,17 +100,17 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
         setDeploying(true);
         setIsShowDeploymentResult(true);
         const createRequest: CreateRequest = {
-            category: props.category,
-            csp: props.csp,
-            flavor: props.flavor,
-            region: props.region,
-            serviceName: props.name,
-            version: props.version,
+            category: state.category,
+            csp: state.csp,
+            flavor: state.flavor,
+            region: state.region,
+            serviceName: state.name,
+            version: state.version,
             customerServiceName: deployParamsRef.current.Name,
         };
         const serviceRequestProperties: Record<string, string> = {};
         for (const variable in deployParamsRef.current) {
-            if (variable !== CUSTOMER_SERVICE_NAME_FIELD) {
+            if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
                 serviceRequestProperties[variable] = deployParamsRef.current[variable];
             }
         }
@@ -112,20 +119,20 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
     }
 
     const createServicePageUrl: string = createServicePageRoute
-        .concat('?catalog=', props.category)
-        .concat('&serviceName=', props.name)
-        .concat('&latestVersion=', props.version);
+        .concat('?catalog=', state.category)
+        .concat('&serviceName=', state.name)
+        .concat('&latestVersion=', state.version);
 
     return (
         <>
             <div>
-                <Navigate text={'<< Back'} to={createServicePageUrl as To} props={props} />
+                <NavigateOrderSubmission text={'<< Back'} to={createServicePageUrl as To} props={state} />
                 <div className={'Line'} />
                 <div className={'services-content'}>
                     <div className={'content-title'}>
                         <div className={'content-title-order'}>
-                            Service: {props.name}@{props.version}
-                            <ApiDoc id={props.id} styleClass={'content-title-api'}></ApiDoc>
+                            Service: {state.name}@{state.version}
+                            <ApiDoc id={state.id} styleClass={'content-title-api'}></ApiDoc>
                         </div>
                     </div>
                 </div>
@@ -173,7 +180,7 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
                     />
                 </Form.Item>
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
-                    {props.params.map((item) =>
+                    {state.params.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
                             <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
                         ) : (
@@ -196,8 +203,11 @@ function OrderSubmit(props: OrderSubmitProps): React.JSX.Element {
 }
 
 function OrderSubmitPage(): React.JSX.Element {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
-    return OrderSubmit(useLocation().state.props);
+    const location = useLocation();
+    if (!location.state) {
+        return <Navigate to={homePageRoute} />;
+    }
+    return OrderSubmit(location.state as OrderSubmitProps);
 }
 
 export default OrderSubmitPage;

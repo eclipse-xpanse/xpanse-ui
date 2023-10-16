@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
+import { Alert, Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
     AbstractCredentialInfo,
@@ -29,14 +29,14 @@ import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useQuery } from '@tanstack/react-query';
-import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
-import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import { useNavigate } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
 import { useOrderFormStore } from '../order/store/OrderFormStore';
 import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPolling';
 import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
+import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
+import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -116,21 +116,21 @@ function MyServices(): React.JSX.Element {
         }
     }, [listDeployedServicesQuery.error, listDeployedServicesQuery.isError]);
 
-    useEffect(() => {
-        if (isDestroyingCompleted) {
+    const getDestroyCloseStatus = (isClose: boolean) => {
+        if (isClose) {
             setId('');
+            setIsDestroying(false);
             refreshData();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isDestroyingCompleted]);
+    };
 
-    useEffect(() => {
-        if (isPurgingCompleted) {
+    const getPurgeCloseStatus = (isClose: boolean) => {
+        if (isClose) {
             setId('');
+            setIsPurging(false);
             refreshData();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isPurgingCompleted]);
+    };
 
     const columns: ColumnsType<ServiceVo> = [
         {
@@ -200,6 +200,16 @@ function MyServices(): React.JSX.Element {
             dataIndex: 'flavor',
         },
         {
+            title: 'Created On',
+            dataIndex: 'createTime',
+            defaultSortOrder: 'descend',
+            sorter: (serviceVoA, serviceVoB) => {
+                const dateA = new Date(serviceVoA.createTime);
+                const dateB = new Date(serviceVoB.createTime);
+                return dateA.getTime() - dateB.getTime();
+            },
+        },
+        {
             title: 'ServiceState',
             dataIndex: 'serviceDeploymentState',
             filters: serviceStateFilters,
@@ -212,10 +222,19 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (text: string, record: ServiceVo) => {
+            render: (_text: string, record: ServiceVo) => {
                 return (
                     <>
                         <Space size='middle'>
+                            <Button
+                                type='primary'
+                                icon={<InfoCircleOutlined />}
+                                onClick={() => {
+                                    handleMyServiceDetailsOpenModal(record.id);
+                                }}
+                            >
+                                details
+                            </Button>
                             <Button
                                 type='primary'
                                 icon={<AreaChartOutlined />}
@@ -242,6 +261,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     isDestroying ||
+                                    isPurging ||
                                     record.serviceDeploymentState ===
                                         ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
                                     record.serviceDeploymentState ===
@@ -265,9 +285,10 @@ function MyServices(): React.JSX.Element {
                                 >
                                     <Button
                                         className={'purge-btn-class'}
-                                        loading={record.id === id ? isPurging : false}
+                                        loading={record.id === id ? !isPurgingCompleted : false}
                                         type='primary'
                                         icon={<DeleteOutlined />}
+                                        disabled={isPurging || isDestroying}
                                     >
                                         purge
                                     </Button>
@@ -283,33 +304,22 @@ function MyServices(): React.JSX.Element {
                                     }}
                                 >
                                     <Button
-                                        loading={record.id === id ? isDestroying : false}
+                                        loading={record.id === id ? !isDestroyingCompleted : false}
                                         type='primary'
                                         icon={<CloseCircleOutlined />}
                                         disabled={
-                                            !(
-                                                (record.serviceDeploymentState ===
-                                                    ServiceVo.serviceDeploymentState.DESTROY_FAILED ||
-                                                    record.serviceDeploymentState ===
-                                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) &&
-                                                !isDestroying
-                                            )
+                                            (record.serviceDeploymentState !==
+                                                ServiceVo.serviceDeploymentState.DESTROY_FAILED &&
+                                                record.serviceDeploymentState !==
+                                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                                            isDestroying ||
+                                            isPurging
                                         }
                                     >
                                         destroy
                                     </Button>
                                 </Popconfirm>
                             )}
-                            <Button
-                                type='primary'
-                                icon={<InfoCircleOutlined />}
-                                onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record.id);
-                                }}
-                                disabled={isDestroying}
-                            >
-                                details
-                            </Button>
                         </Space>
                     </>
                 );
@@ -326,8 +336,8 @@ function MyServices(): React.JSX.Element {
 
     function destroy(record: ServiceVo): void {
         setIsDestroying(true);
-        setId(record.id);
         setIsDestroyingCompleted(false);
+        setId(record.id);
         serviceDestroyQuery.mutate(record.id);
     }
 
@@ -462,10 +472,10 @@ function MyServices(): React.JSX.Element {
             {isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}
+                    isError={serviceDestroyQuery.isError}
                     error={serviceDestroyQuery.error as Error}
-                    isLoading={serviceDestroyQuery.isLoading}
-                    setIsDestroying={setIsDestroying}
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
+                    getDestroyCloseStatus={getDestroyCloseStatus}
                 />
             ) : null}
             {isPurging && id.length > 0 ? (
@@ -473,9 +483,8 @@ function MyServices(): React.JSX.Element {
                     uuid={id}
                     isError={servicePurgeQuery.isError}
                     error={servicePurgeQuery.error as Error}
-                    isSuccess={servicePurgeQuery.isSuccess}
-                    setIsPurging={setIsPurging}
                     setIsPurgingCompleted={setIsPurgingCompleted}
+                    getPurgeCloseStatus={getPurgeCloseStatus}
                 />
             ) : null}
             <Modal
@@ -514,14 +523,16 @@ function MyServices(): React.JSX.Element {
                 </Button>
             </div>
             {servicesLoadingError}
-            <div className={'service-instance-list'}>
-                <Table
-                    columns={columns}
-                    dataSource={serviceVoList}
-                    loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
-                    rowKey={'id'}
-                />
-            </div>
+            <Row>
+                <div className={'service-instance-list'}>
+                    <Table
+                        columns={columns}
+                        dataSource={serviceVoList}
+                        loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
+                        rowKey={'id'}
+                    />
+                </div>
+            </Row>
         </div>
     );
 }

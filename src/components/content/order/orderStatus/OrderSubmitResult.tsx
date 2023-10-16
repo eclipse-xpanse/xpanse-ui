@@ -26,7 +26,7 @@ export const OrderSubmitResult = (
                 message={`Processing Status`}
                 description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
                 showIcon
-                closable={false}
+                closable={true}
                 type={type}
                 action={
                     <DeploymentTimer

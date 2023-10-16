@@ -7,7 +7,7 @@ import { Button, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
-import { ApiError, Ocl, Response, ServiceTemplateVo, ServiceVendorService } from '../../../xpanse-api/generated';
+import { ApiError, Ocl, Response, ServiceTemplateDetailVo, ServiceVendorService } from '../../../xpanse-api/generated';
 import '../../../styles/register.css';
 import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
 import loadOclFile from '../common/ocl/loadOclFile';
@@ -38,7 +38,7 @@ function RegisterPanel(): React.JSX.Element {
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.register(ocl);
         },
-        onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
+        onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'success';
             registerResult.current = [`ID - ${serviceTemplateVo.id}`];
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
@@ -54,6 +54,14 @@ function RegisterPanel(): React.JSX.Element {
             navigate(registerFailedRoute);
         },
     });
+
+    // useEffect to clean up state when 'register panel' is clicked after registration has failed.
+    useEffect(() => {
+        if (location.pathname === registerPageRoute) {
+            onRemove();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.pathname]);
 
     // useEffect to route to /register URI when a user reloads the failed URI. Hence, this must be run only during component's first render.
     useEffect(() => {
@@ -80,13 +88,12 @@ function RegisterPanel(): React.JSX.Element {
                             files.current[0]
                         );
                     } catch (e: unknown) {
+                        files.current[0].status = 'error';
+                        setYamlSyntaxValidationStatus('error');
                         if (e instanceof Error) {
-                            console.log(e);
-                            files.current[0].status = 'error';
                             yamlValidationResult.current = e.message;
-                            setYamlSyntaxValidationStatus('error');
                         } else {
-                            console.log(e);
+                            yamlValidationResult.current = 'unhandled error occurred';
                         }
                         navigate(registerInvalidRoute);
                     }

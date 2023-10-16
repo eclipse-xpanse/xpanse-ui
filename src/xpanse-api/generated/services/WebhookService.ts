@@ -7,22 +7,29 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { SystemStatus } from '../models/SystemStatus';
+import type { TerraformResult } from '../models/TerraformResult';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class AdminService {
+export class WebhookService {
     /**
-     * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
-     * @returns SystemStatus OK
+     * Process the execution result after terraform executes the command line.
+     * @param taskId task id
+     * @param requestBody
+     * @returns any OK
      * @throws ApiError
      */
-    public static healthCheck(): CancelablePromise<SystemStatus> {
+    public static destroyCallback(taskId: string, requestBody: TerraformResult): CancelablePromise<any> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/health',
+            method: 'POST',
+            url: '/webhook/destroy/{task_id}',
+            path: {
+                task_id: taskId,
+            },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 403: `Forbidden`,
@@ -34,22 +41,21 @@ export class AdminService {
     }
 
     /**
-     * List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
-     * @param active Whether only list cloud service provider with active plugin.
-     * @returns string OK
+     * Process the execution result after terraform executes the command line.
+     * @param taskId task id
+     * @param requestBody
+     * @returns any OK
      * @throws ApiError
      */
-    public static getCsps(
-        active: boolean
-    ): CancelablePromise<
-        Array<'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'>
-    > {
+    public static deployCallback(taskId: string, requestBody: TerraformResult): CancelablePromise<any> {
         return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/csp',
-            query: {
-                active: active,
+            method: 'POST',
+            url: '/webhook/deploy/{task_id}',
+            path: {
+                task_id: taskId,
             },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 403: `Forbidden`,

@@ -6,46 +6,43 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
-    ApiError,
     Billing,
     CloudServiceProvider,
     Flavor,
     Region,
-    Response,
-    UserAvailableServiceVo,
-    ServiceCatalogService,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import Navigate from './Navigate';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from '../formElements/GoToSubmit';
-import { Alert, Select, Skeleton, Space, Tabs } from 'antd';
+import { Select, Skeleton, Space, Tabs } from 'antd';
 import { Area } from '../../../utils/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 import { sortVersion } from '../../../utils/Sort';
 import { currencyMapper } from '../../../utils/currency';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
-import { useQuery } from '@tanstack/react-query';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import ServicesLoadingError from '../query/ServicesLoadingError';
+import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 
 function filterAreaList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, UserAvailableServiceVo[]>
+    versionMapper: Map<string, UserOrderableServiceVo[]>
 ): Area[] {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     versionMapper.forEach((v, k) => {
         if (k !== selectVersion) {
             return [];
         }
-        for (const userAvailableServiceVo of v) {
-            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
+        for (const userOrderableServiceVo of v) {
+            if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
                 const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
-                for (const region of userAvailableServiceVo.regions) {
+                for (const region of userOrderableServiceVo.regions) {
                     if (region.area && !areaRegions.has(region.area)) {
                         areaRegions.set(
                             region.area,
-                            userAvailableServiceVo.regions.filter((data) => data.area === region.area)
+                            userOrderableServiceVo.regions.filter((data) => data.area === region.area)
                         );
                     }
                 }
@@ -59,7 +56,7 @@ function filterAreaList(
                     });
                     areas.push({ name: area, regions: regionNames });
                 });
-                areaMapper.set(userAvailableServiceVo.csp, areas);
+                areaMapper.set(userOrderableServiceVo.csp, areas);
             }
         }
     });
@@ -69,16 +66,16 @@ function filterAreaList(
 function filterFlavorList(
     selectVersion: string,
     selectCsp: string,
-    versionMapper: Map<string, UserAvailableServiceVo[]>
+    versionMapper: Map<string, UserOrderableServiceVo[]>
 ): Map<string, Flavor[]> {
     const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
     versionMapper.forEach((v, k) => {
         if (k !== selectVersion) {
             return new Map<string, Flavor[]>();
         }
-        for (const userAvailableServiceVo of v) {
-            if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
-                flavorMapper.set(userAvailableServiceVo.csp, userAvailableServiceVo.flavors);
+        for (const userOrderableServiceVo of v) {
+            if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
+                flavorMapper.set(userOrderableServiceVo.csp, userOrderableServiceVo.flavors);
             }
         }
     });
@@ -91,7 +88,7 @@ function CreateService(): React.JSX.Element {
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const categoryName = decodeURI(urlParams.get('catalog') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const versionMapper = useRef<Map<string, UserAvailableServiceVo[]>>(new Map<string, UserAvailableServiceVo[]>());
+    const versionMapper = useRef<Map<string, UserOrderableServiceVo[]>>(new Map<string, UserOrderableServiceVo[]>());
     const [versionList, setVersionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
     const [selectVersion, setSelectVersion] = useState<string>('');
 
@@ -110,27 +107,19 @@ function CreateService(): React.JSX.Element {
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
-    const [loadingError, setLoadingError] = useState<JSX.Element | undefined>(undefined);
 
-    const availableServicesQuery = useQuery({
-        queryKey: ['listAvailableServices', categoryName, serviceName],
-        queryFn: () =>
-            ServiceCatalogService.listAvailableServices(
-                categoryName as UserAvailableServiceVo.category,
-                undefined,
-                serviceName,
-                ''
-            ),
-        enabled: categoryName.length > 0 && serviceName.length > 0,
-    });
+    const orderableServicesQuery = userOrderableServicesQuery(
+        categoryName as UserOrderableServiceVo.category,
+        serviceName
+    );
 
     useEffect(() => {
-        if (availableServicesQuery.isSuccess) {
-            const services: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        if (orderableServicesQuery.isSuccess) {
+            const services: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
             if (services.length > 0) {
-                const currentVersions: Map<string, UserAvailableServiceVo[]> = new Map<
+                const currentVersions: Map<string, UserOrderableServiceVo[]> = new Map<
                     string,
-                    UserAvailableServiceVo[]
+                    UserOrderableServiceVo[]
                 >();
                 for (const registerServiceEntity of services) {
                     if (registerServiceEntity.version) {
@@ -189,38 +178,10 @@ function CreateService(): React.JSX.Element {
                 setCurrency(currencyValue);
             }
         }
-    }, [availableServicesQuery.isSuccess, availableServicesQuery.data, latestVersion, location.state, serviceName]);
-
-    useEffect(() => {
-        if (availableServicesQuery.isError) {
-            if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
-                const response: Response = availableServicesQuery.error.body as Response;
-                setLoadingError(
-                    <Alert
-                        message={response.resultType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={true}
-                        className={'catalog-skeleton'}
-                    />
-                );
-            } else if (availableServicesQuery.error instanceof Error) {
-                setLoadingError(
-                    <Alert
-                        message='Fetching Service Details Failed'
-                        description={availableServicesQuery.error.message}
-                        type={'error'}
-                        closable={true}
-                        className={'catalog-skeleton'}
-                    />
-                );
-            }
-            versionMapper.current = new Map<string, UserAvailableServiceVo[]>();
-        }
-    }, [availableServicesQuery.isError, availableServicesQuery.error]);
+    }, [orderableServicesQuery.isSuccess, orderableServicesQuery.data, latestVersion, location.state, serviceName]);
 
     function getVersionList(
-        currentVersions: Map<string, UserAvailableServiceVo[]>
+        currentVersions: Map<string, UserOrderableServiceVo[]>
     ): { value: string; label: string }[] {
         if (currentVersions.size <= 0) {
             return [{ value: '', label: '' }];
@@ -244,8 +205,8 @@ function CreateService(): React.JSX.Element {
 
         versionMapper.current.forEach((v, k) => {
             if (k === selectVersion) {
-                for (const userAvailableServiceVo of v) {
-                    cspList.push(userAvailableServiceVo.csp as unknown as CloudServiceProvider.name);
+                for (const userOrderableServiceVo of v) {
+                    cspList.push(userOrderableServiceVo.csp as unknown as CloudServiceProvider.name);
                 }
             }
         });
@@ -392,15 +353,27 @@ function CreateService(): React.JSX.Element {
 
     const servicePageUrl = servicesSubPageRoute + categoryName;
 
-    if (availableServicesQuery.isError && loadingError !== undefined) {
-        return loadingError;
+    if (orderableServicesQuery.isError) {
+        versionMapper.current = new Map<string, UserOrderableServiceVo[]>();
+        return <ServicesLoadingError error={orderableServicesQuery.error} />;
     }
 
-    if (selectCsp && cspList.length > 0) {
+    if (orderableServicesQuery.isLoading || orderableServicesQuery.isFetching) {
+        return (
+            <Skeleton
+                className={'catalog-skeleton'}
+                active={true}
+                paragraph={{ rows: 2, width: ['20%', '20%'] }}
+                title={{ width: '5%' }}
+            />
+        );
+    }
+
+    if (selectCsp) {
         return (
             <>
                 <div>
-                    <Navigate text={'<< Back'} to={servicePageUrl as To} props={undefined} />
+                    <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
                     <div className={'Line'} />
                 </div>
                 <div className={'services-content'}>
@@ -482,17 +455,9 @@ function CreateService(): React.JSX.Element {
                 </div>
             </>
         );
-    } else {
-        return (
-            <Skeleton
-                className={'catalog-skeleton'}
-                active={true}
-                loading={availableServicesQuery.isLoading}
-                paragraph={{ rows: 2, width: ['20%', '20%'] }}
-                title={{ width: '5%' }}
-            />
-        );
     }
+
+    return <></>;
 }
 
 export default CreateService;

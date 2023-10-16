@@ -9,7 +9,7 @@ import {
     CloudServiceProvider,
     CreateRequest,
     ServiceVo,
-    UserAvailableServiceVo,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
@@ -26,7 +26,7 @@ import { MigrateServiceStatusPolling } from './MigrateServiceStatusPolling';
 import { useDeployRequestSubmitQuery } from '../create/useDeployRequestSubmitQuery';
 
 export const MigrateService = ({
-    userAvailableServiceVoList,
+    userOrderableServiceVoList,
     selectCsp,
     selectArea,
     selectRegion,
@@ -36,7 +36,7 @@ export const MigrateService = ({
     currentSelectedService,
     getCurrentMigrationStepStatus,
 }: {
-    userAvailableServiceVoList: UserAvailableServiceVo[];
+    userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: string;
     selectArea: string;
     selectRegion: string;
@@ -56,11 +56,11 @@ export const MigrateService = ({
 
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: { value: string; label: string; price: string }[] = getFlavorListByCsp(
-        getFlavorMapper(userAvailableServiceVoList),
+        getFlavorMapper(userOrderableServiceVoList),
         selectCsp
     );
     const currentBilling: Billing = getBilling(
-        userAvailableServiceVoList,
+        userOrderableServiceVoList,
         selectCsp.length === 0 ? CloudServiceProvider.name.OPENSTACK : selectCsp
     );
     let priceValue: string = '';

@@ -1,0 +1,97 @@
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Huawei Inc.
+#
+name: ui-release
+
+on:
+    workflow_dispatch:
+        inputs:
+            ReleaseType:
+                type: choice
+                description: Select the version to released
+                options:
+                    - major
+                    - minor
+                    - patch
+
+env:
+    BOT_USER_NAME: eclipse-xpanse-bot
+    BOT_EMAIL_ID: xpanse-bot@eclipse.org
+    REGISTRY: ghcr.io
+    IMAGE_NAME: ${{ github.repository }}
+    GITHUB_TOKEN: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        if: github.repository == 'eclipse-xpanse/xpanse-ui'
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+                  token: ${{ secrets.BOT_GITHUB_TOKEN }}
+
+            - name: git config
+              run: |
+                  git config user.name ${{ env.BOT_USER_NAME }}
+                  git config user.email ${{ env.BOT_EMAIL_ID }}
+
+            - name: Run install dependencies
+              run: npm install
+
+            - name: Run EsLint
+              working-directory: ./
+              run: npx eslint . --ext .js,.jsx,.ts,.tsx --config package.json --max-warnings=0
+
+            - name: Check Prettier Format
+              working-directory: ./
+              run: npx prettier --config .prettierrc --check .
+
+            - name: Run knip
+              working-directory: ./
+              run: npx knip
+
+            - name: Run unit tests
+              working-directory: ./
+              run: npm run test
+
+            - name: Release application
+              working-directory: ./
+              run: npx release-it ${{github.event.inputs.ReleaseType}} --ci
+
+            - name: Set current version env variable
+              run: |
+                  echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v2
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v2
+
+            - name: Login to Github Packages
+              uses: docker/login-action@v2
+              with:
+                  registry: ghcr.io
+                  username: ${{ env.BOT_USER_NAME }}
+                  password: ${{ secrets.BOT_GITHUB_DOCKER_TOKEN }}
+
+            - name: Extract Docker metadata
+              id: meta
+              uses: docker/metadata-action@v4.6.0
+              with:
+                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
+            - name: Build Docker Image and Push
+              uses: docker/build-push-action@v4.1.1
+              with:
+                  context: .
+                  file: docker/Dockerfile
+                  push: true
+                  tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ env.CURRENT_VERSION }}
+                  labels: ${{ steps.meta.outputs.labels }}
+                  provenance: false

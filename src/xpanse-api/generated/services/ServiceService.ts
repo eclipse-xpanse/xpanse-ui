@@ -39,7 +39,7 @@ export class ServiceService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'alicloud' | 'aws' | 'azure' | 'google' | 'scs',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:
@@ -81,6 +81,32 @@ export class ServiceService {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/xpanse/services',
+            body: requestBody,
+            mediaType: 'application/json',
+            errors: {
+                400: `Bad Request`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Start a task to migrate the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id
+     * @param requestBody
+     * @returns string Accepted
+     * @throws ApiError
+     */
+    public static migrate(id: string, requestBody: CreateRequest): CancelablePromise<string> {
+        return __request(OpenAPI, {
+            method: 'POST',
+            url: '/xpanse/services/migrate/{id}',
+            path: {
+                id: id,
+            },
             body: requestBody,
             mediaType: 'application/json',
             errors: {

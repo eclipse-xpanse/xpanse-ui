@@ -10,6 +10,7 @@ import { ApiError, DeployResource, Response, ServiceService } from '../../../xpa
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 import { ServiceDetailsContent } from './ServiceDetailsContent';
+import { DeploymentResultMessage } from './DeploymentResultMessage';
 export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useQuery({
         queryKey: ['getServiceDetailsById', serviceId],
@@ -20,7 +21,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
     if (getServiceDetailsByIdQuery.isSuccess) {
         const endPointMap = new Map<string, string>();
         const requestMap = new Map<string, string>();
-        const resultMessageMap = new Map<string, string>();
+        let resultMessage = undefined;
         let deployResourceMap: DeployResource[] = [];
         if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
             for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
@@ -33,7 +34,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
             }
         }
         if (getServiceDetailsByIdQuery.data.resultMessage) {
-            resultMessageMap.set('Result message details', getServiceDetailsByIdQuery.data.resultMessage);
+            resultMessage = DeploymentResultMessage(getServiceDetailsByIdQuery.data.resultMessage);
         }
         if (getServiceDetailsByIdQuery.data.deployResources) {
             deployResourceMap = getServiceDetailsByIdQuery.data.deployResources;
@@ -43,7 +44,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 <ServiceDetailsContent
                     content={endPointMap}
                     requestParams={requestMap}
-                    resultMessage={resultMessageMap}
+                    resultMessage={resultMessage}
                     deployResources={deployResourceMap}
                 />
             </>

@@ -6,21 +6,31 @@
 import React, { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { ApiError, Ocl, ServiceTemplateVo, Response, ServiceVendorService } from '../../../../../xpanse-api/generated';
+import {
+    ApiError,
+    Ocl,
+    ServiceTemplateDetailVo,
+    Response,
+    ServiceVendorService,
+    ServiceVo,
+} from '../../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
 import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
 import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
 import loadOclFile from '../../../common/ocl/loadOclFile';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 function UpdateService({
     id,
     unregisterStatus,
+    category,
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
+    category: ServiceVo.category;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -30,12 +40,12 @@ function UpdateService({
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
-
+    const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.update(id, ocl);
         },
-        onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
+        onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'success';
             updateResult.current = [`ID - ${serviceTemplateVo.id}`];
         },
@@ -60,7 +70,7 @@ function UpdateService({
 
     const handleCancel = () => {
         if (updateServiceRequest.isSuccess) {
-            window.location.reload();
+            void queryClient.refetchQueries(getQueryKey(category));
         }
         files.current.pop();
         ocl.current = undefined;
@@ -90,13 +100,12 @@ function UpdateService({
                             files.current[0]
                         );
                     } catch (e: unknown) {
+                        files.current[0].status = 'error';
+                        setYamlSyntaxValidationStatus('error');
                         if (e instanceof Error) {
-                            console.log(e);
-                            files.current[0].status = 'error';
                             yamlValidationResult.current = e.message;
-                            setYamlSyntaxValidationStatus('error');
                         } else {
-                            console.log(e);
+                            yamlValidationResult.current = 'unhandled error occurred';
                         }
                     }
                 }

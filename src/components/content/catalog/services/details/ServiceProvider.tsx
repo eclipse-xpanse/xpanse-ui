@@ -3,16 +3,25 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Alert, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import { CloudServiceProvider, Region, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import {
+    ApiError,
+    CloudServiceProvider,
+    Region,
+    Response,
+    ServiceVo,
+    ServiceTemplateDetailVo,
+} from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../../utils/Area';
 import UpdateService from '../update/UpdateService';
 import UnregisterService from '../unregister/UnregisterService';
 import { cspMap } from '../../../order/formElements/CspSelect';
 import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 let lastServiceName: string = '';
 
@@ -20,23 +29,25 @@ function ServiceProvider({
     categoryOclData,
     currentServiceName,
     confirmUnregister,
+    category,
 }: {
-    categoryOclData: Map<string, UserAvailableServiceVo[]>;
+    categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
-}): JSX.Element {
+    category: ServiceVo.category;
+}): React.JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<UserAvailableServiceVo | undefined>(undefined);
+    const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo | undefined>(undefined);
     const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
 
-    const detailMapper: Map<string, UserAvailableServiceVo> = new Map<string, UserAvailableServiceVo>();
+    const detailMapper: Map<string, ServiceTemplateDetailVo> = new Map<string, ServiceTemplateDetailVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = currentServiceName.split('@');
     const unregisterStatus = useRef<string>('');
-    const [unregisterTips, setUnregisterTips] = useState<JSX.Element | undefined>(undefined);
+    const [unregisterTips, setUnregisterTips] = useState<React.JSX.Element | undefined>(undefined);
     const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
     const [unregisterTabsItemDisabled, setUnregisterTabsItemDisabled] = useState<boolean>(false);
-
+    const queryClient = useQueryClient();
     function groupRegionsByArea(regions: Region[]): Map<string, Region[]> {
         const map: Map<string, Region[]> = new Map<string, Region[]>();
         regions.forEach((region) => {
@@ -50,7 +61,7 @@ function ServiceProvider({
         return map;
     }
 
-    const getCspTabs = (categoryOclData: Map<string, UserAvailableServiceVo[]>): Tab[] => {
+    const getCspTabs = (categoryOclData: Map<string, ServiceTemplateDetailVo[]>): Tab[] => {
         const items: Tab[] = [];
         categoryOclData.forEach((serviceList, serviceName) => {
             if (serviceName === name) {
@@ -130,21 +141,41 @@ function ServiceProvider({
         setActiveKey(key);
     };
 
-    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string) {
+    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
         setUnregisterTips(
             <div className={'submit-alert-tip'}>
                 {' '}
                 {unregisterResult ? (
                     <Alert
                         message='Unregister:'
-                        description={msg}
+                        description={msg as string}
                         showIcon
                         type={'success'}
                         closable={true}
                         onClose={onRemove}
                     />
                 ) : (
-                    <Alert message='Unregister:' description={msg} showIcon type={'error'} closable={true} />
+                    <div>
+                        {msg instanceof ApiError && 'details' in msg.body ? (
+                            <Alert
+                                message='Unregister:'
+                                description={(msg.body as Response).details}
+                                showIcon
+                                type={'error'}
+                                closable={true}
+                                onClose={onRemove}
+                            />
+                        ) : (
+                            <Alert
+                                message='Unregister:'
+                                description={(msg as Error).message}
+                                showIcon
+                                type={'error'}
+                                closable={true}
+                                onClose={onRemove}
+                            />
+                        )}
+                    </div>
                 )}{' '}
             </div>
         );
@@ -152,20 +183,20 @@ function ServiceProvider({
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    const onConfirmUnregister = async (msg: string, isUnregisterSuccessful: boolean, id: string) => {
+    const onConfirmUnregister = async (msg: string | Error, isUnregisterSuccessful: boolean, id: string) => {
         setUnregisterTipsInfo(isUnregisterSuccessful, msg);
         setUnregisterServiceId(id);
         unregisterStatus.current = isUnregisterSuccessful ? 'completed' : 'error';
-        confirmUnregister(true);
+        confirmUnregister(false);
         setUnregisterTabsItemDisabled(true);
         if (isUnregisterSuccessful) {
-            await sleep(500);
-            window.location.reload();
+            await sleep(5000);
+            void queryClient.refetchQueries(getQueryKey(category));
         }
     };
 
     const onRemove = () => {
-        window.location.reload();
+        void queryClient.refetchQueries(getQueryKey(category));
     };
 
     return (
@@ -178,12 +209,13 @@ function ServiceProvider({
                         <>
                             <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
                             <div className={'update-unregister-btn-class'}>
-                                <UpdateService id={serviceDetails.id} unregisterStatus={unregisterStatus} />
-                                <UnregisterService
+                                <UpdateService
                                     id={serviceDetails.id}
-                                    /* eslint-disable-next-line @typescript-eslint/no-misused-promises */
-                                    onConfirmHandler={onConfirmUnregister}
+                                    unregisterStatus={unregisterStatus}
+                                    category={category}
                                 />
+                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
+                                <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
                             </div>
                         </>
                     ) : null}

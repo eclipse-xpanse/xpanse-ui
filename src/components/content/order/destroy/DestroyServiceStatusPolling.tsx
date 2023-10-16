@@ -3,146 +3,135 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useStopwatch } from 'react-timer-hook';
-import React, { useEffect } from 'react';
+import { ApiError, Response, ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
-import { ServiceDetailVo } from '../../../../xpanse-api/generated';
-import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
-import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
-import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
-import { OperationType } from '../formElements/CommonTypes';
+import React, { useEffect } from 'react';
+import { Alert } from 'antd';
+import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 function DestroyServiceStatusPolling({
     uuid,
+    isError,
     error,
-    isLoading,
-    setIsDestroying,
     setIsDestroyingCompleted,
+    getDestroyCloseStatus,
 }: {
     uuid: string;
+    isError: boolean;
     error: Error | undefined;
-    isLoading: boolean;
-    setIsDestroying: (arg: boolean) => void;
     setIsDestroyingCompleted: (arg: boolean) => void;
+    getDestroyCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
     ]);
 
-    const stopWatch = useStopwatch({
-        autoStart: true,
-    });
-
     useEffect(() => {
         if (
-            getServiceDetailsByIdQuery.data &&
+            getServiceDetailsByIdQuery.isSuccess &&
             [
                 ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
                 ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
-            setIsDestroying(false);
             setIsDestroyingCompleted(true);
         }
-    }, [getServiceDetailsByIdQuery.data, setIsDestroyingCompleted, setIsDestroying]);
+    }, [getServiceDetailsByIdQuery.isSuccess, getServiceDetailsByIdQuery.data, setIsDestroyingCompleted]);
 
     useEffect(() => {
-        if (error) {
-            setIsDestroying(false);
+        if (isError) {
             setIsDestroyingCompleted(true);
         }
-    }, [error, setIsDestroyingCompleted, setIsDestroying]);
+    }, [isError, setIsDestroyingCompleted]);
 
     useEffect(() => {
-        if (getServiceDetailsByIdQuery.error) {
-            setIsDestroying(false);
+        if (getServiceDetailsByIdQuery.isError) {
             setIsDestroyingCompleted(true);
         }
-    }, [getServiceDetailsByIdQuery.error, setIsDestroyingCompleted, setIsDestroying]);
+    }, [getServiceDetailsByIdQuery.isError, setIsDestroyingCompleted]);
 
-    if (isLoading) {
-        return OrderSubmitResult(
-            'Request submission in-progress',
-            uuid,
-            'success',
-            ServiceDetailVo.serviceDeploymentState.DESTROYING,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
+    const onClose = () => {
+        getDestroyCloseStatus(true);
+    };
 
-    if (error) {
-        return OrderSubmitFailed(
-            error,
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (uuid && getServiceDetailsByIdQuery.error) {
-        return OrderSubmitResult(
-            'Destroy status polling failed. Please visit MyServices page to check the status of the request.',
-            uuid,
-            'error',
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
-
-    if (uuid && getServiceDetailsByIdQuery.data)
-        if (
-            ![
-                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
-            ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
-        ) {
-            return OrderSubmitResult(
-                'Destroying, Please wait...',
-                uuid,
-                'success',
-                ServiceDetailVo.serviceDeploymentState.DESTROYING,
-                stopWatch,
-                OperationType.Destroy
+    if (isError) {
+        if (error instanceof ApiError && 'details' in error.body) {
+            const response: Response = error.body as Response;
+            return (
+                <div className={'submit-alert-tip'}>
+                    {' '}
+                    <Alert
+                        message={response.details}
+                        description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                        showIcon
+                        closable={true}
+                        onClose={onClose}
+                        type={'error'}
+                    />{' '}
+                </div>
             );
-        } else if (
+        }
+    }
+
+    if (uuid && getServiceDetailsByIdQuery.isError) {
+        if (
+            getServiceDetailsByIdQuery.error instanceof ApiError &&
+            'details' in getServiceDetailsByIdQuery.error.body
+        ) {
+            const response: Response = getServiceDetailsByIdQuery.error.body as Response;
+            return (
+                <div className={'submit-alert-tip'}>
+                    {' '}
+                    <Alert
+                        message={response.details}
+                        description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                        showIcon
+                        closable={true}
+                        onClose={onClose}
+                        type={'error'}
+                    />{' '}
+                </div>
+            );
+        }
+    }
+
+    if (uuid && getServiceDetailsByIdQuery.data !== undefined)
+        if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
             ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
         ) {
-            return OrderSubmitResult(
-                ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Destroy),
-                uuid,
-                'success',
-                getServiceDetailsByIdQuery.data.serviceDeploymentState,
-                stopWatch,
-                OperationType.Destroy
+            return (
+                <div className={'submit-alert-tip'}>
+                    {' '}
+                    <Alert
+                        message={'Processing Status'}
+                        description={<OrderSubmitResultDetails msg={'Service destroyed successfully'} uuid={uuid} />}
+                        showIcon
+                        closable={true}
+                        onClose={onClose}
+                        type={'success'}
+                    />{' '}
+                </div>
             );
         } else if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState ===
             ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
         ) {
-            return OrderSubmitResult(
-                ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Destroy),
-                uuid,
-                'error',
-                getServiceDetailsByIdQuery.data.serviceDeploymentState,
-                stopWatch,
-                OperationType.Destroy
+            return (
+                <div className={'submit-alert-tip'}>
+                    {' '}
+                    <Alert
+                        message={'Processing Status'}
+                        description={<OrderSubmitResultDetails msg={'Destroy failed'} uuid={uuid} />}
+                        showIcon
+                        closable={true}
+                        onClose={onClose}
+                        type={'error'}
+                    />{' '}
+                </div>
             );
         }
-
-    if (getServiceDetailsByIdQuery.data === undefined) {
-        return OrderSubmitResult(
-            'Request accepted',
-            uuid,
-            'success',
-            ServiceDetailVo.serviceDeploymentState.DESTROYING,
-            stopWatch,
-            OperationType.Destroy
-        );
-    }
 
     return <></>;
 }

@@ -3,7 +3,7 @@
     "info": {
         "title": "Xpanse API",
         "description": "RESTful Services to interact with Xpanse runtime",
-        "version": "1.0.0-SNAPSHOT"
+        "version": "1.0.1-SNAPSHOT"
     },
     "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
     "security": [
@@ -13,6 +13,7 @@
         { "name": "Credentials Management", "description": "APIs for managing user's cloud provider credentials" },
         { "name": "Service Vendor", "description": "APIs to manage service templates." },
         { "name": "Admin", "description": "APIs for administrating Xpanse" },
+        { "name": "Webhook", "description": "Webhook APIs" },
         {
             "name": "Service Catalog",
             "description": "APIs to query the services which are available for the user to order."
@@ -64,7 +65,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -114,7 +115,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -205,7 +206,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -228,11 +229,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -365,11 +366,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -454,11 +455,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -562,6 +563,44 @@
                 }
             }
         },
+        "/xpanse/services/migrate/{id}": {
+            "post": {
+                "tags": ["Service"],
+                "description": "Start a task to migrate the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "migrate",
+                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreateRequest" } } },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "202": {
+                        "description": "Accepted",
+                        "content": { "application/json": { "schema": { "type": "string", "format": "uuid" } } }
+                    }
+                }
+            }
+        },
         "/xpanse/service_templates": {
             "get": {
                 "tags": ["Service Vendor"],
@@ -600,11 +639,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -650,7 +689,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" }
                                 }
                             }
                         }
@@ -693,7 +732,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -737,9 +776,95 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
+                }
+            }
+        },
+        "/webhook/destroy/{task_id}": {
+            "post": {
+                "tags": ["Webhook"],
+                "description": "Process the execution result after terraform executes the command line.",
+                "operationId": "destroyCallback",
+                "parameters": [
+                    {
+                        "name": "task_id",
+                        "in": "path",
+                        "description": "task id",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
+                }
+            }
+        },
+        "/webhook/deploy/{task_id}": {
+            "post": {
+                "tags": ["Webhook"],
+                "description": "Process the execution result after terraform executes the command line.",
+                "operationId": "deployCallback",
+                "parameters": [
+                    {
+                        "name": "task_id",
+                        "in": "path",
+                        "description": "task id",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
                 }
             }
         },
@@ -990,11 +1115,11 @@
                                             "huawei",
                                             "flexibleEngine",
                                             "openstack",
+                                            "scs",
                                             "alicloud",
                                             "aws",
                                             "azure",
-                                            "google",
-                                            "scs"
+                                            "google"
                                         ]
                                     }
                                 }
@@ -1021,11 +1146,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1085,11 +1210,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1163,11 +1288,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     }
@@ -1214,7 +1339,7 @@
             "get": {
                 "tags": ["Service Catalog"],
                 "description": "List of all registered services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listAvailableServices",
+                "operationId": "listOrderableServices",
                 "parameters": [
                     {
                         "name": "categoryName",
@@ -1248,11 +1373,11 @@
                                 "huawei",
                                 "flexibleEngine",
                                 "openstack",
+                                "scs",
                                 "alicloud",
                                 "aws",
                                 "azure",
-                                "google",
-                                "scs"
+                                "google"
                             ]
                         }
                     },
@@ -1298,13 +1423,13 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/UserOrderableServiceVo" }
                                 }
                             },
                             "application/hal+json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/UserOrderableServiceVo" }
                                 }
                             }
                         }
@@ -1316,12 +1441,12 @@
             "get": {
                 "tags": ["Service Catalog"],
                 "description": "Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "availableServiceDetails",
+                "operationId": "getOrderableServiceDetails",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The id of available service.",
+                        "description": "The id of orderable service.",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -1350,7 +1475,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/UserAvailableServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/UserOrderableServiceVo" } }
                         }
                     }
                 }
@@ -1359,7 +1484,7 @@
         "/xpanse/catalog/services/{id}/openapi": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
+                "description": "Get the API document of the orderable service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
                 "operationId": "openApi",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
@@ -1547,7 +1672,8 @@
                             "Sensitive Field Encryption Or Decryption Failed Exception",
                             "Unsupported Enum Value",
                             "Terraform Boot Request Failed",
-                            "Metrics Data Not Ready"
+                            "Metrics Data Not Ready",
+                            "Variable Validation Failed"
                         ]
                     },
                     "details": {
@@ -1583,7 +1709,7 @@
                     "name": {
                         "type": "string",
                         "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "regions": {
                         "type": "array",
@@ -1611,7 +1737,11 @@
                         "description": "The value of the deploy variable. Value can be provided for default variables"
                     },
                     "mandatory": { "type": "boolean", "description": "Indicates if the variable is mandatory" },
-                    "validator": { "type": "string", "description": "Validator of the variable" },
+                    "valueSchema": {
+                        "type": "object",
+                        "additionalProperties": { "type": "object", "description": "valueSchema of the variable" },
+                        "description": "valueSchema of the variable"
+                    },
                     "sensitiveScope": {
                         "type": "string",
                         "description": "Sensitive scope of variable storage",
@@ -1739,17 +1869,23 @@
                     "name": { "type": "string" }
                 }
             },
-            "ServiceTemplateVo": {
+            "ServiceTemplateDetailVo": {
                 "required": [
+                    "billing",
                     "category",
                     "createTime",
                     "csp",
+                    "deployment",
+                    "description",
+                    "flavors",
+                    "icon",
                     "id",
                     "lastModifiedTime",
                     "name",
                     "namespace",
-                    "ocl",
+                    "regions",
                     "serviceRegistrationState",
+                    "variables",
                     "version"
                 ],
                 "type": "object",
@@ -1760,7 +1896,7 @@
                     "csp": {
                         "type": "string",
                         "description": "Csp of the registered service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "category": {
                         "type": "string",
@@ -1782,7 +1918,25 @@
                         "type": "string",
                         "description": "Namespace of the user who registered service template."
                     },
-                    "ocl": { "$ref": "#/components/schemas/Ocl" },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the registered service." },
+                    "icon": { "type": "string", "description": "The icon of the registered service." },
+                    "deployment": { "$ref": "#/components/schemas/Deployment" },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the registered service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
                     "createTime": {
                         "type": "string",
                         "description": "createTime of the registered service.",
@@ -1795,7 +1949,7 @@
                     },
                     "serviceRegistrationState": {
                         "type": "string",
-                        "description": "State of service.",
+                        "description": "State of registered service.",
                         "enum": ["registered", "updated"]
                     },
                     "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
@@ -1809,7 +1963,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "description": { "type": "string", "description": "The description of the credential" },
                     "type": {
@@ -1888,7 +2042,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceRequestProperties": {
@@ -1899,6 +2053,16 @@
                         },
                         "description": "The properties for the requested service"
                     }
+                }
+            },
+            "TerraformResult": {
+                "type": "object",
+                "properties": {
+                    "commandStdOutput": { "type": "string" },
+                    "commandStdError": { "type": "string" },
+                    "terraformState": { "type": "string" },
+                    "importantFileContentMap": { "type": "object", "additionalProperties": { "type": "string" } },
+                    "commandSuccessful": { "type": "boolean" }
                 }
             },
             "ServiceVo": {
@@ -1942,7 +2106,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -2034,7 +2198,7 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceDeploymentState": {
@@ -2075,89 +2239,6 @@
                         "description": "The properties of the deployed service."
                     },
                     "resultMessage": { "type": "string", "description": "The result message of the deployed service." }
-                }
-            },
-            "UserAvailableServiceVo": {
-                "required": [
-                    "billing",
-                    "category",
-                    "createTime",
-                    "csp",
-                    "deployment",
-                    "description",
-                    "flavors",
-                    "icon",
-                    "id",
-                    "lastModifiedTime",
-                    "name",
-                    "namespace",
-                    "regions",
-                    "serviceRegistrationState",
-                    "variables",
-                    "version"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
-                    "category": {
-                        "type": "string",
-                        "description": "The catalog of the available service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "name": { "type": "string", "description": "The name of the available service." },
-                    "version": { "type": "string", "description": "The version of the available service." },
-                    "csp": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Region" }
-                    },
-                    "description": { "type": "string", "description": "The description of the available service." },
-                    "namespace": { "type": "string", "description": "The namespace of the available service." },
-                    "icon": { "type": "string", "description": "The icon of the available service." },
-                    "deployment": { "$ref": "#/components/schemas/Deployment" },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables for the deployment, which will be passed to the deployer.",
-                        "items": { "$ref": "#/components/schemas/DeployVariable" }
-                    },
-                    "flavors": {
-                        "type": "array",
-                        "description": "The flavors of the available service.",
-                        "items": { "$ref": "#/components/schemas/Flavor" }
-                    },
-                    "billing": { "$ref": "#/components/schemas/Billing" },
-                    "createTime": {
-                        "type": "string",
-                        "description": "The registration time of the service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "The latest update time of the available service.",
-                        "format": "date-time"
-                    },
-                    "serviceRegistrationState": {
-                        "type": "string",
-                        "description": "The state of the available service.",
-                        "enum": ["registered", "updated"]
-                    },
-                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },
             "Metric": {
@@ -2259,7 +2340,7 @@
                 }
             },
             "AbstractCredentialInfo": {
-                "required": ["csp", "description", "name", "type", "userId"],
+                "required": ["csp", "description", "name", "type"],
                 "type": "object",
                 "allOf": [
                     { "$ref": "#/components/schemas/CredentialVariables" },
@@ -2273,11 +2354,11 @@
                                     "huawei",
                                     "flexibleEngine",
                                     "openstack",
+                                    "scs",
                                     "alicloud",
                                     "aws",
                                     "azure",
-                                    "google",
-                                    "scs"
+                                    "google"
                                 ]
                             },
                             "type": {
@@ -2293,19 +2374,19 @@
                                 "type": "string",
                                 "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
                             },
-                            "userId": { "type": "string", "description": "The id of user who create the credential." }
+                            "userId": { "type": "string", "description": "The id of user who created the credential." }
                         }
                     }
                 ]
             },
             "CredentialVariables": {
-                "required": ["csp", "description", "name", "type", "userId", "variables"],
+                "required": ["csp", "description", "name", "type", "variables"],
                 "type": "object",
                 "properties": {
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "alicloud", "aws", "azure", "google", "scs"]
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "type": {
                         "type": "string",
@@ -2320,12 +2401,73 @@
                         "type": "string",
                         "description": "The description of the credential,this field is provided by  he the plugin of cloud service provider."
                     },
-                    "userId": { "type": "string", "description": "The id of user who create the credential." },
+                    "userId": { "type": "string", "description": "The id of user who created the credential." },
                     "variables": {
                         "type": "array",
                         "description": "The variables list of the credential.",
                         "items": { "$ref": "#/components/schemas/CredentialVariable" }
                     }
+                }
+            },
+            "UserOrderableServiceVo": {
+                "required": [
+                    "billing",
+                    "category",
+                    "csp",
+                    "description",
+                    "flavors",
+                    "icon",
+                    "id",
+                    "name",
+                    "regions",
+                    "variables",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "description": "The id of the orderable service.", "format": "uuid" },
+                    "category": {
+                        "type": "string",
+                        "description": "The category of the orderable service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "name": { "type": "string", "description": "The name of the orderable service." },
+                    "version": { "type": "string", "description": "The version of the orderable service." },
+                    "csp": {
+                        "type": "string",
+                        "description": "The Cloud Service Provider of the orderable service.",
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                    },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the orderable service." },
+                    "icon": { "type": "string", "description": "The icon of the orderable service." },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the orderable service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
+                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },
             "TokenResponse": {

@@ -28,7 +28,7 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     description?: string;
     /**
-     * The id of user who create the credential.
+     * The id of user who created the credential.
      */
     userId?: string;
 } & {
@@ -48,10 +48,6 @@ export type AbstractCredentialInfo = CredentialVariables & {
      * The description of the credential,this field is provided by  he the plugin of cloud service provider.
      */
     description: string;
-    /**
-     * The id of user who create the credential.
-     */
-    userId: string;
 };
 
 export namespace AbstractCredentialInfo {
@@ -62,11 +58,11 @@ export namespace AbstractCredentialInfo {
         HUAWEI = 'huawei',
         FLEXIBLE_ENGINE = 'flexibleEngine',
         OPENSTACK = 'openstack',
+        SCS = 'scs',
         ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
-        SCS = 'scs',
     }
 
     /**

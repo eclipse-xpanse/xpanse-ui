@@ -11,27 +11,24 @@ import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
-import { ServiceVo, ServiceCatalogService, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceVo, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
-import ServicesLoadingError from './ServicesLoadingError';
-import { useQuery } from '@tanstack/react-query';
-import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
+import ServicesLoadingError from '../query/ServicesLoadingError';
+import { getUserOrderableServiceMapper, getUserOrderableVersionMapper } from './userServiceProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
         []
     );
-    const [isServicesLoaded, setIsServicesLoaded] = useState<boolean>(false);
-    const [isServicesLoadSuccessful, setIsServicesLoadSuccessful] = useState<boolean>(true);
     const navigate = useNavigate();
     const location = useLocation();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
     useEffect(() => {
         clearFormVariables();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [clearFormVariables]);
 
     const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(
@@ -42,116 +39,92 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const availableServicesQuery = useQuery({
-        queryKey: ['catalog', location.hash.split('#')[1] as ServiceVo.category],
-        queryFn: () => ServiceCatalogService.listAvailableServices(location.hash.split('#')[1] as ServiceVo.category),
-        refetchOnWindowFocus: false,
-    });
+    const orderableServicesQuery = userOrderableServicesQuery(
+        location.hash.split('#')[1] as ServiceVo.category,
+        undefined
+    );
 
     useEffect(() => {
-        setIsServicesLoaded(false);
-        const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        const userOrderableServiceList: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
         const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
-        if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
-            serviceMapper.forEach((availableServicesList, serviceName) => {
-                const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+        if (userOrderableServiceList !== undefined && userOrderableServiceList.length > 0) {
+            const serviceMapper: Map<string, UserOrderableServiceVo[]> =
+                getUserOrderableServiceMapper(userOrderableServiceList);
+            serviceMapper.forEach((orderableServicesList, serviceName) => {
+                const versionMapper: Map<string, UserOrderableServiceVo[]> = getUserOrderableVersionMapper(
                     serviceName,
-                    userAvailableServiceList
+                    userOrderableServiceList
                 );
                 const versionList: string[] = Array.from(versionMapper.keys());
                 const serviceItem = {
                     name: serviceName,
-                    content: availableServicesList[0].description,
-                    icon: availableServicesList[0].icon,
+                    content: orderableServicesList[0].description,
+                    icon: orderableServicesList[0].icon,
                     latestVersion: sortVersion(versionList)[0],
                 };
                 serviceList.push(serviceItem);
             });
-            setServices(serviceList);
-            setIsServicesLoaded(true);
-            setIsServicesLoadSuccessful(true);
-        } else {
-            setServices(serviceList);
-            setIsServicesLoaded(true);
-            setIsServicesLoadSuccessful(true);
         }
-    }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
+        setServices(serviceList);
+    }, [orderableServicesQuery.data, orderableServicesQuery.isSuccess]);
 
-    useEffect(() => {
-        if (availableServicesQuery.isError) {
-            setServices([]);
-            setIsServicesLoaded(true);
-            setIsServicesLoadSuccessful(false);
-        }
-    }, [availableServicesQuery.isError]);
+    if (orderableServicesQuery.isError) {
+        return <ServicesLoadingError error={orderableServicesQuery.error} />;
+    }
 
-    useEffect(() => {
-        if (availableServicesQuery.isLoading) {
-            setIsServicesLoaded(false);
-        }
-    }, [availableServicesQuery.isLoading]);
+    if (orderableServicesQuery.isLoading || orderableServicesQuery.isFetching) {
+        return <ServicesSkeleton />;
+    }
+
+    if (services.length === 0) {
+        return (
+            <div className={'service-blank-class'}>
+                <Empty description={'No services available.'} />
+            </div>
+        );
+    }
 
     return (
-        <>
-            {' '}
-            {isServicesLoadSuccessful ? (
-                isServicesLoaded ? (
-                    services.length > 0 ? (
-                        <div className={'services-content'}>
-                            <div className={'content-title'}>
-                                <FormOutlined />
-                                &nbsp;Select Service
-                            </div>
+        <div className={'services-content'}>
+            <div className={'content-title'}>
+                <FormOutlined />
+                &nbsp;Select Service
+            </div>
 
-                            <div className={'services-content-body'}>
-                                {services.map((item, index) => {
-                                    return (
-                                        <Row key={index}>
-                                            <Col span={8} className={'services-content-body-col'}>
-                                                <Space direction='vertical' size='middle'>
-                                                    <Badge.Ribbon text={item.latestVersion}>
-                                                        <div
-                                                            key={index}
-                                                            className={'service-type-option-detail'}
-                                                            onClick={() => {
-                                                                onSelectService(item.name, item.latestVersion);
-                                                            }}
-                                                        >
-                                                            <div className='service-type-option-image'>
-                                                                <img
-                                                                    className='service-type-option-service-icon'
-                                                                    src={item.icon}
-                                                                    alt={'App'}
-                                                                />
-                                                            </div>
-                                                            <div className='service-type-option-info'>
-                                                                <span className='service-type-option'>{item.name}</span>
-                                                                <span className='service-type-option-description'>
-                                                                    {item.content}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </Badge.Ribbon>
-                                                </Space>
-                                            </Col>
-                                        </Row>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className={'service-blank-class'}>
-                            <Empty description={'No services available.'} />
-                        </div>
-                    )
-                ) : (
-                    <ServicesSkeleton />
-                )
-            ) : (
-                <ServicesLoadingError />
-            )}
-        </>
+            <div className={'services-content-body'}>
+                {services.map((item, index) => {
+                    return (
+                        <Row key={index}>
+                            <Col span={8} className={'services-content-body-col'}>
+                                <Space direction='vertical' size='middle'>
+                                    <Badge.Ribbon text={item.latestVersion}>
+                                        <div
+                                            key={index}
+                                            className={'service-type-option-detail'}
+                                            onClick={() => {
+                                                onSelectService(item.name, item.latestVersion);
+                                            }}
+                                        >
+                                            <div className='service-type-option-image'>
+                                                <img
+                                                    className='service-type-option-service-icon'
+                                                    src={item.icon}
+                                                    alt={'App'}
+                                                />
+                                            </div>
+                                            <div className='service-type-option-info'>
+                                                <span className='service-type-option'>{item.name}</span>
+                                                <span className='service-type-option-description'>{item.content}</span>
+                                            </div>
+                                        </div>
+                                    </Badge.Ribbon>
+                                </Space>
+                            </Col>
+                        </Row>
+                    );
+                })}
+            </div>
+        </div>
     );
 }
 

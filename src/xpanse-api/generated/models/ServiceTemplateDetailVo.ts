@@ -8,10 +8,14 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { Billing } from './Billing';
+import type { Deployment } from './Deployment';
+import type { DeployVariable } from './DeployVariable';
+import type { Flavor } from './Flavor';
 import type { Link } from './Link';
-import type { Ocl } from './Ocl';
+import type { Region } from './Region';
 
-export type ServiceTemplateVo = {
+export type ServiceTemplateDetailVo = {
     /**
      * ID of the registered service.
      */
@@ -27,16 +31,37 @@ export type ServiceTemplateVo = {
     /**
      * Csp of the registered service.
      */
-    csp: ServiceTemplateVo.csp;
+    csp: ServiceTemplateDetailVo.csp;
     /**
      * Category of the registered service.
      */
-    category: ServiceTemplateVo.category;
+    category: ServiceTemplateDetailVo.category;
     /**
      * Namespace of the user who registered service template.
      */
     namespace: string;
-    ocl: Ocl;
+    /**
+     * The regions of the Cloud Service Provider.
+     */
+    regions: Array<Region>;
+    /**
+     * The description of the registered service.
+     */
+    description: string;
+    /**
+     * The icon of the registered service.
+     */
+    icon: string;
+    deployment: Deployment;
+    /**
+     * The variables for the deployment, which will be passed to the deployer.
+     */
+    variables: Array<DeployVariable>;
+    /**
+     * The flavors of the registered service.
+     */
+    flavors: Array<Flavor>;
+    billing: Billing;
     /**
      * createTime of the registered service.
      */
@@ -46,13 +71,13 @@ export type ServiceTemplateVo = {
      */
     lastModifiedTime: string;
     /**
-     * State of service.
+     * State of registered service.
      */
-    serviceRegistrationState: ServiceTemplateVo.serviceRegistrationState;
+    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
     links?: Array<Link>;
 };
 
-export namespace ServiceTemplateVo {
+export namespace ServiceTemplateDetailVo {
     /**
      * Csp of the registered service.
      */
@@ -60,11 +85,11 @@ export namespace ServiceTemplateVo {
         HUAWEI = 'huawei',
         FLEXIBLE_ENGINE = 'flexibleEngine',
         OPENSTACK = 'openstack',
+        SCS = 'scs',
         ALICLOUD = 'alicloud',
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
-        SCS = 'scs',
     }
 
     /**
@@ -84,7 +109,7 @@ export namespace ServiceTemplateVo {
     }
 
     /**
-     * State of service.
+     * State of registered service.
      */
     export enum serviceRegistrationState {
         REGISTERED = 'registered',
