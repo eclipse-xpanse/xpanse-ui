@@ -65,7 +65,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -115,7 +115,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -206,7 +206,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -689,7 +689,7 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" }
                                 }
                             }
                         }
@@ -732,7 +732,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -776,7 +776,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
                 }
@@ -1339,7 +1339,7 @@
             "get": {
                 "tags": ["Service Catalog"],
                 "description": "List of all registered services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listAvailableServices",
+                "operationId": "listOrderableServices",
                 "parameters": [
                     {
                         "name": "categoryName",
@@ -1423,13 +1423,13 @@
                             "application/json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/UserOrderableServiceVo" }
                                 }
                             },
                             "application/hal+json": {
                                 "schema": {
                                     "type": "array",
-                                    "items": { "$ref": "#/components/schemas/UserAvailableServiceVo" }
+                                    "items": { "$ref": "#/components/schemas/UserOrderableServiceVo" }
                                 }
                             }
                         }
@@ -1441,12 +1441,12 @@
             "get": {
                 "tags": ["Service Catalog"],
                 "description": "Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "availableServiceDetails",
+                "operationId": "getOrderableServiceDetails",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "The id of available service.",
+                        "description": "The id of orderable service.",
                         "required": true,
                         "schema": { "type": "string" }
                     }
@@ -1475,7 +1475,7 @@
                     "200": {
                         "description": "OK",
                         "content": {
-                            "application/json": { "schema": { "$ref": "#/components/schemas/UserAvailableServiceVo" } }
+                            "application/json": { "schema": { "$ref": "#/components/schemas/UserOrderableServiceVo" } }
                         }
                     }
                 }
@@ -1484,7 +1484,7 @@
         "/xpanse/catalog/services/{id}/openapi": {
             "get": {
                 "tags": ["Service Catalog"],
-                "description": "Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
+                "description": "Get the API document of the orderable service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
                 "operationId": "openApi",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
@@ -1869,17 +1869,23 @@
                     "name": { "type": "string" }
                 }
             },
-            "ServiceTemplateVo": {
+            "ServiceTemplateDetailVo": {
                 "required": [
+                    "billing",
                     "category",
                     "createTime",
                     "csp",
+                    "deployment",
+                    "description",
+                    "flavors",
+                    "icon",
                     "id",
                     "lastModifiedTime",
                     "name",
                     "namespace",
-                    "ocl",
+                    "regions",
                     "serviceRegistrationState",
+                    "variables",
                     "version"
                 ],
                 "type": "object",
@@ -1912,7 +1918,25 @@
                         "type": "string",
                         "description": "Namespace of the user who registered service template."
                     },
-                    "ocl": { "$ref": "#/components/schemas/Ocl" },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the registered service." },
+                    "icon": { "type": "string", "description": "The icon of the registered service." },
+                    "deployment": { "$ref": "#/components/schemas/Deployment" },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the registered service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
                     "createTime": {
                         "type": "string",
                         "description": "createTime of the registered service.",
@@ -1925,7 +1949,7 @@
                     },
                     "serviceRegistrationState": {
                         "type": "string",
-                        "description": "State of service.",
+                        "description": "State of registered service.",
                         "enum": ["registered", "updated"]
                     },
                     "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
@@ -2217,89 +2241,6 @@
                     "resultMessage": { "type": "string", "description": "The result message of the deployed service." }
                 }
             },
-            "UserAvailableServiceVo": {
-                "required": [
-                    "billing",
-                    "category",
-                    "createTime",
-                    "csp",
-                    "deployment",
-                    "description",
-                    "flavors",
-                    "icon",
-                    "id",
-                    "lastModifiedTime",
-                    "name",
-                    "namespace",
-                    "regions",
-                    "serviceRegistrationState",
-                    "variables",
-                    "version"
-                ],
-                "type": "object",
-                "properties": {
-                    "id": { "type": "string", "description": "The id of the available service.", "format": "uuid" },
-                    "category": {
-                        "type": "string",
-                        "description": "The catalog of the available service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "name": { "type": "string", "description": "The name of the available service." },
-                    "version": { "type": "string", "description": "The version of the available service." },
-                    "csp": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider of the available service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": { "$ref": "#/components/schemas/Region" }
-                    },
-                    "description": { "type": "string", "description": "The description of the available service." },
-                    "namespace": { "type": "string", "description": "The namespace of the available service." },
-                    "icon": { "type": "string", "description": "The icon of the available service." },
-                    "deployment": { "$ref": "#/components/schemas/Deployment" },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables for the deployment, which will be passed to the deployer.",
-                        "items": { "$ref": "#/components/schemas/DeployVariable" }
-                    },
-                    "flavors": {
-                        "type": "array",
-                        "description": "The flavors of the available service.",
-                        "items": { "$ref": "#/components/schemas/Flavor" }
-                    },
-                    "billing": { "$ref": "#/components/schemas/Billing" },
-                    "createTime": {
-                        "type": "string",
-                        "description": "createTime of the registered service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "Last updateTime of the registered service.",
-                        "format": "date-time"
-                    },
-                    "serviceRegistrationState": {
-                        "type": "string",
-                        "description": "The state of the available service.",
-                        "enum": ["registered", "updated"]
-                    },
-                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
-                }
-            },
             "Metric": {
                 "required": ["monitorResourceType", "name", "type", "unit"],
                 "type": "object",
@@ -2466,6 +2407,67 @@
                         "description": "The variables list of the credential.",
                         "items": { "$ref": "#/components/schemas/CredentialVariable" }
                     }
+                }
+            },
+            "UserOrderableServiceVo": {
+                "required": [
+                    "billing",
+                    "category",
+                    "csp",
+                    "description",
+                    "flavors",
+                    "icon",
+                    "id",
+                    "name",
+                    "regions",
+                    "variables",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": { "type": "string", "description": "The id of the orderable service.", "format": "uuid" },
+                    "category": {
+                        "type": "string",
+                        "description": "The category of the orderable service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "name": { "type": "string", "description": "The name of the orderable service." },
+                    "version": { "type": "string", "description": "The version of the orderable service." },
+                    "csp": {
+                        "type": "string",
+                        "description": "The Cloud Service Provider of the orderable service.",
+                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                    },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": { "$ref": "#/components/schemas/Region" }
+                    },
+                    "description": { "type": "string", "description": "The description of the orderable service." },
+                    "icon": { "type": "string", "description": "The icon of the orderable service." },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": { "$ref": "#/components/schemas/DeployVariable" }
+                    },
+                    "flavors": {
+                        "type": "array",
+                        "description": "The flavors of the orderable service.",
+                        "items": { "$ref": "#/components/schemas/Flavor" }
+                    },
+                    "billing": { "$ref": "#/components/schemas/Billing" },
+                    "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },
             "TokenResponse": {

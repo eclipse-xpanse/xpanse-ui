@@ -10,7 +10,7 @@ import {
     DeployVariable,
     Flavor,
     Region,
-    UserAvailableServiceVo,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
@@ -31,10 +31,10 @@ export interface DeployParam {
     sensitiveScope: DeployVariable.sensitiveScope;
 }
 
-export const getFlavorMapper = (rsp: UserAvailableServiceVo[]): Map<string, Flavor[]> => {
+export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, Flavor[]> => {
     const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
-    rsp.forEach((userAvailableServiceVo) => {
-        flavorMapper.set(userAvailableServiceVo.csp, userAvailableServiceVo.flavors);
+    rsp.forEach((userOrderableServiceVo) => {
+        flavorMapper.set(userOrderableServiceVo.csp, userOrderableServiceVo.flavors);
     });
     return flavorMapper;
 };
@@ -57,33 +57,33 @@ export const getFlavorListByCsp = (
     return flavors;
 };
 
-export const getBilling = (rsp: UserAvailableServiceVo[], csp: string | undefined): Billing => {
+export const getBilling = (rsp: UserOrderableServiceVo[], csp: string | undefined): Billing => {
     let billing: Billing = {
         model: '' as string,
         period: 'daily' as Billing.period,
         currency: 'euro' as Billing.currency,
     };
-    rsp.forEach((userAvailableServiceVo) => {
-        if (csp !== undefined && csp === userAvailableServiceVo.csp.valueOf()) {
-            billing = userAvailableServiceVo.billing;
+    rsp.forEach((userOrderableServiceVo) => {
+        if (csp !== undefined && csp === userOrderableServiceVo.csp.valueOf()) {
+            billing = userOrderableServiceVo.billing;
         }
     });
     return billing;
 };
 
-export const filterAreaList = (rsp: UserAvailableServiceVo[], selectCsp: string | undefined): Area[] => {
+export const filterAreaList = (rsp: UserOrderableServiceVo[], selectCsp: string | undefined): Area[] => {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     if (selectCsp === undefined) {
         return [];
     }
-    rsp.forEach((userAvailableServiceVo) => {
-        if (userAvailableServiceVo.csp.valueOf() === selectCsp) {
+    rsp.forEach((userOrderableServiceVo) => {
+        if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
             const areaRegions: Map<string, Region[]> = new Map<string, Region[]>();
-            for (const region of userAvailableServiceVo.regions) {
+            for (const region of userOrderableServiceVo.regions) {
                 if (region.area && !areaRegions.has(region.area)) {
                     areaRegions.set(
                         region.area,
-                        userAvailableServiceVo.regions.filter((data) => data.area === region.area)
+                        userOrderableServiceVo.regions.filter((data) => data.area === region.area)
                     );
                 }
             }
@@ -97,14 +97,14 @@ export const filterAreaList = (rsp: UserAvailableServiceVo[], selectCsp: string 
                 });
                 areas.push({ name: area, regions: regionNames });
             });
-            areaMapper.set(userAvailableServiceVo.csp, areas);
+            areaMapper.set(userOrderableServiceVo.csp, areas);
         }
     });
     return areaMapper.get(selectCsp) ?? [];
 };
 
 export const getRegionList = (
-    rsp: UserAvailableServiceVo[],
+    rsp: UserOrderableServiceVo[],
     selectCsp: string | undefined,
     selectArea: string
 ): { value: string; label: string }[] => {
@@ -129,19 +129,19 @@ export const getRegionList = (
 };
 
 export const getDeployParams = (
-    userAvailableServiceVoList: UserAvailableServiceVo[],
+    userOrderableServiceVoList: UserOrderableServiceVo[],
     selectCsp: string,
     selectArea: string,
     selectRegion: string,
     selectFlavor: string
 ): OrderSubmitProps => {
-    let service: UserAvailableServiceVo | undefined;
+    let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
 
-    userAvailableServiceVoList.forEach((userAvailableServiceVo) => {
-        if (userAvailableServiceVo.csp.toString() === selectCsp) {
-            registeredServiceId = userAvailableServiceVo.id;
-            service = userAvailableServiceVo;
+    userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
+        if (userOrderableServiceVo.csp.toString() === selectCsp) {
+            registeredServiceId = userOrderableServiceVo.id;
+            service = userOrderableServiceVo;
         }
     });
 

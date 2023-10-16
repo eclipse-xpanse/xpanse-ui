@@ -1,15 +1,15 @@
-import { UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
 export const getServiceMapper = (
-    userAvailableServiceList: UserAvailableServiceVo[]
-): Map<string, UserAvailableServiceVo[]> => {
-    const serviceMapper: Map<string, UserAvailableServiceVo[]> = new Map<string, UserAvailableServiceVo[]>();
-    for (const userAvailableService of userAvailableServiceList) {
-        if (userAvailableService.name) {
-            if (!serviceMapper.has(userAvailableService.name)) {
+    serviceTemplateList: ServiceTemplateDetailVo[]
+): Map<string, ServiceTemplateDetailVo[]> => {
+    const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    for (const serviceTemplate of serviceTemplateList) {
+        if (serviceTemplate.name) {
+            if (!serviceMapper.has(serviceTemplate.name)) {
                 serviceMapper.set(
-                    userAvailableService.name,
-                    userAvailableServiceList.filter((data) => data.name === userAvailableService.name)
+                    serviceTemplate.name,
+                    serviceTemplateList.filter((data) => data.name === serviceTemplate.name)
                 );
             }
         }
@@ -20,10 +20,10 @@ export const getServiceMapper = (
 
 export const getVersionMapper = (
     currentServiceName: string,
-    userAvailableServiceList: UserAvailableServiceVo[]
-): Map<string, UserAvailableServiceVo[]> => {
-    const versionMapper: Map<string, UserAvailableServiceVo[]> = new Map<string, UserAvailableServiceVo[]>();
-    const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
+    serviceTemplateList: ServiceTemplateDetailVo[]
+): Map<string, ServiceTemplateDetailVo[]> => {
+    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(serviceTemplateList);
     serviceMapper.forEach((serviceList, serviceName) => {
         if (serviceName === currentServiceName) {
             for (const service of serviceList) {
@@ -44,12 +44,12 @@ export const getVersionMapper = (
 export const getCspMapper = (
     currentServiceName: string,
     currentVersionName: string,
-    userAvailableServiceList: UserAvailableServiceVo[]
-): Map<string, UserAvailableServiceVo[]> => {
-    const cspMapper: Map<string, UserAvailableServiceVo[]> = new Map<string, UserAvailableServiceVo[]>();
-    const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+    serviceTemplateList: ServiceTemplateDetailVo[]
+): Map<string, ServiceTemplateDetailVo[]> => {
+    const cspMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
         currentServiceName,
-        userAvailableServiceList
+        serviceTemplateList
     );
     versionMapper.forEach((versionList, versionName) => {
         if (currentVersionName === versionName) {

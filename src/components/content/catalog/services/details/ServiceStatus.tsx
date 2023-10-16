@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceTemplateVo } from '../../../../../xpanse-api/generated';
-import serviceRegistrationState = ServiceTemplateVo.serviceRegistrationState;
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import serviceRegistrationState = ServiceTemplateDetailVo.serviceRegistrationState;
 import { Tag } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React from 'react';
@@ -12,7 +12,7 @@ import React from 'react';
 export function ServiceStatus({
     serviceStatus,
 }: {
-    serviceStatus: ServiceTemplateVo.serviceRegistrationState;
+    serviceStatus: ServiceTemplateDetailVo.serviceRegistrationState;
 }): React.JSX.Element {
     switch (serviceStatus) {
         case serviceRegistrationState.REGISTERED:
@@ -21,7 +21,7 @@ export function ServiceStatus({
                     {serviceStatus.valueOf()}
                 </Tag>
             );
-        case ServiceTemplateVo.serviceRegistrationState.UPDATED:
+        case ServiceTemplateDetailVo.serviceRegistrationState.UPDATED:
             return (
                 <Tag icon={<CheckCircleOutlined />} color='orange' className={'catalog-service-status-size'}>
                     {serviceStatus.valueOf()}

@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Link } from '../models/Link';
-import type { UserAvailableServiceVo } from '../models/UserAvailableServiceVo';
+import type { UserOrderableServiceVo } from '../models/UserOrderableServiceVo';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -21,10 +21,10 @@ export class ServiceCatalogService {
      * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
-     * @returns UserAvailableServiceVo OK
+     * @returns UserOrderableServiceVo OK
      * @throws ApiError
      */
-    public static listAvailableServices(
+    public static listOrderableServices(
         categoryName?:
             | 'ai'
             | 'compute'
@@ -39,7 +39,7 @@ export class ServiceCatalogService {
         cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string
-    ): CancelablePromise<Array<UserAvailableServiceVo>> {
+    ): CancelablePromise<Array<UserOrderableServiceVo>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/catalog/services',
@@ -61,11 +61,11 @@ export class ServiceCatalogService {
 
     /**
      * Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id The id of available service.
-     * @returns UserAvailableServiceVo OK
+     * @param id The id of orderable service.
+     * @returns UserOrderableServiceVo OK
      * @throws ApiError
      */
-    public static availableServiceDetails(id: string): CancelablePromise<UserAvailableServiceVo> {
+    public static getOrderableServiceDetails(id: string): CancelablePromise<UserOrderableServiceVo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/catalog/services/{id}',
@@ -83,7 +83,7 @@ export class ServiceCatalogService {
     }
 
     /**
-     * Get the API document of the available service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+     * Get the API document of the orderable service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param id
      * @returns Link OK
      * @throws ApiError

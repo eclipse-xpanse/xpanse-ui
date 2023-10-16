@@ -5,7 +5,7 @@
 
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Area } from '../../../../utils/Area';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
@@ -19,7 +19,7 @@ function ServiceDetail({
     serviceDetails,
     serviceAreas,
 }: {
-    serviceDetails: UserAvailableServiceVo;
+    serviceDetails: ServiceTemplateDetailVo;
     serviceAreas: Area[];
 }): React.JSX.Element {
     return (

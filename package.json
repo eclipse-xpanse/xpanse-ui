@@ -126,8 +126,7 @@
         "ignoreDependencies": [
             "eslint-config-prettier",
             "@babel/plugin-proposal-private-property-in-object",
-            "openapi-typescript-codegen",
-            "release-it"
+            "openapi-typescript-codegen"
         ],
         "ignoreBinaries": [
             "zip"
