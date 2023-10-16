@@ -11,12 +11,12 @@ import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
-import { ServiceVo, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceVo, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from '../query/ServicesLoadingError';
-import { getServiceMapper, getVersionMapper } from '../../common/catalog/catalogProps';
+import { getUserOrderableServiceMapper, getUserOrderableVersionMapper } from './userServiceProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
-import useAvailableServicesQuery from '../query/useAvailableServicesQuery';
+import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 
 function Services(): React.JSX.Element {
     const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
@@ -28,8 +28,7 @@ function Services(): React.JSX.Element {
 
     useEffect(() => {
         clearFormVariables();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [clearFormVariables]);
 
     const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(
@@ -40,39 +39,40 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const availableServicesQuery = useAvailableServicesQuery(
+    const orderableServicesQuery = userOrderableServicesQuery(
         location.hash.split('#')[1] as ServiceVo.category,
         undefined
     );
 
     useEffect(() => {
-        const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        const userOrderableServiceList: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
         const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
-        if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
-            serviceMapper.forEach((availableServicesList, serviceName) => {
-                const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+        if (userOrderableServiceList !== undefined && userOrderableServiceList.length > 0) {
+            const serviceMapper: Map<string, UserOrderableServiceVo[]> =
+                getUserOrderableServiceMapper(userOrderableServiceList);
+            serviceMapper.forEach((orderableServicesList, serviceName) => {
+                const versionMapper: Map<string, UserOrderableServiceVo[]> = getUserOrderableVersionMapper(
                     serviceName,
-                    userAvailableServiceList
+                    userOrderableServiceList
                 );
                 const versionList: string[] = Array.from(versionMapper.keys());
                 const serviceItem = {
                     name: serviceName,
-                    content: availableServicesList[0].description,
-                    icon: availableServicesList[0].icon,
+                    content: orderableServicesList[0].description,
+                    icon: orderableServicesList[0].icon,
                     latestVersion: sortVersion(versionList)[0],
                 };
                 serviceList.push(serviceItem);
             });
         }
         setServices(serviceList);
-    }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
+    }, [orderableServicesQuery.data, orderableServicesQuery.isSuccess]);
 
-    if (availableServicesQuery.isError) {
-        return <ServicesLoadingError error={availableServicesQuery.error} />;
+    if (orderableServicesQuery.isError) {
+        return <ServicesLoadingError error={orderableServicesQuery.error} />;
     }
 
-    if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
+    if (orderableServicesQuery.isLoading || orderableServicesQuery.isFetching) {
         return <ServicesSkeleton />;
     }
 

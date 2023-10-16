@@ -12,7 +12,7 @@ import {
     Region,
     Response,
     ServiceVo,
-    UserAvailableServiceVo,
+    ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Area } from '../../../../utils/Area';
@@ -31,16 +31,16 @@ function ServiceProvider({
     confirmUnregister,
     category,
 }: {
-    categoryOclData: Map<string, UserAvailableServiceVo[]>;
+    categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
     category: ServiceVo.category;
 }): React.JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<UserAvailableServiceVo | undefined>(undefined);
+    const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo | undefined>(undefined);
     const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
 
-    const detailMapper: Map<string, UserAvailableServiceVo> = new Map<string, UserAvailableServiceVo>();
+    const detailMapper: Map<string, ServiceTemplateDetailVo> = new Map<string, ServiceTemplateDetailVo>();
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
     const [name, version] = currentServiceName.split('@');
     const unregisterStatus = useRef<string>('');
@@ -61,7 +61,7 @@ function ServiceProvider({
         return map;
     }
 
-    const getCspTabs = (categoryOclData: Map<string, UserAvailableServiceVo[]>): Tab[] => {
+    const getCspTabs = (categoryOclData: Map<string, ServiceTemplateDetailVo[]>): Tab[] => {
         const items: Tab[] = [];
         categoryOclData.forEach((serviceList, serviceName) => {
             if (serviceName === name) {

@@ -12,12 +12,12 @@ import {
     myServicesMenu,
     servicesMenu,
 } from '../../content/order/services/servicesMenu';
-import { ServiceTemplateVo } from '../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 
 export function getMenuItems(): ItemType[] {
-    const serviceCategories: string[] = Object.values(ServiceTemplateVo.category).filter((v) => isNaN(Number(v)));
+    const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));
     if (sessionStorage.getItem(userRoleKey) === 'isv') {
         return [catalogMenu(serviceCategories), registerPanelMenu()];
     } else if (sessionStorage.getItem(userRoleKey) === 'admin') {

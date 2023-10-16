@@ -9,7 +9,7 @@ import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-d
 import {
     ApiError,
     Ocl,
-    ServiceTemplateVo,
+    ServiceTemplateDetailVo,
     Response,
     ServiceVendorService,
     ServiceVo,
@@ -45,7 +45,7 @@ function UpdateService({
         mutationFn: (ocl: Ocl) => {
             return ServiceVendorService.update(id, ocl);
         },
-        onSuccess: (serviceTemplateVo: ServiceTemplateVo) => {
+        onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'success';
             updateResult.current = [`ID - ${serviceTemplateVo.id}`];
         },

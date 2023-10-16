@@ -8,7 +8,7 @@ import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
-import { ApiError, Response, ServiceVo, UserAvailableServiceVo } from '../../../../../xpanse-api/generated';
+import { ApiError, Response, ServiceVo, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
@@ -18,19 +18,19 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
-    const [categoryOclData, setCategoryOclData] = useState<Map<string, UserAvailableServiceVo[]>>(
-        new Map<string, UserAvailableServiceVo[]>()
+    const [categoryOclData, setCategoryOclData] = useState<Map<string, ServiceTemplateDetailVo[]>>(
+        new Map<string, ServiceTemplateDetailVo[]>()
     );
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
 
-    const availableServicesQuery = useAvailableServiceTemplatesQuery(category);
+    const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
 
     useEffect(() => {
         const categoryTreeData: DataNode[] = [];
         const tExpandKeys: React.Key[] = [];
-        const userAvailableServiceList: UserAvailableServiceVo[] | undefined = availableServicesQuery.data;
+        const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
         if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, UserAvailableServiceVo[]> = getServiceMapper(userAvailableServiceList);
+            const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
             const serviceNameList: string[] = Array.from(serviceMapper.keys());
             setCategoryOclData(serviceMapper);
             serviceNameList.forEach((serviceName: string) => {
@@ -39,7 +39,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
                     key: serviceName || '',
                     children: [],
                 };
-                const versionMapper: Map<string, UserAvailableServiceVo[]> = getVersionMapper(
+                const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
                     serviceName,
                     userAvailableServiceList
                 );
@@ -62,9 +62,9 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
             setTreeData([]);
             setSelectKey('');
             setExpandKeys([]);
-            setCategoryOclData(new Map<string, UserAvailableServiceVo[]>());
+            setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
         }
-    }, [availableServicesQuery.data, availableServicesQuery.isSuccess]);
+    }, [availableServiceTemplatesQuery.data, availableServiceTemplatesQuery.isSuccess]);
 
     function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
@@ -87,9 +87,12 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         setUnregisteredDisabled(disabled);
     };
 
-    if (availableServicesQuery.isError) {
-        if (availableServicesQuery.error instanceof ApiError && 'details' in availableServicesQuery.error.body) {
-            const response: Response = availableServicesQuery.error.body as Response;
+    if (availableServiceTemplatesQuery.isError) {
+        if (
+            availableServiceTemplatesQuery.error instanceof ApiError &&
+            'details' in availableServiceTemplatesQuery.error.body
+        ) {
+            const response: Response = availableServiceTemplatesQuery.error.body as Response;
             return (
                 <Alert
                     message={response.resultType.valueOf()}
@@ -103,7 +106,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
             return (
                 <Alert
                     message='Fetching Service Details Failed'
-                    description={(availableServicesQuery.error as Error).message}
+                    description={(availableServiceTemplatesQuery.error as Error).message}
                     type={'error'}
                     closable={true}
                     className={'catalog-skeleton'}
@@ -112,7 +115,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         }
     }
 
-    if (availableServicesQuery.isLoading || availableServicesQuery.isFetching) {
+    if (availableServiceTemplatesQuery.isLoading || availableServiceTemplatesQuery.isFetching) {
         return (
             <Skeleton
                 className={'catalog-skeleton'}
@@ -124,7 +127,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         );
     }
 
-    if (availableServicesQuery.data.length === 0) {
+    if (availableServiceTemplatesQuery.data.length === 0) {
         return (
             <div className={'service-blank-class'}>
                 <Empty description={'No services available.'} />

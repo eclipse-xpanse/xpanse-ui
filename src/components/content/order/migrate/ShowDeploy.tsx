@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, UserAvailableServiceVo } from '../../../../xpanse-api/generated';
+import { CreateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -14,7 +14,7 @@ import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 
 export const ShowDeploy = ({
-    userAvailableServiceVoList,
+    userOrderableServiceVoList,
     selectCsp,
     selectArea,
     selectRegion,
@@ -22,7 +22,7 @@ export const ShowDeploy = ({
     getCurrentMigrationStep,
     getDeployParameters,
 }: {
-    userAvailableServiceVoList: UserAvailableServiceVo[];
+    userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: string;
     selectArea: string;
     selectRegion: string;
@@ -31,7 +31,7 @@ export const ShowDeploy = ({
     getDeployParameters: (createRequest: CreateRequest) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const props = getDeployParams(userAvailableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
+    const props = getDeployParams(userOrderableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
 
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DeployServiceOnTheNewDestination
