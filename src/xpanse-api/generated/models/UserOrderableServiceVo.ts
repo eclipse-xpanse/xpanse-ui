@@ -10,7 +10,7 @@
 
 import type { Billing } from './Billing';
 import type { DeployVariable } from './DeployVariable';
-import type { Flavor } from './Flavor';
+import type { FlavorBasic } from './FlavorBasic';
 import type { Link } from './Link';
 import type { Region } from './Region';
 
@@ -54,7 +54,7 @@ export type UserOrderableServiceVo = {
     /**
      * The flavors of the orderable service.
      */
-    flavors: Array<Flavor>;
+    flavors: Array<FlavorBasic>;
     billing: Billing;
     links?: Array<Link>;
 };

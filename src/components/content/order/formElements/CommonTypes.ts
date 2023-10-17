@@ -8,7 +8,7 @@ import {
     Billing,
     CreateRequest,
     DeployVariable,
-    Flavor,
+    FlavorBasic,
     Region,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -31,8 +31,8 @@ export interface DeployParam {
     sensitiveScope: DeployVariable.sensitiveScope;
 }
 
-export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, Flavor[]> => {
-    const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
+export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, FlavorBasic[]> => {
+    const flavorMapper: Map<string, FlavorBasic[]> = new Map<string, FlavorBasic[]>();
     rsp.forEach((userOrderableServiceVo) => {
         flavorMapper.set(userOrderableServiceVo.csp, userOrderableServiceVo.flavors);
     });
@@ -40,13 +40,13 @@ export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, Flav
 };
 
 export const getFlavorListByCsp = (
-    flavorMapper: Map<string, Flavor[]>,
+    flavorMapper: Map<string, FlavorBasic[]>,
     csp: string
 ): { value: string; label: string; price: string }[] => {
     if (csp.length === 0) {
         return [];
     }
-    const flavorList: Flavor[] | undefined = flavorMapper.get(csp);
+    const flavorList: FlavorBasic[] | undefined = flavorMapper.get(csp);
     const flavors: { value: string; label: string; price: string }[] = [];
     if (flavorList !== undefined && flavorList.length > 0) {
         for (const flavor of flavorList) {

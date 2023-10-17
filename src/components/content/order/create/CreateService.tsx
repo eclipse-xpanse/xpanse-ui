@@ -8,7 +8,7 @@ import { To, useLocation, useSearchParams } from 'react-router-dom';
 import {
     Billing,
     CloudServiceProvider,
-    Flavor,
+    FlavorBasic,
     Region,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -67,11 +67,11 @@ function filterFlavorList(
     selectVersion: string,
     selectCsp: string,
     versionMapper: Map<string, UserOrderableServiceVo[]>
-): Map<string, Flavor[]> {
-    const flavorMapper: Map<string, Flavor[]> = new Map<string, Flavor[]>();
+): Map<string, FlavorBasic[]> {
+    const flavorMapper: Map<string, FlavorBasic[]> = new Map<string, FlavorBasic[]>();
     versionMapper.forEach((v, k) => {
         if (k !== selectVersion) {
-            return new Map<string, Flavor[]>();
+            return new Map<string, FlavorBasic[]>();
         }
         for (const userOrderableServiceVo of v) {
             if (userOrderableServiceVo.csp.valueOf() === selectCsp) {
