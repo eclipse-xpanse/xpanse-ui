@@ -25,6 +25,7 @@ export { DeployResource } from './models/DeployResource';
 export { DeployVariable } from './models/DeployVariable';
 export { DeployVariableKind } from './models/DeployVariableKind';
 export type { Flavor } from './models/Flavor';
+export type { FlavorBasic } from './models/FlavorBasic';
 export type { Link } from './models/Link';
 export { Metric } from './models/Metric';
 export { MetricItem } from './models/MetricItem';
