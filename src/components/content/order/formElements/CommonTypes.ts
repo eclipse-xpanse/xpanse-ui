@@ -6,7 +6,7 @@
 import { ChangeEvent } from 'react';
 import {
     Billing,
-    CreateRequest,
+    DeployRequest,
     DeployVariable,
     FlavorBasic,
     Region,
@@ -147,12 +147,12 @@ export const getDeployParams = (
 
     const props: OrderSubmitProps = {
         id: registeredServiceId,
-        category: service?.category as CreateRequest.category,
+        category: service?.category as DeployRequest.category,
         name: service?.name ?? '',
         version: service?.version ?? '',
         region: selectRegion,
         area: selectArea,
-        csp: service?.csp as CreateRequest.csp,
+        csp: service?.csp as DeployRequest.csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
     };

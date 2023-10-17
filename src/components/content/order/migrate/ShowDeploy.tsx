@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -28,7 +28,7 @@ export const ShowDeploy = ({
     selectRegion: string;
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    getDeployParameters: (createRequest: CreateRequest) => void;
+    getDeployParameters: (createRequest: DeployRequest) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(userOrderableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
@@ -71,7 +71,7 @@ export const ShowDeploy = ({
     }
 
     const handleFinish = () => {
-        const createRequest: CreateRequest = {
+        const createRequest: DeployRequest = {
             category: props.category,
             csp: props.csp,
             flavor: props.flavor,

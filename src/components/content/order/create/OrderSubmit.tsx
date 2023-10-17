@@ -18,7 +18,7 @@ import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest } from '../../../../xpanse-api/generated';
+import { DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -42,12 +42,12 @@ export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChan
 
 export interface OrderSubmitProps {
     id: string;
-    category: CreateRequest.category;
+    category: DeployRequest.category;
     name: string;
     version: string;
     region: string;
     area: string;
-    csp: CreateRequest.csp;
+    csp: DeployRequest.csp;
     flavor: string;
     params: DeployParam[];
 }
@@ -99,7 +99,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         setRequestSubmitted(true);
         setDeploying(true);
         setIsShowDeploymentResult(true);
-        const createRequest: CreateRequest = {
+        const createRequest: DeployRequest = {
             category: state.category,
             csp: state.csp,
             flavor: state.flavor,

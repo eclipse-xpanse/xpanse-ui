@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, DeployVariable, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, DeployVariable, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { DeployParam } from './CommonTypes';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../create/OrderSubmit';
@@ -48,12 +48,12 @@ export default function GoToSubmit({
 
         const props: OrderSubmitProps = {
             id: registeredServiceId,
-            category: categoryName as CreateRequest.category,
+            category: categoryName as DeployRequest.category,
             name: serviceName,
             version: selectVersion,
             region: selectRegion,
             area: selectArea,
-            csp: selectCsp as CreateRequest.csp,
+            csp: selectCsp as DeployRequest.csp,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),
         };

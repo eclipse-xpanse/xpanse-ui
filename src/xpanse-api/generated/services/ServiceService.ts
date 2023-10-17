@@ -7,7 +7,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { CreateRequest } from '../models/CreateRequest';
+import type { DeployRequest } from '../models/DeployRequest';
+import type { MigrateRequest } from '../models/MigrateRequest';
 import type { Response } from '../models/Response';
 import type { ServiceDetailVo } from '../models/ServiceDetailVo';
 import type { ServiceVo } from '../models/ServiceVo';
@@ -77,7 +78,7 @@ export class ServiceService {
      * @returns string Accepted
      * @throws ApiError
      */
-    public static deploy(requestBody: CreateRequest): CancelablePromise<string> {
+    public static deploy(requestBody: DeployRequest): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/xpanse/services',
@@ -94,19 +95,15 @@ export class ServiceService {
     }
 
     /**
-     * Start a task to migrate the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
+     * Create a job to migrate the deployed service.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
      * @returns string Accepted
      * @throws ApiError
      */
-    public static migrate(id: string, requestBody: CreateRequest): CancelablePromise<string> {
+    public static migrate(requestBody: MigrateRequest): CancelablePromise<string> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/xpanse/services/migrate/{id}',
-            path: {
-                id: id,
-            },
+            url: '/xpanse/services/migration',
             body: requestBody,
             mediaType: 'application/json',
             errors: {
