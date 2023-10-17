@@ -8,11 +8,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CreateRequest = {
+export type MigrateRequest = {
     /**
      * The category of the service
      */
-    category: CreateRequest.category;
+    category: MigrateRequest.category;
     /**
      * The name of the service ordered.
      */
@@ -32,7 +32,7 @@ export type CreateRequest = {
     /**
      * The csp of the Service.
      */
-    csp: CreateRequest.csp;
+    csp: MigrateRequest.csp;
     /**
      * The flavor of the Service.
      */
@@ -41,9 +41,13 @@ export type CreateRequest = {
      * The properties for the requested service
      */
     serviceRequestProperties?: Record<string, string>;
+    /**
+     * The id of the service to migrate
+     */
+    id: string;
 };
 
-export namespace CreateRequest {
+export namespace MigrateRequest {
     /**
      * The category of the service
      */

@@ -7,7 +7,7 @@ import { Button, Image, Popconfirm, Select, Space, Tabs } from 'antd';
 import {
     Billing,
     CloudServiceProvider,
-    CreateRequest,
+    DeployRequest,
     ServiceVo,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -42,7 +42,7 @@ export const MigrateService = ({
     selectRegion: string;
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    deployParams: CreateRequest | undefined;
+    deployParams: DeployRequest | undefined;
     currentSelectedService: ServiceVo | undefined;
     getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
 }): React.JSX.Element => {

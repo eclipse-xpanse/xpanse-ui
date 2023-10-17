@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { CreateRequest } from './CreateRequest';
+import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
 
 export type ServiceDetailVo = {
@@ -56,7 +56,7 @@ export type ServiceDetailVo = {
      * Time of update service.
      */
     lastModifiedTime: string;
-    createRequest: CreateRequest;
+    deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
      */

@@ -28,9 +28,9 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
             }
         }
-        if (getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
-            for (const key in getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties) {
-                requestMap.set(key, getServiceDetailsByIdQuery.data.createRequest.serviceRequestProperties[key]);
+        if (getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
+            for (const key in getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
+                requestMap.set(key, getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties[key]);
             }
         }
         if (getServiceDetailsByIdQuery.data.resultMessage) {
