@@ -8,7 +8,6 @@ import {
     Billing,
     DeployRequest,
     CredentialVariables,
-    DeployRequest,
     DeployVariable,
     FlavorBasic,
     Region,

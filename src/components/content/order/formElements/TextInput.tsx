@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Input, Tooltip } from 'antd';
+import { Form, Input, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
 import { DeployJsonSchema, DeployParam, TextInputEventHandler } from './CommonTypes';
 import { DeployVariable } from '../../../../xpanse-api/generated';
-import React from 'react';
+import React, { useState } from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
 export function TextInput({
     item,
@@ -16,8 +16,10 @@ export function TextInput({
     item: DeployParam;
     onChangeHandler: TextInputEventHandler;
 }): React.JSX.Element {
-    const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];
+    const ruleItems: Rule[] = [{ required: item.mandatory }];
     let regExp: RegExp;
+    const [valueList, setValueList] = useState<string[]>([]);
+    const [isEnum, setIsEnum] = useState<boolean>(false);
     const setValidator = (_: unknown, value: string) => {
         if (!regExp.test(value)) {
             return Promise.reject(new Error(` the provided input does not match the pattern! ${regExp}`));
@@ -26,13 +28,23 @@ export function TextInput({
     };
 
     for (const key in item.valueSchema) {
-        if (key === DeployJsonSchema.MINLENGTH.valueOf()) {
-            ruleItems.push({ min: item.valueSchema[key] as unknown as number });
+        if (key === DeployJsonSchema.ENUM.valueOf()) {
+            setIsEnum(true);
+            setValueList(item.valueSchema[key] as unknown as string[]);
+            ruleItems.push(
+                { type: 'enum' },
+                {
+                    required: true,
+                    message: 'Please select an option.',
+                }
+            );
+        } else if (key === DeployJsonSchema.MINLENGTH.valueOf()) {
+            ruleItems.push({ type: 'string' }, { min: item.valueSchema[key] as unknown as number });
         } else if (key === DeployJsonSchema.MAXLENGTH.valueOf()) {
-            ruleItems.push({ max: item.valueSchema[key] as unknown as number });
+            ruleItems.push({ type: 'string' }, { max: item.valueSchema[key] as unknown as number });
         } else if (key === DeployJsonSchema.PATTERN.valueOf()) {
             regExp = new RegExp(item.valueSchema[key] as unknown as string);
-            ruleItems.push({ validator: setValidator });
+            ruleItems.push({ type: 'string' }, { validator: setValidator });
         }
     }
 
@@ -49,6 +61,14 @@ export function TextInput({
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                             onChange={onChangeHandler}
                         />
+                    ) : isEnum ? (
+                        <Select onChange={onChangeHandler} size='large'>
+                            {valueList.map((value) => (
+                                <Select.Option key={value} value={value} className='credential-select-option-csp'>
+                                    {value}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     ) : (
                         <Input
                             name={item.name}
