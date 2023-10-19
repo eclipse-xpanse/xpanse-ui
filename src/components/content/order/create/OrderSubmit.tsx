@@ -11,6 +11,7 @@ import {
     DeployParam,
     NumberInputEventHandler,
     ParamOnChangeHandler,
+    SelectOnChangeHandler,
     SwitchOnChangeHandler,
     TextInputEventHandler,
 } from '../formElements/CommonTypes';
@@ -25,6 +26,7 @@ import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { SelectField } from '../formElements/SelectField';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -35,6 +37,9 @@ export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChan
     }
     if (item.type === 'boolean') {
         return <Switch item={item} onChangeHandler={onChangeHandler as SwitchOnChangeHandler} />;
+    }
+    if (item.type === 'enum') {
+        return <SelectField item={item} onChangeHandler={onChangeHandler as SelectOnChangeHandler} />;
     }
 
     return <></>;

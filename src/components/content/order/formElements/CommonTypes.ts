@@ -7,6 +7,8 @@ import { ChangeEvent } from 'react';
 import {
     Billing,
     DeployRequest,
+    CredentialVariables,
+    DeployRequest,
     DeployVariable,
     FlavorBasic,
     Region,
@@ -18,7 +20,12 @@ import { OrderSubmitProps } from '../create/OrderSubmit';
 export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
 export type NumberInputEventHandler = (value: number | string | null) => void;
 export type SwitchOnChangeHandler = (checked: boolean) => void;
-export type ParamOnChangeHandler = TextInputEventHandler | NumberInputEventHandler | SwitchOnChangeHandler;
+export type SelectOnChangeHandler = (selected: CredentialVariables.csp) => void;
+export type ParamOnChangeHandler =
+    | TextInputEventHandler
+    | NumberInputEventHandler
+    | SwitchOnChangeHandler
+    | SelectOnChangeHandler;
 
 export interface DeployParam {
     name: string;
@@ -29,6 +36,7 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     sensitiveScope: DeployVariable.sensitiveScope;
+    valueSchema: Record<string, Record<string, unknown>> | undefined;
 }
 
 export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, FlavorBasic[]> => {
@@ -168,6 +176,7 @@ export const getDeployParams = (
                 value: param.value ?? '',
                 mandatory: param.mandatory,
                 sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
+                valueSchema: param.valueSchema ?? undefined,
             });
         }
     }
@@ -193,4 +202,12 @@ export enum MigrationStatus {
     Processing = 'process',
     Finished = 'finish',
     Failed = 'error',
+}
+export enum DeployJsonSchema {
+    MINLENGTH = 'minLength',
+    MAXLENGTH = 'maxLength',
+    MINIMUM = 'minimum',
+    MAXIMUM = 'maximum',
+    PATTERN = 'pattern',
+    ENUM = 'enum',
 }
