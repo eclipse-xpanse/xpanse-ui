@@ -5,6 +5,7 @@
 
 import { Form, Switch as AntdSwitch } from 'antd';
 import { DeployParam, SwitchOnChangeHandler } from './CommonTypes';
+import React from 'react';
 
 export function Switch({
     item,
@@ -12,7 +13,7 @@ export function Switch({
 }: {
     item: DeployParam;
     onChangeHandler: SwitchOnChangeHandler;
-}): JSX.Element {
+}): React.JSX.Element {
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />

@@ -11,6 +11,7 @@ import {
     DeployParam,
     NumberInputEventHandler,
     ParamOnChangeHandler,
+    SelectOnChangeHandler,
     SwitchOnChangeHandler,
     TextInputEventHandler,
 } from '../formElements/CommonTypes';
@@ -18,13 +19,14 @@ import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest } from '../../../../xpanse-api/generated';
+import { DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { SelectField } from '../formElements/SelectField';
 
 export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
     if (item.type === 'string') {
@@ -36,18 +38,21 @@ export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChan
     if (item.type === 'boolean') {
         return <Switch item={item} onChangeHandler={onChangeHandler as SwitchOnChangeHandler} />;
     }
+    if (item.type === 'enum') {
+        return <SelectField item={item} onChangeHandler={onChangeHandler as SelectOnChangeHandler} />;
+    }
 
     return <></>;
 }
 
 export interface OrderSubmitProps {
     id: string;
-    category: CreateRequest.category;
+    category: DeployRequest.category;
     name: string;
     version: string;
     region: string;
     area: string;
-    csp: CreateRequest.csp;
+    csp: DeployRequest.csp;
     flavor: string;
     params: DeployParam[];
 }
@@ -99,7 +104,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         setRequestSubmitted(true);
         setDeploying(true);
         setIsShowDeploymentResult(true);
-        const createRequest: CreateRequest = {
+        const createRequest: DeployRequest = {
             category: state.category,
             csp: state.csp,
             flavor: state.flavor,
