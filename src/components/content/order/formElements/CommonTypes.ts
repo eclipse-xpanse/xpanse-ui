@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ChangeEvent } from 'react';
 import {
     Billing,
     DeployRequest,
@@ -14,16 +13,6 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
-
-export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
-export type EnumSelectEventHandler = (value: number | string | null) => void;
-export type NumberInputEventHandler = (value: number | string | null) => void;
-export type SwitchOnChangeHandler = (checked: boolean) => void;
-export type ParamOnChangeHandler =
-    | TextInputEventHandler
-    | NumberInputEventHandler
-    | SwitchOnChangeHandler
-    | EnumSelectEventHandler;
 
 export interface DeployParam {
     name: string;

@@ -5,52 +5,42 @@
 
 import { Form, Input, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
-import { DeployVariableSchema, DeployParam, EnumSelectEventHandler, TextInputEventHandler } from './CommonTypes';
+import { DeployVariableSchema, DeployParam } from './CommonTypes';
 import { DeployVariable } from '../../../../xpanse-api/generated';
-import React, { useEffect, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
+import { useOrderFormStore } from '../store/OrderFormStore';
 
-export function TextInput({
-    item,
-    onChangeHandler,
-}: {
-    item: DeployParam;
-    onChangeHandler: TextInputEventHandler | EnumSelectEventHandler;
-}): React.JSX.Element {
+export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];
     let regExp: RegExp;
-    const [valueList, setValueList] = useState<string[]>([]);
-    const [isEnum, setIsEnum] = useState<boolean>(false);
-    const setValidator = (_: unknown, value: string) => {
-        if (!regExp.test(value)) {
-            return Promise.reject(new Error(` the provided input does not match the pattern! ${regExp}`));
-        }
-        return Promise.resolve();
+    let valueList: string[] = [];
+    let isEnum: boolean = false;
+
+    const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
+
+    const getStringEventHandler = (event: ChangeEvent<HTMLInputElement>) => {
+        cacheFormVariable(event.target.name, event.target.value);
     };
 
-    useEffect(() => {
-        for (const key in item.valueSchema) {
-            if (key === DeployVariableSchema.ENUM.valueOf()) {
-                setIsEnum(true);
-                setValueList(item.valueSchema[key] as unknown as string[]);
-                ruleItems.push(
-                    { type: 'enum' },
-                    {
-                        required: true,
-                        message: 'Please select an option.',
-                    }
-                );
-            } else if (key === DeployVariableSchema.MINLENGTH.valueOf()) {
-                ruleItems.push({ type: 'string' }, { min: item.valueSchema[key] as unknown as number });
-            } else if (key === DeployVariableSchema.MAXLENGTH.valueOf()) {
-                ruleItems.push({ type: 'string' }, { max: item.valueSchema[key] as unknown as number });
-            } else if (key === DeployVariableSchema.PATTERN.valueOf()) {
-                // eslint-disable-next-line react-hooks/exhaustive-deps
-                regExp = new RegExp(item.valueSchema[key] as unknown as string);
-                ruleItems.push({ type: 'string' }, { validator: setValidator });
-            }
+    const getEventEventHandler = (event: string) => {
+        cacheFormVariable(item.name, event);
+    };
+
+    for (const key in item.valueSchema) {
+        if (key === DeployVariableSchema.ENUM.valueOf()) {
+            isEnum = true;
+            valueList = item.valueSchema[key] as unknown as string[];
+        } else if (key === DeployVariableSchema.MINLENGTH.valueOf()) {
+            ruleItems.push({ min: item.valueSchema[key] as unknown as number });
+        } else if (key === DeployVariableSchema.MAXLENGTH.valueOf()) {
+            ruleItems.push({ max: item.valueSchema[key] as unknown as number });
+        } else if (key === DeployVariableSchema.PATTERN.valueOf()) {
+            regExp = new RegExp(item.valueSchema[key] as unknown as string);
+            ruleItems.push({ pattern: regExp });
         }
-    }, [item.valueSchema]);
+    }
+
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />
@@ -62,10 +52,10 @@ export function TextInput({
                             name={item.name}
                             placeholder={item.example}
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
-                            onChange={onChangeHandler as TextInputEventHandler}
+                            onChange={getStringEventHandler}
                         />
                     ) : isEnum ? (
-                        <Select onChange={onChangeHandler as EnumSelectEventHandler} size='large'>
+                        <Select onChange={getEventEventHandler} size='large'>
                             {valueList.map((value) => (
                                 <Select.Option key={value} value={value} className={'order-deploy-select-option'}>
                                     {value}
@@ -81,7 +71,7 @@ export function TextInput({
                                     <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
                                 </Tooltip>
                             }
-                            onChange={onChangeHandler as TextInputEventHandler}
+                            onChange={getStringEventHandler}
                         />
                     )}
                 </Form.Item>

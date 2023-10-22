@@ -4,16 +4,16 @@
  */
 
 import { Form, Switch as AntdSwitch } from 'antd';
-import { DeployParam, SwitchOnChangeHandler } from './CommonTypes';
+import { DeployParam } from './CommonTypes';
 import React from 'react';
+import { useOrderFormStore } from '../store/OrderFormStore';
 
-export function Switch({
-    item,
-    onChangeHandler,
-}: {
-    item: DeployParam;
-    onChangeHandler: SwitchOnChangeHandler;
-}): React.JSX.Element {
+export function Switch({ item }: { item: DeployParam }): React.JSX.Element {
+    const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
+    const booleanHandler = (checked: boolean) => {
+        cacheFormVariable(item.name, checked ? 'true' : 'false');
+    };
+
     return (
         <div className={'order-param-item-row'}>
             <div className={'order-param-item-left'} />
@@ -21,9 +21,9 @@ export function Switch({
                 <Form.Item
                     name={item.name}
                     label={item.name + ':  (' + item.description + ')'}
-                    rules={[{ type: 'boolean' }]}
+                    rules={[{ type: 'boolean' }, { required: item.mandatory }]}
                 >
-                    <AntdSwitch onChange={onChangeHandler} defaultChecked={false} />
+                    <AntdSwitch onChange={booleanHandler} defaultChecked={false} />
                 </Form.Item>
             </div>
             <div className={'order-param-item-right'} />
