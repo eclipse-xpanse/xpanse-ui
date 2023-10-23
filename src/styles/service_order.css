@@ -332,3 +332,7 @@
 .purge-btn-class {
     width: 101px;
 }
+
+.order-deploy-select-option {
+    height: 50px;
+}

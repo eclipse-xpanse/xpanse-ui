@@ -67,7 +67,7 @@ export function TextInput({
                     ) : isEnum ? (
                         <Select onChange={onChangeHandler as EnumSelectEventHandler} size='large'>
                             {valueList.map((value) => (
-                                <Select.Option key={value} value={value} className='credential-select-option-csp'>
+                                <Select.Option key={value} value={value} className={'order-deploy-select-option'}>
                                     {value}
                                 </Select.Option>
                             ))}
