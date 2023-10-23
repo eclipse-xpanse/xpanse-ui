@@ -69,6 +69,7 @@ export default function GoToSubmit({
                     value: param.value ?? '',
                     mandatory: param.mandatory,
                     sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
+                    valueSchema: param.valueSchema ?? undefined,
                 });
             }
         }
