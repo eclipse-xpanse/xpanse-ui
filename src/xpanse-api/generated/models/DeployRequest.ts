@@ -40,7 +40,7 @@ export type DeployRequest = {
     /**
      * The properties for the requested service
      */
-    serviceRequestProperties?: Record<string, string>;
+    serviceRequestProperties?: Record<string, any>;
 };
 
 export namespace DeployRequest {

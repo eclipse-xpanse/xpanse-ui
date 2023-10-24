@@ -40,6 +40,7 @@ export { SystemStatus } from './models/SystemStatus';
 export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
+export type { WorkFlowTask } from './models/WorkFlowTask';
 
 export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';
@@ -49,3 +50,4 @@ export { ServiceService } from './services/ServiceService';
 export { ServiceCatalogService } from './services/ServiceCatalogService';
 export { ServiceVendorService } from './services/ServiceVendorService';
 export { WebhookService } from './services/WebhookService';
+export { WorkFlowService } from './services/WorkFlowService';

@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DeployParam } from '../formElements/CommonTypes';
 import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
-import { Switch } from '../formElements/Switch';
+import { BooleanInput } from '../formElements/BooleanInput';
 import { Button, Form, Input, Tooltip } from 'antd';
 import { DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
@@ -28,7 +28,7 @@ export function OrderItem({ item }: { item: DeployParam }) {
         return <NumberInput item={item} />;
     }
     if (item.type === 'boolean') {
-        return <Switch item={item} />;
+        return <BooleanInput item={item} />;
     }
 
     return <></>;
@@ -75,15 +75,15 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             region: state.region,
             serviceName: state.name,
             version: state.version,
-            customerServiceName: deployParamsRef.current.Name,
+            customerServiceName: deployParamsRef.current.Name as string,
         };
-        const serviceRequestProperties: Record<string, string> = {};
+        const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {
             if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
                 serviceRequestProperties[variable] = deployParamsRef.current[variable];
             }
         }
-        createRequest.serviceRequestProperties = serviceRequestProperties;
+        createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         submitDeploymentRequest.mutate(createRequest);
     }
 
