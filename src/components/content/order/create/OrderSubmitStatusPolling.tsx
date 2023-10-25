@@ -15,7 +15,7 @@ function OrderSubmitStatusPolling({
     setRequestSubmitted,
 }: {
     uuid: string | undefined;
-    error: Error | undefined;
+    error: Error | null;
     isLoading: boolean;
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;

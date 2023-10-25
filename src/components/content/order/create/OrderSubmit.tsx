@@ -109,8 +109,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             {isShowDeploymentResult ? (
                 <OrderSubmitStatusPolling
                     uuid={submitDeploymentRequest.data}
-                    error={submitDeploymentRequest.error as Error}
-                    isLoading={submitDeploymentRequest.isLoading}
+                    error={submitDeploymentRequest.error}
+                    isLoading={submitDeploymentRequest.isPending}
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}
                 />

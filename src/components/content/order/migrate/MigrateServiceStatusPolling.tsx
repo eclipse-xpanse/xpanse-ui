@@ -29,7 +29,7 @@ export const MigrateServiceStatusPolling = ({
     deployData: string | undefined;
     isDeploySuccess: boolean;
     isDeployError: boolean;
-    deployError: Error | undefined;
+    deployError: Error | null;
     isDeployLoading: boolean;
     setIsMigrating: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
@@ -161,9 +161,9 @@ export const MigrateServiceStatusPolling = ({
 
     //destroy
     useEffect(() => {
-        if (destroyServiceRequest.isError && destroyServiceRequest.error) {
+        if (destroyServiceRequest.isError) {
             setIsDestroyError(destroyServiceRequest.isError);
-            setDestroyError(destroyServiceRequest.error as Error);
+            setDestroyError(destroyServiceRequest.error);
             setIsMigrating(false);
             setRequestSubmitted(false);
             setIsPreviousDisabled(false);
@@ -179,10 +179,10 @@ export const MigrateServiceStatusPolling = ({
     ]);
 
     useEffect(() => {
-        if (destroyServiceRequest.isLoading) {
+        if (destroyServiceRequest.isPending) {
             setIsDestroyLoading(true);
         }
-    }, [destroyServiceRequest.isLoading]);
+    }, [destroyServiceRequest.isPending]);
 
     useEffect(() => {
         if (destroyServiceRequest.isSuccess) {

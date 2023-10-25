@@ -18,7 +18,7 @@ function DestroyServiceStatusPolling({
 }: {
     uuid: string;
     isError: boolean;
-    error: Error | undefined;
+    error: Error | null;
     setIsDestroyingCompleted: (arg: boolean) => void;
     getDestroyCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element {
