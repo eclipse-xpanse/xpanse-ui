@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CreateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
-import { DeployParam, getDeployParams, MigrationSteps, ParamOnChangeHandler } from '../formElements/CommonTypes';
+import { getDeployParams, MigrationSteps } from '../formElements/CommonTypes';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 
@@ -28,7 +28,7 @@ export const ShowDeploy = ({
     selectRegion: string;
     selectFlavor: string;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    getDeployParameters: (createRequest: CreateRequest) => void;
+    getDeployParameters: (createRequest: DeployRequest) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(userOrderableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
@@ -49,29 +49,8 @@ export const ShowDeploy = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentMigrationStep]);
 
-    function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
-        if (parameter.type === 'string') {
-            return (event: ChangeEvent<HTMLInputElement>) => {
-                cacheFormVariable(event.target.name, event.target.value);
-            };
-        }
-        if (parameter.type === 'number') {
-            return (value: string | number | null) => {
-                cacheFormVariable(parameter.name, value as string);
-            };
-        }
-        if (parameter.type === 'boolean') {
-            return (checked: boolean) => {
-                cacheFormVariable(parameter.name, checked ? 'true' : 'false');
-            };
-        }
-        return (event: ChangeEvent<HTMLInputElement>) => {
-            cacheFormVariable(event.target.name, event.target.value);
-        };
-    }
-
     const handleFinish = () => {
-        const createRequest: CreateRequest = {
+        const createRequest: DeployRequest = {
             category: props.category,
             csp: props.csp,
             flavor: props.flavor,
@@ -137,7 +116,7 @@ export const ShowDeploy = ({
                     <div>
                         {props.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
-                                <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
+                                <OrderItem key={item.name} item={item} />
                             ) : (
                                 <></>
                             )

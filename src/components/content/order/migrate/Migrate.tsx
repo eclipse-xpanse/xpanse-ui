@@ -5,7 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import {
-    CreateRequest,
+    DeployRequest,
     ServiceCatalogService,
     ServiceVo,
     UserOrderableServiceVo,
@@ -29,7 +29,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
-    const [deployParams, setDeployParams] = useState<CreateRequest | undefined>(undefined);
+    const [deployParams, setDeployParams] = useState<DeployRequest | undefined>(undefined);
 
     const listOrderableServices = useQuery({
         queryKey: [
@@ -82,7 +82,7 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         setSelectFlavor(selectedFlavor);
     };
 
-    const getDeployParameters = (values: CreateRequest) => {
+    const getDeployParameters = (values: DeployRequest) => {
         setDeployParams(values);
     };
 

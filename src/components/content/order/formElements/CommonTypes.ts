@@ -3,10 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ChangeEvent } from 'react';
 import {
     Billing,
-    CreateRequest,
+    DeployRequest,
     DeployVariable,
     FlavorBasic,
     Region,
@@ -14,11 +13,6 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Area } from '../../../utils/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
-
-export type TextInputEventHandler = (event: ChangeEvent<HTMLInputElement>) => void;
-export type NumberInputEventHandler = (value: number | string | null) => void;
-export type SwitchOnChangeHandler = (checked: boolean) => void;
-export type ParamOnChangeHandler = TextInputEventHandler | NumberInputEventHandler | SwitchOnChangeHandler;
 
 export interface DeployParam {
     name: string;
@@ -29,6 +23,7 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     sensitiveScope: DeployVariable.sensitiveScope;
+    valueSchema: Record<string, Record<string, unknown>> | undefined;
 }
 
 export const getFlavorMapper = (rsp: UserOrderableServiceVo[]): Map<string, FlavorBasic[]> => {
@@ -147,12 +142,12 @@ export const getDeployParams = (
 
     const props: OrderSubmitProps = {
         id: registeredServiceId,
-        category: service?.category as CreateRequest.category,
+        category: service?.category as DeployRequest.category,
         name: service?.name ?? '',
         version: service?.version ?? '',
         region: selectRegion,
         area: selectArea,
-        csp: service?.csp as CreateRequest.csp,
+        csp: service?.csp as DeployRequest.csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
     };
@@ -168,6 +163,7 @@ export const getDeployParams = (
                 value: param.value ?? '',
                 mandatory: param.mandatory,
                 sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
+                valueSchema: param.valueSchema ?? undefined,
             });
         }
     }
@@ -193,4 +189,13 @@ export enum MigrationStatus {
     Processing = 'process',
     Finished = 'finish',
     Failed = 'error',
+}
+
+export enum DeployVariableSchema {
+    MINLENGTH = 'minLength',
+    MAXLENGTH = 'maxLength',
+    MINIMUM = 'minimum',
+    MAXIMUM = 'maximum',
+    PATTERN = 'pattern',
+    ENUM = 'enum',
 }

@@ -6,19 +6,13 @@
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
 import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
-import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import {
-    DeployParam,
-    NumberInputEventHandler,
-    ParamOnChangeHandler,
-    SwitchOnChangeHandler,
-    TextInputEventHandler,
-} from '../formElements/CommonTypes';
+import React, { useEffect, useRef, useState } from 'react';
+import { DeployParam } from '../formElements/CommonTypes';
 import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { Switch } from '../formElements/Switch';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { CreateRequest } from '../../../../xpanse-api/generated';
+import { DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -26,15 +20,15 @@ import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 
-export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChangeHandler: ParamOnChangeHandler }) {
+export function OrderItem({ item }: { item: DeployParam }) {
     if (item.type === 'string') {
-        return <TextInput item={item} onChangeHandler={onChangeHandler as TextInputEventHandler} />;
+        return <TextInput item={item} />;
     }
     if (item.type === 'number') {
-        return <NumberInput item={item} onChangeHandler={onChangeHandler as NumberInputEventHandler} />;
+        return <NumberInput item={item} />;
     }
     if (item.type === 'boolean') {
-        return <Switch item={item} onChangeHandler={onChangeHandler as SwitchOnChangeHandler} />;
+        return <Switch item={item} />;
     }
 
     return <></>;
@@ -42,12 +36,12 @@ export function OrderItem({ item, onChangeHandler }: { item: DeployParam; onChan
 
 export interface OrderSubmitProps {
     id: string;
-    category: CreateRequest.category;
+    category: DeployRequest.category;
     name: string;
     version: string;
     region: string;
     area: string;
-    csp: CreateRequest.csp;
+    csp: DeployRequest.csp;
     flavor: string;
     params: DeployParam[];
 }
@@ -70,36 +64,11 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         navigate(homePageRoute);
     }
 
-    function GetOnChangeHandler(parameter: DeployParam): ParamOnChangeHandler {
-        if (parameter.type === 'string') {
-            return (event: ChangeEvent<HTMLInputElement>) => {
-                setIsShowDeploymentResult(false);
-                cacheFormVariable(event.target.name, event.target.value);
-            };
-        }
-        if (parameter.type === 'number') {
-            return (value: string | number | null) => {
-                setIsShowDeploymentResult(false);
-                cacheFormVariable(parameter.name, value as string);
-            };
-        }
-        if (parameter.type === 'boolean') {
-            return (checked: boolean) => {
-                setIsShowDeploymentResult(false);
-                cacheFormVariable(parameter.name, checked ? 'true' : 'false');
-            };
-        }
-        return (event: ChangeEvent<HTMLInputElement>) => {
-            setIsShowDeploymentResult(false);
-            cacheFormVariable(event.target.name, event.target.value);
-        };
-    }
-
     function onSubmit() {
         setRequestSubmitted(true);
         setDeploying(true);
         setIsShowDeploymentResult(true);
-        const createRequest: CreateRequest = {
+        const createRequest: DeployRequest = {
             category: state.category,
             csp: state.csp,
             flavor: state.flavor,
@@ -182,7 +151,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {state.params.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
-                            <OrderItem key={item.name} item={item} onChangeHandler={GetOnChangeHandler(item)} />
+                            <OrderItem key={item.name} item={item} />
                         ) : (
                             <></>
                         )
