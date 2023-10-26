@@ -12,8 +12,8 @@
     "tags": [
         { "name": "Credentials Management", "description": "APIs for managing user's cloud provider credentials" },
         { "name": "Service Vendor", "description": "APIs to manage service templates." },
+        { "name": "WorkFlow", "description": "APIs to manage the WorkFlow" },
         { "name": "Admin", "description": "APIs for administrating Xpanse" },
-        { "name": "Webhook", "description": "Webhook APIs" },
         {
             "name": "Service Catalog",
             "description": "APIs to query the services which are available for the user to order."
@@ -27,6 +27,79 @@
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
     "paths": {
+        "/xpanse/workflow/task/{id}": {
+            "put": {
+                "tags": ["WorkFlow"],
+                "description": "Complete tasks by task ID and set global process variables .<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "completeTask",
+                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": { "type": "object", "additionalProperties": { "type": "object" } }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
+                }
+            }
+        },
+        "/xpanse/workflow/task/{id}/{retryOrder}": {
+            "put": {
+                "tags": ["WorkFlow"],
+                "description": "Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "manageFailedOrder",
+                "parameters": [
+                    { "name": "id", "in": "path", "required": true, "schema": { "type": "string" } },
+                    { "name": "retryOrder", "in": "path", "required": true, "schema": { "type": "boolean" } }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
+                }
+            }
+        },
         "/xpanse/service_templates/{id}": {
             "get": {
                 "tags": ["Service Vendor"],
@@ -781,24 +854,11 @@
                 }
             }
         },
-        "/webhook/destroy/{task_id}": {
-            "post": {
-                "tags": ["Webhook"],
-                "description": "Process the execution result after terraform executes the command line.",
-                "operationId": "destroyCallback",
-                "parameters": [
-                    {
-                        "name": "task_id",
-                        "in": "path",
-                        "description": "task id",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    }
-                ],
-                "requestBody": {
-                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
-                    "required": true
-                },
+        "/xpanse/workflow/task/todo": {
+            "get": {
+                "tags": ["WorkFlow"],
+                "description": "Query the tasks that need to be done by me<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "queryTodoTasks",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
@@ -820,28 +880,22 @@
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "200": { "description": "OK" }
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/WorkFlowTask" } }
+                            }
+                        }
+                    }
                 }
             }
         },
-        "/webhook/deploy/{task_id}": {
-            "post": {
-                "tags": ["Webhook"],
-                "description": "Process the execution result after terraform executes the command line.",
-                "operationId": "deployCallback",
-                "parameters": [
-                    {
-                        "name": "task_id",
-                        "in": "path",
-                        "description": "task id",
-                        "required": true,
-                        "schema": { "type": "string" }
-                    }
-                ],
-                "requestBody": {
-                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
-                    "required": true
-                },
+        "/xpanse/workflow/task/done": {
+            "get": {
+                "tags": ["WorkFlow"],
+                "description": "Query the tasks I have completed<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "queryDoneTasks",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
@@ -863,7 +917,48 @@
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "200": { "description": "OK" }
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/WorkFlowTask" } }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/workflow/state/{id}": {
+            "get": {
+                "tags": ["WorkFlow"],
+                "description": "Query process status by processInstanceId<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "queryWorkFlowById",
+                "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    }
                 }
             }
         },
@@ -1738,7 +1833,7 @@
                     "mandatory": { "type": "boolean", "description": "Indicates if the variable is mandatory" },
                     "valueSchema": {
                         "type": "object",
-                        "additionalProperties": { "type": "object", "description": "valueSchema of the variable" },
+                        "additionalProperties": true,
                         "description": "valueSchema of the variable"
                     },
                     "sensitiveScope": {
@@ -2046,10 +2141,7 @@
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceRequestProperties": {
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "string",
-                            "description": "The properties for the requested service"
-                        },
+                        "additionalProperties": true,
                         "description": "The properties for the requested service"
                     }
                 }
@@ -2089,23 +2181,38 @@
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceRequestProperties": {
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "string",
-                            "description": "The properties for the requested service"
-                        },
+                        "additionalProperties": true,
                         "description": "The properties for the requested service"
                     },
                     "id": { "type": "string", "description": "The id of the service to migrate", "format": "uuid" }
                 }
             },
-            "TerraformResult": {
+            "WorkFlowTask": {
+                "required": [
+                    "businessKey",
+                    "createTime",
+                    "executionId",
+                    "processDefinitionId",
+                    "processDefinitionName",
+                    "processInstanceId",
+                    "taskId",
+                    "taskName"
+                ],
                 "type": "object",
                 "properties": {
-                    "commandStdOutput": { "type": "string" },
-                    "commandStdError": { "type": "string" },
-                    "terraformState": { "type": "string" },
-                    "importantFileContentMap": { "type": "object", "additionalProperties": { "type": "string" } },
-                    "commandSuccessful": { "type": "boolean" }
+                    "processInstanceId": { "type": "string", "description": "The id of the ProcessInstance" },
+                    "processInstanceName": { "type": "string", "description": "The name of the ProcessInstance" },
+                    "processDefinitionId": { "type": "string", "description": "The id of the ProcessDefinition" },
+                    "processDefinitionName": { "type": "string", "description": "The name of the ProcessDefinition" },
+                    "executionId": { "type": "string", "description": "The execution id of the ProcessInstance" },
+                    "taskId": { "type": "string", "description": "The id of the task" },
+                    "taskName": { "type": "string", "description": "The name of the task" },
+                    "businessKey": { "type": "string", "description": "The businessKey of the Process" },
+                    "createTime": {
+                        "type": "string",
+                        "description": "The create time of the task",
+                        "format": "date-time"
+                    }
                 }
             },
             "ServiceVo": {
@@ -2406,7 +2513,7 @@
                             },
                             "type": {
                                 "type": "string",
-                                "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                                "description": "The type of the credential, this field is provided by the the plugin of cloud service provider.",
                                 "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                             },
                             "name": {
@@ -2433,7 +2540,7 @@
                     },
                     "type": {
                         "type": "string",
-                        "description": "The type of the credential,this field is provided by  he the plugin of cloud service provider.",
+                        "description": "The type of the credential, this field is provided by the the plugin of cloud service provider.",
                         "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                     },
                     "name": {

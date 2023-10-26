@@ -57,9 +57,9 @@ export const ShowDeploy = ({
             region: props.region,
             serviceName: props.name,
             version: props.version,
-            customerServiceName: deployParamsRef.current.Name,
+            customerServiceName: deployParamsRef.current.Name as string,
         };
-        const serviceRequestProperties: Record<string, string> = {};
+        const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {
             if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
                 serviceRequestProperties[variable] = deployParamsRef.current[variable];

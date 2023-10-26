@@ -15,7 +15,7 @@ export function ServiceDetailsContent({
     deployResources,
 }: {
     content: Map<string, string>;
-    requestParams: Map<string, string>;
+    requestParams: Map<string, unknown>;
     resultMessage: React.JSX.Element | undefined;
     deployResources: DeployResource[];
 }): React.JSX.Element {

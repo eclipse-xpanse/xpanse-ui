@@ -20,7 +20,7 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
 
     if (getServiceDetailsByIdQuery.isSuccess) {
         const endPointMap = new Map<string, string>();
-        const requestMap = new Map<string, string>();
+        const requestMap = new Map<string, unknown>();
         let resultMessage = undefined;
         let deployResourceMap: DeployResource[] = [];
         if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
