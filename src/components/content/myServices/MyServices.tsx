@@ -104,7 +104,7 @@ function MyServices(): React.JSX.Element {
                 setServicesLoadingError(
                     <Alert
                         message='Fetching Service Details Failed'
-                        description={(listDeployedServicesQuery.error as Error).message}
+                        description={listDeployedServicesQuery.error.message}
                         type={'error'}
                         closable={true}
                         className={'failure-alert'}
@@ -473,7 +473,7 @@ function MyServices(): React.JSX.Element {
                 <DestroyServiceStatusPolling
                     uuid={id}
                     isError={serviceDestroyQuery.isError}
-                    error={serviceDestroyQuery.error as Error}
+                    error={serviceDestroyQuery.error}
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
                     getDestroyCloseStatus={getDestroyCloseStatus}
                 />
@@ -482,7 +482,7 @@ function MyServices(): React.JSX.Element {
                 <PurgeServiceStatusPolling
                     uuid={id}
                     isError={servicePurgeQuery.isError}
-                    error={servicePurgeQuery.error as Error}
+                    error={servicePurgeQuery.error}
                     setIsPurgingCompleted={setIsPurgingCompleted}
                     getPurgeCloseStatus={getPurgeCloseStatus}
                 />

@@ -106,7 +106,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
             return (
                 <Alert
                     message='Fetching Service Details Failed'
-                    description={(availableServiceTemplatesQuery.error as Error).message}
+                    description={availableServiceTemplatesQuery.error.message}
                     type={'error'}
                     closable={true}
                     className={'catalog-skeleton'}
@@ -127,7 +127,7 @@ function CategoryCatalog({ category }: { category: ServiceVo.category }): React.
         );
     }
 
-    if (availableServiceTemplatesQuery.data.length === 0) {
+    if (availableServiceTemplatesQuery.data && availableServiceTemplatesQuery.data.length === 0) {
         return (
             <div className={'service-blank-class'}>
                 <Empty description={'No services available.'} />

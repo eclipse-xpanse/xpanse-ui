@@ -103,7 +103,7 @@ export const MonitorChart = ({
         refetchOnWindowFocus: false,
         enabled: isRefreshOnlyLastKnownMetric,
         staleTime: 0,
-        cacheTime: 0,
+        gcTime: 0,
     });
 
     const monitorMetricQueryKey = ['metric', serviceId, activeMonitorMetricType, timePeriod];
@@ -126,7 +126,7 @@ export const MonitorChart = ({
         refetchOnWindowFocus: false,
         enabled: isRefreshMonitorMetric,
         staleTime: 0,
-        cacheTime: 0,
+        gcTime: 0,
     });
 
     useEffect(() => {
@@ -169,7 +169,7 @@ export const MonitorChart = ({
         if (onlyLastKnownMetricQuery.isError) {
             getIsLoading(false);
             setOnlyLastKnownMonitorMetricsQueue([]);
-            setTips(onlyLastKnownMetricQuery.error as Error);
+            setTips(onlyLastKnownMetricQuery.error);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [onlyLastKnownMetricQuery.isError, onlyLastKnownMetricQuery.error]);
@@ -228,7 +228,7 @@ export const MonitorChart = ({
     useEffect(() => {
         if (monitorMetricQuery.isError) {
             setMonitorMetricsQueue([]);
-            setTips(monitorMetricQuery.error as Error);
+            setTips(monitorMetricQuery.error);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [monitorMetricQuery.isError, monitorMetricQuery.error]);

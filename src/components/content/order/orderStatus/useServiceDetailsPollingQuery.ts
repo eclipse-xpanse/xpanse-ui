@@ -15,8 +15,10 @@ export function useServiceDetailsPollingQuery(
         queryKey: ['getServiceDetailsById', uuid],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         queryFn: () => ServiceService.getServiceDetailsById(uuid!),
-        refetchInterval: (data) =>
-            data && refetchUntilStates.includes(data.serviceDeploymentState) ? false : deploymentStatusPollingInterval,
+        refetchInterval: (query) =>
+            query.state.data && refetchUntilStates.includes(query.state.data.serviceDeploymentState)
+                ? false
+                : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
         enabled: uuid !== undefined,
@@ -31,8 +33,10 @@ export function useServiceDestroyDetailsPollingQuery(
     return useQuery({
         queryKey: ['getServiceDetailsById', uuid],
         queryFn: () => ServiceService.getServiceDetailsById(uuid),
-        refetchInterval: (data) =>
-            data && refetchUntilStates.includes(data.serviceDeploymentState) ? false : deploymentStatusPollingInterval,
+        refetchInterval: (query) =>
+            query.state.data && refetchUntilStates.includes(query.state.data.serviceDeploymentState)
+                ? false
+                : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
         enabled: uuid.length > 0 && isDestroyDetailsQuerying,

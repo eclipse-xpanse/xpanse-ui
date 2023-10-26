@@ -55,7 +55,7 @@ export const HealthCheckStatus = (): JSX.Element => {
                 setHealthCheckError(
                     <Alert
                         message='Fetching Service Details Failed'
-                        description={(healthCheckQuery.error as Error).message}
+                        description={healthCheckQuery.error.message}
                         type={'error'}
                         closable={true}
                     />

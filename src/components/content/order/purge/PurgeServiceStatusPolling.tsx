@@ -19,7 +19,7 @@ export function PurgeServiceStatusPolling({
 }: {
     uuid: string;
     isError: boolean;
-    error: Error | undefined;
+    error: Error | null;
     setIsPurgingCompleted: (arg: boolean) => void;
     getPurgeCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element {

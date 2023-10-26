@@ -26,7 +26,7 @@ function OclSummaryDisplay(
             />
         );
     } else {
-        file.status = 'success';
+        file.status = 'done';
         setOclValidationStatus('completed');
         return oclTableData;
     }
