@@ -46,7 +46,7 @@ function UpdateService({
             return ServiceVendorService.update(id, ocl);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
-            files.current[0].status = 'success';
+            files.current[0].status = 'done';
             updateResult.current = [`ID - ${serviceTemplateVo.id}`];
         },
         onError: (error: Error) => {
@@ -70,7 +70,7 @@ function UpdateService({
 
     const handleCancel = () => {
         if (updateServiceRequest.isSuccess) {
-            void queryClient.refetchQueries(getQueryKey(category));
+            void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
         }
         files.current.pop();
         ocl.current = undefined;
@@ -91,7 +91,7 @@ function UpdateService({
                 if (e.target) {
                     try {
                         ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'success';
+                        files.current[0].status = 'done';
                         yamlValidationResult.current = 'YAML Syntax Valid';
                         setYamlSyntaxValidationStatus('completed');
                         oclDisplayData.current = OclSummaryDisplay(
@@ -206,7 +206,7 @@ function UpdateService({
                             type={'primary'}
                             icon={<CloudUploadOutlined />}
                             onClick={sendRequestRequest}
-                            loading={updateServiceRequest.isLoading}
+                            loading={updateServiceRequest.isPending}
                         >
                             Update
                         </Button>

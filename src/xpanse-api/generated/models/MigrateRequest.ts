@@ -40,7 +40,7 @@ export type MigrateRequest = {
     /**
      * The properties for the requested service
      */
-    serviceRequestProperties?: Record<string, string>;
+    serviceRequestProperties?: Record<string, any>;
     /**
      * The id of the service to migrate
      */

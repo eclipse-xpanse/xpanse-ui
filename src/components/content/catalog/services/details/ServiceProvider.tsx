@@ -191,12 +191,12 @@ function ServiceProvider({
         setUnregisterTabsItemDisabled(true);
         if (isUnregisterSuccessful) {
             await sleep(5000);
-            void queryClient.refetchQueries(getQueryKey(category));
+            void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
         }
     };
 
     const onRemove = () => {
-        void queryClient.refetchQueries(getQueryKey(category));
+        void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
     };
 
     return (

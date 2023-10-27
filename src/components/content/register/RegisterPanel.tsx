@@ -39,7 +39,7 @@ function RegisterPanel(): React.JSX.Element {
             return ServiceVendorService.register(ocl);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
-            files.current[0].status = 'success';
+            files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateVo.id}`];
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
         },
@@ -79,7 +79,7 @@ function RegisterPanel(): React.JSX.Element {
                 if (e.target) {
                     try {
                         ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'success';
+                        files.current[0].status = 'done';
                         yamlValidationResult.current = 'YAML Syntax Valid';
                         setYamlSyntaxValidationStatus('completed');
                         oclDisplayData.current = OclSummaryDisplay(
@@ -134,7 +134,7 @@ function RegisterPanel(): React.JSX.Element {
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
-            {ocl.current !== undefined && !registerRequest.isLoading && !registerRequest.isIdle ? (
+            {ocl.current !== undefined && !registerRequest.isPending && !registerRequest.isIdle ? (
                 <RegisterResult
                     ocl={ocl.current}
                     registerRequestStatus={registerRequest.status}
@@ -175,7 +175,7 @@ function RegisterPanel(): React.JSX.Element {
                     type={'primary'}
                     icon={<CloudUploadOutlined />}
                     onClick={sendRequestRequest}
-                    loading={registerRequest.isLoading}
+                    loading={registerRequest.isPending}
                 >
                     Register
                 </Button>

@@ -7,7 +7,7 @@ import React from 'react';
 import { Input, Typography } from 'antd';
 import { CheckOutlined, CopyOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 
-export function convertMapToDetailsList(content: Map<string, string>, title: string): React.JSX.Element {
+export function convertMapToDetailsList(content: Map<string, unknown>, title: string): React.JSX.Element {
     if (content.size > 0) {
         const items: React.JSX.Element[] = [];
         const { Paragraph } = Typography;
@@ -20,7 +20,7 @@ export function convertMapToDetailsList(content: Map<string, string>, title: str
                             <div className={'show-details'}>
                                 <Paragraph
                                     copyable={{
-                                        text: v,
+                                        text: String(v),
                                         icon: [
                                             <CopyOutlined className={'show-details-typography-copy'} />,
                                             <CheckOutlined className={'show-details-typography-copy'} />,
@@ -31,7 +31,7 @@ export function convertMapToDetailsList(content: Map<string, string>, title: str
                                         readOnly={true}
                                         bordered={false}
                                         className={'show-details'}
-                                        defaultValue={v}
+                                        defaultValue={String(v)}
                                         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                                     />
                                 </Paragraph>
@@ -39,7 +39,7 @@ export function convertMapToDetailsList(content: Map<string, string>, title: str
                         ) : (
                             <div>
                                 &nbsp;&nbsp;
-                                {v}
+                                {String(v)}
                             </div>
                         )}
                     </div>
