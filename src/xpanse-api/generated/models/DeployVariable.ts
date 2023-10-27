@@ -40,9 +40,9 @@ export type DeployVariable = {
      */
     mandatory: boolean;
     /**
-     * valueSchema of the variable
+     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
      */
-    valueSchema?: Record<string, Record<string, any>>;
+    valueSchema?: Record<string, any>;
     /**
      * Sensitive scope of variable storage
      */
