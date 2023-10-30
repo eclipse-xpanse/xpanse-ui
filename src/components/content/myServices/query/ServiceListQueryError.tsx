@@ -16,7 +16,7 @@ export default function ServiceListQueryError({ error }: { error: unknown }): Re
                 message={response.resultType.valueOf()}
                 description={convertStringArrayToUnorderedList(response.details)}
                 type={'error'}
-                closable={true}
+                closable={false}
                 className={'failure-alert'}
             />
         );
@@ -26,7 +26,7 @@ export default function ServiceListQueryError({ error }: { error: unknown }): Re
                 message='Fetching Service Details Failed'
                 description={(error as Error).message}
                 type={'error'}
-                closable={true}
+                closable={false}
                 className={'failure-alert'}
             />
         );

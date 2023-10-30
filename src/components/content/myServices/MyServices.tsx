@@ -11,6 +11,7 @@ import {
     ApiError,
     CloudServiceProvider,
     Response,
+    ServiceService,
     ServiceVo,
 } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -27,7 +28,8 @@ import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
 import { useOrderFormStore } from '../order/store/OrderFormStore';
@@ -35,7 +37,6 @@ import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPoll
 import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
-import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -45,7 +46,6 @@ function MyServices(): React.JSX.Element {
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
-    const [defaultServiceStateFilterValue, setDefaultServiceStateFilterValue] = useState<string[]>([]);
     const [id, setId] = useState<string>('');
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
     const [isDestroyingCompleted, setIsDestroyingCompleted] = useState<boolean>(false);
@@ -60,74 +60,29 @@ function MyServices(): React.JSX.Element {
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
-    const location = useLocation();
 
     const navigate = useNavigate();
 
-    const listDeployedServicesQuery = useListDeployedServicesQuery();
+    const listDeployedServicesQuery = useQuery({
+        queryKey: ['listDeployedServices'],
+        queryFn: () => ServiceService.listDeployedServices(undefined, undefined, undefined, undefined, undefined),
+        refetchOnWindowFocus: false,
+    });
 
     useEffect(() => {
         const serviceList: ServiceVo[] = [];
         if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            if (location.state) {
-                const currentServiceState: ServiceVo.serviceDeploymentState =
-                    location.state as ServiceVo.serviceDeploymentState;
-                const serviceVos: ServiceVo[] = [];
-                if (currentServiceState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
-                    listDeployedServicesQuery.data.forEach((serviceItem: ServiceVo) => {
-                        if (
-                            serviceItem.serviceDeploymentState ===
-                            ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
-                        ) {
-                            serviceVos.push(serviceItem);
-                        }
-                    });
-                    setDefaultServiceStateFilterValue([ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL]);
-                } else if (currentServiceState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
-                    listDeployedServicesQuery.data.forEach((serviceItem: ServiceVo) => {
-                        if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
-                            serviceVos.push(serviceItem);
-                        }
-                    });
-                    setDefaultServiceStateFilterValue([ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED]);
-                } else if (currentServiceState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL) {
-                    listDeployedServicesQuery.data.forEach((serviceItem: ServiceVo) => {
-                        if (
-                            serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL
-                        ) {
-                            serviceVos.push(serviceItem);
-                        }
-                    });
-                    setDefaultServiceStateFilterValue([ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL]);
-                } else if (currentServiceState === ServiceVo.serviceDeploymentState.DESTROY_FAILED) {
-                    listDeployedServicesQuery.data.forEach((serviceItem: ServiceVo) => {
-                        if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_FAILED) {
-                            serviceVos.push(serviceItem);
-                        }
-                    });
-                    setDefaultServiceStateFilterValue([ServiceVo.serviceDeploymentState.DESTROY_FAILED]);
-                }
-                setServiceVoList(serviceVos);
-                updateVersionFilters(listDeployedServicesQuery.data);
-                updateNameFilters(listDeployedServicesQuery.data);
-                updateCategoryFilters();
-                updateCspFilters();
-                updateServiceStateFilters();
-                updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
-            } else {
-                setDefaultServiceStateFilterValue([]);
-                setServiceVoList(listDeployedServicesQuery.data);
-                updateVersionFilters(listDeployedServicesQuery.data);
-                updateNameFilters(listDeployedServicesQuery.data);
-                updateCategoryFilters();
-                updateCspFilters();
-                updateServiceStateFilters();
-                updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
-            }
+            setServiceVoList(listDeployedServicesQuery.data);
+            updateVersionFilters(listDeployedServicesQuery.data);
+            updateNameFilters(listDeployedServicesQuery.data);
+            updateCategoryFilters();
+            updateCspFilters();
+            updateServiceStateFilters();
+            updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
         } else {
             setServiceVoList(serviceList);
         }
-    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, location.state]);
+    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess]);
 
     useEffect(() => {
         if (listDeployedServicesQuery.isError) {
@@ -263,7 +218,6 @@ function MyServices(): React.JSX.Element {
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
-            defaultFilteredValue: defaultServiceStateFilterValue,
         },
         {
             title: 'Operation',
@@ -515,7 +469,7 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'services-content'}>
-            {isDestroying && id.length > 0 ? (
+            {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}
                     isError={serviceDestroyQuery.isError}

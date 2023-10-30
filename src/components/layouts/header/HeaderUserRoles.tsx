@@ -54,7 +54,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         // we must take the previously selected role if available.
         if (currentRole !== null && availableRolesToUser.includes(currentRole)) {
             setCurrentRole(currentRole);
-            useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(currentRole);
+            useCurrentUserRoleStore.getState().addCurrentUserRole(currentRole);
             return;
         }
         // if no role is already cached, then take the first valid role from the list of available roles for the user.
@@ -62,7 +62,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
             if (allowRoleList.includes(role)) {
                 sessionStorage.setItem(userRoleKey, role);
                 setCurrentRole(role);
-                useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(currentRole ?? '');
+                useCurrentUserRoleStore.getState().addCurrentUserRole(currentRole ?? '');
                 return;
             }
         });
@@ -109,7 +109,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
     const handleMenuClick: MenuProps['onClick'] = (value) => {
         setCurrentRole(value.key);
         sessionStorage.setItem(userRoleKey, value.key);
-        useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(value.key);
+        useCurrentUserRoleStore.getState().addCurrentUserRole(value.key);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
         navigate(origin);

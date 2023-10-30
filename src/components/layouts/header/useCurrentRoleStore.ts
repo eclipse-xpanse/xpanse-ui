@@ -7,25 +7,25 @@ import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
 
 interface CurrentUserRoleStore {
-    currentUserRoleStoreParams: string;
+    currentUserRole: string | undefined;
 }
 
 const initialState: CurrentUserRoleStore = {
-    currentUserRoleStoreParams: '',
+    currentUserRole: undefined,
 };
 
 interface updateState {
-    addCurrentUserRoleVariable: (currentUserRoleName: string) => void;
-    clearFormVariables: () => void;
+    addCurrentUserRole: (currentUserRole: string) => void;
+    clearCurrentUserRole: () => void;
 }
 
 export const useCurrentUserRoleStore = createWithEqualityFn<CurrentUserRoleStore & updateState>()(
     (set) => ({
         ...initialState,
-        addCurrentUserRoleVariable: (currentUserRoleName) => {
-            set({ currentUserRoleStoreParams: currentUserRoleName });
+        addCurrentUserRole: (currentUserRole) => {
+            set({ currentUserRole: currentUserRole });
         },
-        clearFormVariables: () => {
+        clearCurrentUserRole: () => {
             set(initialState);
         },
     }),

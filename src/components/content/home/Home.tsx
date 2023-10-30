@@ -9,13 +9,13 @@ import { ServicesDashboard } from './ServicesDashboard';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 
 function Home(): React.JSX.Element {
-    const currentRoleParams = useCurrentUserRoleStore((state) => state.currentUserRoleStoreParams);
+    const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
 
     return (
         <div className={'home-data-display'}>
             <WelcomeCard />
             <br />
-            {currentRoleParams.length > 0 && currentRoleParams === 'user' ? <ServicesDashboard /> : <></>}
+            {currentRole && currentRole === 'user' ? <ServicesDashboard /> : <></>}
         </div>
     );
 }
