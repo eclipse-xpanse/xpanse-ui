@@ -4,11 +4,18 @@
  */
 
 import WelcomeCard from './WelcomeCard';
+import React from 'react';
+import { ServicesDashboard } from './ServicesDashboard';
+import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 
-function Home(): JSX.Element {
+function Home(): React.JSX.Element {
+    const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
+
     return (
         <div className={'home-data-display'}>
             <WelcomeCard />
+            <br />
+            {currentRole && currentRole === 'user' ? <ServicesDashboard /> : <></>}
         </div>
     );
 }
