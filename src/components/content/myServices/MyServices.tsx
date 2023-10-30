@@ -469,7 +469,7 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'services-content'}>
-            {isDestroying && id.length > 0 ? (
+            {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}
                     isError={serviceDestroyQuery.isError}
