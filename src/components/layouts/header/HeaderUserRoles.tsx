@@ -12,6 +12,7 @@ import Logout from '../../content/login/Logout';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
 import { allowRoleList, getRolesOfUser, getUserName } from '../../oidc/OidcConfig';
 import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { useCurrentUserRoleStore } from './useCurrentRoleStore';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -53,6 +54,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         // we must take the previously selected role if available.
         if (currentRole !== null && availableRolesToUser.includes(currentRole)) {
             setCurrentRole(currentRole);
+            useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(currentRole);
             return;
         }
         // if no role is already cached, then take the first valid role from the list of available roles for the user.
@@ -60,6 +62,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
             if (allowRoleList.includes(role)) {
                 sessionStorage.setItem(userRoleKey, role);
                 setCurrentRole(role);
+                useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(currentRole ?? '');
                 return;
             }
         });
@@ -106,6 +109,7 @@ export const HeaderUserRoles = (): React.JSX.Element => {
     const handleMenuClick: MenuProps['onClick'] = (value) => {
         setCurrentRole(value.key);
         sessionStorage.setItem(userRoleKey, value.key);
+        useCurrentUserRoleStore.getState().addCurrentUserRoleVariable(value.key);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
         navigate(origin);

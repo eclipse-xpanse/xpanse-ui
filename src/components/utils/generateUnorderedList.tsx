@@ -2,7 +2,7 @@
  * SPDX-License-Identifier: Apache-2.0
  * SPDX-FileCopyrightText: Huawei Inc.
  */
-import '../../styles/my_services.css';
+
 import React from 'react';
 
 export function convertStringArrayToUnorderedList(result: string[]): string | React.JSX.Element {
