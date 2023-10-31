@@ -10,7 +10,7 @@ import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
 import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 import React from 'react';
-import { userRoleKey } from '../utils/constants';
+import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 
 interface ProtectedRouteProperties {
     children: React.JSX.Element;
@@ -34,11 +34,11 @@ function getFullLayout(content: React.JSX.Element): React.JSX.Element {
 
 function Protected(protectedRouteProperties: ProtectedRouteProperties): React.JSX.Element {
     updateApiConfig();
-    const currentRole: string | null = sessionStorage.getItem(userRoleKey);
+    const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
 
     if (
         protectedRouteProperties.allowedRole === 'all' ||
-        (currentRole !== null && protectedRouteProperties.allowedRole === currentRole)
+        (currentRole !== undefined && protectedRouteProperties.allowedRole === currentRole)
     ) {
         return getFullLayout(protectedRouteProperties.children);
     }
