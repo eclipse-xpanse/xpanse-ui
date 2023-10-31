@@ -11,7 +11,6 @@ import {
     ApiError,
     CloudServiceProvider,
     Response,
-    ServiceService,
     ServiceVo,
 } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -28,7 +27,6 @@ import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
@@ -37,6 +35,7 @@ import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPoll
 import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
+import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 
 function MyServices(): React.JSX.Element {
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
@@ -63,11 +62,7 @@ function MyServices(): React.JSX.Element {
 
     const navigate = useNavigate();
 
-    const listDeployedServicesQuery = useQuery({
-        queryKey: ['listDeployedServices'],
-        queryFn: () => ServiceService.listDeployedServices(undefined, undefined, undefined, undefined, undefined),
-        refetchOnWindowFocus: false,
-    });
+    const listDeployedServicesQuery = useListDeployedServicesQuery();
 
     useEffect(() => {
         const serviceList: ServiceVo[] = [];
@@ -469,7 +464,7 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'services-content'}>
-            {isDestroying && id.length > 0 ? (
+            {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}
                     isError={serviceDestroyQuery.isError}

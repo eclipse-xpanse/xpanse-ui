@@ -22,6 +22,7 @@ export function BooleanInput({ item }: { item: DeployParam }): React.JSX.Element
                     name={item.name}
                     label={item.name + ':  (' + item.description + ')'}
                     rules={[{ type: 'boolean' }, { required: item.mandatory }]}
+                    valuePropName='checked'
                 >
                     <AntdSwitch onChange={booleanHandler} defaultChecked={false} />
                 </Form.Item>
