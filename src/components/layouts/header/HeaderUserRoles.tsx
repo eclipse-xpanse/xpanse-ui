@@ -6,7 +6,7 @@
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { UserOutlined } from '@ant-design/icons';
-import { homePageRoute, userRoleKey } from '../../utils/constants';
+import { homePageRoute } from '../../utils/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Logout from '../../content/login/Logout';
 import { useOidcIdToken } from '@axa-fr/react-oidc';
@@ -38,63 +38,55 @@ export const HeaderUserRoles = (): React.JSX.Element => {
     const { useToken } = theme;
     const { token } = useToken();
     const [currentUser, setCurrentUser] = useState<string>('');
-    const [currentRole, setCurrentRole] = useState<string>('');
-    const [roleList, setRoleList] = useState<string[]>([]);
     const [menuProps, setMenuProps] = useState<MenuProps | undefined>(undefined);
     const oidcIdToken: OidcIdToken = useOidcIdToken();
+    const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
+    const updateCurrentUserRole = useCurrentUserRoleStore((state) => state.addCurrentUserRole);
 
     useEffect(() => {
         const userName: string = getUserName(oidcIdToken.idTokenPayload as object);
+        const roleList: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
+        let updatedRole: string | undefined = undefined;
         setCurrentUser(userName);
 
-        const availableRolesToUser: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
-        setRoleList(availableRolesToUser);
-
-        const currentRole: string | null = sessionStorage.getItem(userRoleKey);
         // we must take the previously selected role if available.
-        if (currentRole !== null && availableRolesToUser.includes(currentRole)) {
-            setCurrentRole(currentRole);
-            useCurrentUserRoleStore.getState().addCurrentUserRole(currentRole);
-            return;
-        }
-        // if no role is already cached, then take the first valid role from the list of available roles for the user.
-        availableRolesToUser.forEach((role) => {
-            if (allowRoleList.includes(role)) {
-                sessionStorage.setItem(userRoleKey, role);
-                setCurrentRole(role);
-                useCurrentUserRoleStore.getState().addCurrentUserRole(currentRole ?? '');
-                return;
-            }
-        });
-    }, [oidcIdToken.idTokenPayload]);
-
-    useEffect(() => {
-        if (roleList.length === 0 || currentRole.length === 0) {
-            return;
+        if (currentRole !== undefined && roleList.includes(currentRole)) {
+            updatedRole = currentRole;
+        } else {
+            // if no role is already cached, then take the first valid role from the list of available roles for the user.
+            roleList.forEach((role) => {
+                if (allowRoleList.includes(role)) {
+                    updateCurrentUserRole(role);
+                    updatedRole = role;
+                    return;
+                }
+            });
         }
 
-        const subItems: MenuItem[] = [];
-        roleList.forEach((item) => {
-            const menuItem: MenuItem = { label: item, key: item };
-            subItems.push(menuItem);
-        });
+        if (roleList.length !== 0 && updatedRole) {
+            const subItems: MenuItem[] = [];
+            roleList.forEach((item) => {
+                const menuItem: MenuItem = { label: item, key: item };
+                subItems.push(menuItem);
+            });
 
-        const items: MenuItem[] = [getItem('Switch Role', 'switchRole', null, subItems)];
-        let selectable = false;
-        if (roleList.length > 1) {
-            selectable = true;
+            const items: MenuItem[] = [getItem('Switch Role', 'switchRole', null, subItems)];
+            const menuStyle = {
+                boxShadow: 'none',
+            };
+
+            setMenuProps({
+                items,
+                onClick: handleMenuClick,
+                selectable: roleList.length > 1,
+                selectedKeys: [updatedRole],
+                defaultOpenKeys: ['switchRole'],
+                mode: 'vertical',
+                style: menuStyle,
+            });
         }
-        setMenuProps({
-            items,
-            onClick: handleMenuClick,
-            selectable: selectable,
-            selectedKeys: [currentRole],
-            defaultOpenKeys: ['switchRole'],
-            mode: 'vertical',
-            style: menuStyle,
-        });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [roleList, currentRole]);
+    }, [oidcIdToken.idTokenPayload, currentRole]);
 
     const contentStyle = {
         backgroundColor: token.colorBgElevated,
@@ -102,14 +94,8 @@ export const HeaderUserRoles = (): React.JSX.Element => {
         boxShadow: token.boxShadowSecondary,
     };
 
-    const menuStyle = {
-        boxShadow: 'none',
-    };
-
     const handleMenuClick: MenuProps['onClick'] = (value) => {
-        setCurrentRole(value.key);
-        sessionStorage.setItem(userRoleKey, value.key);
-        useCurrentUserRoleStore.getState().addCurrentUserRole(value.key);
+        updateCurrentUserRole(value.key);
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
         navigate(origin);
