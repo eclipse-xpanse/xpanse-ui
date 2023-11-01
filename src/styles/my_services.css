@@ -46,3 +46,8 @@
     max-width: 100%;
     margin-left: 14px;
 }
+
+.deployed-resource-properties {
+    display: flex;
+    flex-direction: row;
+}
