@@ -1,12 +1,21 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
 import { ServiceVo } from '../../../xpanse-api/generated';
 import useListDeployedServicesQuery from '../myServices/query/useListDeployedServicesQuery';
 import { ServicesDashboardSkeleton } from './ServicesDashboardSkeleton';
 import ServicesDashboardError from './ServicesDashboardError';
+import { myServicesRoute } from '../../utils/constants';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import serviceDeploymentState = ServiceVo.serviceDeploymentState;
 
 export function ServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
+    const navigate = useNavigate();
 
     if (listDeployedServicesQuery.isError) {
         return <ServicesDashboardError error={listDeployedServicesQuery.error} />;
@@ -36,41 +45,78 @@ export function ServicesDashboard(): React.JSX.Element {
             }
         });
 
+        const getMyServicesRedirectionUrl = (serviceState: ServiceVo.serviceDeploymentState) => {
+            navigate({
+                pathname: myServicesRoute,
+                search: createSearchParams({
+                    serviceState: serviceState.valueOf(),
+                }).toString(),
+            });
+        };
+
         return (
             <>
                 <Card title='Services Dashboard' bordered={true}>
                     <Row gutter={16}>
                         <Col span={12}>
-                            <Statistic
-                                title='Successful Deployments'
-                                loading={listDeployedServicesQuery.isLoading}
-                                value={successfulDeploymentsCount}
-                                valueStyle={{ color: '#3f8600' }}
-                            />
+                            <div
+                                onClick={() => {
+                                    getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_SUCCESSFUL);
+                                }}
+                            >
+                                <Statistic
+                                    title='Successful Deployments'
+                                    loading={listDeployedServicesQuery.isLoading}
+                                    value={successfulDeploymentsCount}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    className={'clickable-dashboard-links'}
+                                />
+                            </div>
                         </Col>
                         <Col span={12}>
-                            <Statistic
-                                title='Failed Deployments'
-                                value={failedDeploymentsCount}
-                                loading={listDeployedServicesQuery.isLoading}
-                                valueStyle={{ color: '#cf1322' }}
-                            />
+                            <div
+                                onClick={() => {
+                                    getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_FAILED);
+                                }}
+                            >
+                                <Statistic
+                                    title='Failed Deployments'
+                                    value={failedDeploymentsCount}
+                                    loading={listDeployedServicesQuery.isLoading}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    className={'clickable-dashboard-links'}
+                                />
+                            </div>
                         </Col>
                         <Col span={12}>
-                            <Statistic
-                                title='Successful Destroys'
-                                loading={listDeployedServicesQuery.isLoading}
-                                value={successfulDestroysCount}
-                                valueStyle={{ color: '#3f8600' }}
-                            />
+                            <div
+                                onClick={() => {
+                                    getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_SUCCESSFUL);
+                                }}
+                            >
+                                <Statistic
+                                    title='Successful Destroys'
+                                    loading={listDeployedServicesQuery.isLoading}
+                                    value={successfulDestroysCount}
+                                    valueStyle={{ color: '#3f8600' }}
+                                    className={'clickable-dashboard-links'}
+                                />
+                            </div>
                         </Col>
                         <Col span={12}>
-                            <Statistic
-                                title='Failed Destroys'
-                                value={failedDestroysCount}
-                                loading={listDeployedServicesQuery.isLoading}
-                                valueStyle={{ color: '#cf1322' }}
-                            />
+                            <div
+                                onClick={() => {
+                                    getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_FAILED);
+                                }}
+                            >
+                                <Statistic
+                                    title='Failed Destroys'
+                                    value={failedDestroysCount}
+                                    loading={listDeployedServicesQuery.isLoading}
+                                    valueStyle={{ color: '#cf1322' }}
+                                    className={'clickable-dashboard-links'}
+                                />
+                            </div>
                         </Col>
                     </Row>
                 </Card>

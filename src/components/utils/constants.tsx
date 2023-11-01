@@ -32,3 +32,4 @@ export const CUSTOMER_SERVICE_NAME_FIELD: string = 'Name';
 export const registerFailedRoute: string = '/register/failed';
 export const registerInvalidRoute: string = '/register/invalid';
 export const registerSuccessfulRoute: string = '/register/successful';
+export const serviceStateQuery: string = 'serviceState';
