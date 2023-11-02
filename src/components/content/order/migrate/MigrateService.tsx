@@ -98,6 +98,7 @@ export const MigrateService = ({
                     deployUuid={migrateServiceRequest.data}
                     isMigrateSuccess={migrateServiceRequest.isSuccess}
                     error={migrateServiceRequest.error}
+                    isLoading={migrateServiceRequest.isPending}
                     setIsMigrating={setIsMigrating}
                     setRequestSubmitted={setRequestSubmitted}
                     setIsPreviousDisabled={setIsPreviousDisabled}

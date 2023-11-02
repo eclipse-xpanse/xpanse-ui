@@ -12,6 +12,7 @@ function MigrateServiceStatusPolling({
     deployUuid,
     isMigrateSuccess,
     error,
+    isLoading,
     setIsMigrating,
     setRequestSubmitted,
     setIsPreviousDisabled,
@@ -21,6 +22,7 @@ function MigrateServiceStatusPolling({
     deployUuid: string | undefined;
     isMigrateSuccess: boolean;
     error: Error | null;
+    isLoading: boolean;
     setIsMigrating: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
     setIsPreviousDisabled: (arg: boolean) => void;
@@ -54,6 +56,7 @@ function MigrateServiceStatusPolling({
             setIsMigrating(false);
             setRequestSubmitted(true);
             setIsPreviousDisabled(true);
+            getCurrentMigrationStepStatus(MigrationStatus.Processing);
         }
     }, [
         isStart,
@@ -102,6 +105,17 @@ function MigrateServiceStatusPolling({
             setRequestSubmitted(false);
         }
     }, [error, setIsMigrating, setRequestSubmitted]);
+
+    if (isLoading) {
+        return OrderSubmitResult(
+            'Request submission in-progress',
+            '-',
+            'success',
+            ServiceDetailVo.serviceDeploymentState.MIGRATING,
+            stopWatch,
+            OperationType.Migrate
+        );
+    }
 
     if (error) {
         return OrderSubmitFailed(
