@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { userRoleKey } from '../../utils/constants';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import {
     credentialMenu,
@@ -15,12 +14,13 @@ import {
 import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
+import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 
 export function getMenuItems(): ItemType[] {
     const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));
-    if (sessionStorage.getItem(userRoleKey) === 'isv') {
+    if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
         return [catalogMenu(serviceCategories), registerPanelMenu()];
-    } else if (sessionStorage.getItem(userRoleKey) === 'admin') {
+    } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
     } else {
         return [servicesMenu(serviceCategories), myServicesMenu(), monitorMenu(), credentialMenu()];

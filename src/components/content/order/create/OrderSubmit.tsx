@@ -110,6 +110,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 <OrderSubmitStatusPolling
                     uuid={submitDeploymentRequest.data}
                     error={submitDeploymentRequest.error}
+                    isSuccess={submitDeploymentRequest.isSuccess}
                     isLoading={submitDeploymentRequest.isPending}
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}

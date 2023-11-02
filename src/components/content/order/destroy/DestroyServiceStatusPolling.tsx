@@ -12,17 +12,19 @@ import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 function DestroyServiceStatusPolling({
     uuid,
     isError,
+    isSuccess,
     error,
     setIsDestroyingCompleted,
     getDestroyCloseStatus,
 }: {
     uuid: string;
     isError: boolean;
+    isSuccess: boolean;
     error: Error | null;
     setIsDestroyingCompleted: (arg: boolean) => void;
     getDestroyCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
     ]);

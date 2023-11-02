@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-export const userRoleKey: string = 'userRole';
 export const homePageRoute: string = '/home';
 export const registerPageRoute: string = '/register';
 export const footerText: string = '©2023 Eclipse Foundation - Xpanse';

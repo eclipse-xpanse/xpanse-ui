@@ -103,27 +103,4 @@ export class WorkFlowService {
             },
         });
     }
-
-    /**
-     * Query process status by processInstanceId<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
-     * @returns Response OK
-     * @throws ApiError
-     */
-    public static queryWorkFlowById(id: string): CancelablePromise<Response> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/workflow/state/{id}',
-            path: {
-                id: id,
-            },
-            errors: {
-                400: `Bad Request`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
 }
