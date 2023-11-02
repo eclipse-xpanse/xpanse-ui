@@ -8,10 +8,11 @@ import React from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { DeployResourceDataType } from './myServiceProps';
 import { Table } from 'antd';
+import DeployedResourceProperties from './DeployedResourceProperties';
 
 export function DeployedResources(content: DeployResource[], title: string): React.JSX.Element {
     let columns: ColumnsType<DeployResourceDataType> = [];
-    let deployResourceList: DeployResourceDataType[] = [];
+    const deployResourceList: DeployResourceDataType[] = [];
     if (content.length > 0) {
         columns = [
             {
@@ -32,17 +33,15 @@ export function DeployedResources(content: DeployResource[], title: string): Rea
                 align: 'center',
             },
         ];
-        const currentDeployResourceList: DeployResourceDataType[] = [];
         content.forEach(function (item, index) {
-            const currentDeployResource = {
+            const currentDeployResource: DeployResourceDataType = {
                 key: String(index),
                 resourceType: item.kind,
                 resourceId: item.resourceId,
-                name: item.name,
+                name: DeployedResourceProperties(item),
             };
-            currentDeployResourceList.push(currentDeployResource);
+            deployResourceList.push(currentDeployResource);
         });
-        deployResourceList = currentDeployResourceList;
     }
     return (
         <div>

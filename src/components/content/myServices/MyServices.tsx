@@ -485,7 +485,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             <Modal
                 title={'Service Details'}
-                width={700}
+                width={1000}
                 footer={null}
                 open={serviceIdInModal.length > 0 && isMyServiceDetailsModalOpen}
                 onCancel={handleMyServiceDetailsModalClose}
