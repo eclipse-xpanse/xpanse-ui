@@ -10,17 +10,19 @@ import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsP
 function OrderSubmitStatusPolling({
     uuid,
     error,
+    isSuccess,
     isLoading,
     setIsDeploying,
     setRequestSubmitted,
 }: {
     uuid: string | undefined;
     error: Error | null;
+    isSuccess: boolean;
     isLoading: boolean;
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, [
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
     ]);

@@ -112,6 +112,9 @@ export namespace ServiceDetailVo {
         DESTROYING = 'destroying',
         DESTROY_SUCCESSFUL = 'destroy successful',
         DESTROY_FAILED = 'destroy failed',
+        MIGRATING = 'migrating',
+        MIGRATION_SUCCESS = 'migration_success',
+        MIGRATION_FAILED = 'migration_failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
     }
 }
