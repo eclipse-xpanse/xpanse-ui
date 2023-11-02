@@ -468,6 +468,7 @@ function MyServices(): React.JSX.Element {
                 <DestroyServiceStatusPolling
                     uuid={id}
                     isError={serviceDestroyQuery.isError}
+                    isSuccess={serviceDestroyQuery.isSuccess}
                     error={serviceDestroyQuery.error}
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
                     getDestroyCloseStatus={getDestroyCloseStatus}

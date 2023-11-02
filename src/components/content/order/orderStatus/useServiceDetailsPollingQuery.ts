@@ -9,6 +9,7 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
     uuid: string | undefined,
+    isStartPolling: boolean,
     refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
 ) {
     return useQuery({
@@ -21,24 +22,6 @@ export function useServiceDetailsPollingQuery(
                 : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
-        enabled: uuid !== undefined,
-    });
-}
-
-export function useServiceDestroyDetailsPollingQuery(
-    uuid: string,
-    isDestroyDetailsQuerying: boolean,
-    refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
-) {
-    return useQuery({
-        queryKey: ['getServiceDetailsById', uuid],
-        queryFn: () => ServiceService.getServiceDetailsById(uuid),
-        refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.serviceDeploymentState)
-                ? false
-                : deploymentStatusPollingInterval,
-        refetchIntervalInBackground: true,
-        refetchOnWindowFocus: false,
-        enabled: uuid.length > 0 && isDestroyDetailsQuerying,
+        enabled: uuid !== undefined && isStartPolling,
     });
 }

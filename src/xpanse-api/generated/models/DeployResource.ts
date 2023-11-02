@@ -41,5 +41,6 @@ export namespace DeployResource {
         VPC = 'vpc',
         VOLUME = 'volume',
         UNKNOWN = 'unknown',
+        SUBNET = 'subnet',
     }
 }

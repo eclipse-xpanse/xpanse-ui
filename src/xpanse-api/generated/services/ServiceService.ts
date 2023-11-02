@@ -50,6 +50,9 @@ export class ServiceService {
             | 'destroying'
             | 'destroy successful'
             | 'destroy failed'
+            | 'migrating'
+            | 'migration_success'
+            | 'migration_failed'
             | 'manual cleanup required'
     ): CancelablePromise<Array<ServiceVo>> {
         return __request(OpenAPI, {
@@ -149,6 +152,42 @@ export class ServiceService {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/xpanse/services/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Get the status of service migration by service ID<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getMigrateServiceStateById(
+        id: string
+    ): CancelablePromise<
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'migrating'
+        | 'migration_success'
+        | 'migration_failed'
+        | 'manual cleanup required'
+    > {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/migration/state/{id}',
             path: {
                 id: id,
             },

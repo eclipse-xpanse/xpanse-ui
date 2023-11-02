@@ -8,6 +8,7 @@ import {
     Billing,
     CloudServiceProvider,
     DeployRequest,
+    MigrateRequest,
     ServiceVo,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -22,8 +23,8 @@ import {
     MigrationSteps,
 } from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
-import { MigrateServiceStatusPolling } from './MigrateServiceStatusPolling';
-import { useDeployRequestSubmitQuery } from '../create/useDeployRequestSubmitQuery';
+import { useMigrateServiceQuery } from './useMigrateServiceQuery';
+import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 
 export const MigrateService = ({
     userOrderableServiceVoList,
@@ -70,14 +71,16 @@ export const MigrateService = ({
         }
     });
 
-    const deployServiceRequest = useDeployRequestSubmitQuery();
+    const migrateServiceRequest = useMigrateServiceQuery();
 
     const migrate = () => {
         if (deployParams !== undefined) {
+            const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
+            migrateRequest.id = currentSelectedService === undefined ? '' : currentSelectedService.id;
             setIsMigrating(true);
             setRequestSubmitted(true);
             setIsPreviousDisabled(true);
-            deployServiceRequest.mutate(deployParams);
+            migrateServiceRequest.mutate(migrateRequest);
             setIsShowDeploymentResult(true);
         }
     };
@@ -91,12 +94,10 @@ export const MigrateService = ({
         <>
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusPolling
-                    currentSelectedService={currentSelectedService}
-                    deployData={deployServiceRequest.data}
-                    isDeploySuccess={deployServiceRequest.isSuccess}
-                    isDeployError={deployServiceRequest.isError}
-                    deployError={deployServiceRequest.error}
-                    isDeployLoading={deployServiceRequest.isPending}
+                    destroyUuid={currentSelectedService?.id}
+                    deployUuid={migrateServiceRequest.data}
+                    isMigrateSuccess={migrateServiceRequest.isSuccess}
+                    error={migrateServiceRequest.error}
                     setIsMigrating={setIsMigrating}
                     setRequestSubmitted={setRequestSubmitted}
                     setIsPreviousDisabled={setIsPreviousDisabled}
