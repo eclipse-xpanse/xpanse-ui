@@ -214,13 +214,8 @@ function MyServices(): React.JSX.Element {
                                     onMonitor(record);
                                 }}
                                 disabled={
-                                    isDestroying ||
-                                    record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                                    record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
+                                    record.serviceDeploymentState !==
+                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
                                 }
                             >
                                 monitor
