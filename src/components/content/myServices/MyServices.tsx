@@ -4,15 +4,9 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Alert, Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
+import { Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import {
-    AbstractCredentialInfo,
-    ApiError,
-    CloudServiceProvider,
-    Response,
-    ServiceVo,
-} from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, ServiceVo } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     AreaChartOutlined,
@@ -26,8 +20,7 @@ import '../../../styles/my_services.css';
 import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
 import { useOrderFormStore } from '../order/store/OrderFormStore';
@@ -36,8 +29,12 @@ import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmit
 import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
+import MyServicesError from './MyServicesError';
+import { serviceStateQuery } from '../../utils/constants';
 
 function MyServices(): React.JSX.Element {
+    const [urlParams] = useSearchParams();
+    const serviceStateInQuery = getServiceStateFromQuery();
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
@@ -55,7 +52,6 @@ function MyServices(): React.JSX.Element {
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
-    const [servicesLoadingError, setServicesLoadingError] = useState<React.JSX.Element>(<></>);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
@@ -67,7 +63,15 @@ function MyServices(): React.JSX.Element {
     useEffect(() => {
         const serviceList: ServiceVo[] = [];
         if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            setServiceVoList(listDeployedServicesQuery.data);
+            if (serviceStateInQuery) {
+                setServiceVoList(
+                    listDeployedServicesQuery.data.filter(
+                        (serviceVo) => serviceVo.serviceDeploymentState === serviceStateInQuery
+                    )
+                );
+            } else {
+                setServiceVoList(listDeployedServicesQuery.data);
+            }
             updateVersionFilters(listDeployedServicesQuery.data);
             updateNameFilters(listDeployedServicesQuery.data);
             updateCategoryFilters();
@@ -77,39 +81,11 @@ function MyServices(): React.JSX.Element {
         } else {
             setServiceVoList(serviceList);
         }
-    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess]);
+    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery]);
 
-    useEffect(() => {
-        if (listDeployedServicesQuery.isError) {
-            if (
-                listDeployedServicesQuery.error instanceof ApiError &&
-                'details' in listDeployedServicesQuery.error.body
-            ) {
-                const response: Response = listDeployedServicesQuery.error.body as Response;
-                setServicesLoadingError(
-                    <Alert
-                        message={response.resultType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={true}
-                        className={'failure-alert'}
-                    />
-                );
-            } else {
-                setServicesLoadingError(
-                    <Alert
-                        message='Fetching Service Details Failed'
-                        description={listDeployedServicesQuery.error.message}
-                        type={'error'}
-                        closable={true}
-                        className={'failure-alert'}
-                    />
-                );
-            }
-        } else {
-            setServicesLoadingError(<></>);
-        }
-    }, [listDeployedServicesQuery.error, listDeployedServicesQuery.isError]);
+    if (listDeployedServicesQuery.isError) {
+        return <MyServicesError error={listDeployedServicesQuery.error} />;
+    }
 
     const getDestroyCloseStatus = (isClose: boolean) => {
         if (isClose) {
@@ -207,12 +183,13 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceState',
             dataIndex: 'serviceDeploymentState',
-            filters: serviceStateFilters,
+            filters: serviceStateInQuery ? undefined : serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
+            filtered: !!serviceStateInQuery,
         },
         {
             title: 'Operation',
@@ -237,13 +214,8 @@ function MyServices(): React.JSX.Element {
                                     onMonitor(record);
                                 }}
                                 disabled={
-                                    isDestroying ||
-                                    record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                                    record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
+                                    record.serviceDeploymentState !==
+                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
                                 }
                             >
                                 monitor
@@ -462,6 +434,18 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
+    function getServiceStateFromQuery(): ServiceVo.serviceDeploymentState | undefined {
+        const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
+        if (queryInUri.length > 0) {
+            if (
+                Object.values(ServiceVo.serviceDeploymentState).includes(queryInUri as ServiceVo.serviceDeploymentState)
+            ) {
+                return queryInUri as ServiceVo.serviceDeploymentState;
+            }
+        }
+        return undefined;
+    }
+
     return (
         <div className={'services-content'}>
             {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
@@ -518,13 +502,12 @@ function MyServices(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
-            {servicesLoadingError}
             <Row>
                 <div className={'service-instance-list'}>
                     <Table
                         columns={columns}
                         dataSource={serviceVoList}
-                        loading={listDeployedServicesQuery.isLoading || listDeployedServicesQuery.isRefetching}
+                        loading={listDeployedServicesQuery.isPending || listDeployedServicesQuery.isRefetching}
                         rowKey={'id'}
                     />
                 </div>
