@@ -10,7 +10,6 @@
 .service-instance-detail-position {
     display: flex;
 }
-
 .failure-alert {
     margin-top: 10px;
 }
@@ -36,6 +35,14 @@
 
 .show-details-typography-copy {
     color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.service-instance-Paragraph {
+    margin-bottom: 0em !important;
+}
+
+.show-details-typography-copy-info {
+    font-weight: bold;
 }
 
 .deployment-details-with-scroll {
