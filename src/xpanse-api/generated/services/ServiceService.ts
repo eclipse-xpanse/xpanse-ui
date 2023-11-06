@@ -166,42 +166,6 @@ export class ServiceService {
     }
 
     /**
-     * Get the status of service migration by service ID<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
-     * @returns string OK
-     * @throws ApiError
-     */
-    public static getMigrateServiceStateById(
-        id: string
-    ): CancelablePromise<
-        | 'deploying'
-        | 'deployment successful'
-        | 'deployment failed'
-        | 'destroying'
-        | 'destroy successful'
-        | 'destroy failed'
-        | 'migrating'
-        | 'migration_success'
-        | 'migration_failed'
-        | 'manual cleanup required'
-    > {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/services/migration/state/{id}',
-            path: {
-                id: id,
-            },
-            errors: {
-                400: `Bad Request`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
-    /**
      * Start a task to purge the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
      * @returns Response Accepted
