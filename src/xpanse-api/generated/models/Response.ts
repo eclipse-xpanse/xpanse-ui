@@ -62,5 +62,9 @@ export namespace Response {
         METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
         VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
         VARIABLE_SCHEMA_DEFINITION_INVALID = 'Variable Schema Definition Invalid',
+        POLICY_NOT_FOUND = 'Policy Not Found',
+        DUPLICATE_POLICY = 'Duplicate Policy',
+        POLICY_VALIDATION_FAILED = 'Policy Validation Failed',
+        POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
     }
 }

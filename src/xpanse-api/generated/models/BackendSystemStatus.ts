@@ -42,6 +42,7 @@ export namespace BackendSystemStatus {
         IDENTITY_PROVIDER = 'IdentityProvider',
         DATABASE = 'Database',
         TERRAFORM_BOOT = 'Terraform Boot',
+        POLICY_MAN = 'PolicyMan',
     }
 
     /**
