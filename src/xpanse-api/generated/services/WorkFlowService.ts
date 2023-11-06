@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Response } from '../models/Response';
 import type { WorkFlowTask } from '../models/WorkFlowTask';
 
 import type { CancelablePromise } from '../core/CancelablePromise';

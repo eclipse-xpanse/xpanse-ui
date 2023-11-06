@@ -30,10 +30,11 @@ import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequest
 import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 import MyServicesError from './MyServicesError';
-import { serviceStateQuery } from '../../utils/constants';
+import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
+    const serviceIdInQuery = getServiceIdFormQuery();
     const serviceStateInQuery = getServiceStateFromQuery();
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
@@ -41,6 +42,7 @@ function MyServices(): React.JSX.Element {
     const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
+    const [serviceIdFilters, setServiceIdFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
     const [id, setId] = useState<string>('');
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
@@ -69,9 +71,14 @@ function MyServices(): React.JSX.Element {
                         (serviceVo) => serviceVo.serviceDeploymentState === serviceStateInQuery
                     )
                 );
+            } else if (serviceIdInQuery) {
+                setServiceVoList(
+                    listDeployedServicesQuery.data.filter((serviceVo) => serviceVo.id === serviceIdInQuery)
+                );
             } else {
                 setServiceVoList(listDeployedServicesQuery.data);
             }
+            updateServiceIdFilters(listDeployedServicesQuery.data);
             updateVersionFilters(listDeployedServicesQuery.data);
             updateNameFilters(listDeployedServicesQuery.data);
             updateCategoryFilters();
@@ -81,7 +88,7 @@ function MyServices(): React.JSX.Element {
         } else {
             setServiceVoList(serviceList);
         }
-    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery]);
+    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
 
     if (listDeployedServicesQuery.isError) {
         return <MyServicesError error={listDeployedServicesQuery.error} />;
@@ -107,6 +114,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Id',
             dataIndex: 'id',
+            filters: serviceIdInQuery ? undefined : serviceIdFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: string | number | boolean, record) => record.id.startsWith(value.toString()),
+            filtered: !!serviceIdInQuery,
         },
         {
             title: 'Name',
@@ -325,6 +337,21 @@ function MyServices(): React.JSX.Element {
             state: record,
         });
     }
+    function updateServiceIdFilters(resp: ServiceVo[]): void {
+        const filters: ColumnFilterItem[] = [];
+        const serviceIdSet = new Set<string>('');
+        resp.forEach((v) => {
+            serviceIdSet.add(v.id);
+        });
+        serviceIdSet.forEach((id) => {
+            const filter = {
+                text: id,
+                value: id,
+            };
+            filters.push(filter);
+        });
+        setServiceIdFilters(filters);
+    }
 
     function updateCspFilters(): void {
         const filters: ColumnFilterItem[] = [];
@@ -442,6 +469,14 @@ function MyServices(): React.JSX.Element {
             ) {
                 return queryInUri as ServiceVo.serviceDeploymentState;
             }
+        }
+        return undefined;
+    }
+
+    function getServiceIdFormQuery(): string | undefined {
+        const queryInUri = decodeURI(urlParams.get(serviceIdQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
         }
         return undefined;
     }
