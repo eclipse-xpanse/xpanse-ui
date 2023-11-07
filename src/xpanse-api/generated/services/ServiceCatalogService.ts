@@ -51,6 +51,7 @@ export class ServiceCatalogService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -74,6 +75,7 @@ export class ServiceCatalogService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -97,6 +99,7 @@ export class ServiceCatalogService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,

@@ -32,6 +32,7 @@ export class WorkFlowService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -57,6 +58,7 @@ export class WorkFlowService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -76,6 +78,7 @@ export class WorkFlowService {
             url: '/xpanse/workflow/task/todo',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -95,6 +98,7 @@ export class WorkFlowService {
             url: '/xpanse/workflow/task/done',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,

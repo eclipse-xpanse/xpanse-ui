@@ -19,7 +19,7 @@ import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 export function getMenuItems(): ItemType[] {
     const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));
     if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
-        return [catalogMenu(serviceCategories), registerPanelMenu()];
+        return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu()];
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
     } else {

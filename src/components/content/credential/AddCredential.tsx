@@ -23,10 +23,12 @@ import { cspMap } from '../order/formElements/CspSelect';
 import { CredentialApiDoc } from './CredentialApiDoc';
 
 function AddCredential({
+    role,
     credentialsQuery,
     onCancel,
 }: {
-    credentialsQuery: UseQueryResult<never[]>;
+    role: string | undefined;
+    credentialsQuery: UseQueryResult<never[] | undefined>;
     onCancel: () => void;
 }): React.JSX.Element {
     const active = true;
@@ -54,7 +56,7 @@ function AddCredential({
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        queryFn: () => CredentialsManagementService.listCredentialTypes(currentCsp),
+        queryFn: () => CredentialsManagementService.getUserCloudCredentialTypes(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined,
     });
@@ -79,8 +81,8 @@ function AddCredential({
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        queryFn: () => CredentialsManagementService.listCredentialCapabilities(currentCsp!),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+        queryFn: () => CredentialsManagementService.getUserCloudCredentialCapabilities(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined && currentType !== undefined,
     });
@@ -114,9 +116,7 @@ function AddCredential({
     }, [credentialCapabilitiesQuery.error, currentCsp, currentType]);
 
     const addCredentialRequest = useMutation({
-        mutationFn: (createCredential: CreateCredential) => {
-            return CredentialsManagementService.addCredential(createCredential);
-        },
+        mutationFn: (createCredential: CreateCredential) => addCredentialByRole(createCredential),
         onSuccess: () => {
             void credentialsQuery.refetch();
             getTipInfo('success', 'Adding Credential Successful.');
@@ -135,6 +135,14 @@ function AddCredential({
             }
         },
     });
+
+    const addCredentialByRole = (createCredential: CreateCredential) => {
+        if (role === 'user') {
+            return CredentialsManagementService.addUserCloudCredential(createCredential);
+        } else {
+            return CredentialsManagementService.addIsvCloudCredential(createCredential);
+        }
+    };
 
     useEffect(() => {
         const credentials = credentialCapabilitiesQuery.data;
