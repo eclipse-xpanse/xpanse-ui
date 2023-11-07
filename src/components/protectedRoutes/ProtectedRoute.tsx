@@ -14,7 +14,7 @@ import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 
 interface ProtectedRouteProperties {
     children: React.JSX.Element;
-    allowedRole: 'isv' | 'user' | 'admin' | 'all';
+    allowedRole: ('isv' | 'user' | 'admin')[];
 }
 
 function getFullLayout(content: React.JSX.Element): React.JSX.Element {
@@ -35,10 +35,9 @@ function getFullLayout(content: React.JSX.Element): React.JSX.Element {
 function Protected(protectedRouteProperties: ProtectedRouteProperties): React.JSX.Element {
     updateApiConfig();
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
-
     if (
-        protectedRouteProperties.allowedRole === 'all' ||
-        (currentRole !== undefined && protectedRouteProperties.allowedRole === currentRole)
+        currentRole !== undefined &&
+        protectedRouteProperties.allowedRole.includes(currentRole as 'isv' | 'user' | 'admin')
     ) {
         return getFullLayout(protectedRouteProperties.children);
     }

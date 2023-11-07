@@ -36,6 +36,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -58,6 +59,7 @@ export class PoliciesManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -80,6 +82,7 @@ export class PoliciesManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -103,6 +106,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -126,6 +130,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
