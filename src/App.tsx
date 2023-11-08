@@ -142,7 +142,7 @@ function App(): React.JSX.Element {
                         path={credentialPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={['user']}>
+                                <Protected allowedRole={['user', 'isv']}>
                                     <Credential />
                                 </Protected>
                             </OidcSecure>
