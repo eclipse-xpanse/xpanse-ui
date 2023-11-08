@@ -38,6 +38,10 @@ export type MigrateRequest = {
      */
     flavor: string;
     /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: MigrateRequest.serviceHostingType;
+    /**
      * The properties for the requested service
      */
     serviceRequestProperties?: Record<string, any>;
@@ -76,5 +80,13 @@ export namespace MigrateRequest {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+    }
+
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 }

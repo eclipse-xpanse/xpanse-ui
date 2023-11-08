@@ -81,8 +81,8 @@ function AddCredential({
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
-        queryFn: () => CredentialsManagementService.getUserCloudCredentialCapabilities(currentCsp),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        queryFn: () => CredentialsManagementService.getUserCloudCredentialCapabilities(currentCsp!),
         staleTime: 60000,
         enabled: currentCsp !== undefined && currentType !== undefined,
     });

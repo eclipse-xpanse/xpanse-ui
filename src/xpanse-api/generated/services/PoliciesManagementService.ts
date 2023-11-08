@@ -94,10 +94,10 @@ export class PoliciesManagementService {
     /**
      * Get the details of the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
-     * @returns any OK
+     * @returns PolicyVo OK
      * @throws ApiError
      */
-    public static getPolicyDetails(id: string): CancelablePromise<Record<string, any>> {
+    public static getPolicyDetails(id: string): CancelablePromise<PolicyVo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/policies/{id}',

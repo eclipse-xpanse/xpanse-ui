@@ -56,6 +56,7 @@ export default function GoToSubmit({
             csp: selectCsp as DeployRequest.csp,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),
+            serviceHostingType: service ? service.serviceHostingType : DeployRequest.serviceHostingType.SELF,
         };
 
         if (service !== undefined) {
