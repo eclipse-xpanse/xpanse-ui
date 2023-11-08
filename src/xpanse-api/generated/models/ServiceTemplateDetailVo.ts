@@ -63,6 +63,10 @@ export type ServiceTemplateDetailVo = {
     flavors: Array<Flavor>;
     billing: Billing;
     /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: ServiceTemplateDetailVo.serviceHostingType;
+    /**
      * createTime of the registered service.
      */
     createTime: string;
@@ -106,6 +110,14 @@ export namespace ServiceTemplateDetailVo {
         SECURITY = 'security',
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
+    }
+
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 
     /**

@@ -58,6 +58,7 @@ export const ShowDeploy = ({
             serviceName: props.name,
             version: props.version,
             customerServiceName: deployParamsRef.current.Name as string,
+            serviceHostingType: props.serviceHostingType,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {

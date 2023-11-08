@@ -14,10 +14,6 @@ export type ServiceVo = {
      */
     id: string;
     /**
-     * The id of the user who deployed the service
-     */
-    userId: string;
-    /**
      * The catalog of the service
      */
     category: ServiceVo.category;
