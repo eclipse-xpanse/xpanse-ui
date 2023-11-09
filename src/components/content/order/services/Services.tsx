@@ -5,7 +5,7 @@
 
 import { FormOutlined } from '@ant-design/icons';
 import '../../../../styles/service_order.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
@@ -14,14 +14,12 @@ import { sortVersion } from '../../../utils/Sort';
 import { ServiceVo, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from '../query/ServicesLoadingError';
-import { getUserOrderableServiceMapper, getUserOrderableVersionMapper } from './userServiceProps';
+import { groupServicesByName, groupVersionsForService } from './userServiceHelper';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
+import { UserServiceDisplayType } from './UserServiceDisplayType';
 
 function Services(): React.JSX.Element {
-    const [services, setServices] = useState<{ name: string; content: string; icon: string; latestVersion: string }[]>(
-        []
-    );
     const navigate = useNavigate();
     const location = useLocation();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
@@ -44,30 +42,6 @@ function Services(): React.JSX.Element {
         undefined
     );
 
-    useEffect(() => {
-        const userOrderableServiceList: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
-        const serviceList: { name: string; content: string; icon: string; latestVersion: string }[] = [];
-        if (userOrderableServiceList !== undefined && userOrderableServiceList.length > 0) {
-            const serviceMapper: Map<string, UserOrderableServiceVo[]> =
-                getUserOrderableServiceMapper(userOrderableServiceList);
-            serviceMapper.forEach((orderableServicesList, serviceName) => {
-                const versionMapper: Map<string, UserOrderableServiceVo[]> = getUserOrderableVersionMapper(
-                    serviceName,
-                    userOrderableServiceList
-                );
-                const versionList: string[] = Array.from(versionMapper.keys());
-                const serviceItem = {
-                    name: serviceName,
-                    content: orderableServicesList[0].description,
-                    icon: orderableServicesList[0].icon,
-                    latestVersion: sortVersion(versionList)[0],
-                };
-                serviceList.push(serviceItem);
-            });
-        }
-        setServices(serviceList);
-    }, [orderableServicesQuery.data, orderableServicesQuery.isSuccess]);
-
     if (orderableServicesQuery.isError) {
         return <ServicesLoadingError error={orderableServicesQuery.error} />;
     }
@@ -76,7 +50,28 @@ function Services(): React.JSX.Element {
         return <ServicesSkeleton />;
     }
 
-    if (services.length === 0) {
+    const userOrderableServiceList: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
+    const serviceList: UserServiceDisplayType[] = [];
+    if (userOrderableServiceList !== undefined && userOrderableServiceList.length > 0) {
+        const servicesGroupedByName: Map<string, UserOrderableServiceVo[]> =
+            groupServicesByName(userOrderableServiceList);
+        servicesGroupedByName.forEach((orderableServicesList, _) => {
+            const versionMapper: Map<string, UserOrderableServiceVo[]> = groupVersionsForService(orderableServicesList);
+            const versionList: string[] = Array.from(versionMapper.keys());
+            const latestVersion = sortVersion(versionList)[0];
+            if (versionMapper.has(latestVersion) && versionMapper.get(latestVersion)) {
+                const serviceItem = {
+                    name: versionMapper.get(latestVersion)?.[0].name,
+                    content: versionMapper.get(latestVersion)?.[0].description,
+                    icon: versionMapper.get(latestVersion)?.[0].icon,
+                    latestVersion: latestVersion,
+                };
+                serviceList.push(serviceItem as UserServiceDisplayType);
+            }
+        });
+    }
+
+    if (serviceList.length === 0) {
         return (
             <div className={'service-blank-class'}>
                 <Empty description={'No services available.'} />
@@ -92,7 +87,7 @@ function Services(): React.JSX.Element {
             </div>
 
             <div className={'services-content-body'}>
-                {services.map((item, index) => {
+                {serviceList.map((item, index) => {
                     return (
                         <Row key={index}>
                             <Col span={8} className={'services-content-body-col'}>
