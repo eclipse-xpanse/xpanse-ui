@@ -1,6 +1,11 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export const getUserOrderableServiceMapper = (
+export const groupServicesByName = (
     userOrderableServiceList: UserOrderableServiceVo[]
 ): Map<string, UserOrderableServiceVo[]> => {
     const serviceMapper: Map<string, UserOrderableServiceVo[]> = new Map<string, UserOrderableServiceVo[]>();
@@ -18,25 +23,15 @@ export const getUserOrderableServiceMapper = (
     return serviceMapper;
 };
 
-export const getUserOrderableVersionMapper = (
-    currentServiceName: string,
+export const groupVersionsForService = (
     userOrderableServiceList: UserOrderableServiceVo[]
 ): Map<string, UserOrderableServiceVo[]> => {
     const versionMapper: Map<string, UserOrderableServiceVo[]> = new Map<string, UserOrderableServiceVo[]>();
-    const serviceMapper: Map<string, UserOrderableServiceVo[]> =
-        getUserOrderableServiceMapper(userOrderableServiceList);
-    serviceMapper.forEach((serviceList, serviceName) => {
-        if (serviceName === currentServiceName) {
-            for (const service of serviceList) {
-                if (service.version) {
-                    if (!versionMapper.has(service.version)) {
-                        versionMapper.set(
-                            service.version,
-                            serviceList.filter((data) => data.version === service.version)
-                        );
-                    }
-                }
-            }
+    userOrderableServiceList.forEach((service) => {
+        if (versionMapper.has(service.version)) {
+            versionMapper.get(service.version)?.push(service);
+        } else {
+            versionMapper.set(service.version, [service]);
         }
     });
     return versionMapper;
