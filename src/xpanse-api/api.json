@@ -1161,6 +1161,17 @@
                         "description": "version of the service",
                         "required": false,
                         "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "serviceHostingType",
+                        "in": "query",
+                        "description": "who hosts ths cloud resources",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "Defines which cloud service account is used for deploying cloud resources.",
+                            "enum": ["self", "service-vendor"]
+                        }
                     }
                 ],
                 "responses": {
@@ -2006,6 +2017,17 @@
                         "description": "version of the service",
                         "required": false,
                         "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "serviceHostingType",
+                        "in": "query",
+                        "description": "who hosts ths cloud resources",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "Defines which cloud service account is used for deploying cloud resources.",
+                            "enum": ["self", "service-vendor"]
+                        }
                     }
                 ],
                 "responses": {
@@ -2808,7 +2830,7 @@
                 }
             },
             "PolicyCreateRequest": {
-                "required": ["csp", "policy"],
+                "required": ["csp", "enabled", "policy"],
                 "type": "object",
                 "properties": {
                     "csp": {
@@ -2816,7 +2838,11 @@
                         "description": "The csp which the policy belongs to.",
                         "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
-                    "policy": { "type": "string", "description": "The policy." }
+                    "policy": { "type": "string", "description": "The policy." },
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Is the policy enabled. true:enabled;false:disabled."
+                    }
                 }
             },
             "WorkFlowTask": {
