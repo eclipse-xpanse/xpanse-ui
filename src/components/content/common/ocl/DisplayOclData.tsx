@@ -66,6 +66,15 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <br />
                                 <br />
                             </div>
+                            <div>
+                                <b>Service Hosted By</b>
+                                <br />
+                                <Tag className={'ocl-display-tag'} color='red'>
+                                    {ocl.serviceHostingType.toString()}
+                                </Tag>
+                                <br />
+                                <br />
+                            </div>
                         </div>
                     </div>
                     <div>
