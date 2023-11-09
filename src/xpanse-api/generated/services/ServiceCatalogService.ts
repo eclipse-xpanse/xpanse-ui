@@ -21,6 +21,7 @@ export class ServiceCatalogService {
      * @param cspName name of the cloud service provider
      * @param serviceName name of the service
      * @param serviceVersion version of the service
+     * @param serviceHostingType who hosts ths cloud resources
      * @returns UserOrderableServiceVo OK
      * @throws ApiError
      */
@@ -38,7 +39,8 @@ export class ServiceCatalogService {
             | 'others',
         cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
-        serviceVersion?: string
+        serviceVersion?: string,
+        serviceHostingType?: 'self' | 'service-vendor'
     ): CancelablePromise<Array<UserOrderableServiceVo>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -48,6 +50,7 @@ export class ServiceCatalogService {
                 cspName: cspName,
                 serviceName: serviceName,
                 serviceVersion: serviceVersion,
+                serviceHostingType: serviceHostingType,
             },
             errors: {
                 400: `Bad Request`,
