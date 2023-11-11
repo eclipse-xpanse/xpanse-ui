@@ -11,7 +11,7 @@ import {
     Region,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Area } from '../../../utils/Area';
+import { Area } from '../types/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 
 export interface DeployParam {

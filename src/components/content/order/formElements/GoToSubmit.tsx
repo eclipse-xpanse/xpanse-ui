@@ -20,6 +20,7 @@ export default function GoToSubmit({
     selectArea,
     selectFlavor,
     versionMapper,
+    selectServiceHostingType,
 }: {
     categoryName: string;
     serviceName: string;
@@ -28,6 +29,7 @@ export default function GoToSubmit({
     selectRegion: string;
     selectArea: string;
     selectFlavor: string;
+    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     versionMapper: Map<string, UserOrderableServiceVo[]>;
 }): React.JSX.Element {
     const navigate = useNavigate();
@@ -38,7 +40,10 @@ export default function GoToSubmit({
         versionMapper.forEach((v, k) => {
             if (k === selectVersion) {
                 v.forEach((registerService) => {
-                    if (registerService.csp.valueOf() === selectCsp) {
+                    if (
+                        registerService.csp.valueOf() === selectCsp &&
+                        registerService.serviceHostingType === selectServiceHostingType
+                    ) {
                         registeredServiceId = registerService.id;
                         service = registerService;
                     }
@@ -56,7 +61,7 @@ export default function GoToSubmit({
             csp: selectCsp as DeployRequest.csp,
             flavor: selectFlavor,
             params: new Array<DeployParam>(),
-            serviceHostingType: service ? service.serviceHostingType : DeployRequest.serviceHostingType.SELF,
+            serviceHostingType: selectServiceHostingType,
         };
 
         if (service !== undefined) {

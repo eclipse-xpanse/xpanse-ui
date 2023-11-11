@@ -6,10 +6,10 @@
 import React from 'react';
 import { Ocl } from '../../../../xpanse-api/generated';
 import { Descriptions, Image, Tag } from 'antd';
-import { cspMap } from '../../order/formElements/CspSelect';
 import { DeploymentText } from './DeploymentText';
 import { FlavoursText } from './FlavorsText';
 import { BillingText } from './BillingText';
+import { cspMap } from '../../order/types/CspLogo';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';

@@ -19,8 +19,8 @@ import {
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
-import { cspMap } from '../order/formElements/CspSelect';
 import { CredentialApiDoc } from './CredentialApiDoc';
+import { cspMap } from '../order/types/CspLogo';
 
 function AddCredential({
     role,

@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import HuaWeiLogo from '../../../../img/Huawei_Logo.png';
 import AlibabaLogo from '../../../../img/Alibaba_Logo.png';
 import AzureLogo from '../../../../img/Microsoft_Azure_Logo.png';

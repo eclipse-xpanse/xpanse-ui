@@ -18,8 +18,8 @@ import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
-import { cspMap } from '../order/formElements/CspSelect';
 import { CredentialApiDoc } from './CredentialApiDoc';
+import { cspMap } from '../order/types/CspLogo';
 
 function UpdateCredential({
     role,
@@ -132,7 +132,7 @@ function UpdateCredential({
         {
             title: 'value',
             dataIndex: 'value',
-            render: (value: string, record, index) =>
+            render: (_value: string, record, index) =>
                 record.isMandatory ? (
                     <Form.Item
                         name='value'
