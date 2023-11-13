@@ -127,9 +127,6 @@ function UpdateService({
     };
 
     const onRemove = () => {
-        if (updateServiceRequest.isSuccess) {
-            return;
-        }
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
@@ -182,7 +179,10 @@ function UpdateService({
                             fileList={files.current}
                             onRemove={onRemove}
                             accept={'.yaml, .yml'}
-                            showUploadList={true}
+                            showUploadList={{
+                                showRemoveIcon: true,
+                                removeIcon: updateServiceRequest.isPending,
+                            }}
                         >
                             <Button
                                 size={'large'}
