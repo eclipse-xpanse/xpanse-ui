@@ -16,7 +16,7 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     csp?: AbstractCredentialInfo.csp;
     /**
-     * The type of the credential, this field is provided by the the plugin of cloud service provider.
+     * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type?: AbstractCredentialInfo.type;
     /**
@@ -24,7 +24,7 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     name?: string;
     /**
-     * The description of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The description of the credential,this field is provided by the plugin of cloud service provider.
      */
     description?: string;
     /**
@@ -37,7 +37,7 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     csp: AbstractCredentialInfo.csp;
     /**
-     * The type of the credential, this field is provided by the the plugin of cloud service provider.
+     * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type: AbstractCredentialInfo.type;
     /**
@@ -45,7 +45,7 @@ export type AbstractCredentialInfo = CredentialVariables & {
      */
     name: string;
     /**
-     * The description of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The description of the credential,this field is provided by the plugin of cloud service provider.
      */
     description: string;
 };
@@ -66,7 +66,7 @@ export namespace AbstractCredentialInfo {
     }
 
     /**
-     * The type of the credential, this field is provided by the the plugin of cloud service provider.
+     * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     export enum type {
         VARIABLES = 'variables',

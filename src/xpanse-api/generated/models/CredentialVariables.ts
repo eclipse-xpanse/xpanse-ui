@@ -16,7 +16,7 @@ export type CredentialVariables = {
      */
     csp: CredentialVariables.csp;
     /**
-     * The type of the credential, this field is provided by the the plugin of cloud service provider.
+     * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type: CredentialVariables.type;
     /**
@@ -24,7 +24,7 @@ export type CredentialVariables = {
      */
     name: string;
     /**
-     * The description of the credential,this field is provided by  he the plugin of cloud service provider.
+     * The description of the credential,this field is provided by the plugin of cloud service provider.
      */
     description: string;
     /**
@@ -53,7 +53,7 @@ export namespace CredentialVariables {
     }
 
     /**
-     * The type of the credential, this field is provided by the the plugin of cloud service provider.
+     * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     export enum type {
         VARIABLES = 'variables',
