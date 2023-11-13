@@ -171,6 +171,64 @@ export class ServiceService {
     }
 
     /**
+     * List all deployed services by a user.<br>Required role:<b> isv</b>
+     * @param categoryName category of the service
+     * @param cspName name of the cloud service provider
+     * @param serviceName name of the service
+     * @param serviceVersion version of the service
+     * @param serviceState deployment state of the service
+     * @returns ServiceVo OK
+     * @throws ApiError
+     */
+    public static listDeployedServicesOfIsv(
+        categoryName?:
+            | 'ai'
+            | 'compute'
+            | 'container'
+            | 'storage'
+            | 'network'
+            | 'database'
+            | 'mediaService'
+            | 'security'
+            | 'middleware'
+            | 'others',
+        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        serviceName?: string,
+        serviceVersion?: string,
+        serviceState?:
+            | 'deploying'
+            | 'deployment successful'
+            | 'deployment failed'
+            | 'destroying'
+            | 'destroy successful'
+            | 'destroy failed'
+            | 'migrating'
+            | 'migration_success'
+            | 'migration_failed'
+            | 'manual cleanup required'
+    ): CancelablePromise<Array<ServiceVo>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/isv/services',
+            query: {
+                categoryName: categoryName,
+                cspName: cspName,
+                serviceName: serviceName,
+                serviceVersion: serviceVersion,
+                serviceState: serviceState,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
      * Start a task to purge the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
      * @returns Response Accepted

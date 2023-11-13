@@ -13,7 +13,7 @@
  */
 export type CredentialVariable = {
     /**
-     * The name of the CredentialVariable,this field is provided by the the plugin of cloud service provider.
+     * The name of the CredentialVariable,this field is provided by the plugin of cloud service provider.
      */
     name: string;
     /**
