@@ -151,7 +151,10 @@ function RegisterPanel(): React.JSX.Element {
                     fileList={files.current}
                     onRemove={onRemove}
                     accept={'.yaml, .yml'}
-                    showUploadList={true}
+                    showUploadList={{
+                        showRemoveIcon: true,
+                        removeIcon: registerRequest.isPending,
+                    }}
                 >
                     <Button
                         size={'large'}
