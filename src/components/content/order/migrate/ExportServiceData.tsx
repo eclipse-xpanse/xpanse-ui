@@ -4,8 +4,8 @@
  */
 
 import { Button, Space, Spin } from 'antd';
-import { MigrationSteps } from '../formElements/CommonTypes';
 import React, { useEffect, useState } from 'react';
+import { MigrationSteps } from '../types/MigrationSteps';
 
 export const ExportServiceData = ({
     isQueryLoading,

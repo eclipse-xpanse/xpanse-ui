@@ -6,27 +6,24 @@
 import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getBilling(
-    selectVersion: string,
     csp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
-    versionMapper: Map<string, UserOrderableServiceVo[]>
+    versionMapper: UserOrderableServiceVo[] | undefined
 ): Billing {
     let billing: Billing = {
         model: '' as string,
         period: 'daily' as Billing.period,
         currency: 'euro' as Billing.currency,
     };
-    versionMapper.forEach((v, k) => {
-        if (selectVersion === k) {
-            v.forEach((userOrderableServiceVo) => {
-                if (
-                    csp === userOrderableServiceVo.csp &&
-                    selectServiceHostingType === userOrderableServiceVo.serviceHostingType
-                ) {
-                    billing = userOrderableServiceVo.billing;
-                }
-            });
-        }
-    });
+    if (versionMapper) {
+        versionMapper.forEach((userOrderableServiceVo) => {
+            if (
+                csp === userOrderableServiceVo.csp &&
+                selectServiceHostingType === userOrderableServiceVo.serviceHostingType
+            ) {
+                billing = userOrderableServiceVo.billing;
+            }
+        });
+    }
     return billing;
 }

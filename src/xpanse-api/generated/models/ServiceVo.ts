@@ -41,6 +41,11 @@ export type ServiceVo = {
      * The state of the service
      */
     serviceDeploymentState: ServiceVo.serviceDeploymentState;
+
+    /**
+     * The state of the service
+     */
+    serviceHostingType: ServiceVo.serviceHostingType;
     /**
      * Time of register service.
      */
@@ -96,5 +101,10 @@ export namespace ServiceVo {
         MIGRATION_SUCCESS = 'migration_success',
         MIGRATION_FAILED = 'migration_failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
+    }
+
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 }

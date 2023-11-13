@@ -4,14 +4,14 @@
  */
 
 import { Button, Space } from 'antd';
-import { MigrationSteps } from '../formElements/CommonTypes';
+import { MigrationSteps } from '../types/MigrationSteps';
 import React, { useEffect, useState } from 'react';
 
 export const ImportServiceData = ({
     getCurrentMigrationStep,
 }: {
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const importDataContentDescription: string = 'The data import function is not yet implemented.';
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ImportServiceData);
 

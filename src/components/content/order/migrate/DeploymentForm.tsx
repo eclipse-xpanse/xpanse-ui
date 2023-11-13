@@ -5,17 +5,19 @@
 
 import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
-import { getDeployParams, MigrationSteps } from '../formElements/CommonTypes';
+import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
+import { MigrationSteps } from '../types/MigrationSteps';
 
-export const ShowDeploy = ({
+export const DeploymentForm = ({
     userOrderableServiceVoList,
     selectCsp,
+    selectServiceHostingType,
     selectArea,
     selectRegion,
     selectFlavor,
@@ -23,7 +25,8 @@ export const ShowDeploy = ({
     getDeployParameters,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: string;
+    selectCsp: UserOrderableServiceVo.csp;
+    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     selectArea: string;
     selectRegion: string;
     selectFlavor: string;
@@ -31,7 +34,14 @@ export const ShowDeploy = ({
     getDeployParameters: (createRequest: DeployRequest) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const props = getDeployParams(userOrderableServiceVoList, selectCsp, selectArea, selectRegion, selectFlavor);
+    const props = getDeployParams(
+        userOrderableServiceVoList,
+        selectCsp,
+        selectServiceHostingType,
+        selectArea,
+        selectRegion,
+        selectFlavor
+    );
 
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DeployServiceOnTheNewDestination

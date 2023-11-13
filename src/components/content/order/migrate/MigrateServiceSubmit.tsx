@@ -14,34 +14,35 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
-import {
-    getBilling,
-    getFlavorListByCsp,
-    getFlavorMapper,
-    MigrationStatus,
-    MigrationSteps,
-} from '../formElements/CommonTypes';
 import { currencyMapper } from '../../../utils/currency';
 import { useMigrateServiceQuery } from './useMigrateServiceQuery';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 import { cspMap } from '../types/CspLogo';
+import { Flavor } from '../types/Flavor';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getBilling } from '../formDataHelpers/billingHelper';
+import { MigrationStatus } from '../types/MigrationStatus';
+import { MigrationSteps } from '../types/MigrationSteps';
+import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
 
-export const MigrateService = ({
+export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
     selectCsp,
     selectArea,
     selectRegion,
     selectFlavor,
+    selectServiceHostingType,
     getCurrentMigrationStep,
     deployParams,
     currentSelectedService,
     getCurrentMigrationStepStatus,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: string;
+    selectCsp: UserOrderableServiceVo.csp;
     selectArea: string;
     selectRegion: string;
     selectFlavor: string;
+    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: ServiceVo | undefined;
@@ -56,14 +57,8 @@ export const MigrateService = ({
     );
 
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
-    const currentFlavorList: { value: string; label: string; price: string }[] = getFlavorListByCsp(
-        getFlavorMapper(userOrderableServiceVoList),
-        selectCsp
-    );
-    const currentBilling: Billing = getBilling(
-        userOrderableServiceVoList,
-        selectCsp.length === 0 ? CloudServiceProvider.name.OPENSTACK : selectCsp
-    );
+    const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
+    const currentBilling: Billing = getBilling(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
         if (flavorItem.value === selectFlavor) {
@@ -111,13 +106,7 @@ export const MigrateService = ({
                     <Image
                         width={200}
                         height={56}
-                        src={
-                            cspMap.get(
-                                selectCsp.length === 0
-                                    ? CloudServiceProvider.name.OPENSTACK
-                                    : (selectCsp as CloudServiceProvider.name)
-                            )?.logo
-                        }
+                        src={cspMap.get(selectCsp as unknown as CloudServiceProvider.name)?.logo}
                         alt={selectCsp}
                         preview={false}
                         fallback={
@@ -129,6 +118,14 @@ export const MigrateService = ({
                     <div className='service-type-option-info' />
                 </div>
             </div>
+            <br />
+            <ServiceHostingSelection
+                serviceHostingTypes={[selectServiceHostingType]}
+                disabledAlways={true}
+                previousSelection={undefined}
+            ></ServiceHostingSelection>
+            <br />
+            <br />
             <div className={'cloud-provider-tab-class content-title'}>
                 <Tabs type='card' size='middle' activeKey={selectArea} tabPosition={'top'} items={areaList} />
             </div>
