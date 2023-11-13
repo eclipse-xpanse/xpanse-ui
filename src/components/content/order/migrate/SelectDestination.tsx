@@ -4,12 +4,12 @@
  */
 
 import CspSelect from '../formElements/CspSelect';
-import { Billing, CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Select, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
 import { currencyMapper } from '../../../utils/currency';
-import { Area } from '../../../utils/Area';
+import { Area } from '../types/Area';
 import {
     filterAreaList,
     getBilling,
@@ -42,7 +42,7 @@ export const SelectDestination = ({
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
 }): JSX.Element => {
     const [selectCsp, setSelectCsp] = useState<string>('');
-    const [cspList, setCspList] = useState<CloudServiceProvider.name[]>([]);
+    const [cspList, setCspList] = useState<UserOrderableServiceVo.csp[]>([]);
 
     const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
     const [selectArea, setSelectArea] = useState<string>('');
@@ -76,9 +76,9 @@ export const SelectDestination = ({
 
     useEffect(() => {
         if (userOrderableServiceVoList.length > 0) {
-            const currentCspList: CloudServiceProvider.name[] = [];
+            const currentCspList: UserOrderableServiceVo.csp[] = [];
             userOrderableServiceVoList.forEach((v) => {
-                currentCspList.push(v.csp as unknown as CloudServiceProvider.name);
+                currentCspList.push(v.csp as unknown as UserOrderableServiceVo.csp);
             });
             let cspValue: string = currentCspList[0];
 

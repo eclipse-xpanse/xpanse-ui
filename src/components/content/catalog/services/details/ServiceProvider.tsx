@@ -15,13 +15,13 @@ import {
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Area } from '../../../../utils/Area';
+import { Area } from '../../../order/types/Area';
 import UpdateService from '../update/UpdateService';
 import UnregisterService from '../unregister/UnregisterService';
-import { cspMap } from '../../../order/formElements/CspSelect';
 import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
+import { cspMap } from '../../../order/types/CspLogo';
 
 let lastServiceName: string = '';
 

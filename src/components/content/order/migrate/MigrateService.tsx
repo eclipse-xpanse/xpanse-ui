@@ -14,7 +14,6 @@ import {
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
-import { cspMap } from '../formElements/CspSelect';
 import {
     getBilling,
     getFlavorListByCsp,
@@ -25,6 +24,7 @@ import {
 import { currencyMapper } from '../../../utils/currency';
 import { useMigrateServiceQuery } from './useMigrateServiceQuery';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
+import { cspMap } from '../types/CspLogo';
 
 export const MigrateService = ({
     userOrderableServiceVoList,

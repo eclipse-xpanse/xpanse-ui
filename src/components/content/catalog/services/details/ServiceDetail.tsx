@@ -6,7 +6,7 @@
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { Area } from '../../../../utils/Area';
+import { Area } from '../../../order/types/Area';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
 import React from 'react';
