@@ -66,5 +66,6 @@ export namespace Response {
         DUPLICATE_POLICY = 'Duplicate Policy',
         POLICY_VALIDATION_FAILED = 'Policy Validation Failed',
         POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
+        CURRENT_LOGIN_USER_NO_FOUND = 'Current Login User No Found',
     }
 }

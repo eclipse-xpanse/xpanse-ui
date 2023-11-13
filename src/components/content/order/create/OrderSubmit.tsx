@@ -44,6 +44,7 @@ export interface OrderSubmitProps {
     csp: DeployRequest.csp;
     flavor: string;
     params: DeployParam[];
+    serviceHostingType: DeployRequest.serviceHostingType;
 }
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
@@ -76,6 +77,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             serviceName: state.name,
             version: state.version,
             customerServiceName: deployParamsRef.current.Name as string,
+            serviceHostingType: state.serviceHostingType,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {

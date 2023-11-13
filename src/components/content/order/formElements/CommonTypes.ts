@@ -11,7 +11,7 @@ import {
     Region,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Area } from '../../../utils/Area';
+import { Area } from '../types/Area';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 
 export interface DeployParam {
@@ -150,6 +150,7 @@ export const getDeployParams = (
         csp: service?.csp as DeployRequest.csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
+        serviceHostingType: service ? service.serviceHostingType : DeployRequest.serviceHostingType.SELF,
     };
 
     if (service !== undefined) {

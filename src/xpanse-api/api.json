@@ -3,7 +3,7 @@
     "info": {
         "title": "Xpanse API",
         "description": "RESTful Services to interact with Xpanse runtime",
-        "version": "1.0.2-SNAPSHOT"
+        "version": "1.0.3-SNAPSHOT"
     },
     "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
     "security": [
@@ -25,6 +25,7 @@
             "name": "Service Catalog",
             "description": "APIs to query service templates which are available for the user to order."
         },
+        { "name": "Credentials Management", "description": "APIs for managing isv's cloud provider credentials" },
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
     "paths": {
@@ -59,6 +60,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -91,6 +96,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -130,6 +139,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -182,6 +195,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -222,6 +239,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -271,6 +292,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -336,6 +361,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -377,6 +406,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -414,6 +447,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -425,11 +462,11 @@
                 }
             }
         },
-        "/xpanse/credentials": {
+        "/xpanse/isv/credentials": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listCredentials",
+                "description": "Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> isv</b>",
+                "operationId": "getIsvCloudCredentials",
                 "parameters": [
                     {
                         "name": "cspName",
@@ -478,6 +515,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -497,8 +538,8 @@
             },
             "put": {
                 "tags": ["Credentials Management"],
-                "description": "Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "updateCredential",
+                "description": "Update the user credentials used for ISV to connect to the cloud service provider.<br>Required role:<b> isv</b>",
+                "operationId": "updateIsvCloudCredential",
                 "requestBody": {
                     "content": {
                         "application/json": { "schema": { "$ref": "#/components/schemas/CreateCredential" } }
@@ -520,6 +561,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -531,8 +576,8 @@
             },
             "post": {
                 "tags": ["Credentials Management"],
-                "description": "Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "addCredential",
+                "description": "Add the user credentials for the ISV role used to connect to the cloud service provider.<br>Required role:<b> isv</b>",
+                "operationId": "addIsvCloudCredential",
                 "requestBody": {
                     "content": {
                         "application/json": { "schema": { "$ref": "#/components/schemas/CreateCredential" } }
@@ -556,6 +601,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -565,8 +614,8 @@
             },
             "delete": {
                 "tags": ["Credentials Management"],
-                "description": "Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "deleteCredential",
+                "description": "Delete the credentials of the user in the USER role to connect to the cloud service provider.<br>Required role:<b> isv</b>",
+                "operationId": "deleteIsvCloudCredential",
                 "parameters": [
                     {
                         "name": "cspName",
@@ -620,6 +669,231 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "204": { "description": "No Content" }
+                }
+            }
+        },
+        "/xpanse/credentials": {
+            "get": {
+                "tags": ["Credentials Management"],
+                "description": "List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "getUserCloudCredentials",
+                "parameters": [
+                    {
+                        "name": "cspName",
+                        "in": "query",
+                        "description": "The cloud service provider.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "scs",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "The type of credential.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": { "$ref": "#/components/schemas/AbstractCredentialInfo" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": ["Credentials Management"],
+                "description": "Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "updateUserCloudCredential",
+                "requestBody": {
+                    "content": {
+                        "application/json": { "schema": { "$ref": "#/components/schemas/CreateCredential" } }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "204": { "description": "No Content" }
+                }
+            },
+            "post": {
+                "tags": ["Credentials Management"],
+                "description": "Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "addUserCloudCredential",
+                "requestBody": {
+                    "content": {
+                        "application/json": { "schema": { "$ref": "#/components/schemas/CreateCredential" } }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "204": { "description": "No Content" }
+                }
+            },
+            "delete": {
+                "tags": ["Credentials Management"],
+                "description": "Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
+                "operationId": "deleteUserCloudCredential",
+                "parameters": [
+                    {
+                        "name": "cspName",
+                        "in": "query",
+                        "description": "The cloud service provider.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "huawei",
+                                "flexibleEngine",
+                                "openstack",
+                                "scs",
+                                "alicloud",
+                                "aws",
+                                "azure",
+                                "google"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "The type of credential.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        }
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "The name of of credential.",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -729,6 +1003,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -768,6 +1046,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -803,6 +1085,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -875,6 +1161,17 @@
                         "description": "version of the service",
                         "required": false,
                         "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "serviceHostingType",
+                        "in": "query",
+                        "description": "who hosts ths cloud resources",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "Defines which cloud service account is used for deploying cloud resources.",
+                            "enum": ["self", "service-vendor"]
+                        }
                     }
                 ],
                 "responses": {
@@ -892,6 +1189,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -940,6 +1241,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -984,6 +1289,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1017,6 +1326,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1054,6 +1367,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1102,6 +1419,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1134,6 +1455,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1170,13 +1495,17 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "200": {
                         "description": "OK",
-                        "content": { "application/json": { "schema": { "type": "object" } } }
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PolicyVo" } } }
                     }
                 }
             },
@@ -1200,6 +1529,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1286,6 +1619,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1321,6 +1658,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1365,6 +1706,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1398,7 +1743,7 @@
         "/xpanse/credentials/openapi/{csp}/{type}": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "Returns the OpenAPI document for adding a credential.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "Returns the OpenAPI document for adding a credential.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>",
                 "operationId": "getCredentialOpenApi",
                 "parameters": [
                     {
@@ -1448,6 +1793,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1462,8 +1811,8 @@
         "/xpanse/credentials/capabilities": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List the credential capabilities defined by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listCredentialCapabilities",
+                "description": "List the credential capabilities defined by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>",
+                "operationId": "getUserCloudCredentialCapabilities",
                 "parameters": [
                     {
                         "name": "cspName",
@@ -1519,6 +1868,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1540,8 +1893,8 @@
         "/xpanse/credential_types": {
             "get": {
                 "tags": ["Credentials Management"],
-                "description": "List the credential types supported by the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>",
-                "operationId": "listCredentialTypes",
+                "description": "List the credential types supported by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>",
+                "operationId": "getUserCloudCredentialTypes",
                 "parameters": [
                     {
                         "name": "cspName",
@@ -1578,6 +1931,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1660,6 +2017,17 @@
                         "description": "version of the service",
                         "required": false,
                         "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "serviceHostingType",
+                        "in": "query",
+                        "description": "who hosts ths cloud resources",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "description": "Defines which cloud service account is used for deploying cloud resources.",
+                            "enum": ["self", "service-vendor"]
+                        }
                     }
                 ],
                 "responses": {
@@ -1677,6 +2045,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1734,6 +2106,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1768,6 +2144,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1819,6 +2199,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1854,6 +2238,10 @@
                         "description": "Forbidden",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
@@ -1883,6 +2271,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1944,7 +2336,8 @@
                             "Policy Not Found",
                             "Duplicate Policy",
                             "Policy Validation Failed",
-                            "Policy Evaluation Failed"
+                            "Policy Evaluation Failed",
+                            "Current Login User No Found"
                         ]
                     },
                     "details": {
@@ -2077,6 +2470,7 @@
                     "icon",
                     "name",
                     "namespace",
+                    "serviceHostingType",
                     "serviceVersion",
                     "version"
                 ],
@@ -2111,7 +2505,12 @@
                         "description": "The flavors of the managed service",
                         "items": { "$ref": "#/components/schemas/Flavor" }
                     },
-                    "billing": { "$ref": "#/components/schemas/Billing" }
+                    "billing": { "$ref": "#/components/schemas/Billing" },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    }
                 }
             },
             "Region": {
@@ -2155,6 +2554,7 @@
                     "name",
                     "namespace",
                     "regions",
+                    "serviceHostingType",
                     "serviceRegistrationState",
                     "variables",
                     "version"
@@ -2208,6 +2608,11 @@
                         "items": { "$ref": "#/components/schemas/Flavor" }
                     },
                     "billing": { "$ref": "#/components/schemas/Billing" },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
                     "createTime": {
                         "type": "string",
                         "description": "createTime of the registered service.",
@@ -2325,7 +2730,7 @@
                 "description": "The variables list of the credential"
             },
             "DeployRequest": {
-                "required": ["category", "csp", "flavor", "region", "serviceName", "version"],
+                "required": ["category", "csp", "flavor", "region", "serviceHostingType", "serviceName", "version"],
                 "type": "object",
                 "properties": {
                     "category": {
@@ -2357,6 +2762,11 @@
                         "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
                     "serviceRequestProperties": {
                         "type": "object",
                         "additionalProperties": true,
@@ -2365,7 +2775,16 @@
                 }
             },
             "MigrateRequest": {
-                "required": ["category", "csp", "flavor", "id", "region", "serviceName", "version"],
+                "required": [
+                    "category",
+                    "csp",
+                    "flavor",
+                    "id",
+                    "region",
+                    "serviceHostingType",
+                    "serviceName",
+                    "version"
+                ],
                 "type": "object",
                 "properties": {
                     "category": {
@@ -2397,6 +2816,11 @@
                         "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
                     "serviceRequestProperties": {
                         "type": "object",
                         "additionalProperties": true,
@@ -2406,7 +2830,7 @@
                 }
             },
             "PolicyCreateRequest": {
-                "required": ["csp", "policy"],
+                "required": ["csp", "enabled", "policy"],
                 "type": "object",
                 "properties": {
                     "csp": {
@@ -2414,7 +2838,11 @@
                         "description": "The csp which the policy belongs to.",
                         "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
                     },
-                    "policy": { "type": "string", "description": "The policy." }
+                    "policy": { "type": "string", "description": "The policy." },
+                    "enabled": {
+                        "type": "boolean",
+                        "description": "Is the policy enabled. true:enabled;false:disabled."
+                    }
                 }
             },
             "WorkFlowTask": {
@@ -2454,13 +2882,11 @@
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
-                    "userId",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
-                    "userId": { "type": "string", "description": "The id of the user who deployed the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -2549,13 +2975,11 @@
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
-                    "userId",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
                     "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
-                    "userId": { "type": "string", "description": "The id of the user who deployed the service" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -2683,48 +3107,6 @@
                 },
                 "description": "The list of the metric items."
             },
-            "BackendSystemStatus": {
-                "required": ["backendSystemType", "healthStatus", "name"],
-                "type": "object",
-                "properties": {
-                    "backendSystemType": {
-                        "type": "string",
-                        "description": "The type of backend system.",
-                        "enum": ["IdentityProvider", "Database", "Terraform Boot", "PolicyMan"]
-                    },
-                    "name": { "type": "string", "description": "The name of backend system." },
-                    "healthStatus": {
-                        "type": "string",
-                        "description": "The health status of backend system.",
-                        "enum": ["OK", "NOK"]
-                    },
-                    "endpoint": {
-                        "type": "string",
-                        "description": "The endpoint of backend system. This filed is shown when the user have role 'admin' otherwise it is null."
-                    },
-                    "details": {
-                        "type": "string",
-                        "description": "The details why health is not ok.This filed is shown when the user have role 'admin' otherwise it is null."
-                    }
-                },
-                "description": "The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled."
-            },
-            "SystemStatus": {
-                "required": ["backendSystemStatuses", "healthStatus"],
-                "type": "object",
-                "properties": {
-                    "healthStatus": {
-                        "type": "string",
-                        "description": "The health status of Xpanse api service.",
-                        "enum": ["OK", "NOK"]
-                    },
-                    "backendSystemStatuses": {
-                        "type": "array",
-                        "description": "The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled.",
-                        "items": { "$ref": "#/components/schemas/BackendSystemStatus" }
-                    }
-                }
-            },
             "AbstractCredentialInfo": {
                 "required": ["csp", "description", "name", "type"],
                 "type": "object",
@@ -2795,6 +3177,48 @@
                     }
                 }
             },
+            "BackendSystemStatus": {
+                "required": ["backendSystemType", "healthStatus", "name"],
+                "type": "object",
+                "properties": {
+                    "backendSystemType": {
+                        "type": "string",
+                        "description": "The type of backend system.",
+                        "enum": ["IdentityProvider", "Database", "Terraform Boot", "PolicyMan"]
+                    },
+                    "name": { "type": "string", "description": "The name of backend system." },
+                    "healthStatus": {
+                        "type": "string",
+                        "description": "The health status of backend system.",
+                        "enum": ["OK", "NOK"]
+                    },
+                    "endpoint": {
+                        "type": "string",
+                        "description": "The endpoint of backend system. This filed is shown when the user have role 'admin' otherwise it is null."
+                    },
+                    "details": {
+                        "type": "string",
+                        "description": "The details why health is not ok.This filed is shown when the user have role 'admin' otherwise it is null."
+                    }
+                },
+                "description": "The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled."
+            },
+            "SystemStatus": {
+                "required": ["backendSystemStatuses", "healthStatus"],
+                "type": "object",
+                "properties": {
+                    "healthStatus": {
+                        "type": "string",
+                        "description": "The health status of Xpanse api service.",
+                        "enum": ["OK", "NOK"]
+                    },
+                    "backendSystemStatuses": {
+                        "type": "array",
+                        "description": "The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled.",
+                        "items": { "$ref": "#/components/schemas/BackendSystemStatus" }
+                    }
+                }
+            },
             "FlavorBasic": {
                 "required": ["fixedPrice", "name"],
                 "type": "object",
@@ -2815,6 +3239,7 @@
                     "id",
                     "name",
                     "regions",
+                    "serviceHostingType",
                     "variables",
                     "version"
                 ],
@@ -2862,6 +3287,11 @@
                         "items": { "$ref": "#/components/schemas/FlavorBasic" }
                     },
                     "billing": { "$ref": "#/components/schemas/Billing" },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
                     "links": { "type": "array", "items": { "$ref": "#/components/schemas/Link" } }
                 }
             },

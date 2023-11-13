@@ -28,7 +28,8 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { cspMap } from '../order/formElements/CspSelect';
+import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
+import { cspMap } from '../order/types/CspLogo';
 
 function Credential(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -39,6 +40,7 @@ function Credential(): React.JSX.Element {
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [abstractCredentialInfoList, setAbstractCredentialInfoList] = useState<AbstractCredentialInfo[]>([]);
     const [credentialDetails, setCredentialDetails] = useState<CredentialVariable[]>([]);
+    const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
     const [createCredential, setCreateCredential] = useState<CreateCredential>({
         csp: '' as CredentialVariables.csp,
         description: '',
@@ -49,10 +51,19 @@ function Credential(): React.JSX.Element {
     });
 
     const credentialsQuery = useQuery({
-        queryKey: ['credentialsQuery'],
-        queryFn: () => CredentialsManagementService.listCredentials(),
+        queryKey: ['credentialsQuery', currentRole],
+        queryFn: () => getCredentialsByRole(),
         staleTime: 60000,
     });
+    const getCredentialsByRole = () => {
+        if (currentRole === 'user') {
+            return CredentialsManagementService.getUserCloudCredentials();
+        } else if (currentRole === 'isv') {
+            return CredentialsManagementService.getIsvCloudCredentials();
+        } else {
+            return [];
+        }
+    };
 
     useEffect(() => {
         const credentials: AbstractCredentialInfo[] | undefined = credentialsQuery.data;
@@ -74,13 +85,7 @@ function Credential(): React.JSX.Element {
     }, [credentialsQuery.error]);
 
     const deleteCredentialRequest = useMutation({
-        mutationFn: (credentialVariables: CredentialVariables) => {
-            return CredentialsManagementService.deleteCredential(
-                credentialVariables.csp,
-                credentialVariables.type,
-                credentialVariables.name
-            );
-        },
+        mutationFn: (credentialVariables: CredentialVariables) => deleteCredentialByRole(credentialVariables),
         onSuccess: () => {
             getTipInfo('success', 'Deleting Credential Successful.');
             setIsRefresh(false);
@@ -95,6 +100,22 @@ function Credential(): React.JSX.Element {
             }
         },
     });
+
+    const deleteCredentialByRole = (credentialVariables: CredentialVariables) => {
+        if (currentRole === 'user') {
+            return CredentialsManagementService.deleteUserCloudCredential(
+                credentialVariables.csp,
+                credentialVariables.type,
+                credentialVariables.name
+            );
+        } else {
+            return CredentialsManagementService.deleteIsvCloudCredential(
+                credentialVariables.csp,
+                credentialVariables.type,
+                credentialVariables.name
+            );
+        }
+    };
 
     const columns: ColumnsType<AbstractCredentialInfo> = [
         {
@@ -255,7 +276,7 @@ function Credential(): React.JSX.Element {
                     destroyOnClose={true}
                     footer={[]}
                 >
-                    <AddCredential onCancel={onCancel} credentialsQuery={credentialsQuery} />
+                    <AddCredential role={currentRole} onCancel={onCancel} credentialsQuery={credentialsQuery} />
                 </Modal>
                 <Modal
                     width={1000}
@@ -267,6 +288,7 @@ function Credential(): React.JSX.Element {
                     footer={[]}
                 >
                     <UpdateCredential
+                        role={currentRole}
                         createCredential={createCredential}
                         onUpdateCancel={onUpdateCancel}
                         credentialsQuery={credentialsQuery}

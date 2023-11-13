@@ -21,7 +21,6 @@ import { sortVersionNum } from '../../utils/Sort';
 import { MyServiceDetails } from './MyServiceDetails';
 import { Migrate } from '../order/migrate/Migrate';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { cspMap } from '../order/formElements/CspSelect';
 import { MyServiceStatus } from './MyServiceStatus';
 import { useOrderFormStore } from '../order/store/OrderFormStore';
 import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPolling';
@@ -31,6 +30,7 @@ import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPo
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 import MyServicesError from './MyServicesError';
 import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
+import { cspMap } from '../order/types/CspLogo';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();

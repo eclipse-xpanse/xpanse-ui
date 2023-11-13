@@ -17,6 +17,10 @@ export type PolicyCreateRequest = {
      * The policy.
      */
     policy: string;
+    /**
+     * Is the policy enabled. true:enabled;false:disabled.
+     */
+    enabled: boolean;
 };
 
 export namespace PolicyCreateRequest {

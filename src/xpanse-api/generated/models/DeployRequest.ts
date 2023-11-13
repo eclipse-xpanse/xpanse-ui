@@ -38,6 +38,10 @@ export type DeployRequest = {
      */
     flavor: string;
     /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: DeployRequest.serviceHostingType;
+    /**
      * The properties for the requested service
      */
     serviceRequestProperties?: Record<string, any>;
@@ -72,5 +76,13 @@ export namespace DeployRequest {
         AWS = 'aws',
         AZURE = 'azure',
         GOOGLE = 'google',
+    }
+
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 }

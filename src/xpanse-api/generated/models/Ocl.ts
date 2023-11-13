@@ -49,6 +49,10 @@ export type Ocl = {
      */
     flavors: Array<Flavor>;
     billing: Billing;
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: Ocl.serviceHostingType;
 };
 
 export namespace Ocl {
@@ -66,5 +70,13 @@ export namespace Ocl {
         SECURITY = 'security',
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
+    }
+
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 }

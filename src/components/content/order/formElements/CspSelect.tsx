@@ -3,35 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import {
-    AlibabaLogo,
-    AWSLogo,
-    AzureLogo,
-    FlexibleEngineLogo,
-    HuaWeiLogo,
-    OpenStackLogo,
-    GoogleLogo,
-    ScsLogo,
-} from './CspLogo';
 import { Image } from 'antd';
-import { CloudServiceProvider } from '../../../../xpanse-api/generated';
-
-interface CSP {
-    name: string;
-    icon?: string;
-    logo?: string;
-}
-
-export const cspMap = new Map<CloudServiceProvider.name, CSP>([
-    [CloudServiceProvider.name.HUAWEI, { name: 'Huawei', logo: HuaWeiLogo }],
-    [CloudServiceProvider.name.AZURE, { name: 'Azure', logo: AzureLogo }],
-    [CloudServiceProvider.name.ALICLOUD, { name: 'Alibaba', logo: AlibabaLogo }],
-    [CloudServiceProvider.name.OPENSTACK, { name: 'Openstack', logo: OpenStackLogo }],
-    [CloudServiceProvider.name.FLEXIBLE_ENGINE, { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
-    [CloudServiceProvider.name.AWS, { name: 'aws', logo: AWSLogo }],
-    [CloudServiceProvider.name.GOOGLE, { name: 'Google', logo: GoogleLogo }],
-    [CloudServiceProvider.name.SCS, { name: 'SCS', logo: ScsLogo }],
-]);
+import { CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import React from 'react';
+import { cspMap } from '../types/CspLogo';
 
 export default function CspSelect({
     selectCsp,
@@ -39,9 +14,9 @@ export default function CspSelect({
     onChangeHandler,
 }: {
     selectCsp: string;
-    cspList: CloudServiceProvider.name[];
-    onChangeHandler: (csp: string) => void;
-}): JSX.Element {
+    cspList: UserOrderableServiceVo.csp[];
+    onChangeHandler: (csp: UserOrderableServiceVo.csp) => void;
+}): React.JSX.Element {
     return (
         <>
             <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
@@ -62,7 +37,7 @@ export default function CspSelect({
                             <Image
                                 width={200}
                                 height={56}
-                                src={cspMap.get(item)?.logo}
+                                src={cspMap.get(item as unknown as CloudServiceProvider.name)?.logo}
                                 alt={item}
                                 preview={false}
                                 fallback={'https://img.shields.io/badge/-' + item + '-gray'}

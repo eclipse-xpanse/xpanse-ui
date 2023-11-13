@@ -18,16 +18,18 @@ import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, UseQueryResult } from '@tanstack/react-query';
-import { cspMap } from '../order/formElements/CspSelect';
 import { CredentialApiDoc } from './CredentialApiDoc';
+import { cspMap } from '../order/types/CspLogo';
 
 function UpdateCredential({
+    role,
     createCredential,
     credentialsQuery,
     onUpdateCancel,
 }: {
+    role: string | undefined;
     createCredential: CreateCredential;
-    credentialsQuery: UseQueryResult<never[]>;
+    credentialsQuery: UseQueryResult<never[] | undefined>;
     onUpdateCancel: () => void;
 }): React.JSX.Element {
     const [form] = Form.useForm();
@@ -46,9 +48,7 @@ function UpdateCredential({
     };
 
     const updateCredentialRequest = useMutation({
-        mutationFn: (createCredential: CreateCredential) => {
-            return CredentialsManagementService.updateCredential(createCredential);
-        },
+        mutationFn: (createCredential: CreateCredential) => updateCredentialByRole(createCredential),
         onSuccess: () => {
             getTipInfo('success', 'Updating Credential Successful.');
             setDisable(true);
@@ -64,6 +64,14 @@ function UpdateCredential({
             }
         },
     });
+
+    const updateCredentialByRole = (createCredential: CreateCredential) => {
+        if (role === 'user') {
+            return CredentialsManagementService.updateUserCloudCredential(createCredential);
+        } else {
+            return CredentialsManagementService.updateIsvCloudCredential(createCredential);
+        }
+    };
 
     const submit = (createCredential: CreateCredential) => {
         setUpdateLoading(true);
@@ -124,7 +132,7 @@ function UpdateCredential({
         {
             title: 'value',
             dataIndex: 'value',
-            render: (value: string, record, index) =>
+            render: (_value: string, record, index) =>
                 record.isMandatory ? (
                     <Form.Item
                         name='value'

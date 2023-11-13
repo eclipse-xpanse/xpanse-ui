@@ -48,7 +48,7 @@ function App(): React.JSX.Element {
                         path={homePageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'all'}>
+                                <Protected allowedRole={['isv', 'user', 'admin']}>
                                     <Home />
                                 </Protected>
                             </OidcSecure>
@@ -58,7 +58,7 @@ function App(): React.JSX.Element {
                         path={''}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'all'}>
+                                <Protected allowedRole={['isv', 'user', 'admin']}>
                                     <Home />
                                 </Protected>
                             </OidcSecure>
@@ -70,7 +70,7 @@ function App(): React.JSX.Element {
                                 path={path}
                                 element={
                                     <OidcSecure>
-                                        <Protected allowedRole={'isv'}>
+                                        <Protected allowedRole={['isv']}>
                                             <RegisterPanel />
                                         </Protected>
                                     </OidcSecure>
@@ -82,7 +82,7 @@ function App(): React.JSX.Element {
                         path={catalogPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'isv'}>
+                                <Protected allowedRole={['isv']}>
                                     <CatalogMainPage />
                                 </Protected>
                             </OidcSecure>
@@ -92,7 +92,7 @@ function App(): React.JSX.Element {
                         path={orderPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user']}>
                                     <OrderSubmitPage />
                                 </Protected>
                             </OidcSecure>
@@ -102,7 +102,7 @@ function App(): React.JSX.Element {
                         path={servicesPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user']}>
                                     <Services />
                                 </Protected>
                             </OidcSecure>
@@ -112,7 +112,7 @@ function App(): React.JSX.Element {
                         path={myServicesRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user']}>
                                     <MyServices />
                                 </Protected>
                             </OidcSecure>
@@ -122,7 +122,7 @@ function App(): React.JSX.Element {
                         path={createServicePageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user']}>
                                     <CreateService />
                                 </Protected>
                             </OidcSecure>
@@ -132,7 +132,7 @@ function App(): React.JSX.Element {
                         path={monitorPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user']}>
                                     <Monitor />
                                 </Protected>
                             </OidcSecure>
@@ -142,7 +142,7 @@ function App(): React.JSX.Element {
                         path={credentialPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'user'}>
+                                <Protected allowedRole={['user', 'isv']}>
                                     <Credential />
                                 </Protected>
                             </OidcSecure>
@@ -152,7 +152,7 @@ function App(): React.JSX.Element {
                         path={healthCheckPageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={'admin'}>
+                                <Protected allowedRole={['admin']}>
                                     <HealthCheckStatus />
                                 </Protected>
                             </OidcSecure>

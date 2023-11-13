@@ -36,6 +36,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -58,6 +59,7 @@ export class PoliciesManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -80,6 +82,7 @@ export class PoliciesManagementService {
             mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -91,10 +94,10 @@ export class PoliciesManagementService {
     /**
      * Get the details of the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
-     * @returns any OK
+     * @returns PolicyVo OK
      * @throws ApiError
      */
-    public static getPolicyDetails(id: string): CancelablePromise<Record<string, any>> {
+    public static getPolicyDetails(id: string): CancelablePromise<PolicyVo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/policies/{id}',
@@ -103,6 +106,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
@@ -126,6 +130,7 @@ export class PoliciesManagementService {
             },
             errors: {
                 400: `Bad Request`,
+                401: `Unauthorized`,
                 403: `Forbidden`,
                 422: `Unprocessable Entity`,
                 500: `Internal Server Error`,
