@@ -8,17 +8,13 @@ import { Area } from '../types/Area';
 import { Tab } from 'rc-tabs/lib/interface';
 
 export function getAreasForSelectedVersionHostingTypeAndCsp(
-    selectVersion: string,
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
-    versionMapper: Map<string, UserOrderableServiceVo[]>
+    userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Area[] {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
-    versionMapper.forEach((v, k) => {
-        if (k !== selectVersion) {
-            return [];
-        }
-        for (const userOrderableServiceVo of v) {
+    if (userOrderableServices) {
+        userOrderableServices.forEach((userOrderableServiceVo) => {
             if (
                 userOrderableServiceVo.csp === selectCsp &&
                 userOrderableServiceVo.serviceHostingType === selectServiceHostingType
@@ -44,22 +40,20 @@ export function getAreasForSelectedVersionHostingTypeAndCsp(
                 });
                 areaMapper.set(userOrderableServiceVo.csp, areas);
             }
-        }
-    });
+        });
+    }
     return areaMapper.get(selectCsp) ?? [];
 }
 
 export function convertAreasToTabs(
-    selectVersion: string,
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
-    versionMapper: Map<string, UserOrderableServiceVo[]>
+    userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Tab[] {
     const areaList: Area[] = getAreasForSelectedVersionHostingTypeAndCsp(
-        selectVersion,
         selectCsp,
         selectServiceHostingType,
-        versionMapper
+        userOrderableServices
     );
     let areaTabs: Tab[] = [];
     if (areaList.length > 0) {

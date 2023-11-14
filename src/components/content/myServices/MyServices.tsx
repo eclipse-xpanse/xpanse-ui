@@ -511,19 +511,21 @@ function MyServices(): React.JSX.Element {
             >
                 <MyServiceDetails serviceId={serviceIdInModal} />
             </Modal>
-            <Modal
-                open={isMigrateModalOpen}
-                title={title}
-                closable={true}
-                maskClosable={false}
-                destroyOnClose={true}
-                footer={null}
-                onCancel={handleCancelMigrateModel}
-                width={1400}
-                mask={true}
-            >
-                <Migrate currentSelectedService={currentServiceVo} />
-            </Modal>
+            {currentServiceVo ? (
+                <Modal
+                    open={isMigrateModalOpen}
+                    title={title}
+                    closable={true}
+                    maskClosable={false}
+                    destroyOnClose={true}
+                    footer={null}
+                    onCancel={handleCancelMigrateModel}
+                    width={1400}
+                    mask={true}
+                >
+                    <Migrate currentSelectedService={currentServiceVo} />
+                </Modal>
+            ) : null}
 
             <div>
                 <Button

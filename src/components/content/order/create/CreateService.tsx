@@ -40,19 +40,19 @@ function CreateService(): React.JSX.Element {
     const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp | undefined>(undefined);
     const [cspList, setCspList] = useState<UserOrderableServiceVo.csp[]>([]);
 
-    const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
+    const [areaList, setAreaList] = useState<Tab[]>([]);
     const [selectArea, setSelectArea] = useState<string>('');
 
-    const [regionList, setRegionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
+    const [regionList, setRegionList] = useState<Region[]>([]);
     const [selectRegion, setSelectRegion] = useState<string>('');
 
-    const [flavorList, setFlavorList] = useState<Flavor[]>([{ value: '', label: '', price: '' }]);
+    const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
-    const [selectServiceHostType, setSelectServiceHostType] = useState<UserOrderableServiceVo.serviceHostingType>(
-        UserOrderableServiceVo.serviceHostingType.SELF
-    );
+    const [selectServiceHostType, setSelectServiceHostType] = useState<
+        UserOrderableServiceVo.serviceHostingType | undefined
+    >(undefined);
     const [serviceHostTypes, setServiceHostTypes] = useState<UserOrderableServiceVo.serviceHostingType[]>([]);
 
     const orderableServicesQuery = userOrderableServicesQuery(
@@ -82,71 +82,66 @@ function CreateService(): React.JSX.Element {
                 const currentVersionList = getSortedVersionList(currentVersions);
                 const currentCspList = getCspListForVersion(latestVersion, versionMapper.current);
                 let serviceHostingTypes = getAvailableServiceHostingTypes(
-                    latestVersion,
                     currentCspList[0],
-                    versionMapper.current
+                    versionMapper.current.get(latestVersion)
                 );
                 let currentFlavorList = getFlavorList(
-                    latestVersion,
                     currentCspList[0],
                     serviceHostingTypes[0],
-                    versionMapper.current
+                    versionMapper.current.get(latestVersion)
                 );
                 setVersionList(currentVersionList);
                 setSelectVersion(latestVersion);
                 setCspList(currentCspList);
                 setFlavorList(currentFlavorList);
                 let currentAreaList: Tab[] = convertAreasToTabs(
-                    latestVersion,
                     currentCspList[0],
                     serviceHostingTypes[0],
-                    versionMapper.current
+                    versionMapper.current.get(latestVersion)
                 );
                 let currentRegionList: Region[] = getRegionDropDownValues(
-                    latestVersion,
                     currentCspList[0],
                     serviceHostingTypes[0],
                     currentAreaList[0]?.key ?? '',
-                    versionMapper.current
+                    versionMapper.current.get(latestVersion)
                 );
                 let currentBilling = getBilling(
-                    latestVersion,
                     currentCspList[0],
                     serviceHostingTypes[0],
-                    versionMapper.current
+                    versionMapper.current.get(latestVersion)
                 );
                 let cspValue: UserOrderableServiceVo.csp = currentCspList[0];
                 let areaValue: string = currentAreaList[0]?.key ?? '';
                 let regionValue: string = currentRegionList[0]?.value ?? '';
                 let flavorValue: string = currentFlavorList[0]?.value ?? '';
                 let priceValue: string = currentFlavorList[0]?.price ?? '';
-
+                let serviceHostingTypeValue = selectServiceHostType ?? serviceHostingTypes[0];
                 if (location.state) {
                     const serviceInfo: OrderSubmitProps = location.state as OrderSubmitProps;
+                    serviceHostingTypes = getAvailableServiceHostingTypes(
+                        serviceInfo.csp,
+                        versionMapper.current.get(serviceInfo.version)
+                    );
                     currentAreaList = convertAreasToTabs(
-                        serviceInfo.version,
                         serviceInfo.csp,
                         serviceInfo.serviceHostingType,
-                        versionMapper.current
+                        versionMapper.current.get(serviceInfo.version)
                     );
                     currentRegionList = getRegionDropDownValues(
-                        serviceInfo.version,
                         serviceInfo.csp,
                         serviceInfo.serviceHostingType,
                         serviceInfo.area,
-                        versionMapper.current
+                        versionMapper.current.get(serviceInfo.version)
                     );
                     currentFlavorList = getFlavorList(
-                        serviceInfo.version,
                         serviceInfo.csp,
                         serviceInfo.serviceHostingType,
-                        versionMapper.current
+                        versionMapper.current.get(serviceInfo.version)
                     );
                     currentBilling = getBilling(
-                        serviceInfo.version,
                         serviceInfo.csp,
                         serviceInfo.serviceHostingType,
-                        versionMapper.current
+                        versionMapper.current.get(serviceInfo.version)
                     );
                     cspValue = serviceInfo.csp;
                     areaValue = serviceInfo.area;
@@ -157,7 +152,7 @@ function CreateService(): React.JSX.Element {
                             priceValue = flavorItem.price;
                         }
                     });
-                    serviceHostingTypes = [serviceInfo.serviceHostingType];
+                    serviceHostingTypeValue = serviceInfo.serviceHostingType;
                 }
                 const currencyValue: string = currencyMapper[currentBilling.currency];
                 setSelectCsp(cspValue);
@@ -168,34 +163,36 @@ function CreateService(): React.JSX.Element {
                 setSelectFlavor(flavorValue);
                 setPriceValue(priceValue);
                 setCurrency(currencyValue);
-                setSelectServiceHostType(serviceHostingTypes[0]);
+                setSelectServiceHostType(serviceHostingTypeValue);
                 setServiceHostTypes(serviceHostingTypes);
             }
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [orderableServicesQuery.isSuccess, orderableServicesQuery.data, latestVersion, location.state, serviceName]);
 
     useEffect(() => {
-        if (selectCsp) {
+        if (selectCsp && selectServiceHostType && !location.state) {
             const currentAreaList = convertAreasToTabs(
-                selectVersion,
                 selectCsp,
                 selectServiceHostType,
-                versionMapper.current
+                versionMapper.current.get(selectVersion)
             );
             const currentRegionList = getRegionDropDownValues(
-                selectVersion,
                 selectCsp,
                 selectServiceHostType,
                 currentAreaList[0]?.key ?? '',
-                versionMapper.current
+                versionMapper.current.get(selectVersion)
             );
             const currentFlavorList = getFlavorList(
-                selectVersion,
                 selectCsp,
                 selectServiceHostType,
-                versionMapper.current
+                versionMapper.current.get(selectVersion)
             );
-            const billing: Billing = getBilling(selectVersion, selectCsp, selectServiceHostType, versionMapper.current);
+            const billing: Billing = getBilling(
+                selectCsp,
+                selectServiceHostType,
+                versionMapper.current.get(selectVersion)
+            );
             setAreaList(currentAreaList);
             setSelectArea(currentAreaList[0]?.key ?? '');
             setRegionList(currentRegionList);
@@ -205,110 +202,123 @@ function CreateService(): React.JSX.Element {
             setPriceValue(currentFlavorList[0].price);
             setCurrency(currencyMapper[billing.currency]);
         }
-    }, [selectCsp, selectServiceHostType, selectVersion]);
+    }, [location.state, selectCsp, selectServiceHostType, selectVersion]);
 
     const onChangeVersion = (currentVersion: string) => {
         const currentCspList = getCspListForVersion(currentVersion, versionMapper.current);
-        const currentAreaList = convertAreasToTabs(
-            currentVersion,
-            currentCspList[0],
-            selectServiceHostType,
-            versionMapper.current
-        );
-        const currentRegionList = getRegionDropDownValues(
-            currentVersion,
-            currentCspList[0],
-            selectServiceHostType,
-            currentAreaList[0]?.key ?? '',
-            versionMapper.current
-        );
-        const currentFlavorList = getFlavorList(
-            currentVersion,
-            currentCspList[0],
-            selectServiceHostType,
-            versionMapper.current
-        );
-        const serviceHostingTypes = getAvailableServiceHostingTypes(
-            currentVersion,
-            currentCspList[0],
-            versionMapper.current
-        );
-        const billing: Billing = getBilling(
-            currentVersion,
-            currentCspList[0],
-            serviceHostingTypes[0],
-            versionMapper.current
-        );
-        setSelectVersion(currentVersion);
-        setCspList(currentCspList);
-        setSelectCsp(currentCspList[0]);
-        setAreaList(currentAreaList);
-        setSelectArea(currentAreaList[0]?.key ?? '');
-        setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0]?.value ?? '');
-        setFlavorList(currentFlavorList);
-        setSelectFlavor(currentFlavorList[0]?.value ?? '');
-        setPriceValue(currentFlavorList[0].price);
-        setCurrency(currencyMapper[billing.currency]);
-        setServiceHostTypes(serviceHostingTypes);
-        setSelectServiceHostType(serviceHostingTypes[0]);
+        if (selectServiceHostType) {
+            const currentAreaList = convertAreasToTabs(
+                currentCspList[0],
+                selectServiceHostType,
+                versionMapper.current.get(currentVersion)
+            );
+            const currentRegionList = getRegionDropDownValues(
+                currentCspList[0],
+                selectServiceHostType,
+                currentAreaList[0]?.key ?? '',
+                versionMapper.current.get(currentVersion)
+            );
+            const currentFlavorList = getFlavorList(
+                currentCspList[0],
+                selectServiceHostType,
+                versionMapper.current.get(currentVersion)
+            );
+            const serviceHostingTypes = getAvailableServiceHostingTypes(
+                currentCspList[0],
+                versionMapper.current.get(currentVersion)
+            );
+            const billing: Billing = getBilling(
+                currentCspList[0],
+                serviceHostingTypes[0],
+                versionMapper.current.get(currentVersion)
+            );
+            setSelectVersion(currentVersion);
+            setCspList(currentCspList);
+            setSelectCsp(currentCspList[0]);
+            setAreaList(currentAreaList);
+            setSelectArea(currentAreaList[0]?.key ?? '');
+            setRegionList(currentRegionList);
+            setSelectRegion(currentRegionList[0]?.value ?? '');
+            setFlavorList(currentFlavorList);
+            setSelectFlavor(currentFlavorList[0]?.value ?? '');
+            setPriceValue(currentFlavorList[0].price);
+            setCurrency(currencyMapper[billing.currency]);
+            setServiceHostTypes(serviceHostingTypes);
+            setSelectServiceHostType(serviceHostingTypes[0]);
+        }
     };
 
-    const onChangeCloudProvider = (selectVersion: string, csp: UserOrderableServiceVo.csp) => {
-        const currentAreaList = convertAreasToTabs(selectVersion, csp, selectServiceHostType, versionMapper.current);
-        const currentRegionList = getRegionDropDownValues(
-            selectVersion,
-            csp,
-            selectServiceHostType,
-            currentAreaList[0]?.key ?? '',
-            versionMapper.current
-        );
-        const currentFlavorList = getFlavorList(selectVersion, csp, selectServiceHostType, versionMapper.current);
-        const serviceHostingTypes = getAvailableServiceHostingTypes(selectVersion, csp, versionMapper.current);
-        const billing: Billing = getBilling(selectVersion, csp, serviceHostingTypes[0], versionMapper.current);
-        setSelectCsp(csp);
-        setAreaList(currentAreaList);
-        setSelectArea(currentAreaList[0]?.key ?? '');
-        setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0]?.value ?? '');
-        setFlavorList(currentFlavorList);
-        setSelectFlavor(currentFlavorList[0]?.value ?? '');
-        setPriceValue(currentFlavorList[0].price);
-        setCurrency(currencyMapper[billing.currency]);
-        setSelectServiceHostType(serviceHostingTypes[0]);
-        setServiceHostTypes(serviceHostingTypes);
+    const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
+        if (selectServiceHostType) {
+            const currentAreaList = convertAreasToTabs(
+                csp,
+                selectServiceHostType,
+                versionMapper.current.get(selectVersion)
+            );
+            const currentRegionList = getRegionDropDownValues(
+                csp,
+                selectServiceHostType,
+                currentAreaList[0]?.key ?? '',
+                versionMapper.current.get(selectVersion)
+            );
+            const currentFlavorList = getFlavorList(
+                csp,
+                selectServiceHostType,
+                versionMapper.current.get(selectVersion)
+            );
+            const serviceHostingTypes = getAvailableServiceHostingTypes(csp, versionMapper.current.get(selectVersion));
+            const billing: Billing = getBilling(csp, serviceHostingTypes[0], versionMapper.current.get(selectVersion));
+            setSelectCsp(csp);
+            setAreaList(currentAreaList);
+            setSelectArea(currentAreaList[0]?.key ?? '');
+            setRegionList(currentRegionList);
+            setSelectRegion(currentRegionList[0]?.value ?? '');
+            setFlavorList(currentFlavorList);
+            setSelectFlavor(currentFlavorList[0]?.value ?? '');
+            setPriceValue(currentFlavorList[0].price);
+            setCurrency(currencyMapper[billing.currency]);
+            setSelectServiceHostType(serviceHostingTypes[0]);
+            setServiceHostTypes(serviceHostingTypes);
+        }
     };
 
-    const onChangeAreaValue = (selectVersion: string, csp: UserOrderableServiceVo.csp, key: string) => {
-        const currentRegionList = getRegionDropDownValues(
-            selectVersion,
-            csp,
-            selectServiceHostType,
-            key,
-            versionMapper.current
-        );
-        setSelectArea(key);
-        setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0]?.value ?? '');
+    const onChangeAreaValue = (newArea: string) => {
+        setSelectArea(newArea);
+        if (selectCsp && selectServiceHostType) {
+            const currentRegionList = getRegionDropDownValues(
+                selectCsp,
+                selectServiceHostType,
+                newArea,
+                versionMapper.current.get(selectVersion)
+            );
+            setRegionList(currentRegionList);
+            setSelectRegion(currentRegionList[0]?.value ?? '');
+        }
     };
 
     const onChangeRegion = (value: string) => {
         setSelectRegion(value);
     };
 
-    const onChangeFlavor = (value: string, selectVersion: string, csp: UserOrderableServiceVo.csp) => {
-        setSelectFlavor(value);
-        const currentFlavorList = getFlavorList(selectVersion, csp, selectServiceHostType, versionMapper.current);
-        const billing: Billing = getBilling(selectVersion, csp, selectServiceHostType, versionMapper.current);
-        currentFlavorList.forEach((flavor) => {
-            if (value === flavor.value) {
-                setPriceValue(flavor.price);
-            }
-        });
-        setCurrency(currencyMapper[billing.currency]);
+    const onChangeFlavor = (newFlavor: string) => {
+        setSelectFlavor(newFlavor);
+        if (selectCsp && selectServiceHostType) {
+            const billing: Billing = getBilling(
+                selectCsp,
+                selectServiceHostType,
+                versionMapper.current.get(selectVersion)
+            );
+            flavorList.forEach((flavor) => {
+                if (newFlavor === flavor.value) {
+                    setPriceValue(flavor.price);
+                }
+            });
+            setCurrency(currencyMapper[billing.currency]);
+        }
     };
 
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
+        location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
     };
 
@@ -352,13 +362,15 @@ function CreateService(): React.JSX.Element {
                         selectCsp={selectCsp}
                         cspList={cspList}
                         onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
-                            onChangeCloudProvider(selectVersion, csp);
+                            onChangeCloudProvider(csp);
                         }}
                     />
                     <br />
                     <ServiceHostingSelection
                         serviceHostingTypes={serviceHostTypes}
                         updateServiceHostingType={onChangeServiceHostingType}
+                        disabledAlways={false}
+                        previousSelection={selectServiceHostType}
                     ></ServiceHostingSelection>
                     <br />
                     <br />
@@ -370,7 +382,7 @@ function CreateService(): React.JSX.Element {
                             tabPosition={'top'}
                             items={areaList}
                             onChange={(area) => {
-                                onChangeAreaValue(selectVersion, selectCsp, area);
+                                onChangeAreaValue(area);
                             }}
                         />
                     </div>
@@ -394,8 +406,8 @@ function CreateService(): React.JSX.Element {
                                 className={'select-box-class'}
                                 value={selectFlavor}
                                 style={{ width: 450 }}
-                                onChange={(value) => {
-                                    onChangeFlavor(value, selectVersion, selectCsp);
+                                onChange={(newFlavor) => {
+                                    onChangeFlavor(newFlavor);
                                 }}
                                 options={flavorList}
                             />
@@ -408,20 +420,20 @@ function CreateService(): React.JSX.Element {
                         </span>
                     </div>
                 </div>
-                <div>
-                    <div className={'Line'} />
-                    <GoToSubmit
-                        categoryName={categoryName}
-                        serviceName={serviceName}
-                        selectVersion={selectVersion}
-                        selectCsp={selectCsp}
-                        selectRegion={selectRegion}
-                        selectArea={selectArea}
-                        selectFlavor={selectFlavor}
-                        versionMapper={versionMapper.current}
-                        selectServiceHostingType={selectServiceHostType}
-                    />
-                </div>
+                {selectServiceHostType ? (
+                    <div>
+                        <div className={'Line'} />
+                        <GoToSubmit
+                            selectVersion={selectVersion}
+                            selectCsp={selectCsp}
+                            selectRegion={selectRegion}
+                            selectArea={selectArea}
+                            selectFlavor={selectFlavor}
+                            versionMapper={versionMapper.current}
+                            selectServiceHostingType={selectServiceHostType}
+                        />
+                    </div>
+                ) : null}
             </>
         );
     }

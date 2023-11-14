@@ -3,11 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployParam, DeployVariableSchema } from './CommonTypes';
 import { Form, InputNumber } from 'antd';
 import React from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { DeployParam } from '../types/DeployParam';
+import { DeployVariableSchema } from '../types/DeployVariableSchema';
 
 export function NumberInput({ item }: { item: DeployParam }): React.JSX.Element {
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'number' }];

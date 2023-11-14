@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, DeployVariable, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { DeployParam } from './CommonTypes';
+import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { Button } from 'antd';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 import { useNavigate } from 'react-router-dom';
@@ -12,8 +12,6 @@ import React from 'react';
 import { orderPageRoute } from '../../../utils/constants';
 
 export default function GoToSubmit({
-    categoryName,
-    serviceName,
     selectVersion,
     selectCsp,
     selectRegion,
@@ -22,10 +20,8 @@ export default function GoToSubmit({
     versionMapper,
     selectServiceHostingType,
 }: {
-    categoryName: string;
-    serviceName: string;
     selectVersion: string;
-    selectCsp: string;
+    selectCsp: UserOrderableServiceVo.csp;
     selectRegion: string;
     selectArea: string;
     selectFlavor: string;
@@ -35,50 +31,14 @@ export default function GoToSubmit({
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        let service: UserOrderableServiceVo | undefined;
-        let registeredServiceId = '';
-        versionMapper.forEach((v, k) => {
-            if (k === selectVersion) {
-                v.forEach((registerService) => {
-                    if (
-                        registerService.csp.valueOf() === selectCsp &&
-                        registerService.serviceHostingType === selectServiceHostingType
-                    ) {
-                        registeredServiceId = registerService.id;
-                        service = registerService;
-                    }
-                });
-            }
-        });
-
-        const props: OrderSubmitProps = {
-            id: registeredServiceId,
-            category: categoryName as DeployRequest.category,
-            name: serviceName,
-            version: selectVersion,
-            region: selectRegion,
-            area: selectArea,
-            csp: selectCsp as DeployRequest.csp,
-            flavor: selectFlavor,
-            params: new Array<DeployParam>(),
-            serviceHostingType: selectServiceHostingType,
-        };
-
-        if (service !== undefined) {
-            for (const param of service.variables) {
-                props.params.push({
-                    name: param.name,
-                    kind: param.kind,
-                    type: param.dataType,
-                    example: param.example ?? '',
-                    description: param.description,
-                    value: param.value ?? '',
-                    mandatory: param.mandatory,
-                    sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
-                    valueSchema: param.valueSchema ?? undefined,
-                });
-            }
-        }
+        const props: OrderSubmitProps = getDeployParams(
+            versionMapper.get(selectVersion) ?? [],
+            selectCsp,
+            selectServiceHostingType,
+            selectArea,
+            selectRegion,
+            selectFlavor
+        );
 
         navigate(orderPageRoute, {
             state: props,

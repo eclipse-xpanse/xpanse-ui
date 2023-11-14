@@ -45,6 +45,10 @@ export type ServiceDetailVo = {
      */
     serviceDeploymentState: ServiceDetailVo.serviceDeploymentState;
     /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: ServiceDetailVo.serviceHostingType;
+    /**
      * Time of register service.
      */
     createTime: string;
@@ -112,5 +116,13 @@ export namespace ServiceDetailVo {
         MIGRATION_SUCCESS = 'migration_success',
         MIGRATION_FAILED = 'migration_failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
+    }
+
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    export enum serviceHostingType {
+        SELF = 'self',
+        SERVICE_VENDOR = 'service-vendor',
     }
 }

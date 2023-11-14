@@ -9,17 +9,15 @@ import { Area } from '../types/Area';
 import { getAreasForSelectedVersionHostingTypeAndCsp } from './areaHelper';
 
 export function getRegionDropDownValues(
-    selectVersion: string,
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     selectArea: string,
-    versionMapper: Map<string, UserOrderableServiceVo[]>
+    userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Region[] {
     const areaList: Area[] = getAreasForSelectedVersionHostingTypeAndCsp(
-        selectVersion,
         selectCsp,
         selectServiceHostingType,
-        versionMapper
+        userOrderableServices
     );
     let regions: Region[] = [];
     if (areaList.length > 0) {

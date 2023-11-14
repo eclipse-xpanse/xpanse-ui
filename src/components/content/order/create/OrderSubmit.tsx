@@ -7,7 +7,6 @@ import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
 import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import React, { useEffect, useRef, useState } from 'react';
-import { DeployParam } from '../formElements/CommonTypes';
 import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { BooleanInput } from '../formElements/BooleanInput';
@@ -19,6 +18,7 @@ import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { DeployParam } from '../types/DeployParam';
 
 export function OrderItem({ item }: { item: DeployParam }) {
     if (item.type === 'string') {
