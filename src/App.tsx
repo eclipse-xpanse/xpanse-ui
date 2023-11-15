@@ -45,6 +45,7 @@ function App(): React.JSX.Element {
             <OidcProvider configuration={OidcConfig} sessionLostComponent={SessionLost}>
                 <Routes>
                     <Route
+                        key={homePageRoute}
                         path={homePageRoute}
                         element={
                             <OidcSecure>
@@ -55,6 +56,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={''}
                         path={''}
                         element={
                             <OidcSecure>
@@ -67,6 +69,7 @@ function App(): React.JSX.Element {
                     {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
                         (path) => (
                             <Route
+                                key={path}
                                 path={path}
                                 element={
                                     <OidcSecure>
@@ -79,6 +82,7 @@ function App(): React.JSX.Element {
                         )
                     )}
                     <Route
+                        key={catalogPageRoute}
                         path={catalogPageRoute}
                         element={
                             <OidcSecure>
@@ -89,6 +93,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={orderPageRoute}
                         path={orderPageRoute}
                         element={
                             <OidcSecure>
@@ -99,6 +104,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={servicesPageRoute}
                         path={servicesPageRoute}
                         element={
                             <OidcSecure>
@@ -109,6 +115,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={myServicesRoute}
                         path={myServicesRoute}
                         element={
                             <OidcSecure>
@@ -119,6 +126,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={createServicePageRoute}
                         path={createServicePageRoute}
                         element={
                             <OidcSecure>
@@ -129,6 +137,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={monitorPageRoute}
                         path={monitorPageRoute}
                         element={
                             <OidcSecure>
@@ -139,6 +148,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={credentialPageRoute}
                         path={credentialPageRoute}
                         element={
                             <OidcSecure>
@@ -149,6 +159,7 @@ function App(): React.JSX.Element {
                         }
                     />
                     <Route
+                        key={healthCheckPageRoute}
                         path={healthCheckPageRoute}
                         element={
                             <OidcSecure>
