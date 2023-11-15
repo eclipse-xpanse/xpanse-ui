@@ -9,19 +9,18 @@ import ServiceDetail from './ServiceDetail';
 import {
     ApiError,
     CloudServiceProvider,
-    Region,
     Response,
     ServiceVo,
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Area } from '../../../order/types/Area';
 import UpdateService from '../update/UpdateService';
 import UnregisterService from '../unregister/UnregisterService';
 import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { cspMap } from '../../../order/types/CspLogo';
+import { ServiceHostingOptions } from './ServiceHostingOptions';
 
 let lastServiceName: string = '';
 
@@ -37,29 +36,16 @@ function ServiceProvider({
     category: ServiceVo.category;
 }): React.JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo | undefined>(undefined);
-    const [serviceAreas, setServiceAreas] = useState<Area[]>([]);
+    const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
+    const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
 
-    const detailMapper: Map<string, ServiceTemplateDetailVo> = new Map<string, ServiceTemplateDetailVo>();
-    const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
+    const detailMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
     const [name, version] = currentServiceName.split('@');
     const unregisterStatus = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<React.JSX.Element | undefined>(undefined);
     const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
     const [unregisterTabsItemDisabled, setUnregisterTabsItemDisabled] = useState<boolean>(false);
     const queryClient = useQueryClient();
-    function groupRegionsByArea(regions: Region[]): Map<string, Region[]> {
-        const map: Map<string, Region[]> = new Map<string, Region[]>();
-        regions.forEach((region) => {
-            if (region.area && !map.has(region.area)) {
-                map.set(
-                    region.area,
-                    regions.filter((data) => data.area === region.area)
-                );
-            }
-        });
-        return map;
-    }
 
     const getCspTabs = (categoryOclData: Map<string, ServiceTemplateDetailVo[]>): Tab[] => {
         const items: Tab[] = [];
@@ -71,21 +57,7 @@ function ServiceProvider({
                         const cspMapper = getCspMapper(serviceName, versionName, versionList);
                         cspMapper.forEach((cspList, cspName) => {
                             const key = currentServiceName + '@' + cspName;
-                            detailMapper.set(key, cspList[0]);
-                            const result: Map<string, Region[]> = groupRegionsByArea(cspList[0].regions);
-                            const areas: Area[] = [];
-
-                            result.forEach((v, k) => {
-                                const regions: string[] = [];
-
-                                v.forEach((region) => {
-                                    regions.push(region.name);
-                                });
-                                const area: Area = { name: k, regions: regions };
-                                areas.push(area);
-                            });
-
-                            areaMapper.set(key, areas);
+                            detailMapper.set(key, cspList);
                             const name = cspName.toString();
                             const item: Tab = {
                                 label: (
@@ -112,13 +84,10 @@ function ServiceProvider({
 
     const items: Tab[] = getCspTabs(categoryOclData);
     function updateServiceDetails(serviceKey: string): void {
-        const areas = areaMapper.get(serviceKey);
         const details = detailMapper.get(serviceKey);
         if (details) {
             setServiceDetails(details);
-        }
-        if (areas) {
-            setServiceAreas(areas);
+            setActiveServiceDetail(details[0]);
         }
     }
     useEffect(() => {
@@ -139,6 +108,10 @@ function ServiceProvider({
 
     const onChange = (key: string) => {
         setActiveKey(key);
+    };
+
+    const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
+        setActiveServiceDetail(serviceTemplateDetailVo);
     };
 
     function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
@@ -203,19 +176,24 @@ function ServiceProvider({
         <>
             {currentServiceName.length > 0 ? (
                 <>
-                    {serviceDetails !== undefined && unregisterServiceId === serviceDetails.id ? unregisterTips : ''}
+                    {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
                     <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
-                    {serviceDetails !== undefined ? (
+                    {serviceDetails && activeServiceDetail ? (
                         <>
-                            <ServiceDetail serviceDetails={serviceDetails} serviceAreas={serviceAreas} />
+                            <ServiceHostingOptions
+                                serviceTemplateDetailVos={serviceDetails}
+                                defaultDisplayedService={activeServiceDetail}
+                                updateServiceHostingType={onChangeServiceHostingType}
+                            />
+                            <ServiceDetail serviceDetails={activeServiceDetail} />
                             <div className={'update-unregister-btn-class'}>
                                 <UpdateService
-                                    id={serviceDetails.id}
+                                    id={activeServiceDetail.id}
                                     unregisterStatus={unregisterStatus}
                                     category={category}
                                 />
                                 {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                <UnregisterService id={serviceDetails.id} onConfirmHandler={onConfirmUnregister} />
+                                <UnregisterService id={activeServiceDetail.id} onConfirmHandler={onConfirmUnregister} />
                             </div>
                         </>
                     ) : null}

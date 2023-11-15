@@ -199,7 +199,7 @@ function CreateService(): React.JSX.Element {
             setSelectRegion(currentRegionList[0]?.value ?? '');
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
-            setPriceValue(currentFlavorList[0].price);
+            setPriceValue(currentFlavorList[0]?.price);
             setCurrency(currencyMapper[billing.currency]);
         }
     }, [location.state, selectCsp, selectServiceHostType, selectVersion]);
@@ -241,7 +241,7 @@ function CreateService(): React.JSX.Element {
             setSelectRegion(currentRegionList[0]?.value ?? '');
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
-            setPriceValue(currentFlavorList[0].price);
+            setPriceValue(currentFlavorList[0]?.price);
             setCurrency(currencyMapper[billing.currency]);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypes[0]);
@@ -267,7 +267,7 @@ function CreateService(): React.JSX.Element {
                 versionMapper.current.get(selectVersion)
             );
             const serviceHostingTypes = getAvailableServiceHostingTypes(csp, versionMapper.current.get(selectVersion));
-            const billing: Billing = getBilling(csp, serviceHostingTypes[0], versionMapper.current.get(selectVersion));
+            const billing: Billing = getBilling(csp, selectServiceHostType, versionMapper.current.get(selectVersion));
             setSelectCsp(csp);
             setAreaList(currentAreaList);
             setSelectArea(currentAreaList[0]?.key ?? '');
@@ -275,7 +275,7 @@ function CreateService(): React.JSX.Element {
             setSelectRegion(currentRegionList[0]?.value ?? '');
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
-            setPriceValue(currentFlavorList[0].price);
+            setPriceValue(currentFlavorList[0]?.price);
             setCurrency(currencyMapper[billing.currency]);
             setSelectServiceHostType(serviceHostingTypes[0]);
             setServiceHostTypes(serviceHostingTypes);
