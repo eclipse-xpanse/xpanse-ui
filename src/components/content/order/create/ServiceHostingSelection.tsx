@@ -5,6 +5,7 @@
 
 import { Radio, RadioChangeEvent } from 'antd';
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import React from 'react';
 
 export function ServiceHostingSelection({
     serviceHostingTypes,
@@ -23,7 +24,7 @@ export function ServiceHostingSelection({
         }
     };
 
-    const defaultValue: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
+    const value: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
         ? previousSelection
         : serviceHostingTypes.length > 0
         ? serviceHostingTypes[0]
@@ -35,7 +36,7 @@ export function ServiceHostingSelection({
             <Radio.Group
                 onChange={onChange}
                 disabled={disabledAlways || serviceHostingTypes.length === 1}
-                defaultValue={defaultValue}
+                value={value}
             >
                 <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
                 <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
