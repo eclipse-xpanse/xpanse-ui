@@ -29,7 +29,7 @@ import {
 } from '../../../xpanse-api/generated';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
-import { cspMap } from '../order/types/CspLogo';
+import { cspMap } from '../common/csp/CspLogo';
 
 function Credential(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);

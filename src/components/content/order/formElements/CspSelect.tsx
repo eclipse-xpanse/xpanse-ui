@@ -6,7 +6,7 @@
 import { Image } from 'antd';
 import { CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import React from 'react';
-import { cspMap } from '../types/CspLogo';
+import { cspMap } from '../../common/csp/CspLogo';
 
 export default function CspSelect({
     selectCsp,

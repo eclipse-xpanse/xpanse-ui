@@ -4,16 +4,14 @@
  */
 
 import { CloudServiceProvider } from '../../../../xpanse-api/generated';
-import {
-    AlibabaLogo,
-    AWSLogo,
-    AzureLogo,
-    FlexibleEngineLogo,
-    GoogleLogo,
-    HuaWeiLogo,
-    OpenStackLogo,
-    ScsLogo,
-} from '../formElements/CspLogo';
+import HuaWeiLogo from '../../../../img/Huawei_Logo.png';
+import AlibabaLogo from '../../../../img/Alibaba_Logo.png';
+import AzureLogo from '../../../../img/Microsoft_Azure_Logo.png';
+import AWSLogo from '../../../../img/Aws_Logo.png';
+import OpenStackLogo from '../../../../img/OpenStack_Logo.png';
+import GoogleLogo from '../../../../img/Google_Logo.png';
+import FlexibleEngineLogo from '../../../../img/FlexibleEngine_Logo.png';
+import ScsLogo from '../../../../img/Scs_Logo.png';
 
 interface CSP {
     name: string;

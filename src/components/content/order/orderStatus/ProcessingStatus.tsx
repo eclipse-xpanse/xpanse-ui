@@ -5,7 +5,7 @@
 
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import React from 'react';
-import { convertMapToDetailsList } from '../../common/convertMapToDetailsList';
+import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
 export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): React.JSX.Element => {

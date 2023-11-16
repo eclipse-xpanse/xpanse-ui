@@ -5,6 +5,7 @@
 
 import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface CurrentUserRoleStore {
     currentUserRole: string | undefined;
@@ -20,14 +21,20 @@ interface updateState {
 }
 
 export const useCurrentUserRoleStore = createWithEqualityFn<CurrentUserRoleStore & updateState>()(
-    (set) => ({
-        ...initialState,
-        addCurrentUserRole: (currentUserRole) => {
-            set({ currentUserRole: currentUserRole });
-        },
-        clearCurrentUserRole: () => {
-            set(initialState);
-        },
-    }),
+    persist(
+        (set) => ({
+            ...initialState,
+            addCurrentUserRole: (currentUserRole) => {
+                set({ currentUserRole: currentUserRole });
+            },
+            clearCurrentUserRole: () => {
+                set(initialState);
+            },
+        }),
+        {
+            name: 'storage',
+            storage: createJSONStorage(() => localStorage),
+        }
+    ),
     shallow
 );

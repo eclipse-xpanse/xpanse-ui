@@ -17,7 +17,7 @@ import React, { useState } from 'react';
 import { currencyMapper } from '../../../utils/currency';
 import { useMigrateServiceQuery } from './useMigrateServiceQuery';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
-import { cspMap } from '../types/CspLogo';
+import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
