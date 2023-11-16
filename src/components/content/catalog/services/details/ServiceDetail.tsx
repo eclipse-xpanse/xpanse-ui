@@ -6,7 +6,6 @@
 import { Descriptions, Divider, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { Area } from '../../../order/types/Area';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
 import React from 'react';
@@ -15,32 +14,24 @@ import { FlavoursText } from '../../../common/ocl/FlavorsText';
 import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceStatus } from './ServiceStatus';
 
-function ServiceDetail({
-    serviceDetails,
-    serviceAreas,
-}: {
-    serviceDetails: ServiceTemplateDetailVo;
-    serviceAreas: Area[];
-}): React.JSX.Element {
+function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (
         <>
             <div className={'catalog-detail-class'}>
-                <h3>
+                <h3 className={'catalog-details-h3'}>
                     <CloudUploadOutlined />
                     &nbsp;Available Regions
                 </h3>
                 <Space size={[0, 8]} wrap>
-                    {serviceAreas.map((area) =>
-                        area.regions.map((region) => (
-                            <Tag className={'ocl-display-tag'} color='orange'>
-                                {area.name} : {region}
-                            </Tag>
-                        ))
-                    )}
+                    {serviceDetails.regions.map((region) => (
+                        <Tag key={region.name} className={'ocl-display-tag'} color='orange'>
+                            {region.area ? `${region.area}: ${region.name}` : region.name}
+                        </Tag>
+                    ))}
                 </Space>
                 <Divider />
             </div>
-            <h3>
+            <h3 className={'catalog-details-h3'}>
                 <InfoCircleOutlined />
                 &nbsp;Basic Information
             </h3>

@@ -7,10 +7,10 @@ import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
-import { OperationType } from '../formElements/CommonTypes';
 import { useStopwatch } from 'react-timer-hook';
 import React, { useEffect } from 'react';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { OperationType } from '../types/OperationType';
 
 function OrderSubmitStatusPolling({
     uuid,

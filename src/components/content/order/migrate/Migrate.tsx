@@ -11,21 +11,25 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
-import { ShowDeploy } from './ShowDeploy';
+import { DeploymentForm } from './DeploymentForm';
 import { Steps } from 'antd';
-import { MigrateService } from './MigrateService';
-import { MigrationStatus, MigrationSteps } from '../formElements/CommonTypes';
+import { MigrateServiceSubmit } from './MigrateServiceSubmit';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
 import { useQuery } from '@tanstack/react-query';
+import { MigrationSteps } from '../types/MigrationSteps';
+import { MigrationStatus } from '../types/MigrationStatus';
 
-export const Migrate = ({ currentSelectedService }: { currentSelectedService: ServiceVo | undefined }): JSX.Element => {
+export const Migrate = ({ currentSelectedService }: { currentSelectedService: ServiceVo }): React.JSX.Element => {
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
     const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
         undefined
     );
     const [userOrderableServiceVoList, setUserOrderableServiceVoList] = useState<UserOrderableServiceVo[]>([]);
-    const [selectCsp, setSelectCsp] = useState<string>('');
+    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp | undefined>(undefined);
+    const [selectServiceHostingType, setSelectServiceHostingType] = useState<
+        UserOrderableServiceVo.serviceHostingType | undefined
+    >(undefined);
     const [selectArea, setSelectArea] = useState<string>('');
     const [selectRegion, setSelectRegion] = useState<string>('');
     const [selectFlavor, setSelectFlavor] = useState<string>('');
@@ -34,16 +38,16 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
     const listOrderableServices = useQuery({
         queryKey: [
             'listOrderableServices',
-            currentSelectedService?.category,
-            currentSelectedService?.name,
-            currentSelectedService?.version,
+            currentSelectedService.category,
+            currentSelectedService.name,
+            currentSelectedService.version,
         ],
         queryFn: () =>
             ServiceCatalogService.listOrderableServices(
-                currentSelectedService?.category,
+                currentSelectedService.category,
                 undefined,
-                currentSelectedService?.name,
-                currentSelectedService?.version
+                currentSelectedService.name,
+                currentSelectedService.version
             ),
         refetchOnWindowFocus: false,
     });
@@ -51,15 +55,11 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
     useEffect(() => {
         setCurrentMigrationStepStatus(MigrationStatus.Processing);
         setCurrentMigrationStep(MigrationSteps.ExportServiceData);
-        if (currentSelectedService === undefined) {
-            return;
-        }
         if (listOrderableServices.data && listOrderableServices.data.length > 0) {
             setUserOrderableServiceVoList(listOrderableServices.data);
         } else {
             return;
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [listOrderableServices.data, listOrderableServices.isSuccess]);
 
     useEffect(() => {
@@ -68,18 +68,20 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             setCurrentMigrationStep(MigrationSteps.ExportServiceData);
             setUserOrderableServiceVoList([]);
         }
-    }, [listOrderableServices.isError, listOrderableServices.error]);
+    }, [listOrderableServices.isError]);
 
-    const getSelectedParameters = (
-        selectedCsp: string,
+    const updateSelectedParameters = (
+        selectedCsp: UserOrderableServiceVo.csp,
         selectedArea: string,
         selectedRegion: string,
-        selectedFlavor: string
+        selectedFlavor: string,
+        selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
     ) => {
         setSelectCsp(selectedCsp);
         setSelectArea(selectedArea);
         setSelectRegion(selectedRegion);
         setSelectFlavor(selectedFlavor);
+        setSelectServiceHostingType(selectedServiceHostingType);
     };
 
     const getDeployParameters = (values: DeployRequest) => {
@@ -110,11 +112,12 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
             content: (
                 <SelectDestination
                     userOrderableServiceVoList={userOrderableServiceVoList}
-                    getSelectedParameters={getSelectedParameters}
+                    updateSelectedParameters={updateSelectedParameters}
                     currentCsp={selectCsp}
                     currentArea={selectArea}
                     currentRegion={selectRegion}
                     currentFlavor={selectFlavor}
+                    currentServiceHostingType={selectServiceHostingType}
                     getCurrentMigrationStep={getCurrentMigrationStep}
                 />
             ),
@@ -123,9 +126,12 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         {
             title: 'Prepare deployment parameters',
             content: (
-                <ShowDeploy
+                <DeploymentForm
                     userOrderableServiceVoList={userOrderableServiceVoList}
-                    selectCsp={selectCsp}
+                    selectCsp={selectCsp ? selectCsp : currentSelectedService.csp}
+                    selectServiceHostingType={
+                        selectServiceHostingType ? selectServiceHostingType : currentSelectedService.serviceHostingType
+                    }
                     selectArea={selectArea}
                     selectRegion={selectRegion}
                     selectFlavor={selectFlavor}
@@ -143,19 +149,22 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: Se
         {
             title: 'Migrate',
             content: (
-                <MigrateService
+                <MigrateServiceSubmit
                     userOrderableServiceVoList={userOrderableServiceVoList}
-                    selectCsp={selectCsp}
+                    selectCsp={selectCsp ?? currentSelectedService.csp}
                     selectArea={selectArea}
                     selectRegion={selectRegion}
                     selectFlavor={selectFlavor}
+                    selectServiceHostingType={
+                        selectServiceHostingType ? selectServiceHostingType : currentSelectedService.serviceHostingType
+                    }
                     getCurrentMigrationStep={getCurrentMigrationStep}
                     deployParams={deployParams}
                     currentSelectedService={currentSelectedService}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                 />
             ),
-            description: 'Migrate service to the create destination.',
+            description: 'Migrate service to the new destination.',
         },
     ];
 

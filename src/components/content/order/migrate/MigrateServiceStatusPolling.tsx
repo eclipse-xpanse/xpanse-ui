@@ -6,11 +6,12 @@
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
-import { MigrationStatus, OperationType } from '../formElements/CommonTypes';
 import { useStopwatch } from 'react-timer-hook';
 import React, { useEffect, useState } from 'react';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { MigrationStatus } from '../types/MigrationStatus';
+import { OperationType } from '../types/OperationType';
 
 function MigrateServiceStatusPolling({
     destroyUuid,

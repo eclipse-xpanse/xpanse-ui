@@ -7,7 +7,7 @@ import { StopwatchResult } from 'react-timer-hook';
 import { ServiceDetailVo } from '../../../../xpanse-api/generated';
 import { useEffect } from 'react';
 import { HourglassOutlined } from '@ant-design/icons';
-import { OperationType } from '../formElements/CommonTypes';
+import { OperationType } from '../types/OperationType';
 
 function DeploymentTimer({
     stopWatch,

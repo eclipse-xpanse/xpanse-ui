@@ -5,11 +5,12 @@
 
 import { Form, Input, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
-import { DeployVariableSchema, DeployParam } from './CommonTypes';
 import { DeployVariable } from '../../../../xpanse-api/generated';
 import React, { ChangeEvent } from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { DeployParam } from '../types/DeployParam';
+import { DeployVariableSchema } from '../types/DeployVariableSchema';
 
 export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];

@@ -19,37 +19,57 @@ export function MyServiceStatus(serviceDeploymentState: ServiceVo.serviceDeploym
         case ServiceVo.serviceDeploymentState.DEPLOYING:
         case ServiceVo.serviceDeploymentState.DESTROYING:
             return (
-                <Tag icon={<SyncOutlined spin />} color='processing' className={'my-service-status-size'}>
+                <Tag
+                    bordered={false}
+                    icon={<SyncOutlined spin />}
+                    color='processing'
+                    className={'my-service-status-size'}
+                >
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
         case ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED:
             return (
-                <Tag icon={<CloseCircleOutlined />} color='error' className={'my-service-status-size'}>
+                <Tag bordered={false} icon={<CloseCircleOutlined />} color='error' className={'my-service-status-size'}>
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
         case ServiceVo.serviceDeploymentState.DESTROY_FAILED:
             return (
-                <Tag icon={<CloseCircleOutlined />} color='magenta' className={'my-service-status-size'}>
+                <Tag
+                    bordered={false}
+                    icon={<CloseCircleOutlined />}
+                    color='magenta'
+                    className={'my-service-status-size'}
+                >
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
         case ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL:
             return (
-                <Tag icon={<MinusCircleOutlined />} color='lime' className={'my-service-status-size'}>
+                <Tag bordered={false} icon={<MinusCircleOutlined />} color='lime' className={'my-service-status-size'}>
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
         case ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
             return (
-                <Tag icon={<CheckCircleOutlined />} color='success' className={'my-service-status-size'}>
+                <Tag
+                    bordered={false}
+                    icon={<CheckCircleOutlined />}
+                    color='success'
+                    className={'my-service-status-size'}
+                >
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
         default:
             return (
-                <Tag icon={<ExclamationCircleOutlined />} color='warning' className={'my-service-status-size'}>
+                <Tag
+                    bordered={false}
+                    icon={<ExclamationCircleOutlined />}
+                    color='warning'
+                    className={'my-service-status-size'}
+                >
                     {serviceDeploymentState as string}
                 </Tag>
             );

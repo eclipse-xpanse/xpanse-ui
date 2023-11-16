@@ -31,6 +31,7 @@ import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 import MyServicesError from './MyServicesError';
 import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
 import { cspMap } from '../order/types/CspLogo';
+import { MyServicesHostingType } from './MyServicesHostingType';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -38,6 +39,7 @@ function MyServices(): React.JSX.Element {
     const serviceStateInQuery = getServiceStateFromQuery();
     const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
+    const [serviceHostingTypeFilters, setServiceHostingTypeFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
     const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
@@ -85,6 +87,7 @@ function MyServices(): React.JSX.Element {
             updateCspFilters();
             updateServiceStateFilters();
             updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
+            updateServiceHostingFilters();
         } else {
             setServiceVoList(serviceList);
         }
@@ -119,6 +122,7 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) => record.id.startsWith(value.toString()),
             filtered: !!serviceIdInQuery,
+            align: 'center',
         },
         {
             title: 'Name',
@@ -133,6 +137,7 @@ function MyServices(): React.JSX.Element {
                 }
                 return false;
             },
+            align: 'center',
         },
         {
             title: 'Category',
@@ -141,6 +146,7 @@ function MyServices(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) => record.category.startsWith(value.toString()),
+            align: 'center',
         },
         {
             title: 'Service',
@@ -149,6 +155,7 @@ function MyServices(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
+            align: 'center',
         },
         {
             title: 'Version',
@@ -158,6 +165,18 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
+            align: 'center',
+        },
+        {
+            title: 'ServiceHostedBy',
+            dataIndex: 'serviceHostingType',
+            filters: serviceHostingTypeFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: string | number | boolean, record) =>
+                record.serviceHostingType.startsWith(value.toString()),
+            align: 'center',
+            render: (serviceHostingType: ServiceVo.serviceHostingType) => MyServicesHostingType(serviceHostingType),
         },
         {
             title: 'Csp',
@@ -177,10 +196,12 @@ function MyServices(): React.JSX.Element {
                     </Space>
                 );
             },
+            align: 'center',
         },
         {
             title: 'Flavor',
             dataIndex: 'flavor',
+            align: 'center',
         },
         {
             title: 'Created On',
@@ -191,6 +212,7 @@ function MyServices(): React.JSX.Element {
                 const dateB = new Date(serviceVoB.createTime);
                 return dateA.getTime() - dateB.getTime();
             },
+            align: 'center',
         },
         {
             title: 'ServiceState',
@@ -202,6 +224,7 @@ function MyServices(): React.JSX.Element {
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
             filtered: !!serviceStateInQuery,
+            align: 'center',
         },
         {
             title: 'Operation',
@@ -303,6 +326,7 @@ function MyServices(): React.JSX.Element {
                     </>
                 );
             },
+            align: 'center',
         },
     ];
 
@@ -439,6 +463,18 @@ function MyServices(): React.JSX.Element {
         setCustomerServiceNameFilters(filters);
     }
 
+    function updateServiceHostingFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(ServiceVo.serviceHostingType).forEach((serviceHostingType) => {
+            const filter = {
+                text: serviceHostingType,
+                value: serviceHostingType,
+            };
+            filters.push(filter);
+        });
+        setServiceHostingTypeFilters(filters);
+    }
+
     function refreshData(): void {
         clearFormVariables();
         void listDeployedServicesQuery.refetch();
@@ -511,19 +547,21 @@ function MyServices(): React.JSX.Element {
             >
                 <MyServiceDetails serviceId={serviceIdInModal} />
             </Modal>
-            <Modal
-                open={isMigrateModalOpen}
-                title={title}
-                closable={true}
-                maskClosable={false}
-                destroyOnClose={true}
-                footer={null}
-                onCancel={handleCancelMigrateModel}
-                width={1400}
-                mask={true}
-            >
-                <Migrate currentSelectedService={currentServiceVo} />
-            </Modal>
+            {currentServiceVo ? (
+                <Modal
+                    open={isMigrateModalOpen}
+                    title={title}
+                    closable={true}
+                    maskClosable={false}
+                    destroyOnClose={true}
+                    footer={null}
+                    onCancel={handleCancelMigrateModel}
+                    width={1400}
+                    mask={true}
+                >
+                    <Migrate currentSelectedService={currentServiceVo} />
+                </Modal>
+            ) : null}
 
             <div>
                 <Button

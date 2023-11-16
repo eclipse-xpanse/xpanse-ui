@@ -4,9 +4,9 @@
  */
 
 import { Form, Switch as AntdSwitch } from 'antd';
-import { DeployParam } from './CommonTypes';
 import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
+import { DeployParam } from '../types/DeployParam';
 
 export function BooleanInput({ item }: { item: DeployParam }): React.JSX.Element {
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);

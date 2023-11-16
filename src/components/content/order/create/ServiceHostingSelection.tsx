@@ -5,25 +5,39 @@
 
 import { Radio, RadioChangeEvent } from 'antd';
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import React from 'react';
 
 export function ServiceHostingSelection({
     serviceHostingTypes,
     updateServiceHostingType,
+    disabledAlways,
+    previousSelection,
 }: {
     serviceHostingTypes: UserOrderableServiceVo.serviceHostingType[];
-    updateServiceHostingType: (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => void;
+    updateServiceHostingType?: (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => void;
+    disabledAlways: boolean;
+    previousSelection: UserOrderableServiceVo.serviceHostingType | undefined;
 }) {
     const onChange = (e: RadioChangeEvent) => {
-        updateServiceHostingType(e.target.value as UserOrderableServiceVo.serviceHostingType);
+        if (updateServiceHostingType) {
+            updateServiceHostingType(e.target.value as UserOrderableServiceVo.serviceHostingType);
+        }
     };
 
-    const defaultValue: UserOrderableServiceVo.serviceHostingType | undefined =
-        serviceHostingTypes.length > 0 ? serviceHostingTypes[0] : undefined;
+    const value: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
+        ? previousSelection
+        : serviceHostingTypes.length > 0
+        ? serviceHostingTypes[0]
+        : undefined;
 
     return (
         <>
             <div className={'cloud-provider-tab-class'}>Service Hosted By:</div>
-            <Radio.Group onChange={onChange} disabled={serviceHostingTypes.length === 1} defaultValue={defaultValue}>
+            <Radio.Group
+                onChange={onChange}
+                disabled={disabledAlways || serviceHostingTypes.length === 1}
+                value={value}
+            >
                 <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
                 <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
             </Radio.Group>

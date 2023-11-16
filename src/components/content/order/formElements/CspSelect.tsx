@@ -13,7 +13,7 @@ export default function CspSelect({
     cspList,
     onChangeHandler,
 }: {
-    selectCsp: string;
+    selectCsp: UserOrderableServiceVo.csp;
     cspList: UserOrderableServiceVo.csp[];
     onChangeHandler: (csp: UserOrderableServiceVo.csp) => void;
 }): React.JSX.Element {

@@ -9,56 +9,62 @@ import { Button, Select, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
 import { currencyMapper } from '../../../utils/currency';
-import { Area } from '../types/Area';
-import {
-    filterAreaList,
-    getBilling,
-    getFlavorMapper,
-    getFlavorListByCsp,
-    getRegionList,
-    MigrationSteps,
-} from '../formElements/CommonTypes';
+import { Region } from '../types/Region';
+import { Flavor } from '../types/Flavor';
+import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
+import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getBilling } from '../formDataHelpers/billingHelper';
+import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
+import { MigrationSteps } from '../types/MigrationSteps';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
-    getSelectedParameters,
+    updateSelectedParameters,
     currentCsp,
     currentArea,
     currentRegion,
     currentFlavor,
+    currentServiceHostingType,
     getCurrentMigrationStep,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    getSelectedParameters: (
-        selectedCsp: string,
+    updateSelectedParameters: (
+        selectedCsp: UserOrderableServiceVo.csp,
         selectedArea: string,
         selectedRegion: string,
-        selectedFlavor: string
+        selectedFlavor: string,
+        selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
     ) => void;
-    currentCsp: string;
+    currentCsp: UserOrderableServiceVo.csp | undefined;
     currentArea: string;
     currentRegion: string;
     currentFlavor: string;
+    currentServiceHostingType: UserOrderableServiceVo.serviceHostingType | undefined;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-}): JSX.Element => {
-    const [selectCsp, setSelectCsp] = useState<string>('');
+}): React.JSX.Element => {
+    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp | undefined>(undefined);
     const [cspList, setCspList] = useState<UserOrderableServiceVo.csp[]>([]);
 
-    const [areaList, setAreaList] = useState<Tab[]>([{ key: '', label: '' }]);
+    const [areaList, setAreaList] = useState<Tab[]>([]);
     const [selectArea, setSelectArea] = useState<string>('');
 
-    const [regionList, setRegionList] = useState<{ value: string; label: string }[]>([{ value: '', label: '' }]);
+    const [regionList, setRegionList] = useState<Region[]>([]);
     const [selectRegion, setSelectRegion] = useState<string>('');
 
-    const [flavorList, setFlavorList] = useState<{ value: string; label: string; price: string }[]>([
-        { value: '', label: '', price: '' },
-    ]);
+    const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
     const [currency, setCurrency] = useState<string>('');
 
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.SelectADestination);
+
+    const [selectServiceHostType, setSelectServiceHostType] = useState<
+        UserOrderableServiceVo.serviceHostingType | undefined
+    >(undefined);
+    const [serviceHostTypes, setServiceHostTypes] = useState<UserOrderableServiceVo.serviceHostingType[]>([]);
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ExportServiceData);
@@ -77,37 +83,54 @@ export const SelectDestination = ({
     useEffect(() => {
         if (userOrderableServiceVoList.length > 0) {
             const currentCspList: UserOrderableServiceVo.csp[] = [];
-            userOrderableServiceVoList.forEach((v) => {
-                currentCspList.push(v.csp as unknown as UserOrderableServiceVo.csp);
+            userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
+                if (!currentCspList.includes(userOrderableServiceVo.csp)) {
+                    currentCspList.push(userOrderableServiceVo.csp);
+                }
             });
-            let cspValue: string = currentCspList[0];
 
-            let currentAreaList: Tab[] = getAreaList(userOrderableServiceVoList, cspValue);
+            let cspValue: UserOrderableServiceVo.csp = currentCspList[0];
+
+            let serviceHostingTypes = getAvailableServiceHostingTypes(currentCspList[0], userOrderableServiceVoList);
+            let serviceHostingTypeValue = serviceHostingTypes[0];
+
+            let currentAreaList: Tab[] = convertAreasToTabs(
+                cspValue,
+                serviceHostingTypes[0],
+                userOrderableServiceVoList
+            );
             let areaValue: string = currentAreaList[0]?.key ?? '';
 
-            let currentRegionList: { value: string; label: string }[] = getRegionList(
-                userOrderableServiceVoList,
+            let currentRegionList: Region[] = getRegionDropDownValues(
                 cspValue,
-                areaValue
+                serviceHostingTypes[0],
+                areaValue,
+                userOrderableServiceVoList
             );
             let regionValue: string = currentRegionList[0]?.value ?? '';
 
-            const currentFlavorMapper = getFlavorMapper(userOrderableServiceVoList);
-            let currentFlavorList = getFlavorListByCsp(currentFlavorMapper, cspValue);
+            let currentFlavorList = getFlavorList(cspValue, serviceHostingTypes[0], userOrderableServiceVoList);
             let flavorValue: string = currentFlavorList[0]?.value ?? '';
             let priceValue: string = currentFlavorList[0]?.price ?? '';
 
-            let currentBilling = getBilling(userOrderableServiceVoList, cspValue);
+            let currentBilling = getBilling(currentCspList[0], serviceHostingTypes[0], userOrderableServiceVoList);
 
-            if (currentCsp.length > 0) {
-                currentAreaList = getAreaList(userOrderableServiceVoList, currentCsp);
-                currentRegionList = getRegionList(userOrderableServiceVoList, currentCsp, currentArea);
-                currentFlavorList = getFlavorListByCsp(currentFlavorMapper, currentCsp);
-                currentBilling = getBilling(userOrderableServiceVoList, currentCsp);
-                cspValue = currentCsp;
+            if (currentCsp && currentServiceHostingType) {
+                serviceHostingTypes = getAvailableServiceHostingTypes(currentCsp, userOrderableServiceVoList);
+                currentAreaList = convertAreasToTabs(currentCsp, currentServiceHostingType, userOrderableServiceVoList);
+                currentRegionList = getRegionDropDownValues(
+                    currentCsp,
+                    currentServiceHostingType,
+                    currentAreaList[0]?.key ?? '',
+                    userOrderableServiceVoList
+                );
+                currentFlavorList = getFlavorList(currentCsp, currentServiceHostingType, userOrderableServiceVoList);
+                currentBilling = getBilling(currentCsp, currentServiceHostingType, userOrderableServiceVoList);
                 areaValue = currentArea;
+                cspValue = currentCsp;
                 regionValue = currentRegion;
                 flavorValue = currentFlavor;
+                serviceHostingTypeValue = currentServiceHostingType;
                 currentFlavorList.forEach((flavorItem) => {
                     if (flavorItem.value === currentFlavor) {
                         priceValue = flavorItem.price;
@@ -125,41 +148,35 @@ export const SelectDestination = ({
             setSelectFlavor(flavorValue);
             setPriceValue(priceValue);
             setCurrency(currencyValue);
+            setServiceHostTypes(serviceHostingTypes);
+            setSelectServiceHostType(serviceHostingTypeValue);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userOrderableServiceVoList, currentCsp, currentArea, currentRegion, currentFlavor]);
+    }, []);
 
     useEffect(() => {
-        if (selectCsp.length > 0 && selectArea.length > 0 && selectRegion.length > 0 && selectFlavor.length > 0) {
-            getSelectedParameters(selectCsp, selectArea, selectRegion, selectFlavor);
+        if (
+            selectCsp &&
+            selectArea.length > 0 &&
+            selectRegion.length > 0 &&
+            selectFlavor.length > 0 &&
+            selectServiceHostType
+        ) {
+            updateSelectedParameters(selectCsp, selectArea, selectRegion, selectFlavor, selectServiceHostType);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectCsp, selectArea, selectRegion, selectFlavor]);
+    }, [selectCsp, selectArea, selectRegion, selectFlavor, selectServiceHostType, updateSelectedParameters]);
 
-    function getAreaList(rsp: UserOrderableServiceVo[], selectCsp: string): Tab[] {
-        const areas: Area[] = filterAreaList(rsp, selectCsp);
-        let areaItems: Tab[] = [];
-        if (areas.length > 0) {
-            areaItems = areas.map((area: Area) => {
-                if (!area.name) {
-                    return { key: '', label: '' };
-                }
-                const name = area.name;
-                return {
-                    label: name,
-                    key: name,
-                    children: [],
-                };
-            });
-        }
-        return areaItems;
-    }
-
-    const onChangeCloudProvider = (csp: string) => {
-        const currentAreaList = getAreaList(userOrderableServiceVoList, csp);
-        const currentRegionList = getRegionList(userOrderableServiceVoList, csp, currentAreaList[0]?.key ?? '');
-        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userOrderableServiceVoList), csp);
-        const billing: Billing = getBilling(userOrderableServiceVoList, csp);
+    const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
+        const serviceHostingTypes = getAvailableServiceHostingTypes(csp, userOrderableServiceVoList);
+        const currentAreaList = convertAreasToTabs(csp, serviceHostingTypes[0], userOrderableServiceVoList);
+        const currentRegionList = getRegionDropDownValues(
+            csp,
+            serviceHostingTypes[0],
+            currentAreaList[0]?.key ?? '',
+            userOrderableServiceVoList
+        );
+        const currentFlavorList = getFlavorList(csp, serviceHostingTypes[0], userOrderableServiceVoList);
+        const billing: Billing = getBilling(csp, serviceHostingTypes[0], userOrderableServiceVoList);
         setSelectCsp(csp);
         setAreaList(currentAreaList);
         setSelectArea(currentAreaList[0]?.key ?? '');
@@ -172,116 +189,162 @@ export const SelectDestination = ({
     };
 
     const onChangeAreaValue = (area: string) => {
-        const currentRegionList = getRegionList(userOrderableServiceVoList, selectCsp, area);
-        setSelectArea(area);
-        setRegionList(currentRegionList);
-        setSelectRegion(currentRegionList[0]?.value ?? '');
+        if (selectCsp) {
+            const currentRegionList = getRegionDropDownValues(
+                selectCsp,
+                selectServiceHostType ?? serviceHostTypes[0],
+                area,
+                userOrderableServiceVoList
+            );
+            setSelectArea(area);
+            setRegionList(currentRegionList);
+            setSelectRegion(currentRegionList[0]?.value ?? '');
+        }
     };
 
-    const onChangeRegion = (value: string) => {
-        setSelectRegion(value);
+    const onChangeRegion = (newRegion: string) => {
+        setSelectRegion(newRegion);
     };
 
-    const onChangeFlavor = (value: string) => {
-        const currentFlavorList = getFlavorListByCsp(getFlavorMapper(userOrderableServiceVoList), selectCsp);
-        const billing: Billing = getBilling(userOrderableServiceVoList, selectCsp);
-
-        setSelectFlavor(value);
-        setCurrency(currencyMapper[billing.currency]);
-        currentFlavorList.forEach((flavor) => {
-            if (value === flavor.value) {
-                setPriceValue(flavor.price);
-            }
-        });
+    const onChangeFlavor = (newFlavor: string) => {
+        setSelectFlavor(newFlavor);
+        if (selectCsp) {
+            const billing: Billing = getBilling(
+                selectCsp,
+                selectServiceHostType ?? serviceHostTypes[0],
+                userOrderableServiceVoList
+            );
+            setSelectFlavor(newFlavor);
+            setCurrency(currencyMapper[billing.currency]);
+            flavorList.forEach((flavor) => {
+                if (newFlavor === flavor.value) {
+                    setPriceValue(flavor.price);
+                }
+            });
+        }
     };
 
-    return (
-        <div>
-            <CspSelect
-                selectCsp={selectCsp}
-                cspList={cspList}
-                onChangeHandler={(csp) => {
-                    onChangeCloudProvider(csp);
-                }}
-            />
-            <div className={'cloud-provider-tab-class content-title'}>
-                <Tabs
-                    type='card'
-                    size='middle'
-                    activeKey={selectArea}
-                    tabPosition={'top'}
-                    items={areaList}
-                    onChange={(area) => {
-                        onChangeAreaValue(area);
+    const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
+        setSelectServiceHostType(serviceHostingType);
+        if (selectCsp) {
+            const currentAreaList = convertAreasToTabs(selectCsp, serviceHostingType, userOrderableServiceVoList);
+            const currentRegionList = getRegionDropDownValues(
+                selectCsp,
+                serviceHostingType,
+                currentAreaList[0]?.key ?? '',
+                userOrderableServiceVoList
+            );
+            const currentFlavorList = getFlavorList(selectCsp, serviceHostingType, userOrderableServiceVoList);
+            const currentBilling = getBilling(selectCsp, serviceHostingType, userOrderableServiceVoList);
+            setAreaList(currentAreaList);
+            setSelectArea(currentAreaList[0]?.key ?? '');
+            setRegionList(currentRegionList);
+            setSelectRegion(currentRegionList[0]?.value ?? '');
+            setFlavorList(currentFlavorList);
+            setSelectFlavor(currentFlavorList[0]?.value ?? '');
+            setPriceValue(currentFlavorList[0].price);
+            setCurrency(currencyMapper[currentBilling.currency]);
+        }
+    };
+
+    if (selectCsp) {
+        return (
+            <div>
+                <CspSelect
+                    selectCsp={selectCsp}
+                    cspList={cspList}
+                    onChangeHandler={(csp) => {
+                        onChangeCloudProvider(csp);
                     }}
                 />
-            </div>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                <Space wrap>
-                    <Select
-                        className={'select-box-class'}
-                        defaultValue={selectRegion}
-                        value={selectRegion}
-                        style={{ width: 450 }}
-                        onChange={onChangeRegion}
-                        options={regionList}
-                    />
-                </Space>
-            </div>
-
-            <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                <Space wrap>
-                    <Select
-                        className={'select-box-class'}
-                        value={selectFlavor}
-                        style={{ width: 450 }}
-                        onChange={(value) => {
-                            onChangeFlavor(value);
+                <br />
+                <ServiceHostingSelection
+                    serviceHostingTypes={serviceHostTypes}
+                    updateServiceHostingType={onChangeServiceHostingType}
+                    disabledAlways={false}
+                    previousSelection={selectServiceHostType}
+                ></ServiceHostingSelection>
+                <br />
+                <br />
+                <div className={'cloud-provider-tab-class content-title'}>
+                    <Tabs
+                        type='card'
+                        size='middle'
+                        activeKey={selectArea}
+                        tabPosition={'top'}
+                        items={areaList}
+                        onChange={(area) => {
+                            onChangeAreaValue(area);
                         }}
-                        options={flavorList}
                     />
-                </Space>
-            </div>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                Price:&nbsp;
-                <span className={'services-content-price-class'}>
-                    {priceValue}&nbsp;{currency}
-                </span>
-            </div>
-            <div className={'migrate-step-button-inner-class'}>
-                <Space size={'large'}>
-                    {currentMigrationStep > MigrationSteps.ExportServiceData ? (
-                        <Button
-                            type='primary'
-                            className={'migrate-steps-operation-button-clas'}
-                            onClick={() => {
-                                prev();
+                </div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                    <Space wrap>
+                        <Select
+                            className={'select-box-class'}
+                            defaultValue={selectRegion}
+                            value={selectRegion}
+                            style={{ width: 450 }}
+                            onChange={onChangeRegion}
+                            options={regionList}
+                        />
+                    </Space>
+                </div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                    <Space wrap>
+                        <Select
+                            className={'select-box-class'}
+                            value={selectFlavor}
+                            style={{ width: 450 }}
+                            onChange={(newFlavor) => {
+                                onChangeFlavor(newFlavor);
                             }}
-                            disabled={isPreviousDisabled}
-                        >
-                            Previous
-                        </Button>
-                    ) : (
-                        <></>
-                    )}
+                            options={flavorList}
+                        />
+                    </Space>
+                </div>
+                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                    Price:&nbsp;
+                    <span className={'services-content-price-class'}>
+                        {priceValue}&nbsp;{currency}
+                    </span>
+                </div>
+                <div className={'migrate-step-button-inner-class'}>
+                    <Space size={'large'}>
+                        {currentMigrationStep > MigrationSteps.ExportServiceData ? (
+                            <Button
+                                type='primary'
+                                className={'migrate-steps-operation-button-clas'}
+                                onClick={() => {
+                                    prev();
+                                }}
+                                disabled={isPreviousDisabled}
+                            >
+                                Previous
+                            </Button>
+                        ) : (
+                            <></>
+                        )}
 
-                    {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
-                        <Button
-                            type='primary'
-                            className={'migrate-steps-operation-button-clas'}
-                            onClick={() => {
-                                next();
-                            }}
-                        >
-                            Next
-                        </Button>
-                    ) : (
-                        <></>
-                    )}
-                </Space>
+                        {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
+                            <Button
+                                type='primary'
+                                className={'migrate-steps-operation-button-clas'}
+                                onClick={() => {
+                                    next();
+                                }}
+                            >
+                                Next
+                            </Button>
+                        ) : (
+                            <></>
+                        )}
+                    </Space>
+                </div>
             </div>
-        </div>
-    );
+        );
+    }
+    return <></>;
 };
