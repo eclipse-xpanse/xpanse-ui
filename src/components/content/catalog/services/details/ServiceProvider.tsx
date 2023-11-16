@@ -19,7 +19,7 @@ import UnregisterService from '../unregister/UnregisterService';
 import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
-import { cspMap } from '../../../order/types/CspLogo';
+import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
 
 let lastServiceName: string = '';
