@@ -30,7 +30,7 @@ import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPo
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 import MyServicesError from './MyServicesError';
 import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
-import { cspMap } from '../order/types/CspLogo';
+import { cspMap } from '../common/csp/CspLogo';
 import { MyServicesHostingType } from './MyServicesHostingType';
 
 function MyServices(): React.JSX.Element {

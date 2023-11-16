@@ -6,7 +6,7 @@
 import React from 'react';
 import { DeployResource } from '../../../xpanse-api/generated';
 import { DeployedResources } from './DeployedResources';
-import { convertMapToDetailsList } from '../common/convertMapToDetailsList';
+import { convertMapToDetailsList } from '../../utils/convertMapToDetailsList';
 
 export function ServiceDetailsContent({
     content,

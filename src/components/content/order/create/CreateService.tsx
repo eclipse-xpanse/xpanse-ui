@@ -8,7 +8,7 @@ import { To, useLocation, useSearchParams } from 'react-router-dom';
 import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
-import GoToSubmit from '../formElements/GoToSubmit';
+import GoToSubmit from './GoToSubmit';
 import { Select, Skeleton, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { currencyMapper } from '../../../utils/currency';

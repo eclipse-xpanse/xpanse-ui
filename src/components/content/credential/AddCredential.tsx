@@ -20,7 +20,7 @@ import {
 import { CredentialTip } from './CredentialTip';
 import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
 import { CredentialApiDoc } from './CredentialApiDoc';
-import { cspMap } from '../order/types/CspLogo';
+import { cspMap } from '../common/csp/CspLogo';
 
 function AddCredential({
     role,
