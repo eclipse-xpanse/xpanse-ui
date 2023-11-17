@@ -16,6 +16,7 @@ function DestroyServiceStatusPolling({
     error,
     setIsDestroyingCompleted,
     getDestroyCloseStatus,
+    serviceHostingType,
 }: {
     uuid: string;
     isError: boolean;
@@ -23,8 +24,9 @@ function DestroyServiceStatusPolling({
     error: Error | null;
     setIsDestroyingCompleted: (arg: boolean) => void;
     getDestroyCloseStatus: (arg: boolean) => void;
+    serviceHostingType: ServiceDetailVo.serviceHostingType;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, serviceHostingType, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
     ]);
@@ -98,10 +100,10 @@ function DestroyServiceStatusPolling({
         }
     }
 
-    if (uuid && getServiceDetailsByIdQuery.data !== undefined)
+    if (uuid && getServiceDetailsByIdQuery.data !== undefined) {
         if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             return (
                 <div className={'submit-alert-tip'}>
@@ -117,8 +119,8 @@ function DestroyServiceStatusPolling({
                 </div>
             );
         } else if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED.toString()
         ) {
             return (
                 <div className={'submit-alert-tip'}>
@@ -134,6 +136,7 @@ function DestroyServiceStatusPolling({
                 </div>
             );
         }
+    }
 
     return <></>;
 }

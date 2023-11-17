@@ -23,6 +23,7 @@ function MigrateServiceStatusPolling({
     setRequestSubmitted,
     setIsPreviousDisabled,
     getCurrentMigrationStepStatus,
+    serviceHostingType,
 }: {
     destroyUuid: string | undefined;
     deployUuid: string | undefined;
@@ -33,15 +34,16 @@ function MigrateServiceStatusPolling({
     setRequestSubmitted: (arg: boolean) => void;
     setIsPreviousDisabled: (arg: boolean) => void;
     getCurrentMigrationStepStatus: (srg: MigrationStatus) => void;
+    serviceHostingType: ServiceDetailVo.serviceHostingType;
 }): React.JSX.Element {
     const [isStart, setIsStart] = useState<boolean>(false);
 
-    const getDestroyServiceEntityByIdQuery = useServiceDetailsPollingQuery(destroyUuid, isStart, [
+    const getDestroyServiceEntityByIdQuery = useServiceDetailsPollingQuery(destroyUuid, isStart, serviceHostingType, [
         ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
         ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
     ]);
 
-    const getDeployServiceEntityByIdQuery = useServiceDetailsPollingQuery(deployUuid, isStart, [
+    const getDeployServiceEntityByIdQuery = useServiceDetailsPollingQuery(deployUuid, isStart, serviceHostingType, [
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
     ]);
@@ -78,8 +80,8 @@ function MigrateServiceStatusPolling({
     useEffect(() => {
         if (
             getDestroyServiceEntityByIdQuery.data &&
-            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             setIsMigrating(false);
             setRequestSubmitted(true);
@@ -88,8 +90,8 @@ function MigrateServiceStatusPolling({
         }
         if (
             getDestroyServiceEntityByIdQuery.data &&
-            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
         ) {
             setIsMigrating(false);
             setRequestSubmitted(false);
@@ -164,8 +166,8 @@ function MigrateServiceStatusPolling({
     if (
         deployUuid &&
         getDeployServiceEntityByIdQuery.data &&
-        getDeployServiceEntityByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+        getDeployServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
     ) {
         return OrderSubmitResult(
             ProcessingStatus(getDeployServiceEntityByIdQuery.data, OperationType.Migrate),
@@ -180,16 +182,16 @@ function MigrateServiceStatusPolling({
     if (
         deployUuid &&
         getDeployServiceEntityByIdQuery.data &&
-        getDeployServiceEntityByIdQuery.data.serviceDeploymentState !==
-            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+        getDeployServiceEntityByIdQuery.data.serviceDeploymentState.toString() !==
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
     ) {
         if (
             destroyUuid &&
             getDestroyServiceEntityByIdQuery.data &&
-            (getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DESTROYING ||
-                getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                    ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL)
+            (getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DESTROYING.toString() ||
+                getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                    ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString())
         ) {
             return OrderSubmitResult(
                 'Migrating..., Please wait...',
@@ -204,8 +206,8 @@ function MigrateServiceStatusPolling({
         if (
             destroyUuid &&
             getDestroyServiceEntityByIdQuery.data &&
-            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getDestroyServiceEntityByIdQuery.data, OperationType.Migrate),
@@ -220,8 +222,8 @@ function MigrateServiceStatusPolling({
         if (
             destroyUuid &&
             getDestroyServiceEntityByIdQuery.data &&
-            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getDeployServiceEntityByIdQuery.data, OperationType.Migrate),

@@ -6,15 +6,35 @@
 import '../../../styles/app.css';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useQuery } from '@tanstack/react-query';
-import { ApiError, DeployResource, Response, ServiceService } from '../../../xpanse-api/generated';
+import {
+    ApiError,
+    DeployResource,
+    Response,
+    ServiceDetailVo,
+    ServiceService,
+    ServiceVo,
+} from '../../../xpanse-api/generated';
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 import { ServiceDetailsContent } from './ServiceDetailsContent';
 import { DeploymentResultMessage } from './DeploymentResultMessage';
-export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
+
+export const MyServiceDetails = ({
+    serviceId,
+    serviceHostingType,
+}: {
+    serviceId: string;
+    serviceHostingType: ServiceVo.serviceHostingType;
+}): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getServiceDetailsById', serviceId],
-        queryFn: () => ServiceService.getServiceDetailsById(serviceId),
+        queryKey: ['getServiceDetailsById', serviceId, serviceHostingType],
+        queryFn: () => {
+            if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+                return ServiceService.getSelfHostedServiceDetailsById(serviceId);
+            } else {
+                return ServiceService.getVendorHostedServiceDetailsById(serviceId);
+            }
+        },
         refetchOnWindowFocus: false,
     });
 
@@ -33,11 +53,14 @@ export const MyServiceDetails = ({ serviceId }: { serviceId: string }): React.JS
                 requestMap.set(key, getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties[key]);
             }
         }
-        if (getServiceDetailsByIdQuery.data.resultMessage) {
-            resultMessage = DeploymentResultMessage(getServiceDetailsByIdQuery.data.resultMessage);
-        }
-        if (getServiceDetailsByIdQuery.data.deployResources) {
-            deployResourceMap = getServiceDetailsByIdQuery.data.deployResources;
+        if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+            const serviceDetailVo = getServiceDetailsByIdQuery.data as ServiceDetailVo;
+            if (serviceDetailVo.resultMessage) {
+                resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
+            }
+            if (serviceDetailVo.deployResources) {
+                deployResourceMap = serviceDetailVo.deployResources;
+            }
         }
         return (
             <>

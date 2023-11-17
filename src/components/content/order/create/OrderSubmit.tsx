@@ -116,6 +116,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     isLoading={submitDeploymentRequest.isPending}
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}
+                    serviceHostingType={state.serviceHostingType}
                 />
             ) : null}
             <div className={'order-param-item-left'} />

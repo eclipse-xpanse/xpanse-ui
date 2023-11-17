@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ApiError, Response, ServiceService } from '../../../../xpanse-api/generated';
+import { ApiError, Response, ServiceService, ServiceVo } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 import { Alert } from 'antd';
@@ -16,17 +16,25 @@ export function PurgeServiceStatusPolling({
     error,
     setIsPurgingCompleted,
     getPurgeCloseStatus,
+    serviceHostingType,
 }: {
     uuid: string;
     isError: boolean;
     error: Error | null;
     setIsPurgingCompleted: (arg: boolean) => void;
     getPurgeCloseStatus: (arg: boolean) => void;
+    serviceHostingType: ServiceVo.serviceHostingType;
 }): React.JSX.Element {
     const [isRefetch, setIsRefetch] = useState<boolean>(true);
     const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getPurgeServiceDetailsById', uuid],
-        queryFn: () => ServiceService.getServiceDetailsById(uuid),
+        queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
+        queryFn: () => {
+            if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+                return ServiceService.getSelfHostedServiceDetailsById(uuid);
+            } else {
+                return ServiceService.getVendorHostedServiceDetailsById(uuid);
+            }
+        },
         refetchOnWindowFocus: false,
         refetchInterval: uuid.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
         enabled: uuid.length > 0 && isRefetch,
