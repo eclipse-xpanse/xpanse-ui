@@ -19,6 +19,7 @@ function OrderSubmitStatusPolling({
     isLoading,
     setIsDeploying,
     setRequestSubmitted,
+    serviceHostingType,
 }: {
     uuid: string | undefined;
     error: Error | null;
@@ -26,8 +27,9 @@ function OrderSubmitStatusPolling({
     isLoading: boolean;
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
+    serviceHostingType: ServiceDetailVo.serviceHostingType;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, [
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, serviceHostingType, [
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
         ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED,
     ]);
@@ -39,16 +41,16 @@ function OrderSubmitStatusPolling({
     useEffect(() => {
         if (
             getServiceDetailsByIdQuery.data &&
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
         ) {
             setIsDeploying(false);
             setRequestSubmitted(true);
         }
         if (
             getServiceDetailsByIdQuery.data &&
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+                ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
         ) {
             setIsDeploying(false);
             setRequestSubmitted(false);
@@ -101,13 +103,14 @@ function OrderSubmitStatusPolling({
 
     if (
         uuid &&
-        getServiceDetailsByIdQuery.data?.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYING
+        getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DEPLOYING.toString()
     ) {
         return OrderSubmitResult(
             'Deploying, Please wait...',
             uuid,
             'success',
-            getServiceDetailsByIdQuery.data.serviceDeploymentState,
+            ServiceDetailVo.serviceDeploymentState.DEPLOYING,
             stopWatch,
             OperationType.Deploy
         );
@@ -127,11 +130,12 @@ function OrderSubmitStatusPolling({
     if (
         uuid &&
         getServiceDetailsByIdQuery.data &&
-        getServiceDetailsByIdQuery.data.serviceDeploymentState !== ServiceDetailVo.serviceDeploymentState.DEPLOYING
+        getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() !==
+            ServiceDetailVo.serviceDeploymentState.DEPLOYING.toString()
     ) {
         if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),
@@ -143,8 +147,8 @@ function OrderSubmitStatusPolling({
             );
         }
         if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState ===
-            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),
