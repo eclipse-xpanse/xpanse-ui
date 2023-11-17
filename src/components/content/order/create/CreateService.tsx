@@ -168,7 +168,7 @@ function CreateService(): React.JSX.Element {
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [orderableServicesQuery.isSuccess, orderableServicesQuery.data, latestVersion, location.state, serviceName]);
+    }, [orderableServicesQuery.isSuccess, orderableServicesQuery.data, latestVersion, serviceName]);
 
     useEffect(() => {
         if (selectCsp && selectServiceHostType && !location.state) {
@@ -202,7 +202,8 @@ function CreateService(): React.JSX.Element {
             setPriceValue(currentFlavorList[0]?.price);
             setCurrency(currencyMapper[billing.currency]);
         }
-    }, [location.state, selectCsp, selectServiceHostType, selectVersion]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectServiceHostType]);
 
     const onChangeVersion = (currentVersion: string) => {
         const currentCspList = getCspListForVersion(currentVersion, versionMapper.current);
