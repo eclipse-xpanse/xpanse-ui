@@ -6,7 +6,7 @@
 import { Image, Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { homePageRoute } from '../../utils/constants';
+import { catalogPageRoute, homePageRoute, servicesPageRoute } from '../../utils/constants';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { getMenuItems } from './menuItems';
 
@@ -19,6 +19,16 @@ function LayoutSider(): React.JSX.Element {
     const onClicked = function (cfg: MenuInfo): void {
         navigate(cfg.key);
     };
+
+    function getSelectedKey(): string[] {
+        if (pathname.startsWith(servicesPageRoute) && hash) {
+            return [servicesPageRoute + hash];
+        }
+        if (pathname.startsWith(catalogPageRoute) && hash) {
+            return [catalogPageRoute + hash];
+        }
+        return [pathname];
+    }
 
     return (
         <Layout.Sider
@@ -38,7 +48,7 @@ function LayoutSider(): React.JSX.Element {
                 mode='inline'
                 theme='dark'
                 onClick={onClicked}
-                selectedKeys={[hash ? pathname + hash : pathname]}
+                selectedKeys={getSelectedKey()}
             />
         </Layout.Sider>
     );

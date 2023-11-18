@@ -9,13 +9,13 @@ export const footerText: string = '©2023 Eclipse Foundation - Xpanse';
 export const catalogPageRoute: string = '/catalog';
 export const catalogSubPageRoute: string = '/catalog#';
 export const catalogLabelName: string = 'Catalog';
-export const orderPageRoute: string = '/order';
 export const servicesPageRoute: string = '/services';
 export const myServicesRoute: string = '/myServices';
 export const myServicesLabelName: string = 'MyServices';
 export const servicesSubPageRoute: string = '/services#';
 export const servicesLabelName: string = 'Services';
-export const createServicePageRoute: string = '/createService';
+export const createServicePageRoute: string = servicesPageRoute + '/createService';
+export const orderPageRoute: string = createServicePageRoute + '/orderSubmit';
 export const monitorPageRoute: string = '/monitor';
 export const monitorLabelName: string = 'Monitor';
 
