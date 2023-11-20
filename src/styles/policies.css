@@ -1,0 +1,89 @@
+.add-policy-container {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.update-policy {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-policy {
+    display: flex;
+    flex-direction: row;
+}
+
+.submit-reset-container {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.submit-class {
+    display: flex;
+    flex-direction: row;
+}
+
+.reset-class {
+    display: flex;
+    flex-direction: row;
+}
+
+.policy-data-display {
+    margin-right: 10em;
+    margin-left: 10em;
+}
+
+.policy-data-hover {
+    padding: 0;
+}
+
+.policy-content-hover {
+    width: 400px;
+    overflow: auto;
+    max-height: 500px;
+}
+
+.edit-form-class {
+    max-width: 60%;
+}
+
+.policy-content-upload-preview {
+    whitespace: pre-wrap;
+    width: 400px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.policy-content-read-only-preview {
+    color: #555;
+    pointer-events: none;
+}
+
+.policy-form-select {
+    display: flex;
+    justify-content: center;
+}
+
+.policy-form-select .ant-select-selection-item {
+    display: flex;
+    align-items: center;
+}
+
+.policy-form-select .custom-select-image {
+    margin-right: 8px;
+}
+
+.policy-form-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.policy-upload-file-remove-buttons {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}

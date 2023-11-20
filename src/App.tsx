@@ -10,17 +10,18 @@ import Protected from './components/protectedRoutes/ProtectedRoute';
 import {
     catalogPageRoute,
     createServicePageRoute,
-    homePageRoute,
-    orderPageRoute,
-    registerPageRoute,
-    myServicesRoute,
-    servicesPageRoute,
-    monitorPageRoute,
     credentialPageRoute,
     healthCheckPageRoute,
+    homePageRoute,
+    monitorPageRoute,
+    myServicesRoute,
+    orderPageRoute,
+    policiesRoute,
     registerFailedRoute,
     registerInvalidRoute,
+    registerPageRoute,
     registerSuccessfulRoute,
+    servicesPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Services from './components/content/order/services/Services';
@@ -37,6 +38,8 @@ import { HealthCheckStatus } from './components/content/systemStatus/HealthCheck
 import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
 import React from 'react';
 import { SessionLost } from './components/content/login/SessionLost';
+import Policies from './components/content/policies/Policies';
+
 const queryClient = new QueryClient();
 
 function App(): React.JSX.Element {
@@ -165,6 +168,17 @@ function App(): React.JSX.Element {
                             <OidcSecure>
                                 <Protected allowedRole={['admin']}>
                                     <HealthCheckStatus />
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        key={policiesRoute}
+                        path={policiesRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={['user']}>
+                                    <Policies />
                                 </Protected>
                             </OidcSecure>
                         }
