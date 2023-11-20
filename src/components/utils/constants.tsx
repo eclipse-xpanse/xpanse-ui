@@ -34,3 +34,5 @@ export const registerInvalidRoute: string = '/register/invalid';
 export const registerSuccessfulRoute: string = '/register/successful';
 export const serviceStateQuery: string = 'serviceState';
 export const serviceIdQuery: string = 'serviceId';
+export const policiesRoute: string = '/policies';
+export const policiesLabelName: string = 'Policies';

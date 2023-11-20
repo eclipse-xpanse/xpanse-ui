@@ -80,7 +80,7 @@ function Services(): React.JSX.Element {
     }
 
     return (
-        <div className={'services-content'}>
+        <div className={'generic-table-container'}>
             <div className={'content-title'}>
                 <FormOutlined />
                 &nbsp;Select Service

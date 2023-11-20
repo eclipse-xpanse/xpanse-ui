@@ -7,7 +7,7 @@ import { Col, Row, Skeleton, Space } from 'antd';
 
 function ServicesSkeleton() {
     return (
-        <div className={'services-content'}>
+        <div className={'generic-table-container'}>
             <div className={'content-title'}>
                 <Skeleton active={true} paragraph={{ rows: 0 }} />
             </div>

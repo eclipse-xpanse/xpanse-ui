@@ -348,7 +348,7 @@ function CreateService(): React.JSX.Element {
                     <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
                     <div className={'Line'} />
                 </div>
-                <div className={'services-content'}>
+                <div className={'generic-table-container'}>
                     <div className={'content-title'}>
                         Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
                         <Select

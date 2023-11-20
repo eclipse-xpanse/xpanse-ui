@@ -352,7 +352,7 @@ function MyServices(): React.JSX.Element {
     function migrate(record: ServiceVo): void {
         setCurrentServiceVo(record);
         setTitle(
-            <div className={'services-content'}>
+            <div className={'generic-table-container'}>
                 <div className={'content-title'}>
                     Service: {record.name}@{record.version}
                 </div>
@@ -524,7 +524,7 @@ function MyServices(): React.JSX.Element {
     }
 
     return (
-        <div className={'services-content'}>
+        <div className={'generic-table-container'}>
             {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}

@@ -31,7 +31,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
 
-function Credential(): React.JSX.Element {
+function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -87,7 +87,7 @@ function Credential(): React.JSX.Element {
     const deleteCredentialRequest = useMutation({
         mutationFn: (credentialVariables: CredentialVariables) => deleteCredentialByRole(credentialVariables),
         onSuccess: () => {
-            getTipInfo('success', 'Deleting Credential Successful.');
+            getTipInfo('success', 'Deleting Credentials Successful.');
             setIsRefresh(false);
             void credentialsQuery.refetch();
         },
@@ -166,8 +166,8 @@ function Credential(): React.JSX.Element {
                                 Details
                             </Button>
                             <Popconfirm
-                                title='Delete the Credential'
-                                description='Are you sure to delete the Credential?'
+                                title='Delete the Credentials'
+                                description='Are you sure to delete the Credentials?'
                                 okText='Yes'
                                 cancelText='No'
                                 onConfirm={() => {
@@ -264,12 +264,12 @@ function Credential(): React.JSX.Element {
     };
 
     return (
-        <div>
+        <div className={'generic-table-container'}>
             <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
             <div>
                 <Modal
                     width={1000}
-                    title='Add Credential'
+                    title='Add Credentials'
                     open={isAddOpen}
                     onCancel={onCancel}
                     maskClosable={false}
@@ -280,7 +280,7 @@ function Credential(): React.JSX.Element {
                 </Modal>
                 <Modal
                     width={1000}
-                    title='Update Credential'
+                    title='Update Credentials'
                     open={isUpdateOpen}
                     onCancel={onUpdateCancel}
                     maskClosable={false}
@@ -296,7 +296,7 @@ function Credential(): React.JSX.Element {
                 </Modal>
                 <Modal
                     width={1000}
-                    title='Credential Details'
+                    title='Credentials Details'
                     open={isDetailsOpen}
                     onCancel={onDetailsCancel}
                     maskClosable={false}
@@ -307,27 +307,27 @@ function Credential(): React.JSX.Element {
                 </Modal>
             </div>
             <div>
-                <Button
-                    className={'add-credential-from-button'}
-                    type='primary'
-                    loading={isRefresh && (credentialsQuery.isLoading || credentialsQuery.isRefetching)}
-                    icon={<SyncOutlined />}
-                    onClick={() => {
-                        refresh();
-                    }}
-                >
-                    refresh
-                </Button>
-                <Button
-                    className={'add-credential-from-button'}
-                    type='primary'
-                    icon={<PlusCircleOutlined />}
-                    onClick={() => {
-                        addCredential();
-                    }}
-                >
-                    Add
-                </Button>
+                <div className={'policy-manage-buttons-container'}>
+                    <Button
+                        type='primary'
+                        loading={isRefresh && (credentialsQuery.isLoading || credentialsQuery.isRefetching)}
+                        icon={<SyncOutlined />}
+                        onClick={() => {
+                            refresh();
+                        }}
+                    >
+                        refresh
+                    </Button>
+                    <Button
+                        type='primary'
+                        icon={<PlusCircleOutlined />}
+                        onClick={() => {
+                            addCredential();
+                        }}
+                    >
+                        Add
+                    </Button>
+                </div>
                 <Table
                     columns={columns}
                     loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}
@@ -338,4 +338,4 @@ function Credential(): React.JSX.Element {
     );
 }
 
-export default Credential;
+export default Credentials;
