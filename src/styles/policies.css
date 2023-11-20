@@ -1,4 +1,4 @@
-.add-policy-container {
+.policy-manage-buttons-container {
     display: flex;
     gap: 20px;
     flex-direction: row;
@@ -52,7 +52,6 @@
 }
 
 .policy-content-upload-preview {
-    whitespace: pre-wrap;
     width: 400px;
     overflow: auto;
     max-height: 300px;

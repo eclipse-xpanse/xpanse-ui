@@ -29,7 +29,7 @@ import CreateService from './components/content/order/create/CreateService';
 import OrderSubmitPage from './components/content/order/create/OrderSubmit';
 import MyServices from './components/content/myServices/MyServices';
 import Monitor from './components/content/monitor/Monitor';
-import Credential from './components/content/credential/Credential';
+import Credentials from './components/content/credentials/Credentials';
 import { OidcConfig } from './components/oidc/OidcConfig';
 import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
 import { NotFoundPage } from './components/notFound/NotFoundPage';
@@ -156,7 +156,7 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user', 'isv']}>
-                                    <Credential />
+                                    <Credentials />
                                 </Protected>
                             </OidcSecure>
                         }

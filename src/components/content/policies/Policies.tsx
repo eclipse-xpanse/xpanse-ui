@@ -199,7 +199,7 @@ function Policies(): React.JSX.Element {
 
     return (
         <>
-            <div className={'services-content policies-instance-list'}>
+            <div className={'generic-table-container'}>
                 {deletePoliciesManagementServiceRequest.isSuccess && id.length > 0 ? (
                     <PolicyDeleteResultStatus
                         id={id}
@@ -209,7 +209,7 @@ function Policies(): React.JSX.Element {
                         getDeleteCloseStatus={getDeleteCloseStatus}
                     />
                 ) : null}
-                <div className={'add-policy-container'}>
+                <div className={'policy-manage-buttons-container'}>
                     <div className={'update-policy'}>
                         <Button
                             type='primary'

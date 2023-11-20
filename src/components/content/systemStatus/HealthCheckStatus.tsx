@@ -196,7 +196,7 @@ export const HealthCheckStatus = (): JSX.Element => {
 
     return (
         <>
-            <div className={'services-content'}>
+            <div className={'generic-table-container'}>
                 <div className={'health-status-title'}>
                     <h3>
                         <DashboardOutlined />
