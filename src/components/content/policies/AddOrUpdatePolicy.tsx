@@ -235,11 +235,9 @@ export const AddOrUpdatePolicy = ({
                     <Radio.Group onChange={OnPolicyStatusChanged} value={isEnabled}>
                         {policiesStatuses.map((item, index) => {
                             return (
-                                <>
-                                    <Radio key={index} value={item}>
-                                        {item ? 'true' : 'false'}
-                                    </Radio>
-                                </>
+                                <Radio key={index} value={item}>
+                                    {item ? 'true' : 'false'}
+                                </Radio>
                             );
                         })}
                     </Radio.Group>
@@ -249,39 +247,43 @@ export const AddOrUpdatePolicy = ({
                     name='policy'
                     rules={[{ required: true, message: 'Please upload policy file!' }]}
                 >
-                    <div className={'policy-upload-file-remove-buttons'}>
-                        <Upload
-                            name={'Policy Content File'}
-                            multiple={false}
-                            beforeUpload={setPolicyContentFileData}
-                            maxCount={1}
-                            fileList={files.current}
-                            onRemove={onRemovePolicyContentFile}
-                            accept={'.rego'}
-                            showUploadList={true}
-                        >
-                            <Button
-                                size={'large'}
-                                disabled={regoFileUploadStatus === 'completed'}
-                                loading={regoFileUploadStatus === 'inProgress'}
-                                type={'primary'}
-                                icon={<UploadOutlined />}
-                            >
-                                Upload File
-                            </Button>
-                        </Upload>
-                    </div>
-                    <br />
                     <div>
-                        {policyContent.current ? (
-                            <Card className={'policy-content-upload-preview'}>
-                                <pre>
-                                    <div className={'policy-content-read-only-preview'}>{policyContent.current}</div>
-                                </pre>
-                            </Card>
-                        ) : (
-                            <></>
-                        )}
+                        <div className={'policy-upload-file-remove-buttons'}>
+                            <Upload
+                                name={'Policy Content File'}
+                                multiple={false}
+                                beforeUpload={setPolicyContentFileData}
+                                maxCount={1}
+                                fileList={files.current}
+                                onRemove={onRemovePolicyContentFile}
+                                accept={'.rego'}
+                                showUploadList={true}
+                            >
+                                <Button
+                                    size={'large'}
+                                    disabled={regoFileUploadStatus === 'completed'}
+                                    loading={regoFileUploadStatus === 'inProgress'}
+                                    type={'primary'}
+                                    icon={<UploadOutlined />}
+                                >
+                                    Upload File
+                                </Button>
+                            </Upload>
+                        </div>
+                        <br />
+                        <div>
+                            {policyContent.current ? (
+                                <Card className={'policy-content-upload-preview'}>
+                                    <pre>
+                                        <div className={'policy-content-read-only-preview'}>
+                                            {policyContent.current}
+                                        </div>
+                                    </pre>
+                                </Card>
+                            ) : (
+                                <></>
+                            )}
+                        </div>
                     </div>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
