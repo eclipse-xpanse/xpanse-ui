@@ -31,9 +31,9 @@ function Services(): React.JSX.Element {
     const onSelectService = function (serviceName: string, latestVersion: string) {
         navigate(
             createServicePageRoute
-                .concat('?catalog=', location.hash.split('#')[1])
-                .concat('&serviceName=', serviceName)
+                .concat('?serviceName=', serviceName)
                 .concat('&latestVersion=', latestVersion.replace(' ', ''))
+                .concat('#', location.hash.split('#')[1])
         );
     };
 
