@@ -52,6 +52,9 @@ function MyServices(): React.JSX.Element {
     const [isPurging, setIsPurging] = useState<boolean>(false);
     const [isPurgingCompleted, setIsPurgingCompleted] = useState<boolean>(false);
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
+    const [serviceHostingType, setServiceHostingType] = useState<ServiceVo.serviceHostingType>(
+        ServiceVo.serviceHostingType.SELF
+    );
     const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [title, setTitle] = useState<React.JSX.Element>(<></>);
@@ -237,7 +240,7 @@ function MyServices(): React.JSX.Element {
                                 type='primary'
                                 icon={<InfoCircleOutlined />}
                                 onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record.id);
+                                    handleMyServiceDetailsOpenModal(record);
                                 }}
                             >
                                 details
@@ -332,6 +335,7 @@ function MyServices(): React.JSX.Element {
 
     const purge = (record: ServiceVo): void => {
         setIsPurging(true);
+        setServiceHostingType(record.serviceHostingType);
         setIsPurgingCompleted(false);
         setId(record.id);
         servicePurgeQuery.mutate(record.id);
@@ -340,6 +344,7 @@ function MyServices(): React.JSX.Element {
     function destroy(record: ServiceVo): void {
         setIsDestroying(true);
         setIsDestroyingCompleted(false);
+        setServiceHostingType(record.serviceHostingType);
         setId(record.id);
         serviceDestroyQuery.mutate(record.id);
     }
@@ -347,7 +352,7 @@ function MyServices(): React.JSX.Element {
     function migrate(record: ServiceVo): void {
         setCurrentServiceVo(record);
         setTitle(
-            <div className={'services-content'}>
+            <div className={'generic-table-container'}>
                 <div className={'content-title'}>
                     Service: {record.name}@{record.version}
                 </div>
@@ -480,8 +485,9 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
     }
 
-    const handleMyServiceDetailsOpenModal = (id: string) => {
-        setServiceIdInModal(id);
+    const handleMyServiceDetailsOpenModal = (serviceVo: ServiceVo) => {
+        setServiceIdInModal(serviceVo.id);
+        setServiceHostingType(serviceVo.serviceHostingType);
         setIsMyServiceDetailsModalOpen(true);
     };
 
@@ -518,7 +524,7 @@ function MyServices(): React.JSX.Element {
     }
 
     return (
-        <div className={'services-content'}>
+        <div className={'generic-table-container'}>
             {serviceDestroyQuery.isSuccess && isDestroying && id.length > 0 ? (
                 <DestroyServiceStatusPolling
                     uuid={id}
@@ -527,6 +533,7 @@ function MyServices(): React.JSX.Element {
                     error={serviceDestroyQuery.error}
                     setIsDestroyingCompleted={setIsDestroyingCompleted}
                     getDestroyCloseStatus={getDestroyCloseStatus}
+                    serviceHostingType={serviceHostingType}
                 />
             ) : null}
             {isPurging && id.length > 0 ? (
@@ -536,6 +543,7 @@ function MyServices(): React.JSX.Element {
                     error={servicePurgeQuery.error}
                     setIsPurgingCompleted={setIsPurgingCompleted}
                     getPurgeCloseStatus={getPurgeCloseStatus}
+                    serviceHostingType={serviceHostingType}
                 />
             ) : null}
             <Modal
@@ -545,7 +553,7 @@ function MyServices(): React.JSX.Element {
                 open={serviceIdInModal.length > 0 && isMyServiceDetailsModalOpen}
                 onCancel={handleMyServiceDetailsModalClose}
             >
-                <MyServiceDetails serviceId={serviceIdInModal} />
+                <MyServiceDetails serviceId={serviceIdInModal} serviceHostingType={serviceHostingType} />
             </Modal>
             {currentServiceVo ? (
                 <Modal

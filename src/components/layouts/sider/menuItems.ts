@@ -4,7 +4,14 @@
  */
 
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
-import { credentialMenu, healthCheckMenu, monitorMenu, myServicesMenu, servicesMenu } from './servicesMenu';
+import {
+    credentialMenu,
+    healthCheckMenu,
+    monitorMenu,
+    myServicesMenu,
+    policiesMenu,
+    servicesMenu,
+} from './servicesMenu';
 import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
@@ -17,6 +24,6 @@ export function getMenuItems(): ItemType[] {
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
     } else {
-        return [servicesMenu(serviceCategories), myServicesMenu(), monitorMenu(), credentialMenu()];
+        return [servicesMenu(serviceCategories), myServicesMenu(), monitorMenu(), credentialMenu(), policiesMenu()];
     }
 }

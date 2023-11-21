@@ -98,6 +98,7 @@ export const MigrateServiceSubmit = ({
                     setRequestSubmitted={setRequestSubmitted}
                     setIsPreviousDisabled={setIsPreviousDisabled}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
+                    serviceHostingType={selectServiceHostingType}
                 />
             ) : null}
             <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>

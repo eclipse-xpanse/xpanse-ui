@@ -8,7 +8,9 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type ServiceVo = {
+import type { DeployRequest } from './DeployRequest';
+
+export type VendorHostedServiceDetailsVo = {
     /**
      * The ID of the service
      */
@@ -16,7 +18,7 @@ export type ServiceVo = {
     /**
      * The catalog of the service
      */
-    category: ServiceVo.category;
+    category: VendorHostedServiceDetailsVo.category;
     /**
      * The name of the service
      */
@@ -32,7 +34,7 @@ export type ServiceVo = {
     /**
      * The provider of the service
      */
-    csp: ServiceVo.csp;
+    csp: VendorHostedServiceDetailsVo.csp;
     /**
      * The flavor of the service
      */
@@ -40,11 +42,11 @@ export type ServiceVo = {
     /**
      * The state of the service
      */
-    serviceDeploymentState: ServiceVo.serviceDeploymentState;
+    serviceDeploymentState: VendorHostedServiceDetailsVo.serviceDeploymentState;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */
-    serviceHostingType: ServiceVo.serviceHostingType;
+    serviceHostingType: VendorHostedServiceDetailsVo.serviceHostingType;
     /**
      * Time of register service.
      */
@@ -53,9 +55,14 @@ export type ServiceVo = {
      * Time of update service.
      */
     lastModifiedTime: string;
+    deployRequest: DeployRequest;
+    /**
+     * The properties of the deployed service.
+     */
+    deployedServiceProperties?: Record<string, string>;
 };
 
-export namespace ServiceVo {
+export namespace VendorHostedServiceDetailsVo {
     /**
      * The catalog of the service
      */

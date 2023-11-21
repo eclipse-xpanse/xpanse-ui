@@ -12,6 +12,7 @@ import type { MigrateRequest } from '../models/MigrateRequest';
 import type { Response } from '../models/Response';
 import type { ServiceDetailVo } from '../models/ServiceDetailVo';
 import type { ServiceVo } from '../models/ServiceVo';
+import type { VendorHostedServiceDetailsVo } from '../models/VendorHostedServiceDetailsVo';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -128,7 +129,7 @@ export class ServiceService {
      * @returns ServiceDetailVo OK
      * @throws ApiError
      */
-    public static getServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
+    public static getSelfHostedServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/services/{id}',
@@ -216,6 +217,54 @@ export class ServiceService {
                 serviceName: serviceName,
                 serviceVersion: serviceVersion,
                 serviceState: serviceState,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Get deployed service details by id.<br>Required role:<b> isv</b>
+     * @param id Task id of deployed service
+     * @returns ServiceDetailVo OK
+     * @throws ApiError
+     */
+    public static getServiceDetailsByIdForIsv(id: string): CancelablePromise<ServiceDetailVo> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/isv/services/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id Task id of deployed service
+     * @returns VendorHostedServiceDetailsVo OK
+     * @throws ApiError
+     */
+    public static getVendorHostedServiceDetailsById(id: string): CancelablePromise<VendorHostedServiceDetailsVo> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/isv/service/vendor_hosted/{id}',
+            path: {
+                id: id,
             },
             errors: {
                 400: `Bad Request`,

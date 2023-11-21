@@ -84,7 +84,7 @@ export const DeploymentForm = ({
     return (
         <div>
             <div className={'migrate-show-deploy-class'}>
-                <div className={'services-content'}>
+                <div className={'generic-table-container'}>
                     <div className={'content-title'}>
                         <div className={'content-title-order'}>
                             <ApiDoc id={props.id} styleClass={'content-title-api'}></ApiDoc>

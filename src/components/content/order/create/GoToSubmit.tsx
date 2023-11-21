@@ -40,9 +40,15 @@ export default function GoToSubmit({
             selectFlavor
         );
 
-        navigate(orderPageRoute, {
-            state: props,
-        });
+        navigate(
+            orderPageRoute
+                .concat('?serviceName=', props.name)
+                .concat('&version=', props.version)
+                .concat('#', props.category),
+            {
+                state: props,
+            }
+        );
     };
 
     return (

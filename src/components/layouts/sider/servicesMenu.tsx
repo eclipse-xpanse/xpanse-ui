@@ -8,6 +8,7 @@ import {
     CloudServerOutlined,
     DashboardOutlined,
     HddOutlined,
+    SafetyOutlined,
     VerifiedOutlined,
 } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
@@ -20,6 +21,8 @@ import {
     monitorPageRoute,
     myServicesLabelName,
     myServicesRoute,
+    policiesLabelName,
+    policiesRoute,
     servicesLabelName,
     servicesPageRoute,
     servicesSubPageRoute,
@@ -78,5 +81,14 @@ export const healthCheckMenu = (): ItemType => {
         label: <Link to={healthCheckPageRoute}>{healthCheckLabelName}</Link>,
         icon: <DashboardOutlined />,
         title: 'HealthCheck',
+    };
+};
+
+export const policiesMenu = (): ItemType => {
+    return {
+        key: policiesRoute,
+        label: <Link to={policiesRoute}>{policiesLabelName}</Link>,
+        icon: <SafetyOutlined />,
+        title: 'Policies',
     };
 };

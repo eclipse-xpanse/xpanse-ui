@@ -99,7 +99,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             <div>
                 <NavigateOrderSubmission text={'<< Back'} to={createServicePageUrl as To} props={state} />
                 <div className={'Line'} />
-                <div className={'services-content'}>
+                <div className={'generic-table-container'}>
                     <div className={'content-title'}>
                         <div className={'content-title-order'}>
                             Service: {state.name}@{state.version}
@@ -116,6 +116,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     isLoading={submitDeploymentRequest.isPending}
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}
+                    serviceHostingType={state.serviceHostingType}
                 />
             ) : null}
             <div className={'order-param-item-left'} />

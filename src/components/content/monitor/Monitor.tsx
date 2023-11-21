@@ -233,7 +233,7 @@ function Monitor(): React.JSX.Element {
     };
 
     return (
-        <div className={'services-content'}>
+        <div className={'generic-table-container'}>
             <div className={'monitor-service-select-title'}>
                 <h3>
                     <MonitorOutlined />

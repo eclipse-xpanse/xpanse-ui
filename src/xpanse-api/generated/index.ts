@@ -42,6 +42,7 @@ export { ServiceVo } from './models/ServiceVo';
 export { SystemStatus } from './models/SystemStatus';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
+export { VendorHostedServiceDetailsVo } from './models/VendorHostedServiceDetailsVo';
 export type { WorkFlowTask } from './models/WorkFlowTask';
 
 export { AdminService } from './services/AdminService';
