@@ -43,6 +43,7 @@
 
 .show-details-typography-copy-info {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .deployment-details-with-scroll {
