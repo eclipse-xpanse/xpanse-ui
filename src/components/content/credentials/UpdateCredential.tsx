@@ -17,19 +17,18 @@ import {
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
 import { CredentialTip } from './CredentialTip';
-import { useMutation, UseQueryResult } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
+import useCredentialsListQuery from './query/queryCredentialsList';
 
 function UpdateCredential({
     role,
     createCredential,
-    credentialsQuery,
     onUpdateCancel,
 }: {
     role: string | undefined;
     createCredential: CreateCredential;
-    credentialsQuery: UseQueryResult<never[] | undefined>;
     onUpdateCancel: () => void;
 }): React.JSX.Element {
     const [form] = Form.useForm();
@@ -38,6 +37,8 @@ function UpdateCredential({
     const [disable, setDisable] = useState<boolean>(false);
     const [updateLoading, setUpdateLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
+
+    const credentialsQuery = useCredentialsListQuery();
     const setFormFields = (createCredential: CreateCredential) => {
         form.setFieldsValue({ name: createCredential.name });
         form.setFieldsValue({ csp: createCredential.csp });
