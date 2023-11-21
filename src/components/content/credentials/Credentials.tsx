@@ -27,9 +27,10 @@ import {
     CredentialVariables,
     Response,
 } from '../../../xpanse-api/generated';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
+import useCredentialsListQuery from './query/queryCredentialsList';
 
 function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -50,20 +51,7 @@ function Credentials(): React.JSX.Element {
         variables: [],
     });
 
-    const credentialsQuery = useQuery({
-        queryKey: ['credentialsQuery', currentRole],
-        queryFn: () => getCredentialsByRole(),
-        staleTime: 60000,
-    });
-    const getCredentialsByRole = () => {
-        if (currentRole === 'user') {
-            return CredentialsManagementService.getUserCloudCredentials();
-        } else if (currentRole === 'isv') {
-            return CredentialsManagementService.getIsvCloudCredentials();
-        } else {
-            return [];
-        }
-    };
+    const credentialsQuery = useCredentialsListQuery();
 
     useEffect(() => {
         const credentials: AbstractCredentialInfo[] | undefined = credentialsQuery.data;
@@ -276,7 +264,7 @@ function Credentials(): React.JSX.Element {
                     destroyOnClose={true}
                     footer={[]}
                 >
-                    <AddCredential role={currentRole} onCancel={onCancel} credentialsQuery={credentialsQuery} />
+                    <AddCredential role={currentRole} onCancel={onCancel} />
                 </Modal>
                 <Modal
                     width={1000}
@@ -291,7 +279,6 @@ function Credentials(): React.JSX.Element {
                         role={currentRole}
                         createCredential={createCredential}
                         onUpdateCancel={onUpdateCancel}
-                        credentialsQuery={credentialsQuery}
                     />
                 </Modal>
                 <Modal
