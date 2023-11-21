@@ -18,19 +18,12 @@ import {
     Response,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
-import { useMutation, useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
+import useCredentialsListQuery from './query/queryCredentialsList';
 
-function AddCredential({
-    role,
-    credentialsQuery,
-    onCancel,
-}: {
-    role: string | undefined;
-    credentialsQuery: UseQueryResult<never[] | undefined>;
-    onCancel: () => void;
-}): React.JSX.Element {
+function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const active = true;
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
@@ -47,6 +40,7 @@ function AddCredential({
     const [descriptionValue, setDescriptionValue] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [addLoading, setAddLoading] = useState<boolean>(false);
+    const credentialsQuery = useCredentialsListQuery();
 
     const getCspsQuery = useQuery({
         queryKey: ['getCspsQuery', active],
