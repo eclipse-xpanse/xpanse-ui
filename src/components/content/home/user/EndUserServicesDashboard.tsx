@@ -5,15 +5,15 @@
 
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import { ServiceVo } from '../../../xpanse-api/generated';
-import useListDeployedServicesQuery from '../myServices/query/useListDeployedServicesQuery';
-import { ServicesDashboardSkeleton } from './ServicesDashboardSkeleton';
-import ServicesDashboardError from './ServicesDashboardError';
-import { myServicesRoute } from '../../utils/constants';
+import { ServiceVo } from '../../../../xpanse-api/generated';
+import useListDeployedServicesQuery from '../../myServices/query/useListDeployedServicesQuery';
+import { EndUserServicesDashboardSkeleton } from './EndUserServicesDashboardSkeleton';
+import EndUserServicesDashboardError from './EndUserServicesDashboardError';
+import { myServicesRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import serviceDeploymentState = ServiceVo.serviceDeploymentState;
 
-export function ServicesDashboard(): React.JSX.Element {
+export function EndUserServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
     const navigate = useNavigate();
     let successfulDeploymentsCount: number = 0;
@@ -22,11 +22,11 @@ export function ServicesDashboard(): React.JSX.Element {
     let failedDestroysCount: number = 0;
 
     if (listDeployedServicesQuery.isError) {
-        return <ServicesDashboardError error={listDeployedServicesQuery.error} />;
+        return <EndUserServicesDashboardError error={listDeployedServicesQuery.error} />;
     }
 
     if (listDeployedServicesQuery.isPending || listDeployedServicesQuery.isFetching) {
-        return <ServicesDashboardSkeleton />;
+        return <EndUserServicesDashboardSkeleton />;
     }
 
     if (listDeployedServicesQuery.data.length > 0) {
@@ -58,8 +58,8 @@ export function ServicesDashboard(): React.JSX.Element {
     return (
         <>
             <Card title='Services Dashboard' bordered={true}>
-                <Row gutter={16}>
-                    <Col span={12}>
+                <Row gutter={16} justify={'start'}>
+                    <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_SUCCESSFUL);
@@ -69,12 +69,12 @@ export function ServicesDashboard(): React.JSX.Element {
                                 title='Successful Deployments'
                                 loading={listDeployedServicesQuery.isLoading}
                                 value={successfulDeploymentsCount}
-                                valueStyle={{ color: '#3f8600' }}
+                                valueStyle={{ color: '#3f8600', textAlign: 'center' }}
                                 className={'clickable-dashboard-links'}
                             />
                         </div>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_FAILED);
@@ -84,12 +84,12 @@ export function ServicesDashboard(): React.JSX.Element {
                                 title='Failed Deployments'
                                 value={failedDeploymentsCount}
                                 loading={listDeployedServicesQuery.isLoading}
-                                valueStyle={{ color: '#cf1322' }}
+                                valueStyle={{ color: '#cf1322', textAlign: 'center' }}
                                 className={'clickable-dashboard-links'}
                             />
                         </div>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_SUCCESSFUL);
@@ -99,12 +99,12 @@ export function ServicesDashboard(): React.JSX.Element {
                                 title='Successful Destroys'
                                 loading={listDeployedServicesQuery.isLoading}
                                 value={successfulDestroysCount}
-                                valueStyle={{ color: '#3f8600' }}
+                                valueStyle={{ color: '#3f8600', textAlign: 'center' }}
                                 className={'clickable-dashboard-links'}
                             />
                         </div>
                     </Col>
-                    <Col span={12}>
+                    <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_FAILED);
@@ -114,7 +114,7 @@ export function ServicesDashboard(): React.JSX.Element {
                                 title='Failed Destroys'
                                 value={failedDestroysCount}
                                 loading={listDeployedServicesQuery.isLoading}
-                                valueStyle={{ color: '#cf1322' }}
+                                valueStyle={{ color: '#cf1322', textAlign: 'center' }}
                                 className={'clickable-dashboard-links'}
                             />
                         </div>

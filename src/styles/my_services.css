@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 .service-instance-list {
     margin-top: 15px;
     width: 100%;
@@ -10,6 +15,7 @@
 .service-instance-detail-position {
     display: flex;
 }
+
 .failure-alert {
     margin-top: 10px;
 }
@@ -38,11 +44,12 @@
 }
 
 .service-instance-Paragraph {
-    margin-bottom: 0em !important;
+    margin-bottom: 0 !important;
 }
 
 .show-details-typography-copy-info {
     font-weight: bold;
+    cursor: pointer;
 }
 
 .deployment-details-with-scroll {
@@ -57,8 +64,4 @@
 .deployed-resource-properties {
     display: flex;
     flex-direction: row;
-}
-
-.clickable-dashboard-links {
-    cursor: pointer;
 }

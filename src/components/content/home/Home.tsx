@@ -5,8 +5,9 @@
 
 import WelcomeCard from './WelcomeCard';
 import React from 'react';
-import { ServicesDashboard } from './ServicesDashboard';
+import { EndUserServicesDashboard } from './user/EndUserServicesDashboard';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
+import { IsvServicesDashBoard } from './isv/IsvServicesDashBoard';
 
 function Home(): React.JSX.Element {
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
@@ -15,7 +16,8 @@ function Home(): React.JSX.Element {
         <div className={'home-data-display'}>
             <WelcomeCard />
             <br />
-            {currentRole && currentRole === 'user' ? <ServicesDashboard /> : <></>}
+            {currentRole && currentRole === 'user' ? <EndUserServicesDashboard /> : <></>}
+            {currentRole && currentRole === 'isv' ? <IsvServicesDashBoard /> : <></>}
         </div>
     );
 }
