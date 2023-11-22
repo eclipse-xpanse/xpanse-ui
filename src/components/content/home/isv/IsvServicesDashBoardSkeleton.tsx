@@ -4,12 +4,13 @@
  */
 
 import React from 'react';
+import '../../../../styles/dashboard.css';
 import { Card, Skeleton } from 'antd';
 
-export function ServicesDashboardSkeleton(): React.JSX.Element {
+export function ServicesDashboardByIsvSkeleton(): React.JSX.Element {
     return (
         <Card title='Services Dashboard' bordered={true}>
-            <Skeleton avatar={false} active={true} paragraph={{ rows: 1 }} style={{ width: '300px' }} />
+            <Skeleton avatar={false} active={true} paragraph={{ rows: 1 }} className={'dashboard-pending'} />
         </Card>
     );
 }

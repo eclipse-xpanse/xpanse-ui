@@ -10,6 +10,7 @@
 .service-instance-detail-position {
     display: flex;
 }
+
 .failure-alert {
     margin-top: 10px;
 }
@@ -57,8 +58,4 @@
 .deployed-resource-properties {
     display: flex;
     flex-direction: row;
-}
-
-.clickable-dashboard-links {
-    cursor: pointer;
 }

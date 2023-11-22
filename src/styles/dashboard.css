@@ -1,0 +1,13 @@
+.dashboard-pending {
+    width: 300px;
+}
+
+.dashboard-container-class {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clickable-dashboard-links {
+    cursor: pointer;
+}

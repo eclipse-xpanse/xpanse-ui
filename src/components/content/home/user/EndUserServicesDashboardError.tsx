@@ -5,10 +5,10 @@
 
 import { Alert, Card } from 'antd';
 import React from 'react';
-import { ApiError, Response } from '../../../xpanse-api/generated';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { ApiError, Response } from '../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
-export default function ServicesDashboardError({ error }: { error: unknown }): React.JSX.Element {
+export default function EndUserServicesDashboardError({ error }: { error: unknown }): React.JSX.Element {
     if (error instanceof ApiError && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
