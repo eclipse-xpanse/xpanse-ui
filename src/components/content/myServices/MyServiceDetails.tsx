@@ -10,9 +10,9 @@ import {
     ApiError,
     DeployResource,
     Response,
-    ServiceDetailVo,
+    DeployedServiceDetails,
     ServiceService,
-    ServiceVo,
+    DeployedService,
 } from '../../../xpanse-api/generated';
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
@@ -24,12 +24,12 @@ export const MyServiceDetails = ({
     serviceHostingType,
 }: {
     serviceId: string;
-    serviceHostingType: ServiceVo.serviceHostingType;
+    serviceHostingType: DeployedService.serviceHostingType;
 }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useQuery({
         queryKey: ['getServiceDetailsById', serviceId, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
                 return ServiceService.getSelfHostedServiceDetailsById(serviceId);
             } else {
                 return ServiceService.getVendorHostedServiceDetailsById(serviceId);
@@ -53,8 +53,8 @@ export const MyServiceDetails = ({
                 requestMap.set(key, getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties[key]);
             }
         }
-        if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
-            const serviceDetailVo = getServiceDetailsByIdQuery.data as ServiceDetailVo;
+        if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
+            const serviceDetailVo = getServiceDetailsByIdQuery.data as DeployedServiceDetails;
             if (serviceDetailVo.resultMessage) {
                 resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
             }

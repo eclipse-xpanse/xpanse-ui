@@ -4,7 +4,7 @@
  */
 
 import { StopwatchResult } from 'react-timer-hook';
-import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { useEffect } from 'react';
 import { HourglassOutlined } from '@ant-design/icons';
 import { OperationType } from '../types/OperationType';
@@ -15,31 +15,31 @@ function DeploymentTimer({
     operationType,
 }: {
     stopWatch: StopwatchResult;
-    deploymentStatus: ServiceDetailVo.serviceDeploymentState;
+    deploymentStatus: DeployedServiceDetails.serviceDeploymentState;
     operationType: OperationType;
 }) {
     useEffect(() => {
         if (operationType === OperationType.Deploy) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL)
+                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL)
             ) {
                 stopWatch.pause();
             }
-            if (!stopWatch.isRunning && deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYING) {
+            if (!stopWatch.isRunning && deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYING) {
                 stopWatch.reset();
             }
         }
         if (operationType === OperationType.Destroy) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED)
+                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED)
             ) {
                 stopWatch.pause();
             }
-            if (!stopWatch.isRunning && deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROYING) {
+            if (!stopWatch.isRunning && deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROYING) {
                 stopWatch.reset();
             }
         }
@@ -47,16 +47,16 @@ function DeploymentTimer({
         if (operationType === OperationType.Migrate) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL)
+                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL)
             ) {
                 stopWatch.pause();
             }
             if (
                 !stopWatch.isRunning &&
-                (deploymentStatus === ServiceDetailVo.serviceDeploymentState.DEPLOYING ||
-                    deploymentStatus === ServiceDetailVo.serviceDeploymentState.DESTROYING)
+                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYING ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROYING)
             ) {
                 stopWatch.reset();
             }

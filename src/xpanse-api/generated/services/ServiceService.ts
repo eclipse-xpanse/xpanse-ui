@@ -7,12 +7,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { DeployedService } from '../models/DeployedService';
+import type { DeployedServiceDetails } from '../models/DeployedServiceDetails';
 import type { DeployRequest } from '../models/DeployRequest';
 import type { MigrateRequest } from '../models/MigrateRequest';
 import type { Response } from '../models/Response';
-import type { ServiceDetailVo } from '../models/ServiceDetailVo';
-import type { ServiceVo } from '../models/ServiceVo';
-import type { VendorHostedServiceDetailsVo } from '../models/VendorHostedServiceDetailsVo';
+import type { VendorHostedDeployedServiceDetails } from '../models/VendorHostedDeployedServiceDetails';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -26,7 +26,7 @@ export class ServiceService {
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      * @param serviceState deployment state of the service
-     * @returns ServiceVo OK
+     * @returns DeployedService OK
      * @throws ApiError
      */
     public static listDeployedServices(
@@ -55,7 +55,7 @@ export class ServiceService {
             | 'migration_success'
             | 'migration_failed'
             | 'manual cleanup required'
-    ): CancelablePromise<Array<ServiceVo>> {
+    ): CancelablePromise<Array<DeployedService>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/services',
@@ -126,10 +126,10 @@ export class ServiceService {
     /**
      * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id Task id of deployed service
-     * @returns ServiceDetailVo OK
+     * @returns DeployedServiceDetails OK
      * @throws ApiError
      */
-    public static getSelfHostedServiceDetailsById(id: string): CancelablePromise<ServiceDetailVo> {
+    public static getSelfHostedServiceDetailsById(id: string): CancelablePromise<DeployedServiceDetails> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/services/{id}',
@@ -178,7 +178,7 @@ export class ServiceService {
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      * @param serviceState deployment state of the service
-     * @returns ServiceVo OK
+     * @returns DeployedService OK
      * @throws ApiError
      */
     public static listDeployedServicesOfIsv(
@@ -207,7 +207,7 @@ export class ServiceService {
             | 'migration_success'
             | 'migration_failed'
             | 'manual cleanup required'
-    ): CancelablePromise<Array<ServiceVo>> {
+    ): CancelablePromise<Array<DeployedService>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/isv/services',
@@ -232,10 +232,10 @@ export class ServiceService {
     /**
      * Get deployed service details by id.<br>Required role:<b> isv</b>
      * @param id Task id of deployed service
-     * @returns ServiceDetailVo OK
+     * @returns DeployedServiceDetails OK
      * @throws ApiError
      */
-    public static getServiceDetailsByIdForIsv(id: string): CancelablePromise<ServiceDetailVo> {
+    public static getServiceDetailsByIdForIsv(id: string): CancelablePromise<DeployedServiceDetails> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/isv/services/{id}',
@@ -256,10 +256,10 @@ export class ServiceService {
     /**
      * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id Task id of deployed service
-     * @returns VendorHostedServiceDetailsVo OK
+     * @returns VendorHostedDeployedServiceDetails OK
      * @throws ApiError
      */
-    public static getVendorHostedServiceDetailsById(id: string): CancelablePromise<VendorHostedServiceDetailsVo> {
+    public static getVendorHostedServiceDetailsById(id: string): CancelablePromise<VendorHostedDeployedServiceDetails> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/isv/service/vendor_hosted/{id}',

@@ -12,7 +12,7 @@ import {
     ServiceTemplateDetailVo,
     Response,
     ServiceVendorService,
-    ServiceVo,
+    DeployedService,
 } from '../../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
@@ -30,7 +30,7 @@ function UpdateService({
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
-    category: ServiceVo.category;
+    category: DeployedService.category;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);

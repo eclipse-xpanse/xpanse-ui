@@ -5,7 +5,7 @@
 
 import { OrderSubmitResult } from './OrderSubmitResult';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { ApiError, Response, ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { ApiError, Response, DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { StopwatchResult } from 'react-timer-hook';
 import React from 'react';
 import { OperationType } from '../types/OperationType';
@@ -20,7 +20,7 @@ function getOrderSubmissionFailedDisplay(reasons: string[]) {
 }
 export function OrderSubmitFailed(
     error: Error,
-    deploymentStatus: ServiceDetailVo.serviceDeploymentState,
+    deploymentStatus: DeployedServiceDetails.serviceDeploymentState,
     stopWatch: StopwatchResult,
     operationType: OperationType
 ): React.JSX.Element {

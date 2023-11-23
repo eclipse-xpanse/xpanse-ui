@@ -4,19 +4,19 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceDetailVo, ServiceService, ServiceVo } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, ServiceService, DeployedService } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
     uuid: string | undefined,
     isStartPolling: boolean,
-    serviceHostingType: ServiceVo.serviceHostingType,
-    refetchUntilStates: ServiceDetailVo.serviceDeploymentState[]
+    serviceHostingType: DeployedService.serviceHostingType,
+    refetchUntilStates: DeployedServiceDetails.serviceDeploymentState[]
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', uuid, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return ServiceService.getSelfHostedServiceDetailsById(uuid!);
             } else {

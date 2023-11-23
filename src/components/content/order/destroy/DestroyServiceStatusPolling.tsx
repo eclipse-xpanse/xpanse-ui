@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, Response, ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { ApiError, Response, DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import React, { useEffect } from 'react';
 import { Alert } from 'antd';
@@ -24,19 +24,19 @@ function DestroyServiceStatusPolling({
     error: Error | null;
     setIsDestroyingCompleted: (arg: boolean) => void;
     getDestroyCloseStatus: (arg: boolean) => void;
-    serviceHostingType: ServiceDetailVo.serviceHostingType;
+    serviceHostingType: DeployedServiceDetails.serviceHostingType;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, serviceHostingType, [
-        ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-        ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
+        DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
+        DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
     ]);
 
     useEffect(() => {
         if (
             getServiceDetailsByIdQuery.isSuccess &&
             [
-                ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED,
-                ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL,
+                DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
+                DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             setIsDestroyingCompleted(true);
@@ -103,7 +103,7 @@ function DestroyServiceStatusPolling({
     if (uuid && getServiceDetailsByIdQuery.data !== undefined) {
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             return (
                 <div className={'submit-alert-tip'}>
@@ -120,7 +120,7 @@ function DestroyServiceStatusPolling({
             );
         } else if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-            ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED.toString()
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED.toString()
         ) {
             return (
                 <div className={'submit-alert-tip'}>

@@ -6,7 +6,7 @@
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from './OrderSubmitResultDetails';
 import { StopwatchResult } from 'react-timer-hook';
-import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import DeploymentTimer from './DeploymentTimer';
 import React from 'react';
 import { OperationType } from '../types/OperationType';
@@ -15,7 +15,7 @@ export const OrderSubmitResult = (
     msg: string | React.JSX.Element,
     uuid: string,
     type: 'success' | 'error',
-    deploymentStatus: ServiceDetailVo.serviceDeploymentState,
+    deploymentStatus: DeployedServiceDetails.serviceDeploymentState,
     stopWatch: StopwatchResult,
     operationType: OperationType
 ): React.JSX.Element => {

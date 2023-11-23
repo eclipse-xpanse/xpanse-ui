@@ -11,7 +11,7 @@ import { createServicePageRoute } from '../../../utils/constants';
 import { Col, Empty, Row } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
-import { ServiceVo, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployedService, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import ServicesSkeleton from './ServicesSkeleton';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import { groupServicesByName, groupVersionsForService } from './userServiceHelper';
@@ -38,7 +38,7 @@ function Services(): React.JSX.Element {
     };
 
     const orderableServicesQuery = userOrderableServicesQuery(
-        location.hash.split('#')[1] as ServiceVo.category,
+        location.hash.split('#')[1] as DeployedService.category,
         undefined
     );
 

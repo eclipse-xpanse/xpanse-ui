@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ApiError, Response, ServiceService, ServiceVo } from '../../../../xpanse-api/generated';
+import { ApiError, Response, ServiceService, DeployedService } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 import { Alert } from 'antd';
@@ -23,13 +23,13 @@ export function PurgeServiceStatusPolling({
     error: Error | null;
     setIsPurgingCompleted: (arg: boolean) => void;
     getPurgeCloseStatus: (arg: boolean) => void;
-    serviceHostingType: ServiceVo.serviceHostingType;
+    serviceHostingType: DeployedService.serviceHostingType;
 }): React.JSX.Element {
     const [isRefetch, setIsRefetch] = useState<boolean>(true);
     const getServiceDetailsByIdQuery = useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === ServiceVo.serviceHostingType.SELF) {
+            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
                 return ServiceService.getSelfHostedServiceDetailsById(uuid);
             } else {
                 return ServiceService.getVendorHostedServiceDetailsById(uuid);

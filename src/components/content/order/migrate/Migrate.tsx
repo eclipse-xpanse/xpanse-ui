@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import {
     DeployRequest,
     ServiceCatalogService,
-    ServiceVo,
+    DeployedService,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
@@ -20,7 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { MigrationStatus } from '../types/MigrationStatus';
 
-export const Migrate = ({ currentSelectedService }: { currentSelectedService: ServiceVo }): React.JSX.Element => {
+export const Migrate = ({ currentSelectedService }: { currentSelectedService: DeployedService }): React.JSX.Element => {
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
     const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
         undefined
