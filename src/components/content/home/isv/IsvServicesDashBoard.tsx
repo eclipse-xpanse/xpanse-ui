@@ -6,11 +6,11 @@
 import React from 'react';
 import { Card, Col, Divider, Row, Statistic } from 'antd';
 import '../../../../styles/dashboard.css';
-import { ServiceVo } from '../../../../xpanse-api/generated';
 import useListDeployedServicesByIsvQuery from '../../myServices/query/useListDeployedServiceByIsvQuery';
 import IsvServicesDashBoardError from './IsvServicesDashBoardError';
 import { ServicesDashboardByIsvSkeleton } from './IsvServicesDashBoardSkeleton';
 import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
+import { DeployedService } from '../../../../xpanse-api/generated';
 
 export function IsvServicesDashBoard(): React.JSX.Element {
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
@@ -22,17 +22,17 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     let registeredServicesCount: number = 0;
 
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
-        listDeployedServicesByIsvQuery.data.forEach((serviceItem: ServiceVo) => {
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 successfulDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED) {
                 failedDestroysCount++;
             }
         });

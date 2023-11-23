@@ -9,7 +9,7 @@ import {
     CredentialVariables,
     PolicyCreateRequest,
     PolicyUpdateRequest,
-    PolicyVo,
+    Policy,
 } from '../../../xpanse-api/generated';
 import '../../../styles/policies.css';
 import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
@@ -28,7 +28,7 @@ export const AddOrUpdatePolicy = ({
     currentPolicyService,
     getCancelUpdateStatus,
 }: {
-    currentPolicyService: PolicyVo | undefined;
+    currentPolicyService: Policy | undefined;
     getCancelUpdateStatus: (arg: boolean) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
@@ -42,7 +42,7 @@ export const AddOrUpdatePolicy = ({
     const createPoliciesManagementServiceRequest = useCreatePolicyRequest();
     const updatePoliciesManagementServiceRequest = useUpdatePolicyRequest();
 
-    const onFinish = (policyRequest: { csp: PolicyVo.csp; enabled: boolean; policy: string }) => {
+    const onFinish = (policyRequest: { csp: Policy.csp; enabled: boolean; policy: string }) => {
         if (currentPolicyService === undefined) {
             const policyCreateRequest: PolicyCreateRequest = policyRequest as PolicyCreateRequest;
             policyCreateRequest.csp = policyRequest.csp;
@@ -66,7 +66,7 @@ export const AddOrUpdatePolicy = ({
     };
 
     const comparePolicyUpdateRequestResult = (policyRequest: {
-        csp: PolicyVo.csp;
+        csp: Policy.csp;
         enabled: boolean;
         policy: string;
     }): boolean => {

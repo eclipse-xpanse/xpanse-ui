@@ -5,13 +5,13 @@
 
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import { ServiceVo } from '../../../../xpanse-api/generated';
 import useListDeployedServicesQuery from '../../myServices/query/useListDeployedServicesQuery';
 import { EndUserServicesDashboardSkeleton } from './EndUserServicesDashboardSkeleton';
 import EndUserServicesDashboardError from './EndUserServicesDashboardError';
 import { myServicesRoute } from '../../../utils/constants';
+import { DeployedService } from '../../../../xpanse-api/generated';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import serviceDeploymentState = ServiceVo.serviceDeploymentState;
+import serviceDeploymentState = DeployedService.serviceDeploymentState;
 
 export function EndUserServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
@@ -30,23 +30,23 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     }
 
     if (listDeployedServicesQuery.data.length > 0) {
-        listDeployedServicesQuery.data.forEach((serviceItem: ServiceVo) => {
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        listDeployedServicesQuery.data.forEach((serviceItem: DeployedService) => {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 successfulDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED) {
                 failedDestroysCount++;
             }
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceState: ServiceVo.serviceDeploymentState) => {
+    const getMyServicesRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState) => {
         navigate({
             pathname: myServicesRoute,
             search: createSearchParams({

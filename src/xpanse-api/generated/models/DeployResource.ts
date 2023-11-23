@@ -41,6 +41,9 @@ export namespace DeployResource {
         VPC = 'vpc',
         VOLUME = 'volume',
         UNKNOWN = 'unknown',
+        SECURITY_GROUP = 'security_group',
+        SECURITY_GROUP_RULE = 'security_group_rule',
+        KEYPAIR = 'keypair',
         SUBNET = 'subnet',
     }
 }

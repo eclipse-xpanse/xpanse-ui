@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { AbstractCredentialInfo, CloudServiceProvider, ServiceVo } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     AreaChartOutlined,
@@ -37,7 +37,7 @@ function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceIdInQuery = getServiceIdFormQuery();
     const serviceStateInQuery = getServiceStateFromQuery();
-    const [serviceVoList, setServiceVoList] = useState<ServiceVo[]>([]);
+    const [serviceVoList, setServiceVoList] = useState<DeployedService[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceHostingTypeFilters, setServiceHostingTypeFilters] = useState<ColumnFilterItem[]>([]);
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
@@ -52,10 +52,10 @@ function MyServices(): React.JSX.Element {
     const [isPurging, setIsPurging] = useState<boolean>(false);
     const [isPurgingCompleted, setIsPurgingCompleted] = useState<boolean>(false);
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
-    const [serviceHostingType, setServiceHostingType] = useState<ServiceVo.serviceHostingType>(
-        ServiceVo.serviceHostingType.SELF
+    const [serviceHostingType, setServiceHostingType] = useState<DeployedService.serviceHostingType>(
+        DeployedService.serviceHostingType.SELF
     );
-    const [currentServiceVo, setCurrentServiceVo] = useState<ServiceVo | undefined>(undefined);
+    const [currentServiceVo, setCurrentServiceVo] = useState<DeployedService | undefined>(undefined);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
@@ -68,7 +68,7 @@ function MyServices(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
 
     useEffect(() => {
-        const serviceList: ServiceVo[] = [];
+        const serviceList: DeployedService[] = [];
         if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
             if (serviceStateInQuery) {
                 setServiceVoList(
@@ -116,7 +116,7 @@ function MyServices(): React.JSX.Element {
         }
     };
 
-    const columns: ColumnsType<ServiceVo> = [
+    const columns: ColumnsType<DeployedService> = [
         {
             title: 'Id',
             dataIndex: 'id',
@@ -179,7 +179,8 @@ function MyServices(): React.JSX.Element {
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
-            render: (serviceHostingType: ServiceVo.serviceHostingType) => MyServicesHostingType(serviceHostingType),
+            render: (serviceHostingType: DeployedService.serviceHostingType) =>
+                MyServicesHostingType(serviceHostingType),
         },
         {
             title: 'Csp',
@@ -225,14 +226,14 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
-            render: (serviceState: ServiceVo.serviceDeploymentState) => MyServiceStatus(serviceState),
+            render: (serviceState: DeployedService.serviceDeploymentState) => MyServiceStatus(serviceState),
             filtered: !!serviceStateInQuery,
             align: 'center',
         },
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (_text: string, record: ServiceVo) => {
+            render: (_text: string, record: DeployedService) => {
                 return (
                     <>
                         <Space size='middle'>
@@ -253,7 +254,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 disabled={
                                     record.serviceDeploymentState !==
-                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
                                 }
                             >
                                 monitor
@@ -268,17 +269,20 @@ function MyServices(): React.JSX.Element {
                                     isDestroying ||
                                     isPurging ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
                                     record.serviceDeploymentState ===
-                                        ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYING ||
-                                    record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROYING
+                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                                    record.serviceDeploymentState ===
+                                        DeployedService.serviceDeploymentState.DEPLOYING ||
+                                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
                                 }
                             >
                                 migrate
                             </Button>
-                            {record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                            record.serviceDeploymentState === ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                            {record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                            record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
                                 <Popconfirm
                                     title='Purge the service'
                                     description='Are you sure to purge the service?'
@@ -314,9 +318,9 @@ function MyServices(): React.JSX.Element {
                                         icon={<CloseCircleOutlined />}
                                         disabled={
                                             (record.serviceDeploymentState !==
-                                                ServiceVo.serviceDeploymentState.DESTROY_FAILED &&
+                                                DeployedService.serviceDeploymentState.DESTROY_FAILED &&
                                                 record.serviceDeploymentState !==
-                                                    ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
                                             isDestroying ||
                                             isPurging
                                         }
@@ -333,7 +337,7 @@ function MyServices(): React.JSX.Element {
         },
     ];
 
-    const purge = (record: ServiceVo): void => {
+    const purge = (record: DeployedService): void => {
         setIsPurging(true);
         setServiceHostingType(record.serviceHostingType);
         setIsPurgingCompleted(false);
@@ -341,7 +345,7 @@ function MyServices(): React.JSX.Element {
         servicePurgeQuery.mutate(record.id);
     };
 
-    function destroy(record: ServiceVo): void {
+    function destroy(record: DeployedService): void {
         setIsDestroying(true);
         setIsDestroyingCompleted(false);
         setServiceHostingType(record.serviceHostingType);
@@ -349,7 +353,7 @@ function MyServices(): React.JSX.Element {
         serviceDestroyQuery.mutate(record.id);
     }
 
-    function migrate(record: ServiceVo): void {
+    function migrate(record: DeployedService): void {
         setCurrentServiceVo(record);
         setTitle(
             <div className={'generic-table-container'}>
@@ -361,12 +365,12 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(true);
     }
 
-    function onMonitor(record: ServiceVo): void {
+    function onMonitor(record: DeployedService): void {
         navigate('/monitor', {
             state: record,
         });
     }
-    function updateServiceIdFilters(resp: ServiceVo[]): void {
+    function updateServiceIdFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const serviceIdSet = new Set<string>('');
         resp.forEach((v) => {
@@ -384,7 +388,7 @@ function MyServices(): React.JSX.Element {
 
     function updateCspFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceVo.csp).forEach((csp) => {
+        Object.values(DeployedService.csp).forEach((csp) => {
             const filter = {
                 text: csp,
                 value: csp,
@@ -396,7 +400,7 @@ function MyServices(): React.JSX.Element {
 
     function updateServiceStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceVo.serviceDeploymentState).forEach((serviceStateItem) => {
+        Object.values(DeployedService.serviceDeploymentState).forEach((serviceStateItem) => {
             const filter = {
                 text: serviceStateItem,
                 value: serviceStateItem,
@@ -408,7 +412,7 @@ function MyServices(): React.JSX.Element {
 
     function updateCategoryFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceVo.category).forEach((category) => {
+        Object.values(DeployedService.category).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -418,7 +422,7 @@ function MyServices(): React.JSX.Element {
         setCategoryFilters(filters);
     }
 
-    function updateVersionFilters(resp: ServiceVo[]): void {
+    function updateVersionFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const versionSet = new Set<string>('');
         resp.forEach((v) => {
@@ -434,7 +438,7 @@ function MyServices(): React.JSX.Element {
         setVersionFilters(filters);
     }
 
-    function updateNameFilters(resp: ServiceVo[]): void {
+    function updateNameFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const nameSet = new Set<string>('');
         resp.forEach((v) => {
@@ -450,7 +454,7 @@ function MyServices(): React.JSX.Element {
         setNameFilters(filters);
     }
 
-    function updateCustomerServiceNameFilters(resp: ServiceVo[]): void {
+    function updateCustomerServiceNameFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const customerServiceNameSet = new Set<string>('');
         resp.forEach((v) => {
@@ -470,7 +474,7 @@ function MyServices(): React.JSX.Element {
 
     function updateServiceHostingFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceVo.serviceHostingType).forEach((serviceHostingType) => {
+        Object.values(DeployedService.serviceHostingType).forEach((serviceHostingType) => {
             const filter = {
                 text: serviceHostingType,
                 value: serviceHostingType,
@@ -485,7 +489,7 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
     }
 
-    const handleMyServiceDetailsOpenModal = (serviceVo: ServiceVo) => {
+    const handleMyServiceDetailsOpenModal = (serviceVo: DeployedService) => {
         setServiceIdInModal(serviceVo.id);
         setServiceHostingType(serviceVo.serviceHostingType);
         setIsMyServiceDetailsModalOpen(true);
@@ -503,13 +507,15 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
-    function getServiceStateFromQuery(): ServiceVo.serviceDeploymentState | undefined {
+    function getServiceStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
         const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
         if (queryInUri.length > 0) {
             if (
-                Object.values(ServiceVo.serviceDeploymentState).includes(queryInUri as ServiceVo.serviceDeploymentState)
+                Object.values(DeployedService.serviceDeploymentState).includes(
+                    queryInUri as DeployedService.serviceDeploymentState
+                )
             ) {
-                return queryInUri as ServiceVo.serviceDeploymentState;
+                return queryInUri as DeployedService.serviceDeploymentState;
             }
         }
         return undefined;

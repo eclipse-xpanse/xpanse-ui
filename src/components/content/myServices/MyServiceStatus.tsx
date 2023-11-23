@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ServiceVo } from '../../../xpanse-api/generated';
+import { DeployedService } from '../../../xpanse-api/generated';
 import { Tag } from 'antd';
 import {
     CheckCircleOutlined,
@@ -14,10 +14,10 @@ import {
     SyncOutlined,
 } from '@ant-design/icons';
 
-export function MyServiceStatus(serviceDeploymentState: ServiceVo.serviceDeploymentState): React.JSX.Element {
+export function MyServiceStatus(serviceDeploymentState: DeployedService.serviceDeploymentState): React.JSX.Element {
     switch (serviceDeploymentState) {
-        case ServiceVo.serviceDeploymentState.DEPLOYING:
-        case ServiceVo.serviceDeploymentState.DESTROYING:
+        case DeployedService.serviceDeploymentState.DEPLOYING:
+        case DeployedService.serviceDeploymentState.DESTROYING:
             return (
                 <Tag
                     bordered={false}
@@ -28,13 +28,13 @@ export function MyServiceStatus(serviceDeploymentState: ServiceVo.serviceDeploym
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case ServiceVo.serviceDeploymentState.DEPLOYMENT_FAILED:
+        case DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED:
             return (
                 <Tag bordered={false} icon={<CloseCircleOutlined />} color='error' className={'my-service-status-size'}>
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case ServiceVo.serviceDeploymentState.DESTROY_FAILED:
+        case DeployedService.serviceDeploymentState.DESTROY_FAILED:
             return (
                 <Tag
                     bordered={false}
@@ -45,13 +45,13 @@ export function MyServiceStatus(serviceDeploymentState: ServiceVo.serviceDeploym
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case ServiceVo.serviceDeploymentState.DESTROY_SUCCESSFUL:
+        case DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL:
             return (
                 <Tag bordered={false} icon={<MinusCircleOutlined />} color='lime' className={'my-service-status-size'}>
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case ServiceVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
+        case DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
             return (
                 <Tag
                     bordered={false}

@@ -8,13 +8,13 @@ import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
-import { ApiError, Response, ServiceVo, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, Response, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 
-function CategoryCatalog({ category }: { category: ServiceVo.category }): React.JSX.Element {
+function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
