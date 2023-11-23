@@ -124,54 +124,6 @@ export class ServiceService {
     }
 
     /**
-     * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id Task id of deployed service
-     * @returns DeployedServiceDetails OK
-     * @throws ApiError
-     */
-    public static getSelfHostedServiceDetailsById(id: string): CancelablePromise<DeployedServiceDetails> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/services/{id}',
-            path: {
-                id: id,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
-    /**
-     * Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
-     * @returns Response Accepted
-     * @throws ApiError
-     */
-    public static destroy(id: string): CancelablePromise<Response> {
-        return __request(OpenAPI, {
-            method: 'DELETE',
-            url: '/xpanse/services/{id}',
-            path: {
-                id: id,
-            },
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
-    /**
      * List all deployed services by a user.<br>Required role:<b> isv</b>
      * @param categoryName category of the service
      * @param cspName name of the cloud service provider
@@ -210,7 +162,7 @@ export class ServiceService {
     ): CancelablePromise<Array<DeployedService>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/isv/services',
+            url: '/xpanse/services/isv',
             query: {
                 categoryName: categoryName,
                 cspName: cspName,
@@ -238,7 +190,7 @@ export class ServiceService {
     public static getServiceDetailsByIdForIsv(id: string): CancelablePromise<DeployedServiceDetails> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/isv/services/{id}',
+            url: '/xpanse/services/isv/details/vendor_hosted/{id}',
             path: {
                 id: id,
             },
@@ -262,7 +214,55 @@ export class ServiceService {
     public static getVendorHostedServiceDetailsById(id: string): CancelablePromise<VendorHostedDeployedServiceDetails> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/isv/service/vendor_hosted/{id}',
+            url: '/xpanse/services/details/vendor_hosted/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id Task id of deployed service
+     * @returns DeployedServiceDetails OK
+     * @throws ApiError
+     */
+    public static getSelfHostedServiceDetailsById(id: string): CancelablePromise<DeployedServiceDetails> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/services/details/self_hosted/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+
+    /**
+     * Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id
+     * @returns Response Accepted
+     * @throws ApiError
+     */
+    public static destroy(id: string): CancelablePromise<Response> {
+        return __request(OpenAPI, {
+            method: 'DELETE',
+            url: '/xpanse/services/{id}',
             path: {
                 id: id,
             },
