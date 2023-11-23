@@ -8,7 +8,7 @@ import { Button, Image, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/policies.css';
 import useListPoliciesManagementServiceQuery from './useListPoliciesManagementServiceQuery';
-import { AbstractCredentialInfo, CloudServiceProvider, PolicyVo } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, Policy } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
 import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
@@ -20,10 +20,10 @@ import { cspMap } from '../common/csp/CspLogo';
 
 function Policies(): React.JSX.Element {
     const [id, setId] = useState<string>('');
-    const [currentPolicyService, setCurrentPolicyService] = useState<PolicyVo | undefined>(undefined);
+    const [currentPolicyService, setCurrentPolicyService] = useState<Policy | undefined>(undefined);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [enabledFilters, setEnabledFilters] = useState<ColumnFilterItem[]>([]);
-    const [policiesManagementServiceList, setPoliciesManagementServiceList] = useState<PolicyVo[]>([]);
+    const [policiesManagementServiceList, setPoliciesManagementServiceList] = useState<Policy[]>([]);
     const listPoliciesManagementServiceQuery = useListPoliciesManagementServiceQuery();
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ function Policies(): React.JSX.Element {
         return <PoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />;
     }
 
-    const columns: ColumnsType<PolicyVo> = [
+    const columns: ColumnsType<Policy> = [
         {
             title: 'Policy ID',
             dataIndex: 'id',
@@ -87,7 +87,7 @@ function Policies(): React.JSX.Element {
         {
             title: 'Content',
             dataIndex: 'policy',
-            render: (_text: string, record: PolicyVo) => {
+            render: (_text: string, record: Policy) => {
                 return (
                     <Popover
                         content={
@@ -107,7 +107,7 @@ function Policies(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (_text: string, record: PolicyVo) => {
+            render: (_text: string, record: Policy) => {
                 return (
                     <>
                         <Space size='middle'>
@@ -160,7 +160,7 @@ function Policies(): React.JSX.Element {
         },
     ];
 
-    const deleteCurrentPolicy = (record: PolicyVo) => {
+    const deleteCurrentPolicy = (record: Policy) => {
         setId(record.id);
         deletePoliciesManagementServiceRequest.mutate(record.id);
     };
@@ -185,7 +185,7 @@ function Policies(): React.JSX.Element {
         setIsOpenAddOrUpdatePolicyModal(false);
         refreshPoliciesManagementServiceList();
     };
-    const updatePoliciesManagementService = (record: PolicyVo) => {
+    const updatePoliciesManagementService = (record: Policy) => {
         setCurrentPolicyService(record);
         setIsOpenAddOrUpdatePolicyModal(true);
     };

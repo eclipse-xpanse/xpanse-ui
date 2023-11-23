@@ -3,15 +3,15 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceDetailVo } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
-export const ProcessingStatus = (response: ServiceDetailVo, operationType: OperationType): React.JSX.Element => {
+export const ProcessingStatus = (response: DeployedServiceDetails, operationType: OperationType): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -29,7 +29,9 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
             } else {
                 return <span>{'Deployment Successful'}</span>;
             }
-        } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED) {
+        } else if (
+            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED
+        ) {
             return (
                 <div>
                     <span>{'Deployment Failed.'}</span>
@@ -40,13 +42,13 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
     }
 
     if (operationType === (OperationType.Destroy as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Destroyed Successfully'}</span>
                 </div>
             );
-        } else if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED) {
+        } else if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED) {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
@@ -57,7 +59,7 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
     }
 
     if (operationType === (OperationType.Migrate as OperationType)) {
-        if (response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -76,8 +78,8 @@ export const ProcessingStatus = (response: ServiceDetailVo, operationType: Opera
                 return <span>{'Migrated Successfully'}</span>;
             }
         } else if (
-            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DESTROY_FAILED ||
-            response.serviceDeploymentState === ServiceDetailVo.serviceDeploymentState.DEPLOYMENT_FAILED
+            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED ||
+            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED
         ) {
             return (
                 <div>

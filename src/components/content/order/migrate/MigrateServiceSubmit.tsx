@@ -9,7 +9,7 @@ import {
     CloudServiceProvider,
     DeployRequest,
     MigrateRequest,
-    ServiceVo,
+    DeployedService,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -45,7 +45,7 @@ export const MigrateServiceSubmit = ({
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
-    currentSelectedService: ServiceVo | undefined;
+    currentSelectedService: DeployedService | undefined;
     getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
 }): React.JSX.Element => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);

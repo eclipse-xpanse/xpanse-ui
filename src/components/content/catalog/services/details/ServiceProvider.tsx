@@ -10,7 +10,7 @@ import {
     ApiError,
     CloudServiceProvider,
     Response,
-    ServiceVo,
+    DeployedService,
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -33,7 +33,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
-    category: ServiceVo.category;
+    category: DeployedService.category;
 }): React.JSX.Element {
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);

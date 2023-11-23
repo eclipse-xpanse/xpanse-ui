@@ -4,9 +4,12 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceCatalogService, ServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceCatalogService, DeployedService } from '../../../../xpanse-api/generated';
 
-export default function UserOrderableServicesQuery(category: ServiceVo.category, serviceName: string | undefined) {
+export default function UserOrderableServicesQuery(
+    category: DeployedService.category,
+    serviceName: string | undefined
+) {
     return useQuery({
         queryKey: ['orderableServices', category, serviceName],
         queryFn: () => ServiceCatalogService.listOrderableServices(category, undefined, serviceName),
