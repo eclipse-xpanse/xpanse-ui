@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { DeployedService } from '../../../xpanse-api/generated';
+import { DeployedService } from '../../../../xpanse-api/generated';
 import { Tag } from 'antd';
 import {
     CheckCircleOutlined,
@@ -14,7 +14,9 @@ import {
     SyncOutlined,
 } from '@ant-design/icons';
 
-export function MyServiceStatus(serviceDeploymentState: DeployedService.serviceDeploymentState): React.JSX.Element {
+export function DeployedServicesStatus(
+    serviceDeploymentState: DeployedService.serviceDeploymentState
+): React.JSX.Element {
     switch (serviceDeploymentState) {
         case DeployedService.serviceDeploymentState.DEPLOYING:
         case DeployedService.serviceDeploymentState.DESTROYING:

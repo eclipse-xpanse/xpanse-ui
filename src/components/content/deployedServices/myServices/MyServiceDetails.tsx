@@ -3,21 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import '../../../styles/app.css';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import '../../../../styles/app.css';
 import { useQuery } from '@tanstack/react-query';
 import {
-    ApiError,
-    DeployResource,
-    Response,
-    DeployedServiceDetails,
-    ServiceService,
     DeployedService,
-} from '../../../xpanse-api/generated';
-import { Alert, Skeleton } from 'antd';
+    DeployedServiceDetails,
+    DeployResource,
+    ServiceService,
+} from '../../../../xpanse-api/generated';
 import React from 'react';
-import { ServiceDetailsContent } from './ServiceDetailsContent';
-import { DeploymentResultMessage } from './DeploymentResultMessage';
+import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
+import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
+import { GetServiceDetailsByIdQueryLoading } from '../common/GetServiceDetailsByIdQueryLoading';
+import DeployedServicesError from '../common/DeployedServicesError';
 
 export const MyServiceDetails = ({
     serviceId,
@@ -64,7 +62,7 @@ export const MyServiceDetails = ({
         }
         return (
             <>
-                <ServiceDetailsContent
+                <DeployedServicesDetailsContent
                     content={endPointMap}
                     requestParams={requestMap}
                     resultMessage={resultMessage}
@@ -75,38 +73,11 @@ export const MyServiceDetails = ({
     }
 
     if (getServiceDetailsByIdQuery.isLoading) {
-        return (
-            <Skeleton
-                className={'my-service-details-skeleton'}
-                active={true}
-                loading={getServiceDetailsByIdQuery.isLoading}
-                paragraph={{ rows: 2, width: ['20%', '20%'] }}
-                title={{ width: '5%' }}
-            />
-        );
+        return <GetServiceDetailsByIdQueryLoading isLoading={getServiceDetailsByIdQuery.isLoading} />;
     }
 
-    if (getServiceDetailsByIdQuery.error instanceof ApiError && 'details' in getServiceDetailsByIdQuery.error.body) {
-        const response: Response = getServiceDetailsByIdQuery.error.body as Response;
-        return (
-            <Alert
-                message={response.resultType.valueOf()}
-                description={convertStringArrayToUnorderedList(response.details)}
-                type={'error'}
-                closable={true}
-                className={'my-service-details-skeleton'}
-            />
-        );
-    } else if (getServiceDetailsByIdQuery.error instanceof Error) {
-        return (
-            <Alert
-                message='Fetching Service Details Failed'
-                description={getServiceDetailsByIdQuery.error.message}
-                type={'error'}
-                closable={true}
-                className={'my-service-details-skeleton'}
-            />
-        );
+    if (getServiceDetailsByIdQuery.isError) {
+        return <DeployedServicesError error={getServiceDetailsByIdQuery.error} />;
     }
 
     return <></>;
