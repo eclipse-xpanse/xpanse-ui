@@ -1,4 +1,4 @@
-import { DeployResource } from '../../../xpanse-api/generated';
+import { DeployResource } from '../../../../xpanse-api/generated';
 import React from 'react';
 
 export interface DeployResourceDataType {

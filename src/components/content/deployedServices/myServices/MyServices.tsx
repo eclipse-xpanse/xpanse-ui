@@ -6,7 +6,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     AreaChartOutlined,
@@ -16,22 +16,22 @@ import {
     InfoCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
-import '../../../styles/my_services.css';
-import { sortVersionNum } from '../../utils/Sort';
-import { MyServiceDetails } from './MyServiceDetails';
-import { Migrate } from '../order/migrate/Migrate';
+import '../../../../styles/my_services.css';
+import { sortVersionNum } from '../../../utils/Sort';
+import { Migrate } from '../../order/migrate/Migrate';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MyServiceStatus } from './MyServiceStatus';
-import { useOrderFormStore } from '../order/store/OrderFormStore';
-import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPolling';
-import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
-import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
-import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
+import { useOrderFormStore } from '../../order/store/OrderFormStore';
+import { PurgeServiceStatusPolling } from '../../order/purge/PurgeServiceStatusPolling';
+import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
+import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
+import DestroyServiceStatusPolling from '../../order/destroy/DestroyServiceStatusPolling';
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
-import MyServicesError from './MyServicesError';
-import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
-import { cspMap } from '../common/csp/CspLogo';
-import { MyServicesHostingType } from './MyServicesHostingType';
+import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
+import { cspMap } from '../../common/csp/CspLogo';
+import DeployedServicesError from '../common/DeployedServicesError';
+import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
+import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
+import { MyServiceDetails } from './MyServiceDetails';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -97,7 +97,7 @@ function MyServices(): React.JSX.Element {
     }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
 
     if (listDeployedServicesQuery.isError) {
-        return <MyServicesError error={listDeployedServicesQuery.error} />;
+        return <DeployedServicesError error={listDeployedServicesQuery.error} />;
     }
 
     const getDestroyCloseStatus = (isClose: boolean) => {
@@ -180,7 +180,7 @@ function MyServices(): React.JSX.Element {
                 record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (serviceHostingType: DeployedService.serviceHostingType) =>
-                MyServicesHostingType(serviceHostingType),
+                DeployedServicesHostingType(serviceHostingType),
         },
         {
             title: 'Csp',
@@ -226,7 +226,7 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: string | number | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
-            render: (serviceState: DeployedService.serviceDeploymentState) => MyServiceStatus(serviceState),
+            render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
             filtered: !!serviceStateInQuery,
             align: 'center',
         },
@@ -370,6 +370,7 @@ function MyServices(): React.JSX.Element {
             state: record,
         });
     }
+
     function updateServiceIdFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const serviceIdSet = new Set<string>('');

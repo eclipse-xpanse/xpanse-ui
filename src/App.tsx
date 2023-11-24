@@ -21,13 +21,14 @@ import {
     registerInvalidRoute,
     registerPageRoute,
     registerSuccessfulRoute,
+    reportsRoute,
     servicesPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Services from './components/content/order/services/Services';
 import CreateService from './components/content/order/create/CreateService';
 import OrderSubmitPage from './components/content/order/create/OrderSubmit';
-import MyServices from './components/content/myServices/MyServices';
+import MyServices from './components/content/deployedServices/myServices/MyServices';
 import Monitor from './components/content/monitor/Monitor';
 import Credentials from './components/content/credentials/Credentials';
 import { OidcConfig } from './components/oidc/OidcConfig';
@@ -39,6 +40,7 @@ import CatalogMainPage from './components/content/catalog/services/menu/CatalogM
 import React from 'react';
 import { SessionLost } from './components/content/login/SessionLost';
 import Policies from './components/content/policies/Policies';
+import Reports from './components/content/deployedServices/reports/Reports';
 
 const queryClient = new QueryClient();
 
@@ -179,6 +181,17 @@ function App(): React.JSX.Element {
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
                                     <Policies />
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        key={reportsRoute}
+                        path={reportsRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={['isv']}>
+                                    <Reports />
                                 </Protected>
                             </OidcSecure>
                         }

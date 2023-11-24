@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedService } from '../../../xpanse-api/generated';
+import { DeployedService } from '../../../../xpanse-api/generated';
 import React from 'react';
 import { Tag } from 'antd';
 
-export function MyServicesHostingType(serviceHostingType: DeployedService.serviceHostingType): React.JSX.Element {
+export function DeployedServicesHostingType(serviceHostingType: DeployedService.serviceHostingType): React.JSX.Element {
     switch (serviceHostingType) {
         case DeployedService.serviceHostingType.SERVICE_VENDOR:
             return (

@@ -10,6 +10,7 @@ import {
     monitorMenu,
     myServicesMenu,
     policiesMenu,
+    reportsMenu,
     servicesMenu,
 } from './servicesMenu';
 import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
@@ -20,7 +21,7 @@ import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 export function getMenuItems(): ItemType[] {
     const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));
     if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
-        return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu()];
+        return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu(), reportsMenu()];
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
     } else {

@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
-import { DeployResource } from '../../../xpanse-api/generated';
+import { DeployResource } from '../../../../xpanse-api/generated';
+import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { DeployedResources } from './DeployedResources';
-import { convertMapToDetailsList } from '../../utils/convertMapToDetailsList';
 
-export function ServiceDetailsContent({
+export function DeployedServicesDetailsContent({
     content,
     requestParams,
     resultMessage,

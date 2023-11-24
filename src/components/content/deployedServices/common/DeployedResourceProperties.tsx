@@ -1,5 +1,11 @@
-import { DeployResource } from '../../../xpanse-api/generated';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import { DeployResource } from '../../../../xpanse-api/generated';
 import { Button, Popover, Typography } from 'antd';
+import '../../../../styles/my_services.css';
 import React from 'react';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 
