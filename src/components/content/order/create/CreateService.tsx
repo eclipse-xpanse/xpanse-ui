@@ -15,7 +15,7 @@ import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
-import { ServiceHostingSelection } from './ServiceHostingSelection';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { Region } from '../types/Region';
@@ -414,7 +414,7 @@ function CreateService(): React.JSX.Element {
                             />
                         </Space>
                     </div>
-                    <OrderBilling priceValue={priceValue} currentBilling={currentBilling} />
+                    <OrderBilling priceValue={priceValue} billing={currentBilling} />
                 </div>
                 {selectServiceHostType ? (
                     <div>

@@ -15,7 +15,7 @@ import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { MigrationSteps } from '../types/MigrationSteps';
 import '../../../../styles/service_order.css';
 import { OrderBilling } from '../common/OrderBilling';
@@ -305,7 +305,7 @@ export const SelectDestination = ({
                         />
                     </Space>
                 </div>
-                <OrderBilling priceValue={priceValue} currentBilling={currentBilling} />
+                <OrderBilling priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>
                     <Space size={'large'}>
                         {currentMigrationStep > MigrationSteps.ExportServiceData ? (

@@ -10,21 +10,21 @@ import { Billing } from '../../../../xpanse-api/generated';
 
 export const OrderBilling = ({
     priceValue,
-    currentBilling,
+    billing,
 }: {
     priceValue: string;
-    currentBilling: Billing | undefined;
+    billing: Billing | undefined;
 }): React.JSX.Element => {
     return (
         <>
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <span className={'order-billing-title-class'}>Price:&nbsp;</span>
                 <Tag color={'blue'} className={'order-billing-value-class'}>
-                    {`${priceValue} ${currentBilling?.currency} ${currentBilling?.period}`}
+                    {`${priceValue} ${billing?.currency} ${billing?.period}`}
                 </Tag>
                 <span className={'order-billing-model-title-class'}>Model:&nbsp;</span>
                 <Tag color={'blue'} className={'order-billing-model-value-class'}>
-                    {currentBilling?.model}
+                    {billing?.model}
                 </Tag>
             </div>
         </>
