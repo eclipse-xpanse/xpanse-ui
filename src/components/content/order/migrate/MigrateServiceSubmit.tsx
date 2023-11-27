@@ -7,14 +7,13 @@ import { Button, Image, Popconfirm, Select, Space, Tabs } from 'antd';
 import {
     Billing,
     CloudServiceProvider,
+    DeployedService,
     DeployRequest,
     MigrateRequest,
-    DeployedService,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
-import { currencyMapper } from '../../../utils/currency';
 import { useMigrateServiceQuery } from './useMigrateServiceQuery';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 import { cspMap } from '../../common/csp/CspLogo';
@@ -24,6 +23,7 @@ import { getBilling } from '../formDataHelpers/billingHelper';
 import { MigrationStatus } from '../types/MigrationStatus';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
+import { OrderBilling } from '../common/OrderBilling';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -151,12 +151,7 @@ export const MigrateServiceSubmit = ({
                     />
                 </Space>
             </div>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                Price:&nbsp;
-                <span className={'services-content-price-class'}>
-                    {priceValue}&nbsp;{currencyMapper[currentBilling.currency]}
-                </span>
-            </div>
+            <OrderBilling priceValue={priceValue} currentBilling={currentBilling} />
             <div className={'migrate-step-button-inner-class'}>
                 <Space size={'large'}>
                     {currentMigrationStep > MigrationSteps.ExportServiceData ? (

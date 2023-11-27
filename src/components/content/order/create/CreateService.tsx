@@ -11,7 +11,6 @@ import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from './GoToSubmit';
 import { Select, Skeleton, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { currencyMapper } from '../../../utils/currency';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import ServicesLoadingError from '../query/ServicesLoadingError';
@@ -26,6 +25,8 @@ import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
+import '../../../../styles/service_order.css';
+import { OrderBilling } from '../common/OrderBilling';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -49,7 +50,7 @@ function CreateService(): React.JSX.Element {
     const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
-    const [currency, setCurrency] = useState<string>('');
+    const [currentBilling, setCurrentBilling] = useState<Billing | undefined>(undefined);
     const [selectServiceHostType, setSelectServiceHostType] = useState<
         UserOrderableServiceVo.serviceHostingType | undefined
     >(undefined);
@@ -154,7 +155,6 @@ function CreateService(): React.JSX.Element {
                     });
                     serviceHostingTypeValue = serviceInfo.serviceHostingType;
                 }
-                const currencyValue: string = currencyMapper[currentBilling.currency];
                 setSelectCsp(cspValue);
                 setAreaList(currentAreaList);
                 setSelectArea(areaValue);
@@ -162,7 +162,7 @@ function CreateService(): React.JSX.Element {
                 setSelectRegion(regionValue);
                 setSelectFlavor(flavorValue);
                 setPriceValue(priceValue);
-                setCurrency(currencyValue);
+                setCurrentBilling(currentBilling);
                 setSelectServiceHostType(serviceHostingTypeValue);
                 setServiceHostTypes(serviceHostingTypes);
             }
@@ -200,7 +200,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectServiceHostType]);
@@ -243,7 +243,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypes[0]);
         }
@@ -277,7 +277,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             setSelectServiceHostType(serviceHostingTypes[0]);
             setServiceHostTypes(serviceHostingTypes);
         }
@@ -314,7 +314,7 @@ function CreateService(): React.JSX.Element {
                     setPriceValue(flavor.price);
                 }
             });
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
         }
     };
 
@@ -414,12 +414,7 @@ function CreateService(): React.JSX.Element {
                             />
                         </Space>
                     </div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>
-                        Price:&nbsp;
-                        <span className={'services-content-price-class'}>
-                            {priceValue}&nbsp;{currency}
-                        </span>
-                    </div>
+                    <OrderBilling priceValue={priceValue} currentBilling={currentBilling} />
                 </div>
                 {selectServiceHostType ? (
                     <div>
