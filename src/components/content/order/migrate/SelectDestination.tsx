@@ -8,7 +8,6 @@ import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generate
 import { Button, Select, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
-import { currencyMapper } from '../../../utils/currency';
 import { Region } from '../types/Region';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
@@ -16,8 +15,10 @@ import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { MigrationSteps } from '../types/MigrationSteps';
+import '../../../../styles/service_order.css';
+import { BillingInfo } from '../common/BillingInfo';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -56,7 +57,7 @@ export const SelectDestination = ({
     const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
-    const [currency, setCurrency] = useState<string>('');
+    const [currentBilling, setCurrentBilling] = useState<Billing | undefined>(undefined);
 
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.SelectADestination);
@@ -137,7 +138,6 @@ export const SelectDestination = ({
                     }
                 });
             }
-            const currencyValue: string = currencyMapper[currentBilling.currency];
             setCspList(currentCspList);
             setSelectCsp(cspValue);
             setAreaList(currentAreaList);
@@ -147,7 +147,7 @@ export const SelectDestination = ({
             setFlavorList(currentFlavorList);
             setSelectFlavor(flavorValue);
             setPriceValue(priceValue);
-            setCurrency(currencyValue);
+            setCurrentBilling(currentBilling);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypeValue);
         }
@@ -185,7 +185,7 @@ export const SelectDestination = ({
         setFlavorList(currentFlavorList);
         setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
-        setCurrency(currencyMapper[billing.currency]);
+        setCurrentBilling(billing);
     };
 
     const onChangeAreaValue = (area: string) => {
@@ -215,7 +215,7 @@ export const SelectDestination = ({
                 userOrderableServiceVoList
             );
             setSelectFlavor(newFlavor);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             flavorList.forEach((flavor) => {
                 if (newFlavor === flavor.value) {
                     setPriceValue(flavor.price);
@@ -243,7 +243,7 @@ export const SelectDestination = ({
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0].price);
-            setCurrency(currencyMapper[currentBilling.currency]);
+            setCurrentBilling(currentBilling);
         }
     };
 
@@ -305,12 +305,7 @@ export const SelectDestination = ({
                         />
                     </Space>
                 </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    Price:&nbsp;
-                    <span className={'services-content-price-class'}>
-                        {priceValue}&nbsp;{currency}
-                    </span>
-                </div>
+                <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>
                     <Space size={'large'}>
                         {currentMigrationStep > MigrationSteps.ExportServiceData ? (
