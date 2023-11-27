@@ -26,7 +26,7 @@ import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHosti
 import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
 import '../../../../styles/service_order.css';
-import { OrderBilling } from '../common/OrderBilling';
+import { BillingInfo } from '../common/BillingInfo';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -414,7 +414,7 @@ function CreateService(): React.JSX.Element {
                             />
                         </Space>
                     </div>
-                    <OrderBilling priceValue={priceValue} billing={currentBilling} />
+                    <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 </div>
                 {selectServiceHostType ? (
                     <div>

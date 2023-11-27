@@ -23,7 +23,7 @@ import { getBilling } from '../formDataHelpers/billingHelper';
 import { MigrationStatus } from '../types/MigrationStatus';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { OrderBilling } from '../common/OrderBilling';
+import { BillingInfo } from '../common/BillingInfo';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -151,7 +151,7 @@ export const MigrateServiceSubmit = ({
                     />
                 </Space>
             </div>
-            <OrderBilling priceValue={priceValue} billing={currentBilling} />
+            <BillingInfo priceValue={priceValue} billing={currentBilling} />
             <div className={'migrate-step-button-inner-class'}>
                 <Space size={'large'}>
                     {currentMigrationStep > MigrationSteps.ExportServiceData ? (

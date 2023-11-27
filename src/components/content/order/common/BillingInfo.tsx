@@ -8,7 +8,7 @@ import { Tag } from 'antd';
 import '../../../../styles/service_order.css';
 import { Billing } from '../../../../xpanse-api/generated';
 
-export const OrderBilling = ({
+export const BillingInfo = ({
     priceValue,
     billing,
 }: {
