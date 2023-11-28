@@ -27,8 +27,8 @@ export function ServiceHostingSelection({
     const value: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
         ? previousSelection
         : serviceHostingTypes.length > 0
-        ? serviceHostingTypes[0]
-        : undefined;
+          ? serviceHostingTypes[0]
+          : undefined;
 
     return (
         <>
