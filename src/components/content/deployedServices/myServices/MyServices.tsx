@@ -4,15 +4,16 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
+import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
-    AreaChartOutlined,
+    CaretDownOutlined,
     CloseCircleOutlined,
     CopyOutlined,
     DeleteOutlined,
+    FundOutlined,
     InfoCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
@@ -95,6 +96,97 @@ function MyServices(): React.JSX.Element {
             setServiceVoList(serviceList);
         }
     }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
+
+    const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
+        return [
+            {
+                key: 'details',
+                label: (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                    <a
+                        rel='noopener noreferrer'
+                        onClick={() => {
+                            handleMyServiceDetailsOpenModal(record);
+                        }}
+                    >
+                        details
+                    </a>
+                ),
+                icon: <InfoCircleOutlined />,
+            },
+            {
+                key: 'migrate',
+                label: (
+                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+                    <a
+                        rel='noopener noreferrer'
+                        onClick={() => {
+                            migrate(record);
+                        }}
+                    >
+                        migrate
+                    </a>
+                ),
+                icon: <CopyOutlined />,
+                disabled:
+                    isDestroying ||
+                    isPurging ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING,
+            },
+            {
+                key:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                        ? 'purge'
+                        : 'destroy',
+                icon:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                        <DeleteOutlined />
+                    ) : (
+                        <CloseCircleOutlined />
+                    ),
+                disabled:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                        ? isPurging || isDestroying || isPurgingCompleted
+                        : (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
+                              record.serviceDeploymentState !==
+                                  DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                          isDestroyingCompleted,
+                label:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                        <Popconfirm
+                            title='Purge the service'
+                            description='Are you sure to purge the service?'
+                            cancelText='Yes'
+                            okText='No'
+                            onCancel={() => {
+                                purge(record);
+                            }}
+                        >
+                            purge
+                        </Popconfirm>
+                    ) : (
+                        <Popconfirm
+                            title='Destroy the service'
+                            description='Are you sure to destroy the service?'
+                            cancelText='Yes'
+                            okText='No'
+                            onCancel={() => {
+                                destroy(record);
+                            }}
+                        >
+                            destroy
+                        </Popconfirm>
+                    ),
+            },
+        ];
+    };
 
     if (listDeployedServicesQuery.isError) {
         return <DeployedServicesError error={listDeployedServicesQuery.error} />;
@@ -231,104 +323,48 @@ function MyServices(): React.JSX.Element {
             align: 'center',
         },
         {
+            title: 'Monitor',
+            dataIndex: 'monitor',
+            align: 'center',
+            render: (_, record) => {
+                return (
+                    <Tooltip title='Viewing Monitoring Indicators' placement='top'>
+                        <Button
+                            type='text'
+                            onClick={() => {
+                                onMonitor(record);
+                            }}
+                            disabled={
+                                record.serviceDeploymentState !==
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                            }
+                        >
+                            <FundOutlined />
+                        </Button>
+                    </Tooltip>
+                );
+            },
+        },
+        {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: DeployedService) => {
                 return (
                     <>
                         <Space size='middle'>
-                            <Button
-                                type='primary'
-                                icon={<InfoCircleOutlined />}
-                                onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record);
-                                }}
-                            >
-                                details
-                            </Button>
-                            <Button
-                                type='primary'
-                                icon={<AreaChartOutlined />}
-                                onClick={() => {
-                                    onMonitor(record);
-                                }}
-                                disabled={
-                                    record.serviceDeploymentState !==
-                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
-                                }
-                            >
-                                monitor
-                            </Button>
-                            <Button
-                                type='primary'
-                                icon={<CopyOutlined />}
-                                onClick={() => {
-                                    migrate(record);
-                                }}
-                                disabled={
-                                    isDestroying ||
-                                    isPurging ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DEPLOYING ||
-                                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
-                                }
-                            >
-                                migrate
-                            </Button>
-                            {record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                            record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
-                                <Popconfirm
-                                    title='Purge the service'
-                                    description='Are you sure to purge the service?'
-                                    cancelText='Yes'
-                                    okText='No'
-                                    onCancel={() => {
-                                        purge(record);
+                            <Dropdown menu={{ items: getOperationMenu(record) }}>
+                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                                <a
+                                    onClick={(e) => {
+                                        e.preventDefault();
                                     }}
                                 >
-                                    <Button
-                                        className={'purge-btn-class'}
-                                        loading={record.id === id ? !isPurgingCompleted : false}
-                                        type='primary'
-                                        icon={<DeleteOutlined />}
-                                        disabled={isPurging || isDestroying}
-                                    >
-                                        purge
-                                    </Button>
-                                </Popconfirm>
-                            ) : (
-                                <Popconfirm
-                                    title='Destroy the service'
-                                    description='Are you sure to destroy the service?'
-                                    cancelText='Yes'
-                                    okText='No'
-                                    onCancel={() => {
-                                        destroy(record);
-                                    }}
-                                >
-                                    <Button
-                                        loading={record.id === id ? !isDestroyingCompleted : false}
-                                        type='primary'
-                                        icon={<CloseCircleOutlined />}
-                                        disabled={
-                                            (record.serviceDeploymentState !==
-                                                DeployedService.serviceDeploymentState.DESTROY_FAILED &&
-                                                record.serviceDeploymentState !==
-                                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
-                                            isDestroying ||
-                                            isPurging
-                                        }
-                                    >
-                                        destroy
-                                    </Button>
-                                </Popconfirm>
-                            )}
+                                    <Space>
+                                        More
+                                        <CaretDownOutlined />
+                                    </Space>
+                                </a>
+                            </Dropdown>
                         </Space>
                     </>
                 );

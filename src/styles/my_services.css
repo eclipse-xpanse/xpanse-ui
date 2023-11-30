@@ -65,3 +65,17 @@
     display: flex;
     flex-direction: row;
 }
+
+.custom-monitor-button {
+    background-color: transparent;
+    border-color: #fff;
+    color: #333;
+}
+
+.custom-monitor-button:hover,
+.custom-monitor-button:active,
+.custom-monitor-button:focus {
+    background-color: #fafafa;
+    border-color: #fafafa;
+    color: #fafafa;
+}
