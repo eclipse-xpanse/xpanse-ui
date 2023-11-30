@@ -102,39 +102,42 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'details',
                 label: (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a
-                        rel='noopener noreferrer'
+                    <Button
                         onClick={() => {
                             handleMyServiceDetailsOpenModal(record);
                         }}
+                        className={'button-as-link'}
+                        icon={<InfoCircleOutlined />}
+                        type={'link'}
                     >
                         details
-                    </a>
+                    </Button>
                 ),
-                icon: <InfoCircleOutlined />,
             },
             {
                 key: 'migrate',
                 label: (
-                    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-                    <a
-                        rel='noopener noreferrer'
+                    <Button
                         onClick={() => {
                             migrate(record);
                         }}
+                        className={'button-as-link'}
+                        icon={<CopyOutlined />}
+                        disabled={
+                            isDestroying ||
+                            isPurging ||
+                            record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                            record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING ||
+                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
+                        }
+                        type={'link'}
                     >
                         migrate
-                    </a>
+                    </Button>
                 ),
-                icon: <CopyOutlined />,
-                disabled:
-                    isDestroying ||
-                    isPurging ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING,
             },
             {
                 key:
@@ -142,13 +145,6 @@ function MyServices(): React.JSX.Element {
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
                         ? 'purge'
                         : 'destroy',
-                icon:
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
-                        <DeleteOutlined />
-                    ) : (
-                        <CloseCircleOutlined />
-                    ),
                 disabled:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
@@ -169,7 +165,9 @@ function MyServices(): React.JSX.Element {
                                 purge(record);
                             }}
                         >
-                            purge
+                            <Button icon={<DeleteOutlined />} className={'button-as-link'} type={'link'}>
+                                purge
+                            </Button>
                         </Popconfirm>
                     ) : (
                         <Popconfirm
@@ -181,7 +179,9 @@ function MyServices(): React.JSX.Element {
                                 destroy(record);
                             }}
                         >
-                            destroy
+                            <Button icon={<CloseCircleOutlined />} className={'button-as-link'} type={'link'}>
+                                destroy
+                            </Button>
                         </Popconfirm>
                     ),
             },
@@ -353,17 +353,17 @@ function MyServices(): React.JSX.Element {
                     <>
                         <Space size='middle'>
                             <Dropdown menu={{ items: getOperationMenu(record) }}>
-                                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-                                <a
+                                <Button
                                     onClick={(e) => {
                                         e.preventDefault();
                                     }}
+                                    type={'link'}
                                 >
                                     <Space>
                                         More
                                         <CaretDownOutlined />
                                     </Space>
-                                </a>
+                                </Button>
                             </Dropdown>
                         </Space>
                     </>

@@ -79,3 +79,9 @@
     border-color: #fafafa;
     color: #fafafa;
 }
+
+.button-as-link {
+    border: none;
+    box-shadow: none;
+    background: none;
+}
