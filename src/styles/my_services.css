@@ -66,6 +66,13 @@
     flex-direction: row;
 }
 
+.deployed-resource-properties div {
+    max-width: 40vh;
+    word-wrap: break-word;
+    overflow: auto;
+    max-height: 30vh;
+}
+
 .custom-monitor-button {
     background-color: transparent;
     border-color: #fff;
