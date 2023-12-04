@@ -7,11 +7,13 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
-import { DashboardOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 import SystemStatusIcon from './SystemStatusIcon';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import '../../../styles/health_status.css';
+
 interface DataType {
     key: React.Key;
     backendSystemType: BackendSystemStatus.backendSystemType;
@@ -194,16 +196,25 @@ export const HealthCheckStatus = (): JSX.Element => {
         setHealthStatusFilters(filters);
     };
 
+    const refreshData = () => {
+        void healthCheckQuery.refetch();
+    };
+
     return (
         <>
             <div className={'generic-table-container'}>
-                <div className={'health-status-title'}>
-                    <h3>
-                        <DashboardOutlined />
-                        &nbsp; Health Status
-                    </h3>
-                </div>
                 {healthCheckError}
+                <div className={'health-status-refresh'}>
+                    <Button
+                        type='primary'
+                        icon={<SyncOutlined />}
+                        onClick={() => {
+                            refreshData();
+                        }}
+                    >
+                        refresh
+                    </Button>
+                </div>
                 <Table columns={columns} dataSource={backendSystemStatusList} />
             </div>
         </>
