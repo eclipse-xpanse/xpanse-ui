@@ -12,6 +12,7 @@ import { getMenuItems } from './menuItems';
 
 function LayoutSider(): React.JSX.Element {
     const [collapsed, setCollapsed] = useState(false);
+    const [isBroken, setIsBroken] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const { pathname, hash } = location;
@@ -32,15 +33,23 @@ function LayoutSider(): React.JSX.Element {
 
     return (
         <Layout.Sider
-            collapsible
+            collapsible={!isBroken}
             collapsed={collapsed}
             onCollapse={(newValue) => {
                 setCollapsed(newValue);
             }}
+            breakpoint={'md'}
+            onBreakpoint={(broken) => {
+                setIsBroken(broken);
+            }}
         >
             <div className={'logo'}>
                 <Link to={homePageRoute}>
-                    <Image width={150} src='xpanse-black.png' preview={false} />
+                    <Image
+                        width={collapsed ? 30 : 150}
+                        src={collapsed ? 'xpanse-black-logo-only.png' : 'xpanse-black.png'}
+                        preview={false}
+                    />
                 </Link>
             </div>
             <Menu
