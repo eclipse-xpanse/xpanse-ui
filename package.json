@@ -100,7 +100,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "knip": "^3.3.5",
         "openapi-typescript-codegen": "^0.25.0",
-        "prettier": "3.1.0",
+        "prettier": "3.1.1",
         "react-scripts": "5.0.1",
         "release-it": "^17.0.0",
         "ts-jest": "^29.1.1",
