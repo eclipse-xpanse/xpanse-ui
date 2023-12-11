@@ -83,7 +83,7 @@
         "@tanstack/eslint-plugin-query": "^5.8.4",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^13.4.0",
-        "@types/node": "^16.18.12",
+        "@types/node": "^20.10.4",
         "@types/react": "^18.2.0",
         "@types/react-dom": "^18.2.0",
         "@typescript-eslint/eslint-plugin": "^6.13.0",
