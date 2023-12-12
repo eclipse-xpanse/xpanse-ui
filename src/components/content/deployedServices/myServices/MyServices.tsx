@@ -215,7 +215,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceIdInQuery ? undefined : serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.id.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.id.startsWith(value.toString()),
             filtered: !!serviceIdInQuery,
             align: 'center',
         },
@@ -225,7 +225,7 @@ function MyServices(): React.JSX.Element {
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
                     return customerServiceName.startsWith(value.toString());
@@ -240,7 +240,7 @@ function MyServices(): React.JSX.Element {
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.category.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
             align: 'center',
         },
         {
@@ -249,7 +249,7 @@ function MyServices(): React.JSX.Element {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.name.startsWith(value.toString()),
             align: 'center',
         },
         {
@@ -258,7 +258,7 @@ function MyServices(): React.JSX.Element {
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.version.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
             align: 'center',
         },
@@ -268,8 +268,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) =>
-                record.serviceHostingType.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (serviceHostingType: DeployedService.serviceHostingType) =>
                 DeployedServicesHostingType(serviceHostingType),
@@ -280,7 +279,7 @@ function MyServices(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: AbstractCredentialInfo.csp, _) => {
                 return (
                     <Space size='middle'>
@@ -316,7 +315,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceStateInQuery ? undefined : serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) =>
+            onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
             filtered: !!serviceStateInQuery,

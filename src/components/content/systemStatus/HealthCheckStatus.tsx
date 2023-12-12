@@ -75,7 +75,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const name = record.name;
                 return name.startsWith(value.toString());
             },
@@ -89,7 +89,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: backendSystemTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const backendSystemType = record.backendSystemType;
                 return backendSystemType.startsWith(value.toString());
             },
@@ -117,7 +117,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: healthStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const healthStatus = record.healthStatus;
                 return healthStatus.startsWith(value.toString());
             },
