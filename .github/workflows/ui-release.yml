@@ -59,6 +59,10 @@ jobs:
               working-directory: ./
               run: npm run test
 
+            - name: Run TSC
+              working-directory: ./
+              run: tsc
+
             - name: Release application
               working-directory: ./
               run: npx release-it ${{github.event.inputs.ReleaseType}} --ci
