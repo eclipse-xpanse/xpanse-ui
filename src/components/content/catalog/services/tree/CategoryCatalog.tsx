@@ -14,19 +14,23 @@ import { convertStringArrayToUnorderedList } from '../../../../utils/generateUno
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { catalogPageRoute, serviceNameKeyQuery, serviceVersionKeyQuery } from '../../../../utils/constants';
+import {
+    catalogPageRoute,
+    serviceCspQuery,
+    serviceHostingTypeQuery,
+    serviceNameKeyQuery,
+    serviceVersionKeyQuery,
+} from '../../../../utils/constants';
 
 function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
     const [urlParams] = useSearchParams();
-    const serviceNameQuery = getServiceNameFromQuery();
-    const serviceVersionQuery = getServiceVersionFromQuery();
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
-    const [currentServiceName, setCurrentServiceName] = useState<string>('');
-    const [currentVersion, setCurrentVersion] = useState<string>('');
-    const [currentCsp, setCurrentCsp] = useState<string>('');
-    const [currentHostType, setCurrentHostType] = useState<string>('');
+    const [currentServiceName, setCurrentServiceName] = useState<string>(getServiceNameFromQuery());
+    const [currentVersion, setCurrentVersion] = useState<string>(getServiceVersionFromQuery());
+    const [currentCsp, setCurrentCsp] = useState<string>(getServiceCspFormQuery());
+    const [currentHostType, setCurrentHostType] = useState<string>(getServiceHostingTypeFormQuery());
     const [categoryOclData, setCategoryOclData] = useState<Map<string, ServiceTemplateDetailVo[]>>(
         new Map<string, ServiceTemplateDetailVo[]>()
     );
@@ -35,70 +39,65 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
     const navigate = useNavigate();
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
-
     useEffect(() => {
-        const categoryTreeData: DataNode[] = [];
-        const tExpandKeys: React.Key[] = [];
-        setCurrentServiceName('');
-        setCurrentVersion('');
-        setCurrentCsp('');
-        setCurrentHostType('');
-        const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
-        if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
-            const serviceNameList: string[] = Array.from(serviceMapper.keys());
-            setCategoryOclData(serviceMapper);
-            serviceNameList.forEach((serviceName: string) => {
-                const dataNode: DataNode = {
-                    title: serviceName,
-                    key: serviceName || '',
-                    children: [],
-                };
-                const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
-                    serviceName,
-                    userAvailableServiceList
-                );
-                const versionList: string[] = Array.from(versionMapper.keys());
+        if (availableServiceTemplatesQuery.isSuccess) {
+            const categoryTreeData: DataNode[] = [];
+            const tExpandKeys: React.Key[] = [];
+            const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
+            if (userAvailableServiceList.length > 0) {
+                const serviceMapper: Map<string, ServiceTemplateDetailVo[]> =
+                    getServiceMapper(userAvailableServiceList);
+                const serviceNameList: string[] = Array.from(serviceMapper.keys());
+                setCategoryOclData(serviceMapper);
+                serviceNameList.forEach((serviceName: string) => {
+                    const dataNode: DataNode = {
+                        title: serviceName,
+                        key: serviceName || '',
+                        children: [],
+                    };
+                    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
+                        serviceName,
+                        userAvailableServiceList
+                    );
+                    const versionList: string[] = Array.from(versionMapper.keys());
 
-                versionList.forEach((versionName: string) => {
-                    dataNode.children?.push({
-                        title: versionName,
-                        key: serviceName + '@' + versionName,
-                        icon: <TagOutlined />,
+                    versionList.forEach((versionName: string) => {
+                        dataNode.children?.push({
+                            title: versionName,
+                            key: serviceName + '@' + versionName,
+                            icon: <TagOutlined />,
+                        });
+                        tExpandKeys.push(serviceName + '@' + versionName);
                     });
-                    tExpandKeys.push(serviceName + '@' + versionName);
+                    categoryTreeData.push(dataNode);
                 });
-                categoryTreeData.push(dataNode);
-            });
-            setTreeData(categoryTreeData);
-            setSelectKey(
-                serviceNameQuery.length > 0 && serviceVersionQuery.length > 0
-                    ? serviceNameQuery + '@' + serviceVersionQuery
-                    : tExpandKeys[0]
-            );
-            setExpandKeys(tExpandKeys);
-            setCurrentServiceName(
-                serviceNameQuery.length > 0 ? serviceNameQuery : tExpandKeys[0].toString().split('@')[0]
-            );
-            setCurrentVersion(
-                serviceVersionQuery.length > 0 ? serviceVersionQuery : tExpandKeys[0].toString().split('@')[1]
-            );
-        } else {
-            setTreeData([]);
-            setSelectKey('');
-            setExpandKeys([]);
-            setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
-            setCurrentServiceName('');
-            setCurrentVersion('');
-            setCurrentCsp('');
-            setCurrentHostType('');
+                setTreeData(categoryTreeData);
+                setSelectKey(
+                    currentServiceName.length > 0 && currentVersion.length > 0
+                        ? currentServiceName + '@' + currentVersion
+                        : tExpandKeys[0]
+                );
+                setExpandKeys(tExpandKeys);
+                if (!currentServiceName) {
+                    setCurrentServiceName(tExpandKeys[0].toString().split('@')[0]);
+                }
+
+                if (!currentVersion) {
+                    setCurrentVersion(tExpandKeys[0].toString().split('@')[1]);
+                }
+            } else {
+                setTreeData([]);
+                setSelectKey('');
+                setExpandKeys([]);
+                setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
+                setCurrentServiceName('');
+                setCurrentVersion('');
+                setCurrentCsp('');
+                setCurrentHostType('');
+            }
         }
-    }, [
-        availableServiceTemplatesQuery.data,
-        availableServiceTemplatesQuery.isSuccess,
-        serviceNameQuery,
-        serviceVersionQuery,
-    ]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [availableServiceTemplatesQuery.isSuccess, category]);
 
     useEffect(() => {
         navigate({
@@ -111,12 +110,13 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                 hostingType: currentHostType,
             }).toString(),
         });
-    }, [currentServiceName, currentVersion, currentCsp, currentHostType, navigate, category]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentServiceName, currentVersion, currentCsp, currentHostType, category]);
 
     function getServiceNameFromQuery(): string {
         const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
         if (queryInUri.length > 0) {
-            return queryInUri as DeployedService.serviceDeploymentState;
+            return queryInUri;
         }
         return '';
     }
@@ -124,7 +124,23 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
     function getServiceVersionFromQuery(): string {
         const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
         if (queryInUri.length > 0) {
-            return queryInUri as DeployedService.serviceDeploymentState;
+            return queryInUri;
+        }
+        return '';
+    }
+
+    function getServiceCspFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
+    function getServiceHostingTypeFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
         }
         return '';
     }
