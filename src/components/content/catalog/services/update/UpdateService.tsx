@@ -8,11 +8,11 @@ import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     ApiError,
-    Ocl,
-    ServiceTemplateDetailVo,
-    Response,
-    ServiceVendorService,
     DeployedService,
+    Ocl,
+    Response,
+    ServiceTemplateDetailVo,
+    ServiceVendorService,
 } from '../../../../../xpanse-api/generated';
 import { RcFile } from 'antd/es/upload';
 import UpdateResult from './UpdateResult';
@@ -27,10 +27,22 @@ function UpdateService({
     id,
     unregisterStatus,
     category,
+    currentServiceName,
+    currentCsp,
+    defaultDisplayedService,
+    getServiceKey,
+    getCsp,
+    getHostType,
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
     category: DeployedService.category;
+    currentServiceName: string;
+    currentCsp: string;
+    defaultDisplayedService: ServiceTemplateDetailVo | undefined;
+    getServiceKey: (arg: string) => void;
+    getCsp: (arg: string) => void;
+    getHostType: (arg: string) => void;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -71,6 +83,11 @@ function UpdateService({
     const handleCancel = () => {
         if (updateServiceRequest.isSuccess) {
             void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
+            getServiceKey(currentServiceName);
+            getCsp(currentCsp);
+            getHostType(
+                defaultDisplayedService !== undefined ? defaultDisplayedService.serviceHostingType.valueOf() : ''
+            );
         }
         files.current.pop();
         ocl.current = undefined;
@@ -112,6 +129,7 @@ function UpdateService({
             };
         }
     }
+
     const sendRequestRequest = () => {
         if (ocl.current) {
             updateServiceRequest.mutate(ocl.current);
@@ -223,4 +241,5 @@ function UpdateService({
         </div>
     );
 }
+
 export default UpdateService;

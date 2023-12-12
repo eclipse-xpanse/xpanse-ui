@@ -11,10 +11,12 @@ import { EnvironmentOutlined } from '@ant-design/icons';
 export function ServiceHostingOptions({
     serviceTemplateDetailVos,
     defaultDisplayedService,
+    serviceHostingTypeInQuery,
     updateServiceHostingType,
 }: {
     serviceTemplateDetailVos: ServiceTemplateDetailVo[];
     defaultDisplayedService: ServiceTemplateDetailVo;
+    serviceHostingTypeInQuery: string;
     updateServiceHostingType?: (serviceTemplateDetailVo: ServiceTemplateDetailVo) => void;
 }): React.JSX.Element {
     const serviceHostingTypes: ServiceTemplateDetailVo.serviceHostingType[] = [];
@@ -45,7 +47,11 @@ export function ServiceHostingOptions({
             </h3>
             <Radio.Group
                 disabled={serviceHostingTypes.length === 1}
-                value={defaultDisplayedService.serviceHostingType}
+                value={
+                    serviceHostingTypeInQuery.length > 0
+                        ? serviceHostingTypeInQuery
+                        : defaultDisplayedService.serviceHostingType
+                }
                 onChange={onChange}
             >
                 <Radio value={ServiceTemplateDetailVo.serviceHostingType.SELF}>self</Radio>

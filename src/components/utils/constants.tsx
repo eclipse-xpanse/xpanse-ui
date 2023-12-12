@@ -38,3 +38,8 @@ export const policiesRoute: string = '/policies';
 export const policiesLabelName: string = 'Policies';
 export const reportsRoute: string = '/reports';
 export const reportsLabelName: string = 'Reports';
+
+export const serviceNameKeyQuery: string = 'serviceName';
+export const serviceCspQuery: string = 'csp';
+export const serviceVersionKeyQuery: string = 'version';
+export const serviceHostingTypeQuery: string = 'hostingType';

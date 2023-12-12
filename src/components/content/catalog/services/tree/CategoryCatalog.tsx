@@ -8,26 +8,41 @@ import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
-import { ApiError, Response, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { catalogPageRoute, serviceNameKeyQuery, serviceVersionKeyQuery } from '../../../../utils/constants';
 
 function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
+    const [urlParams] = useSearchParams();
+    const serviceNameQuery = getServiceNameFromQuery();
+    const serviceVersionQuery = getServiceVersionFromQuery();
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
+    const [currentServiceName, setCurrentServiceName] = useState<string>('');
+    const [currentVersion, setCurrentVersion] = useState<string>('');
+    const [currentCsp, setCurrentCsp] = useState<string>('');
+    const [currentHostType, setCurrentHostType] = useState<string>('');
     const [categoryOclData, setCategoryOclData] = useState<Map<string, ServiceTemplateDetailVo[]>>(
         new Map<string, ServiceTemplateDetailVo[]>()
     );
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
 
     useEffect(() => {
         const categoryTreeData: DataNode[] = [];
         const tExpandKeys: React.Key[] = [];
+        setCurrentServiceName('');
+        setCurrentVersion('');
+        setCurrentCsp('');
+        setCurrentHostType('');
         const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
         if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
             const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
@@ -56,15 +71,63 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                 categoryTreeData.push(dataNode);
             });
             setTreeData(categoryTreeData);
-            setSelectKey(tExpandKeys[0]);
+            setSelectKey(
+                serviceNameQuery.length > 0 && serviceVersionQuery.length > 0
+                    ? serviceNameQuery + '@' + serviceVersionQuery
+                    : tExpandKeys[0]
+            );
             setExpandKeys(tExpandKeys);
+            setCurrentServiceName(
+                serviceNameQuery.length > 0 ? serviceNameQuery : tExpandKeys[0].toString().split('@')[0]
+            );
+            setCurrentVersion(
+                serviceVersionQuery.length > 0 ? serviceVersionQuery : tExpandKeys[0].toString().split('@')[1]
+            );
         } else {
             setTreeData([]);
             setSelectKey('');
             setExpandKeys([]);
             setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
+            setCurrentServiceName('');
+            setCurrentVersion('');
+            setCurrentCsp('');
+            setCurrentHostType('');
         }
-    }, [availableServiceTemplatesQuery.data, availableServiceTemplatesQuery.isSuccess]);
+    }, [
+        availableServiceTemplatesQuery.data,
+        availableServiceTemplatesQuery.isSuccess,
+        serviceNameQuery,
+        serviceVersionQuery,
+    ]);
+
+    useEffect(() => {
+        navigate({
+            pathname: catalogPageRoute,
+            hash: '#' + category,
+            search: createSearchParams({
+                csp: currentCsp,
+                serviceName: currentServiceName,
+                version: currentVersion,
+                hostingType: currentHostType,
+            }).toString(),
+        });
+    }, [currentServiceName, currentVersion, currentCsp, currentHostType, navigate, category]);
+
+    function getServiceNameFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri as DeployedService.serviceDeploymentState;
+        }
+        return '';
+    }
+
+    function getServiceVersionFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri as DeployedService.serviceDeploymentState;
+        }
+        return '';
+    }
 
     function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
@@ -81,6 +144,8 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             return;
         }
         setSelectKey(selectedKeys[0]);
+        setCurrentServiceName(selectedKeys[0].toString().split('@')[0]);
+        setCurrentVersion(selectedKeys[0].toString().split('@')[1]);
     };
 
     const onConfirmUnregister = (disabled: boolean) => {
@@ -134,6 +199,22 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             </div>
         );
     }
+    const getServiceKey = (serviceKey: string) => {
+        if (serviceKey.length > 0) {
+            setCurrentServiceName(serviceKey.split('@')[0]);
+            setCurrentVersion(serviceKey.split('@')[1]);
+        }
+    };
+    const getCsp = (csp: string) => {
+        if (csp.length > 0) {
+            setCurrentCsp(csp);
+        }
+    };
+    const getHostType = (hostType: string) => {
+        if (hostType.length > 0) {
+            setCurrentHostType(hostType);
+        }
+    };
 
     return (
         <div className={'catalog-middleware'}>
@@ -162,6 +243,9 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                         currentServiceName={selectKey.toString()}
                         confirmUnregister={onConfirmUnregister}
                         category={category}
+                        getServiceKey={getServiceKey}
+                        getCsp={getCsp}
+                        getHostType={getHostType}
                     />
                 </div>
             </div>
