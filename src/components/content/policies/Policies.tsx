@@ -53,7 +53,7 @@ function Policies(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: AbstractCredentialInfo.csp, _) => {
                 return (
                     <Space size='middle'>
@@ -79,7 +79,7 @@ function Policies(): React.JSX.Element {
             filters: enabledFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.enabled === value,
+            onFilter: (value: React.Key | boolean, record) => record.enabled === value,
             render: (text, _) => {
                 return text ? 'true' : 'false';
             },
@@ -190,8 +190,8 @@ function Policies(): React.JSX.Element {
         setIsOpenAddOrUpdatePolicyModal(true);
     };
 
-    const getCancelUpdateStatus = (isCancle: boolean) => {
-        if (isCancle) {
+    const getCancelUpdateStatus = (isCancelled: boolean) => {
+        if (isCancelled) {
             setIsOpenAddOrUpdatePolicyModal(false);
             refreshPoliciesManagementServiceList();
         }
