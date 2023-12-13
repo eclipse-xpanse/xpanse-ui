@@ -31,8 +31,9 @@ export const HealthCheckStatus = (): JSX.Element => {
     const [backendSystemStatusList, setBackendSystemStatusList] = useState<DataType[]>([]);
     const healthCheckQuery = useHealthCheckStatusQuery();
     useEffect(() => {
-        const rsp: SystemStatus | undefined = healthCheckQuery.data;
-        if (rsp !== undefined && healthCheckQuery.isSuccess) {
+        if (healthCheckQuery.isSuccess) {
+            setHealthCheckError(<></>);
+            const rsp: SystemStatus | undefined = healthCheckQuery.data;
             updateBackendSystemStatusList(rsp.backendSystemStatuses);
             updateNameFilters(rsp.backendSystemStatuses);
             updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
@@ -46,21 +47,25 @@ export const HealthCheckStatus = (): JSX.Element => {
             if (healthCheckQuery.error instanceof ApiError && 'details' in healthCheckQuery.error.body) {
                 const response: Response = healthCheckQuery.error.body as Response;
                 setHealthCheckError(
-                    <Alert
-                        message={response.resultType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={true}
-                    />
+                    <div className={'health-refresh-alert-tip'}>
+                        <Alert
+                            message={response.resultType.valueOf()}
+                            description={convertStringArrayToUnorderedList(response.details)}
+                            type={'error'}
+                            closable={true}
+                        />
+                    </div>
                 );
             } else {
                 setHealthCheckError(
-                    <Alert
-                        message='Fetching Service Details Failed'
-                        description={healthCheckQuery.error.message}
-                        type={'error'}
-                        closable={true}
-                    />
+                    <div className={'health-refresh-alert-tip'}>
+                        <Alert
+                            message='Fetching Health Check Status Failed'
+                            description={healthCheckQuery.error.message}
+                            type={'error'}
+                            closable={true}
+                        />
+                    </div>
                 );
             }
         }
@@ -197,6 +202,7 @@ export const HealthCheckStatus = (): JSX.Element => {
     };
 
     const refreshData = () => {
+        setHealthCheckError(<></>);
         void healthCheckQuery.refetch();
     };
 

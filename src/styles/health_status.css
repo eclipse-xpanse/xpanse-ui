@@ -6,3 +6,9 @@
 .health-status-refresh {
     margin-bottom: 1%;
 }
+
+.health-refresh-alert-tip {
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
