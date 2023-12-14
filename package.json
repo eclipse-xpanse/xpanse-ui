@@ -15,7 +15,7 @@
         "rc-tabs": "^12.13.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router-dom": "^6.20.0",
+        "react-router-dom": "^6.21.0",
         "react-timer-hook": "^3.0.7",
         "yaml": "^2.3.3",
         "zustand": "^4.4.7"
