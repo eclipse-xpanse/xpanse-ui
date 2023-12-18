@@ -4,12 +4,12 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { PoliciesManagementService, PolicyUpdateRequest } from '../../../../xpanse-api/generated';
+import { UserPoliciesManagementService, UserPolicyUpdateRequest } from '../../../../xpanse-api/generated';
 
 export function useUpdatePolicyRequest() {
     return useMutation({
-        mutationFn: (requestBody: PolicyUpdateRequest) => {
-            return PoliciesManagementService.updatePolicy(requestBody);
+        mutationFn: (requestBody: UserPolicyUpdateRequest) => {
+            return UserPoliciesManagementService.updateUserPolicy(requestBody);
         },
     });
 }

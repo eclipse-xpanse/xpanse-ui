@@ -14,7 +14,6 @@ import type { Link } from '../models/Link';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-import { CredentialVariables } from '../models/CredentialVariables';
 
 export class CredentialsManagementService {
     /**
@@ -263,14 +262,14 @@ export class CredentialsManagementService {
     /**
      * List the credential capabilities defined by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
      * @param cspName name of the cloud service provider.
-     * @param type? The type of credential.
-     * @param name? The name of credential.
+     * @param type The type of credential.
+     * @param name The name of credential.
      * @returns AbstractCredentialInfo OK
      * @throws ApiError
      */
     public static getCredentialCapabilities(
-        cspName: CredentialVariables.csp | undefined,
-        type?: CredentialVariables.type | undefined,
+        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
         name?: string
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {

@@ -7,26 +7,26 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Policy } from '../models/Policy';
-import type { PolicyCreateRequest } from '../models/PolicyCreateRequest';
-import type { PolicyUpdateRequest } from '../models/PolicyUpdateRequest';
+import type { UserPolicy } from '../models/UserPolicy';
+import type { UserPolicyCreateRequest } from '../models/UserPolicyCreateRequest';
+import type { UserPolicyUpdateRequest } from '../models/UserPolicyUpdateRequest';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class PoliciesManagementService {
+export class UserPoliciesManagementService {
     /**
      * List the policies defined by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName Name of csp which the policy belongs to.
      * @param enabled Is the policy enabled.
-     * @returns Policy OK
+     * @returns UserPolicy OK
      * @throws ApiError
      */
-    public static listPolicies(
+    public static listUserPolicies(
         cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         enabled?: boolean
-    ): CancelablePromise<Array<Policy>> {
+    ): CancelablePromise<Array<UserPolicy>> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/policies',
@@ -48,10 +48,10 @@ export class PoliciesManagementService {
     /**
      * Update the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
-     * @returns Policy OK
+     * @returns UserPolicy OK
      * @throws ApiError
      */
-    public static updatePolicy(requestBody: PolicyUpdateRequest): CancelablePromise<Policy> {
+    public static updateUserPolicy(requestBody: UserPolicyUpdateRequest): CancelablePromise<UserPolicy> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/xpanse/policies',
@@ -71,10 +71,10 @@ export class PoliciesManagementService {
     /**
      * Add policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
-     * @returns Policy OK
+     * @returns UserPolicy OK
      * @throws ApiError
      */
-    public static addPolicy(requestBody: PolicyCreateRequest): CancelablePromise<Policy> {
+    public static addUserPolicy(requestBody: UserPolicyCreateRequest): CancelablePromise<UserPolicy> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/xpanse/policies',
@@ -94,10 +94,10 @@ export class PoliciesManagementService {
     /**
      * Get the details of the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
-     * @returns Policy OK
+     * @returns UserPolicy OK
      * @throws ApiError
      */
-    public static getPolicyDetails(id: string): CancelablePromise<Policy> {
+    public static getPolicyDetails(id: string): CancelablePromise<UserPolicy> {
         return __request(OpenAPI, {
             method: 'GET',
             url: '/xpanse/policies/{id}',
@@ -121,7 +121,7 @@ export class PoliciesManagementService {
      * @returns void
      * @throws ApiError
      */
-    public static deletePolicy(id: string): CancelablePromise<void> {
+    public static deleteUserPolicy(id: string): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/xpanse/policies/{id}',

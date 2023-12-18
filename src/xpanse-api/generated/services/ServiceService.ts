@@ -52,9 +52,10 @@ export class ServiceService {
             | 'destroy successful'
             | 'destroy failed'
             | 'migrating'
-            | 'migration_success'
-            | 'migration_failed'
+            | 'migration successful'
+            | 'migration failed'
             | 'manual cleanup required'
+            | 'rollback failed'
     ): CancelablePromise<Array<DeployedService>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -156,9 +157,10 @@ export class ServiceService {
             | 'destroy successful'
             | 'destroy failed'
             | 'migrating'
-            | 'migration_success'
-            | 'migration_failed'
+            | 'migration successful'
+            | 'migration failed'
             | 'manual cleanup required'
+            | 'rollback failed'
     ): CancelablePromise<Array<DeployedService>> {
         return __request(OpenAPI, {
             method: 'GET',

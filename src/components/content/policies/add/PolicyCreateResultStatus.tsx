@@ -5,7 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
-import { ApiError, Policy, Response } from '../../../../xpanse-api/generated';
+import { ApiError, Response, UserPolicy } from '../../../../xpanse-api/generated';
 import PolicySubmitResultDetails from '../PolicySubmitResultDetails';
 
 export default function PolicyCreateResultStatus({
@@ -17,7 +17,7 @@ export default function PolicyCreateResultStatus({
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
-    currentPolicyService: Policy | undefined;
+    currentPolicyService: UserPolicy | undefined;
 }): React.JSX.Element {
     if (isError) {
         if (error instanceof ApiError && 'details' in error.body) {

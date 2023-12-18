@@ -8,19 +8,19 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type Policy = {
+export type ServicePolicy = {
     /**
      * The id of the policy.
      */
     id: string;
     /**
-     * The valid policy created by the user.
+     * The valid policy belongs to the service.
      */
     policy: string;
     /**
-     * The csp which the policy belongs to.
+     * The id of registered service template which the policy belongs to.
      */
-    csp: Policy.csp;
+    serviceTemplateId: string;
     /**
      * Is the policy enabled.
      */
@@ -34,19 +34,3 @@ export type Policy = {
      */
     lastModifiedTime: string;
 };
-
-export namespace Policy {
-    /**
-     * The csp which the policy belongs to.
-     */
-    export enum csp {
-        HUAWEI = 'huawei',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
-        OPENSTACK = 'openstack',
-        SCS = 'scs',
-        ALICLOUD = 'alicloud',
-        AWS = 'aws',
-        AZURE = 'azure',
-        GOOGLE = 'google',
-    }
-}
