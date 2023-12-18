@@ -75,7 +75,11 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        queryFn: () => CredentialsManagementService.getCredentialCapabilities(currentCsp, currentType),
+        queryFn: () =>
+            CredentialsManagementService.getCredentialCapabilities(
+                currentCsp ?? CredentialVariables.csp.HUAWEI,
+                currentType
+            ),
         staleTime: 60000,
         enabled: currentCsp !== undefined && currentType !== undefined,
     });

@@ -8,34 +8,26 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type PolicyVo = {
+export type UserPolicyUpdateRequest = {
     /**
      * The id of the policy.
      */
     id: string;
     /**
-     * The valid policy created by the user.
-     */
-    policy: string;
-    /**
      * The csp which the policy belongs to.
      */
-    csp: PolicyVo.csp;
+    csp?: UserPolicyUpdateRequest.csp;
     /**
-     * Is the policy enabled.
+     * The policy.
      */
-    enabled: boolean;
+    policy?: string;
     /**
-     * Time of the policy created.
+     * Is the policy enabled. true:enabled;false:disabled.
      */
-    createTime: string;
-    /**
-     * Time of the policy updated.
-     */
-    lastModifiedTime: string;
+    enabled?: boolean;
 };
 
-export namespace PolicyVo {
+export namespace UserPolicyUpdateRequest {
     /**
      * The csp which the policy belongs to.
      */

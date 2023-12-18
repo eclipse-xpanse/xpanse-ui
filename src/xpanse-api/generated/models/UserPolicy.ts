@@ -8,22 +8,34 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type PolicyCreateRequest = {
+export type UserPolicy = {
     /**
-     * The csp which the policy belongs to.
+     * The id of the policy.
      */
-    csp: PolicyCreateRequest.csp;
+    id: string;
     /**
-     * The policy.
+     * The valid policy created by the user.
      */
     policy: string;
     /**
-     * Is the policy enabled. true:enabled;false:disabled.
+     * The csp which the policy belongs to.
+     */
+    csp: UserPolicy.csp;
+    /**
+     * Is the policy enabled.
      */
     enabled: boolean;
+    /**
+     * Time of the policy created.
+     */
+    createTime: string;
+    /**
+     * Time of the policy updated.
+     */
+    lastModifiedTime: string;
 };
 
-export namespace PolicyCreateRequest {
+export namespace UserPolicy {
     /**
      * The csp which the policy belongs to.
      */
