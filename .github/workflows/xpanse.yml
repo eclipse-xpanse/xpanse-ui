@@ -16,7 +16,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
             - name: Install all required NPM packages
               working-directory: ./
               run: npm install
@@ -32,3 +32,6 @@ jobs:
             - name: Run unit tests
               working-directory: ./
               run: npm run test
+            - name: Run TSC
+              working-directory: ./
+              run: tsc

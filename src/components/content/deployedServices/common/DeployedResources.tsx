@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployResource } from '../../../xpanse-api/generated';
+import { DeployResource } from '../../../../xpanse-api/generated';
 import React from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { DeployResourceDataType } from './myServiceProps';
+import { DeployResourceDataType } from '../myServices/myServiceProps';
 import { Table } from 'antd';
 import DeployedResourceProperties from './DeployedResourceProperties';
 

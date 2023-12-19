@@ -7,11 +7,13 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
-import { DashboardOutlined } from '@ant-design/icons';
+import { SyncOutlined } from '@ant-design/icons';
 import SystemStatusIcon from './SystemStatusIcon';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import '../../../styles/health_status.css';
+
 interface DataType {
     key: React.Key;
     backendSystemType: BackendSystemStatus.backendSystemType;
@@ -29,8 +31,9 @@ export const HealthCheckStatus = (): JSX.Element => {
     const [backendSystemStatusList, setBackendSystemStatusList] = useState<DataType[]>([]);
     const healthCheckQuery = useHealthCheckStatusQuery();
     useEffect(() => {
-        const rsp: SystemStatus | undefined = healthCheckQuery.data;
-        if (rsp !== undefined && healthCheckQuery.isSuccess) {
+        if (healthCheckQuery.isSuccess) {
+            setHealthCheckError(<></>);
+            const rsp: SystemStatus | undefined = healthCheckQuery.data;
             updateBackendSystemStatusList(rsp.backendSystemStatuses);
             updateNameFilters(rsp.backendSystemStatuses);
             updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
@@ -44,21 +47,25 @@ export const HealthCheckStatus = (): JSX.Element => {
             if (healthCheckQuery.error instanceof ApiError && 'details' in healthCheckQuery.error.body) {
                 const response: Response = healthCheckQuery.error.body as Response;
                 setHealthCheckError(
-                    <Alert
-                        message={response.resultType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={true}
-                    />
+                    <div className={'health-refresh-alert-tip'}>
+                        <Alert
+                            message={response.resultType.valueOf()}
+                            description={convertStringArrayToUnorderedList(response.details)}
+                            type={'error'}
+                            closable={true}
+                        />
+                    </div>
                 );
             } else {
                 setHealthCheckError(
-                    <Alert
-                        message='Fetching Service Details Failed'
-                        description={healthCheckQuery.error.message}
-                        type={'error'}
-                        closable={true}
-                    />
+                    <div className={'health-refresh-alert-tip'}>
+                        <Alert
+                            message='Fetching Health Check Status Failed'
+                            description={healthCheckQuery.error.message}
+                            type={'error'}
+                            closable={true}
+                        />
+                    </div>
                 );
             }
         }
@@ -73,7 +80,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const name = record.name;
                 return name.startsWith(value.toString());
             },
@@ -87,7 +94,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: backendSystemTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const backendSystemType = record.backendSystemType;
                 return backendSystemType.startsWith(value.toString());
             },
@@ -115,7 +122,7 @@ export const HealthCheckStatus = (): JSX.Element => {
             filters: healthStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 const healthStatus = record.healthStatus;
                 return healthStatus.startsWith(value.toString());
             },
@@ -194,16 +201,26 @@ export const HealthCheckStatus = (): JSX.Element => {
         setHealthStatusFilters(filters);
     };
 
+    const refreshData = () => {
+        setHealthCheckError(<></>);
+        void healthCheckQuery.refetch();
+    };
+
     return (
         <>
             <div className={'generic-table-container'}>
-                <div className={'health-status-title'}>
-                    <h3>
-                        <DashboardOutlined />
-                        &nbsp; Health Status
-                    </h3>
-                </div>
                 {healthCheckError}
+                <div className={'health-status-refresh'}>
+                    <Button
+                        type='primary'
+                        icon={<SyncOutlined />}
+                        onClick={() => {
+                            refreshData();
+                        }}
+                    >
+                        refresh
+                    </Button>
+                </div>
                 <Table columns={columns} dataSource={backendSystemStatusList} />
             </div>
         </>

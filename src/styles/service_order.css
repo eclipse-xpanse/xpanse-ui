@@ -240,14 +240,9 @@
     margin-left: 30px;
     margin-right: 30px;
 }
+
 .services-content-body-col {
     margin: 15px;
-}
-
-.services-content-price-class {
-    font-size: 14px;
-    font-weight: bold;
-    color: red;
 }
 
 .version-drop-down {
@@ -340,4 +335,25 @@
 
 .order-deploy-select-option {
     height: 50px;
+}
+
+.order-billing-title-class {
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.order-billing-value-class {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.order-billing-model-title-class {
+    font-size: 14px;
+    margin-left: 16px;
+    margin-right: 8px;
+}
+
+.order-billing-model-value-class {
+    font-size: 14px;
+    font-weight: normal;
 }

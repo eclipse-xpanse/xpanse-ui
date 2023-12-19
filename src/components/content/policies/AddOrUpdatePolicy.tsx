@@ -7,9 +7,9 @@ import React, { useRef, useState } from 'react';
 import {
     CloudServiceProvider,
     CredentialVariables,
-    PolicyCreateRequest,
-    PolicyUpdateRequest,
-    Policy,
+    UserPolicy,
+    UserPolicyCreateRequest,
+    UserPolicyUpdateRequest,
 } from '../../../xpanse-api/generated';
 import '../../../styles/policies.css';
 import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
@@ -28,13 +28,13 @@ export const AddOrUpdatePolicy = ({
     currentPolicyService,
     getCancelUpdateStatus,
 }: {
-    currentPolicyService: Policy | undefined;
+    currentPolicyService: UserPolicy | undefined;
     getCancelUpdateStatus: (arg: boolean) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const policyContent = useRef<string>(currentPolicyService?.policy ?? '');
-    const [createPolicyRequest, setCreatePolicyRequest] = useState<PolicyCreateRequest | undefined>(undefined);
-    const [updatePolicyRequest, setUpdatePolicyRequest] = useState<PolicyUpdateRequest | undefined>(undefined);
+    const [createPolicyRequest, setCreatePolicyRequest] = useState<UserPolicyCreateRequest | undefined>(undefined);
+    const [updatePolicyRequest, setUpdatePolicyRequest] = useState<UserPolicyUpdateRequest | undefined>(undefined);
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
     const files = useRef<UploadFile[]>([]);
@@ -42,9 +42,9 @@ export const AddOrUpdatePolicy = ({
     const createPoliciesManagementServiceRequest = useCreatePolicyRequest();
     const updatePoliciesManagementServiceRequest = useUpdatePolicyRequest();
 
-    const onFinish = (policyRequest: { csp: Policy.csp; enabled: boolean; policy: string }) => {
+    const onFinish = (policyRequest: { csp: UserPolicy.csp; enabled: boolean; policy: string }) => {
         if (currentPolicyService === undefined) {
-            const policyCreateRequest: PolicyCreateRequest = policyRequest as PolicyCreateRequest;
+            const policyCreateRequest: UserPolicyCreateRequest = policyRequest as UserPolicyCreateRequest;
             policyCreateRequest.csp = policyRequest.csp;
             policyCreateRequest.enabled = policyRequest.enabled;
             policyCreateRequest.policy = policyRequest.policy;
@@ -55,7 +55,7 @@ export const AddOrUpdatePolicy = ({
                 setIsUpdated(comparePolicyUpdateRequestResult(policyRequest));
                 return;
             }
-            const policyUpdateRequest: PolicyUpdateRequest = policyRequest as PolicyUpdateRequest;
+            const policyUpdateRequest: UserPolicyUpdateRequest = policyRequest as UserPolicyUpdateRequest;
             policyUpdateRequest.id = currentPolicyService.id;
             policyUpdateRequest.csp = policyRequest.csp;
             policyUpdateRequest.enabled = policyRequest.enabled;
@@ -66,7 +66,7 @@ export const AddOrUpdatePolicy = ({
     };
 
     const comparePolicyUpdateRequestResult = (policyRequest: {
-        csp: Policy.csp;
+        csp: UserPolicy.csp;
         enabled: boolean;
         policy: string;
     }): boolean => {

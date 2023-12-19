@@ -9,8 +9,8 @@ import ServiceDetail from './ServiceDetail';
 import {
     ApiError,
     CloudServiceProvider,
-    Response,
     DeployedService,
+    Response,
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -21,6 +21,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
+import { useSearchParams } from 'react-router-dom';
+import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/constants';
 
 let lastServiceName: string = '';
 
@@ -29,12 +31,21 @@ function ServiceProvider({
     currentServiceName,
     confirmUnregister,
     category,
+    getServiceKey,
+    getCsp,
+    getHostType,
 }: {
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
     category: DeployedService.category;
+    getServiceKey: (arg: string) => void;
+    getCsp: (arg: string) => void;
+    getHostType: (arg: string) => void;
 }): React.JSX.Element {
+    const [urlParams] = useSearchParams();
+    const serviceCspInQuery = getServiceCspFormQuery();
+    const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
@@ -83,35 +94,61 @@ function ServiceProvider({
     };
 
     const items: Tab[] = getCspTabs(categoryOclData);
+
+    function getServiceCspFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
+    function getServiceHostingTypeFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
     function updateServiceDetails(serviceKey: string): void {
         const details = detailMapper.get(serviceKey);
         if (details) {
             setServiceDetails(details);
             setActiveServiceDetail(details[0]);
+            getHostType(details[0].serviceHostingType);
         }
     }
+
     useEffect(() => {
-        if (items.length > 0 && lastServiceName !== currentServiceName) {
+        if (items.length > 0 && serviceCspInQuery.length > 0) {
+            setActiveKey(serviceCspInQuery);
+            getCsp(serviceCspInQuery);
+        } else if (items.length > 0 && lastServiceName !== currentServiceName) {
             updateServiceDetails(currentServiceName + '@' + items[0].key);
             setActiveKey(items[0]?.key);
+            getCsp(items[0]?.key);
         } else if (items.length > 0 && lastServiceName === currentServiceName) {
             setActiveKey(items[0]?.key);
+            getCsp(items[0]?.key);
         }
         lastServiceName = currentServiceName;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentServiceName]);
+    }, [currentServiceName, serviceCspInQuery]);
 
     useEffect(() => {
         updateServiceDetails(currentServiceName + '@' + activeKey);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeKey]);
+    }, [activeKey, currentServiceName]);
 
     const onChange = (key: string) => {
         setActiveKey(key);
+        getCsp(key);
     };
 
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
         setActiveServiceDetail(serviceTemplateDetailVo);
+        getHostType(serviceTemplateDetailVo.serviceHostingType);
     };
 
     function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
@@ -154,16 +191,13 @@ function ServiceProvider({
         );
     }
 
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-
-    const onConfirmUnregister = async (msg: string | Error, isUnregisterSuccessful: boolean, id: string) => {
+    const onConfirmUnregister = (msg: string | Error, isUnregisterSuccessful: boolean, id: string) => {
         setUnregisterTipsInfo(isUnregisterSuccessful, msg);
         setUnregisterServiceId(id);
         unregisterStatus.current = isUnregisterSuccessful ? 'completed' : 'error';
         confirmUnregister(false);
         setUnregisterTabsItemDisabled(true);
         if (isUnregisterSuccessful) {
-            await sleep(5000);
             void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
         }
     };
@@ -183,6 +217,7 @@ function ServiceProvider({
                             <ServiceHostingOptions
                                 serviceTemplateDetailVos={serviceDetails}
                                 defaultDisplayedService={activeServiceDetail}
+                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
                                 updateServiceHostingType={onChangeServiceHostingType}
                             />
                             <ServiceDetail serviceDetails={activeServiceDetail} />
@@ -191,9 +226,23 @@ function ServiceProvider({
                                     id={activeServiceDetail.id}
                                     unregisterStatus={unregisterStatus}
                                     category={category}
+                                    currentServiceName={currentServiceName}
+                                    currentCsp={activeKey}
+                                    defaultDisplayedService={activeServiceDetail}
+                                    getServiceKey={getServiceKey}
+                                    getCsp={getCsp}
+                                    getHostType={getHostType}
                                 />
-                                {/* eslint-disable-next-line @typescript-eslint/no-misused-promises */}
-                                <UnregisterService id={activeServiceDetail.id} onConfirmHandler={onConfirmUnregister} />
+                                <UnregisterService
+                                    id={activeServiceDetail.id}
+                                    currentServiceName={currentServiceName}
+                                    categoryOclData={categoryOclData}
+                                    onConfirmHandler={onConfirmUnregister}
+                                    defaultDisplayedService={activeServiceDetail}
+                                    getServiceKey={getServiceKey}
+                                    getCsp={getCsp}
+                                    getHostType={getHostType}
+                                />
                             </div>
                         </>
                     ) : null}

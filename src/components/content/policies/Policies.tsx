@@ -8,7 +8,7 @@ import { Button, Image, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/policies.css';
 import useListPoliciesManagementServiceQuery from './useListPoliciesManagementServiceQuery';
-import { AbstractCredentialInfo, CloudServiceProvider, Policy } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, UserPolicy } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
 import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
@@ -20,10 +20,10 @@ import { cspMap } from '../common/csp/CspLogo';
 
 function Policies(): React.JSX.Element {
     const [id, setId] = useState<string>('');
-    const [currentPolicyService, setCurrentPolicyService] = useState<Policy | undefined>(undefined);
+    const [currentPolicyService, setCurrentPolicyService] = useState<UserPolicy | undefined>(undefined);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [enabledFilters, setEnabledFilters] = useState<ColumnFilterItem[]>([]);
-    const [policiesManagementServiceList, setPoliciesManagementServiceList] = useState<Policy[]>([]);
+    const [policiesManagementServiceList, setPoliciesManagementServiceList] = useState<UserPolicy[]>([]);
     const listPoliciesManagementServiceQuery = useListPoliciesManagementServiceQuery();
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
@@ -42,7 +42,7 @@ function Policies(): React.JSX.Element {
         return <PoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />;
     }
 
-    const columns: ColumnsType<Policy> = [
+    const columns: ColumnsType<UserPolicy> = [
         {
             title: 'Policy ID',
             dataIndex: 'id',
@@ -53,7 +53,7 @@ function Policies(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: AbstractCredentialInfo.csp, _) => {
                 return (
                     <Space size='middle'>
@@ -79,7 +79,7 @@ function Policies(): React.JSX.Element {
             filters: enabledFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.enabled === value,
+            onFilter: (value: React.Key | boolean, record) => record.enabled === value,
             render: (text, _) => {
                 return text ? 'true' : 'false';
             },
@@ -87,7 +87,7 @@ function Policies(): React.JSX.Element {
         {
             title: 'Content',
             dataIndex: 'policy',
-            render: (_text: string, record: Policy) => {
+            render: (_text: string, record: UserPolicy) => {
                 return (
                     <Popover
                         content={
@@ -107,7 +107,7 @@ function Policies(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (_text: string, record: Policy) => {
+            render: (_text: string, record: UserPolicy) => {
                 return (
                     <>
                         <Space size='middle'>
@@ -160,7 +160,7 @@ function Policies(): React.JSX.Element {
         },
     ];
 
-    const deleteCurrentPolicy = (record: Policy) => {
+    const deleteCurrentPolicy = (record: UserPolicy) => {
         setId(record.id);
         deletePoliciesManagementServiceRequest.mutate(record.id);
     };
@@ -185,13 +185,13 @@ function Policies(): React.JSX.Element {
         setIsOpenAddOrUpdatePolicyModal(false);
         refreshPoliciesManagementServiceList();
     };
-    const updatePoliciesManagementService = (record: Policy) => {
+    const updatePoliciesManagementService = (record: UserPolicy) => {
         setCurrentPolicyService(record);
         setIsOpenAddOrUpdatePolicyModal(true);
     };
 
-    const getCancelUpdateStatus = (isCancle: boolean) => {
-        if (isCancle) {
+    const getCancelUpdateStatus = (isCancelled: boolean) => {
+        if (isCancelled) {
             setIsOpenAddOrUpdatePolicyModal(false);
             refreshPoliciesManagementServiceList();
         }

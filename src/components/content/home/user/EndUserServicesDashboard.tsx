@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import useListDeployedServicesQuery from '../../myServices/query/useListDeployedServicesQuery';
+import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesQuery';
 import { EndUserServicesDashboardSkeleton } from './EndUserServicesDashboardSkeleton';
 import EndUserServicesDashboardError from './EndUserServicesDashboardError';
 import { myServicesRoute } from '../../../utils/constants';

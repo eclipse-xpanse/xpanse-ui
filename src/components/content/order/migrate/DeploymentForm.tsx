@@ -128,9 +128,7 @@ export const DeploymentForm = ({
                         {props.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
                                 <OrderItem key={item.name} item={item} />
-                            ) : (
-                                <></>
-                            )
+                            ) : undefined
                         )}
                     </div>
                     <Space size={'large'}>

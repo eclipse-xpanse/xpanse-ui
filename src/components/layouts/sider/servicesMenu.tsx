@@ -23,6 +23,8 @@ import {
     myServicesRoute,
     policiesLabelName,
     policiesRoute,
+    reportsLabelName,
+    reportsRoute,
     servicesLabelName,
     servicesPageRoute,
     servicesSubPageRoute,
@@ -89,6 +91,15 @@ export const policiesMenu = (): ItemType => {
         key: policiesRoute,
         label: <Link to={policiesRoute}>{policiesLabelName}</Link>,
         icon: <SafetyOutlined />,
+        title: 'Policies',
+    };
+};
+
+export const reportsMenu = (): ItemType => {
+    return {
+        key: reportsRoute,
+        label: <Link to={reportsRoute}>{reportsLabelName}</Link>,
+        icon: <CloudServerOutlined />,
         title: 'Policies',
     };
 };

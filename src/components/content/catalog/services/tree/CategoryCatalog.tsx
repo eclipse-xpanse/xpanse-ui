@@ -8,63 +8,142 @@ import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
 import ServiceProvider from '../details/ServiceProvider';
 import { HomeOutlined, TagOutlined } from '@ant-design/icons';
-import { ApiError, Response, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+    catalogPageRoute,
+    serviceCspQuery,
+    serviceHostingTypeQuery,
+    serviceNameKeyQuery,
+    serviceVersionKeyQuery,
+} from '../../../../utils/constants';
 
 function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
+    const [urlParams] = useSearchParams();
     const [selectKey, setSelectKey] = useState<React.Key>('');
     const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
+    const [currentServiceName, setCurrentServiceName] = useState<string>(getServiceNameFromQuery());
+    const [currentVersion, setCurrentVersion] = useState<string>(getServiceVersionFromQuery());
+    const [currentCsp, setCurrentCsp] = useState<string>(getServiceCspFormQuery());
+    const [currentHostType, setCurrentHostType] = useState<string>(getServiceHostingTypeFormQuery());
     const [categoryOclData, setCategoryOclData] = useState<Map<string, ServiceTemplateDetailVo[]>>(
         new Map<string, ServiceTemplateDetailVo[]>()
     );
     const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
 
+    const navigate = useNavigate();
+
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
+    useEffect(() => {
+        if (availableServiceTemplatesQuery.isSuccess) {
+            const categoryTreeData: DataNode[] = [];
+            const tExpandKeys: React.Key[] = [];
+            const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
+            if (userAvailableServiceList.length > 0) {
+                const serviceMapper: Map<string, ServiceTemplateDetailVo[]> =
+                    getServiceMapper(userAvailableServiceList);
+                const serviceNameList: string[] = Array.from(serviceMapper.keys());
+                setCategoryOclData(serviceMapper);
+                serviceNameList.forEach((serviceName: string) => {
+                    const dataNode: DataNode = {
+                        title: serviceName,
+                        key: serviceName || '',
+                        children: [],
+                    };
+                    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
+                        serviceName,
+                        userAvailableServiceList
+                    );
+                    const versionList: string[] = Array.from(versionMapper.keys());
+
+                    versionList.forEach((versionName: string) => {
+                        dataNode.children?.push({
+                            title: versionName,
+                            key: serviceName + '@' + versionName,
+                            icon: <TagOutlined />,
+                        });
+                        tExpandKeys.push(serviceName + '@' + versionName);
+                    });
+                    categoryTreeData.push(dataNode);
+                });
+                setTreeData(categoryTreeData);
+                setSelectKey(
+                    currentServiceName.length > 0 && currentVersion.length > 0
+                        ? currentServiceName + '@' + currentVersion
+                        : tExpandKeys[0]
+                );
+                setExpandKeys(tExpandKeys);
+                if (!currentServiceName) {
+                    setCurrentServiceName(tExpandKeys[0].toString().split('@')[0]);
+                }
+
+                if (!currentVersion) {
+                    setCurrentVersion(tExpandKeys[0].toString().split('@')[1]);
+                }
+            } else {
+                setTreeData([]);
+                setSelectKey('');
+                setExpandKeys([]);
+                setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
+                setCurrentServiceName('');
+                setCurrentVersion('');
+                setCurrentCsp('');
+                setCurrentHostType('');
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [availableServiceTemplatesQuery.isSuccess, category]);
 
     useEffect(() => {
-        const categoryTreeData: DataNode[] = [];
-        const tExpandKeys: React.Key[] = [];
-        const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
-        if (userAvailableServiceList !== undefined && userAvailableServiceList.length > 0) {
-            const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
-            const serviceNameList: string[] = Array.from(serviceMapper.keys());
-            setCategoryOclData(serviceMapper);
-            serviceNameList.forEach((serviceName: string) => {
-                const dataNode: DataNode = {
-                    title: serviceName,
-                    key: serviceName || '',
-                    children: [],
-                };
-                const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
-                    serviceName,
-                    userAvailableServiceList
-                );
-                const versionList: string[] = Array.from(versionMapper.keys());
+        navigate({
+            pathname: catalogPageRoute,
+            hash: '#' + category,
+            search: createSearchParams({
+                csp: currentCsp,
+                serviceName: currentServiceName,
+                version: currentVersion,
+                hostingType: currentHostType,
+            }).toString(),
+        });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentServiceName, currentVersion, currentCsp, currentHostType, category]);
 
-                versionList.forEach((versionName: string) => {
-                    dataNode.children?.push({
-                        title: versionName,
-                        key: serviceName + '@' + versionName,
-                        icon: <TagOutlined />,
-                    });
-                    tExpandKeys.push(serviceName + '@' + versionName);
-                });
-                categoryTreeData.push(dataNode);
-            });
-            setTreeData(categoryTreeData);
-            setSelectKey(tExpandKeys[0]);
-            setExpandKeys(tExpandKeys);
-        } else {
-            setTreeData([]);
-            setSelectKey('');
-            setExpandKeys([]);
-            setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
+    function getServiceNameFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
         }
-    }, [availableServiceTemplatesQuery.data, availableServiceTemplatesQuery.isSuccess]);
+        return '';
+    }
+
+    function getServiceVersionFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
+    function getServiceCspFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
+    function getServiceHostingTypeFormQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
 
     function isParentTreeSelected(selectKey: React.Key): boolean {
         let isParentNode: boolean = false;
@@ -81,6 +160,8 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             return;
         }
         setSelectKey(selectedKeys[0]);
+        setCurrentServiceName(selectedKeys[0].toString().split('@')[0]);
+        setCurrentVersion(selectedKeys[0].toString().split('@')[1]);
     };
 
     const onConfirmUnregister = (disabled: boolean) => {
@@ -134,6 +215,22 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             </div>
         );
     }
+    const getServiceKey = (serviceKey: string) => {
+        if (serviceKey.length > 0) {
+            setCurrentServiceName(serviceKey.split('@')[0]);
+            setCurrentVersion(serviceKey.split('@')[1]);
+        }
+    };
+    const getCsp = (csp: string) => {
+        if (csp.length > 0) {
+            setCurrentCsp(csp);
+        }
+    };
+    const getHostType = (hostType: string) => {
+        if (hostType.length > 0) {
+            setCurrentHostType(hostType);
+        }
+    };
 
     return (
         <div className={'catalog-middleware'}>
@@ -162,6 +259,9 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                         currentServiceName={selectKey.toString()}
                         confirmUnregister={onConfirmUnregister}
                         category={category}
+                        getServiceKey={getServiceKey}
+                        getCsp={getCsp}
+                        getHostType={getHostType}
                     />
                 </div>
             </div>

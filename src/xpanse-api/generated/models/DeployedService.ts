@@ -38,9 +38,13 @@ export type DeployedService = {
      */
     flavor?: string;
     /**
-     * The state of the service
+     * The deployment state of the service
      */
     serviceDeploymentState: DeployedService.serviceDeploymentState;
+    /**
+     * The run state of the service
+     */
+    serviceState: DeployedService.serviceState;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */
@@ -87,7 +91,7 @@ export namespace DeployedService {
     }
 
     /**
-     * The state of the service
+     * The deployment state of the service
      */
     export enum serviceDeploymentState {
         DEPLOYING = 'deploying',
@@ -97,9 +101,23 @@ export namespace DeployedService {
         DESTROY_SUCCESSFUL = 'destroy successful',
         DESTROY_FAILED = 'destroy failed',
         MIGRATING = 'migrating',
-        MIGRATION_SUCCESS = 'migration_success',
-        MIGRATION_FAILED = 'migration_failed',
+        MIGRATION_SUCCESSFUL = 'migration successful',
+        MIGRATION_FAILED = 'migration failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
+        ROLLBACK_FAILED = 'rollback failed',
+    }
+
+    /**
+     * The run state of the service
+     */
+    export enum serviceState {
+        NOT_RUNNING = 'notRunning',
+        RUNNING = 'running',
+        STARTING = 'starting',
+        STARTING_FAILED = 'startingFailed',
+        STOPPING = 'stopping',
+        STOPPED = 'stopped',
+        STOPPING_FAILED = 'stoppingFailed',
     }
 
     /**

@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceService } from '../../../../xpanse-api/generated';
+import { ServiceService } from '../../../../../xpanse-api/generated';
 
 export default function useListDeployedServicesByIsvQuery() {
     return useQuery({

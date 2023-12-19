@@ -30,7 +30,7 @@ jobs:
             contents: write
         steps:
             - name: Checkout
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
                   fetch-depth: 0
                   token: ${{ secrets.BOT_GITHUB_TOKEN }}
@@ -59,6 +59,10 @@ jobs:
               working-directory: ./
               run: npm run test
 
+            - name: Run TSC
+              working-directory: ./
+              run: tsc
+
             - name: Release application
               working-directory: ./
               run: npx release-it ${{github.event.inputs.ReleaseType}} --ci
@@ -68,13 +72,13 @@ jobs:
                   echo "CURRENT_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
 
             - name: Set up QEMU
-              uses: docker/setup-qemu-action@v2
+              uses: docker/setup-qemu-action@v3
 
             - name: Set up Docker Buildx
-              uses: docker/setup-buildx-action@v2
+              uses: docker/setup-buildx-action@v3
 
             - name: Login to Github Packages
-              uses: docker/login-action@v2
+              uses: docker/login-action@v3
               with:
                   registry: ghcr.io
                   username: ${{ env.BOT_USER_NAME }}
@@ -82,12 +86,12 @@ jobs:
 
             - name: Extract Docker metadata
               id: meta
-              uses: docker/metadata-action@v4.6.0
+              uses: docker/metadata-action@v5.3.0
               with:
                   images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
             - name: Build Docker Image and Push
-              uses: docker/build-push-action@v4.1.1
+              uses: docker/build-push-action@v5.1.0
               with:
                   context: .
                   file: docker/Dockerfile

@@ -4,34 +4,35 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Button, Image, Modal, Popconfirm, Row, Space, Table } from 'antd';
+import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
-    AreaChartOutlined,
+    CaretDownOutlined,
     CloseCircleOutlined,
     CopyOutlined,
     DeleteOutlined,
+    FundOutlined,
     InfoCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
-import '../../../styles/my_services.css';
-import { sortVersionNum } from '../../utils/Sort';
-import { MyServiceDetails } from './MyServiceDetails';
-import { Migrate } from '../order/migrate/Migrate';
+import '../../../../styles/my_services.css';
+import { sortVersionNum } from '../../../utils/Sort';
+import { Migrate } from '../../order/migrate/Migrate';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { MyServiceStatus } from './MyServiceStatus';
-import { useOrderFormStore } from '../order/store/OrderFormStore';
-import { PurgeServiceStatusPolling } from '../order/purge/PurgeServiceStatusPolling';
-import { usePurgeRequestSubmitQuery } from '../order/purge/usePurgeRequestSubmitQuery';
-import { useDestroyRequestSubmitQuery } from '../order/destroy/useDestroyRequestSubmitQuery';
-import DestroyServiceStatusPolling from '../order/destroy/DestroyServiceStatusPolling';
+import { useOrderFormStore } from '../../order/store/OrderFormStore';
+import { PurgeServiceStatusPolling } from '../../order/purge/PurgeServiceStatusPolling';
+import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
+import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
+import DestroyServiceStatusPolling from '../../order/destroy/DestroyServiceStatusPolling';
 import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
-import MyServicesError from './MyServicesError';
-import { serviceIdQuery, serviceStateQuery } from '../../utils/constants';
-import { cspMap } from '../common/csp/CspLogo';
-import { MyServicesHostingType } from './MyServicesHostingType';
+import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
+import { cspMap } from '../../common/csp/CspLogo';
+import DeployedServicesError from '../common/DeployedServicesError';
+import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
+import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
+import { MyServiceDetails } from './MyServiceDetails';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -96,8 +97,99 @@ function MyServices(): React.JSX.Element {
         }
     }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
 
+    const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
+        return [
+            {
+                key: 'details',
+                label: (
+                    <Button
+                        onClick={() => {
+                            handleMyServiceDetailsOpenModal(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<InfoCircleOutlined />}
+                        type={'link'}
+                    >
+                        details
+                    </Button>
+                ),
+            },
+            {
+                key: 'migrate',
+                label: (
+                    <Button
+                        onClick={() => {
+                            migrate(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<CopyOutlined />}
+                        disabled={
+                            isDestroying ||
+                            isPurging ||
+                            record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                            record.serviceDeploymentState ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING ||
+                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
+                        }
+                        type={'link'}
+                    >
+                        migrate
+                    </Button>
+                ),
+            },
+            {
+                key:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                        ? 'purge'
+                        : 'destroy',
+                disabled:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                        ? isPurging || isDestroying || isPurgingCompleted
+                        : (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
+                              record.serviceDeploymentState !==
+                                  DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                          isDestroyingCompleted,
+                label:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                        <Popconfirm
+                            title='Purge the service'
+                            description='Are you sure to purge the service?'
+                            cancelText='Yes'
+                            okText='No'
+                            onCancel={() => {
+                                purge(record);
+                            }}
+                        >
+                            <Button icon={<DeleteOutlined />} className={'button-as-link'} type={'link'}>
+                                purge
+                            </Button>
+                        </Popconfirm>
+                    ) : (
+                        <Popconfirm
+                            title='Destroy the service'
+                            description='Are you sure to destroy the service?'
+                            cancelText='Yes'
+                            okText='No'
+                            onCancel={() => {
+                                destroy(record);
+                            }}
+                        >
+                            <Button icon={<CloseCircleOutlined />} className={'button-as-link'} type={'link'}>
+                                destroy
+                            </Button>
+                        </Popconfirm>
+                    ),
+            },
+        ];
+    };
+
     if (listDeployedServicesQuery.isError) {
-        return <MyServicesError error={listDeployedServicesQuery.error} />;
+        return <DeployedServicesError error={listDeployedServicesQuery.error} />;
     }
 
     const getDestroyCloseStatus = (isClose: boolean) => {
@@ -123,7 +215,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceIdInQuery ? undefined : serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.id.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.id.startsWith(value.toString()),
             filtered: !!serviceIdInQuery,
             align: 'center',
         },
@@ -133,7 +225,7 @@ function MyServices(): React.JSX.Element {
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => {
+            onFilter: (value: React.Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
                     return customerServiceName.startsWith(value.toString());
@@ -148,7 +240,7 @@ function MyServices(): React.JSX.Element {
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.category.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
             align: 'center',
         },
         {
@@ -157,7 +249,7 @@ function MyServices(): React.JSX.Element {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.name.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.name.startsWith(value.toString()),
             align: 'center',
         },
         {
@@ -166,7 +258,7 @@ function MyServices(): React.JSX.Element {
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.version.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
             align: 'center',
         },
@@ -176,11 +268,10 @@ function MyServices(): React.JSX.Element {
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) =>
-                record.serviceHostingType.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (serviceHostingType: DeployedService.serviceHostingType) =>
-                MyServicesHostingType(serviceHostingType),
+                DeployedServicesHostingType(serviceHostingType),
         },
         {
             title: 'Csp',
@@ -188,7 +279,7 @@ function MyServices(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) => record.csp.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: AbstractCredentialInfo.csp, _) => {
                 return (
                     <Space size='middle'>
@@ -224,11 +315,34 @@ function MyServices(): React.JSX.Element {
             filters: serviceStateInQuery ? undefined : serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: string | number | boolean, record) =>
+            onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
-            render: (serviceState: DeployedService.serviceDeploymentState) => MyServiceStatus(serviceState),
+            render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
             filtered: !!serviceStateInQuery,
             align: 'center',
+        },
+        {
+            title: 'Monitor',
+            dataIndex: 'monitor',
+            align: 'center',
+            render: (_, record) => {
+                return (
+                    <Tooltip title='Viewing Monitoring Indicators' placement='top'>
+                        <Button
+                            type='text'
+                            onClick={() => {
+                                onMonitor(record);
+                            }}
+                            disabled={
+                                record.serviceDeploymentState !==
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                            }
+                        >
+                            <FundOutlined />
+                        </Button>
+                    </Tooltip>
+                );
+            },
         },
         {
             title: 'Operation',
@@ -237,98 +351,19 @@ function MyServices(): React.JSX.Element {
                 return (
                     <>
                         <Space size='middle'>
-                            <Button
-                                type='primary'
-                                icon={<InfoCircleOutlined />}
-                                onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record);
-                                }}
-                            >
-                                details
-                            </Button>
-                            <Button
-                                type='primary'
-                                icon={<AreaChartOutlined />}
-                                onClick={() => {
-                                    onMonitor(record);
-                                }}
-                                disabled={
-                                    record.serviceDeploymentState !==
-                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
-                                }
-                            >
-                                monitor
-                            </Button>
-                            <Button
-                                type='primary'
-                                icon={<CopyOutlined />}
-                                onClick={() => {
-                                    migrate(record);
-                                }}
-                                disabled={
-                                    isDestroying ||
-                                    isPurging ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                                    record.serviceDeploymentState ===
-                                        DeployedService.serviceDeploymentState.DEPLOYING ||
-                                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
-                                }
-                            >
-                                migrate
-                            </Button>
-                            {record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                            record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
-                                <Popconfirm
-                                    title='Purge the service'
-                                    description='Are you sure to purge the service?'
-                                    cancelText='Yes'
-                                    okText='No'
-                                    onCancel={() => {
-                                        purge(record);
+                            <Dropdown menu={{ items: getOperationMenu(record) }}>
+                                <Button
+                                    onClick={(e) => {
+                                        e.preventDefault();
                                     }}
+                                    type={'link'}
                                 >
-                                    <Button
-                                        className={'purge-btn-class'}
-                                        loading={record.id === id ? !isPurgingCompleted : false}
-                                        type='primary'
-                                        icon={<DeleteOutlined />}
-                                        disabled={isPurging || isDestroying}
-                                    >
-                                        purge
-                                    </Button>
-                                </Popconfirm>
-                            ) : (
-                                <Popconfirm
-                                    title='Destroy the service'
-                                    description='Are you sure to destroy the service?'
-                                    cancelText='Yes'
-                                    okText='No'
-                                    onCancel={() => {
-                                        destroy(record);
-                                    }}
-                                >
-                                    <Button
-                                        loading={record.id === id ? !isDestroyingCompleted : false}
-                                        type='primary'
-                                        icon={<CloseCircleOutlined />}
-                                        disabled={
-                                            (record.serviceDeploymentState !==
-                                                DeployedService.serviceDeploymentState.DESTROY_FAILED &&
-                                                record.serviceDeploymentState !==
-                                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
-                                            isDestroying ||
-                                            isPurging
-                                        }
-                                    >
-                                        destroy
-                                    </Button>
-                                </Popconfirm>
-                            )}
+                                    <Space>
+                                        More
+                                        <CaretDownOutlined />
+                                    </Space>
+                                </Button>
+                            </Dropdown>
                         </Space>
                     </>
                 );
@@ -370,6 +405,7 @@ function MyServices(): React.JSX.Element {
             state: record,
         });
     }
+
     function updateServiceIdFilters(resp: DeployedService[]): void {
         const filters: ColumnFilterItem[] = [];
         const serviceIdSet = new Set<string>('');

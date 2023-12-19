@@ -9,14 +9,13 @@ import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generate
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from './GoToSubmit';
-import { Select, Skeleton, Space, Tabs } from 'antd';
+import { Form, Select, Skeleton, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { currencyMapper } from '../../../utils/currency';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
-import { ServiceHostingSelection } from './ServiceHostingSelection';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { Region } from '../types/Region';
@@ -26,6 +25,10 @@ import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
+import '../../../../styles/service_order.css';
+import { BillingInfo } from '../common/BillingInfo';
+import { RegionInfo } from '../common/RegionInfo';
+import { FlavorInfo } from '../common/FlavorInfo';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -49,7 +52,7 @@ function CreateService(): React.JSX.Element {
     const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
     const [priceValue, setPriceValue] = useState<string>('');
-    const [currency, setCurrency] = useState<string>('');
+    const [currentBilling, setCurrentBilling] = useState<Billing | undefined>(undefined);
     const [selectServiceHostType, setSelectServiceHostType] = useState<
         UserOrderableServiceVo.serviceHostingType | undefined
     >(undefined);
@@ -154,7 +157,6 @@ function CreateService(): React.JSX.Element {
                     });
                     serviceHostingTypeValue = serviceInfo.serviceHostingType;
                 }
-                const currencyValue: string = currencyMapper[currentBilling.currency];
                 setSelectCsp(cspValue);
                 setAreaList(currentAreaList);
                 setSelectArea(areaValue);
@@ -162,7 +164,7 @@ function CreateService(): React.JSX.Element {
                 setSelectRegion(regionValue);
                 setSelectFlavor(flavorValue);
                 setPriceValue(priceValue);
-                setCurrency(currencyValue);
+                setCurrentBilling(currentBilling);
                 setSelectServiceHostType(serviceHostingTypeValue);
                 setServiceHostTypes(serviceHostingTypes);
             }
@@ -200,7 +202,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectServiceHostType]);
@@ -243,7 +245,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypes[0]);
         }
@@ -277,7 +279,7 @@ function CreateService(): React.JSX.Element {
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0]?.price);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             setSelectServiceHostType(serviceHostingTypes[0]);
             setServiceHostTypes(serviceHostingTypes);
         }
@@ -314,7 +316,7 @@ function CreateService(): React.JSX.Element {
                     setPriceValue(flavor.price);
                 }
             });
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
         }
     };
 
@@ -344,97 +346,77 @@ function CreateService(): React.JSX.Element {
     if (selectCsp) {
         return (
             <>
-                <div>
-                    <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
-                    <div className={'Line'} />
-                </div>
-                <div className={'generic-table-container'}>
-                    <div className={'content-title'}>
-                        Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
-                        <Select
-                            value={selectVersion}
-                            className={'version-drop-down'}
-                            onChange={onChangeVersion}
-                            options={versionList}
-                        />
+                <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
+                    <div>
+                        <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
+                        <div className={'Line'} />
                     </div>
-                    <br />
-                    <CspSelect
-                        selectCsp={selectCsp}
-                        cspList={cspList}
-                        onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
-                            onChangeCloudProvider(csp);
-                        }}
-                    />
-                    <br />
-                    <ServiceHostingSelection
-                        serviceHostingTypes={serviceHostTypes}
-                        updateServiceHostingType={onChangeServiceHostingType}
-                        disabledAlways={false}
-                        previousSelection={selectServiceHostType}
-                    ></ServiceHostingSelection>
-                    <br />
-                    <br />
-                    <div className={'cloud-provider-tab-class content-title'}>
-                        <Tabs
-                            type='card'
-                            size='middle'
-                            activeKey={selectArea}
-                            tabPosition={'top'}
-                            items={areaList}
-                            onChange={(area) => {
-                                onChangeAreaValue(area);
+                    <div className={'generic-table-container'}>
+                        <div className={'content-title'}>
+                            Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
+                            <Select
+                                value={selectVersion}
+                                className={'version-drop-down'}
+                                onChange={onChangeVersion}
+                                options={versionList}
+                            />
+                        </div>
+                        <br />
+                        <CspSelect
+                            selectCsp={selectCsp}
+                            cspList={cspList}
+                            onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
+                                onChangeCloudProvider(csp);
                             }}
                         />
-                    </div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>
-                        <Space wrap>
-                            <Select
-                                className={'select-box-class'}
-                                defaultValue={selectRegion}
-                                value={selectRegion}
-                                style={{ width: 450 }}
-                                onChange={onChangeRegion}
-                                options={regionList}
-                            />
-                        </Space>
-                    </div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>
-                        <Space wrap>
-                            <Select
-                                className={'select-box-class'}
-                                value={selectFlavor}
-                                style={{ width: 450 }}
-                                onChange={(newFlavor) => {
-                                    onChangeFlavor(newFlavor);
+                        <br />
+                        <ServiceHostingSelection
+                            serviceHostingTypes={serviceHostTypes}
+                            updateServiceHostingType={onChangeServiceHostingType}
+                            disabledAlways={false}
+                            previousSelection={selectServiceHostType}
+                        ></ServiceHostingSelection>
+                        <br />
+                        <br />
+                        <div className={'cloud-provider-tab-class content-title'}>
+                            <Tabs
+                                type='card'
+                                size='middle'
+                                activeKey={selectArea}
+                                tabPosition={'top'}
+                                items={areaList}
+                                onChange={(area) => {
+                                    onChangeAreaValue(area);
                                 }}
-                                options={flavorList}
                             />
-                        </Space>
-                    </div>
-                    <div className={'cloud-provider-tab-class region-flavor-content'}>
-                        Price:&nbsp;
-                        <span className={'services-content-price-class'}>
-                            {priceValue}&nbsp;{currency}
-                        </span>
-                    </div>
-                </div>
-                {selectServiceHostType ? (
-                    <div>
-                        <div className={'Line'} />
-                        <GoToSubmit
-                            selectVersion={selectVersion}
-                            selectCsp={selectCsp}
+                        </div>
+                        <RegionInfo
                             selectRegion={selectRegion}
-                            selectArea={selectArea}
-                            selectFlavor={selectFlavor}
-                            versionMapper={versionMapper.current}
-                            selectServiceHostingType={selectServiceHostType}
+                            onChangeRegion={onChangeRegion}
+                            regionList={regionList}
                         />
+                        <FlavorInfo
+                            selectFlavor={selectFlavor}
+                            flavorList={flavorList}
+                            onChangeFlavor={onChangeFlavor}
+                        />
+                        <BillingInfo priceValue={priceValue} billing={currentBilling} />
                     </div>
-                ) : null}
+                    {selectServiceHostType ? (
+                        <div>
+                            <div className={'Line'} />
+                            <GoToSubmit
+                                selectVersion={selectVersion}
+                                selectCsp={selectCsp}
+                                selectRegion={selectRegion}
+                                selectArea={selectArea}
+                                selectFlavor={selectFlavor}
+                                versionMapper={versionMapper.current}
+                                selectServiceHostingType={selectServiceHostType}
+                            />
+                        </div>
+                    ) : null}
+                </Form>
             </>
         );
     }

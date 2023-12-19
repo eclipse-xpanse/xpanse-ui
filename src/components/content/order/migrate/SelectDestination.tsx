@@ -5,10 +5,9 @@
 
 import CspSelect from '../formElements/CspSelect';
 import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { Button, Select, Space, Tabs } from 'antd';
+import { Button, Form, Space, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useState } from 'react';
-import { currencyMapper } from '../../../utils/currency';
 import { Region } from '../types/Region';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
@@ -16,8 +15,12 @@ import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { ServiceHostingSelection } from '../create/ServiceHostingSelection';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { MigrationSteps } from '../types/MigrationSteps';
+import '../../../../styles/service_order.css';
+import { BillingInfo } from '../common/BillingInfo';
+import { RegionInfo } from '../common/RegionInfo';
+import { FlavorInfo } from '../common/FlavorInfo';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -55,8 +58,9 @@ export const SelectDestination = ({
 
     const [flavorList, setFlavorList] = useState<Flavor[]>([]);
     const [selectFlavor, setSelectFlavor] = useState<string>('');
+
     const [priceValue, setPriceValue] = useState<string>('');
-    const [currency, setCurrency] = useState<string>('');
+    const [currentBilling, setCurrentBilling] = useState<Billing | undefined>(undefined);
 
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.SelectADestination);
@@ -137,7 +141,6 @@ export const SelectDestination = ({
                     }
                 });
             }
-            const currencyValue: string = currencyMapper[currentBilling.currency];
             setCspList(currentCspList);
             setSelectCsp(cspValue);
             setAreaList(currentAreaList);
@@ -147,7 +150,7 @@ export const SelectDestination = ({
             setFlavorList(currentFlavorList);
             setSelectFlavor(flavorValue);
             setPriceValue(priceValue);
-            setCurrency(currencyValue);
+            setCurrentBilling(currentBilling);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypeValue);
         }
@@ -185,7 +188,7 @@ export const SelectDestination = ({
         setFlavorList(currentFlavorList);
         setSelectFlavor(currentFlavorList[0]?.value ?? '');
         setPriceValue(currentFlavorList[0].price);
-        setCurrency(currencyMapper[billing.currency]);
+        setCurrentBilling(billing);
     };
 
     const onChangeAreaValue = (area: string) => {
@@ -215,7 +218,7 @@ export const SelectDestination = ({
                 userOrderableServiceVoList
             );
             setSelectFlavor(newFlavor);
-            setCurrency(currencyMapper[billing.currency]);
+            setCurrentBilling(billing);
             flavorList.forEach((flavor) => {
                 if (newFlavor === flavor.value) {
                     setPriceValue(flavor.price);
@@ -243,107 +246,79 @@ export const SelectDestination = ({
             setFlavorList(currentFlavorList);
             setSelectFlavor(currentFlavorList[0]?.value ?? '');
             setPriceValue(currentFlavorList[0].price);
-            setCurrency(currencyMapper[currentBilling.currency]);
+            setCurrentBilling(currentBilling);
         }
     };
 
     if (selectCsp) {
         return (
-            <div>
-                <CspSelect
-                    selectCsp={selectCsp}
-                    cspList={cspList}
-                    onChangeHandler={(csp) => {
-                        onChangeCloudProvider(csp);
-                    }}
-                />
-                <br />
-                <ServiceHostingSelection
-                    serviceHostingTypes={serviceHostTypes}
-                    updateServiceHostingType={onChangeServiceHostingType}
-                    disabledAlways={false}
-                    previousSelection={selectServiceHostType}
-                ></ServiceHostingSelection>
-                <br />
-                <br />
-                <div className={'cloud-provider-tab-class content-title'}>
-                    <Tabs
-                        type='card'
-                        size='middle'
-                        activeKey={selectArea}
-                        tabPosition={'top'}
-                        items={areaList}
-                        onChange={(area) => {
-                            onChangeAreaValue(area);
+            <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
+                <div>
+                    <CspSelect
+                        selectCsp={selectCsp}
+                        cspList={cspList}
+                        onChangeHandler={(csp) => {
+                            onChangeCloudProvider(csp);
                         }}
                     />
-                </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>Region:</div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    <Space wrap>
-                        <Select
-                            className={'select-box-class'}
-                            defaultValue={selectRegion}
-                            value={selectRegion}
-                            style={{ width: 450 }}
-                            onChange={onChangeRegion}
-                            options={regionList}
-                        />
-                    </Space>
-                </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>Flavor:</div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    <Space wrap>
-                        <Select
-                            className={'select-box-class'}
-                            value={selectFlavor}
-                            style={{ width: 450 }}
-                            onChange={(newFlavor) => {
-                                onChangeFlavor(newFlavor);
+                    <br />
+                    <ServiceHostingSelection
+                        serviceHostingTypes={serviceHostTypes}
+                        updateServiceHostingType={onChangeServiceHostingType}
+                        disabledAlways={false}
+                        previousSelection={selectServiceHostType}
+                    ></ServiceHostingSelection>
+                    <br />
+                    <br />
+                    <div className={'cloud-provider-tab-class content-title'}>
+                        <Tabs
+                            type='card'
+                            size='middle'
+                            activeKey={selectArea}
+                            tabPosition={'top'}
+                            items={areaList}
+                            onChange={(area) => {
+                                onChangeAreaValue(area);
                             }}
-                            options={flavorList}
                         />
-                    </Space>
-                </div>
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
-                    Price:&nbsp;
-                    <span className={'services-content-price-class'}>
-                        {priceValue}&nbsp;{currency}
-                    </span>
-                </div>
-                <div className={'migrate-step-button-inner-class'}>
-                    <Space size={'large'}>
-                        {currentMigrationStep > MigrationSteps.ExportServiceData ? (
-                            <Button
-                                type='primary'
-                                className={'migrate-steps-operation-button-clas'}
-                                onClick={() => {
-                                    prev();
-                                }}
-                                disabled={isPreviousDisabled}
-                            >
-                                Previous
-                            </Button>
-                        ) : (
-                            <></>
-                        )}
+                    </div>
+                    <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
+                    <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
+                    <BillingInfo priceValue={priceValue} billing={currentBilling} />
+                    <div className={'migrate-step-button-inner-class'}>
+                        <Space size={'large'}>
+                            {currentMigrationStep > MigrationSteps.ExportServiceData ? (
+                                <Button
+                                    type='primary'
+                                    className={'migrate-steps-operation-button-clas'}
+                                    onClick={() => {
+                                        prev();
+                                    }}
+                                    disabled={isPreviousDisabled}
+                                >
+                                    Previous
+                                </Button>
+                            ) : (
+                                <></>
+                            )}
 
-                        {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
-                            <Button
-                                type='primary'
-                                className={'migrate-steps-operation-button-clas'}
-                                onClick={() => {
-                                    next();
-                                }}
-                            >
-                                Next
-                            </Button>
-                        ) : (
-                            <></>
-                        )}
-                    </Space>
+                            {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
+                                <Button
+                                    type='primary'
+                                    className={'migrate-steps-operation-button-clas'}
+                                    onClick={() => {
+                                        next();
+                                    }}
+                                >
+                                    Next
+                                </Button>
+                            ) : (
+                                <></>
+                            )}
+                        </Space>
+                    </div>
                 </div>
-            </div>
+            </Form>
         );
     }
     return <></>;

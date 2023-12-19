@@ -17,7 +17,7 @@
 }
 
 .failure-alert {
-    margin-top: 10px;
+    margin: 30px;
 }
 
 .my-service-details-skeleton {
@@ -64,4 +64,31 @@
 .deployed-resource-properties {
     display: flex;
     flex-direction: row;
+}
+
+.deployed-resource-properties div {
+    max-width: 40vh;
+    word-wrap: break-word;
+    overflow: auto;
+    max-height: 30vh;
+}
+
+.custom-monitor-button {
+    background-color: transparent;
+    border-color: #fff;
+    color: #333;
+}
+
+.custom-monitor-button:hover,
+.custom-monitor-button:active,
+.custom-monitor-button:focus {
+    background-color: #fafafa;
+    border-color: #fafafa;
+    color: #fafafa;
+}
+
+.button-as-link {
+    border: none;
+    box-shadow: none;
+    background: none;
 }

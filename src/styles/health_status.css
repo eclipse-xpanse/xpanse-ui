@@ -3,6 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-.health-status-title {
-    margin: 1% 0 1% 0;
+.health-status-refresh {
+    margin-bottom: 1%;
+}
+
+.health-refresh-alert-tip {
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
