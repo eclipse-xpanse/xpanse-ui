@@ -4,7 +4,7 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Alert, Image, Tabs } from 'antd';
+import { Alert, Divider, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import {
     ApiError,
@@ -23,6 +23,7 @@ import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { useSearchParams } from 'react-router-dom';
 import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/constants';
+import { ServicePolicies } from '../policies/ServicePolicies';
 
 let lastServiceName: string = '';
 
@@ -47,6 +48,8 @@ function ServiceProvider({
     const serviceCspInQuery = getServiceCspFormQuery();
     const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
     const [activeKey, setActiveKey] = useState<string>('');
+    const [currentHostingType, setCurrentHostingType] = useState<string>('');
+    const [currentServiceTemplateId, setCurrentServiceTemplateId] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
 
@@ -117,6 +120,7 @@ function ServiceProvider({
             setServiceDetails(details);
             setActiveServiceDetail(details[0]);
             getHostType(details[0].serviceHostingType);
+            setCurrentHostingType(details[0].serviceHostingType);
         }
     }
 
@@ -146,9 +150,35 @@ function ServiceProvider({
         getCsp(key);
     };
 
+    useEffect(() => {
+        if (!currentServiceName || !activeKey || !currentHostingType) {
+            return;
+        }
+        categoryOclData.forEach((serviceList, serviceName) => {
+            if (serviceName === currentServiceName.split('@')[0]) {
+                const versionMapper = getVersionMapper(serviceName, serviceList);
+                versionMapper.forEach((versionList, version) => {
+                    if (version === currentServiceName.split('@')[1]) {
+                        const cspMapper = getCspMapper(serviceName, version, versionList);
+                        cspMapper.forEach((cspList, csp) => {
+                            if (csp === activeKey) {
+                                cspList.forEach((item) => {
+                                    if (item.serviceHostingType.valueOf() === currentHostingType) {
+                                        setCurrentServiceTemplateId(item.id);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    }, [categoryOclData, currentServiceName, activeKey, currentHostingType]);
+
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
         setActiveServiceDetail(serviceTemplateDetailVo);
         getHostType(serviceTemplateDetailVo.serviceHostingType);
+        setCurrentHostingType(serviceTemplateDetailVo.serviceHostingType);
     };
 
     function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
@@ -244,6 +274,8 @@ function ServiceProvider({
                                     getHostType={getHostType}
                                 />
                             </div>
+                            <Divider />
+                            <ServicePolicies serviceTemplateId={currentServiceTemplateId} />
                         </>
                     ) : null}
                 </>

@@ -67,11 +67,15 @@ function Policies(): React.JSX.Element {
             },
         },
         {
-            title: 'CreateOn',
+            title: 'CreatedAt',
             dataIndex: 'createTime',
             defaultSortOrder: 'descend',
             sorter: (a, b) => a.createTime.length - b.createTime.length,
             sortDirections: ['descend'],
+        },
+        {
+            title: 'LastModifiedAt',
+            dataIndex: 'lastModifiedTime',
         },
         {
             title: 'Enabled',
@@ -99,7 +103,7 @@ function Policies(): React.JSX.Element {
                         title={'Policy Content'}
                         trigger='hover'
                     >
-                        <Button className={'policy-data-hover'} type={'link'}>{`Policy Content`}</Button>
+                        <Button className={'policy-data-hover'} type={'link'}>{`policy`}</Button>
                     </Popover>
                 );
             },
