@@ -1,0 +1,77 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.service-policies-container {
+    margin-top: 0;
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+}
+
+.policy-add-refresh-buttons {
+    display: flex;
+    margin-top: 5px;
+    justify-content: space-between;
+}
+
+.refresh-service-policy {
+    margin-left: 20px;
+}
+
+.add-service-policy {
+    margin-left: 20px;
+}
+
+.catalog-service-policies-title-h3 {
+    font-size: 16px;
+}
+
+.service-policies-table {
+    width: 100%;
+}
+
+.service-policy-submit-reset-container {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.service-policy-reset-class {
+    display: flex;
+    flex-direction: row;
+}
+
+.service-policy-submit-class {
+    display: flex;
+    flex-direction: row;
+}
+
+.service-policy-content-upload-preview {
+    width: 400px;
+    overflow: auto;
+    max-height: 300px;
+}
+
+.service-policy-content-read-only-preview {
+    color: #555;
+    pointer-events: none;
+}
+
+.service-policy-upload-file-remove-buttons {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+}
+
+.service-policy-edit-form-class {
+    max-width: 60%;
+}
+
+.service-policy-submit-alert-tip {
+    margin-bottom: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+}
