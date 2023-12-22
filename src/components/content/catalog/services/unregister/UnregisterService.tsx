@@ -8,6 +8,7 @@ import { ServiceTemplateDetailVo, ServiceVendorService } from '../../../../../xp
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { getVersionMapper } from '../../../common/catalog/catalogProps';
+import { CloseCircleOutlined } from '@ant-design/icons';
 
 function UnregisterService({
     id,
@@ -92,6 +93,7 @@ function UnregisterService({
                 }}
             >
                 <Button
+                    icon={<CloseCircleOutlined />}
                     type='primary'
                     style={{ marginLeft: '50px', marginTop: '20px' }}
                     disabled={unregisterRequest.isSuccess}

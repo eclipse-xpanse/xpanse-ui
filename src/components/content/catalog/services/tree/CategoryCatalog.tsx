@@ -11,7 +11,7 @@ import { HomeOutlined, TagOutlined } from '@ant-design/icons';
 import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Alert, Empty, Skeleton, Tree } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-import { getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
+import { getCspMapper, getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
@@ -40,64 +40,79 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
     useEffect(() => {
-        if (availableServiceTemplatesQuery.isSuccess) {
+        if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
             const categoryTreeData: DataNode[] = [];
             const tExpandKeys: React.Key[] = [];
             const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
-            if (userAvailableServiceList.length > 0) {
-                const serviceMapper: Map<string, ServiceTemplateDetailVo[]> =
-                    getServiceMapper(userAvailableServiceList);
-                const serviceNameList: string[] = Array.from(serviceMapper.keys());
-                setCategoryOclData(serviceMapper);
-                serviceNameList.forEach((serviceName: string) => {
-                    const dataNode: DataNode = {
-                        title: serviceName,
-                        key: serviceName || '',
-                        children: [],
-                    };
-                    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
-                        serviceName,
-                        userAvailableServiceList
-                    );
-                    const versionList: string[] = Array.from(versionMapper.keys());
-
-                    versionList.forEach((versionName: string) => {
-                        dataNode.children?.push({
-                            title: versionName,
-                            key: serviceName + '@' + versionName,
-                            icon: <TagOutlined />,
-                        });
-                        tExpandKeys.push(serviceName + '@' + versionName);
-                    });
-                    categoryTreeData.push(dataNode);
-                });
-                setTreeData(categoryTreeData);
-                setSelectKey(
-                    currentServiceName.length > 0 && currentVersion.length > 0
-                        ? currentServiceName + '@' + currentVersion
-                        : tExpandKeys[0]
+            const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
+            const serviceNameList: string[] = Array.from(serviceMapper.keys());
+            setCategoryOclData(serviceMapper);
+            serviceNameList.forEach((serviceName: string) => {
+                const dataNode: DataNode = {
+                    title: serviceName,
+                    key: serviceName || '',
+                    children: [],
+                };
+                const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
+                    serviceName,
+                    userAvailableServiceList
                 );
-                setExpandKeys(tExpandKeys);
-                if (!currentServiceName) {
-                    setCurrentServiceName(tExpandKeys[0].toString().split('@')[0]);
-                }
+                const versionList: string[] = Array.from(versionMapper.keys());
 
-                if (!currentVersion) {
-                    setCurrentVersion(tExpandKeys[0].toString().split('@')[1]);
-                }
-            } else {
-                setTreeData([]);
-                setSelectKey('');
-                setExpandKeys([]);
-                setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
-                setCurrentServiceName('');
-                setCurrentVersion('');
-                setCurrentCsp('');
-                setCurrentHostType('');
+                versionList.forEach((versionName: string) => {
+                    dataNode.children?.push({
+                        title: versionName,
+                        key: serviceName + '@' + versionName,
+                        icon: <TagOutlined />,
+                    });
+                    tExpandKeys.push(serviceName + '@' + versionName);
+                });
+                categoryTreeData.push(dataNode);
+            });
+            setTreeData(categoryTreeData);
+            setSelectKey(
+                currentServiceName.length > 0 && currentVersion.length > 0
+                    ? currentServiceName + '@' + currentVersion
+                    : tExpandKeys[0]
+            );
+            setExpandKeys(tExpandKeys);
+            if (!currentServiceName) {
+                setCurrentServiceName(tExpandKeys[0].toString().split('@')[0]);
             }
+
+            if (!currentVersion) {
+                setCurrentVersion(tExpandKeys[0].toString().split('@')[1]);
+            }
+        } else {
+            setTreeData([]);
+            setSelectKey('');
+            setExpandKeys([]);
+            setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
+            setCurrentServiceName('');
+            setCurrentVersion('');
+            setCurrentCsp('');
+            setCurrentHostType('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [availableServiceTemplatesQuery.isSuccess, category]);
+
+    useEffect(() => {
+        categoryOclData.forEach((serviceList, serviceName) => {
+            if (serviceName === currentServiceName) {
+                const versionMapper = getVersionMapper(serviceName, serviceList);
+                versionMapper.forEach((versionList, versionName) => {
+                    if (versionName === currentVersion) {
+                        const cspMapper = getCspMapper(serviceName, versionName, versionList);
+                        const firstCspList: ServiceTemplateDetailVo[] = cspMapper.values().next()
+                            .value as ServiceTemplateDetailVo[];
+                        if (firstCspList.length > 0) {
+                            setCurrentCsp(firstCspList[0].csp.valueOf());
+                        }
+                    }
+                });
+            }
+        });
+    }, [categoryOclData, currentServiceName, currentVersion]);
 
     useEffect(() => {
         navigate({

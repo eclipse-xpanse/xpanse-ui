@@ -17,7 +17,9 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
         yamlDocument.contents = billing;
         return (
             <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Billing'} trigger='hover'>
-                <Button className={'ocl-data-hover'} type={'link'}>{`${billing.model}`}</Button>
+                <Button className={'ocl-data-hover'} type={'link'}>
+                    {billing.model}
+                </Button>
             </Popover>
         );
     }

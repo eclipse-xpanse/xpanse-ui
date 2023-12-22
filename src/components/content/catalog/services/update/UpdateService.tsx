@@ -5,7 +5,7 @@
 
 import React, { MutableRefObject, useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
-import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
+import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import {
     ApiError,
     DeployedService,
@@ -159,6 +159,7 @@ function UpdateService({
         <div className={'update-unregister-btn-class'}>
             <Button
                 type='primary'
+                icon={<EditOutlined />}
                 onClick={showModal}
                 style={{ marginLeft: '20px', marginTop: '20px' }}
                 disabled={unregisterStatus.current === 'completed' || unregisterStatus.current === 'error'}
