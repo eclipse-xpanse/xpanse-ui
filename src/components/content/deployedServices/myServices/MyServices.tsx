@@ -15,6 +15,8 @@ import {
     DeleteOutlined,
     FundOutlined,
     InfoCircleOutlined,
+    PlayCircleOutlined,
+    PoweroffOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
 import '../../../../styles/my_services.css';
@@ -31,8 +33,12 @@ import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
 import DeployedServicesError from '../common/DeployedServicesError';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
+import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { MyServiceDetails } from './MyServiceDetails';
+import { useServiceStateStartQuery } from '../common/useServiceStateStartQuery';
+import { useServiceStateStopQuery } from '../common/useServiceStateStopQuery';
+import { useServiceStateRestartQuery } from '../common/useServiceStateRestartQuery';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -46,6 +52,7 @@ function MyServices(): React.JSX.Element {
     const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
     const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceIdFilters, setServiceIdFilters] = useState<ColumnFilterItem[]>([]);
+    const [serviceDeploymentStateFilters, setServiceDeploymentStateFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
     const [id, setId] = useState<string>('');
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
@@ -62,6 +69,10 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
+    const serviceStateStartQuery = useServiceStateStartQuery();
+    const serviceStateStopQuery = useServiceStateStopQuery();
+    const serviceStateRestartQuery = useServiceStateRestartQuery();
+
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
     const navigate = useNavigate();
@@ -89,6 +100,7 @@ function MyServices(): React.JSX.Element {
             updateNameFilters(listDeployedServicesQuery.data);
             updateCategoryFilters();
             updateCspFilters();
+            updateServiceDeploymentStateFilters();
             updateServiceStateFilters();
             updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
             updateServiceHostingFilters();
@@ -96,6 +108,71 @@ function MyServices(): React.JSX.Element {
             setServiceVoList(serviceList);
         }
     }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
+
+    useEffect(() => {
+        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
+            const serviceList: DeployedService[] = listDeployedServicesQuery.data.map(
+                (deployedService: DeployedService) => {
+                    if (deployedService.id === id) {
+                        if (serviceStateStartQuery.isSuccess || serviceStateRestartQuery.isSuccess) {
+                            deployedService.serviceState = DeployedService.serviceState.RUNNING;
+                        }
+                        if (serviceStateStartQuery.isError || serviceStateRestartQuery.isError) {
+                            deployedService.serviceState = DeployedService.serviceState.STARTING_FAILED;
+                        }
+                        if (serviceStateStartQuery.isPending || serviceStateRestartQuery.isPending) {
+                            deployedService.serviceState = DeployedService.serviceState.STARTING;
+                        }
+                    }
+                    return deployedService;
+                }
+            );
+            setServiceVoList(serviceList);
+        } else {
+            setServiceVoList([]);
+        }
+    }, [
+        id,
+        listDeployedServicesQuery.data,
+        listDeployedServicesQuery.isSuccess,
+        serviceStateStartQuery.isPending,
+        serviceStateRestartQuery.isPending,
+        serviceStateStartQuery.isSuccess,
+        serviceStateRestartQuery.isSuccess,
+        serviceStateStartQuery.isError,
+        serviceStateRestartQuery.isError,
+    ]);
+
+    useEffect(() => {
+        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
+            const serviceList: DeployedService[] = listDeployedServicesQuery.data.map(
+                (deployedService: DeployedService) => {
+                    if (deployedService.id === id) {
+                        if (serviceStateStopQuery.isPending) {
+                            deployedService.serviceState = DeployedService.serviceState.STOPPING;
+                        }
+                        if (serviceStateStopQuery.isSuccess) {
+                            deployedService.serviceState = DeployedService.serviceState.STOPPED;
+                        }
+                        if (serviceStateStopQuery.isError) {
+                            deployedService.serviceState = DeployedService.serviceState.STOPPING_FAILED;
+                        }
+                    }
+                    return deployedService;
+                }
+            );
+            setServiceVoList(serviceList);
+        } else {
+            setServiceVoList([]);
+        }
+    }, [
+        id,
+        listDeployedServicesQuery.data,
+        listDeployedServicesQuery.isSuccess,
+        serviceStateStopQuery.isPending,
+        serviceStateStopQuery.isSuccess,
+        serviceStateStopQuery.isError,
+    ]);
 
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
@@ -185,7 +262,108 @@ function MyServices(): React.JSX.Element {
                         </Popconfirm>
                     ),
             },
+            {
+                key: 'start',
+                label: (
+                    <Button
+                        onClick={() => {
+                            start(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<PlayCircleOutlined />}
+                        disabled={isDisableStartBtn(record)}
+                        type={'link'}
+                    >
+                        start
+                    </Button>
+                ),
+            },
+            {
+                key: 'stop',
+                label: (
+                    <Popconfirm
+                        title='Stop the service'
+                        description='Are you sure to stop the service?'
+                        cancelText='Yes'
+                        okText='No'
+                        onCancel={() => {
+                            stop(record);
+                        }}
+                    >
+                        <Button
+                            icon={<PoweroffOutlined />}
+                            className={'button-as-link'}
+                            disabled={isDisabledStopOrRestartBtn(record)}
+                            type={'link'}
+                        >
+                            stop
+                        </Button>
+                    </Popconfirm>
+                ),
+            },
+            {
+                key: 'restart',
+                label: (
+                    <Button
+                        onClick={() => {
+                            restart(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<SyncOutlined />}
+                        disabled={isDisabledStopOrRestartBtn(record)}
+                        type={'link'}
+                    >
+                        restart
+                    </Button>
+                ),
+            },
         ];
+    };
+
+    const isDisableStartBtn = (record: DeployedService) => {
+        if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED) {
+                return true;
+            }
+        }
+
+        if (
+            id === record.id &&
+            (serviceStateStartQuery.isPending || serviceStateStopQuery.isPending || serviceStateRestartQuery.isPending)
+        ) {
+            return true;
+        }
+
+        if (
+            record.serviceState === DeployedService.serviceState.RUNNING ||
+            record.serviceState === DeployedService.serviceState.STOPPING_FAILED
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    const isDisabledStopOrRestartBtn = (record: DeployedService) => {
+        if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED) {
+                return true;
+            }
+        }
+
+        if (
+            id === record.id &&
+            (serviceStateStartQuery.isPending || serviceStateStopQuery.isPending || serviceStateRestartQuery.isPending)
+        ) {
+            return true;
+        }
+
+        if (
+            record.serviceState === DeployedService.serviceState.STOPPED ||
+            record.serviceState === DeployedService.serviceState.STARTING_FAILED
+        ) {
+            return true;
+        }
+        return false;
     };
 
     if (listDeployedServicesQuery.isError) {
@@ -310,9 +488,9 @@ function MyServices(): React.JSX.Element {
             align: 'center',
         },
         {
-            title: 'ServiceState',
+            title: 'ServiceDeploymentState',
             dataIndex: 'serviceDeploymentState',
-            filters: serviceStateInQuery ? undefined : serviceStateFilters,
+            filters: serviceStateInQuery ? undefined : serviceDeploymentStateFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
@@ -320,6 +498,16 @@ function MyServices(): React.JSX.Element {
             render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
             filtered: !!serviceStateInQuery,
             align: 'center',
+        },
+        {
+            title: 'ServiceState',
+            dataIndex: 'serviceState',
+            align: 'center',
+            filters: serviceStateFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.serviceState.startsWith(value.toString()),
+            render: (serviceState: DeployedService.serviceState) => DeployedServicesRunningStatus(serviceState),
         },
         {
             title: 'Monitor',
@@ -388,6 +576,21 @@ function MyServices(): React.JSX.Element {
         serviceDestroyQuery.mutate(record.id);
     }
 
+    function start(record: DeployedService): void {
+        setId(record.id);
+        serviceStateStartQuery.mutate(record.id);
+    }
+
+    function stop(record: DeployedService): void {
+        setId(record.id);
+        serviceStateStopQuery.mutate(record.id);
+    }
+
+    function restart(record: DeployedService): void {
+        setId(record.id);
+        serviceStateRestartQuery.mutate(record.id);
+    }
+
     function migrate(record: DeployedService): void {
         setCurrentServiceVo(record);
         setTitle(
@@ -434,9 +637,21 @@ function MyServices(): React.JSX.Element {
         setCspFilters(filters);
     }
 
-    function updateServiceStateFilters(): void {
+    function updateServiceDeploymentStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
         Object.values(DeployedService.serviceDeploymentState).forEach((serviceStateItem) => {
+            const filter = {
+                text: serviceStateItem,
+                value: serviceStateItem,
+            };
+            filters.push(filter);
+        });
+        setServiceDeploymentStateFilters(filters);
+    }
+
+    function updateServiceStateFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(DeployedService.serviceState).forEach((serviceStateItem) => {
             const filter = {
                 text: serviceStateItem,
                 value: serviceStateItem,
