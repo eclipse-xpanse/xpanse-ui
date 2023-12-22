@@ -194,7 +194,7 @@ function MigrateServiceStatusPolling({
                     DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString())
         ) {
             return OrderSubmitResult(
-                'Migrating..., Please wait...',
+                'Migrating... Please wait...',
                 deployUuid,
                 'success',
                 getDeployServiceEntityByIdQuery.data.serviceDeploymentState,
