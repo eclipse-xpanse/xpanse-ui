@@ -22,6 +22,8 @@ import {
 } from '../../utils/constants';
 import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
 import RegisterResult from './RegisterResult';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '../catalog/services/query/useAvailableServiceTemplatesQuery';
 
 function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -33,6 +35,7 @@ function RegisterPanel(): React.JSX.Element {
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const navigate = useNavigate();
     const location = useLocation();
+    const queryClient = useQueryClient();
 
     const registerRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
@@ -41,6 +44,7 @@ function RegisterPanel(): React.JSX.Element {
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateVo.id}`];
+            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category) });
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
         },
         onError: (error: Error) => {
