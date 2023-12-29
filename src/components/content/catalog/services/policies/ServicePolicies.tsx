@@ -205,31 +205,6 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                     getDeleteCloseStatus={getDeleteCloseStatus}
                 />
             ) : null}
-            <Modal
-                title={currentServicePolicy === undefined ? 'Add service policy' : 'Update service policy'}
-                width={1000}
-                footer={null}
-                open={isOpenAddOrUpdatePolicyModal}
-                destroyOnClose={true}
-                onCancel={closeAddOrUpdateServicePolicyModal}
-            >
-                <AddOrUpdateServicePolicy
-                    serviceTemplateId={serviceTemplateId}
-                    currentServicePolicy={currentServicePolicy}
-                    getCancelUpdateStatus={getCancelUpdateStatus}
-                />
-            </Modal>
-            <Table
-                columns={columns}
-                className={'service-policies-table'}
-                dataSource={
-                    servicePolicyListQuery.data !== undefined && servicePolicyListQuery.data.length > 0
-                        ? servicePolicyListQuery.data
-                        : []
-                }
-                rowKey={'id'}
-                loading={servicePolicyListQuery.isPending || servicePolicyListQuery.isRefetching}
-            />
             <div className={'service-policies-container'}>
                 <Button
                     type='primary'
@@ -263,6 +238,31 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                     Add
                 </Button>
             </div>
+            <Modal
+                title={currentServicePolicy === undefined ? 'Add service policy' : 'Update service policy'}
+                width={1000}
+                footer={null}
+                open={isOpenAddOrUpdatePolicyModal}
+                destroyOnClose={true}
+                onCancel={closeAddOrUpdateServicePolicyModal}
+            >
+                <AddOrUpdateServicePolicy
+                    serviceTemplateId={serviceTemplateId}
+                    currentServicePolicy={currentServicePolicy}
+                    getCancelUpdateStatus={getCancelUpdateStatus}
+                />
+            </Modal>
+            <Table
+                columns={columns}
+                className={'service-policies-table'}
+                dataSource={
+                    servicePolicyListQuery.data !== undefined && servicePolicyListQuery.data.length > 0
+                        ? servicePolicyListQuery.data
+                        : []
+                }
+                rowKey={'id'}
+                loading={servicePolicyListQuery.isPending || servicePolicyListQuery.isRefetching}
+            />
         </>
     );
 };

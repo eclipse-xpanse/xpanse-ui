@@ -24,6 +24,7 @@ import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { useSearchParams } from 'react-router-dom';
 import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/constants';
 import { ServicePolicies } from '../policies/ServicePolicies';
+import { EnvironmentOutlined } from '@ant-design/icons';
 
 let lastServiceName: string = '';
 
@@ -48,8 +49,6 @@ function ServiceProvider({
     const serviceCspInQuery = getServiceCspFormQuery();
     const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
     const [activeKey, setActiveKey] = useState<string>('');
-    const [currentHostingType, setCurrentHostingType] = useState<string>('');
-    const [currentServiceTemplateId, setCurrentServiceTemplateId] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
 
@@ -120,7 +119,6 @@ function ServiceProvider({
             setServiceDetails(details);
             setActiveServiceDetail(details[0]);
             getHostType(details[0].serviceHostingType);
-            setCurrentHostingType(details[0].serviceHostingType);
         }
     }
 
@@ -150,35 +148,9 @@ function ServiceProvider({
         getCsp(key);
     };
 
-    useEffect(() => {
-        if (!currentServiceName || !activeKey || !currentHostingType) {
-            return;
-        }
-        categoryOclData.forEach((serviceList, serviceName) => {
-            if (serviceName === currentServiceName.split('@')[0]) {
-                const versionMapper = getVersionMapper(serviceName, serviceList);
-                versionMapper.forEach((versionList, version) => {
-                    if (version === currentServiceName.split('@')[1]) {
-                        const cspMapper = getCspMapper(serviceName, version, versionList);
-                        cspMapper.forEach((cspList, csp) => {
-                            if (csp === activeKey) {
-                                cspList.forEach((item) => {
-                                    if (item.serviceHostingType.valueOf() === currentHostingType) {
-                                        setCurrentServiceTemplateId(item.id);
-                                    }
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }, [categoryOclData, currentServiceName, activeKey, currentHostingType]);
-
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
         setActiveServiceDetail(serviceTemplateDetailVo);
         getHostType(serviceTemplateDetailVo.serviceHostingType);
-        setCurrentHostingType(serviceTemplateDetailVo.serviceHostingType);
     };
 
     function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
@@ -238,19 +210,17 @@ function ServiceProvider({
 
     return (
         <>
+            {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
             {currentServiceName.length > 0 ? (
                 <>
-                    {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
-                    <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
                     {serviceDetails && activeServiceDetail ? (
                         <>
-                            <ServiceHostingOptions
-                                serviceTemplateDetailVos={serviceDetails}
-                                defaultDisplayedService={activeServiceDetail}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                updateServiceHostingType={onChangeServiceHostingType}
+                            <Tabs
+                                items={items}
+                                onChange={onChange}
+                                activeKey={activeKey}
+                                className={'ant-tabs-tab-btn'}
                             />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
                             <div className={'update-unregister-btn-class'}>
                                 <UpdateService
                                     id={activeServiceDetail.id}
@@ -274,8 +244,20 @@ function ServiceProvider({
                                     getHostType={getHostType}
                                 />
                             </div>
+                            <h3 className={'catalog-details-h3'}>
+                                <EnvironmentOutlined />
+                                &nbsp;Service Hosting Options
+                            </h3>
+                            <ServiceHostingOptions
+                                serviceTemplateDetailVos={serviceDetails}
+                                defaultDisplayedService={activeServiceDetail}
+                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                updateServiceHostingType={onChangeServiceHostingType}
+                            />
+                            <ServiceDetail serviceDetails={activeServiceDetail} />
+
                             <Divider />
-                            <ServicePolicies serviceTemplateId={currentServiceTemplateId} />
+                            <ServicePolicies serviceTemplateId={activeServiceDetail.id} />
                         </>
                     ) : null}
                 </>

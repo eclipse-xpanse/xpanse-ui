@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Descriptions, Divider, Space, Tag } from 'antd';
+import { Descriptions, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
@@ -29,7 +29,6 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                         </Tag>
                     ))}
                 </Space>
-                <Divider />
             </div>
             <h3 className={'catalog-details-h3'}>
                 <InfoCircleOutlined />

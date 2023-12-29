@@ -52,13 +52,13 @@ function UnregisterService({
             if (currentServiceName.split('@')[0] === serviceName) {
                 const versionMapper = getVersionMapper(serviceName, serviceList);
                 versionMapper.forEach((versionList, version) => {
-                    if (serviceName + '@' + version === currentServiceName) {
+                    if (currentServiceName.split('@')[1] === version) {
                         refreshedServiceName = currentServiceName;
                         refreshedServiceCsp = versionList[0].csp.valueOf();
                         return false;
                     }
                 });
-                if (refreshedServiceName.length === 0) {
+                if (refreshedServiceName.length === 0 && refreshedServiceCsp.length === 0) {
                     const firstVersionList: ServiceTemplateDetailVo[] = versionMapper.values().next()
                         .value as ServiceTemplateDetailVo[];
                     if (firstVersionList.length > 0) {
@@ -95,7 +95,7 @@ function UnregisterService({
                 <Button
                     icon={<CloseCircleOutlined />}
                     type='primary'
-                    style={{ marginLeft: '50px', marginTop: '20px' }}
+                    className={'catalog-update-btn-class'}
                     disabled={unregisterRequest.isSuccess}
                 >
                     Unregister

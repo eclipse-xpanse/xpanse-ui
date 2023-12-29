@@ -94,7 +94,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             setCurrentHostType('');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [availableServiceTemplatesQuery.isSuccess, category]);
+    }, [availableServiceTemplatesQuery.isSuccess, category, availableServiceTemplatesQuery.data]);
 
     useEffect(() => {
         categoryOclData.forEach((serviceList, serviceName) => {

@@ -203,7 +203,7 @@ function Reports(): React.JSX.Element {
                             <Tooltip
                                 title={
                                     record.serviceHostingType === DeployedService.serviceHostingType.SELF
-                                        ? 'query of self hosted services cannot be viewed. '
+                                        ? 'details of self hosted services cannot be viewed.'
                                         : ''
                                 }
                             >
