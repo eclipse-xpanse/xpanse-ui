@@ -24,6 +24,7 @@ import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { useSearchParams } from 'react-router-dom';
 import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/constants';
 import { ServicePolicies } from '../policies/ServicePolicies';
+import { EnvironmentOutlined } from '@ant-design/icons';
 
 let lastServiceName: string = '';
 
@@ -209,19 +210,17 @@ function ServiceProvider({
 
     return (
         <>
+            {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
             {currentServiceName.length > 0 ? (
                 <>
-                    {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
-                    <Tabs items={items} onChange={onChange} activeKey={activeKey} className={'ant-tabs-tab-btn'} />
                     {serviceDetails && activeServiceDetail ? (
                         <>
-                            <ServiceHostingOptions
-                                serviceTemplateDetailVos={serviceDetails}
-                                defaultDisplayedService={activeServiceDetail}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                updateServiceHostingType={onChangeServiceHostingType}
+                            <Tabs
+                                items={items}
+                                onChange={onChange}
+                                activeKey={activeKey}
+                                className={'ant-tabs-tab-btn'}
                             />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
                             <div className={'update-unregister-btn-class'}>
                                 <UpdateService
                                     id={activeServiceDetail.id}
@@ -245,6 +244,18 @@ function ServiceProvider({
                                     getHostType={getHostType}
                                 />
                             </div>
+                            <h3 className={'catalog-details-h3'}>
+                                <EnvironmentOutlined />
+                                &nbsp;Service Hosting Options
+                            </h3>
+                            <ServiceHostingOptions
+                                serviceTemplateDetailVos={serviceDetails}
+                                defaultDisplayedService={activeServiceDetail}
+                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                updateServiceHostingType={onChangeServiceHostingType}
+                            />
+                            <ServiceDetail serviceDetails={activeServiceDetail} />
+
                             <Divider />
                             <ServicePolicies serviceTemplateId={activeServiceDetail.id} />
                         </>

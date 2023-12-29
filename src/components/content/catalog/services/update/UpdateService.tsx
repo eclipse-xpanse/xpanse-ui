@@ -161,7 +161,7 @@ function UpdateService({
                 type='primary'
                 icon={<EditOutlined />}
                 onClick={showModal}
-                style={{ marginLeft: '20px', marginTop: '20px' }}
+                className={'catalog-update-btn-class'}
                 disabled={unregisterStatus.current === 'completed' || unregisterStatus.current === 'error'}
             >
                 Update
