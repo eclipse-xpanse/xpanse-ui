@@ -4,9 +4,8 @@
  */
 
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { Divider, Radio, RadioChangeEvent } from 'antd';
+import { Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
-import { EnvironmentOutlined } from '@ant-design/icons';
 
 export function ServiceHostingOptions({
     serviceTemplateDetailVos,
@@ -41,10 +40,6 @@ export function ServiceHostingOptions({
 
     return (
         <>
-            <h3 className={'catalog-details-h3'}>
-                <EnvironmentOutlined />
-                &nbsp;Service Hosting Options
-            </h3>
             <Radio.Group
                 disabled={serviceHostingTypes.length === 1}
                 value={
@@ -57,7 +52,6 @@ export function ServiceHostingOptions({
                 <Radio value={ServiceTemplateDetailVo.serviceHostingType.SELF}>self</Radio>
                 <Radio value={ServiceTemplateDetailVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
             </Radio.Group>
-            <Divider />
         </>
     );
 }
