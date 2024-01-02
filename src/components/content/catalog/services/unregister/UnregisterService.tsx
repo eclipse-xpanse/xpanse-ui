@@ -4,31 +4,20 @@
  */
 
 import { Button, Popconfirm } from 'antd';
-import { ServiceTemplateDetailVo, ServiceVendorService } from '../../../../../xpanse-api/generated';
+import { ServiceVendorService } from '../../../../../xpanse-api/generated';
 import { useMutation } from '@tanstack/react-query';
 import React from 'react';
-import { getVersionMapper } from '../../../common/catalog/catalogProps';
 import { CloseCircleOutlined } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 
 function UnregisterService({
     id,
-    currentServiceName,
-    categoryOclData,
     onConfirmHandler,
-    defaultDisplayedService,
-    getServiceKey,
-    getCsp,
-    getHostType,
 }: {
     id: string;
-    currentServiceName: string;
-    categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     onConfirmHandler: (message: string | Error, unregisterResult: boolean, id: string) => void;
-    defaultDisplayedService: ServiceTemplateDetailVo | undefined;
-    getServiceKey: (arg: string) => void;
-    getCsp: (arg: string) => void;
-    getHostType: (arg: string) => void;
 }): React.JSX.Element {
+    useQueryClient();
     const unregisterRequest = useMutation({
         mutationFn: () => {
             return ServiceVendorService.unregister(id);
@@ -44,42 +33,6 @@ function UnregisterService({
     const unregister = () => {
         unregisterRequest.mutate();
     };
-
-    if (unregisterRequest.isSuccess) {
-        let refreshedServiceName = '';
-        let refreshedServiceCsp = '';
-        categoryOclData.forEach((serviceList, serviceName) => {
-            if (currentServiceName.split('@')[0] === serviceName) {
-                const versionMapper = getVersionMapper(serviceName, serviceList);
-                versionMapper.forEach((versionList, version) => {
-                    if (currentServiceName.split('@')[1] === version) {
-                        refreshedServiceName = currentServiceName;
-                        refreshedServiceCsp = versionList[0].csp.valueOf();
-                        return false;
-                    }
-                });
-                if (refreshedServiceName.length === 0 && refreshedServiceCsp.length === 0) {
-                    const firstVersionList: ServiceTemplateDetailVo[] = versionMapper.values().next()
-                        .value as ServiceTemplateDetailVo[];
-                    if (firstVersionList.length > 0) {
-                        refreshedServiceName = serviceName + '@' + firstVersionList[0].version;
-                        refreshedServiceCsp = firstVersionList[0].csp.valueOf();
-                    }
-                }
-                return;
-            } else {
-                const firstServiceList: ServiceTemplateDetailVo[] = categoryOclData.values().next()
-                    .value as ServiceTemplateDetailVo[];
-                if (firstServiceList.length > 0) {
-                    refreshedServiceName = serviceName + '@' + firstServiceList[0].version;
-                    refreshedServiceCsp = firstServiceList[0].csp.valueOf();
-                }
-            }
-        });
-        getServiceKey(refreshedServiceName);
-        getCsp(refreshedServiceCsp);
-        getHostType(defaultDisplayedService !== undefined ? defaultDisplayedService.serviceHostingType.valueOf() : '');
-    }
 
     return (
         <div className={'update-unregister-btn-class'}>
