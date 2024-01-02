@@ -178,18 +178,34 @@ function MyServices(): React.JSX.Element {
         return [
             {
                 key: 'details',
-                label: (
-                    <Button
-                        onClick={() => {
-                            handleMyServiceDetailsOpenModal(record);
-                        }}
-                        className={'button-as-link'}
-                        icon={<InfoCircleOutlined />}
-                        type={'link'}
-                    >
-                        details
-                    </Button>
-                ),
+                label:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                        <Tooltip title='Please contact the service provider'>
+                            <Button
+                                onClick={() => {
+                                    handleMyServiceDetailsOpenModal(record);
+                                }}
+                                disabled={true}
+                                className={'button-as-link'}
+                                icon={<InfoCircleOutlined />}
+                                type={'link'}
+                            >
+                                details
+                            </Button>
+                        </Tooltip>
+                    ) : (
+                        <Button
+                            onClick={() => {
+                                handleMyServiceDetailsOpenModal(record);
+                            }}
+                            className={'button-as-link'}
+                            icon={<InfoCircleOutlined />}
+                            type={'link'}
+                        >
+                            details
+                        </Button>
+                    ),
             },
             {
                 key: 'migrate',
