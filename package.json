@@ -80,7 +80,7 @@
     },
     "devDependencies": {
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "@tanstack/eslint-plugin-query": "^5.14.6",
+        "@tanstack/eslint-plugin-query": "^5.17.1",
         "@testing-library/jest-dom": "^6.1.6",
         "@testing-library/react": "^14.1.2",
         "@types/jest": "^29.5.11",
