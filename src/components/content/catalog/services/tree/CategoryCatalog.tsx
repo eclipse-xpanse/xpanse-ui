@@ -47,6 +47,8 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
             const serviceNameList: string[] = Array.from(serviceMapper.keys());
             setCategoryOclData(serviceMapper);
+            let serviceName: string | undefined = undefined;
+            let version: string | undefined = undefined;
             serviceNameList.forEach((serviceName: string) => {
                 const dataNode: DataNode = {
                     title: serviceName,
@@ -70,19 +72,22 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                 categoryTreeData.push(dataNode);
             });
             setTreeData(categoryTreeData);
-            setSelectKey(
-                currentServiceName.length > 0 && currentVersion.length > 0
-                    ? currentServiceName + '@' + currentVersion
-                    : tExpandKeys[0]
-            );
             setExpandKeys(tExpandKeys);
-            if (!currentServiceName) {
-                setCurrentServiceName(tExpandKeys[0].toString().split('@')[0]);
-            }
 
-            if (!currentVersion) {
-                setCurrentVersion(tExpandKeys[0].toString().split('@')[1]);
+            if (!currentServiceName || (currentServiceName && !serviceMapper.has(currentServiceName))) {
+                serviceName = tExpandKeys[0].toString().split('@')[0];
+                setCurrentServiceName(serviceName);
+            } else {
+                serviceName = currentServiceName;
             }
+            const versionMapper = getVersionMapper(currentServiceName, userAvailableServiceList);
+            if (!currentVersion || (currentVersion && !versionMapper.has(currentVersion))) {
+                version = tExpandKeys[0].toString().split('@')[1];
+                setCurrentVersion(version);
+            } else {
+                version = currentVersion;
+            }
+            setSelectKey(serviceName && version ? serviceName + '@' + version : tExpandKeys[0]);
         } else {
             setTreeData([]);
             setSelectKey('');
@@ -105,14 +110,17 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                         const cspMapper = getCspMapper(serviceName, versionName, versionList);
                         const firstCspList: ServiceTemplateDetailVo[] = cspMapper.values().next()
                             .value as ServiceTemplateDetailVo[];
-                        if (firstCspList.length > 0) {
-                            setCurrentCsp(firstCspList[0].csp.valueOf());
+                        if (!cspMapper.has(currentCsp)) {
+                            if (firstCspList.length > 0) {
+                                setCurrentCsp(firstCspList[0].csp.valueOf());
+                                setCurrentHostType(firstCspList[0].serviceHostingType);
+                            }
                         }
                     }
                 });
             }
         });
-    }, [categoryOclData, currentServiceName, currentVersion]);
+    }, [categoryOclData, currentCsp, currentServiceName, currentVersion]);
 
     useEffect(() => {
         navigate({
@@ -230,12 +238,6 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             </div>
         );
     }
-    const getServiceKey = (serviceKey: string) => {
-        if (serviceKey.length > 0) {
-            setCurrentServiceName(serviceKey.split('@')[0]);
-            setCurrentVersion(serviceKey.split('@')[1]);
-        }
-    };
     const getCsp = (csp: string) => {
         if (csp.length > 0) {
             setCurrentCsp(csp);
@@ -274,7 +276,6 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                         currentServiceName={selectKey.toString()}
                         confirmUnregister={onConfirmUnregister}
                         category={category}
-                        getServiceKey={getServiceKey}
                         getCsp={getCsp}
                         getHostType={getHostType}
                     />

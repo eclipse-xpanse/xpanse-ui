@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
 import { Alert, Divider, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
 import {
@@ -26,14 +26,11 @@ import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/cons
 import { ServicePolicies } from '../policies/ServicePolicies';
 import { EnvironmentOutlined } from '@ant-design/icons';
 
-let lastServiceName: string = '';
-
 function ServiceProvider({
     categoryOclData,
     currentServiceName,
     confirmUnregister,
     category,
-    getServiceKey,
     getCsp,
     getHostType,
 }: {
@@ -41,7 +38,6 @@ function ServiceProvider({
     currentServiceName: string;
     confirmUnregister: (disabled: boolean) => void;
     category: DeployedService.category;
-    getServiceKey: (arg: string) => void;
     getCsp: (arg: string) => void;
     getHostType: (arg: string) => void;
 }): React.JSX.Element {
@@ -52,7 +48,9 @@ function ServiceProvider({
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
 
-    const detailMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    const detailMapper: MutableRefObject<Map<string, ServiceTemplateDetailVo[]>> = useRef(
+        new Map<string, ServiceTemplateDetailVo[]>()
+    );
     const [name, version] = currentServiceName.split('@');
     const unregisterStatus = useRef<string>('');
     const [unregisterTips, setUnregisterTips] = useState<React.JSX.Element | undefined>(undefined);
@@ -70,7 +68,7 @@ function ServiceProvider({
                         const cspMapper = getCspMapper(serviceName, versionName, versionList);
                         cspMapper.forEach((cspList, cspName) => {
                             const key = currentServiceName + '@' + cspName;
-                            detailMapper.set(key, cspList);
+                            detailMapper.current.set(key, cspList);
                             const name = cspName.toString();
                             const item: Tab = {
                                 label: (
@@ -113,43 +111,33 @@ function ServiceProvider({
         return '';
     }
 
-    function updateServiceDetails(serviceKey: string): void {
-        const details = detailMapper.get(serviceKey);
+    useEffect(() => {
+        setActiveKey(serviceCspInQuery);
+        const details = detailMapper.current.get(currentServiceName + '@' + serviceCspInQuery);
         if (details) {
+            let isActiveDetailUpdated = false;
             setServiceDetails(details);
-            setActiveServiceDetail(details[0]);
-            getHostType(details[0].serviceHostingType);
+            if (serviceHostingTypeInQuery) {
+                for (const serviceTemplateDetailVo of details) {
+                    if (serviceTemplateDetailVo.serviceHostingType.toString() === serviceHostingTypeInQuery) {
+                        setActiveServiceDetail(serviceTemplateDetailVo);
+                        isActiveDetailUpdated = true;
+                    }
+                }
+            }
+            if (!isActiveDetailUpdated) {
+                setActiveServiceDetail(details[0]);
+                getHostType(details[0].serviceHostingType);
+            }
         }
-    }
-
-    useEffect(() => {
-        if (items.length > 0 && serviceCspInQuery.length > 0) {
-            setActiveKey(serviceCspInQuery);
-            getCsp(serviceCspInQuery);
-        } else if (items.length > 0 && lastServiceName !== currentServiceName) {
-            updateServiceDetails(currentServiceName + '@' + items[0].key);
-            setActiveKey(items[0]?.key);
-            getCsp(items[0]?.key);
-        } else if (items.length > 0 && lastServiceName === currentServiceName) {
-            setActiveKey(items[0]?.key);
-            getCsp(items[0]?.key);
-        }
-        lastServiceName = currentServiceName;
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentServiceName, serviceCspInQuery]);
-
-    useEffect(() => {
-        updateServiceDetails(currentServiceName + '@' + activeKey);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activeKey, currentServiceName]);
+    }, [serviceHostingTypeInQuery, serviceCspInQuery, categoryOclData]);
 
     const onChange = (key: string) => {
-        setActiveKey(key);
         getCsp(key);
     };
 
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
-        setActiveServiceDetail(serviceTemplateDetailVo);
         getHostType(serviceTemplateDetailVo.serviceHostingType);
     };
 
@@ -226,23 +214,8 @@ function ServiceProvider({
                                     id={activeServiceDetail.id}
                                     unregisterStatus={unregisterStatus}
                                     category={category}
-                                    currentServiceName={currentServiceName}
-                                    currentCsp={activeKey}
-                                    defaultDisplayedService={activeServiceDetail}
-                                    getServiceKey={getServiceKey}
-                                    getCsp={getCsp}
-                                    getHostType={getHostType}
                                 />
-                                <UnregisterService
-                                    id={activeServiceDetail.id}
-                                    currentServiceName={currentServiceName}
-                                    categoryOclData={categoryOclData}
-                                    onConfirmHandler={onConfirmUnregister}
-                                    defaultDisplayedService={activeServiceDetail}
-                                    getServiceKey={getServiceKey}
-                                    getCsp={getCsp}
-                                    getHostType={getHostType}
-                                />
+                                <UnregisterService id={activeServiceDetail.id} onConfirmHandler={onConfirmUnregister} />
                             </div>
                             <h3 className={'catalog-details-h3'}>
                                 <EnvironmentOutlined />

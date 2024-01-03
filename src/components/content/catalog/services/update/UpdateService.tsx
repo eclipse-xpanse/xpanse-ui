@@ -27,22 +27,10 @@ function UpdateService({
     id,
     unregisterStatus,
     category,
-    currentServiceName,
-    currentCsp,
-    defaultDisplayedService,
-    getServiceKey,
-    getCsp,
-    getHostType,
 }: {
     id: string;
     unregisterStatus: MutableRefObject<string>;
     category: DeployedService.category;
-    currentServiceName: string;
-    currentCsp: string;
-    defaultDisplayedService: ServiceTemplateDetailVo | undefined;
-    getServiceKey: (arg: string) => void;
-    getCsp: (arg: string) => void;
-    getHostType: (arg: string) => void;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -81,14 +69,7 @@ function UpdateService({
     };
 
     const handleCancel = () => {
-        if (updateServiceRequest.isSuccess) {
-            void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-            getServiceKey(currentServiceName);
-            getCsp(currentCsp);
-            getHostType(
-                defaultDisplayedService !== undefined ? defaultDisplayedService.serviceHostingType.valueOf() : ''
-            );
-        }
+        void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
         files.current.pop();
         ocl.current = undefined;
         yamlValidationResult.current = '';
@@ -144,17 +125,6 @@ function UpdateService({
         return false;
     };
 
-    const onRemove = () => {
-        files.current.pop();
-        ocl.current = undefined;
-        yamlValidationResult.current = '';
-        updateResult.current = [];
-        setYamlSyntaxValidationStatus('notStarted');
-        setOclValidationStatus('notStarted');
-        oclDisplayData.current = <></>;
-        updateServiceRequest.reset();
-    };
-
     return (
         <div className={'update-unregister-btn-class'}>
             <Button
@@ -186,7 +156,7 @@ function UpdateService({
                             ocl={ocl.current}
                             updateRequestStatus={updateServiceRequest.status}
                             updateResult={updateResult.current}
-                            onRemove={onRemove}
+                            onRemove={handleCancel}
                         />
                     ) : null}
                     <div className={'register-buttons'}>
@@ -196,7 +166,7 @@ function UpdateService({
                             beforeUpload={setFileData}
                             maxCount={1}
                             fileList={files.current}
-                            onRemove={onRemove}
+                            onRemove={handleCancel}
                             accept={'.yaml, .yml'}
                             showUploadList={{
                                 showRemoveIcon: true,

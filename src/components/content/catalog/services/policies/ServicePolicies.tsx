@@ -30,8 +30,6 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
 
     useEffect(() => {
         setId('');
-        refreshServicePoliciesList();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [serviceTemplateId]);
 
     if (servicePolicyListQuery.isError) {
