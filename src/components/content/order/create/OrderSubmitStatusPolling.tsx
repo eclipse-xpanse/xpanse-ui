@@ -55,6 +55,14 @@ function OrderSubmitStatusPolling({
             setIsDeploying(false);
             setRequestSubmitted(false);
         }
+        if (
+            getServiceDetailsByIdQuery.data &&
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+        ) {
+            setIsDeploying(false);
+            setRequestSubmitted(false);
+        }
     }, [getServiceDetailsByIdQuery.data, setIsDeploying, setRequestSubmitted]);
 
     useEffect(() => {
@@ -149,6 +157,19 @@ function OrderSubmitStatusPolling({
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
             DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
+        ) {
+            return OrderSubmitResult(
+                ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),
+                uuid,
+                'error',
+                getServiceDetailsByIdQuery.data.serviceDeploymentState,
+                stopWatch,
+                OperationType.Deploy
+            );
+        }
+        if (
+            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getServiceDetailsByIdQuery.data, OperationType.Deploy),

@@ -88,10 +88,22 @@ function MigrateServiceStatusPolling({
             setIsPreviousDisabled(true);
             getCurrentMigrationStepStatus(MigrationStatus.Finished);
         }
+
         if (
             getDestroyServiceEntityByIdQuery.data &&
             getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
                 DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
+        ) {
+            setIsMigrating(false);
+            setRequestSubmitted(false);
+            setIsPreviousDisabled(true);
+            getCurrentMigrationStepStatus(MigrationStatus.Failed);
+        }
+
+        if (
+            getDestroyServiceEntityByIdQuery.data &&
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
         ) {
             setIsMigrating(false);
             setRequestSubmitted(false);
@@ -224,6 +236,22 @@ function MigrateServiceStatusPolling({
             getDestroyServiceEntityByIdQuery.data &&
             getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
                 DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
+        ) {
+            return OrderSubmitResult(
+                ProcessingStatus(getDeployServiceEntityByIdQuery.data, OperationType.Migrate),
+                deployUuid,
+                'success',
+                getDestroyServiceEntityByIdQuery.data.serviceDeploymentState,
+                stopWatch,
+                OperationType.Migrate
+            );
+        }
+
+        if (
+            destroyUuid &&
+            getDestroyServiceEntityByIdQuery.data &&
+            getDestroyServiceEntityByIdQuery.data.serviceDeploymentState.toString() ===
+                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
         ) {
             return OrderSubmitResult(
                 ProcessingStatus(getDeployServiceEntityByIdQuery.data, OperationType.Migrate),
