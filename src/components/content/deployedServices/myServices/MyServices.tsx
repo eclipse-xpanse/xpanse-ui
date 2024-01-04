@@ -219,12 +219,14 @@ function MyServices(): React.JSX.Element {
             {
                 key:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
                         ? 'purge'
                         : 'destroy',
                 disabled:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
                         ? isPurging || isDestroying || isPurgingCompleted
                         : (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
                               record.serviceDeploymentState !==
@@ -232,7 +234,8 @@ function MyServices(): React.JSX.Element {
                           isDestroyingCompleted,
                 label:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED ? (
                         <Popconfirm
                             title='Purge the service'
                             description='Are you sure to purge the service?'
