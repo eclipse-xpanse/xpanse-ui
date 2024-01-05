@@ -13,11 +13,13 @@ function RegisterResult({
     registerRequestStatus,
     registerResult,
     onRemove,
+    retryRequest,
 }: {
     ocl: Ocl;
     registerRequestStatus: string;
     registerResult: string[];
     onRemove: () => void;
+    retryRequest: () => void;
 }): React.JSX.Element {
     if (registerRequestStatus === 'success') {
         return (
@@ -45,9 +47,20 @@ function RegisterResult({
                 onClose={onRemove}
                 className={'result'}
                 action={
-                    <Button size='small' type='primary' onClick={onRemove} danger={true}>
-                        Try Again
-                    </Button>
+                    <>
+                        <Button
+                            className={'try-again-btn-class'}
+                            size='small'
+                            type='primary'
+                            onClick={retryRequest}
+                            danger={true}
+                        >
+                            Retry Request
+                        </Button>
+                        <Button size='small' type='primary' onClick={onRemove} danger={true}>
+                            Upload New File
+                        </Button>
+                    </>
                 }
             />
         );
