@@ -10,9 +10,10 @@ import {
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsManagementService,
     CredentialVariable,
+    IsvCloudCredentialsManagementService,
     Response,
+    UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
@@ -68,9 +69,9 @@ function UpdateCredential({
 
     const updateCredentialByRole = (createCredential: CreateCredential) => {
         if (role === 'user') {
-            return CredentialsManagementService.updateUserCloudCredential(createCredential);
+            return UserCloudCredentialsManagementService.updateUserCloudCredential(createCredential);
         } else {
-            return CredentialsManagementService.updateIsvCloudCredential(createCredential);
+            return IsvCloudCredentialsManagementService.updateIsvCloudCredential(createCredential);
         }
     };
 

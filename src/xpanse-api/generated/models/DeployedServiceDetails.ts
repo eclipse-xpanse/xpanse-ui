@@ -60,6 +60,14 @@ export type DeployedServiceDetails = {
      * Time of update service.
      */
     lastModifiedTime: string;
+    /**
+     * Time of start service.
+     */
+    lastStartedAt?: string;
+    /**
+     * Time of stop service.
+     */
+    lastStoppedAt?: string;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -127,13 +135,13 @@ export namespace DeployedServiceDetails {
      * The run state of the service
      */
     export enum serviceState {
-        NOT_RUNNING = 'notRunning',
+        NOT_RUNNING = 'not running',
         RUNNING = 'running',
         STARTING = 'starting',
-        STARTING_FAILED = 'startingFailed',
+        STARTING_FAILED = 'starting failed',
         STOPPING = 'stopping',
         STOPPED = 'stopped',
-        STOPPING_FAILED = 'stoppingFailed',
+        STOPPING_FAILED = 'stopping failed',
     }
 
     /**

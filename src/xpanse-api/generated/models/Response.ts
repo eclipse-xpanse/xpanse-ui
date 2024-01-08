@@ -68,5 +68,6 @@ export namespace Response {
         POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
         CURRENT_LOGIN_USER_NO_FOUND = 'Current Login User No Found',
         SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
+        MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
     }
 }

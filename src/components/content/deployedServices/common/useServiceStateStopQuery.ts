@@ -4,12 +4,12 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { ServiceResourceService } from '../../../../xpanse-api/generated';
+import { ServiceStatusManagementService } from '../../../../xpanse-api/generated';
 
 export function useServiceStateStopQuery() {
     return useMutation({
         mutationFn: (id: string) => {
-            return ServiceResourceService.stopService(id);
+            return ServiceStatusManagementService.stopService(id);
         },
     });
 }
