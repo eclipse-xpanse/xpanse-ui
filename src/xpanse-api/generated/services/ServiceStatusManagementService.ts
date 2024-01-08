@@ -13,7 +13,7 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 
-export class ServiceResourceService {
+export class ServiceStatusManagementService {
     /**
      * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id

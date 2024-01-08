@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -50,12 +51,13 @@ export type { WorkFlowTask } from './models/WorkFlowTask';
 
 export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';
-export { CredentialsManagementService } from './services/CredentialsManagementService';
+export { CredentialsConfigurationService } from './services/CredentialsConfigurationService';
+export { IsvCloudCredentialsManagementService } from './services/IsvCloudCredentialsManagementService';
 export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
 export { ServiceCatalogService } from './services/ServiceCatalogService';
 export { ServicePoliciesManagementService } from './services/ServicePoliciesManagementService';
-export { ServiceResourceService } from './services/ServiceResourceService';
+export { ServiceStatusManagementService } from './services/ServiceStatusManagementService';
 export { ServiceVendorService } from './services/ServiceVendorService';
+export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';
 export { UserPoliciesManagementService } from './services/UserPoliciesManagementService';
-export { WorkFlowService } from './services/WorkFlowService';
