@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert, Card } from 'antd';
+import { Alert } from 'antd';
 import React from 'react';
 import { ApiError, Response } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
@@ -12,7 +12,7 @@ export default function ServicePolicyListError({ error }: { error: unknown }): R
     if (error instanceof ApiError && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
-            <Card title='Service Policies' bordered={true}>
+            <div>
                 <Alert
                     message={response.resultType.valueOf()}
                     description={convertStringArrayToUnorderedList(response.details)}
@@ -20,11 +20,11 @@ export default function ServicePolicyListError({ error }: { error: unknown }): R
                     closable={false}
                     className={'failure-alert'}
                 />
-            </Card>
+            </div>
         );
     } else {
         return (
-            <Card title='Service Policies' bordered={true}>
+            <div>
                 <Alert
                     message='Fetching Service Policies Details Failed'
                     description={(error as Error).message}
@@ -32,7 +32,7 @@ export default function ServicePolicyListError({ error }: { error: unknown }): R
                     closable={false}
                     className={'failure-alert'}
                 />
-            </Card>
+            </div>
         );
     }
 }

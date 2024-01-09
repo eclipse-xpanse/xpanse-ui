@@ -32,10 +32,6 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
         setId('');
     }, [serviceTemplateId]);
 
-    if (servicePolicyListQuery.isError) {
-        return <ServicePolicyListError error={servicePolicyListQuery.error} />;
-    }
-
     const updateEnabledFilters = (): ColumnFilterItem[] => {
         const filters: ColumnFilterItem[] = [];
 
@@ -236,6 +232,7 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                     Add
                 </Button>
             </div>
+            {servicePolicyListQuery.isError ? <ServicePolicyListError error={servicePolicyListQuery.error} /> : <></>}
             <Modal
                 title={currentServicePolicy === undefined ? 'Add service policy' : 'Update service policy'}
                 width={1000}

@@ -385,10 +385,6 @@ function MyServices(): React.JSX.Element {
         return false;
     };
 
-    if (listDeployedServicesQuery.isError) {
-        return <DeployedServicesError error={listDeployedServicesQuery.error} />;
-    }
-
     const getDestroyCloseStatus = (isClose: boolean) => {
         if (isClose) {
             setId('');
@@ -859,6 +855,14 @@ function MyServices(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
+            {listDeployedServicesQuery.isError ? (
+                <>
+                    <DeployedServicesError error={listDeployedServicesQuery.error} />
+                </>
+            ) : (
+                <></>
+            )}
+
             <Row>
                 <div className={'service-instance-list'}>
                     <Table

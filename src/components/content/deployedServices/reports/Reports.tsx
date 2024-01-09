@@ -75,10 +75,6 @@ function Reports(): React.JSX.Element {
         serviceIdInQuery,
     ]);
 
-    if (listDeployedServicesByIsvQuery.isError) {
-        return <DeployedServicesError error={listDeployedServicesByIsvQuery.error} />;
-    }
-
     const columns: ColumnsType<DeployedService> = [
         {
             title: 'Id',
@@ -400,6 +396,11 @@ function Reports(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
+            {listDeployedServicesByIsvQuery.isError ? (
+                <DeployedServicesError error={listDeployedServicesByIsvQuery.error} />
+            ) : (
+                <></>
+            )}
             <Row>
                 <div className={'service-instance-list'}>
                     <Table

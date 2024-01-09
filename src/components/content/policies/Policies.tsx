@@ -38,10 +38,6 @@ function Policies(): React.JSX.Element {
         setPoliciesManagementServiceList(listPoliciesManagementServiceQuery.data);
     }, [listPoliciesManagementServiceQuery.isSuccess, listPoliciesManagementServiceQuery.data]);
 
-    if (listPoliciesManagementServiceQuery.isError) {
-        return <PoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />;
-    }
-
     const columns: ColumnsType<UserPolicy> = [
         {
             title: 'Policy ID',
@@ -246,6 +242,11 @@ function Policies(): React.JSX.Element {
                         </Button>
                     </div>
                 </div>
+                {listPoliciesManagementServiceQuery.isError ? (
+                    <PoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />
+                ) : (
+                    <></>
+                )}
 
                 <Modal
                     title={currentPolicyService === undefined ? 'Add policy' : 'Update policy'}
