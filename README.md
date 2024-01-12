@@ -17,7 +17,7 @@ service catalog and also for end users to deploy services from the service catal
 
 ## Development Setup
 
-Documentation can be found on the project website [here](https://eclipse-xpanse.github.io/xpanse-website/docs/ui)
+Documentation can be found on the project website [here](https://eclipse.dev/xpanse/docs/ui)
 
 ### Unit Tests
 
