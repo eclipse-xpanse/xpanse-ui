@@ -1,0 +1,11 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+const trustedDomains = {
+    default: {
+        oidcDomains: ['${REACT_APP_ZITADEL_AUTHORITY_URL}'],
+        accessTokenDomains: ['${REACT_APP_XPANSE_API_URL}'],
+    },
+};

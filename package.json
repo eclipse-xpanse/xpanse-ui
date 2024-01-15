@@ -26,7 +26,8 @@
         "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed react-scripts build",
         "build": "react-scripts build",
         "test": "jest",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "update-service-wer-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
     },
     "eslintConfig": {
         "extends": [
@@ -105,7 +106,8 @@
         "react-scripts": "5.0.1",
         "release-it": "^17.0.0",
         "ts-jest": "^29.1.1",
-        "typescript": "5.3.3"
+        "typescript": "5.3.3",
+        "@axa-fr/oidc-client": "^7.13.14"
     },
     "overrides": {
         "react-scripts": {

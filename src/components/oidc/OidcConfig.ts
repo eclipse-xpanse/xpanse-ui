@@ -15,7 +15,9 @@ export const OidcConfig: OidcConfiguration = {
     redirect_uri: window.location.origin + (env.REACT_APP_ZITADEL_REDIRECT_URI ?? ''),
     silent_redirect_uri: window.location.origin + (env.REACT_APP_ZITADEL_SILENT_REDIRECT_URI ?? ''),
     scope: env.REACT_APP_ZITADEL_SCOPE ?? '',
-    service_worker_only: false,
+    service_worker_relative_url: '/OidcServiceWorker.js',
+    service_worker_only: env.REACT_APP_AUTH_USE_SERVICE_WORKER_ONLY === 'true',
+    service_worker_activate: () => env.REACT_APP_AUTH_USE_SERVICE_WORKER_ONLY === 'true',
 };
 
 export function getRolesOfUser(oidcUserInfo: object): string[] {
