@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export { ApiError } from './core/ApiError';
 export { CancelablePromise, CancelError } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
@@ -39,6 +38,7 @@ export { Response } from './models/Response';
 export type { ServicePolicy } from './models/ServicePolicy';
 export type { ServicePolicyCreateRequest } from './models/ServicePolicyCreateRequest';
 export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateRequest';
+export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
 export type { TokenResponse } from './models/TokenResponse';

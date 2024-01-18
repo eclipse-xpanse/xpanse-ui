@@ -12,6 +12,7 @@ import type { Billing } from './Billing';
 import type { CloudServiceProvider } from './CloudServiceProvider';
 import type { Deployment } from './Deployment';
 import type { Flavor } from './Flavor';
+import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 
 export type Ocl = {
     /**
@@ -53,6 +54,7 @@ export type Ocl = {
      * Defines which cloud service account is used for deploying cloud resources.
      */
     serviceHostingType: Ocl.serviceHostingType;
+    serviceProviderContactDetails: ServiceProviderContactDetails;
 };
 
 export namespace Ocl {
