@@ -14,6 +14,7 @@ import type { DeployVariable } from './DeployVariable';
 import type { Flavor } from './Flavor';
 import type { Link } from './Link';
 import type { Region } from './Region';
+import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 
 export type ServiceTemplateDetailVo = {
     /**
@@ -78,6 +79,7 @@ export type ServiceTemplateDetailVo = {
      * State of registered service.
      */
     serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    serviceProviderContactDetails: ServiceProviderContactDetails;
     links?: Array<Link>;
 };
 
