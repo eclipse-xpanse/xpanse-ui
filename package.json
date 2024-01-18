@@ -27,7 +27,7 @@
         "build": "react-scripts build",
         "test": "jest",
         "eject": "react-scripts eject",
-        "update-service-wer-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
+        "update-service-worker-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
     },
     "eslintConfig": {
         "extends": [
