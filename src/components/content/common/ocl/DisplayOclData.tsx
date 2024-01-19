@@ -10,6 +10,7 @@ import { DeploymentText } from './DeploymentText';
 import { FlavoursText } from './FlavorsText';
 import { BillingText } from './BillingText';
 import { cspMap } from '../csp/CspLogo';
+import { ContactDetailsText } from './ContactDetailsText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -98,6 +99,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             </Descriptions.Item>
                             <Descriptions.Item label='CredentialType'>
                                 {ocl.deployment.credentialType ? ocl.deployment.credentialType : ''}
+                            </Descriptions.Item>
+                            <Descriptions.Item label='Contact Details'>
+                                <ContactDetailsText serviceProviderContactDetails={ocl.serviceProviderContactDetails} />
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                         </Descriptions>
