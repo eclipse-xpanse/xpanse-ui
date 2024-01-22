@@ -9,7 +9,7 @@ import { ApiError, Response } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
 export default function ServicePolicyListError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && 'details' in error.body) {
+    if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
             <div>

@@ -58,7 +58,7 @@ function UpdateCredential({
         },
         onError: (error: Error) => {
             setUpdateLoading(false);
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
