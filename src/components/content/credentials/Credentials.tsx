@@ -65,7 +65,11 @@ function Credentials(): React.JSX.Element {
     }, [credentialsQuery.data, credentialsQuery.isSuccess]);
 
     useEffect(() => {
-        if (credentialsQuery.error instanceof ApiError && 'details' in credentialsQuery.error.body) {
+        if (
+            credentialsQuery.error instanceof ApiError &&
+            credentialsQuery.error.body &&
+            'details' in credentialsQuery.error.body
+        ) {
             const response: Response = credentialsQuery.error.body as Response;
             getTipInfo('error', response.details.join());
         } else if (credentialsQuery.error instanceof Error) {
@@ -81,7 +85,7 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {

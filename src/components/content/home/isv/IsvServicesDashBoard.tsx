@@ -7,12 +7,12 @@ import React from 'react';
 import { Card, Col, Divider, Row, Statistic } from 'antd';
 import '../../../../styles/dashboard.css';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
-import IsvServicesDashBoardError from './IsvServicesDashBoardError';
-import { ServicesDashboardByIsvSkeleton } from './IsvServicesDashBoardSkeleton';
+import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
 import { DeployedService, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 import { catalogPageRoute, reportsRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import DashBoardError from '../common/DashBoardError';
 
 export function IsvServicesDashBoard(): React.JSX.Element {
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
@@ -50,7 +50,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
             ? listDeployedServicesByIsvQuery.error
             : listRegisteredServicesByIsvQuery.error;
 
-        return <IsvServicesDashBoardError error={errorToDisplay} />;
+        return <DashBoardError error={errorToDisplay} />;
     }
 
     if (
@@ -59,7 +59,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         listRegisteredServicesByIsvQuery.isPending ||
         listRegisteredServicesByIsvQuery.isFetching
     ) {
-        return <ServicesDashboardByIsvSkeleton />;
+        return <DashBoardSkeleton />;
     }
 
     const getCatalogRedirectionUrl = () => {

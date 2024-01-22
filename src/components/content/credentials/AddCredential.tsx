@@ -101,6 +101,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         if (currentCsp !== undefined && currentType !== undefined) {
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
+                credentialCapabilitiesQuery.error.body &&
                 'details' in credentialCapabilitiesQuery.error.body
             ) {
                 const response: Response = credentialCapabilitiesQuery.error.body as Response;
@@ -124,7 +125,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         },
         onError: (error: Error) => {
             setAddLoading(false);
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
                 setDisable(true);

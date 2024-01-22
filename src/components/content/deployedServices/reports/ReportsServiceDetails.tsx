@@ -66,6 +66,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
     if (getServiceDetailsByIdQuery.isError) {
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
+            getServiceDetailsByIdQuery.error.body &&
             'details' in getServiceDetailsByIdQuery.error.body
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;

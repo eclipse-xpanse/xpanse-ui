@@ -194,6 +194,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
     if (availableServiceTemplatesQuery.isError) {
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
+            availableServiceTemplatesQuery.error.body &&
             'details' in availableServiceTemplatesQuery.error.body
         ) {
             const response: Response = availableServiceTemplatesQuery.error.body as Response;

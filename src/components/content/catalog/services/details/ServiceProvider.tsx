@@ -156,7 +156,7 @@ function ServiceProvider({
                     />
                 ) : (
                     <div>
-                        {msg instanceof ApiError && 'details' in msg.body ? (
+                        {msg instanceof ApiError && msg.body && 'details' in msg.body ? (
                             <Alert
                                 message='Unregister:'
                                 description={(msg.body as Response).details}

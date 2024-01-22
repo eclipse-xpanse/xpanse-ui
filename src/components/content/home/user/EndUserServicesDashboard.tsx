@@ -6,12 +6,12 @@
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesQuery';
-import { EndUserServicesDashboardSkeleton } from './EndUserServicesDashboardSkeleton';
-import EndUserServicesDashboardError from './EndUserServicesDashboardError';
 import { myServicesRoute } from '../../../utils/constants';
 import { DeployedService } from '../../../../xpanse-api/generated';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import serviceDeploymentState = DeployedService.serviceDeploymentState;
+import DashBoardError from '../common/DashBoardError';
+import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 
 export function EndUserServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
@@ -22,11 +22,11 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     let failedDestroysCount: number = 0;
 
     if (listDeployedServicesQuery.isError) {
-        return <EndUserServicesDashboardError error={listDeployedServicesQuery.error} />;
+        return <DashBoardError error={listDeployedServicesQuery.error} />;
     }
 
     if (listDeployedServicesQuery.isPending || listDeployedServicesQuery.isFetching) {
-        return <EndUserServicesDashboardSkeleton />;
+        return <DashBoardSkeleton />;
     }
 
     if (listDeployedServicesQuery.data.length > 0) {
