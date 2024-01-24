@@ -22,7 +22,7 @@ import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { useSearchParams } from 'react-router-dom';
-import { serviceCspQuery, serviceHostingTypeQuery } from '../../../../utils/constants';
+import { serviceCspQuery, serviceHostingTypeQuery, serviceVersionKeyQuery } from '../../../../utils/constants';
 import { ServicePolicies } from '../policies/ServicePolicies';
 import { EnvironmentOutlined } from '@ant-design/icons';
 
@@ -44,6 +44,7 @@ function ServiceProvider({
     const [urlParams] = useSearchParams();
     const serviceCspInQuery = getServiceCspFormQuery();
     const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
+    const serviceVersionInQuery = getServiceVersionFromQuery();
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
@@ -111,6 +112,14 @@ function ServiceProvider({
         return '';
     }
 
+    function getServiceVersionFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
     useEffect(() => {
         setActiveKey(serviceCspInQuery);
         const details = detailMapper.current.get(currentServiceName + '@' + serviceCspInQuery);
@@ -131,7 +140,7 @@ function ServiceProvider({
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceHostingTypeInQuery, serviceCspInQuery, categoryOclData]);
+    }, [serviceHostingTypeInQuery, serviceCspInQuery, serviceVersionInQuery, categoryOclData]);
 
     const onChange = (key: string) => {
         getCsp(key);
