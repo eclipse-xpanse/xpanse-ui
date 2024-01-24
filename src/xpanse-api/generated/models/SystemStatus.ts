@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { BackendSystemStatus } from './BackendSystemStatus';
-
 export type SystemStatus = {
     /**
      * The health status of Xpanse api service.
@@ -20,7 +18,6 @@ export type SystemStatus = {
      */
     backendSystemStatuses: Array<BackendSystemStatus>;
 };
-
 export namespace SystemStatus {
     /**
      * The health status of Xpanse api service.

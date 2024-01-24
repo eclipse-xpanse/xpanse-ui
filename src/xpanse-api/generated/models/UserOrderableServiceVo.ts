@@ -7,13 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Billing } from './Billing';
 import type { DeployVariable } from './DeployVariable';
 import type { FlavorBasic } from './FlavorBasic';
 import type { Link } from './Link';
 import type { Region } from './Region';
-
 export type UserOrderableServiceVo = {
     /**
      * The id of the orderable service.
@@ -62,7 +60,6 @@ export type UserOrderableServiceVo = {
     serviceHostingType: UserOrderableServiceVo.serviceHostingType;
     links?: Array<Link>;
 };
-
 export namespace UserOrderableServiceVo {
     /**
      * The category of the orderable service.
@@ -79,7 +76,6 @@ export namespace UserOrderableServiceVo {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The Cloud Service Provider of the orderable service.
      */
@@ -93,7 +89,6 @@ export namespace UserOrderableServiceVo {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

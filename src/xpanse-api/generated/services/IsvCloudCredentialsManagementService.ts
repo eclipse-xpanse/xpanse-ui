@@ -9,11 +9,9 @@
 /* eslint-disable */
 import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
 import type { CreateCredential } from '../models/CreateCredential';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class IsvCloudCredentialsManagementService {
     /**
      * Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> isv</b>
@@ -43,7 +41,6 @@ export class IsvCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Update the user credentials used for ISV to connect to the cloud service provider.<br>Required role:<b> isv</b>
      * @param requestBody
@@ -66,7 +63,6 @@ export class IsvCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Add the user credentials for the ISV role used to connect to the cloud service provider.<br>Required role:<b> isv</b>
      * @param requestBody
@@ -89,7 +85,6 @@ export class IsvCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Delete the credentials of the user in the USER role to connect to the cloud service provider.<br>Required role:<b> isv</b>
      * @param cspName The cloud service provider.

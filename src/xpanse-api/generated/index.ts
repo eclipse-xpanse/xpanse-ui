@@ -41,6 +41,7 @@ export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateReq
 export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
+export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 export { UserPolicy } from './models/UserPolicy';
@@ -53,6 +54,7 @@ export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';
 export { CredentialsConfigurationService } from './services/CredentialsConfigurationService';
 export { IsvCloudCredentialsManagementService } from './services/IsvCloudCredentialsManagementService';
+export { MigrationService } from './services/MigrationService';
 export { MonitorService } from './services/MonitorService';
 export { ServiceService } from './services/ServiceService';
 export { ServiceCatalogService } from './services/ServiceCatalogService';
@@ -61,3 +63,4 @@ export { ServiceStatusManagementService } from './services/ServiceStatusManageme
 export { ServiceVendorService } from './services/ServiceVendorService';
 export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';
 export { UserPoliciesManagementService } from './services/UserPoliciesManagementService';
+export { WebhookService } from './services/WebhookService';

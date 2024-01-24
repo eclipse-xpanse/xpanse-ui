@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type DeployedService = {
     /**
      * The ID of the service
@@ -66,7 +65,6 @@ export type DeployedService = {
      */
     lastStoppedAt?: string;
 };
-
 export namespace DeployedService {
     /**
      * The catalog of the service
@@ -83,7 +81,6 @@ export namespace DeployedService {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The provider of the service
      */
@@ -97,7 +94,6 @@ export namespace DeployedService {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * The deployment state of the service
      */
@@ -114,7 +110,6 @@ export namespace DeployedService {
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
     }
-
     /**
      * The run state of the service
      */
@@ -127,7 +122,6 @@ export namespace DeployedService {
         STOPPED = 'stopped',
         STOPPING_FAILED = 'stopping failed',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

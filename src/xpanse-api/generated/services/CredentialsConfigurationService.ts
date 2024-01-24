@@ -9,11 +9,9 @@
 /* eslint-disable */
 import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
 import type { Link } from '../models/Link';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class CredentialsConfigurationService {
     /**
      * Returns the OpenAPI document for adding a credential.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
@@ -43,7 +41,6 @@ export class CredentialsConfigurationService {
             },
         });
     }
-
     /**
      * List the credential capabilities defined by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
      * @param cspName name of the cloud service provider.
@@ -75,7 +72,6 @@ export class CredentialsConfigurationService {
             },
         });
     }
-
     /**
      * List the credential types supported by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
      * @param cspName The cloud service provider.

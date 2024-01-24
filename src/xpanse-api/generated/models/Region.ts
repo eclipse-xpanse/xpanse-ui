@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The regions of the Cloud Service Provider
  */

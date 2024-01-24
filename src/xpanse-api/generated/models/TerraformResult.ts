@@ -7,14 +7,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type Link = {
-    rel?: string;
-    href?: string;
-    hreflang?: string;
-    media?: string;
-    title?: string;
-    type?: string;
-    deprecation?: string;
-    profile?: string;
-    name?: string;
+export type TerraformResult = {
+    commandStdOutput?: string;
+    commandStdError?: string;
+    terraformState?: string;
+    importantFileContentMap?: Record<string, string>;
+    commandSuccessful?: boolean;
 };

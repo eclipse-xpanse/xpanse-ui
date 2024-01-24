@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { CredentialVariable } from './CredentialVariable';
-
 export type CredentialVariables = {
     /**
      * The cloud service provider of the credential.
@@ -36,7 +34,6 @@ export type CredentialVariables = {
      */
     variables: Array<CredentialVariable>;
 };
-
 export namespace CredentialVariables {
     /**
      * The cloud service provider of the credential.
@@ -51,7 +48,6 @@ export namespace CredentialVariables {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */

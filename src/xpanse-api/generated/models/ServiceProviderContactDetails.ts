@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The contact details of the service provider.
  */

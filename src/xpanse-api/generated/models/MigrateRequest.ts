@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type MigrateRequest = {
     /**
      * The category of the service
@@ -50,7 +49,6 @@ export type MigrateRequest = {
      */
     id: string;
 };
-
 export namespace MigrateRequest {
     /**
      * The category of the service
@@ -67,7 +65,6 @@ export namespace MigrateRequest {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The csp of the Service.
      */
@@ -81,7 +78,6 @@ export namespace MigrateRequest {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

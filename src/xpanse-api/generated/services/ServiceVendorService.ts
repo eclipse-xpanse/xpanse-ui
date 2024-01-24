@@ -10,11 +10,9 @@
 import type { Ocl } from '../models/Ocl';
 import type { Response } from '../models/Response';
 import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class ServiceVendorService {
     /**
      * Get service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
@@ -39,7 +37,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
@@ -66,7 +63,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * Delete service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
@@ -90,7 +86,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
@@ -118,7 +113,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * List service templates with query params.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param categoryName category of the service
@@ -166,7 +160,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param requestBody
@@ -189,7 +182,6 @@ export class ServiceVendorService {
             },
         });
     }
-
     /**
      * Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param oclLocation URL of Ocl file

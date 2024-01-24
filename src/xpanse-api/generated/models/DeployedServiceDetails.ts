@@ -7,10 +7,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
-
 export type DeployedServiceDetails = {
     /**
      * The ID of the service
@@ -82,7 +80,6 @@ export type DeployedServiceDetails = {
      */
     resultMessage?: string;
 };
-
 export namespace DeployedServiceDetails {
     /**
      * The catalog of the service
@@ -99,7 +96,6 @@ export namespace DeployedServiceDetails {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The provider of the service
      */
@@ -113,7 +109,6 @@ export namespace DeployedServiceDetails {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * The deployment state of the service
      */
@@ -130,7 +125,6 @@ export namespace DeployedServiceDetails {
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
     }
-
     /**
      * The run state of the service
      */
@@ -143,7 +137,6 @@ export namespace DeployedServiceDetails {
         STOPPED = 'stopped',
         STOPPING_FAILED = 'stopping failed',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

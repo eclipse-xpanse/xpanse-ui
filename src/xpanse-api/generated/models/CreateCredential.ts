@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { CredentialVariable } from './CredentialVariable';
-
 export type CreateCredential = {
     /**
      * The name of the credential
@@ -36,7 +34,6 @@ export type CreateCredential = {
      */
     timeToLive: number;
 };
-
 export namespace CreateCredential {
     /**
      * The cloud service provider of the credential.
@@ -51,7 +48,6 @@ export namespace CreateCredential {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * The type of the credential
      */

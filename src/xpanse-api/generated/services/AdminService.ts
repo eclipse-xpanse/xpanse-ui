@@ -8,11 +8,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { SystemStatus } from '../models/SystemStatus';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class AdminService {
     /**
      * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
@@ -33,7 +31,6 @@ export class AdminService {
             },
         });
     }
-
     /**
      * List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
      * @param active Whether only list cloud service provider with active plugin.

@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The list of the metric items.
  */
@@ -29,7 +28,6 @@ export type MetricItem = {
      */
     value: number;
 };
-
 export namespace MetricItem {
     /**
      * Type of the MetricItem.
