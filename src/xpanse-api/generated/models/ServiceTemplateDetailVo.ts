@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Billing } from './Billing';
 import type { Deployment } from './Deployment';
 import type { DeployVariable } from './DeployVariable';
@@ -15,7 +14,6 @@ import type { Flavor } from './Flavor';
 import type { Link } from './Link';
 import type { Region } from './Region';
 import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
-
 export type ServiceTemplateDetailVo = {
     /**
      * ID of the registered service.
@@ -82,7 +80,6 @@ export type ServiceTemplateDetailVo = {
     serviceProviderContactDetails: ServiceProviderContactDetails;
     links?: Array<Link>;
 };
-
 export namespace ServiceTemplateDetailVo {
     /**
      * Csp of the registered service.
@@ -97,7 +94,6 @@ export namespace ServiceTemplateDetailVo {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * Category of the registered service.
      */
@@ -113,7 +109,6 @@ export namespace ServiceTemplateDetailVo {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */
@@ -121,7 +116,6 @@ export namespace ServiceTemplateDetailVo {
         SELF = 'self',
         SERVICE_VENDOR = 'service-vendor',
     }
-
     /**
      * State of registered service.
      */

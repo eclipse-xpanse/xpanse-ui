@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type ServicePolicyUpdateRequest = {
     /**
      * The id of the policy.

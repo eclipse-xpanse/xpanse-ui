@@ -10,11 +10,13 @@
         { "OAuth2Flow": ["openid", "profile", "urn:zitadel:iam:org:project:roles", "urn:zitadel:iam:user:metadata"] }
     ],
     "tags": [
+        { "name": "Webhook", "description": "Webhook APIs" },
         { "name": "Auth Management", "description": "APIs for user authentication and authorization." },
         { "name": "Credentials Configuration", "description": "APIs Viewing Cloud Credentials Configuration" },
         { "name": "Service Policies Management", "description": "APIs for managing service's infra policies." },
         { "name": "Service", "description": "APIs to manage the service instances" },
         { "name": "Service Status Management", "description": "APIs to manage the service instances" },
+        { "name": "Migration", "description": "APIs to manage the service migration." },
         { "name": "Service Vendor", "description": "APIs to manage service templates." },
         { "name": "Admin", "description": "APIs for administrating Xpanse" },
         {
@@ -30,7 +32,6 @@
             "name": "Service Catalog",
             "description": "APIs to query the services which are available for the user to order."
         },
-        { "name": "WorkFlow", "description": "APIs to manage the Workflow" },
         { "name": "User Policies Management", "description": "APIs for managing user's infra policies." },
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
@@ -88,7 +89,7 @@
         },
         "/xpanse/workflow/task/{id}/{retryOrder}": {
             "put": {
-                "tags": ["WorkFlow"],
+                "tags": ["Workflow"],
                 "description": "Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "manageFailedOrder",
                 "parameters": [
@@ -1349,7 +1350,7 @@
         },
         "/xpanse/services/migration": {
             "post": {
-                "tags": ["Service"],
+                "tags": ["Migration"],
                 "description": "Create a job to migrate the deployed service.<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "migrate",
                 "requestBody": {
@@ -1589,6 +1590,100 @@
                             "application/json": { "schema": { "$ref": "#/components/schemas/ServiceTemplateDetailVo" } }
                         }
                     }
+                }
+            }
+        },
+        "/webhook/destroy/{task_id}": {
+            "post": {
+                "tags": ["Webhook"],
+                "description": "Process the execution result after terraform executes the command line.",
+                "operationId": "destroyCallback",
+                "parameters": [
+                    {
+                        "name": "task_id",
+                        "in": "path",
+                        "description": "task id",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
+                }
+            }
+        },
+        "/webhook/deploy/{task_id}": {
+            "post": {
+                "tags": ["Webhook"],
+                "description": "Process the execution result after terraform executes the command line.",
+                "operationId": "deployCallback",
+                "parameters": [
+                    {
+                        "name": "task_id",
+                        "in": "path",
+                        "description": "task id",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    }
+                ],
+                "requestBody": {
+                    "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TerraformResult" } } },
+                    "required": true
+                },
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": { "description": "OK" }
                 }
             }
         },
@@ -2920,7 +3015,8 @@
                             "Policy Evaluation Failed",
                             "Current Login User No Found",
                             "Service Details No Accessible",
-                            "Migrating activiti Task Not Found"
+                            "Migrating activiti Task Not Found",
+                            "Service Migration Failed Exception"
                         ]
                     },
                     "details": {
@@ -3429,6 +3525,10 @@
                         "description": "The id of registered service template which the policy belongs to.",
                         "format": "uuid"
                     },
+                    "flavorName": {
+                        "type": "string",
+                        "description": "The flavor name which the policy belongs to. If a flavor is not provided, then the policy will be executed for during service deployment of all flavors."
+                    },
                     "enabled": { "type": "boolean", "description": "Is the policy enabled." },
                     "createTime": {
                         "type": "string",
@@ -3592,6 +3692,10 @@
                         "description": "The id of registered service template which the policy belongs to.",
                         "format": "uuid"
                     },
+                    "flavorName": {
+                        "type": "string",
+                        "description": "The flavor name which the policy belongs to. If a flavor is not provided, then the policy will be executed for during service deployment of all flavors."
+                    },
                     "policy": { "type": "string", "description": "The policy." },
                     "enabled": {
                         "type": "boolean",
@@ -3613,6 +3717,16 @@
                         "type": "boolean",
                         "description": "Is the policy enabled. true:enabled;false:disabled."
                     }
+                }
+            },
+            "TerraformResult": {
+                "type": "object",
+                "properties": {
+                    "commandStdOutput": { "type": "string" },
+                    "commandStdError": { "type": "string" },
+                    "terraformState": { "type": "string" },
+                    "importantFileContentMap": { "type": "object", "additionalProperties": { "type": "string" } },
+                    "commandSuccessful": { "type": "boolean" }
                 }
             },
             "WorkFlowTask": {

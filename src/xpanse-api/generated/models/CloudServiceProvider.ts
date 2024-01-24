@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Region } from './Region';
-
 /**
  * The cloud service provider of the managed service
  */
@@ -23,7 +21,6 @@ export type CloudServiceProvider = {
      */
     regions: Array<Region>;
 };
-
 export namespace CloudServiceProvider {
     /**
      * The Cloud Service Provider.

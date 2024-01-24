@@ -9,11 +9,9 @@
 /* eslint-disable */
 import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
 import type { CreateCredential } from '../models/CreateCredential';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class UserCloudCredentialsManagementService {
     /**
      * List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
@@ -43,7 +41,6 @@ export class UserCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
@@ -66,7 +63,6 @@ export class UserCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
@@ -89,7 +85,6 @@ export class UserCloudCredentialsManagementService {
             },
         });
     }
-
     /**
      * Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
      * @param cspName The cloud service provider.

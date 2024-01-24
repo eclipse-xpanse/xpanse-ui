@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type TokenResponse = {
     /**
      * An access_token as a JWT or opaque token.

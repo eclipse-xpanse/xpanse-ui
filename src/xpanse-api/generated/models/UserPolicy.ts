@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type UserPolicy = {
     /**
      * The id of the policy.
@@ -34,7 +33,6 @@ export type UserPolicy = {
      */
     lastModifiedTime: string;
 };
-
 export namespace UserPolicy {
     /**
      * The csp which the policy belongs to.

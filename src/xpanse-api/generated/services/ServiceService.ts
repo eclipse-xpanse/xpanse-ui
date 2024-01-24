@@ -10,14 +10,11 @@
 import type { DeployedService } from '../models/DeployedService';
 import type { DeployedServiceDetails } from '../models/DeployedServiceDetails';
 import type { DeployRequest } from '../models/DeployRequest';
-import type { MigrateRequest } from '../models/MigrateRequest';
 import type { Response } from '../models/Response';
 import type { VendorHostedDeployedServiceDetails } from '../models/VendorHostedDeployedServiceDetails';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class ServiceService {
     /**
      * List all deployed services by a user.<br>Required role:<b> admin</b> or <b>user</b>
@@ -77,7 +74,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
      * @param requestBody
@@ -100,30 +96,6 @@ export class ServiceService {
             },
         });
     }
-
-    /**
-     * Create a job to migrate the deployed service.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param requestBody
-     * @returns string Accepted
-     * @throws ApiError
-     */
-    public static migrate(requestBody: MigrateRequest): CancelablePromise<string> {
-        return __request(OpenAPI, {
-            method: 'POST',
-            url: '/xpanse/services/migration',
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
-
     /**
      * List all deployed services by a user.<br>Required role:<b> isv</b>
      * @param categoryName category of the service
@@ -182,7 +154,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Get deployed service details by id.<br>Required role:<b> isv</b>
      * @param id Task id of deployed service
@@ -206,7 +177,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id Task id of deployed service
@@ -230,7 +200,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id Task id of deployed service
@@ -254,7 +223,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
@@ -278,7 +246,6 @@ export class ServiceService {
             },
         });
     }
-
     /**
      * Start a task to purge the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id

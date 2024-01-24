@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type UserPolicyCreateRequest = {
     /**
      * The csp which the policy belongs to.
@@ -22,7 +21,6 @@ export type UserPolicyCreateRequest = {
      */
     enabled: boolean;
 };
-
 export namespace UserPolicyCreateRequest {
     /**
      * The csp which the policy belongs to.
