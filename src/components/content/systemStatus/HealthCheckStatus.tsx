@@ -23,7 +23,7 @@ interface DataType {
     details: string | undefined;
 }
 
-export const HealthCheckStatus = (): JSX.Element => {
+export const HealthCheckStatus = (): React.JSX.Element => {
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
     const [backendSystemTypeFilters, setBackendSystemTypeFilters] = useState<ColumnFilterItem[]>([]);
     const [healthStatusFilters, setHealthStatusFilters] = useState<ColumnFilterItem[]>([]);
@@ -44,7 +44,11 @@ export const HealthCheckStatus = (): JSX.Element => {
     useEffect(() => {
         if (healthCheckQuery.isError) {
             setBackendSystemStatusList([]);
-            if (healthCheckQuery.error instanceof ApiError && 'details' in healthCheckQuery.error.body) {
+            if (
+                healthCheckQuery.error instanceof ApiError &&
+                healthCheckQuery.error.body &&
+                'details' in healthCheckQuery.error.body
+            ) {
                 const response: Response = healthCheckQuery.error.body as Response;
                 setHealthCheckError(
                     <div className={'health-refresh-alert-tip'}>

@@ -7,12 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Billing } from './Billing';
 import type { CloudServiceProvider } from './CloudServiceProvider';
 import type { Deployment } from './Deployment';
 import type { Flavor } from './Flavor';
-
+import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 export type Ocl = {
     /**
      * The catalog of the service
@@ -53,8 +52,8 @@ export type Ocl = {
      * Defines which cloud service account is used for deploying cloud resources.
      */
     serviceHostingType: Ocl.serviceHostingType;
+    serviceProviderContactDetails: ServiceProviderContactDetails;
 };
-
 export namespace Ocl {
     /**
      * The catalog of the service
@@ -71,7 +70,6 @@ export namespace Ocl {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

@@ -36,3 +36,7 @@
     overflow: auto;
     max-width: 50vh;
 }
+
+.try-again-btn-class {
+    margin-right: 20px;
+}

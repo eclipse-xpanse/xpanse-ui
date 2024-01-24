@@ -1,4 +1,9 @@
 #!/usr/bin/bash
+#
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Huawei Inc.
+#
+
 # the script reads all available environment vars with names starting with REACT_APP_ and adds them to the
 # inject.js file as a JS object.
 WWW_DIR=/usr/share/nginx/html
@@ -12,6 +17,10 @@ for envrow in $(printenv); do
   fi
 done
 echo "};" >> "${INJECT_FILE_PATH}"
+
+# OidcTrustedDomains file will be updated from the template and values from environment variables.
+envsubst < public/OidcTrustedDomains.js.template > public/OidcTrustedDomains.js
+
 if [ "$#" -eq 0 ]
   then nginx -g 'daemon off;'
 else

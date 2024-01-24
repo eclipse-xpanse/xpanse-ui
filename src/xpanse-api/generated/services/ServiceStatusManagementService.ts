@@ -8,12 +8,10 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DeployedService } from '../models/DeployedService';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
-export class ServiceResourceService {
+export class ServiceStatusManagementService {
     /**
      * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
@@ -37,7 +35,6 @@ export class ServiceResourceService {
             },
         });
     }
-
     /**
      * Start the service by the service id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
@@ -61,7 +58,6 @@ export class ServiceResourceService {
             },
         });
     }
-
     /**
      * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id

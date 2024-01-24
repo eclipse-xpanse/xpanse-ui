@@ -4,7 +4,10 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { CredentialsManagementService } from '../../../../xpanse-api/generated';
+import {
+    IsvCloudCredentialsManagementService,
+    UserCloudCredentialsManagementService,
+} from '../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../layouts/header/useCurrentRoleStore';
 
 export default function useCredentialsListQuery() {
@@ -13,9 +16,9 @@ export default function useCredentialsListQuery() {
         queryKey: ['credentialsQuery', currentRole],
         queryFn: () => {
             if (currentRole === 'user') {
-                return CredentialsManagementService.getUserCloudCredentials();
+                return UserCloudCredentialsManagementService.getUserCloudCredentials();
             } else {
-                return CredentialsManagementService.getIsvCloudCredentials();
+                return IsvCloudCredentialsManagementService.getIsvCloudCredentials();
             }
         },
         staleTime: 60000,

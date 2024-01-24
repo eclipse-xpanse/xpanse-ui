@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { DeployVariableKind } from './DeployVariableKind';
-
 /**
  * The variables for the deployment, which will be passed to the deployer
  */
@@ -48,7 +46,6 @@ export type DeployVariable = {
      */
     sensitiveScope?: DeployVariable.sensitiveScope;
 };
-
 export namespace DeployVariable {
     /**
      * The type of the deploy variable
@@ -58,7 +55,6 @@ export namespace DeployVariable {
         NUMBER = 'number',
         BOOLEAN = 'boolean',
     }
-
     /**
      * Sensitive scope of variable storage
      */

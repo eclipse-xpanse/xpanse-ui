@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled.
  */
@@ -33,7 +32,6 @@ export type BackendSystemStatus = {
      */
     details?: string;
 };
-
 export namespace BackendSystemStatus {
     /**
      * The type of backend system.
@@ -45,7 +43,6 @@ export namespace BackendSystemStatus {
         POLICY_MAN = 'PolicyMan',
         OPEN_TELEMETRY_COLLECTOR = 'OpenTelemetry Collector',
     }
-
     /**
      * The health status of backend system.
      */

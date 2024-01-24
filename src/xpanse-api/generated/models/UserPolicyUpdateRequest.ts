@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type UserPolicyUpdateRequest = {
     /**
      * The id of the policy.
@@ -26,7 +25,6 @@ export type UserPolicyUpdateRequest = {
      */
     enabled?: boolean;
 };
-
 export namespace UserPolicyUpdateRequest {
     /**
      * The csp which the policy belongs to.

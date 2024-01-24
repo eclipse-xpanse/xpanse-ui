@@ -8,15 +8,13 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { WorkFlowTask } from '../models/WorkFlowTask';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
-export class WorkFlowService {
+export class WorkflowService {
     /**
      * Complete tasks by task ID and set global process variables .<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
+     * @param id ID of the workflow task that needs to be handled
      * @param requestBody
      * @returns any OK
      * @throws ApiError
@@ -40,11 +38,10 @@ export class WorkFlowService {
             },
         });
     }
-
     /**
      * Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id
-     * @param retryOrder
+     * @param id ID of the workflow task that needs to be handled
+     * @param retryOrder Controls if the order must be retried again or simply closed.
      * @returns any OK
      * @throws ApiError
      */
@@ -66,9 +63,8 @@ export class WorkFlowService {
             },
         });
     }
-
     /**
-     * Query the tasks that need to be done by me<br>Required role:<b> admin</b> or <b>user</b>
+     * Query the tasks that need to be handled by the user<br>Required role:<b> admin</b> or <b>user</b>
      * @returns WorkFlowTask OK
      * @throws ApiError
      */
@@ -86,9 +82,8 @@ export class WorkFlowService {
             },
         });
     }
-
     /**
-     * Query the tasks I have completed<br>Required role:<b> admin</b> or <b>user</b>
+     * Query the tasks the given user has completed<br>Required role:<b> admin</b> or <b>user</b>
      * @returns WorkFlowTask OK
      * @throws ApiError
      */

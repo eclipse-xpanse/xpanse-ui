@@ -12,7 +12,7 @@ import '../../../styles/register.css';
 import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
 import loadOclFile from '../common/ocl/loadOclFile';
 import { ValidationStatus } from '../common/ocl/ValidationStatus';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
     registerFailedRoute,
@@ -22,7 +22,6 @@ import {
 } from '../../utils/constants';
 import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
 import RegisterResult from './RegisterResult';
-import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../catalog/services/query/useAvailableServiceTemplatesQuery';
 
 function RegisterPanel(): React.JSX.Element {
@@ -49,7 +48,7 @@ function RegisterPanel(): React.JSX.Element {
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 registerResult.current = response.details;
             } else {
@@ -132,6 +131,12 @@ function RegisterPanel(): React.JSX.Element {
         navigate(registerPageRoute);
     };
 
+    const retryRequest = () => {
+        if (ocl.current !== undefined) {
+            registerRequest.mutate(ocl.current);
+        }
+    };
+
     return (
         <div className={'register-content'}>
             <div className={'content-title'}>
@@ -144,6 +149,7 @@ function RegisterPanel(): React.JSX.Element {
                     registerRequestStatus={registerRequest.status}
                     registerResult={registerResult.current}
                     onRemove={onRemove}
+                    retryRequest={retryRequest}
                 />
             ) : null}
             <div className={'register-buttons'}>

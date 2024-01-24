@@ -60,7 +60,7 @@ function DestroyServiceStatusPolling({
     };
 
     if (isError) {
-        if (error instanceof ApiError && 'details' in error.body) {
+        if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
                 <div className={'submit-alert-tip'}>

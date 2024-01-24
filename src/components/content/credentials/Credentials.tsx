@@ -22,10 +22,11 @@ import {
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsManagementService,
     CredentialVariable,
     CredentialVariables,
+    IsvCloudCredentialsManagementService,
     Response,
+    UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
 import { useMutation } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
@@ -64,7 +65,11 @@ function Credentials(): React.JSX.Element {
     }, [credentialsQuery.data, credentialsQuery.isSuccess]);
 
     useEffect(() => {
-        if (credentialsQuery.error instanceof ApiError && 'details' in credentialsQuery.error.body) {
+        if (
+            credentialsQuery.error instanceof ApiError &&
+            credentialsQuery.error.body &&
+            'details' in credentialsQuery.error.body
+        ) {
             const response: Response = credentialsQuery.error.body as Response;
             getTipInfo('error', response.details.join());
         } else if (credentialsQuery.error instanceof Error) {
@@ -80,7 +85,7 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
@@ -91,13 +96,13 @@ function Credentials(): React.JSX.Element {
 
     const deleteCredentialByRole = (credentialVariables: CredentialVariables) => {
         if (currentRole === 'user') {
-            return CredentialsManagementService.deleteUserCloudCredential(
+            return UserCloudCredentialsManagementService.deleteUserCloudCredential(
                 credentialVariables.csp,
                 credentialVariables.type,
                 credentialVariables.name
             );
         } else {
-            return CredentialsManagementService.deleteIsvCloudCredential(
+            return IsvCloudCredentialsManagementService.deleteIsvCloudCredential(
                 credentialVariables.csp,
                 credentialVariables.type,
                 credentialVariables.name

@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The billing policy of the managed service
  */
@@ -25,7 +24,6 @@ export type Billing = {
      */
     currency: Billing.currency;
 };
-
 export namespace Billing {
     /**
      * The rental period of the managed service
@@ -37,7 +35,6 @@ export namespace Billing {
         QUARTERLY = 'quarterly',
         YEARLY = 'yearly',
     }
-
     /**
      * The billing currency of the managed service, valid values: euro,uso
      */

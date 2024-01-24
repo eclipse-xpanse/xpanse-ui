@@ -10,9 +10,10 @@ import {
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsManagementService,
     CredentialVariable,
+    IsvCloudCredentialsManagementService,
     Response,
+    UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/credential.css';
@@ -57,7 +58,7 @@ function UpdateCredential({
         },
         onError: (error: Error) => {
             setUpdateLoading(false);
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
@@ -68,9 +69,9 @@ function UpdateCredential({
 
     const updateCredentialByRole = (createCredential: CreateCredential) => {
         if (role === 'user') {
-            return CredentialsManagementService.updateUserCloudCredential(createCredential);
+            return UserCloudCredentialsManagementService.updateUserCloudCredential(createCredential);
         } else {
-            return CredentialsManagementService.updateIsvCloudCredential(createCredential);
+            return IsvCloudCredentialsManagementService.updateIsvCloudCredential(createCredential);
         }
     };
 

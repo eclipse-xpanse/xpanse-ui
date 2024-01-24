@@ -12,10 +12,12 @@ import {
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsManagementService,
+    CredentialsConfigurationService,
     CredentialVariable,
     CredentialVariables,
+    IsvCloudCredentialsManagementService,
     Response,
+    UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
 import { CredentialTip } from './CredentialTip';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -50,7 +52,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        queryFn: () => CredentialsManagementService.getCredentialTypes(currentCsp),
+        queryFn: () => CredentialsConfigurationService.getCredentialTypes(currentCsp),
         staleTime: 60000,
         enabled: currentCsp !== undefined,
     });
@@ -76,7 +78,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
         queryFn: () =>
-            CredentialsManagementService.getCredentialCapabilities(
+            CredentialsConfigurationService.getCredentialCapabilities(
                 currentCsp ?? CredentialVariables.csp.HUAWEI,
                 currentType
             ),
@@ -99,6 +101,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         if (currentCsp !== undefined && currentType !== undefined) {
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
+                credentialCapabilitiesQuery.error.body &&
                 'details' in credentialCapabilitiesQuery.error.body
             ) {
                 const response: Response = credentialCapabilitiesQuery.error.body as Response;
@@ -122,7 +125,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         },
         onError: (error: Error) => {
             setAddLoading(false);
-            if (error instanceof ApiError && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
                 setDisable(true);
@@ -135,9 +138,9 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const addCredentialByRole = (createCredential: CreateCredential) => {
         if (role === 'user') {
-            return CredentialsManagementService.addUserCloudCredential(createCredential);
+            return UserCloudCredentialsManagementService.addUserCloudCredential(createCredential);
         } else {
-            return CredentialsManagementService.addIsvCloudCredential(createCredential);
+            return IsvCloudCredentialsManagementService.addIsvCloudCredential(createCredential);
         }
     };
 

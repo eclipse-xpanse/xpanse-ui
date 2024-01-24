@@ -59,7 +59,7 @@ export function PurgeServiceStatusPolling({
     };
 
     if (isError) {
-        if (error instanceof ApiError && 'details' in error.body) {
+        if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 return (
@@ -82,6 +82,7 @@ export function PurgeServiceStatusPolling({
     if (uuid && getServiceDetailsByIdQuery.isError) {
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
+            getServiceDetailsByIdQuery.error.body &&
             'details' in getServiceDetailsByIdQuery.error.body
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;

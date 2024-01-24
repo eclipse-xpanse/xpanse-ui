@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The resource list of the deployed service.
  */
@@ -29,7 +28,6 @@ export type DeployResource = {
      */
     properties: Record<string, string>;
 };
-
 export namespace DeployResource {
     /**
      * The kind of the deployed resource.

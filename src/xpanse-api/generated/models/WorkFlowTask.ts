@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type WorkFlowTask = {
     /**
      * The id of the ProcessInstance

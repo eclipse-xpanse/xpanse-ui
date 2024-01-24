@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 export type DeployRequest = {
     /**
      * The category of the service
@@ -46,7 +45,6 @@ export type DeployRequest = {
      */
     serviceRequestProperties?: Record<string, any>;
 };
-
 export namespace DeployRequest {
     /**
      * The category of the service
@@ -63,7 +61,6 @@ export namespace DeployRequest {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The csp of the Service.
      */
@@ -77,7 +74,6 @@ export namespace DeployRequest {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

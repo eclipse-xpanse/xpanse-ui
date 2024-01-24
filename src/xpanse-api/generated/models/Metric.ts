@@ -7,9 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { MetricItem } from './MetricItem';
-
 export type Metric = {
     /**
      * The name of the metric.
@@ -40,7 +38,6 @@ export type Metric = {
      */
     metrics?: Array<MetricItem>;
 };
-
 export namespace Metric {
     /**
      * The type of the metric.
@@ -51,7 +48,6 @@ export namespace Metric {
         HISTOGRAM = 'histogram',
         SUMMARY = 'summary',
     }
-
     /**
      * The resource type of the metric.
      */
@@ -61,7 +57,6 @@ export namespace Metric {
         VM_NETWORK_INCOMING = 'vm_network_incoming',
         VM_NETWORK_OUTGOING = 'vm_network_outgoing',
     }
-
     /**
      * The unit of the metric.
      */

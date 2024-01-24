@@ -7,10 +7,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
-
 export type DeployedServiceDetails = {
     /**
      * The ID of the service
@@ -60,6 +58,14 @@ export type DeployedServiceDetails = {
      * Time of update service.
      */
     lastModifiedTime: string;
+    /**
+     * Time of start service.
+     */
+    lastStartedAt?: string;
+    /**
+     * Time of stop service.
+     */
+    lastStoppedAt?: string;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -74,7 +80,6 @@ export type DeployedServiceDetails = {
      */
     resultMessage?: string;
 };
-
 export namespace DeployedServiceDetails {
     /**
      * The catalog of the service
@@ -91,7 +96,6 @@ export namespace DeployedServiceDetails {
         MIDDLEWARE = 'middleware',
         OTHERS = 'others',
     }
-
     /**
      * The provider of the service
      */
@@ -105,7 +109,6 @@ export namespace DeployedServiceDetails {
         AZURE = 'azure',
         GOOGLE = 'google',
     }
-
     /**
      * The deployment state of the service
      */
@@ -122,20 +125,18 @@ export namespace DeployedServiceDetails {
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
     }
-
     /**
      * The run state of the service
      */
     export enum serviceState {
-        NOT_RUNNING = 'notRunning',
+        NOT_RUNNING = 'not running',
         RUNNING = 'running',
         STARTING = 'starting',
-        STARTING_FAILED = 'startingFailed',
+        STARTING_FAILED = 'starting failed',
         STOPPING = 'stopping',
         STOPPED = 'stopped',
-        STOPPING_FAILED = 'stoppingFailed',
+        STOPPING_FAILED = 'stopping failed',
     }
-
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */

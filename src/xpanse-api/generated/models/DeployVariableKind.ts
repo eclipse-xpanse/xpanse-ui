@@ -7,7 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * - `fix_env`: Values for variable of this type are defined by the managed service provider
  * in the OCL template. Runtime will inject it to deployer as environment variables.

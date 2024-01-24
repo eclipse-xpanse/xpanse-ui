@@ -8,8 +8,8 @@ import React from 'react';
 import { ApiError, Response } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
-export default function EndUserServicesDashboardError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && 'details' in error.body) {
+export default function DashBoardError({ error }: { error: unknown }): React.JSX.Element {
+    if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
             <Card title='Services Dashboard' bordered={true}>

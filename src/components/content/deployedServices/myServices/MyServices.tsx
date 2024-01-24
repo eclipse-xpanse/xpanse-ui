@@ -178,18 +178,34 @@ function MyServices(): React.JSX.Element {
         return [
             {
                 key: 'details',
-                label: (
-                    <Button
-                        onClick={() => {
-                            handleMyServiceDetailsOpenModal(record);
-                        }}
-                        className={'button-as-link'}
-                        icon={<InfoCircleOutlined />}
-                        type={'link'}
-                    >
-                        details
-                    </Button>
-                ),
+                label:
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                        <Tooltip title='Please contact the service provider'>
+                            <Button
+                                onClick={() => {
+                                    handleMyServiceDetailsOpenModal(record);
+                                }}
+                                disabled={true}
+                                className={'button-as-link'}
+                                icon={<InfoCircleOutlined />}
+                                type={'link'}
+                            >
+                                details
+                            </Button>
+                        </Tooltip>
+                    ) : (
+                        <Button
+                            onClick={() => {
+                                handleMyServiceDetailsOpenModal(record);
+                            }}
+                            className={'button-as-link'}
+                            icon={<InfoCircleOutlined />}
+                            type={'link'}
+                        >
+                            details
+                        </Button>
+                    ),
             },
             {
                 key: 'migrate',
@@ -219,12 +235,14 @@ function MyServices(): React.JSX.Element {
             {
                 key:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
                         ? 'purge'
                         : 'destroy',
                 disabled:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
                         ? isPurging || isDestroying || isPurgingCompleted
                         : (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
                               record.serviceDeploymentState !==
@@ -232,7 +250,8 @@ function MyServices(): React.JSX.Element {
                           isDestroyingCompleted,
                 label:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED ? (
                         <Popconfirm
                             title='Purge the service'
                             description='Are you sure to purge the service?'
@@ -365,10 +384,6 @@ function MyServices(): React.JSX.Element {
         }
         return false;
     };
-
-    if (listDeployedServicesQuery.isError) {
-        return <DeployedServicesError error={listDeployedServicesQuery.error} />;
-    }
 
     const getDestroyCloseStatus = (isClose: boolean) => {
         if (isClose) {
@@ -840,6 +855,14 @@ function MyServices(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
+            {listDeployedServicesQuery.isError ? (
+                <>
+                    <DeployedServicesError error={listDeployedServicesQuery.error} />
+                </>
+            ) : (
+                <></>
+            )}
+
             <Row>
                 <div className={'service-instance-list'}>
                     <Table

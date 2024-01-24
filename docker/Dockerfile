@@ -4,7 +4,7 @@
 #
 FROM nginx:1.25.3-alpine
 WORKDIR /usr/share/nginx/html
-RUN apk add --no-cache bash
+RUN apk add --no-cache bash envsubst
 COPY docker/nginx-entrypoint.sh /
 COPY build/ /usr/share/nginx/html
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf

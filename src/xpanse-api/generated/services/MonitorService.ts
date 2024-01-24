@@ -8,11 +8,9 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { Metric } from '../models/Metric';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
-
 export class MonitorService {
     /**
      * Get metrics of a deployed service or a resource.<br>Required role:<b> admin</b> or <b>user</b>
