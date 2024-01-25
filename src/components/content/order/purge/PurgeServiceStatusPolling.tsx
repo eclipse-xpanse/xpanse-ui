@@ -18,7 +18,7 @@ export function PurgeServiceStatusPolling({
     getPurgeCloseStatus,
     serviceHostingType,
 }: {
-    uuid: string;
+    uuid: DeployedService;
     isError: boolean;
     error: Error | null;
     setIsPurgingCompleted: (arg: boolean) => void;
@@ -27,17 +27,17 @@ export function PurgeServiceStatusPolling({
 }): React.JSX.Element {
     const [isRefetch, setIsRefetch] = useState<boolean>(true);
     const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
+        queryKey: ['getPurgeServiceDetailsById', uuid.id, serviceHostingType],
         queryFn: () => {
             if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                return ServiceService.getSelfHostedServiceDetailsById(uuid);
+                return ServiceService.getSelfHostedServiceDetailsById(uuid.id);
             } else {
-                return ServiceService.getVendorHostedServiceDetailsById(uuid);
+                return ServiceService.getVendorHostedServiceDetailsById(uuid.id);
             }
         },
         refetchOnWindowFocus: false,
-        refetchInterval: uuid.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
-        enabled: uuid.length > 0 && isRefetch,
+        refetchInterval: uuid.id.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
+        enabled: uuid.id.length > 0 && isRefetch,
     });
 
     useEffect(() => {
@@ -62,12 +62,13 @@ export function PurgeServiceStatusPolling({
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
                         <Alert
                             message={response.details}
-                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid.id} />}
                             showIcon
                             closable={true}
                             onClose={onClose}
@@ -79,7 +80,7 @@ export function PurgeServiceStatusPolling({
         }
     }
 
-    if (uuid && getServiceDetailsByIdQuery.isError) {
+    if (uuid.id && getServiceDetailsByIdQuery.isError) {
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             getServiceDetailsByIdQuery.error.body &&
@@ -87,12 +88,13 @@ export function PurgeServiceStatusPolling({
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
                         <Alert
                             message={response.details}
-                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid.id} />}
                             showIcon
                             closable={true}
                             onClose={onClose}
@@ -101,13 +103,17 @@ export function PurgeServiceStatusPolling({
                     </div>
                 );
             } else {
+                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
                         <Alert
                             message={'Processing Status'}
                             description={
-                                <OrderSubmitResultDetails msg={`Service ${uuid} purged successfully`} uuid={uuid} />
+                                <OrderSubmitResultDetails
+                                    msg={`Service ${uuid.id} purged successfully`}
+                                    uuid={uuid.id}
+                                />
                             }
                             showIcon
                             closable={true}
