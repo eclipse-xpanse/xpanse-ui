@@ -25,7 +25,7 @@ export function PurgeServiceStatusPolling({
     getPurgeCloseStatus: (arg: boolean) => void;
     serviceHostingType: DeployedService.serviceHostingType;
 }): React.JSX.Element {
-    const [isRefetch, setIsRefetch] = useState<boolean>(true);
+    const [isRefetch, setIsRefetch] = useState<boolean>(false);
     const getServiceDetailsByIdQuery = useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
         queryFn: () => {
@@ -43,6 +43,9 @@ export function PurgeServiceStatusPolling({
     useEffect(() => {
         if (isError) {
             setIsRefetch(false);
+            setIsPurgingCompleted(true);
+        } else {
+            setIsRefetch(true);
             setIsPurgingCompleted(true);
         }
     }, [isError, setIsPurgingCompleted]);
@@ -79,6 +82,22 @@ export function PurgeServiceStatusPolling({
         }
     }
 
+    if (uuid && getServiceDetailsByIdQuery.isPending) {
+        return (
+            <div className={'submit-alert-tip'}>
+                {' '}
+                <Alert
+                    message={'Processing Status'}
+                    description={<OrderSubmitResultDetails msg={'Purge ...'} uuid={uuid} />}
+                    showIcon
+                    closable={true}
+                    onClose={onClose}
+                    type={'success'}
+                />{' '}
+            </div>
+        );
+    }
+
     if (uuid && getServiceDetailsByIdQuery.isError) {
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
@@ -86,21 +105,7 @@ export function PurgeServiceStatusPolling({
             'details' in getServiceDetailsByIdQuery.error.body
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;
-            if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                return (
-                    <div className={'submit-alert-tip'}>
-                        {' '}
-                        <Alert
-                            message={response.details}
-                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
-                            showIcon
-                            closable={true}
-                            onClose={onClose}
-                            type={'error'}
-                        />{' '}
-                    </div>
-                );
-            } else {
+            if (response.resultType === Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
@@ -113,6 +118,20 @@ export function PurgeServiceStatusPolling({
                             closable={true}
                             onClose={onClose}
                             type={'success'}
+                        />{' '}
+                    </div>
+                );
+            } else {
+                return (
+                    <div className={'submit-alert-tip'}>
+                        {' '}
+                        <Alert
+                            message={response.details}
+                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                            showIcon
+                            closable={true}
+                            onClose={onClose}
+                            type={'error'}
                         />{' '}
                     </div>
                 );
