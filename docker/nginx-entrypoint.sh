@@ -9,6 +9,7 @@
 WWW_DIR=/usr/share/nginx/html
 ENV_PREFIX=REACT_APP_
 INJECT_FILE_PATH="${WWW_DIR}/inject.js"
+rm -f ${INJECT_FILE_PATH}
 echo "window.injectedEnv = {" >> "${INJECT_FILE_PATH}"
 for envrow in $(printenv); do
   IFS='=' read -r key value <<< "${envrow}"
@@ -19,7 +20,7 @@ done
 echo "};" >> "${INJECT_FILE_PATH}"
 
 # OidcTrustedDomains file will be updated from the template and values from environment variables.
-envsubst < public/OidcTrustedDomains.js.template > public/OidcTrustedDomains.js
+envsubst < ${WWW_DIR}/OidcTrustedDomains.js.template > ${WWW_DIR}/OidcTrustedDomains.js
 
 if [ "$#" -eq 0 ]
   then nginx -g 'daemon off;'
