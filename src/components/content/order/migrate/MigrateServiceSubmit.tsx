@@ -13,8 +13,8 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useState } from 'react';
-import { useMigrateServiceQuery } from './useMigrateServiceQuery';
+import React, { useEffect, useState } from 'react';
+import { useMigrateServiceDetailsQuery, useMigrateServiceQuery } from './useMigrateServiceQuery';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
@@ -54,6 +54,7 @@ export const MigrateServiceSubmit = ({
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const [isMigrating, setIsMigrating] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
+    const [deployUuid, setDeployUuid] = useState<string>('');
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DestroyTheOldService
     );
@@ -70,6 +71,8 @@ export const MigrateServiceSubmit = ({
 
     const migrateServiceRequest = useMigrateServiceQuery();
 
+    const migrateServiceDetailsRequest = useMigrateServiceDetailsQuery();
+
     const migrate = () => {
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
@@ -82,6 +85,18 @@ export const MigrateServiceSubmit = ({
         }
     };
 
+    useEffect(() => {
+        if (migrateServiceRequest.data && migrateServiceRequest.data.length > 0) {
+            migrateServiceDetailsRequest.mutate(migrateServiceRequest.data);
+        }
+    }, [migrateServiceDetailsRequest, migrateServiceRequest.data, migrateServiceRequest.isSuccess]);
+
+    useEffect(() => {
+        if (migrateServiceDetailsRequest.data) {
+            setDeployUuid(migrateServiceDetailsRequest.data.newServiceId);
+        }
+    }, [migrateServiceDetailsRequest.data]);
+
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
         getCurrentMigrationStep(MigrationSteps.ImportServiceData);
@@ -92,7 +107,7 @@ export const MigrateServiceSubmit = ({
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusPolling
                     destroyUuid={currentSelectedService?.id}
-                    deployUuid={migrateServiceRequest.data}
+                    deployUuid={deployUuid}
                     isMigrateSuccess={migrateServiceRequest.isSuccess}
                     error={migrateServiceRequest.error}
                     isLoading={migrateServiceRequest.isPending}

@@ -13,3 +13,11 @@ export function useMigrateServiceQuery() {
         },
     });
 }
+
+export function useMigrateServiceDetailsQuery() {
+    return useMutation({
+        mutationFn: (processInstanceId: string) => {
+            return MigrationService.getMigrationOrderDetailsById(processInstanceId);
+        },
+    });
+}
