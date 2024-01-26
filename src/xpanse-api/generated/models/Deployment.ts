@@ -35,6 +35,7 @@ export namespace Deployment {
      */
     export enum kind {
         TERRAFORM = 'terraform',
+        OPENTOFU = 'opentofu',
     }
     /**
      * The credential type to do the deployment

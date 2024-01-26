@@ -13,9 +13,9 @@ export type ServicePolicyCreateRequest = {
      */
     serviceTemplateId: string;
     /**
-     * The flavor name which the policy belongs to. If a flavor is not provided, then the policy will be executed for during service deployment of all flavors.
+     * The flavor name list which the policy belongs to. If the list is empty, then the policy will be executed for during service deployment of all flavors.
      */
-    flavorName?: string;
+    flavorNameList?: Array<string>;
     /**
      * The policy.
      */
