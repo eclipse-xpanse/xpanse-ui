@@ -107,7 +107,7 @@
         "release-it": "^17.0.3",
         "ts-jest": "^29.1.2",
         "typescript": "5.3.3",
-        "@axa-fr/oidc-client": "^7.13.15"
+        "@axa-fr/oidc-client": "^7.14.0"
     },
     "overrides": {
         "react-scripts": {
