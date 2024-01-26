@@ -42,6 +42,7 @@ export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateReq
 export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
+export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 export { UserPolicy } from './models/UserPolicy';
