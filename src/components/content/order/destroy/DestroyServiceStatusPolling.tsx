@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, Response, DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { ApiError, Response, DeployedServiceDetails, DeployedService } from '../../../../xpanse-api/generated';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import React, { useEffect } from 'react';
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 function DestroyServiceStatusPolling({
-    uuid,
+    deployedService,
     isError,
     isSuccess,
     error,
@@ -18,7 +18,7 @@ function DestroyServiceStatusPolling({
     getDestroyCloseStatus,
     serviceHostingType,
 }: {
-    uuid: string;
+    deployedService: DeployedService;
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
@@ -26,10 +26,15 @@ function DestroyServiceStatusPolling({
     getDestroyCloseStatus: (arg: boolean) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, serviceHostingType, [
-        DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
-        DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
-    ]);
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
+        deployedService.id,
+        isSuccess,
+        serviceHostingType,
+        [
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
+        ]
+    );
 
     useEffect(() => {
         if (
@@ -39,9 +44,15 @@ function DestroyServiceStatusPolling({
                 DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
+            deployedService.serviceDeploymentState = getServiceDetailsByIdQuery.data.serviceDeploymentState;
             setIsDestroyingCompleted(true);
         }
-    }, [getServiceDetailsByIdQuery.isSuccess, getServiceDetailsByIdQuery.data, setIsDestroyingCompleted]);
+    }, [
+        getServiceDetailsByIdQuery.isSuccess,
+        getServiceDetailsByIdQuery.data,
+        setIsDestroyingCompleted,
+        deployedService,
+    ]);
 
     useEffect(() => {
         if (isError) {
@@ -60,6 +71,7 @@ function DestroyServiceStatusPolling({
     };
 
     if (isError) {
+        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
@@ -67,7 +79,9 @@ function DestroyServiceStatusPolling({
                     {' '}
                     <Alert
                         message={response.details}
-                        description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                        description={
+                            <OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.id} />
+                        }
                         showIcon
                         closable={true}
                         onClose={onClose}
@@ -78,7 +92,8 @@ function DestroyServiceStatusPolling({
         }
     }
 
-    if (uuid && getServiceDetailsByIdQuery.isError) {
+    if (getServiceDetailsByIdQuery.isError) {
+        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             'details' in getServiceDetailsByIdQuery.error.body
@@ -89,7 +104,12 @@ function DestroyServiceStatusPolling({
                     {' '}
                     <Alert
                         message={response.details}
-                        description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid} />}
+                        description={
+                            <OrderSubmitResultDetails
+                                msg={'Polling Service Destroy Status Failed'}
+                                uuid={deployedService.id}
+                            />
+                        }
                         showIcon
                         closable={true}
                         onClose={onClose}
@@ -100,7 +120,7 @@ function DestroyServiceStatusPolling({
         }
     }
 
-    if (uuid && getServiceDetailsByIdQuery.data !== undefined) {
+    if (getServiceDetailsByIdQuery.data !== undefined) {
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
@@ -110,7 +130,12 @@ function DestroyServiceStatusPolling({
                     {' '}
                     <Alert
                         message={'Processing Status'}
-                        description={<OrderSubmitResultDetails msg={'Service destroyed successfully'} uuid={uuid} />}
+                        description={
+                            <OrderSubmitResultDetails
+                                msg={'Service destroyed successfully'}
+                                uuid={deployedService.id}
+                            />
+                        }
                         showIcon
                         closable={true}
                         onClose={onClose}
@@ -127,7 +152,7 @@ function DestroyServiceStatusPolling({
                     {' '}
                     <Alert
                         message={'Processing Status'}
-                        description={<OrderSubmitResultDetails msg={'Destroy failed'} uuid={uuid} />}
+                        description={<OrderSubmitResultDetails msg={'Destroy failed'} uuid={deployedService.id} />}
                         showIcon
                         closable={true}
                         onClose={onClose}
