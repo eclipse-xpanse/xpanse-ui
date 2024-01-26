@@ -13,6 +13,7 @@ import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavoursText } from '../../../common/ocl/FlavorsText';
 import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceStatus } from './ServiceStatus';
+import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (
@@ -64,6 +65,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
                     <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
+                </Descriptions.Item>
+                <Descriptions.Item label='Contact Details'>
+                    <ContactDetailsText serviceProviderContactDetails={serviceDetails.serviceProviderContactDetails} />
                 </Descriptions.Item>
             </Descriptions>
         </>
