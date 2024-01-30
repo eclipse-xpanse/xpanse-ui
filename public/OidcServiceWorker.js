@@ -107,11 +107,11 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 function countLetter(str, find) {
   return str.split(find).length - 1;
 }
-function parseJwt(token) {
+const parseJwt = (payload) => {
   return JSON.parse(
-    b64DecodeUnicode(token.split(".")[1].replace("-", "+").replace("_", "/"))
+    b64DecodeUnicode(payload.replace(/-/g, "+").replace(/_/g, "/"))
   );
-}
+};
 function b64DecodeUnicode(str) {
   return decodeURIComponent(
     Array.prototype.map.call(
@@ -138,7 +138,7 @@ const extractTokenPayload = (token) => {
       return null;
     }
     if (countLetter(token, ".") === 2) {
-      return parseJwt(token);
+      return parseJwt(token.split(".")[1]);
     } else {
       return null;
     }
@@ -264,7 +264,7 @@ function replaceCodeVerifier(codeVerifier, newCodeVerifier) {
   const regex = /code_verifier=[A-Za-z0-9_-]+/i;
   return codeVerifier.replace(regex, `code_verifier=${newCodeVerifier}`);
 }
-const version = "7.13.15";
+const version = "7.14.0";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {
