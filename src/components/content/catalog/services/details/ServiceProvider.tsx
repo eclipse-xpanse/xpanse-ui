@@ -22,7 +22,12 @@ import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { useSearchParams } from 'react-router-dom';
-import { serviceCspQuery, serviceHostingTypeQuery, serviceVersionKeyQuery } from '../../../../utils/constants';
+import {
+    serviceCspQuery,
+    serviceHostingTypeQuery,
+    serviceNameKeyQuery,
+    serviceVersionKeyQuery,
+} from '../../../../utils/constants';
 import { ServicePolicies } from '../policies/ServicePolicies';
 import { EnvironmentOutlined } from '@ant-design/icons';
 
@@ -45,6 +50,7 @@ function ServiceProvider({
     const serviceCspInQuery = getServiceCspFormQuery();
     const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
     const serviceVersionInQuery = getServiceVersionFromQuery();
+    const serviceNameInQuery = getServiceNameFromQuery();
     const [activeKey, setActiveKey] = useState<string>('');
     const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
     const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
@@ -120,6 +126,14 @@ function ServiceProvider({
         return '';
     }
 
+    function getServiceNameFromQuery(): string {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }
+
     useEffect(() => {
         setActiveKey(serviceCspInQuery);
         const details = detailMapper.current.get(currentServiceName + '@' + serviceCspInQuery);
@@ -140,7 +154,7 @@ function ServiceProvider({
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceHostingTypeInQuery, serviceCspInQuery, serviceVersionInQuery, categoryOclData]);
+    }, [serviceHostingTypeInQuery, serviceCspInQuery, serviceVersionInQuery, serviceNameInQuery, categoryOclData]);
 
     const onChange = (key: string) => {
         getCsp(key);
