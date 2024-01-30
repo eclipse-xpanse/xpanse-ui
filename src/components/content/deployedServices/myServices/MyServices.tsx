@@ -179,8 +179,7 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'details',
                 label:
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ? (
+                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ? (
                         <Tooltip title='Please contact the service provider'>
                             <Button
                                 onClick={() => {
