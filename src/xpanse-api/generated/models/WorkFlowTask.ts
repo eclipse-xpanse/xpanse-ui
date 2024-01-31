@@ -41,7 +41,20 @@ export type WorkFlowTask = {
      */
     businessKey: string;
     /**
+     * The status of the Task
+     */
+    status: WorkFlowTask.status;
+    /**
      * The create time of the task
      */
     createTime: string;
 };
+export namespace WorkFlowTask {
+    /**
+     * The status of the Task
+     */
+    export enum status {
+        DONE = 'done',
+        FAILED = 'failed',
+    }
+}

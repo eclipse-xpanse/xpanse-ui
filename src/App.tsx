@@ -23,6 +23,7 @@ import {
     registerSuccessfulRoute,
     reportsRoute,
     servicesPageRoute,
+    workflowsPageRoute,
 } from './components/utils/constants';
 import RegisterPanel from './components/content/register/RegisterPanel';
 import Services from './components/content/order/services/Services';
@@ -41,6 +42,7 @@ import React from 'react';
 import { SessionLost } from './components/content/login/SessionLost';
 import Policies from './components/content/policies/Policies';
 import Reports from './components/content/deployedServices/reports/Reports';
+import Workflows from './components/content/workflows/Workflows';
 
 const queryClient = new QueryClient();
 
@@ -192,6 +194,17 @@ function App(): React.JSX.Element {
                             <OidcSecure>
                                 <Protected allowedRole={['isv']}>
                                     <Reports />
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        key={workflowsPageRoute}
+                        path={workflowsPageRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={['user']}>
+                                    <Workflows />
                                 </Protected>
                             </OidcSecure>
                         }
