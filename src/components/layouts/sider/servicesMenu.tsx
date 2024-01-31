@@ -5,6 +5,7 @@
 
 import {
     AreaChartOutlined,
+    BranchesOutlined,
     CloudServerOutlined,
     DashboardOutlined,
     HddOutlined,
@@ -28,6 +29,8 @@ import {
     servicesLabelName,
     servicesPageRoute,
     servicesSubPageRoute,
+    workflowsLabelName,
+    workflowsPageRoute,
 } from '../../utils/constants';
 import { Link } from 'react-router-dom';
 import React from 'react';
@@ -101,5 +104,14 @@ export const reportsMenu = (): ItemType => {
         label: <Link to={reportsRoute}>{reportsLabelName}</Link>,
         icon: <CloudServerOutlined />,
         title: 'Policies',
+    };
+};
+
+export const workflowsMenu = (): ItemType => {
+    return {
+        key: workflowsPageRoute,
+        label: <Link to={workflowsPageRoute}>{workflowsLabelName}</Link>,
+        icon: <BranchesOutlined />,
+        title: 'Workflows',
     };
 };

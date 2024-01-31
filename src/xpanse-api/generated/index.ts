@@ -49,7 +49,7 @@ export { UserPolicy } from './models/UserPolicy';
 export { UserPolicyCreateRequest } from './models/UserPolicyCreateRequest';
 export { UserPolicyUpdateRequest } from './models/UserPolicyUpdateRequest';
 export { VendorHostedDeployedServiceDetails } from './models/VendorHostedDeployedServiceDetails';
-export type { WorkFlowTask } from './models/WorkFlowTask';
+export { WorkFlowTask } from './models/WorkFlowTask';
 
 export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';
@@ -65,3 +65,4 @@ export { ServiceVendorService } from './services/ServiceVendorService';
 export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';
 export { UserPoliciesManagementService } from './services/UserPoliciesManagementService';
 export { WebhookService } from './services/WebhookService';
+export { WorkflowService } from './services/WorkFlowService';
