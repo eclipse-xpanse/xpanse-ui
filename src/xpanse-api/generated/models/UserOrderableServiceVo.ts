@@ -12,6 +12,7 @@ import type { DeployVariable } from './DeployVariable';
 import type { FlavorBasic } from './FlavorBasic';
 import type { Link } from './Link';
 import type { Region } from './Region';
+import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 export type UserOrderableServiceVo = {
     /**
      * The id of the orderable service.
@@ -58,6 +59,7 @@ export type UserOrderableServiceVo = {
      * Defines which cloud service account is used for deploying cloud resources.
      */
     serviceHostingType: UserOrderableServiceVo.serviceHostingType;
+    serviceProviderContactDetails: ServiceProviderContactDetails;
     links?: Array<Link>;
 };
 export namespace UserOrderableServiceVo {

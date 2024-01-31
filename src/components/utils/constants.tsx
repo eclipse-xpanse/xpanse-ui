@@ -43,3 +43,6 @@ export const serviceNameKeyQuery: string = 'serviceName';
 export const serviceCspQuery: string = 'csp';
 export const serviceVersionKeyQuery: string = 'version';
 export const serviceHostingTypeQuery: string = 'hostingType';
+
+export const workflowsPageRoute: string = '/workflows';
+export const workflowsLabelName: string = 'Workflows';

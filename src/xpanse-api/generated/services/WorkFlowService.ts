@@ -64,33 +64,18 @@ export class WorkflowService {
         });
     }
     /**
-     * Query the tasks that need to be handled by the user<br>Required role:<b> admin</b> or <b>user</b>
+     * Query all tasks of the given user<br>Required role:<b> admin</b> or <b>user</b>
+     * @param status the status of task
      * @returns WorkFlowTask OK
      * @throws ApiError
      */
-    public static queryTodoTasks(): CancelablePromise<Array<WorkFlowTask>> {
+    public static queryTasks(status?: 'done' | 'failed'): CancelablePromise<Array<WorkFlowTask>> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/workflow/task/todo',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
+            url: '/xpanse/workflow/tasks',
+            query: {
+                status: status,
             },
-        });
-    }
-    /**
-     * Query the tasks the given user has completed<br>Required role:<b> admin</b> or <b>user</b>
-     * @returns WorkFlowTask OK
-     * @throws ApiError
-     */
-    public static queryDoneTasks(): CancelablePromise<Array<WorkFlowTask>> {
-        return __request(OpenAPI, {
-            method: 'GET',
-            url: '/xpanse/workflow/task/done',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
