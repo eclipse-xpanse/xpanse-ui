@@ -1,5 +1,10 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import React, { useEffect, useState } from 'react';
-import { Button, Row, Space, Table, Tag } from 'antd';
+import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, Response, WorkflowService, WorkFlowTask } from '../../../xpanse-api/generated';
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
@@ -165,31 +170,27 @@ function Workflows(): React.JSX.Element {
     ];
 
     return (
-        <div>
-            <Row>
-                <div className={'service-instance-list'}>
-                    <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>
-                    <div className={'policy-manage-buttons-container'}>
-                        <Button
-                            type='primary'
-                            loading={isRefresh && (tasksQuery.isLoading || tasksQuery.isRefetching)}
-                            icon={<SyncOutlined />}
-                            onClick={() => {
-                                refresh();
-                            }}
-                        >
-                            refresh
-                        </Button>
-                    </div>
+        <div className={'generic-table-container'}>
+            <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>
+            <div className={'policy-manage-buttons-container'}>
+                <Button
+                    type='primary'
+                    loading={isRefresh && (tasksQuery.isLoading || tasksQuery.isRefetching)}
+                    icon={<SyncOutlined />}
+                    onClick={() => {
+                        refresh();
+                    }}
+                >
+                    refresh
+                </Button>
+            </div>
 
-                    <Table
-                        columns={columns}
-                        dataSource={todoTasks}
-                        loading={tasksQuery.isLoading || tasksQuery.isRefetching}
-                        rowKey={'processInstanceId'}
-                    />
-                </div>
-            </Row>
+            <Table
+                columns={columns}
+                dataSource={todoTasks}
+                loading={tasksQuery.isLoading || tasksQuery.isRefetching}
+                rowKey={'processInstanceId'}
+            />
         </div>
     );
 }

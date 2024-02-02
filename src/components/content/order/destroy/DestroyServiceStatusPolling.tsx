@@ -45,6 +45,7 @@ function DestroyServiceStatusPolling({
             ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
         ) {
             deployedService.serviceDeploymentState = getServiceDetailsByIdQuery.data.serviceDeploymentState;
+            deployedService.serviceState = getServiceDetailsByIdQuery.data.serviceState;
             setIsDestroyingCompleted(true);
         }
     }, [
