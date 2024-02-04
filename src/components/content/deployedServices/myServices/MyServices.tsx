@@ -36,14 +36,14 @@ import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { MyServiceDetails } from './MyServiceDetails';
-import { useServiceStateStartQuery } from '../common/useServiceStateStartQuery';
-import { useServiceStateStopQuery } from '../common/useServiceStateStopQuery';
-import { useServiceStateRestartQuery } from '../common/useServiceStateRestartQuery';
+import { useServiceStateStartQuery } from './query/useServiceStateStartQuery';
+import { useServiceStateStopQuery } from './query/useServiceStateStopQuery';
+import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceIdInQuery = getServiceIdFormQuery();
-    const serviceStateInQuery = getServiceStateFromQuery();
+    const serviceDeploymentStateInQuery = getServiceDeploymentStateFromQuery();
     const [serviceVoList, setServiceVoList] = useState<DeployedService[]>([]);
     const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
     const [serviceHostingTypeFilters, setServiceHostingTypeFilters] = useState<ColumnFilterItem[]>([]);
@@ -82,10 +82,10 @@ function MyServices(): React.JSX.Element {
     useEffect(() => {
         const serviceList: DeployedService[] = [];
         if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            if (serviceStateInQuery) {
+            if (serviceDeploymentStateInQuery) {
                 setServiceVoList(
                     listDeployedServicesQuery.data.filter(
-                        (serviceVo) => serviceVo.serviceDeploymentState === serviceStateInQuery
+                        (serviceVo) => serviceVo.serviceDeploymentState === serviceDeploymentStateInQuery
                     )
                 );
             } else if (serviceIdInQuery) {
@@ -107,71 +107,11 @@ function MyServices(): React.JSX.Element {
         } else {
             setServiceVoList(serviceList);
         }
-    }, [listDeployedServicesQuery.data, listDeployedServicesQuery.isSuccess, serviceStateInQuery, serviceIdInQuery]);
-
-    useEffect(() => {
-        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            const serviceList: DeployedService[] = listDeployedServicesQuery.data.map(
-                (deployedService: DeployedService) => {
-                    if (deployedService.id === activeRecord?.id) {
-                        if (serviceStateStartQuery.isSuccess || serviceStateRestartQuery.isSuccess) {
-                            deployedService.serviceState = DeployedService.serviceState.RUNNING;
-                        }
-                        if (serviceStateStartQuery.isError || serviceStateRestartQuery.isError) {
-                            deployedService.serviceState = DeployedService.serviceState.STARTING_FAILED;
-                        }
-                        if (serviceStateStartQuery.isPending || serviceStateRestartQuery.isPending) {
-                            deployedService.serviceState = DeployedService.serviceState.STARTING;
-                        }
-                    }
-                    return deployedService;
-                }
-            );
-            setServiceVoList(serviceList);
-        } else {
-            setServiceVoList([]);
-        }
     }, [
-        activeRecord,
         listDeployedServicesQuery.data,
         listDeployedServicesQuery.isSuccess,
-        serviceStateStartQuery.isPending,
-        serviceStateRestartQuery.isPending,
-        serviceStateStartQuery.isSuccess,
-        serviceStateRestartQuery.isSuccess,
-        serviceStateStartQuery.isError,
-        serviceStateRestartQuery.isError,
-    ]);
-
-    useEffect(() => {
-        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            const serviceList: DeployedService[] = listDeployedServicesQuery.data.map(
-                (deployedService: DeployedService) => {
-                    if (deployedService.id === activeRecord?.id) {
-                        if (serviceStateStopQuery.isPending) {
-                            deployedService.serviceState = DeployedService.serviceState.STOPPING;
-                        }
-                        if (serviceStateStopQuery.isSuccess) {
-                            deployedService.serviceState = DeployedService.serviceState.STOPPED;
-                        }
-                        if (serviceStateStopQuery.isError) {
-                            deployedService.serviceState = DeployedService.serviceState.STOPPING_FAILED;
-                        }
-                    }
-                    return deployedService;
-                }
-            );
-            setServiceVoList(serviceList);
-        } else {
-            setServiceVoList([]);
-        }
-    }, [
-        activeRecord,
-        listDeployedServicesQuery.data,
-        listDeployedServicesQuery.isSuccess,
-        serviceStateStopQuery.isPending,
-        serviceStateStopQuery.isSuccess,
-        serviceStateStopQuery.isError,
+        serviceDeploymentStateInQuery,
+        serviceIdInQuery,
     ]);
 
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
@@ -501,13 +441,13 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceDeploymentState',
             dataIndex: 'serviceDeploymentState',
-            filters: serviceStateInQuery ? undefined : serviceDeploymentStateFilters,
+            filters: serviceDeploymentStateInQuery ? undefined : serviceDeploymentStateFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
-            filtered: !!serviceStateInQuery,
+            filtered: !!serviceDeploymentStateInQuery,
             align: 'center',
         },
         {
@@ -591,17 +531,20 @@ function MyServices(): React.JSX.Element {
 
     function start(record: DeployedService): void {
         setActiveRecord(record);
-        serviceStateStartQuery.mutate(record.id);
+        record.serviceState = DeployedService.serviceState.STARTING;
+        serviceStateStartQuery.mutate(record);
     }
 
     function stop(record: DeployedService): void {
         setActiveRecord(record);
-        serviceStateStopQuery.mutate(record.id);
+        record.serviceState = DeployedService.serviceState.STOPPING;
+        serviceStateStopQuery.mutate(record);
     }
 
     function restart(record: DeployedService): void {
         setActiveRecord(record);
-        serviceStateRestartQuery.mutate(record.id);
+        record.serviceState = DeployedService.serviceState.STOPPING;
+        serviceStateRestartQuery.mutate(record);
     }
 
     function migrate(record: DeployedService): void {
@@ -771,7 +714,7 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
-    function getServiceStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
+    function getServiceDeploymentStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
         const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
         if (queryInUri.length > 0) {
             if (
