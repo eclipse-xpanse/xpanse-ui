@@ -10,6 +10,7 @@ import {
     DeployedService,
     DeployRequest,
     MigrateRequest,
+    ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
@@ -26,6 +27,7 @@ import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { getAvailableContactServiceDetails } from '../formDataHelpers/contactServiceDetailsHelper';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -59,6 +61,10 @@ export const MigrateServiceSubmit = ({
         MigrationSteps.DestroyTheOldService
     );
 
+    const currentContactServiceDetails: ServiceProviderContactDetails | undefined = getAvailableContactServiceDetails(
+        selectCsp,
+        userOrderableServiceVoList
+    );
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
     const currentBilling: Billing = getBilling(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
@@ -116,6 +122,7 @@ export const MigrateServiceSubmit = ({
                     setIsPreviousDisabled={setIsPreviousDisabled}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                     serviceHostingType={selectServiceHostingType}
+                    currentContactServiceDetails={currentContactServiceDetails}
                 />
             ) : null}
             <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>

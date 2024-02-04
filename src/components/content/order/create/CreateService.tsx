@@ -5,11 +5,11 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { To, useLocation, useSearchParams } from 'react-router-dom';
-import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Billing, ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import CspSelect from '../formElements/CspSelect';
 import GoToSubmit from './GoToSubmit';
-import { Form, Select, Skeleton, Tabs } from 'antd';
+import { Col, Form, Row, Select, Skeleton, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from './OrderSubmit';
@@ -29,6 +29,8 @@ import '../../../../styles/service_order.css';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { getAvailableContactServiceDetails } from '../formDataHelpers/contactServiceDetailsHelper';
+import { ContactDetailsInfo } from '../common/ContactDetailsInfo';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -57,6 +59,9 @@ function CreateService(): React.JSX.Element {
         UserOrderableServiceVo.serviceHostingType | undefined
     >(undefined);
     const [serviceHostTypes, setServiceHostTypes] = useState<UserOrderableServiceVo.serviceHostingType[]>([]);
+    const [selectContactServiceDetails, setSelectContactServiceDetails] = useState<
+        ServiceProviderContactDetails | undefined
+    >(undefined);
 
     const orderableServicesQuery = userOrderableServicesQuery(
         categoryName as UserOrderableServiceVo.category,
@@ -85,6 +90,10 @@ function CreateService(): React.JSX.Element {
                 const currentVersionList = getSortedVersionList(currentVersions);
                 const currentCspList = getCspListForVersion(latestVersion, versionMapper.current);
                 let serviceHostingTypes = getAvailableServiceHostingTypes(
+                    currentCspList[0],
+                    versionMapper.current.get(latestVersion)
+                );
+                let contactServiceDetails = getAvailableContactServiceDetails(
                     currentCspList[0],
                     versionMapper.current.get(latestVersion)
                 );
@@ -156,6 +165,7 @@ function CreateService(): React.JSX.Element {
                         }
                     });
                     serviceHostingTypeValue = serviceInfo.serviceHostingType;
+                    contactServiceDetails = serviceInfo.contactServiceDetails ?? undefined;
                 }
                 setSelectCsp(cspValue);
                 setAreaList(currentAreaList);
@@ -167,6 +177,7 @@ function CreateService(): React.JSX.Element {
                 setCurrentBilling(currentBilling);
                 setSelectServiceHostType(serviceHostingTypeValue);
                 setServiceHostTypes(serviceHostingTypes);
+                setSelectContactServiceDetails(contactServiceDetails);
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,6 +246,10 @@ function CreateService(): React.JSX.Element {
                 serviceHostingTypes[0],
                 versionMapper.current.get(currentVersion)
             );
+            const contactServiceDetails: ServiceProviderContactDetails | undefined = getAvailableContactServiceDetails(
+                currentCspList[0],
+                versionMapper.current.get(currentVersion)
+            );
             setSelectVersion(currentVersion);
             setCspList(currentCspList);
             setSelectCsp(currentCspList[0]);
@@ -248,6 +263,7 @@ function CreateService(): React.JSX.Element {
             setCurrentBilling(billing);
             setServiceHostTypes(serviceHostingTypes);
             setSelectServiceHostType(serviceHostingTypes[0]);
+            setSelectContactServiceDetails(contactServiceDetails);
         }
     };
 
@@ -271,6 +287,10 @@ function CreateService(): React.JSX.Element {
             );
             const serviceHostingTypes = getAvailableServiceHostingTypes(csp, versionMapper.current.get(selectVersion));
             const billing: Billing = getBilling(csp, selectServiceHostType, versionMapper.current.get(selectVersion));
+            const contactServiceDetails: ServiceProviderContactDetails | undefined = getAvailableContactServiceDetails(
+                csp,
+                versionMapper.current.get(selectVersion)
+            );
             setSelectCsp(csp);
             setAreaList(currentAreaList);
             setSelectArea(currentAreaList[0]?.key ?? '');
@@ -282,6 +302,7 @@ function CreateService(): React.JSX.Element {
             setCurrentBilling(billing);
             setSelectServiceHostType(serviceHostingTypes[0]);
             setServiceHostTypes(serviceHostingTypes);
+            setSelectContactServiceDetails(contactServiceDetails);
         }
     };
 
@@ -352,15 +373,26 @@ function CreateService(): React.JSX.Element {
                         <div className={'Line'} />
                     </div>
                     <div className={'generic-table-container'}>
-                        <div className={'content-title'}>
-                            Service: {serviceName}&nbsp;&nbsp;&nbsp;&nbsp; Version:&nbsp;
-                            <Select
-                                value={selectVersion}
-                                className={'version-drop-down'}
-                                onChange={onChangeVersion}
-                                options={versionList}
-                            />
-                        </div>
+                        <Row justify='start' gutter={10}>
+                            <Col span={4}>
+                                <div className={'content-title'}>Service: {serviceName}</div>
+                            </Col>
+                            <Col span={6}>
+                                <div className={'content-title'}>
+                                    Version:&nbsp;
+                                    <Select
+                                        value={selectVersion}
+                                        className={'version-drop-down'}
+                                        onChange={onChangeVersion}
+                                        options={versionList}
+                                    />
+                                </div>
+                            </Col>
+                            <Col span={4}>
+                                <ContactDetailsInfo serviceProviderContactDetails={selectContactServiceDetails} />
+                            </Col>
+                        </Row>
+
                         <br />
                         <CspSelect
                             selectCsp={selectCsp}
@@ -413,6 +445,7 @@ function CreateService(): React.JSX.Element {
                                 selectFlavor={selectFlavor}
                                 versionMapper={versionMapper.current}
                                 selectServiceHostingType={selectServiceHostType}
+                                selectContactServiceDetails={selectContactServiceDetails}
                             />
                         </div>
                     ) : null}

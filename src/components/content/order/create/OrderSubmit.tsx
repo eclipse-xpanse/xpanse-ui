@@ -11,7 +11,7 @@ import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { BooleanInput } from '../formElements/BooleanInput';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { DeployRequest } from '../../../../xpanse-api/generated';
+import { DeployRequest, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -45,6 +45,7 @@ export interface OrderSubmitProps {
     flavor: string;
     params: DeployParam[];
     serviceHostingType: DeployRequest.serviceHostingType;
+    contactServiceDetails: ServiceProviderContactDetails | undefined;
 }
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
@@ -117,6 +118,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     setIsDeploying={setDeploying}
                     setRequestSubmitted={setRequestSubmitted}
                     serviceHostingType={state.serviceHostingType}
+                    contactServiceDetails={state.contactServiceDetails}
                 />
             ) : null}
             <div className={'order-param-item-left'} />

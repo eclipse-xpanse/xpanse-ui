@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { Button } from 'antd';
 import { OrderSubmitProps } from './OrderSubmit';
@@ -19,6 +19,7 @@ export default function GoToSubmit({
     selectFlavor,
     versionMapper,
     selectServiceHostingType,
+    selectContactServiceDetails,
 }: {
     selectVersion: string;
     selectCsp: UserOrderableServiceVo.csp;
@@ -27,6 +28,7 @@ export default function GoToSubmit({
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     versionMapper: Map<string, UserOrderableServiceVo[]>;
+    selectContactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const navigate = useNavigate();
 
@@ -37,7 +39,8 @@ export default function GoToSubmit({
             selectServiceHostingType,
             selectArea,
             selectRegion,
-            selectFlavor
+            selectFlavor,
+            selectContactServiceDetails
         );
 
         navigate(

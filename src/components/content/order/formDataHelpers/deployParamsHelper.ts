@@ -3,7 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, DeployVariable, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    DeployRequest,
+    DeployVariable,
+    ServiceProviderContactDetails,
+    UserOrderableServiceVo,
+} from '../../../../xpanse-api/generated';
 import { OrderSubmitProps } from '../create/OrderSubmit';
 import { DeployParam } from '../types/DeployParam';
 
@@ -13,7 +18,8 @@ export const getDeployParams = (
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     selectArea: string,
     selectRegion: string,
-    selectFlavor: string
+    selectFlavor: string,
+    selectContactServiceDetails: ServiceProviderContactDetails | undefined
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
@@ -36,6 +42,7 @@ export const getDeployParams = (
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
         serviceHostingType: selectServiceHostingType,
+        contactServiceDetails: selectContactServiceDetails ?? undefined,
     };
 
     if (service !== undefined) {
