@@ -8,6 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { DeployVariable } from './DeployVariable';
+import type { ScriptsRepo } from './ScriptsRepo';
 /**
  * The deployment of the managed service
  */
@@ -25,9 +26,10 @@ export type Deployment = {
      */
     credentialType?: Deployment.credentialType;
     /**
-     * The real deployer, something like terraform scripts...
+     * The real deployer, something like terraform scripts. Either deployer or deployFromGitRepo must be provided.
      */
-    deployer: string;
+    deployer?: string;
+    scriptsRepo?: ScriptsRepo;
 };
 export namespace Deployment {
     /**
