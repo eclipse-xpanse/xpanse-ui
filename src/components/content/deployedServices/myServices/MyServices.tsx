@@ -6,7 +6,13 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
+import {
+    AbstractCredentialInfo,
+    CloudServiceProvider,
+    DeployedService,
+    DeployedServiceDetails,
+    VendorHostedDeployedServiceDetails,
+} from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     CaretDownOutlined,
@@ -28,7 +34,6 @@ import { PurgeServiceStatusPolling } from '../../order/purge/PurgeServiceStatusP
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
 import DestroyServiceStatusPolling from '../../order/destroy/DestroyServiceStatusPolling';
-import useListDeployedServicesQuery from './query/useListDeployedServicesQuery';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
 import DeployedServicesError from '../common/DeployedServicesError';
@@ -36,6 +41,7 @@ import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { MyServiceDetails } from './MyServiceDetails';
+import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
 import { useServiceStateStartQuery } from './query/useServiceStateStartQuery';
 import { useServiceStateStopQuery } from './query/useServiceStateStopQuery';
 import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery';
@@ -77,7 +83,7 @@ function MyServices(): React.JSX.Element {
 
     const navigate = useNavigate();
 
-    const listDeployedServicesQuery = useListDeployedServicesQuery();
+    const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
 
     useEffect(() => {
         const serviceList: DeployedService[] = [];
@@ -118,35 +124,29 @@ function MyServices(): React.JSX.Element {
         return [
             {
                 key: 'details',
-                label:
-                    record.serviceHostingType === DeployedService.serviceHostingType.SERVICE_VENDOR &&
-                    record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
-                    record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ? (
-                        <Tooltip title='Please contact the service provider'>
-                            <Button
-                                onClick={() => {
-                                    handleMyServiceDetailsOpenModal(record);
-                                }}
-                                disabled={true}
-                                className={'button-as-link'}
-                                icon={<InfoCircleOutlined />}
-                                type={'link'}
-                            >
-                                details
-                            </Button>
-                        </Tooltip>
-                    ) : (
+                label: isDisableDetails(record) ? (
+                    <Tooltip title='Please contact the service provider'>
                         <Button
-                            onClick={() => {
-                                handleMyServiceDetailsOpenModal(record);
-                            }}
+                            disabled={true}
                             className={'button-as-link'}
                             icon={<InfoCircleOutlined />}
                             type={'link'}
                         >
                             details
                         </Button>
-                    ),
+                    </Tooltip>
+                ) : (
+                    <Button
+                        onClick={() => {
+                            handleMyServiceDetailsOpenModal(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<InfoCircleOutlined />}
+                        type={'link'}
+                    >
+                        details
+                    </Button>
+                ),
             },
             {
                 key: 'migrate',
@@ -180,19 +180,9 @@ function MyServices(): React.JSX.Element {
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
                         ? 'purge'
                         : 'destroy',
-                disabled:
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
-                        ? isPurging || isDestroying || isPurgingCompleted
-                        : (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED &&
-                              record.serviceDeploymentState !==
-                                  DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
-                          isDestroyingCompleted,
                 label:
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED ||
                     record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED ? (
                         <Popconfirm
                             title='Purge the service'
@@ -203,7 +193,12 @@ function MyServices(): React.JSX.Element {
                                 purge(record);
                             }}
                         >
-                            <Button icon={<DeleteOutlined />} className={'button-as-link'} type={'link'}>
+                            <Button
+                                icon={<DeleteOutlined />}
+                                disabled={isPurging || isDestroying || isPurgingCompleted}
+                                className={'button-as-link'}
+                                type={'link'}
+                            >
                                 purge
                             </Button>
                         </Popconfirm>
@@ -217,7 +212,18 @@ function MyServices(): React.JSX.Element {
                                 destroy(record);
                             }}
                         >
-                            <Button icon={<CloseCircleOutlined />} className={'button-as-link'} type={'link'}>
+                            <Button
+                                icon={<CloseCircleOutlined />}
+                                disabled={
+                                    (record.serviceDeploymentState !==
+                                        DeployedService.serviceDeploymentState.DESTROY_FAILED &&
+                                        record.serviceDeploymentState !==
+                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
+                                    isDestroyingCompleted
+                                }
+                                className={'button-as-link'}
+                                type={'link'}
+                            >
                                 destroy
                             </Button>
                         </Popconfirm>
@@ -279,6 +285,51 @@ function MyServices(): React.JSX.Element {
                 ),
             },
         ];
+    };
+
+    function isHasDeployedServiceProperties(
+        details: VendorHostedDeployedServiceDetails | DeployedServiceDetails
+    ): boolean {
+        return details.deployedServiceProperties && Object.keys(details.deployedServiceProperties).length !== 0
+            ? true
+            : false;
+    }
+
+    function isHasServiceRequestProperties(
+        details: VendorHostedDeployedServiceDetails | DeployedServiceDetails
+    ): boolean {
+        return details.deployRequest.serviceRequestProperties &&
+            Object.keys(details.deployRequest.serviceRequestProperties).length !== 0
+            ? true
+            : false;
+    }
+
+    function isHasResultMessage(details: DeployedServiceDetails): boolean {
+        return !!details.resultMessage;
+    }
+
+    function isHasDeployResources(details: DeployedServiceDetails): boolean {
+        return !!details.deployResources && details.deployResources.length > 0;
+    }
+
+    const isDisableDetails = (record: DeployedService) => {
+        if (record.serviceHostingType === DeployedService.serviceHostingType.SERVICE_VENDOR) {
+            const details = record as VendorHostedDeployedServiceDetails;
+            if (isHasDeployedServiceProperties(details) || isHasServiceRequestProperties(details)) {
+                return false;
+            }
+        } else {
+            const details = record as DeployedServiceDetails;
+            if (
+                isHasDeployedServiceProperties(details) ||
+                isHasServiceRequestProperties(details) ||
+                isHasResultMessage(details) ||
+                isHasDeployResources(details)
+            ) {
+                return false;
+            }
+        }
+        return true;
     };
 
     const isDisableStartBtn = (record: DeployedService) => {
@@ -696,14 +747,15 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
     }
 
-    const handleMyServiceDetailsOpenModal = (serviceVo: DeployedService) => {
-        setServiceIdInModal(serviceVo.id);
-        setServiceHostingType(serviceVo.serviceHostingType);
+    const handleMyServiceDetailsOpenModal = (record: DeployedService) => {
+        setServiceIdInModal(record.id);
+        setActiveRecord(record);
         setIsMyServiceDetailsModalOpen(true);
     };
 
     const handleMyServiceDetailsModalClose = () => {
         setServiceIdInModal('');
+        setActiveRecord(undefined);
         setIsMyServiceDetailsModalOpen(false);
     };
 
@@ -766,7 +818,7 @@ function MyServices(): React.JSX.Element {
                 open={serviceIdInModal.length > 0 && isMyServiceDetailsModalOpen}
                 onCancel={handleMyServiceDetailsModalClose}
             >
-                <MyServiceDetails serviceId={serviceIdInModal} serviceHostingType={serviceHostingType} />
+                <MyServiceDetails serviceDetails={activeRecord} />
             </Modal>
             {currentServiceVo ? (
                 <Modal
