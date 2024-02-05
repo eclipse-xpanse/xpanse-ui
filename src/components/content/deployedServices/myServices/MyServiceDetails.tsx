@@ -4,81 +4,72 @@
  */
 
 import '../../../../styles/app.css';
-import { useQuery } from '@tanstack/react-query';
 import {
     DeployedService,
     DeployedServiceDetails,
     DeployResource,
-    ServiceService,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import React from 'react';
 import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
-import { GetServiceDetailsByIdQueryLoading } from '../common/GetServiceDetailsByIdQueryLoading';
-import DeployedServicesError from '../common/DeployedServicesError';
 
 export const MyServiceDetails = ({
-    serviceId,
-    serviceHostingType,
+    serviceDetails,
 }: {
-    serviceId: string;
-    serviceHostingType: DeployedService.serviceHostingType;
+    serviceDetails: DeployedService | undefined;
 }): React.JSX.Element => {
-    const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getServiceDetailsById', serviceId, serviceHostingType],
-        queryFn: () => {
-            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                return ServiceService.getSelfHostedServiceDetailsById(serviceId);
-            } else {
-                return ServiceService.getVendorHostedServiceDetailsById(serviceId);
-            }
-        },
-        refetchOnWindowFocus: false,
-    });
+    const endPointMap = new Map<string, string>();
+    const requestMap = new Map<string, unknown>();
+    let resultMessage = undefined;
+    let deployResourceMap: DeployResource[] = [];
 
-    if (getServiceDetailsByIdQuery.isSuccess) {
-        const endPointMap = new Map<string, string>();
-        const requestMap = new Map<string, unknown>();
-        let resultMessage = undefined;
-        let deployResourceMap: DeployResource[] = [];
-        if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
-            for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
-                endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
-            }
-        }
-        if (getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
-            for (const key in getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
-                requestMap.set(key, getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties[key]);
-            }
-        }
-        if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-            const serviceDetailVo = getServiceDetailsByIdQuery.data as DeployedServiceDetails;
-            if (serviceDetailVo.resultMessage) {
-                resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
-            }
-            if (serviceDetailVo.deployResources) {
-                deployResourceMap = serviceDetailVo.deployResources;
-            }
-        }
-        return (
-            <>
-                <DeployedServicesDetailsContent
-                    content={endPointMap}
-                    requestParams={requestMap}
-                    resultMessage={resultMessage}
-                    deployResources={deployResourceMap}
-                />
-            </>
-        );
+    if (serviceDetails === undefined) {
+        return <></>;
     }
 
-    if (getServiceDetailsByIdQuery.isLoading) {
-        return <GetServiceDetailsByIdQueryLoading isLoading={getServiceDetailsByIdQuery.isLoading} />;
+    if (serviceDetails.serviceHostingType === DeployedService.serviceHostingType.SELF) {
+        const serviceDetailVo = serviceDetails as DeployedServiceDetails;
+        if (serviceDetailVo.deployedServiceProperties) {
+            for (const key in serviceDetailVo.deployedServiceProperties) {
+                endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
+            }
+        }
+        if (serviceDetailVo.deployRequest.serviceRequestProperties) {
+            for (const key in serviceDetailVo.deployRequest.serviceRequestProperties) {
+                requestMap.set(key, serviceDetailVo.deployRequest.serviceRequestProperties[key]);
+            }
+        }
+        if (serviceDetailVo.resultMessage) {
+            resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
+        }
+        if (serviceDetailVo.deployResources) {
+            deployResourceMap = serviceDetailVo.deployResources;
+        }
+    } else {
+        const serviceDetailVo = serviceDetails as VendorHostedDeployedServiceDetails;
+        if (serviceDetailVo.deployedServiceProperties) {
+            for (const key in serviceDetailVo.deployedServiceProperties) {
+                endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
+            }
+        }
+        if (serviceDetailVo.deployRequest.serviceRequestProperties) {
+            for (const key in serviceDetailVo.deployRequest.serviceRequestProperties) {
+                requestMap.set(key, serviceDetailVo.deployRequest.serviceRequestProperties[key]);
+            }
+        }
     }
 
-    if (getServiceDetailsByIdQuery.isError) {
-        return <DeployedServicesError error={getServiceDetailsByIdQuery.error} />;
-    }
+    return (
+        <>
+            <DeployedServicesDetailsContent
+                content={endPointMap}
+                requestParams={requestMap}
+                resultMessage={resultMessage}
+                deployResources={deployResourceMap}
+            />
+        </>
+    );
 
     return <></>;
 };

@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesQuery';
+import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import { myServicesRoute } from '../../../utils/constants';
 import { DeployedService } from '../../../../xpanse-api/generated';
 import { createSearchParams, useNavigate } from 'react-router-dom';

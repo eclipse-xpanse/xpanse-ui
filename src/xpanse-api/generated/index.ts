@@ -35,6 +35,7 @@ export { MigrateRequest } from './models/MigrateRequest';
 export { Ocl } from './models/Ocl';
 export type { Region } from './models/Region';
 export { Response } from './models/Response';
+export type { ScriptsRepo } from './models/ScriptsRepo';
 export { ServiceMigrationDetails } from './models/ServiceMigrationDetails';
 export type { ServicePolicy } from './models/ServicePolicy';
 export type { ServicePolicyCreateRequest } from './models/ServicePolicyCreateRequest';
@@ -42,7 +43,6 @@ export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateReq
 export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
-export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 export { UserPolicy } from './models/UserPolicy';
@@ -64,5 +64,3 @@ export { ServiceStatusManagementService } from './services/ServiceStatusManageme
 export { ServiceVendorService } from './services/ServiceVendorService';
 export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';
 export { UserPoliciesManagementService } from './services/UserPoliciesManagementService';
-export { WebhookService } from './services/WebhookService';
-export { WorkflowService } from './services/WorkFlowService';

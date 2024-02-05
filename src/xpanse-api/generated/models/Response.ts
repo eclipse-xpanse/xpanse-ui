@@ -68,5 +68,6 @@ export namespace Response {
         SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
         MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
         SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
+        INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     }
 }

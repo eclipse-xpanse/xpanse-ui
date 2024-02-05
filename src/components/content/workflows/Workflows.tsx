@@ -6,11 +6,12 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { ApiError, Response, WorkflowService, WorkFlowTask } from '../../../xpanse-api/generated';
+import { ApiError, Response, WorkFlowTask } from '../../../xpanse-api/generated';
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
 import { useMutation } from '@tanstack/react-query';
+import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
 
 function Workflows(): React.JSX.Element {
     const [tipMessage, setTipMessage] = useState<string>('');
