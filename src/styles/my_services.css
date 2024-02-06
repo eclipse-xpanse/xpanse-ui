@@ -92,3 +92,9 @@
     box-shadow: none;
     background: none;
 }
+.service-instance-list-service-state {
+    font-style: italic;
+    font-size: 12px;
+    white-space: nowrap;
+    color: #999;
+}
