@@ -6,7 +6,7 @@
 import { Button, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
-import { ServicePolicy } from '../../../../../xpanse-api/generated';
+import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SafetyOutlined, SyncOutlined } from '@ant-design/icons';
 import { useGetServicePolicyList } from './policyList/useGetServicePolicyList';
 import { useDeleteServicePolicy } from './deletePolicy/useDeleteServicePolicy';
@@ -16,12 +16,12 @@ import ServicePolicyListError from './ServicePolicyListError';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import '../../../../../styles/service_policies.css';
 
-export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: string }) => {
+export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }) => {
     const [id, setId] = useState<string>('');
     const [currentServicePolicy, setCurrentServicePolicy] = useState<ServicePolicy | undefined>(undefined);
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
-    const servicePolicyListQuery = useGetServicePolicyList(serviceTemplateId);
+    const servicePolicyListQuery = useGetServicePolicyList(serviceDetails.id);
     const deleteServicePolicyRequest = useDeleteServicePolicy();
 
     const refreshServicePoliciesList = () => {
@@ -30,7 +30,7 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
 
     useEffect(() => {
         setId('');
-    }, [serviceTemplateId]);
+    }, [serviceDetails]);
 
     const updateEnabledFilters = (): ColumnFilterItem[] => {
         const filters: ColumnFilterItem[] = [];
@@ -94,6 +94,10 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
             dataIndex: 'lastModifiedTime',
         },
         {
+            title: 'Flavors',
+            dataIndex: 'flavors',
+        },
+        {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: ServicePolicy) => {
@@ -108,9 +112,7 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                                 }}
                                 disabled={
                                     id.length > 0 &&
-                                    (deleteServicePolicyRequest.isPending ||
-                                        deleteServicePolicyRequest.isSuccess ||
-                                        deleteServicePolicyRequest.isError)
+                                    (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
                                 }
                             >
                                 Update
@@ -134,9 +136,7 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                                     }
                                     disabled={
                                         id.length > 0 &&
-                                        (deleteServicePolicyRequest.isPending ||
-                                            deleteServicePolicyRequest.isSuccess ||
-                                            deleteServicePolicyRequest.isError)
+                                        (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
                                     }
                                 >
                                     Delete
@@ -242,9 +242,10 @@ export const ServicePolicies = ({ serviceTemplateId }: { serviceTemplateId: stri
                 onCancel={closeAddOrUpdateServicePolicyModal}
             >
                 <AddOrUpdateServicePolicy
-                    serviceTemplateId={serviceTemplateId}
+                    serviceTemplateId={serviceDetails.id}
                     currentServicePolicy={currentServicePolicy}
                     getCancelUpdateStatus={getCancelUpdateStatus}
+                    serviceDetails={serviceDetails}
                 />
             </Modal>
             <Table
