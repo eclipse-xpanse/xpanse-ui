@@ -75,9 +75,9 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
-    const serviceStateStartQuery = useServiceStateStartQuery();
-    const serviceStateStopQuery = useServiceStateStopQuery();
-    const serviceStateRestartQuery = useServiceStateRestartQuery();
+    const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
+    const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
+    const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
 
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
@@ -509,7 +509,7 @@ function MyServices(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.serviceState.startsWith(value.toString()),
-            render: (serviceState: DeployedService.serviceState) => DeployedServicesRunningStatus(serviceState),
+            render: (_text, record) => DeployedServicesRunningStatus(record),
         },
         {
             title: 'Monitor',

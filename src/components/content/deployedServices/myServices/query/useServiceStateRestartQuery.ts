@@ -6,12 +6,13 @@
 import { useMutation } from '@tanstack/react-query';
 import { DeployedService, ServiceStatusManagementService } from '../../../../../xpanse-api/generated';
 
-export function useServiceStateRestartQuery() {
+export function useServiceStateRestartQuery(refreshData: () => void) {
     return useMutation({
         mutationFn: (deployedService: DeployedService) => {
             deployedService.serviceState = DeployedService.serviceState.STOPPING;
             return ServiceStatusManagementService.restartService(deployedService.id);
         },
+        onSuccess: refreshData,
         onSettled: (data: DeployedService | undefined, _error, deployedService: DeployedService, _context) => {
             if (data) {
                 deployedService.serviceState = data.serviceState;
