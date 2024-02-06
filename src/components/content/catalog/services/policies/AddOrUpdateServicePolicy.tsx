@@ -5,15 +5,21 @@
 
 import React, { useRef, useState } from 'react';
 import '../../../../../styles/service_policies.css';
-import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Upload, UploadFile } from 'antd';
+import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { RcFile } from 'antd/es/upload';
 import {
     ServicePolicy,
     ServicePolicyCreateRequest,
     ServicePolicyUpdateRequest,
+    ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
-import { servicePoliciesStatuses, ServicePolicyUploadFileStatus } from './servicePoliciesParams';
+import {
+    comparePolicyUpdateRequestResult,
+    flavorNameList,
+    servicePoliciesStatuses,
+    ServicePolicyUploadFileStatus,
+} from './servicePoliciesParams';
 import { useAddServicePolicy } from './addPolicy/useAddServicePolicy';
 import { useUpdateServicePolicy } from './updatePolicy/useUpdateServicePolicy';
 import ServicePolicySubmitResult from './ServicePolicySubmitResult';
@@ -25,13 +31,16 @@ export const AddOrUpdateServicePolicy = ({
     serviceTemplateId,
     currentServicePolicy,
     getCancelUpdateStatus,
+    serviceDetails,
 }: {
     serviceTemplateId: string;
     currentServicePolicy: ServicePolicy | undefined;
     getCancelUpdateStatus: (arg: boolean) => void;
+    serviceDetails: ServiceTemplateDetailVo;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const policyContent = useRef<string>(currentServicePolicy?.policy ?? '');
+    const flavorList = useRef<string[]>(flavorNameList(serviceDetails));
     const [createPolicyRequest, setCreatePolicyRequest] = useState<ServicePolicyCreateRequest | undefined>(undefined);
     const [updatePolicyRequest, setUpdatePolicyRequest] = useState<ServicePolicyUpdateRequest | undefined>(undefined);
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
@@ -41,34 +50,32 @@ export const AddOrUpdateServicePolicy = ({
     const createServicePoliciesRequest = useAddServicePolicy();
     const updatePoliciesManagementServiceRequest = useUpdateServicePolicy();
 
-    const onFinish = (policyRequest: { enabled: boolean; policy: string }) => {
+    const onFinish = (policyRequest: { enabled: boolean; policy: string; flavors: string[] }) => {
         if (currentServicePolicy === undefined) {
-            const policyCreateRequest: ServicePolicyCreateRequest = policyRequest as ServicePolicyCreateRequest;
-            policyCreateRequest.enabled = policyRequest.enabled;
-            policyCreateRequest.policy = policyRequest.policy;
-            policyCreateRequest.serviceTemplateId = serviceTemplateId;
+            const policyCreateRequest: ServicePolicyCreateRequest = {
+                enabled: policyRequest.enabled,
+                flavorNameList: policyRequest.flavors,
+                policy: policyRequest.policy,
+                serviceTemplateId: serviceTemplateId,
+            };
             setCreatePolicyRequest(policyCreateRequest);
             createServicePoliciesRequest.mutate(policyCreateRequest);
         } else if (currentServicePolicy.id.length > 0) {
-            if (comparePolicyUpdateRequestResult(policyRequest)) {
-                setIsUpdated(comparePolicyUpdateRequestResult(policyRequest));
+            // Check whether the modified data has changed
+            if (comparePolicyUpdateRequestResult(policyRequest, currentServicePolicy)) {
+                setIsUpdated(comparePolicyUpdateRequestResult(policyRequest, currentServicePolicy));
                 return;
             }
-            const policyUpdateRequest: ServicePolicyUpdateRequest = policyRequest as ServicePolicyUpdateRequest;
-            policyUpdateRequest.id = currentServicePolicy.id;
-            policyUpdateRequest.enabled = policyRequest.enabled;
-            policyUpdateRequest.policy = policyRequest.policy;
+
+            const policyUpdateRequest: ServicePolicyUpdateRequest = {
+                id: currentServicePolicy.id,
+                enabled: policyRequest.enabled,
+                policy: policyRequest.policy,
+                flavorNameList: policyRequest.flavors,
+            };
             setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate(policyUpdateRequest);
         }
-    };
-
-    const comparePolicyUpdateRequestResult = (policyRequest: { enabled: boolean; policy: string }): boolean => {
-        return (
-            currentServicePolicy !== undefined &&
-            currentServicePolicy.enabled === policyRequest.enabled &&
-            currentServicePolicy.policy === policyRequest.policy
-        );
     };
 
     const onReset = () => {
@@ -165,6 +172,11 @@ export const AddOrUpdateServicePolicy = ({
         createServicePoliciesRequest.reset();
     };
 
+    const handleFlavorSelect = (flavorNames: string[]) => {
+        setIsUpdated(false);
+        form.setFieldsValue({ flavors: flavorNames });
+    };
+
     return (
         <>
             {createPolicyRequest !== undefined && createPolicyRequest.policy.length > 0 ? (
@@ -189,6 +201,12 @@ export const AddOrUpdateServicePolicy = ({
                 name='basic'
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
+                disabled={
+                    createServicePoliciesRequest.isPending ||
+                    createServicePoliciesRequest.isSuccess ||
+                    updatePoliciesManagementServiceRequest.isPending ||
+                    updatePoliciesManagementServiceRequest.isSuccess
+                }
                 className={'service-policy-edit-form-class'}
                 initialValues={{
                     remember: true,
@@ -196,6 +214,12 @@ export const AddOrUpdateServicePolicy = ({
                         currentServicePolicy !== undefined && currentServicePolicy.id.length > 0
                             ? currentServicePolicy.enabled
                             : false,
+                    flavors:
+                        currentServicePolicy !== undefined &&
+                        currentServicePolicy.id.length > 0 &&
+                        currentServicePolicy.flavorNameList
+                            ? currentServicePolicy.flavorNameList
+                            : [],
                     policy: policyContent.current,
                 }}
                 onFinish={onFinish}
@@ -211,6 +235,27 @@ export const AddOrUpdateServicePolicy = ({
                             );
                         })}
                     </Radio.Group>
+                </Form.Item>
+                <Form.Item label='Flavors' name='flavors'>
+                    <Select
+                        mode={'multiple'}
+                        allowClear
+                        size={'large'}
+                        onChange={handleFlavorSelect}
+                        placeholder={'Please select'}
+                        className={'service-policies-select-option-flavor'}
+                        value={[]}
+                    >
+                        {flavorList.current.map((flavor: string) => (
+                            <Select.Option
+                                key={flavor}
+                                value={flavor}
+                                className={'service-policies-select-option-flavor'}
+                            >
+                                {flavor}
+                            </Select.Option>
+                        ))}
+                    </Select>
                 </Form.Item>
                 <Form.Item
                     label='Policy'
@@ -231,7 +276,11 @@ export const AddOrUpdateServicePolicy = ({
                             >
                                 <Button
                                     size={'large'}
-                                    disabled={regoFileUploadStatus === 'completed'}
+                                    disabled={
+                                        regoFileUploadStatus === 'completed' ||
+                                        updatePoliciesManagementServiceRequest.isPending ||
+                                        updatePoliciesManagementServiceRequest.isSuccess
+                                    }
                                     loading={regoFileUploadStatus === 'inProgress'}
                                     type={'primary'}
                                     icon={<UploadOutlined />}

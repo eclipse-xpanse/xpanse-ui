@@ -75,3 +75,13 @@
     margin-left: 30px;
     margin-right: 30px;
 }
+
+.service-policies-select-option-flavor {
+    width: 100%;
+    max-height: 200px;
+}
+
+.service-policy-flavor-form-select {
+    display: flex;
+    justify-content: center;
+}
