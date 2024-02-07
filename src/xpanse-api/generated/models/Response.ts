@@ -57,6 +57,7 @@ export namespace Response {
         SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
         UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
         TERRAFORM_BOOT_REQUEST_FAILED = 'Terraform Boot Request Failed',
+        TOFU_MAKER_REQUEST_FAILED = 'Tofu Maker Request Failed',
         METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
         VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
         VARIABLE_SCHEMA_DEFINITION_INVALID = 'Variable Schema Definition Invalid',
