@@ -253,7 +253,7 @@ function ServiceProvider({
                             <ServiceDetail serviceDetails={activeServiceDetail} />
 
                             <Divider />
-                            <ServicePolicies serviceTemplateId={activeServiceDetail.id} />
+                            <ServicePolicies serviceDetails={activeServiceDetail} />
                         </>
                     ) : null}
                 </>

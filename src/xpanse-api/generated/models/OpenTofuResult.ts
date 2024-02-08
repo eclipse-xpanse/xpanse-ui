@@ -7,15 +7,15 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TerraformResult = {
-    destroyScenario?: TerraformResult.destroyScenario;
+export type OpenTofuResult = {
+    destroyScenario?: OpenTofuResult.destroyScenario;
     commandStdOutput?: string;
     commandStdError?: string;
     terraformState?: string;
     importantFileContentMap?: Record<string, string>;
     commandSuccessful?: boolean;
 };
-export namespace TerraformResult {
+export namespace OpenTofuResult {
     export enum destroyScenario {
         DESTROY = 'destroy',
         ROLLBACK = 'rollback',
