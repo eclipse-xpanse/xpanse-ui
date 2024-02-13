@@ -11,64 +11,67 @@ import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 export function PurgeServiceStatusPolling({
-    uuid,
+    deployedService,
     isError,
     error,
-    setIsPurgingCompleted,
-    getPurgeCloseStatus,
+    setIsPurging,
+    closePurgeResultAlert,
     serviceHostingType,
 }: {
-    uuid: DeployedService;
+    deployedService: DeployedService;
     isError: boolean;
     error: Error | null;
-    setIsPurgingCompleted: (arg: boolean) => void;
-    getPurgeCloseStatus: (arg: boolean) => void;
+    setIsPurging: (arg: boolean) => void;
+    closePurgeResultAlert: (arg: boolean) => void;
     serviceHostingType: DeployedService.serviceHostingType;
 }): React.JSX.Element {
     const [isRefetch, setIsRefetch] = useState<boolean>(true);
     const getServiceDetailsByIdQuery = useQuery({
-        queryKey: ['getPurgeServiceDetailsById', uuid.id, serviceHostingType],
+        queryKey: ['getPurgeServiceDetailsById', deployedService.id, serviceHostingType],
         queryFn: () => {
             if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                return ServiceService.getSelfHostedServiceDetailsById(uuid.id);
+                return ServiceService.getSelfHostedServiceDetailsById(deployedService.id);
             } else {
-                return ServiceService.getVendorHostedServiceDetailsById(uuid.id);
+                return ServiceService.getVendorHostedServiceDetailsById(deployedService.id);
             }
         },
         refetchOnWindowFocus: false,
-        refetchInterval: uuid.id.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
-        enabled: uuid.id.length > 0 && isRefetch,
+        refetchInterval: deployedService.id.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
+        enabled: deployedService.id.length > 0 && isRefetch,
     });
 
     useEffect(() => {
         if (isError) {
             setIsRefetch(false);
-            setIsPurgingCompleted(true);
+            setIsPurging(false);
         }
-    }, [isError, setIsPurgingCompleted]);
+    }, [isError, setIsPurging]);
 
     useEffect(() => {
         if (getServiceDetailsByIdQuery.isError) {
             setIsRefetch(false);
-            setIsPurgingCompleted(true);
+            setIsPurging(false);
         }
-    }, [getServiceDetailsByIdQuery.isError, setIsPurgingCompleted]);
+    }, [getServiceDetailsByIdQuery.isError, setIsPurging]);
 
     const onClose = () => {
-        getPurgeCloseStatus(true);
+        setIsPurging(false);
+        closePurgeResultAlert(true);
     };
 
     if (isError) {
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
                         <Alert
                             message={response.details}
-                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid.id} />}
+                            description={
+                                <OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.id} />
+                            }
                             showIcon
                             closable={true}
                             onClose={onClose}
@@ -80,7 +83,7 @@ export function PurgeServiceStatusPolling({
         }
     }
 
-    if (uuid.id && getServiceDetailsByIdQuery.isError) {
+    if (deployedService.id && getServiceDetailsByIdQuery.isError) {
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             getServiceDetailsByIdQuery.error.body &&
@@ -88,13 +91,15 @@ export function PurgeServiceStatusPolling({
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
                         <Alert
                             message={response.details}
-                            description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={uuid.id} />}
+                            description={
+                                <OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.id} />
+                            }
                             showIcon
                             closable={true}
                             onClose={onClose}
@@ -103,7 +108,7 @@ export function PurgeServiceStatusPolling({
                     </div>
                 );
             } else {
-                uuid.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
+                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
                 return (
                     <div className={'submit-alert-tip'}>
                         {' '}
@@ -111,8 +116,8 @@ export function PurgeServiceStatusPolling({
                             message={'Processing Status'}
                             description={
                                 <OrderSubmitResultDetails
-                                    msg={`Service ${uuid.id} purged successfully`}
-                                    uuid={uuid.id}
+                                    msg={`Service ${deployedService.id} purged successfully`}
+                                    uuid={deployedService.id}
                                 />
                             }
                             showIcon

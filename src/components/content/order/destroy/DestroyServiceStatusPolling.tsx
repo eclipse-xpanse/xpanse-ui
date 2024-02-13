@@ -14,16 +14,16 @@ function DestroyServiceStatusPolling({
     isError,
     isSuccess,
     error,
-    setIsDestroyingCompleted,
-    getDestroyCloseStatus,
+    setIsDestroying,
+    closeDestroyResultAlert,
     serviceHostingType,
 }: {
     deployedService: DeployedService;
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
-    setIsDestroyingCompleted: (arg: boolean) => void;
-    getDestroyCloseStatus: (arg: boolean) => void;
+    setIsDestroying: (arg: boolean) => void;
+    closeDestroyResultAlert: (arg: boolean) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
@@ -46,29 +46,25 @@ function DestroyServiceStatusPolling({
         ) {
             deployedService.serviceDeploymentState = getServiceDetailsByIdQuery.data.serviceDeploymentState;
             deployedService.serviceState = getServiceDetailsByIdQuery.data.serviceState;
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [
-        getServiceDetailsByIdQuery.isSuccess,
-        getServiceDetailsByIdQuery.data,
-        setIsDestroyingCompleted,
-        deployedService,
-    ]);
+    }, [getServiceDetailsByIdQuery.isSuccess, getServiceDetailsByIdQuery.data, setIsDestroying, deployedService]);
 
     useEffect(() => {
         if (isError) {
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [isError, setIsDestroyingCompleted]);
+    }, [isError, setIsDestroying]);
 
     useEffect(() => {
         if (getServiceDetailsByIdQuery.isError) {
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [getServiceDetailsByIdQuery.isError, setIsDestroyingCompleted]);
+    }, [getServiceDetailsByIdQuery.isError, setIsDestroying]);
 
     const onClose = () => {
-        getDestroyCloseStatus(true);
+        setIsDestroying(false);
+        closeDestroyResultAlert(true);
     };
 
     if (isError) {
