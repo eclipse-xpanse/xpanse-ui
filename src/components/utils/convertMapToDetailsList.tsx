@@ -29,7 +29,7 @@ export function convertMapToDetailsList(content: Map<string, unknown>, title: st
                                 >
                                     <Input.Password
                                         readOnly={true}
-                                        bordered={false}
+                                        variant={'borderless'}
                                         className={'show-details'}
                                         defaultValue={String(v)}
                                         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
