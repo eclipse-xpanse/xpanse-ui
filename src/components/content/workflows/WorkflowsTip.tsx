@@ -14,7 +14,7 @@ export const WorkflowsTip = ({
     type: 'error' | 'success' | undefined;
     msg: string;
     onRemove: () => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     if (!type) {
         return <></>;
     }

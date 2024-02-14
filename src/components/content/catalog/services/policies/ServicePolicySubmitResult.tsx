@@ -8,7 +8,13 @@ import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function ServicePolicySubmitResult({ msg, uuid }: { msg: string | JSX.Element; uuid: string }): JSX.Element {
+function ServicePolicySubmitResult({
+    msg,
+    uuid,
+}: {
+    msg: string | React.JSX.Element;
+    uuid: string;
+}): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
     return (

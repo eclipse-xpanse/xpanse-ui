@@ -8,7 +8,7 @@ import React from 'react';
 import { CredentialVariable } from '../../../xpanse-api/generated';
 import { ColumnsType } from 'antd/es/table';
 
-function CredentialDetails({ credentialDetails }: { credentialDetails: CredentialVariable[] }): JSX.Element {
+function CredentialDetails({ credentialDetails }: { credentialDetails: CredentialVariable[] }): React.JSX.Element {
     const columns: ColumnsType<CredentialVariable> = [
         {
             title: 'Name',

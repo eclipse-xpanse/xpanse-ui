@@ -5,8 +5,9 @@
 
 import { Layout } from 'antd';
 import { footerText } from '../../utils/constants';
+import React from 'react';
 
-function LayoutFooter(): JSX.Element {
+function LayoutFooter(): React.JSX.Element {
     return <Layout.Footer>{footerText}</Layout.Footer>;
 }
 

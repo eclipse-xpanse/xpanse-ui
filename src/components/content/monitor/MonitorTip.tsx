@@ -16,7 +16,7 @@ export const MonitorTip = ({
     msg: string;
     description: string;
     onRemove: () => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     if (!type) {
         return <></>;
     }

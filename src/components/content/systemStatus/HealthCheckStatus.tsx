@@ -27,7 +27,7 @@ export const HealthCheckStatus = (): React.JSX.Element => {
     const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
     const [backendSystemTypeFilters, setBackendSystemTypeFilters] = useState<ColumnFilterItem[]>([]);
     const [healthStatusFilters, setHealthStatusFilters] = useState<ColumnFilterItem[]>([]);
-    const [healthCheckError, setHealthCheckError] = useState<JSX.Element>(<></>);
+    const [healthCheckError, setHealthCheckError] = useState<React.JSX.Element>(<></>);
     const [backendSystemStatusList, setBackendSystemStatusList] = useState<DataType[]>([]);
     const healthCheckQuery = useHealthCheckStatusQuery();
     useEffect(() => {
