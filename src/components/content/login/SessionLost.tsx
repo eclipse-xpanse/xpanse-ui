@@ -4,14 +4,10 @@
  */
 
 import { useOidc } from '@axa-fr/react-oidc';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export function SessionLost(): React.JSX.Element {
     const { login } = useOidc();
-
-    useEffect(() => {
-        void login();
-    }, [login]);
-
+    void login();
     return <></>;
 }

@@ -48,7 +48,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             const serviceNameList: string[] = Array.from(serviceMapper.keys());
             setCategoryOclData(serviceMapper);
             let serviceName: string | undefined = undefined;
-            let version: string | undefined = undefined;
+            let version: string | undefined;
             serviceNameList.forEach((serviceName: string) => {
                 const dataNode: DataNode = {
                     title: serviceName,
