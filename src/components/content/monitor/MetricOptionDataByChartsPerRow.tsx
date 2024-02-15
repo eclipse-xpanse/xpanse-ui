@@ -16,14 +16,14 @@ export const MetricOptionDataByChartsPerRow = ({
     chartsPerRow: string;
     options: echarts.EChartsCoreOption[];
     chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[];
-}): JSX.Element => {
-    const [chartCols, setChartCols] = useState<JSX.Element[]>([]);
+}): React.JSX.Element => {
+    const [chartCols, setChartCols] = useState<React.JSX.Element[]>([]);
 
     useEffect(() => {
         if (options.length === 0 || chartsTitle.length === 0) {
             return;
         }
-        const currentChartCols: JSX.Element[] = [];
+        const currentChartCols: React.JSX.Element[] = [];
         for (let i = 0; i < options.length; i++) {
             currentChartCols.push(
                 <Col key={i.toString()} span={options.length > 0 ? 24 / Number(chartsPerRow) : 24}>

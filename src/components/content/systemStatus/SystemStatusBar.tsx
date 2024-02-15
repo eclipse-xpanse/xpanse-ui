@@ -7,8 +7,9 @@ import { Button } from 'antd';
 import { SystemStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import React from 'react';
 
-function SystemStatusBar(): JSX.Element {
+function SystemStatusBar(): React.JSX.Element {
     const healthCheckQuery = useHealthCheckStatusQuery();
 
     return (

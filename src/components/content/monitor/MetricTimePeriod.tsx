@@ -13,7 +13,7 @@ export const MetricTimePeriod = ({
 }: {
     isLoading: boolean;
     getTimePeriod: (currentTimePeriod: number) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [timePeriod, setTimePeriod] = useState<number>(lastMinuteRadioButtonKeyId.valueOf());
 
     const onChangeTimePeriod = (e: RadioChangeEvent) => {

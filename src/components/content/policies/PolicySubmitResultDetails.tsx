@@ -9,7 +9,13 @@ import React from 'react';
 import { policiesRoute } from '../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function PolicySubmitResultDetails({ msg, uuid }: { msg: string | JSX.Element; uuid: string }): JSX.Element {
+function PolicySubmitResultDetails({
+    msg,
+    uuid,
+}: {
+    msg: string | React.JSX.Element;
+    uuid: string;
+}): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
     return (
