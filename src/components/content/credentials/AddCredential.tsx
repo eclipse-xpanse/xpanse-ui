@@ -445,7 +445,12 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                                 },
                             ]}
                         >
-                            <Table pagination={false} columns={columns} dataSource={credentialVariableList}></Table>
+                            <Table
+                                rowKey={'name'}
+                                pagination={false}
+                                columns={columns}
+                                dataSource={credentialVariableList}
+                            ></Table>
                         </Form.Item>
                     ) : (
                         <></>

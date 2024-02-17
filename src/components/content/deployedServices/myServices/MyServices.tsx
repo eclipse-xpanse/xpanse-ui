@@ -62,9 +62,9 @@ function MyServices(): React.JSX.Element {
     const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
     const [activeRecord, setActiveRecord] = useState<DeployedService | undefined>(undefined);
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
-    const [isDestroyingCompleted, setIsDestroyingCompleted] = useState<boolean>(false);
+    const [isShowDestroyResult, setIsShowDestroyResult] = useState<boolean>(false);
     const [isPurging, setIsPurging] = useState<boolean>(false);
-    const [isPurgingCompleted, setIsPurgingCompleted] = useState<boolean>(false);
+    const [isShowPurgingResult, setIsShowPurgingResult] = useState<boolean>(false);
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
     const [serviceHostingType, setServiceHostingType] = useState<DeployedService.serviceHostingType>(
         DeployedService.serviceHostingType.SELF
@@ -195,7 +195,7 @@ function MyServices(): React.JSX.Element {
                         >
                             <Button
                                 icon={<DeleteOutlined />}
-                                disabled={isPurging || isDestroying || isPurgingCompleted}
+                                disabled={isPurging || isDestroying}
                                 className={'button-as-link'}
                                 type={'link'}
                             >
@@ -219,7 +219,7 @@ function MyServices(): React.JSX.Element {
                                         DeployedService.serviceDeploymentState.DESTROY_FAILED &&
                                         record.serviceDeploymentState !==
                                             DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
-                                    isDestroyingCompleted
+                                    isDestroying
                                 }
                                 className={'button-as-link'}
                                 type={'link'}
@@ -290,18 +290,16 @@ function MyServices(): React.JSX.Element {
     function isHasDeployedServiceProperties(
         details: VendorHostedDeployedServiceDetails | DeployedServiceDetails
     ): boolean {
-        return details.deployedServiceProperties && Object.keys(details.deployedServiceProperties).length !== 0
-            ? true
-            : false;
+        return !!(details.deployedServiceProperties && Object.keys(details.deployedServiceProperties).length !== 0);
     }
 
     function isHasServiceRequestProperties(
         details: VendorHostedDeployedServiceDetails | DeployedServiceDetails
     ): boolean {
-        return details.deployRequest.serviceRequestProperties &&
+        return !!(
+            details.deployRequest.serviceRequestProperties &&
             Object.keys(details.deployRequest.serviceRequestProperties).length !== 0
-            ? true
-            : false;
+        );
     }
 
     function isHasResultMessage(details: DeployedServiceDetails): boolean {
@@ -372,19 +370,21 @@ function MyServices(): React.JSX.Element {
         );
     };
 
-    const getDestroyCloseStatus = (isClose: boolean) => {
+    const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
             setIsDestroying(false);
             refreshData();
+            setIsShowDestroyResult(false);
         }
     };
 
-    const getPurgeCloseStatus = (isClose: boolean) => {
+    const closePurgeResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
             setIsPurging(false);
             refreshData();
+            setIsShowPurgingResult(false);
         }
     };
 
@@ -564,8 +564,8 @@ function MyServices(): React.JSX.Element {
 
     const purge = (record: DeployedService): void => {
         setIsPurging(true);
+        setIsShowPurgingResult(true);
         setServiceHostingType(record.serviceHostingType);
-        setIsPurgingCompleted(false);
         setActiveRecord(record);
         servicePurgeQuery.mutate(record.id);
         record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
@@ -573,7 +573,7 @@ function MyServices(): React.JSX.Element {
 
     function destroy(record: DeployedService): void {
         setIsDestroying(true);
-        setIsDestroyingCompleted(false);
+        setIsShowDestroyResult(true);
         setServiceHostingType(record.serviceHostingType);
         setActiveRecord(record);
         serviceDestroyQuery.mutate(record.id);
@@ -744,6 +744,7 @@ function MyServices(): React.JSX.Element {
 
     function refreshData(): void {
         clearFormVariables();
+        setIsShowPurgingResult(false);
         void listDeployedServicesQuery.refetch();
     }
 
@@ -790,24 +791,26 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'generic-table-container'}>
-            {serviceDestroyQuery.isSuccess && isDestroying && activeRecord ? (
+            {serviceDestroyQuery.isSuccess && isShowDestroyResult && activeRecord ? (
                 <DestroyServiceStatusPolling
+                    key={activeRecord.id}
                     deployedService={activeRecord}
                     isError={serviceDestroyQuery.isError}
                     isSuccess={serviceDestroyQuery.isSuccess}
                     error={serviceDestroyQuery.error}
-                    setIsDestroyingCompleted={setIsDestroyingCompleted}
-                    getDestroyCloseStatus={getDestroyCloseStatus}
+                    setIsDestroying={setIsDestroying}
+                    closeDestroyResultAlert={closeDestroyResultAlert}
                     serviceHostingType={serviceHostingType}
                 />
             ) : null}
-            {isPurging && activeRecord ? (
+            {isShowPurgingResult && activeRecord ? (
                 <PurgeServiceStatusPolling
-                    uuid={activeRecord}
+                    key={activeRecord.id}
+                    deployedService={activeRecord}
                     isError={servicePurgeQuery.isError}
                     error={servicePurgeQuery.error}
-                    setIsPurgingCompleted={setIsPurgingCompleted}
-                    getPurgeCloseStatus={getPurgeCloseStatus}
+                    setIsPurging={setIsPurging}
+                    closePurgeResultAlert={closePurgeResultAlert}
                     serviceHostingType={serviceHostingType}
                 />
             ) : null}

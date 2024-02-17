@@ -324,6 +324,7 @@ function Credentials(): React.JSX.Element {
                     columns={columns}
                     loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}
                     dataSource={abstractCredentialInfoList}
+                    rowKey={'csp'}
                 />
             </div>
         </div>

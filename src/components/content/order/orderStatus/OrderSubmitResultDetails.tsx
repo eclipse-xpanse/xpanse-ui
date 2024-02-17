@@ -9,7 +9,7 @@ import React from 'react';
 import { myServicesRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
-function OrderSubmitResultDetails({ msg, uuid }: { msg: string | JSX.Element; uuid: string }): JSX.Element {
+function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Element; uuid: string }): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
     return (

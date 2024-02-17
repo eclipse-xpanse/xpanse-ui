@@ -4,7 +4,7 @@
  */
 
 import { Button, Modal, Popconfirm, Popover, Space, Table } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SafetyOutlined, SyncOutlined } from '@ant-design/icons';
@@ -17,7 +17,7 @@ import { ColumnFilterItem } from 'antd/es/table/interface';
 import '../../../../../styles/service_policies.css';
 
 export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }) => {
-    const [id, setId] = useState<string>('');
+    const [currentPolicyId, setCurrentPolicyId] = useState<string>('');
     const [currentServicePolicy, setCurrentServicePolicy] = useState<ServicePolicy | undefined>(undefined);
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
@@ -27,10 +27,6 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
     const refreshServicePoliciesList = () => {
         void servicePolicyListQuery.refetch();
     };
-
-    useEffect(() => {
-        setId('');
-    }, [serviceDetails]);
 
     const updateEnabledFilters = (): ColumnFilterItem[] => {
         const filters: ColumnFilterItem[] = [];
@@ -111,7 +107,7 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                                     updateServicePolicies(record);
                                 }}
                                 disabled={
-                                    id.length > 0 &&
+                                    currentPolicyId.length > 0 &&
                                     (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
                                 }
                             >
@@ -130,12 +126,12 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
                                     loading={
-                                        record.id === id &&
+                                        record.id === currentPolicyId &&
                                         !deleteServicePolicyRequest.isSuccess &&
                                         deleteServicePolicyRequest.isError
                                     }
                                     disabled={
-                                        id.length > 0 &&
+                                        currentPolicyId.length > 0 &&
                                         (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
                                     }
                                 >
@@ -150,12 +146,12 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
     ];
 
     const deleteCurrentServicePolicy = (record: ServicePolicy) => {
-        setId(record.id);
+        setCurrentPolicyId(record.id);
         deleteServicePolicyRequest.mutate(record.id);
     };
 
     const addServicePolicies = () => {
-        setId('');
+        setCurrentPolicyId('');
         setCurrentServicePolicy(undefined);
         setIsOpenAddOrUpdatePolicyModal(true);
     };
@@ -179,7 +175,7 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
 
     const getDeleteCloseStatus = (isClose: boolean) => {
         if (isClose) {
-            setId('');
+            setCurrentPolicyId('');
             refreshServicePoliciesList();
         }
     };
@@ -190,9 +186,9 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                 <SafetyOutlined />
                 &nbsp;Service Policies
             </h3>
-            {deleteServicePolicyRequest.isSuccess && id.length > 0 ? (
+            {deleteServicePolicyRequest.isSuccess && currentPolicyId.length > 0 ? (
                 <ServicePolicyDeleteStatus
-                    id={id}
+                    id={currentPolicyId}
                     isError={deleteServicePolicyRequest.isError}
                     isSuccess={deleteServicePolicyRequest.isSuccess}
                     error={deleteServicePolicyRequest.error}
@@ -206,7 +202,7 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                     onClick={refreshServicePoliciesList}
                     icon={<SyncOutlined />}
                     disabled={
-                        id.length > 0 &&
+                        currentPolicyId.length > 0 &&
                         (deleteServicePolicyRequest.isPending ||
                             deleteServicePolicyRequest.isSuccess ||
                             deleteServicePolicyRequest.isError)
@@ -223,7 +219,7 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                     className={'add-service-policy'}
                     icon={<PlusCircleOutlined />}
                     disabled={
-                        id.length > 0 &&
+                        currentPolicyId.length > 0 &&
                         (deleteServicePolicyRequest.isPending ||
                             deleteServicePolicyRequest.isSuccess ||
                             deleteServicePolicyRequest.isError)

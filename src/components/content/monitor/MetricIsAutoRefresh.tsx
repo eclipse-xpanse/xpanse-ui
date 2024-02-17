@@ -12,7 +12,7 @@ export const MetricIsAutoRefresh = ({
 }: {
     isLoading: boolean;
     getIsAutoRefresh: (currentIsAutoRefresh: boolean) => void;
-}): JSX.Element => {
+}): React.JSX.Element => {
     const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
     const onChangeAutoRefresh = (isChecked: boolean) => {
         setIsAutoRefresh(isChecked);

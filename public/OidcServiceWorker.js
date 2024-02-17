@@ -150,18 +150,18 @@ const extractTokenPayload = (token) => {
 const isTokensOidcValid = (tokens, nonce, oidcServerConfiguration) => {
   if (tokens.idTokenPayload) {
     const idTokenPayload = tokens.idTokenPayload;
-    if (oidcServerConfiguration.issuer !== idTokenPayload.iss) {
+    if (idTokenPayload && oidcServerConfiguration.issuer !== idTokenPayload.iss) {
       return { isValid: false, reason: `Issuer does not match (oidcServerConfiguration issuer) ${oidcServerConfiguration.issuer} !== (idTokenPayload issuer) ${idTokenPayload.iss}` };
     }
     const currentTimeUnixSecond = (/* @__PURE__ */ new Date()).getTime() / 1e3;
-    if (idTokenPayload.exp && idTokenPayload.exp < currentTimeUnixSecond) {
+    if (idTokenPayload && idTokenPayload.exp && idTokenPayload.exp < currentTimeUnixSecond) {
       return { isValid: false, reason: `Token expired at (idTokenPayload exp) ${idTokenPayload.exp} < (currentTimeUnixSecond) ${currentTimeUnixSecond}` };
     }
     const timeInSevenDays = 60 * 60 * 24 * 7;
-    if (idTokenPayload.iat && idTokenPayload.iat + timeInSevenDays < currentTimeUnixSecond) {
+    if (idTokenPayload && idTokenPayload.iat && idTokenPayload.iat + timeInSevenDays < currentTimeUnixSecond) {
       return { isValid: false, reason: `Token is used from too long time (idTokenPayload iat + timeInSevenDays) ${idTokenPayload.iat + timeInSevenDays} < (currentTimeUnixSecond) ${currentTimeUnixSecond}` };
     }
-    if (nonce && idTokenPayload.nonce && idTokenPayload.nonce !== nonce) {
+    if (idTokenPayload && nonce && idTokenPayload.nonce && idTokenPayload.nonce !== nonce) {
       return { isValid: false, reason: `Nonce does not match (nonce) ${nonce} !== (idTokenPayload nonce) ${idTokenPayload.nonce}` };
     }
   }
@@ -198,11 +198,19 @@ function _hideTokens(tokens, currentDatabaseElement, configurationName) {
     secureTokens.access_token = TOKEN.ACCESS_TOKEN + "_" + configurationName;
   }
   tokens.accessTokenPayload = accessTokenPayload;
+  const oldTokens = currentDatabaseElement.tokens;
+  let id_token;
+  if (oldTokens != null && "id_token" in oldTokens && !("id_token" in tokens)) {
+    id_token = oldTokens.id_token;
+  } else {
+    id_token = tokens.id_token;
+  }
+  tokens.id_token = id_token;
   let _idTokenPayload = null;
-  if (tokens.id_token) {
-    _idTokenPayload = extractTokenPayload(tokens.id_token);
-    tokens.idTokenPayload = { ..._idTokenPayload };
-    if (_idTokenPayload.nonce && currentDatabaseElement.nonce != null) {
+  if (id_token) {
+    _idTokenPayload = extractTokenPayload(id_token);
+    tokens.idTokenPayload = _idTokenPayload != null ? { ..._idTokenPayload } : null;
+    if (_idTokenPayload && _idTokenPayload.nonce && currentDatabaseElement.nonce != null) {
       const keyNonce = TOKEN.NONCE_TOKEN + "_" + currentDatabaseElement.configurationName;
       _idTokenPayload.nonce = keyNonce;
     }
@@ -235,8 +243,8 @@ function _hideTokens(tokens, currentDatabaseElement, configurationName) {
   if (!isValid) {
     throw Error(`Tokens are not OpenID valid, reason: ${reason}`);
   }
-  if (currentDatabaseElement.tokens != null && "refresh_token" in currentDatabaseElement.tokens && !("refresh_token" in tokens)) {
-    const refreshToken = currentDatabaseElement.tokens.refresh_token;
+  if (oldTokens != null && "refresh_token" in oldTokens && !("refresh_token" in tokens)) {
+    const refreshToken = oldTokens.refresh_token;
     currentDatabaseElement.tokens = {
       ...tokens,
       refresh_token: refreshToken
@@ -264,7 +272,7 @@ function replaceCodeVerifier(codeVerifier, newCodeVerifier) {
   const regex = /code_verifier=[A-Za-z0-9_-]+/i;
   return codeVerifier.replace(regex, `code_verifier=${newCodeVerifier}`);
 }
-const version = "7.14.0";
+const version = "7.15.4";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {

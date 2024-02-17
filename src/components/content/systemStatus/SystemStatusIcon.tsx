@@ -4,6 +4,7 @@
  */
 
 import { CheckCircleTwoTone, CloseCircleTwoTone, LoadingOutlined } from '@ant-design/icons';
+import React from 'react';
 
 function SystemStatusIcon({
     isSystemUp,
@@ -11,7 +12,7 @@ function SystemStatusIcon({
 }: {
     isSystemUp: boolean;
     isStatusLoading: boolean;
-}): JSX.Element {
+}): React.JSX.Element {
     if (isStatusLoading) {
         return <LoadingOutlined spin />;
     }
