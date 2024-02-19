@@ -47,16 +47,17 @@ function DeploymentTimer({
         if (operationType === OperationType.Migrate) {
             if (
                 stopWatch.isRunning &&
-                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED ||
-                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL)
+                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.MIGRATION_SUCCESSFUL ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED)
             ) {
                 stopWatch.pause();
             }
             if (
                 !stopWatch.isRunning &&
-                (deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DEPLOYING ||
-                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.DESTROYING)
+                !(
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.MIGRATION_SUCCESSFUL ||
+                    deploymentStatus === DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED
+                )
             ) {
                 stopWatch.reset();
             }
