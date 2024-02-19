@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
@@ -20,6 +20,7 @@ function OrderSubmitStatusPolling({
     setIsDeploying,
     setRequestSubmitted,
     serviceHostingType,
+    serviceProviderContactDetails,
 }: {
     uuid: string | undefined;
     error: Error | null;
@@ -28,6 +29,7 @@ function OrderSubmitStatusPolling({
     setIsDeploying: (arg: boolean) => void;
     setRequestSubmitted: (arg: boolean) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(uuid, isSuccess, serviceHostingType, [
         DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
@@ -85,7 +87,8 @@ function OrderSubmitStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.DEPLOYING,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Deploy,
+            undefined
         );
     }
 
@@ -94,7 +97,8 @@ function OrderSubmitStatusPolling({
             error,
             DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Deploy,
+            serviceProviderContactDetails
         );
     }
 
@@ -105,7 +109,8 @@ function OrderSubmitStatusPolling({
             'error',
             DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Deploy,
+            serviceProviderContactDetails
         );
     }
 
@@ -120,7 +125,8 @@ function OrderSubmitStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.DEPLOYING,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Deploy,
+            undefined
         );
     }
 
@@ -131,7 +137,8 @@ function OrderSubmitStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.DEPLOYING,
             stopWatch,
-            OperationType.Deploy
+            OperationType.Deploy,
+            undefined
         );
     }
 
@@ -151,7 +158,8 @@ function OrderSubmitStatusPolling({
                 'success',
                 getServiceDetailsByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Deploy
+                OperationType.Deploy,
+                undefined
             );
         }
         if (
@@ -164,7 +172,8 @@ function OrderSubmitStatusPolling({
                 'error',
                 getServiceDetailsByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Deploy
+                OperationType.Deploy,
+                serviceProviderContactDetails
             );
         }
         if (
@@ -177,7 +186,8 @@ function OrderSubmitStatusPolling({
                 'error',
                 getServiceDetailsByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Deploy
+                OperationType.Deploy,
+                serviceProviderContactDetails
             );
         }
     }

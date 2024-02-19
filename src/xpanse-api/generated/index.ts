@@ -67,3 +67,4 @@ export { ServiceVendorService } from './services/ServiceVendorService';
 export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';
 export { UserPoliciesManagementService } from './services/UserPoliciesManagementService';
 export { WebhookService } from './services/WebhookService';
+export { WorkflowService } from './services/WorkflowService';

@@ -14,6 +14,7 @@ import { FlavoursText } from '../../../common/ocl/FlavorsText';
 import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceStatus } from './ServiceStatus';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
+import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (
@@ -67,7 +68,10 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Contact Details'>
-                    <ContactDetailsText serviceProviderContactDetails={serviceDetails.serviceProviderContactDetails} />
+                    <ContactDetailsText
+                        serviceProviderContactDetails={serviceDetails.serviceProviderContactDetails}
+                        showFor={ContactDetailsShowType.Catalog}
+                    />
                 </Descriptions.Item>
             </Descriptions>
         </>

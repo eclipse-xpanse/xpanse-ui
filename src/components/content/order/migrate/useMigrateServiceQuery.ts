@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { MigrateRequest, MigrationService } from '../../../../xpanse-api/generated';
 
 export function useMigrateServiceQuery() {
@@ -14,10 +14,10 @@ export function useMigrateServiceQuery() {
     });
 }
 
-export function useMigrateServiceDetailsQuery() {
-    return useMutation({
-        mutationFn: (processInstanceId: string) => {
-            return MigrationService.getMigrationOrderDetailsById(processInstanceId);
-        },
+export function useMigrateServiceDetailsQuery(processInstanceId: string) {
+    return useQuery({
+        queryKey: ['migrationServiceDetails', processInstanceId],
+        queryFn: () => MigrationService.getMigrationOrderDetailsById(processInstanceId),
+        enabled: processInstanceId.length > 0,
     });
 }

@@ -4,11 +4,14 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ApiError, Response, ServiceService, DeployedService } from '../../../../xpanse-api/generated';
+import { ApiError, DeployedService, Response, ServiceService } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 
 export function PurgeServiceStatusPolling({
     deployedService,
@@ -39,6 +42,8 @@ export function PurgeServiceStatusPolling({
         refetchInterval: deployedService.id.length > 0 && isRefetch ? deploymentStatusPollingInterval : false,
         enabled: deployedService.id.length > 0 && isRefetch,
     });
+
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
     useEffect(() => {
         if (isError) {
@@ -76,6 +81,20 @@ export function PurgeServiceStatusPolling({
                             closable={true}
                             onClose={onClose}
                             type={'error'}
+                            action={
+                                <>
+                                    {getOrderableServiceDetails.isSuccess ? (
+                                        <ContactDetailsText
+                                            serviceProviderContactDetails={
+                                                getOrderableServiceDetails.data.serviceProviderContactDetails
+                                            }
+                                            showFor={ContactDetailsShowType.Order}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </>
+                            }
                         />{' '}
                     </div>
                 );
@@ -104,6 +123,20 @@ export function PurgeServiceStatusPolling({
                             closable={true}
                             onClose={onClose}
                             type={'error'}
+                            action={
+                                <>
+                                    {getOrderableServiceDetails.isSuccess ? (
+                                        <ContactDetailsText
+                                            serviceProviderContactDetails={
+                                                getOrderableServiceDetails.data.serviceProviderContactDetails
+                                            }
+                                            showFor={ContactDetailsShowType.Order}
+                                        />
+                                    ) : (
+                                        <></>
+                                    )}
+                                </>
+                            }
                         />{' '}
                     </div>
                 );

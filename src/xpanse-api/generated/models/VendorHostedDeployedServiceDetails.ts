@@ -38,6 +38,10 @@ export type VendorHostedDeployedServiceDetails = {
      */
     flavor?: string;
     /**
+     * The id of the Service Template
+     */
+    serviceTemplateId?: string;
+    /**
      * The deployment state of the service
      */
     serviceDeploymentState: VendorHostedDeployedServiceDetails.serviceDeploymentState;

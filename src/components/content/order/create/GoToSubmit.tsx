@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { Button } from 'antd';
 import { OrderSubmitProps } from './OrderSubmit';
@@ -12,32 +12,35 @@ import React from 'react';
 import { orderPageRoute } from '../../../utils/constants';
 
 export default function GoToSubmit({
-    selectVersion,
-    selectCsp,
-    selectRegion,
-    selectArea,
-    selectFlavor,
+    selectedVersion,
+    selectedCsp,
+    selectedRegion,
+    selectedArea,
+    selectedFlavor,
     versionMapper,
-    selectServiceHostingType,
+    selectedServiceHostingType,
+    currentServiceProviderContactDetails,
 }: {
-    selectVersion: string;
-    selectCsp: UserOrderableServiceVo.csp;
-    selectRegion: string;
-    selectArea: string;
-    selectFlavor: string;
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
+    selectedVersion: string;
+    selectedCsp: UserOrderableServiceVo.csp;
+    selectedRegion: string;
+    selectedArea: string;
+    selectedFlavor: string;
+    selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     versionMapper: Map<string, UserOrderableServiceVo[]>;
+    currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
         const props: OrderSubmitProps = getDeployParams(
-            versionMapper.get(selectVersion) ?? [],
-            selectCsp,
-            selectServiceHostingType,
-            selectArea,
-            selectRegion,
-            selectFlavor
+            versionMapper.get(selectedVersion) ?? [],
+            selectedCsp,
+            selectedServiceHostingType,
+            selectedArea,
+            selectedRegion,
+            selectedFlavor,
+            currentServiceProviderContactDetails
         );
 
         navigate(
