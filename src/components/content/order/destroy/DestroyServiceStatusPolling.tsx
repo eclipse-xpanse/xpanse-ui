@@ -3,27 +3,30 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, Response, DeployedServiceDetails, DeployedService } from '../../../../xpanse-api/generated';
+import { ApiError, DeployedService, DeployedServiceDetails, Response } from '../../../../xpanse-api/generated';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import React, { useEffect } from 'react';
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 
 function DestroyServiceStatusPolling({
     deployedService,
     isError,
     isSuccess,
     error,
-    setIsDestroyingCompleted,
-    getDestroyCloseStatus,
+    setIsDestroying,
+    closeDestroyResultAlert,
     serviceHostingType,
 }: {
     deployedService: DeployedService;
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
-    setIsDestroyingCompleted: (arg: boolean) => void;
-    getDestroyCloseStatus: (arg: boolean) => void;
+    setIsDestroying: (arg: boolean) => void;
+    closeDestroyResultAlert: (arg: boolean) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
 }): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
@@ -35,6 +38,7 @@ function DestroyServiceStatusPolling({
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
         ]
     );
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
     useEffect(() => {
         if (
@@ -46,29 +50,25 @@ function DestroyServiceStatusPolling({
         ) {
             deployedService.serviceDeploymentState = getServiceDetailsByIdQuery.data.serviceDeploymentState;
             deployedService.serviceState = getServiceDetailsByIdQuery.data.serviceState;
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [
-        getServiceDetailsByIdQuery.isSuccess,
-        getServiceDetailsByIdQuery.data,
-        setIsDestroyingCompleted,
-        deployedService,
-    ]);
+    }, [getServiceDetailsByIdQuery.isSuccess, getServiceDetailsByIdQuery.data, setIsDestroying, deployedService]);
 
     useEffect(() => {
         if (isError) {
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [isError, setIsDestroyingCompleted]);
+    }, [isError, setIsDestroying]);
 
     useEffect(() => {
         if (getServiceDetailsByIdQuery.isError) {
-            setIsDestroyingCompleted(true);
+            setIsDestroying(false);
         }
-    }, [getServiceDetailsByIdQuery.isError, setIsDestroyingCompleted]);
+    }, [getServiceDetailsByIdQuery.isError, setIsDestroying]);
 
     const onClose = () => {
-        getDestroyCloseStatus(true);
+        setIsDestroying(false);
+        closeDestroyResultAlert(true);
     };
 
     if (isError) {
@@ -87,6 +87,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );
@@ -115,6 +129,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );
@@ -158,6 +186,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );

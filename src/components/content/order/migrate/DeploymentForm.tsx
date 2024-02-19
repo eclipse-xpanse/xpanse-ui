@@ -40,7 +40,8 @@ export const DeploymentForm = ({
         selectServiceHostingType,
         selectArea,
         selectRegion,
-        selectFlavor
+        selectFlavor,
+        undefined
     );
 
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(

@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { WorkflowService } from '../../../../xpanse-api/generated/services/WorkFlowService';
+import { WorkflowService } from '../../../../xpanse-api/generated/services/WorkflowService';
 
 export default function useAllTasksQuery(status: 'done' | 'failed' | undefined) {
     return useQuery({

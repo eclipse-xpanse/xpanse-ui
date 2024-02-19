@@ -11,7 +11,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-des
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
 import { useMutation } from '@tanstack/react-query';
-import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
+import { WorkflowService } from '../../../xpanse-api/generated/services/WorkflowService';
 
 function Workflows(): React.JSX.Element {
     const [tipMessage, setTipMessage] = useState<string>('');
@@ -195,4 +195,5 @@ function Workflows(): React.JSX.Element {
         </div>
     );
 }
+
 export default Workflows;

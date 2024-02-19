@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { OrderSubmitFailed } from '../orderStatus/OrderSubmitFailed';
 import { useStopwatch } from 'react-timer-hook';
@@ -24,6 +24,7 @@ function MigrateServiceStatusPolling({
     setIsPreviousDisabled,
     getCurrentMigrationStepStatus,
     serviceHostingType,
+    currentContactServiceDetails,
 }: {
     destroyUuid: string | undefined;
     deployUuid: string | undefined;
@@ -35,6 +36,7 @@ function MigrateServiceStatusPolling({
     setIsPreviousDisabled: (arg: boolean) => void;
     getCurrentMigrationStepStatus: (srg: MigrationStatus) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
+    currentContactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const [isStart, setIsStart] = useState<boolean>(false);
 
@@ -133,7 +135,8 @@ function MigrateServiceStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.MIGRATING,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            undefined
         );
     }
 
@@ -142,7 +145,8 @@ function MigrateServiceStatusPolling({
             error,
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -153,7 +157,8 @@ function MigrateServiceStatusPolling({
             'error',
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -162,7 +167,8 @@ function MigrateServiceStatusPolling({
             getDeployServiceEntityByIdQuery.error,
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -171,7 +177,8 @@ function MigrateServiceStatusPolling({
             getDestroyServiceEntityByIdQuery.error,
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -187,7 +194,8 @@ function MigrateServiceStatusPolling({
             'error',
             getDeployServiceEntityByIdQuery.data.serviceDeploymentState,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -211,7 +219,8 @@ function MigrateServiceStatusPolling({
                 'success',
                 getDeployServiceEntityByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         }
 
@@ -227,7 +236,8 @@ function MigrateServiceStatusPolling({
                 'error',
                 getDestroyServiceEntityByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                currentContactServiceDetails
             );
         }
 
@@ -243,7 +253,8 @@ function MigrateServiceStatusPolling({
                 'success',
                 getDestroyServiceEntityByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         }
 
@@ -259,7 +270,8 @@ function MigrateServiceStatusPolling({
                 'success',
                 getDestroyServiceEntityByIdQuery.data.serviceDeploymentState,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         }
     }

@@ -39,6 +39,10 @@ export type DeployedServiceDetails = {
      */
     flavor?: string;
     /**
+     * The id of the Service Template
+     */
+    serviceTemplateId?: string;
+    /**
      * The deployment state of the service
      */
     serviceDeploymentState: DeployedServiceDetails.serviceDeploymentState;
