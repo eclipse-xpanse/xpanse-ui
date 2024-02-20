@@ -55,6 +55,8 @@ export { WorkFlowTask } from './models/WorkFlowTask';
 
 export { AdminService } from './services/AdminService';
 export { AuthManagementService } from './services/AuthManagementService';
+export { CloudResourcesService } from './services/CloudResourcesService';
+export { CloudServiceProviderService } from './services/CloudServiceProviderService';
 export { CredentialsConfigurationService } from './services/CredentialsConfigurationService';
 export { IsvCloudCredentialsManagementService } from './services/IsvCloudCredentialsManagementService';
 export { MigrationService } from './services/MigrationService';
