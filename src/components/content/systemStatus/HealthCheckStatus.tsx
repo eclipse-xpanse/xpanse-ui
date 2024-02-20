@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
@@ -24,56 +24,116 @@ interface DataType {
 }
 
 export const HealthCheckStatus = (): React.JSX.Element => {
-    const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
-    const [backendSystemTypeFilters, setBackendSystemTypeFilters] = useState<ColumnFilterItem[]>([]);
-    const [healthStatusFilters, setHealthStatusFilters] = useState<ColumnFilterItem[]>([]);
-    const [healthCheckError, setHealthCheckError] = useState<React.JSX.Element>(<></>);
-    const [backendSystemStatusList, setBackendSystemStatusList] = useState<DataType[]>([]);
-    const healthCheckQuery = useHealthCheckStatusQuery();
-    useEffect(() => {
-        if (healthCheckQuery.isSuccess) {
-            setHealthCheckError(<></>);
-            const rsp: SystemStatus | undefined = healthCheckQuery.data;
-            updateBackendSystemStatusList(rsp.backendSystemStatuses);
-            updateNameFilters(rsp.backendSystemStatuses);
-            updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
-            updateHealthStatusFilters(rsp.backendSystemStatuses);
-        }
-    }, [healthCheckQuery.data, healthCheckQuery.isSuccess]);
+    let nameFilters: ColumnFilterItem[] = [];
+    let backendSystemTypeFilters: ColumnFilterItem[] = [];
+    let healthStatusFilters: ColumnFilterItem[] = [];
+    let healthCheckError: React.JSX.Element = <></>;
+    let backendSystemStatusFilters: DataType[] = [];
 
-    useEffect(() => {
-        if (healthCheckQuery.isError) {
-            setBackendSystemStatusList([]);
-            if (
-                healthCheckQuery.error instanceof ApiError &&
-                healthCheckQuery.error.body &&
-                'details' in healthCheckQuery.error.body
-            ) {
-                const response: Response = healthCheckQuery.error.body as Response;
-                setHealthCheckError(
-                    <div className={'health-refresh-alert-tip'}>
-                        <Alert
-                            message={response.resultType.valueOf()}
-                            description={convertStringArrayToUnorderedList(response.details)}
-                            type={'error'}
-                            closable={true}
-                        />
-                    </div>
-                );
-            } else {
-                setHealthCheckError(
-                    <div className={'health-refresh-alert-tip'}>
-                        <Alert
-                            message='Fetching Health Check Status Failed'
-                            description={healthCheckQuery.error.message}
-                            type={'error'}
-                            closable={true}
-                        />
-                    </div>
-                );
-            }
+    const updateBackendSystemStatusList = (backendSystemStatusList: BackendSystemStatus[]): void => {
+        const currentBackendSystemStatusList: DataType[] = [];
+        backendSystemStatusList.forEach(function (item, index) {
+            const currentBackendSystemStatus = {
+                key: String(index),
+                backendSystemType: item.backendSystemType,
+                name: item.name,
+                healthStatus: item.healthStatus,
+                endpoint: item.endpoint,
+                details: item.details,
+            };
+            currentBackendSystemStatusList.push(currentBackendSystemStatus);
+        });
+        backendSystemStatusFilters = currentBackendSystemStatusList;
+    };
+
+    const updateNameFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
+        const filters: ColumnFilterItem[] = [];
+        const nameSet = new Set<string>('');
+        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
+            nameSet.add(item.name);
+        });
+        nameSet.forEach((name) => {
+            const filter = {
+                text: name,
+                value: name,
+            };
+            filters.push(filter);
+        });
+        nameFilters = filters;
+    };
+
+    const updateBackendSystemTypeFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
+        const filters: ColumnFilterItem[] = [];
+        const backendSystemTypeSet = new Set<string>('');
+        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
+            backendSystemTypeSet.add(item.backendSystemType);
+        });
+        backendSystemTypeSet.forEach((backendSystemType) => {
+            const filter = {
+                text: backendSystemType,
+                value: backendSystemType,
+            };
+            filters.push(filter);
+        });
+        backendSystemTypeFilters = filters;
+    };
+
+    const updateHealthStatusFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
+        const filters: ColumnFilterItem[] = [];
+        const healthStatusSet = new Set<string>('');
+        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
+            healthStatusSet.add(item.healthStatus);
+        });
+        healthStatusSet.forEach((healthStatus) => {
+            const filter = {
+                text: healthStatus,
+                value: healthStatus,
+            };
+            filters.push(filter);
+        });
+        healthStatusFilters = filters;
+    };
+    const healthCheckQuery = useHealthCheckStatusQuery();
+
+    if (healthCheckQuery.isSuccess) {
+        const rsp: SystemStatus | undefined = healthCheckQuery.data;
+        updateBackendSystemStatusList(rsp.backendSystemStatuses);
+        updateNameFilters(rsp.backendSystemStatuses);
+        updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
+        updateHealthStatusFilters(rsp.backendSystemStatuses);
+    }
+
+    if (healthCheckQuery.isError) {
+        backendSystemStatusFilters = [];
+        if (
+            healthCheckQuery.error instanceof ApiError &&
+            healthCheckQuery.error.body &&
+            'details' in healthCheckQuery.error.body
+        ) {
+            const response: Response = healthCheckQuery.error.body as Response;
+            healthCheckError = (
+                <div className={'health-refresh-alert-tip'}>
+                    <Alert
+                        message={response.resultType.valueOf()}
+                        description={convertStringArrayToUnorderedList(response.details)}
+                        type={'error'}
+                        closable={true}
+                    />
+                </div>
+            );
+        } else {
+            healthCheckError = (
+                <div className={'health-refresh-alert-tip'}>
+                    <Alert
+                        message='Fetching Health Check Status Failed'
+                        description={healthCheckQuery.error.message}
+                        type={'error'}
+                        closable={true}
+                    />
+                </div>
+            );
         }
-    }, [healthCheckQuery.isError, healthCheckQuery.error]);
+    }
 
     const columns: ColumnsType<DataType> = [
         {
@@ -141,79 +201,15 @@ export const HealthCheckStatus = (): React.JSX.Element => {
         },
     ];
 
-    const updateBackendSystemStatusList = (backendSystemStatusList: BackendSystemStatus[]): void => {
-        const currentBackendSystemStatusList: DataType[] = [];
-        backendSystemStatusList.forEach(function (item, index) {
-            const currentBackendSystemStatus = {
-                key: String(index),
-                backendSystemType: item.backendSystemType,
-                name: item.name,
-                healthStatus: item.healthStatus,
-                endpoint: item.endpoint,
-                details: item.details,
-            };
-            currentBackendSystemStatusList.push(currentBackendSystemStatus);
-        });
-        setBackendSystemStatusList(currentBackendSystemStatusList);
-    };
-
-    const updateNameFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
-        const filters: ColumnFilterItem[] = [];
-        const nameSet = new Set<string>('');
-        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
-            nameSet.add(item.name);
-        });
-        nameSet.forEach((name) => {
-            const filter = {
-                text: name,
-                value: name,
-            };
-            filters.push(filter);
-        });
-        setNameFilters(filters);
-    };
-
-    const updateBackendSystemTypeFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
-        const filters: ColumnFilterItem[] = [];
-        const backendSystemTypeSet = new Set<string>('');
-        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
-            backendSystemTypeSet.add(item.backendSystemType);
-        });
-        backendSystemTypeSet.forEach((backendSystemType) => {
-            const filter = {
-                text: backendSystemType,
-                value: backendSystemType,
-            };
-            filters.push(filter);
-        });
-        setBackendSystemTypeFilters(filters);
-    };
-
-    const updateHealthStatusFilters = (backendSystemStatusList: BackendSystemStatus[]): void => {
-        const filters: ColumnFilterItem[] = [];
-        const healthStatusSet = new Set<string>('');
-        backendSystemStatusList.forEach((item: BackendSystemStatus) => {
-            healthStatusSet.add(item.healthStatus);
-        });
-        healthStatusSet.forEach((healthStatus) => {
-            const filter = {
-                text: healthStatus,
-                value: healthStatus,
-            };
-            filters.push(filter);
-        });
-        setHealthStatusFilters(filters);
-    };
-
     const refreshData = () => {
-        setHealthCheckError(<></>);
+        healthCheckError = <></>;
         void healthCheckQuery.refetch();
     };
 
     return (
         <>
             <div className={'generic-table-container'}>
-                {healthCheckError}
+                {healthCheckQuery.isError ? healthCheckError : undefined}
                 <div className={'health-status-refresh'}>
                     <Button
                         type='primary'
@@ -225,7 +221,7 @@ export const HealthCheckStatus = (): React.JSX.Element => {
                         refresh
                     </Button>
                 </div>
-                <Table columns={columns} dataSource={backendSystemStatusList} />
+                <Table columns={columns} dataSource={backendSystemStatusFilters} loading={healthCheckQuery.isLoading} />
             </div>
         </>
     );

@@ -7,7 +7,13 @@ import { PoweroffOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useOidc } from '@axa-fr/react-oidc';
 import React from 'react';
-import { createServicePageRoute, homePageRoute, orderPageRoute, registerPageRoute } from '../../utils/constants';
+import {
+    catalogPageRoute,
+    createServicePageRoute,
+    homePageRoute,
+    orderPageRoute,
+    registerPageRoute,
+} from '../../utils/constants';
 function Logout(): React.JSX.Element {
     const { logout } = useOidc();
 
@@ -21,6 +27,9 @@ function Logout(): React.JSX.Element {
         }
         if (window.location.pathname.startsWith(registerPageRoute)) {
             return registerPageRoute;
+        }
+        if (window.location.pathname.startsWith(catalogPageRoute)) {
+            return catalogPageRoute;
         }
         return window.location.href.replace(window.location.hash, '');
     }

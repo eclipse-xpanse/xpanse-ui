@@ -13,8 +13,7 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useEffect, useState } from 'react';
-import { useMigrateServiceDetailsQuery, useMigrateServiceQuery } from './useMigrateServiceQuery';
+import React, { useState } from 'react';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
@@ -26,6 +25,7 @@ import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { useMigrateServiceQuery } from './useMigrateServiceQuery';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -54,7 +54,6 @@ export const MigrateServiceSubmit = ({
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const [isMigrating, setIsMigrating] = useState<boolean>(false);
     const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
-    const [deployUuid, setDeployUuid] = useState<string>('');
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DestroyTheOldService
     );
@@ -71,8 +70,6 @@ export const MigrateServiceSubmit = ({
 
     const migrateServiceRequest = useMigrateServiceQuery();
 
-    const migrateServiceDetailsRequest = useMigrateServiceDetailsQuery();
-
     const migrate = () => {
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
@@ -85,18 +82,6 @@ export const MigrateServiceSubmit = ({
         }
     };
 
-    useEffect(() => {
-        if (migrateServiceRequest.data && migrateServiceRequest.data.length > 0) {
-            migrateServiceDetailsRequest.mutate(migrateServiceRequest.data);
-        }
-    }, [migrateServiceDetailsRequest, migrateServiceRequest.data, migrateServiceRequest.isSuccess]);
-
-    useEffect(() => {
-        if (migrateServiceDetailsRequest.data) {
-            setDeployUuid(migrateServiceDetailsRequest.data.newServiceId);
-        }
-    }, [migrateServiceDetailsRequest.data]);
-
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
         getCurrentMigrationStep(MigrationSteps.ImportServiceData);
@@ -106,13 +91,12 @@ export const MigrateServiceSubmit = ({
         <>
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusPolling
-                    destroyUuid={currentSelectedService?.id}
-                    deployUuid={deployUuid}
-                    isMigrateSuccess={migrateServiceRequest.isSuccess}
-                    error={migrateServiceRequest.error}
-                    isLoading={migrateServiceRequest.isPending}
+                    migrationId={migrateServiceRequest.data}
+                    isMigrateRequestSuccess={migrateServiceRequest.isSuccess}
+                    migrateRequestError={migrateServiceRequest.error}
+                    isMigrateRequestLoading={migrateServiceRequest.isPending}
                     setIsMigrating={setIsMigrating}
-                    setRequestSubmitted={setRequestSubmitted}
+                    setMigrateDisable={setRequestSubmitted}
                     setIsPreviousDisabled={setIsPreviousDisabled}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                     serviceHostingType={selectServiceHostingType}

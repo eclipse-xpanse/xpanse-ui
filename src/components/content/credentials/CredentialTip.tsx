@@ -4,7 +4,7 @@
  */
 
 import { Alert } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const CredentialTip = ({
     type,
@@ -15,14 +15,20 @@ export const CredentialTip = ({
     msg: string;
     onRemove: () => void;
 }): React.JSX.Element => {
-    if (!type) {
+    const [isAlertVisible, setIsAlertVisible] = useState<boolean>(true);
+
+    function onRemoveAlert() {
+        setIsAlertVisible(false);
+        onRemove();
+    }
+    if (!type || !isAlertVisible) {
         return <></>;
     }
 
     return (
         <div className={'credential-tip'}>
             {' '}
-            <Alert description={msg} type={type} onClose={onRemove} closable={true} />{' '}
+            <Alert description={msg} type={type} onClose={onRemoveAlert} closable={true} />{' '}
         </div>
     );
 };
