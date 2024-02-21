@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { ColumnsType } from 'antd/es/table';
 import AddCredential from './AddCredential';
 import UpdateCredential from './UpdateCredential';
@@ -21,8 +21,6 @@ import {
     AbstractCredentialInfo,
     ApiError,
     CloudServiceProvider,
-    CreateCredential,
-    CredentialVariable,
     CredentialVariables,
     IsvCloudCredentialsManagementService,
     Response,
@@ -32,64 +30,59 @@ import { useMutation } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
 import useCredentialsListQuery from './query/queryCredentialsList';
+import { v4 } from 'uuid';
 
 function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-    const [isRefresh, setIsRefresh] = useState(false);
-    const [tipMessage, setTipMessage] = useState<string>('');
-    const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const [abstractCredentialInfoList, setAbstractCredentialInfoList] = useState<AbstractCredentialInfo[]>([]);
-    const [credentialDetails, setCredentialDetails] = useState<CredentialVariable[]>([]);
+    let tipMessage: string = '';
+    let tipType: 'error' | 'success' | undefined = undefined;
+    let abstractCredentialInfoList: AbstractCredentialInfo[] = [];
+    const [activeCredential, setActiveCredential] = useState<CredentialVariables | undefined>(undefined);
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
-    const [createCredential, setCreateCredential] = useState<CreateCredential>({
-        csp: '' as CredentialVariables.csp,
-        description: '',
-        name: '',
-        timeToLive: 0,
-        type: '' as CredentialVariables.type,
-        variables: [],
-    });
 
     const credentialsQuery = useCredentialsListQuery();
 
-    useEffect(() => {
-        const credentials: AbstractCredentialInfo[] | undefined = credentialsQuery.data;
-        if (credentials !== undefined && credentials.length > 0) {
-            setAbstractCredentialInfoList(credentials);
+    if (credentialsQuery.isSuccess) {
+        const credentials: AbstractCredentialInfo[] = credentialsQuery.data;
+        if (credentials.length > 0) {
+            abstractCredentialInfoList = credentials;
         } else {
-            setAbstractCredentialInfoList([]);
+            abstractCredentialInfoList = [];
         }
-        getTipInfo(undefined, '');
-    }, [credentialsQuery.data, credentialsQuery.isSuccess]);
+    }
 
-    useEffect(() => {
+    if (credentialsQuery.isError) {
         if (
             credentialsQuery.error instanceof ApiError &&
             credentialsQuery.error.body &&
             'details' in credentialsQuery.error.body
         ) {
             const response: Response = credentialsQuery.error.body as Response;
-            getTipInfo('error', response.details.join());
+            tipType = 'error';
+            tipMessage = response.details.join();
         } else if (credentialsQuery.error instanceof Error) {
-            getTipInfo('error', credentialsQuery.error.message);
+            tipType = 'error';
+            tipMessage = credentialsQuery.error.message;
         }
-    }, [credentialsQuery.error]);
+    }
 
     const deleteCredentialRequest = useMutation({
         mutationFn: (credentialVariables: CredentialVariables) => deleteCredentialByRole(credentialVariables),
         onSuccess: () => {
-            getTipInfo('success', 'Deleting Credentials Successful.');
-            setIsRefresh(false);
+            tipType = 'success';
+            tipMessage = 'Deleting Credentials Successful.';
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
             if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
-                getTipInfo('error', response.details.join());
+                tipType = 'error';
+                tipMessage = response.details.join();
             } else {
-                getTipInfo('error', error.message);
+                tipType = 'error';
+                tipMessage = error.message;
             }
         },
     });
@@ -161,9 +154,9 @@ function Credentials(): React.JSX.Element {
                             <Popconfirm
                                 title='Delete the Credentials'
                                 description='Are you sure to delete the Credentials?'
-                                okText='Yes'
-                                cancelText='No'
-                                onConfirm={() => {
+                                okText='No'
+                                cancelText='Yes'
+                                onCancel={() => {
                                     deleteCredentialRequest.mutate(record);
                                 }}
                             >
@@ -189,88 +182,63 @@ function Credentials(): React.JSX.Element {
 
     const addCredential = () => {
         setIsAddOpen(true);
-        setIsRefresh(false);
-        getTipInfo(undefined, '');
     };
 
     const refresh = () => {
-        setIsRefresh(true);
         void credentialsQuery.refetch();
     };
 
-    const updateCredential = (abstractCredentialInfo: AbstractCredentialInfo) => {
-        const credentialVariables: CredentialVariables = abstractCredentialInfo;
-        const credentialVariableList: CredentialVariable[] = credentialVariables.variables;
-        const credentialVariableLists: CredentialVariable[] = [];
-        credentialVariableList.forEach((credentialVariable) => {
-            if (credentialVariable.isSensitive) {
-                credentialVariable.value = '';
-            }
-            credentialVariableLists.push(credentialVariable);
-        });
-        const createCredential: CreateCredential = {
-            name: credentialVariables.name,
-            type: credentialVariables.type,
-            csp: credentialVariables.csp,
-            description: credentialVariables.description,
-            variables: credentialVariableLists,
-            timeToLive: (abstractCredentialInfo as CreateCredential).timeToLive,
-        };
-        setCreateCredential(createCredential);
-        setIsRefresh(false);
+    const updateCredential = (credentialVariables: CredentialVariables) => {
+        setActiveCredential(credentialVariables);
         setIsUpdateOpen(true);
-        getTipInfo(undefined, '');
     };
 
     const details = (credentialVariables: CredentialVariables) => {
         setIsDetailsOpen(true);
-        getTipInfo(undefined, '');
-        setCredentialDetails(credentialVariables.variables);
+        setActiveCredential(credentialVariables);
     };
 
     const onCancel = () => {
         setIsAddOpen(false);
-        setIsRefresh(false);
-        onRemove();
+        setActiveCredential(undefined);
         void credentialsQuery.refetch();
     };
 
     const onUpdateCancel = () => {
         setIsUpdateOpen(false);
-        setIsRefresh(false);
-        onRemove();
+        setActiveCredential(undefined);
         void credentialsQuery.refetch();
     };
 
     const onDetailsCancel = () => {
+        setActiveCredential(undefined);
         setIsDetailsOpen(false);
-        onRemove();
     };
 
     const onRemove = () => {
-        getTipInfo(undefined, '');
-    };
-
-    const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
-        setTipType(tipType);
-        setTipMessage(tipMessage);
+        tipMessage = '';
+        tipType = undefined;
     };
 
     return (
         <div className={'generic-table-container'}>
-            <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
+            <CredentialTip key={v4().toString()} type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
             <div>
-                <Modal
-                    width={1000}
-                    title='Add Credentials'
-                    open={isAddOpen}
-                    onCancel={onCancel}
-                    maskClosable={false}
-                    destroyOnClose={true}
-                    footer={[]}
-                >
-                    <AddCredential role={currentRole} onCancel={onCancel} />
-                </Modal>
+                {/* this condition will unmount and mount the modal completely. So that the old values are not retained. */}
+                {isAddOpen ? (
+                    <Modal
+                        width={1000}
+                        title='Add Credentials'
+                        open={isAddOpen}
+                        onCancel={onCancel}
+                        maskClosable={false}
+                        destroyOnClose={true}
+                        footer={[]}
+                        forceRender={true}
+                    >
+                        <AddCredential role={currentRole} onCancel={onCancel} />
+                    </Modal>
+                ) : null}
                 <Modal
                     width={1000}
                     title='Update Credentials'
@@ -280,11 +248,14 @@ function Credentials(): React.JSX.Element {
                     destroyOnClose={true}
                     footer={[]}
                 >
-                    <UpdateCredential
-                        role={currentRole}
-                        createCredential={createCredential}
-                        onUpdateCancel={onUpdateCancel}
-                    />
+                    {activeCredential ? (
+                        <UpdateCredential
+                            key={activeCredential.csp}
+                            role={currentRole}
+                            credentialVariables={activeCredential}
+                            onUpdateCancel={onUpdateCancel}
+                        />
+                    ) : null}
                 </Modal>
                 <Modal
                     width={1000}
@@ -295,14 +266,16 @@ function Credentials(): React.JSX.Element {
                     destroyOnClose={true}
                     footer={[]}
                 >
-                    <CredentialDetails credentialDetails={credentialDetails} />
+                    {activeCredential ? (
+                        <CredentialDetails key={activeCredential.csp} credentialDetails={activeCredential.variables} />
+                    ) : null}
                 </Modal>
             </div>
             <div>
                 <div className={'policy-manage-buttons-container'}>
                     <Button
                         type='primary'
-                        loading={isRefresh && (credentialsQuery.isLoading || credentialsQuery.isRefetching)}
+                        loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}
                         icon={<SyncOutlined />}
                         onClick={() => {
                             refresh();

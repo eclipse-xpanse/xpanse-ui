@@ -4,16 +4,17 @@
  */
 
 import { Alert } from 'antd';
-import OrderSubmitResultDetails from './OrderSubmitResultDetails';
 import { StopwatchResult } from 'react-timer-hook';
 import { DeployedServiceDetails, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
-import DeploymentTimer from './DeploymentTimer';
+
 import React from 'react';
 import { OperationType } from '../types/OperationType';
+import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import DeploymentTimer from '../orderStatus/DeploymentTimer';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 
-export const OrderSubmitResult = (
+export const MigrationOrderSubmitResult = (
     msg: string | React.JSX.Element,
     uuid: string,
     type: 'success' | 'error',
@@ -41,7 +42,6 @@ export const OrderSubmitResult = (
                         ) : (
                             <></>
                         )}
-
                         <DeploymentTimer
                             stopWatch={stopWatch}
                             deploymentStatus={deploymentStatus}

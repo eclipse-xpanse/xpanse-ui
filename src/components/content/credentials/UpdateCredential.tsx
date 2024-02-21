@@ -4,13 +4,14 @@
  */
 
 import { Button, Form, Image, Input, InputNumber, Table, Tooltip } from 'antd';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
 import {
     ApiError,
     CloudServiceProvider,
     CreateCredential,
     CredentialVariable,
+    CredentialVariables,
     IsvCloudCredentialsManagementService,
     Response,
     UserCloudCredentialsManagementService,
@@ -22,88 +23,100 @@ import { useMutation } from '@tanstack/react-query';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
 import useCredentialsListQuery from './query/queryCredentialsList';
+import { v4 } from 'uuid';
 
 function UpdateCredential({
     role,
-    createCredential,
+    credentialVariables,
     onUpdateCancel,
 }: {
     role: string | undefined;
-    createCredential: CreateCredential;
+    credentialVariables: CredentialVariables;
     onUpdateCancel: () => void;
 }): React.JSX.Element {
     const [form] = Form.useForm();
-    const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
+    const credentialVariablesCopy: CredentialVariables = credentialVariables;
     const [tipMessage, setTipMessage] = useState<string>('');
-    const [disable, setDisable] = useState<boolean>(false);
-    const [updateLoading, setUpdateLoading] = useState<boolean>(false);
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
 
+    // Copy necessary to replace already masked values with empty string to avoid user to misunderstand.
+    credentialVariablesCopy.variables.forEach((credentialVariable) => {
+        if (credentialVariable.isSensitive) {
+            credentialVariable.value = '';
+        }
+    });
     const credentialsQuery = useCredentialsListQuery();
-    const setFormFields = (createCredential: CreateCredential) => {
-        form.setFieldsValue({ name: createCredential.name });
-        form.setFieldsValue({ csp: createCredential.csp });
-        form.setFieldsValue({ description: createCredential.description });
-        form.setFieldsValue({ type: createCredential.type });
-        form.setFieldsValue({ variables: createCredential.variables });
-        form.setFieldsValue({ timeToLive: createCredential.timeToLive });
-    };
+
+    // useEffect necessary since the form is updated after the first rendering is completed.
+    // Also, necessary to avoid changing state during render
+    useEffect(() => {
+        form.setFieldsValue({ name: credentialVariablesCopy.name });
+        form.setFieldsValue({ csp: credentialVariablesCopy.csp });
+        form.setFieldsValue({ description: credentialVariablesCopy.description });
+        form.setFieldsValue({ type: credentialVariablesCopy.type });
+        form.setFieldsValue({ variables: credentialVariablesCopy.variables });
+        form.setFieldsValue({ timeToLive: (credentialVariablesCopy as CreateCredential).timeToLive });
+    }, [form, credentialVariablesCopy]);
 
     const updateCredentialRequest = useMutation({
         mutationFn: (createCredential: CreateCredential) => updateCredentialByRole(createCredential),
         onSuccess: () => {
-            getTipInfo('success', 'Updating Credential Successful.');
-            setDisable(true);
-            setUpdateLoading(false);
+            setTipType('success');
+            setTipMessage('Updating Credential Successful.');
         },
         onError: (error: Error) => {
-            setUpdateLoading(false);
             if (error instanceof ApiError && error.body && 'details' in error.body) {
                 const response: Response = error.body as Response;
-                getTipInfo('error', response.details.join());
+                setTipType('error');
+                setTipMessage(response.details.join());
             } else {
-                getTipInfo('error', error.message);
+                setTipType('error');
+                setTipMessage(error.message);
             }
         },
     });
 
-    const updateCredentialByRole = (createCredential: CreateCredential) => {
-        if (role === 'user') {
-            return UserCloudCredentialsManagementService.updateUserCloudCredential(createCredential);
-        } else {
-            return IsvCloudCredentialsManagementService.updateIsvCloudCredential(createCredential);
-        }
-    };
+    const updateCredentialByRole = useCallback(
+        (createCredential: CreateCredential) => {
+            if (role === 'user') {
+                return UserCloudCredentialsManagementService.updateUserCloudCredential(createCredential);
+            } else {
+                return IsvCloudCredentialsManagementService.updateIsvCloudCredential(createCredential);
+            }
+        },
+        [role]
+    );
 
     const submit = (createCredential: CreateCredential) => {
-        setUpdateLoading(true);
         if (!isContainsEmpty(createCredential.variables)) {
-            updateCredentialRequest.mutate(createCredential);
+            // necessary to create the object again since the values sent from form contains each credential variable also as parent key in JSON.
+            // It must be only in the variables map.
+            const createCredentialRequest: CreateCredential = {
+                csp: createCredential.csp,
+                description: createCredential.description,
+                name: createCredential.name,
+                type: createCredential.type,
+                timeToLive: createCredential.timeToLive,
+                variables: createCredential.variables,
+            };
+            updateCredentialRequest.mutate(createCredentialRequest);
         }
     };
 
-    const setVariablesValue = (index: number, e: ChangeEvent<HTMLInputElement>) => {
-        credentialVariableList[index].value = e.target.value;
-        form.setFieldsValue({ variables: credentialVariableList });
-        setCredentialVariableList(credentialVariableList);
-        createCredential.variables = credentialVariableList;
+    const setVariablesValue = (variableName: string, e: ChangeEvent<HTMLInputElement>) => {
+        credentialVariablesCopy.variables.forEach((credentialVariable) => {
+            if (credentialVariable.name === variableName) {
+                credentialVariable.value = e.target.value;
+            }
+        });
+        form.setFieldsValue({ variables: credentialVariablesCopy.variables });
     };
-
-    useEffect(() => {
-        setFormFields(createCredential);
-        setCredentialVariableList(createCredential.variables);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [createCredential]);
 
     const onRemove = () => {
-        getTipInfo(undefined, '');
+        setTipType(undefined);
+        setTipMessage('');
         onUpdateCancel();
         void credentialsQuery.refetch();
-    };
-
-    const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
-        setTipType(tipType);
-        setTipMessage(tipMessage);
     };
 
     const isContainsEmpty = (credentialVariableList: CredentialVariable[]) => {
@@ -134,51 +147,53 @@ function UpdateCredential({
         {
             title: 'value',
             dataIndex: 'value',
-            render: (_value: string, record, index) =>
+            render: (value: string, record) =>
                 record.isMandatory ? (
                     <Form.Item
-                        name='value'
+                        name={record.name}
                         rules={[
                             {
-                                required: isContainsEmpty(credentialVariableList),
+                                required: !value,
                                 message: 'mandatory field',
                             },
                         ]}
+                        initialValue={record.value}
                     >
-                        {''}
                         {record.isSensitive ? (
-                            <Tooltip title='Actual value for sensitive fields are not available'>
-                                <Input.Password
-                                    onChange={(e) => {
-                                        setVariablesValue(index, e);
-                                    }}
-                                />
+                            <Tooltip title='Actual values for sensitive fields are not available'>
+                                <div>
+                                    <Input.Password
+                                        onChange={(e) => {
+                                            setVariablesValue(record.name, e);
+                                        }}
+                                    />
+                                </div>
                             </Tooltip>
                         ) : (
                             <Input
-                                defaultValue={record.value}
                                 onChange={(e) => {
-                                    setVariablesValue(index, e);
+                                    setVariablesValue(record.name, e);
                                 }}
                             />
                         )}
                     </Form.Item>
                 ) : (
-                    <Form.Item name='value'>
-                        {''}
+                    <Form.Item key={record.name} name='value' initialValue={record.value}>
                         {record.isSensitive ? (
-                            <Tooltip title='Actual value for sensitive fields are not available'>
-                                <Input.Password
-                                    onChange={(e) => {
-                                        setVariablesValue(index, e);
-                                    }}
-                                />
+                            <Tooltip title='Actual values for sensitive fields are not available'>
+                                {/* Necessary to wrap in div https://stackoverflow.com/questions/70684982/adding-tooltip-to-input-causes-finddomnode-is-deprecated-in-strictmode-error*/}
+                                <div>
+                                    <Input.Password
+                                        onChange={(e) => {
+                                            setVariablesValue(record.name, e);
+                                        }}
+                                    />
+                                </div>
                             </Tooltip>
                         ) : (
                             <Input
-                                defaultValue={record.value}
                                 onChange={(e) => {
-                                    setVariablesValue(index, e);
+                                    setVariablesValue(record.name, e);
                                 }}
                             />
                         )}
@@ -202,8 +217,8 @@ function UpdateCredential({
     return (
         <div className={'credential-from'}>
             <CredentialApiDoc
-                csp={createCredential.csp}
-                credentialType={createCredential.type}
+                csp={credentialVariables.csp}
+                credentialType={credentialVariables.type}
                 styleClass={'update-credential-api-doc'}
             />
             <Form
@@ -214,13 +229,18 @@ function UpdateCredential({
                 style={{ maxWidth: 1200 }}
                 onFinish={submit}
             >
-                <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
+                <CredentialTip
+                    key={v4().toString()}
+                    type={tipType}
+                    msg={tipMessage}
+                    onRemove={onRemove}
+                ></CredentialTip>
                 <div className={'credential-from-input'}>
                     <Form.Item label='Csp' name='csp'>
                         <Image
                             width={100}
                             preview={false}
-                            src={cspMap.get(createCredential.csp.valueOf() as CloudServiceProvider.name)?.logo}
+                            src={cspMap.get(credentialVariables.csp.valueOf() as CloudServiceProvider.name)?.logo}
                         />
                     </Form.Item>
                     <Form.Item label='Type' name='type'>
@@ -235,21 +255,22 @@ function UpdateCredential({
                     <Form.Item label='TimeToLive (In Seconds)' name='timeToLive'>
                         <InputNumber />
                     </Form.Item>
-                    <Form.Item
-                        label='Variables'
-                        name='variables'
-                        rules={[
-                            {
-                                required: isContainsEmpty(credentialVariableList),
-                                message: 'Please Input The Variables of Credential!',
-                            },
-                        ]}
-                    >
-                        <Table pagination={false} columns={columns} dataSource={credentialVariableList}></Table>
+                    <Form.Item label='Variables' name='variables'>
+                        <Table
+                            rowKey={'name'}
+                            pagination={false}
+                            columns={columns}
+                            dataSource={credentialVariablesCopy.variables}
+                        ></Table>
                     </Form.Item>
                 </div>
                 <Form.Item className={'credential-from-button'}>
-                    <Button type='primary' loading={updateLoading} disabled={disable} htmlType='submit'>
+                    <Button
+                        type='primary'
+                        loading={updateCredentialRequest.isPending}
+                        disabled={updateCredentialRequest.isSuccess}
+                        htmlType='submit'
+                    >
                         Update
                     </Button>
                     <Button
