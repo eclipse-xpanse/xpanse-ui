@@ -93,7 +93,6 @@ export const MigrateServiceSubmit = ({
             setIsShowDeploymentResult(true);
         }
     };
-
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
         getCurrentMigrationStep(MigrationSteps.ImportServiceData);
