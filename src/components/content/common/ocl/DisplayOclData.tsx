@@ -11,6 +11,7 @@ import { FlavoursText } from './FlavorsText';
 import { BillingText } from './BillingText';
 import { cspMap } from '../csp/CspLogo';
 import { ContactDetailsText } from './ContactDetailsText';
+import { ContactDetailsShowType } from './ContactDetailsShowType';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -101,7 +102,10 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 {ocl.deployment.credentialType ? ocl.deployment.credentialType : ''}
                             </Descriptions.Item>
                             <Descriptions.Item label='Contact Details'>
-                                <ContactDetailsText serviceProviderContactDetails={ocl.serviceProviderContactDetails} />
+                                <ContactDetailsText
+                                    serviceProviderContactDetails={ocl.serviceProviderContactDetails}
+                                    showFor={ContactDetailsShowType.Catalog}
+                                />
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                         </Descriptions>

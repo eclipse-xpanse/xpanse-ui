@@ -3,11 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, Response, DeployedServiceDetails, DeployedService } from '../../../../xpanse-api/generated';
+import { ApiError, DeployedService, DeployedServiceDetails, Response } from '../../../../xpanse-api/generated';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import React, { useEffect } from 'react';
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 
 function DestroyServiceStatusPolling({
     deployedService,
@@ -35,6 +38,7 @@ function DestroyServiceStatusPolling({
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
         ]
     );
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
     useEffect(() => {
         if (
@@ -83,6 +87,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );
@@ -111,6 +129,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );
@@ -154,6 +186,20 @@ function DestroyServiceStatusPolling({
                         closable={true}
                         onClose={onClose}
                         type={'error'}
+                        action={
+                            <>
+                                {getOrderableServiceDetails.isSuccess ? (
+                                    <ContactDetailsText
+                                        serviceProviderContactDetails={
+                                            getOrderableServiceDetails.data.serviceProviderContactDetails
+                                        }
+                                        showFor={ContactDetailsShowType.Order}
+                                    />
+                                ) : (
+                                    <></>
+                                )}
+                            </>
+                        }
                     />{' '}
                 </div>
             );

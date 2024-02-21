@@ -774,7 +774,7 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'generic-table-container'}>
-            {serviceDestroyQuery.isSuccess && isShowDestroyResult && activeRecord ? (
+            {isShowDestroyResult && activeRecord ? (
                 <DestroyServiceStatusPolling
                     key={activeRecord.id}
                     deployedService={activeRecord}

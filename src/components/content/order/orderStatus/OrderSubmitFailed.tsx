@@ -5,7 +5,12 @@
 
 import { OrderSubmitResult } from './OrderSubmitResult';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { ApiError, Response, DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import {
+    ApiError,
+    DeployedServiceDetails,
+    Response,
+    ServiceProviderContactDetails,
+} from '../../../../xpanse-api/generated';
 import { StopwatchResult } from 'react-timer-hook';
 import React from 'react';
 import { OperationType } from '../types/OperationType';
@@ -18,11 +23,13 @@ function getOrderSubmissionFailedDisplay(reasons: string[]) {
         </div>
     );
 }
+
 export function OrderSubmitFailed(
     error: Error,
     deploymentStatus: DeployedServiceDetails.serviceDeploymentState,
     stopWatch: StopwatchResult,
-    operationType: OperationType
+    operationType: OperationType,
+    contactServiceDetails: ServiceProviderContactDetails | undefined
 ): React.JSX.Element {
     if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
@@ -32,7 +39,8 @@ export function OrderSubmitFailed(
             'error',
             deploymentStatus,
             stopWatch,
-            operationType
+            operationType,
+            contactServiceDetails
         );
     }
     return OrderSubmitResult(
@@ -41,6 +49,7 @@ export function OrderSubmitFailed(
         'error',
         deploymentStatus,
         stopWatch,
-        operationType
+        operationType,
+        contactServiceDetails
     );
 }

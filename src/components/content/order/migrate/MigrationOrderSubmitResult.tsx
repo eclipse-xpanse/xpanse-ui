@@ -5,12 +5,14 @@
 
 import { Alert } from 'antd';
 import { StopwatchResult } from 'react-timer-hook';
-import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 
 import React from 'react';
 import { OperationType } from '../types/OperationType';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 import DeploymentTimer from '../orderStatus/DeploymentTimer';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 
 export const MigrationOrderSubmitResult = (
     msg: string | React.JSX.Element,
@@ -18,7 +20,8 @@ export const MigrationOrderSubmitResult = (
     type: 'success' | 'error',
     deploymentStatus: DeployedServiceDetails.serviceDeploymentState,
     stopWatch: StopwatchResult,
-    operationType: OperationType
+    operationType: OperationType,
+    contactServiceDetails: ServiceProviderContactDetails | undefined
 ): React.JSX.Element => {
     return (
         <div className={'submit-alert-tip'}>
@@ -30,11 +33,21 @@ export const MigrationOrderSubmitResult = (
                 closable={true}
                 type={type}
                 action={
-                    <DeploymentTimer
-                        stopWatch={stopWatch}
-                        deploymentStatus={deploymentStatus}
-                        operationType={operationType}
-                    />
+                    <>
+                        {contactServiceDetails !== undefined ? (
+                            <ContactDetailsText
+                                serviceProviderContactDetails={contactServiceDetails}
+                                showFor={ContactDetailsShowType.Order}
+                            />
+                        ) : (
+                            <></>
+                        )}
+                        <DeploymentTimer
+                            stopWatch={stopWatch}
+                            deploymentStatus={deploymentStatus}
+                            operationType={operationType}
+                        />
+                    </>
                 }
             />{' '}
         </div>
