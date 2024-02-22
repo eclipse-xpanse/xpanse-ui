@@ -289,7 +289,15 @@ export const AddOrUpdatePolicy = ({
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <div className={'submit-reset-container'}>
                         <div className={'submit-class'}>
-                            <Button type='primary' htmlType='submit' className={'submit-policy-class'}>
+                            <Button
+                                type='primary'
+                                htmlType='submit'
+                                className={'submit-policy-class'}
+                                disabled={
+                                    createPoliciesManagementServiceRequest.isSuccess ||
+                                    updatePoliciesManagementServiceRequest.isSuccess
+                                }
+                            >
                                 Submit
                             </Button>
                         </div>

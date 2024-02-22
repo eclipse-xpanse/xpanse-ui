@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Image, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import '../../../styles/policies.css';
@@ -21,22 +21,19 @@ import { cspMap } from '../common/csp/CspLogo';
 function Policies(): React.JSX.Element {
     const [id, setId] = useState<string>('');
     const [currentPolicyService, setCurrentPolicyService] = useState<UserPolicy | undefined>(undefined);
-    const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
-    const [enabledFilters, setEnabledFilters] = useState<ColumnFilterItem[]>([]);
-    const [policiesManagementServiceList, setPoliciesManagementServiceList] = useState<UserPolicy[]>([]);
+    let cspFilters: ColumnFilterItem[] = [];
+    let enabledFilters: ColumnFilterItem[] = [];
+    let policiesManagementServiceList: UserPolicy[] = [];
     const listPoliciesManagementServiceQuery = useListPoliciesManagementServiceQuery();
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
     const deletePoliciesManagementServiceRequest = useDeletePolicyRequest();
 
-    useEffect(() => {
-        if (!listPoliciesManagementServiceQuery.isSuccess) {
-            return;
-        }
-        setCspFilters(updateCspFilters());
-        setEnabledFilters(updateEnabledFilters());
-        setPoliciesManagementServiceList(listPoliciesManagementServiceQuery.data);
-    }, [listPoliciesManagementServiceQuery.isSuccess, listPoliciesManagementServiceQuery.data]);
+    if (listPoliciesManagementServiceQuery.isSuccess) {
+        cspFilters = updateCspFilters();
+        enabledFilters = updateEnabledFilters();
+        policiesManagementServiceList = listPoliciesManagementServiceQuery.data;
+    }
 
     const columns: ColumnsType<UserPolicy> = [
         {
