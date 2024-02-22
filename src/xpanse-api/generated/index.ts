@@ -13,6 +13,7 @@ export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { AbstractCredentialInfo } from './models/AbstractCredentialInfo';
+export { AutoFill } from './models/AutoFill';
 export { BackendSystemStatus } from './models/BackendSystemStatus';
 export { Billing } from './models/Billing';
 export { CloudServiceProvider } from './models/CloudServiceProvider';
@@ -33,7 +34,6 @@ export { Metric } from './models/Metric';
 export { MetricItem } from './models/MetricItem';
 export { MigrateRequest } from './models/MigrateRequest';
 export { Ocl } from './models/Ocl';
-export { OpenTofuResult } from './models/OpenTofuResult';
 export type { Region } from './models/Region';
 export { Response } from './models/Response';
 export type { ScriptsRepo } from './models/ScriptsRepo';
@@ -44,7 +44,6 @@ export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateReq
 export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
-export { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 export { UserPolicy } from './models/UserPolicy';
