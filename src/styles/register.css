@@ -42,3 +42,12 @@
 .try-again-btn-class {
     margin-right: 20px;
 }
+
+.ocl-contact-details-class {
+    display: flex;
+    align-items: center;
+}
+
+.ocl-contact-details-values {
+    margin: 0;
+}
