@@ -10,10 +10,11 @@ import {
     DeployedService,
     DeployRequest,
     MigrateRequest,
+    ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
 import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
@@ -26,6 +27,7 @@ import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
 import { useMigrateServiceQuery } from './useMigrateServiceQuery';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -47,7 +49,7 @@ export const MigrateServiceSubmit = ({
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
-    currentSelectedService: DeployedService | undefined;
+    currentSelectedService: DeployedService;
     getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
 }): React.JSX.Element => {
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
@@ -57,6 +59,9 @@ export const MigrateServiceSubmit = ({
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
         MigrationSteps.DestroyTheOldService
     );
+    const [currentContactServiceDetails, setCurrentContactServiceDetails] = useState<
+        ServiceProviderContactDetails | undefined
+    >(undefined);
 
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
@@ -70,10 +75,17 @@ export const MigrateServiceSubmit = ({
 
     const migrateServiceRequest = useMigrateServiceQuery();
 
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(currentSelectedService.serviceTemplateId);
+
+    useEffect(() => {
+        if (getOrderableServiceDetails.isSuccess) {
+            setCurrentContactServiceDetails(getOrderableServiceDetails.data.serviceProviderContactDetails);
+        }
+    }, [getOrderableServiceDetails.isSuccess, getOrderableServiceDetails.data]);
     const migrate = () => {
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
-            migrateRequest.id = currentSelectedService === undefined ? '' : currentSelectedService.id;
+            migrateRequest.id = currentSelectedService.id;
             setIsMigrating(true);
             setRequestSubmitted(true);
             setIsPreviousDisabled(true);
@@ -81,7 +93,6 @@ export const MigrateServiceSubmit = ({
             setIsShowDeploymentResult(true);
         }
     };
-
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
         getCurrentMigrationStep(MigrationSteps.ImportServiceData);
@@ -100,6 +111,7 @@ export const MigrateServiceSubmit = ({
                     setIsPreviousDisabled={setIsPreviousDisabled}
                     getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
                     serviceHostingType={selectServiceHostingType}
+                    currentContactServiceDetails={currentContactServiceDetails}
                 />
             ) : null}
             <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>

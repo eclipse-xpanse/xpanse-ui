@@ -3,7 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails, ServiceMigrationDetails } from '../../../../xpanse-api/generated';
+import {
+    DeployedServiceDetails,
+    ServiceMigrationDetails,
+    ServiceProviderContactDetails,
+} from '../../../../xpanse-api/generated';
 import { useStopwatch } from 'react-timer-hook';
 import React, { useEffect, useState } from 'react';
 import { MigrationStatus } from '../types/MigrationStatus';
@@ -22,6 +26,7 @@ function MigrateServiceStatusPolling({
     setIsPreviousDisabled,
     getCurrentMigrationStepStatus,
     serviceHostingType,
+    currentContactServiceDetails,
 }: {
     migrationId: string | undefined;
     isMigrateRequestSuccess: boolean;
@@ -32,6 +37,7 @@ function MigrateServiceStatusPolling({
     setIsPreviousDisabled: (arg: boolean) => void;
     getCurrentMigrationStepStatus: (srg: MigrationStatus) => void;
     serviceHostingType: DeployedServiceDetails.serviceHostingType;
+    currentContactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const [newServiceId, setNewServiceId] = useState<string | undefined>(undefined);
     const [oldServiceId, setOldServiceId] = useState<string | undefined>(undefined);
@@ -138,7 +144,8 @@ function MigrateServiceStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.MIGRATING,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            undefined
         );
     }
 
@@ -149,7 +156,8 @@ function MigrateServiceStatusPolling({
             'error',
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -160,7 +168,8 @@ function MigrateServiceStatusPolling({
             'success',
             DeployedServiceDetails.serviceDeploymentState.MIGRATING,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            undefined
         );
     }
 
@@ -171,7 +180,8 @@ function MigrateServiceStatusPolling({
             'error',
             DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
             stopWatch,
-            OperationType.Migrate
+            OperationType.Migrate,
+            currentContactServiceDetails
         );
     }
 
@@ -186,7 +196,8 @@ function MigrateServiceStatusPolling({
                 'success',
                 DeployedServiceDetails.serviceDeploymentState.MIGRATION_SUCCESSFUL,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         }
     } else {
@@ -201,7 +212,8 @@ function MigrateServiceStatusPolling({
                     'error',
                     DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
                     stopWatch,
-                    OperationType.Migrate
+                    OperationType.Migrate,
+                    undefined
                 );
             }
         } else if (
@@ -215,7 +227,8 @@ function MigrateServiceStatusPolling({
                     'error',
                     DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
                     stopWatch,
-                    OperationType.Migrate
+                    OperationType.Migrate,
+                    undefined
                 );
             }
         } else if (
@@ -230,7 +243,8 @@ function MigrateServiceStatusPolling({
                 'error',
                 DeployedServiceDetails.serviceDeploymentState.MIGRATION_FAILED,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         } else {
             return MigrationOrderSubmitResult(
@@ -239,7 +253,8 @@ function MigrateServiceStatusPolling({
                 'success',
                 DeployedServiceDetails.serviceDeploymentState.MIGRATING,
                 stopWatch,
-                OperationType.Migrate
+                OperationType.Migrate,
+                undefined
             );
         }
     }

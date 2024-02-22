@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import {
@@ -50,16 +50,16 @@ function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceIdInQuery = getServiceIdFormQuery();
     const serviceDeploymentStateInQuery = getServiceDeploymentStateFromQuery();
-    const [serviceVoList, setServiceVoList] = useState<DeployedService[]>([]);
-    const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceHostingTypeFilters, setServiceHostingTypeFilters] = useState<ColumnFilterItem[]>([]);
-    const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
-    const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
-    const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
-    const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceIdFilters, setServiceIdFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceDeploymentStateFilters, setServiceDeploymentStateFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
+    let serviceVoList: DeployedService[] = [];
+    let versionFilters: ColumnFilterItem[] = [];
+    let serviceHostingTypeFilters: ColumnFilterItem[] = [];
+    let nameFilters: ColumnFilterItem[] = [];
+    let customerServiceNameFilters: ColumnFilterItem[] = [];
+    let categoryFilters: ColumnFilterItem[] = [];
+    let cspFilters: ColumnFilterItem[] = [];
+    let serviceIdFilters: ColumnFilterItem[] = [];
+    let serviceDeploymentStateFilters: ColumnFilterItem[] = [];
+    let serviceStateFilters: ColumnFilterItem[] = [];
     const [activeRecord, setActiveRecord] = useState<DeployedService | undefined>(undefined);
     const [isDestroying, setIsDestroying] = useState<boolean>(false);
     const [isShowDestroyResult, setIsShowDestroyResult] = useState<boolean>(false);
@@ -78,47 +78,30 @@ function MyServices(): React.JSX.Element {
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
     const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
     const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
-
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
-
     const navigate = useNavigate();
-
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
 
-    useEffect(() => {
-        const serviceList: DeployedService[] = [];
-        if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-            if (serviceDeploymentStateInQuery) {
-                setServiceVoList(
-                    listDeployedServicesQuery.data.filter(
-                        (serviceVo) => serviceVo.serviceDeploymentState === serviceDeploymentStateInQuery
-                    )
-                );
-            } else if (serviceIdInQuery) {
-                setServiceVoList(
-                    listDeployedServicesQuery.data.filter((serviceVo) => serviceVo.id === serviceIdInQuery)
-                );
-            } else {
-                setServiceVoList(listDeployedServicesQuery.data);
-            }
-            updateServiceIdFilters(listDeployedServicesQuery.data);
-            updateVersionFilters(listDeployedServicesQuery.data);
-            updateNameFilters(listDeployedServicesQuery.data);
-            updateCategoryFilters();
-            updateCspFilters();
-            updateServiceDeploymentStateFilters();
-            updateServiceStateFilters();
-            updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
-            updateServiceHostingFilters();
+    if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
+        if (serviceDeploymentStateInQuery) {
+            serviceVoList = listDeployedServicesQuery.data.filter(
+                (serviceVo) => serviceVo.serviceDeploymentState === serviceDeploymentStateInQuery
+            );
+        } else if (serviceIdInQuery) {
+            serviceVoList = listDeployedServicesQuery.data.filter((serviceVo) => serviceVo.id === serviceIdInQuery);
         } else {
-            setServiceVoList(serviceList);
+            serviceVoList = listDeployedServicesQuery.data;
         }
-    }, [
-        listDeployedServicesQuery.data,
-        listDeployedServicesQuery.isSuccess,
-        serviceDeploymentStateInQuery,
-        serviceIdInQuery,
-    ]);
+        updateServiceIdFilters(listDeployedServicesQuery.data);
+        updateVersionFilters(listDeployedServicesQuery.data);
+        updateNameFilters(listDeployedServicesQuery.data);
+        updateCategoryFilters();
+        updateCspFilters();
+        updateServiceDeploymentStateFilters();
+        updateServiceStateFilters();
+        updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
+        updateServiceHostingFilters();
+    }
 
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
@@ -629,7 +612,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceIdFilters(filters);
+        serviceIdFilters = filters;
     }
 
     function updateCspFilters(): void {
@@ -641,7 +624,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCspFilters(filters);
+        cspFilters = filters;
     }
 
     function updateServiceDeploymentStateFilters(): void {
@@ -653,7 +636,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceDeploymentStateFilters(filters);
+        serviceDeploymentStateFilters = filters;
     }
 
     function updateServiceStateFilters(): void {
@@ -665,7 +648,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceStateFilters(filters);
+        serviceStateFilters = filters;
     }
 
     function updateCategoryFilters(): void {
@@ -677,7 +660,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCategoryFilters(filters);
+        categoryFilters = filters;
     }
 
     function updateVersionFilters(resp: DeployedService[]): void {
@@ -693,7 +676,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setVersionFilters(filters);
+        versionFilters = filters;
     }
 
     function updateNameFilters(resp: DeployedService[]): void {
@@ -709,7 +692,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setNameFilters(filters);
+        nameFilters = filters;
     }
 
     function updateCustomerServiceNameFilters(resp: DeployedService[]): void {
@@ -727,7 +710,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCustomerServiceNameFilters(filters);
+        customerServiceNameFilters = filters;
     }
 
     function updateServiceHostingFilters(): void {
@@ -739,7 +722,7 @@ function MyServices(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceHostingTypeFilters(filters);
+        serviceHostingTypeFilters = filters;
     }
 
     function refreshData(): void {
@@ -791,7 +774,7 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'generic-table-container'}>
-            {serviceDestroyQuery.isSuccess && isShowDestroyResult && activeRecord ? (
+            {isShowDestroyResult && activeRecord ? (
                 <DestroyServiceStatusPolling
                     key={activeRecord.id}
                     deployedService={activeRecord}

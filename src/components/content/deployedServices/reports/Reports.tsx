@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Image, Modal, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
@@ -25,15 +25,15 @@ function Reports(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceIdInQuery = getServiceIdFormQuery();
     const serviceStateInQuery = getServiceStateFromQuery();
-    const [deployedServiceList, setDeployedServiceList] = useState<DeployedService[]>([]);
-    const [versionFilters, setVersionFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceHostingTypeFilters, setServiceHostingTypeFilters] = useState<ColumnFilterItem[]>([]);
-    const [nameFilters, setNameFilters] = useState<ColumnFilterItem[]>([]);
-    const [customerServiceNameFilters, setCustomerServiceNameFilters] = useState<ColumnFilterItem[]>([]);
-    const [categoryFilters, setCategoryFilters] = useState<ColumnFilterItem[]>([]);
-    const [cspFilters, setCspFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceIdFilters, setServiceIdFilters] = useState<ColumnFilterItem[]>([]);
-    const [serviceStateFilters, setServiceStateFilters] = useState<ColumnFilterItem[]>([]);
+    let deployedServiceList: DeployedService[] = [];
+    let versionFilters: ColumnFilterItem[] = [];
+    let serviceHostingTypeFilters: ColumnFilterItem[] = [];
+    let nameFilters: ColumnFilterItem[] = [];
+    let customerServiceNameFilters: ColumnFilterItem[] = [];
+    let categoryFilters: ColumnFilterItem[] = [];
+    let cspFilters: ColumnFilterItem[] = [];
+    let serviceIdFilters: ColumnFilterItem[] = [];
+    let serviceStateFilters: ColumnFilterItem[] = [];
     const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
 
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
@@ -41,21 +41,19 @@ function Reports(): React.JSX.Element {
 
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
 
-    useEffect(() => {
+    if (listDeployedServicesByIsvQuery.isSuccess) {
         const serviceList: DeployedService[] = [];
-        if (listDeployedServicesByIsvQuery.isSuccess && listDeployedServicesByIsvQuery.data.length > 0) {
+        if (listDeployedServicesByIsvQuery.data.length > 0) {
             if (serviceStateInQuery) {
-                setDeployedServiceList(
-                    listDeployedServicesByIsvQuery.data.filter(
-                        (service) => service.serviceDeploymentState === serviceStateInQuery
-                    )
+                deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
+                    (service) => service.serviceDeploymentState === serviceStateInQuery
                 );
             } else if (serviceIdInQuery) {
-                setDeployedServiceList(
-                    listDeployedServicesByIsvQuery.data.filter((service) => service.id === serviceIdInQuery)
+                deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
+                    (service) => service.id === serviceIdInQuery
                 );
             } else {
-                setDeployedServiceList(listDeployedServicesByIsvQuery.data);
+                deployedServiceList = listDeployedServicesByIsvQuery.data;
             }
             updateServiceIdFilters(listDeployedServicesByIsvQuery.data);
             updateVersionFilters(listDeployedServicesByIsvQuery.data);
@@ -66,14 +64,9 @@ function Reports(): React.JSX.Element {
             updateCustomerServiceNameFilters(listDeployedServicesByIsvQuery.data);
             updateServiceHostingFilters();
         } else {
-            setDeployedServiceList(serviceList);
+            deployedServiceList = serviceList;
         }
-    }, [
-        listDeployedServicesByIsvQuery.data,
-        listDeployedServicesByIsvQuery.isSuccess,
-        serviceStateInQuery,
-        serviceIdInQuery,
-    ]);
+    }
 
     const columns: ColumnsType<DeployedService> = [
         {
@@ -235,7 +228,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceIdFilters(filters);
+        serviceIdFilters = filters;
     }
 
     function updateCspFilters(): void {
@@ -247,7 +240,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCspFilters(filters);
+        cspFilters = filters;
     }
 
     function updateServiceStateFilters(): void {
@@ -259,7 +252,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceStateFilters(filters);
+        serviceStateFilters = filters;
     }
 
     function updateCategoryFilters(): void {
@@ -271,7 +264,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCategoryFilters(filters);
+        categoryFilters = filters;
     }
 
     function updateVersionFilters(resp: DeployedService[]): void {
@@ -287,7 +280,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setVersionFilters(filters);
+        versionFilters = filters;
     }
 
     function updateNameFilters(resp: DeployedService[]): void {
@@ -303,7 +296,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setNameFilters(filters);
+        nameFilters = filters;
     }
 
     function updateCustomerServiceNameFilters(resp: DeployedService[]): void {
@@ -321,7 +314,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setCustomerServiceNameFilters(filters);
+        customerServiceNameFilters = filters;
     }
 
     function updateServiceHostingFilters(): void {
@@ -333,7 +326,7 @@ function Reports(): React.JSX.Element {
             };
             filters.push(filter);
         });
-        setServiceHostingTypeFilters(filters);
+        serviceHostingTypeFilters = filters;
     }
 
     function refreshData(): void {
