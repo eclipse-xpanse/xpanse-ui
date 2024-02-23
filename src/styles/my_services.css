@@ -10,6 +10,7 @@
 
 .service-instance-list-detail {
     font-weight: bold;
+    white-space: nowrap;
 }
 
 .service-instance-detail-position {
