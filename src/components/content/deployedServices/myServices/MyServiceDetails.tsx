@@ -23,9 +23,14 @@ export const MyServiceDetails = ({
     const requestMap = new Map<string, unknown>();
     let resultMessage = undefined;
     let deployResourceMap: DeployResource[] = [];
+    let serviceTemplateId: string = '';
 
     if (serviceDetails === undefined) {
         return <></>;
+    }
+
+    if (serviceDetails.serviceTemplateId) {
+        serviceTemplateId = serviceDetails.serviceTemplateId;
     }
 
     if (serviceDetails.serviceHostingType === DeployedService.serviceHostingType.SELF) {
@@ -67,9 +72,8 @@ export const MyServiceDetails = ({
                 requestParams={requestMap}
                 resultMessage={resultMessage}
                 deployResources={deployResourceMap}
+                serviceTemplateId={serviceTemplateId}
             />
         </>
     );
-
-    return <></>;
 };

@@ -93,9 +93,21 @@
     box-shadow: none;
     background: none;
 }
+
 .service-instance-list-service-state {
     font-style: italic;
     font-size: 12px;
     white-space: nowrap;
     color: #999;
+}
+
+.my-service-contact-container {
+    position: relative;
+    margin-right: 50px;
+}
+
+.my-service-contact-container-content-position {
+    position: absolute;
+    top: 0;
+    right: 0;
 }
