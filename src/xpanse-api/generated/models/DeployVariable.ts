@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AutoFill } from './AutoFill';
 import type { DeployVariableKind } from './DeployVariableKind';
 /**
  * The variables for the deployment, which will be passed to the deployer
@@ -45,6 +46,7 @@ export type DeployVariable = {
      * Sensitive scope of variable storage
      */
     sensitiveScope?: DeployVariable.sensitiveScope;
+    autoFill?: AutoFill;
 };
 export namespace DeployVariable {
     /**

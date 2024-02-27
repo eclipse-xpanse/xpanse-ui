@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ApiError, Response, WorkFlowTask } from '../../../xpanse-api/generated';
@@ -17,20 +17,20 @@ function Workflows(): React.JSX.Element {
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [isRefresh, setIsRefresh] = useState(false);
-    const [todoTasks, setTodoTasks] = useState<WorkFlowTask[]>([]);
+    let todoTasks: WorkFlowTask[] = [];
 
     const tasksQuery = useAllTasksQuery(undefined);
 
-    useEffect(() => {
-        const workflowTasks: WorkFlowTask[] | undefined = tasksQuery.data;
-        if (workflowTasks !== undefined && workflowTasks.length > 0) {
-            setTodoTasks(workflowTasks);
-        } else {
-            setTodoTasks([]);
-        }
-    }, [tasksQuery.data, tasksQuery.isSuccess]);
+    if (tasksQuery.isSuccess) {
+        todoTasks = tasksQuery.data;
+    }
 
-    useEffect(() => {
+    const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
+        setTipType(tipType);
+        setTipMessage(tipMessage);
+    };
+
+    if (tasksQuery.error) {
         if (tasksQuery.error instanceof ApiError && tasksQuery.error.body && 'details' in tasksQuery.error.body) {
             const response: Response = tasksQuery.error.body as Response;
             getTipInfo('error', response.details.join());
@@ -38,7 +38,7 @@ function Workflows(): React.JSX.Element {
             getTipInfo('error', tasksQuery.error.message);
         }
         setIsRefresh(false);
-    }, [tasksQuery.error]);
+    }
 
     const completeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => WorkflowService.manageFailedOrder(taskId, true),
@@ -89,11 +89,6 @@ function Workflows(): React.JSX.Element {
         getTipInfo(undefined, '');
     };
 
-    const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
-        setTipType(tipType);
-        setTipMessage(tipMessage);
-    };
-
     const columns: ColumnsType<WorkFlowTask> = [
         {
             title: 'ProcessInstanceId',
@@ -110,24 +105,24 @@ function Workflows(): React.JSX.Element {
         {
             title: 'TaskName',
             dataIndex: 'taskName',
-            render: (taskName: string, WorkFlowTask) => {
-                return <Tag color='blue'>{taskName}</Tag>;
+            render: (record: WorkFlowTask) => {
+                return <Tag color='blue'>{record.taskName}</Tag>;
             },
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status: WorkFlowTask.status, record: WorkFlowTask) => {
-                if (status === WorkFlowTask.status.FAILED) {
+            render: (record: WorkFlowTask) => {
+                if (record.status === WorkFlowTask.status.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
-                            {status.valueOf()}
+                            {record.status.valueOf()}
                         </Tag>
                     );
                 } else {
                     return (
                         <Tag bordered={false} icon={<CheckCircleOutlined />} color='success'>
-                            {status.valueOf()}
+                            {record.status.valueOf()}
                         </Tag>
                     );
                 }
