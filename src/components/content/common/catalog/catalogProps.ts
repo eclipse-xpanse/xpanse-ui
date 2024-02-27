@@ -1,6 +1,13 @@
-import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
 
-export const getServiceMapper = (
+import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+import { DataNode } from 'antd/es/tree';
+import React from 'react';
+
+export const groupServiceTemplatesByName = (
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
@@ -18,12 +25,12 @@ export const getServiceMapper = (
     return serviceMapper;
 };
 
-export const getVersionMapper = (
+export const groupServicesByVersionForSpecificServiceName = (
     currentServiceName: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const versionMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-    const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(serviceTemplateList);
+    const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = groupServiceTemplatesByName(serviceTemplateList);
     serviceMapper.forEach((serviceList, serviceName) => {
         if (serviceName === currentServiceName) {
             for (const service of serviceList) {
@@ -41,13 +48,13 @@ export const getVersionMapper = (
     return versionMapper;
 };
 
-export const getCspMapper = (
+export const groupServicesByCspForSpecificServiceNameAndVersion = (
     currentServiceName: string,
     currentVersionName: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const cspMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
+    const versionMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByVersionForSpecificServiceName(
         currentServiceName,
         serviceTemplateList
     );
@@ -65,3 +72,13 @@ export const getCspMapper = (
     });
     return cspMapper;
 };
+
+export function getAllKeysFromCatalogTree(treeData: DataNode[]): React.Key[] {
+    const allKeys: React.Key[] = [];
+    for (const treeNode of treeData) {
+        if (treeNode.children) {
+            treeNode.children.forEach((child) => allKeys.push(child.key));
+        }
+    }
+    return allKeys;
+}

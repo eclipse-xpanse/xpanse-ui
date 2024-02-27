@@ -31,6 +31,17 @@ function LayoutSider(): React.JSX.Element {
         return [pathname];
     }
 
+    // necessary to open collapsed menu item when user directly opens a specific sub-page link
+    function getDefaultOpenKey(): string[] {
+        if (pathname.startsWith(servicesPageRoute) && hash) {
+            return [servicesPageRoute];
+        }
+        if (pathname.startsWith(catalogPageRoute) && hash) {
+            return [catalogPageRoute];
+        }
+        return [];
+    }
+
     return (
         <Layout.Sider
             collapsible={!isBroken}
@@ -58,6 +69,7 @@ function LayoutSider(): React.JSX.Element {
                 theme='dark'
                 onClick={onClicked}
                 selectedKeys={getSelectedKey()}
+                defaultOpenKeys={getDefaultOpenKey()}
             />
         </Layout.Sider>
     );

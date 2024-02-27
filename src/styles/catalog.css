@@ -73,3 +73,9 @@
 .catalog-update-btn-class {
     margin-left: 20px;
 }
+
+.catalog-csp-details-skeleton {
+    margin: 30px;
+    position: relative;
+    width: 80%;
+}
