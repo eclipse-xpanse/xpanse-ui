@@ -11,6 +11,7 @@ import {
     CloudServiceProvider,
     DeployedService,
     DeployedServiceDetails,
+    ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -45,6 +46,9 @@ import useListDeployedServicesDetailsQuery from './query/useListDeployedServices
 import { useServiceStateStartQuery } from './query/useServiceStateStartQuery';
 import { useServiceStateStopQuery } from './query/useServiceStateStopQuery';
 import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery';
+import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -73,6 +77,7 @@ function MyServices(): React.JSX.Element {
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
+    const [serviceTemplateId, setServiceTemplateId] = useState<string>('');
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
@@ -81,6 +86,7 @@ function MyServices(): React.JSX.Element {
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
     const navigate = useNavigate();
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(serviceTemplateId);
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
         if (serviceDeploymentStateInQuery) {
@@ -103,12 +109,38 @@ function MyServices(): React.JSX.Element {
         updateServiceHostingFilters();
     }
 
+    const getTooltipWhenDetailsDisabled = (
+        serviceProviderContactDetails: ServiceProviderContactDetails
+    ): React.JSX.Element => {
+        return (
+            <div>
+                <span>Please contact the service provider</span>
+                <ContactDetailsText
+                    serviceProviderContactDetails={serviceProviderContactDetails}
+                    showFor={ContactDetailsShowType.Order}
+                />
+            </div>
+        );
+    };
+
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
             {
                 key: 'details',
                 label: isDisableDetails(record) ? (
-                    <Tooltip title='Please contact the service provider'>
+                    <Tooltip
+                        placement={'left'}
+                        style={{ maxWidth: '100%' }}
+                        title={
+                            getOrderableServiceDetails.isSuccess ? (
+                                getTooltipWhenDetailsDisabled(
+                                    getOrderableServiceDetails.data.serviceProviderContactDetails
+                                )
+                            ) : (
+                                <></>
+                            )
+                        }
+                    >
                         <Button
                             disabled={true}
                             className={'button-as-link'}
@@ -521,6 +553,9 @@ function MyServices(): React.JSX.Element {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: DeployedService) => {
+                if (record.serviceTemplateId) {
+                    setServiceTemplateId(record.serviceTemplateId);
+                }
                 return (
                     <>
                         <Space size='middle'>
