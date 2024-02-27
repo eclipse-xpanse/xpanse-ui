@@ -15,13 +15,13 @@ export function ServiceStatus({
     serviceStatus: ServiceTemplateDetailVo.serviceRegistrationState;
 }): React.JSX.Element {
     switch (serviceStatus) {
-        case serviceRegistrationState.REGISTERED:
+        case serviceRegistrationState.APPROVED:
             return (
                 <Tag icon={<CheckCircleOutlined />} color='success' className={'catalog-service-status-size'}>
                     {serviceStatus.valueOf()}
                 </Tag>
             );
-        case ServiceTemplateDetailVo.serviceRegistrationState.UPDATED:
+        case ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING:
             return (
                 <Tag icon={<CheckCircleOutlined />} color='orange' className={'catalog-service-status-size'}>
                     {serviceStatus.valueOf()}

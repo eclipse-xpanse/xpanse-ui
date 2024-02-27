@@ -120,7 +120,8 @@ export namespace ServiceTemplateDetailVo {
      * State of registered service.
      */
     export enum serviceRegistrationState {
-        REGISTERED = 'registered',
-        UPDATED = 'updated',
+        APPROVAL_PENDING = 'approval pending',
+        APPROVED = 'approved',
+        REJECTED = 'rejected',
     }
 }
