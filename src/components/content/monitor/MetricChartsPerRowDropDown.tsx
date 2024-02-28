@@ -4,28 +4,27 @@
  */
 
 import { Select } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { chartsPerRowCountList, chartsPerRowWithTwo } from './metricProps';
+import React from 'react';
+import { chartsPerRowCountList } from './metricProps';
 
-export const MetricChartsPerRow = ({
+export const MetricChartsPerRowDropDown = ({
     isLoading,
     optionLength,
-    getMetricChartsPerRow,
+    metricChartsPerRow,
+    setMetricChartsPerRow,
 }: {
     isLoading: boolean;
     optionLength: number;
-    getMetricChartsPerRow: (currentMetricChartsPerRow: string) => void;
+    metricChartsPerRow: string;
+    setMetricChartsPerRow: (currentMetricChartsPerRow: string) => void;
 }): React.JSX.Element => {
-    const [chartsPerRow, setChartsPerRow] = useState<string>(chartsPerRowWithTwo);
-    const [chartsPerRowOptions, setChartsPerRowOptions] = useState<{ value: string; label: string }[]>([]);
     const handleChangeChartsPerRow = (value: string) => {
         if (optionLength > 1) {
-            setChartsPerRow(value);
-            getMetricChartsPerRow(value);
+            setMetricChartsPerRow(value);
         }
     };
 
-    useEffect(() => {
+    const getChartRowOptions = () => {
         const chartsPerRowOptions: { value: string; label: string }[] = [];
         chartsPerRowCountList.forEach((item: string) => {
             const chartPerRowOption: { value: string; label: string } = {
@@ -34,16 +33,17 @@ export const MetricChartsPerRow = ({
             };
             chartsPerRowOptions.push(chartPerRowOption);
         });
-        setChartsPerRowOptions(chartsPerRowOptions);
-    }, []);
+        return chartsPerRowOptions;
+    };
+
     return (
         <>
             &nbsp;&nbsp;Charts per Row:&nbsp;
             <Select
-                defaultValue={chartsPerRow}
+                defaultValue={metricChartsPerRow}
                 style={{ width: 55 }}
                 onChange={handleChangeChartsPerRow}
-                options={chartsPerRowOptions}
+                options={getChartRowOptions()}
                 disabled={isLoading}
             />
         </>

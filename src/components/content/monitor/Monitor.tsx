@@ -6,42 +6,49 @@
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Form, Input, Row, Select } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ApiError, Response, DeployedService } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
 import { MonitorChart } from './MonitorChart';
 import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
-import { MetricTimePeriod } from './MetricTimePeriod';
-import { MetricIsAutoRefresh } from './MetricIsAutoRefresh';
-import { MetricChartsPerRow } from './MetricChartsPerRow';
+import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
+import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
+import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
 import { useLocation } from 'react-router-dom';
 
 function Monitor(): React.JSX.Element {
     const [form] = Form.useForm();
     const [serviceId, setServiceId] = useState<string>('');
-    const [deployedServiceList, setDeployedServiceList] = useState<DeployedService[]>([]);
-    const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
-    const [tipMessage, setTipMessage] = useState<string>('');
-    const [tipDescription, setTipDescription] = useState<string>('');
-    const [isQueryResultDisabled, setIsQueryResultDisabled] = useState<boolean>(false);
-    const [serviceNameList, setServiceNameList] = useState<{ value: string; label: string }[]>([
-        { value: '', label: '' },
-    ]);
-    const [customerServiceNameList, setCustomerServiceNameList] = useState<
-        { value: string; label: string; serviceName: string; id: string }[]
-    >([{ value: '', label: '', serviceName: '', id: '' }]);
-
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    let deployedServiceList: DeployedService[] = [];
+    const tipType = useRef<'error' | 'success' | undefined>(undefined);
+    const tipMessage = useRef<string>('');
+    const tipDescription = useRef<string>('');
+    let serviceNameList: { value: string; label: string }[] = [{ value: '', label: '' }];
+    let customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [
+        { value: '', label: '', serviceName: '', id: '' },
+    ];
 
     const [timePeriod, setTimePeriod] = useState<number>(lastMinuteRadioButtonKeyId.valueOf());
     const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
     const [chartsPerRow, setChartsPerRow] = useState<string>(chartsPerRowWithTwo);
-    const [optionLength, setOptionLength] = useState<number>(0);
+    const [numberOfChartsAvailable, setNumberOfChartsAvailable] = useState<number>(0);
     const deployedServiceQuery = useDeployedServicesByUserQuery();
 
     const location = useLocation();
 
+    const onFinish = useCallback((values: { serviceName: string; customerServiceName: string; serviceId: string }) => {
+        setServiceId('');
+        if (!values.serviceId) {
+            tipType.current = undefined;
+            tipMessage.current = '';
+            tipDescription.current = '';
+            return;
+        }
+        setServiceId(values.serviceId);
+    }, []);
+
+    // Effect necessary since the form data is set outside the React context.
     useEffect(() => {
         if (location.state) {
             const serviceVo: DeployedService = location.state as DeployedService;
@@ -54,76 +61,63 @@ function Monitor(): React.JSX.Element {
                 serviceId: serviceVo.id,
             });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [location.state]);
+    }, [form, location.state, onFinish]);
 
-    useEffect(() => {
-        if (deployedServiceQuery.isSuccess) {
-            const serviceList: DeployedService[] | undefined = deployedServiceQuery.data;
-            const serviceNameList: { value: string; label: string }[] = [];
-            const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
-            // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-            if (serviceList !== undefined && serviceList.length > 0) {
-                const serviceVoMap: Map<string, DeployedService[]> = new Map<string, DeployedService[]>();
-                serviceList.forEach((serviceVo: DeployedService) => {
-                    if (
-                        serviceVo.serviceDeploymentState ===
-                        DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
-                    ) {
-                        if (!serviceVoMap.has(serviceVo.name)) {
-                            serviceVoMap.set(
-                                serviceVo.name,
-                                serviceList.filter((data: DeployedService) => data.name === serviceVo.name)
-                            );
-                        }
-                        const customerServiceName: {
-                            value: string;
-                            label: string;
-                            serviceName: string;
-                            id: string;
-                        } = {
-                            value: serviceVo.customerServiceName ?? '',
-                            label: serviceVo.customerServiceName ?? '',
-                            serviceName: serviceVo.name,
-                            id: serviceVo.id,
-                        };
-                        customerServiceNameList.push(customerServiceName);
+    if (deployedServiceQuery.isSuccess) {
+        const serviceList: DeployedService[] = deployedServiceQuery.data;
+        const newServiceNameList: { value: string; label: string }[] = [];
+        const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
+        if (serviceList.length > 0) {
+            const serviceVoMap: Map<string, DeployedService[]> = new Map<string, DeployedService[]>();
+            serviceList.forEach((serviceVo: DeployedService) => {
+                if (serviceVo.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+                    if (!serviceVoMap.has(serviceVo.name)) {
+                        serviceVoMap.set(
+                            serviceVo.name,
+                            serviceList.filter((data: DeployedService) => data.name === serviceVo.name)
+                        );
                     }
-                });
-                serviceVoMap.forEach((_, name) => {
-                    const serviceNameUnique: { value: string; label: string } = {
-                        value: name,
-                        label: name,
+                    const customerServiceName: {
+                        value: string;
+                        label: string;
+                        serviceName: string;
+                        id: string;
+                    } = {
+                        value: serviceVo.customerServiceName ?? '',
+                        label: serviceVo.customerServiceName ?? '',
+                        serviceName: serviceVo.name,
+                        id: serviceVo.id,
                     };
-                    serviceNameList.push(serviceNameUnique);
-                });
-                setDeployedServiceList(serviceList);
-                setServiceNameList(serviceNameList);
-                setCustomerServiceNameList(customerServiceNameList);
-            }
+                    newCustomerServiceNameList.push(customerServiceName);
+                }
+            });
+            serviceVoMap.forEach((_, name) => {
+                const serviceNameUnique: { value: string; label: string } = {
+                    value: name,
+                    label: name,
+                };
+                newServiceNameList.push(serviceNameUnique);
+            });
+            deployedServiceList = serviceList;
+            serviceNameList = newServiceNameList;
+            customerServiceNameList = newCustomerServiceNameList;
         }
-    }, [deployedServiceQuery.data, deployedServiceQuery.isSuccess]);
+    }
 
-    useEffect(() => {
-        if (deployedServiceQuery.isError) {
-            setDeployedServiceList([]);
-            setServiceNameList([]);
-            setCustomerServiceNameList([]);
-            setTipType('error');
-            setIsQueryResultDisabled(true);
-            if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
-                const response: Response = deployedServiceQuery.error.body as Response;
-                setTipMessage(response.resultType.valueOf());
-                setTipDescription(response.details.join());
-            } else if (deployedServiceQuery.error instanceof Error) {
-                setTipMessage('Error while fetching all deployed services.');
-                setTipDescription(deployedServiceQuery.error.message);
-            }
+    if (deployedServiceQuery.isError) {
+        tipType.current = 'error';
+        if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
+            const response: Response = deployedServiceQuery.error.body as Response;
+            tipMessage.current = response.resultType.valueOf();
+            tipDescription.current = response.details.join();
+        } else if (deployedServiceQuery.error instanceof Error) {
+            tipMessage.current = 'Error while fetching all deployed services.';
+            tipDescription.current = deployedServiceQuery.error.message;
         }
-    }, [deployedServiceQuery.isError, deployedServiceQuery.error]);
+    }
 
     const handleChangeServiceName = (selectServiceName: string) => {
-        const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
+        const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         if (selectServiceName) {
             form.setFieldsValue({ serviceId: '' });
             form.setFieldsValue({ customerServiceName: '' });
@@ -138,11 +132,11 @@ function Monitor(): React.JSX.Element {
                         serviceName: serviceVo.name,
                         id: serviceVo.id,
                     };
-                    customerServiceNameList.push(cusServiceName);
+                    newCustomerServiceNameList.push(cusServiceName);
                 }
             });
         }
-        setCustomerServiceNameList(customerServiceNameList);
+        customerServiceNameList = newCustomerServiceNameList;
     };
 
     const handleChangeCustomerServiceName = (selectCustomerServiceName: string) => {
@@ -155,25 +149,13 @@ function Monitor(): React.JSX.Element {
         }
     };
 
-    const onFinish = (values: { serviceName: string; customerServiceName: string; serviceId: string }) => {
-        setServiceId('');
-        if (!values.serviceId) {
-            setTipType(undefined);
-            setTipMessage('');
-            setTipDescription('');
-            return;
-        }
-        setIsQueryResultDisabled(false);
-        setServiceId(values.serviceId);
-    };
     const onReset = () => {
         setServiceId('');
-        setTipType(undefined);
-        setTipMessage('');
-        setTipDescription('');
-        setIsQueryResultDisabled(false);
+        tipType.current = undefined;
+        tipMessage.current = '';
+        tipDescription.current = '';
         form.resetFields();
-        const customerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
+        const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: DeployedService) => {
             if (serviceVo.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
@@ -182,10 +164,10 @@ function Monitor(): React.JSX.Element {
                     serviceName: serviceVo.name,
                     id: serviceVo.id,
                 };
-                customerServiceNameList.push(cusServiceName);
+                newCustomerServiceNameList.push(cusServiceName);
             }
         });
-        setCustomerServiceNameList(customerServiceNameList);
+        customerServiceNameList = newCustomerServiceNameList;
     };
 
     const onFinishFailed = () => {
@@ -195,44 +177,10 @@ function Monitor(): React.JSX.Element {
     const onRemove = () => {
         setServiceId('');
         form.resetFields();
-        setTipType(undefined);
-        setTipMessage('');
-        setTipDescription('');
-        setIsQueryResultDisabled(false);
-    };
-
-    const getTipInfo = (
-        serviceId: string,
-        isLoading: boolean,
-        tipType: 'error' | 'success' | undefined,
-        tipMessage: string,
-        tipDescription: string,
-        isQueryResultDisabled: boolean
-    ) => {
-        setServiceId(serviceId);
-        setTipType(tipType);
-        setTipMessage(tipMessage);
-        setTipDescription(tipDescription);
-        setIsQueryResultDisabled(isQueryResultDisabled);
-    };
-
-    const getTimePeriod = (currentTimePeriod: number) => {
-        setTimePeriod(currentTimePeriod);
-    };
-
-    const getIsAutoRefresh = (currentIsAutoRefresh: boolean) => {
-        setIsAutoRefresh(currentIsAutoRefresh);
-    };
-    const getMetricChartsPerRow = (currentMetricChartsPerRow: string) => {
-        setChartsPerRow(currentMetricChartsPerRow);
-    };
-
-    const getIsLoading = (isLoading: boolean) => {
-        setIsLoading(isLoading);
-    };
-
-    const getOptionLength = (currentOptionLength: number) => {
-        setOptionLength(currentOptionLength);
+        tipType.current = undefined;
+        tipMessage.current = '';
+        tipDescription.current = '';
+        void deployedServiceQuery.refetch();
     };
 
     return (
@@ -243,7 +191,12 @@ function Monitor(): React.JSX.Element {
                     &nbsp; Operating System Monitor
                 </h3>
             </div>
-            <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
+            <MonitorTip
+                type={tipType.current}
+                msg={tipMessage.current}
+                description={tipDescription.current}
+                onRemove={onRemove}
+            />
             <Form
                 name='basic'
                 form={form}
@@ -257,7 +210,7 @@ function Monitor(): React.JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeServiceName}
-                                disabled={isQueryResultDisabled}
+                                disabled={deployedServiceQuery.isError}
                             >
                                 {serviceNameList.map((item, _) => (
                                     <Select.Option key={item.value} value={item.value}>
@@ -272,7 +225,7 @@ function Monitor(): React.JSX.Element {
                             <Select
                                 placeholder='Select a service'
                                 onChange={handleChangeCustomerServiceName}
-                                disabled={isQueryResultDisabled}
+                                disabled={deployedServiceQuery.isError}
                             >
                                 {customerServiceNameList.map((item, _) => (
                                     <Select.Option key={item.id}>{item.value}</Select.Option>
@@ -290,7 +243,7 @@ function Monitor(): React.JSX.Element {
                             <Button
                                 type='primary'
                                 htmlType='submit'
-                                disabled={isQueryResultDisabled}
+                                disabled={deployedServiceQuery.isError}
                                 className={'monitor-search-button-class'}
                             >
                                 Search
@@ -304,16 +257,21 @@ function Monitor(): React.JSX.Element {
                 </Row>
             </Form>
             <div className={'chart-operation-class'}>
-                <MetricTimePeriod isLoading={isLoading} getTimePeriod={getTimePeriod} />
+                <MetricTimePeriodRadioButton isLoading={false} timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
                 <br />
                 <br />
                 <br />
                 <div>
-                    <MetricIsAutoRefresh isLoading={isLoading} getIsAutoRefresh={getIsAutoRefresh} />
-                    <MetricChartsPerRow
-                        isLoading={isLoading}
-                        optionLength={optionLength}
-                        getMetricChartsPerRow={getMetricChartsPerRow}
+                    <MetricAutoRefreshSwitch
+                        isLoading={false}
+                        isAutoRefresh={isAutoRefresh}
+                        setIsAutoRefresh={setIsAutoRefresh}
+                    />
+                    <MetricChartsPerRowDropDown
+                        isLoading={false}
+                        metricChartsPerRow={chartsPerRow}
+                        optionLength={numberOfChartsAvailable}
+                        setMetricChartsPerRow={setChartsPerRow}
                     />
                 </div>
             </div>
@@ -324,14 +282,12 @@ function Monitor(): React.JSX.Element {
                         timePeriod={timePeriod}
                         isAutoRefresh={isAutoRefresh}
                         chartsPerRow={chartsPerRow}
-                        getTipInfo={getTipInfo}
-                        getIsLoading={getIsLoading}
-                        getOptionLength={getOptionLength}
+                        setNumberOfChartsAvailable={setNumberOfChartsAvailable}
                     />
                 </div>
             ) : (
                 <div className={'service-blank-class'}>
-                    <Empty description={'No services available.'} />
+                    <Empty description={'No metrics data available.'} />
                 </div>
             )}
         </div>

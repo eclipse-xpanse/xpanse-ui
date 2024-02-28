@@ -24,12 +24,6 @@ interface MetricRequestParams {
     to: number;
 }
 
-export interface MetricQueueParams {
-    timePeriod: number;
-    monitorMetricType: string;
-    metricList: Metric[];
-}
-
 export const chartsPerRowCountList: string[] = ['2', '3', '4', '6', '8', '12'];
 export const chartsPerRowWithTwo: string = '2';
 export const lastMinuteRadioButtonKeyId: number = 1;
@@ -69,7 +63,7 @@ export const getTotalSecondsOfTimePeriod = (timePeriod: number): number => {
         return 0;
     }
 };
-export const getCurrentMetricProps = (metricProps: MetricProps[]): Map<string, MetricProps[]> => {
+export const groupMetricsByResourceIds = (metricProps: MetricProps[]): Map<string, MetricProps[]> => {
     const currentMetricProps: Map<string, MetricProps[]> = new Map<string, MetricProps[]>();
     for (const metricProp of metricProps) {
         if (metricProp.id) {
@@ -137,61 +131,11 @@ export const getMetricRequestParams = (totalSeconds: number): MetricRequestParam
     };
 };
 
-export const lastNonEmptyMetricsByTimePeriodAndActiveMonitorMetricType = (
-    timePeriod: number,
-    activeMonitorMetricType: Metric.monitorResourceType,
-    prevQueue: MetricQueueParams[]
-): MetricQueueParams | undefined => {
-    let lastMetricList: MetricQueueParams;
-    if (prevQueue.length === 0) {
-        return undefined;
-    }
-    for (let i = prevQueue.length - 1; i >= 0; i--) {
-        const item = prevQueue[i];
-        if (
-            item.metricList.length > 0 &&
-            item.timePeriod === timePeriod &&
-            item.monitorMetricType === activeMonitorMetricType.valueOf()
-        ) {
-            lastMetricList = item;
-            return lastMetricList;
-        }
-    }
-    return undefined;
-};
-
-export const metricsIsEmpty = (metricList: Metric[]): boolean => {
+export const isMetricEmpty = (metricList: Metric[]): boolean => {
     return metricList.some((metric: Metric) => metric.metrics?.length === 0);
 };
 
-export const getNewMetricQueueItem = (
-    timePeriod: number,
-    activeMonitorMetricType: Metric.monitorResourceType,
-    metrics: Metric[]
-): MetricQueueParams => {
-    return {
-        timePeriod: timePeriod,
-        monitorMetricType: activeMonitorMetricType,
-        metricList: metrics,
-    };
-};
-
-export const getCurrentMetrics = (metrics: Metric[]): Map<string, Metric[]> => {
-    const currentMetrics: Map<string, Metric[]> = new Map<string, Metric[]>();
-    for (const metric of metrics) {
-        if (metric.monitorResourceType.valueOf() && !currentMetrics.has(metric.monitorResourceType.valueOf())) {
-            currentMetrics.set(
-                metric.monitorResourceType.valueOf(),
-                metrics.filter(
-                    (data: Metric) => data.monitorResourceType.valueOf() === metric.monitorResourceType.valueOf()
-                )
-            );
-        }
-    }
-    return currentMetrics;
-};
-
-export const getMetricProps = (metrics: Metric[]): MetricProps[] => {
+export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] => {
     const metricProps: MetricProps[] = [];
     metrics.forEach((metric: Metric) => {
         const labelsMap = new Map<string, string>();
@@ -200,8 +144,7 @@ export const getMetricProps = (metrics: Metric[]): MetricProps[] => {
                 labelsMap.set(key, metric.labels[key]);
             }
         }
-        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-        if (metric.metrics === undefined || metric.metrics === null) {
+        if (metric.metrics === undefined) {
             const metricProp: MetricProps = {
                 id: labelsMap.get('id') ?? '',
                 name: metric.name,
