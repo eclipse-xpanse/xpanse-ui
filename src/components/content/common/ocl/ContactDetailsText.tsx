@@ -8,6 +8,7 @@ import { Button, Popover, Typography } from 'antd';
 import React from 'react';
 import { ContactsOutlined, GlobalOutlined, MailOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
+import { v4 as uuidv4 } from 'uuid';
 
 export function ContactDetailsText({
     serviceProviderContactDetails,
@@ -34,42 +35,42 @@ function convertRecordToList(serviceProviderContactDetails: ServiceProviderConta
     const content: React.JSX.Element[] = [];
     if (serviceProviderContactDetails.email) {
         content.push(
-            <>
+            <React.Fragment key={uuidv4()}>
                 <div className={'ocl-contact-details-class'}>
                     <MailOutlined />
                     {getEmailPropertyValue(serviceProviderContactDetails.email)}
                 </div>
-            </>
+            </React.Fragment>
         );
     }
     if (serviceProviderContactDetails.phone) {
         content.push(
-            <>
+            <React.Fragment key={uuidv4()}>
                 <div className={'ocl-contact-details-class'}>
                     <PhoneOutlined />
                     {getPhonePropertyValue(serviceProviderContactDetails.phone)}
                 </div>
-            </>
+            </React.Fragment>
         );
     }
     if (serviceProviderContactDetails.chat) {
         content.push(
-            <>
+            <React.Fragment key={uuidv4()}>
                 <div className={'ocl-contact-details-class'}>
                     <MessageOutlined />
                     {getPropertyValue(serviceProviderContactDetails.chat)}
                 </div>
-            </>
+            </React.Fragment>
         );
     }
     if (serviceProviderContactDetails.website) {
         content.push(
-            <>
+            <React.Fragment key={uuidv4()}>
                 <div className={'ocl-contact-details-class'}>
                     <GlobalOutlined />
                     {getPropertyValue(serviceProviderContactDetails.website)}
                 </div>
-            </>
+            </React.Fragment>
         );
     }
     return <>{content}</>;
