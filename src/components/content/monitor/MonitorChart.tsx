@@ -5,297 +5,75 @@
 
 import { Spin } from 'antd';
 import {
-    getCurrentMetricProps,
-    getCurrentMetrics,
-    getMetricProps,
-    getMetricRequestParams,
-    getNewMetricQueueItem,
+    convertMetricsToMetricProps,
     getOptionData,
     getTotalSecondsOfTimePeriod,
+    groupMetricsByResourceIds,
+    isMetricEmpty,
     lastMinuteRadioButtonKeyId,
-    lastNonEmptyMetricsByTimePeriodAndActiveMonitorMetricType,
     MetricProps,
-    MetricQueueParams,
-    metricsIsEmpty,
 } from './metricProps';
-import React, { useEffect, useRef, useState } from 'react';
-import { MonitorMetricsType } from './MonitorMetricsType';
-import { ApiError, Metric, MonitorService, Response } from '../../../xpanse-api/generated';
-import {
-    fetchMonitorMetricDataTimeInterval,
-    fetchOnlyLastKnownMonitorMetricDataTimeInterval,
-    monitorMetricQueueSize,
-} from '../../utils/constants';
-import { MetricOptionDataByChartsPerRow } from './MetricOptionDataByChartsPerRow';
-import { useQuery } from '@tanstack/react-query';
+import React, { useRef, useState } from 'react';
+import { MonitorMetricsTypeTabs } from './MonitorMetricsTypeTabs';
+import { ApiError, Metric, Response } from '../../../xpanse-api/generated';
+import { monitorMetricQueueSize } from '../../utils/constants';
+import { BuildMetricGraphs } from './BuildMetricGraphs';
 import { EChartsCoreOption } from 'echarts';
+import {
+    useGetLastKnownMetricForASpecificTypeQuery,
+    useGetMetricsForSpecificTimePeriodAndSpecificType,
+} from './MetricQueries';
+import { MonitorTip } from './MonitorTip';
 
 export const MonitorChart = ({
     serviceId,
     timePeriod,
     isAutoRefresh,
     chartsPerRow,
-    getTipInfo,
-    getIsLoading,
-    getOptionLength,
+    setNumberOfChartsAvailable,
 }: {
     serviceId: string;
     timePeriod: number;
     isAutoRefresh: boolean;
     chartsPerRow: string;
-    getTipInfo: (
-        serviceId: string,
-        isLoading: boolean,
-        tipType: 'error' | 'success' | undefined,
-        tipMessage: string,
-        tipDescription: string,
-        isQueryResultDisabled: boolean
-    ) => void;
-    getIsLoading: (isLoading: boolean) => void;
-    getOptionLength: (optionLength: number) => void;
+    setNumberOfChartsAvailable: (chartCount: number) => void;
 }): React.JSX.Element => {
-    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<string>(
-        Metric.monitorResourceType.CPU.valueOf()
+    let tipType: 'error' | 'success' | undefined = undefined;
+    let tipMessage: string = '';
+    let tipDescription: string = '';
+    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<Metric.monitorResourceType>(
+        Metric.monitorResourceType.CPU
+    );
+    const useGetLastKnownMetric = useGetLastKnownMetricForASpecificTypeQuery(
+        serviceId,
+        isAutoRefresh,
+        timePeriod === lastMinuteRadioButtonKeyId,
+        activeMonitorMetricType
     );
 
-    const [isRefreshOnlyLastKnownMetric, setIsRefreshOnlyLastKnownMetric] = useState<boolean>(false);
-    const [isRefreshMonitorMetric, setIsRefreshMonitorMetric] = useState<boolean>(false);
-
-    const [onlyLastKnownMonitorMetricsQueue, setOnlyLastKnownMonitorMetricsQueue] = useState<Metric[][] | undefined>(
-        undefined
+    const useGetMetricForSpecificTimePeriod = useGetMetricsForSpecificTimePeriodAndSpecificType(
+        serviceId,
+        timePeriod,
+        timePeriod !== lastMinuteRadioButtonKeyId,
+        activeMonitorMetricType,
+        isAutoRefresh
     );
-    const [monitorMetricsQueue, setMonitorMetricsQueue] = useState<MetricQueueParams[]>([]);
 
-    const [chartsTitle, setChartsTitle] = useState<{ Id: string; metricTitle: string; metricSubTitle: string }[]>([]);
-    const [options, setOptions] = useState<EChartsCoreOption[]>([]);
+    // useRef necessary to store existing data between re-renders
+    const onlyLastKnownMetricsQueue = useRef<Metric[]>([]);
+    const metricsForSpecificTimePeriodQueue = useRef<Metric[]>([]);
 
-    const tipMessageInfo = useRef<string>('');
-    const tipDescriptionInfo = useRef<string[]>([]);
+    let chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
+    let options: EChartsCoreOption[] = [];
 
-    const getActiveMonitorMetricType = (activeMonitorMetricType: string) => {
-        setActiveMonitorMetricType(activeMonitorMetricType);
-    };
-
-    useEffect(() => {
-        if (serviceId.length > 0 && timePeriod === lastMinuteRadioButtonKeyId && isAutoRefresh) {
-            setIsRefreshOnlyLastKnownMetric(true);
-            setIsRefreshMonitorMetric(false);
-        } else if (
-            serviceId.length > 0 &&
-            timePeriod !== lastMinuteRadioButtonKeyId &&
-            activeMonitorMetricType.length > 0 &&
-            isAutoRefresh
-        ) {
-            setIsRefreshOnlyLastKnownMetric(false);
-            setIsRefreshMonitorMetric(true);
-        }
-    }, [serviceId, timePeriod, activeMonitorMetricType, isAutoRefresh]);
-
-    const onlyLastKnownMetricQueryKey = ['onlyLastKnownMetric', serviceId];
-    const onlyLastKnownMetricQueryFn = () =>
-        MonitorService.getMetrics(serviceId, undefined, undefined, undefined, undefined, undefined, true);
-
-    const onlyLastKnownMetricQuery = useQuery({
-        queryKey: onlyLastKnownMetricQueryKey,
-        queryFn: onlyLastKnownMetricQueryFn,
-        refetchInterval: isRefreshOnlyLastKnownMetric ? fetchOnlyLastKnownMonitorMetricDataTimeInterval : false,
-        refetchIntervalInBackground: isRefreshOnlyLastKnownMetric,
-        refetchOnWindowFocus: false,
-        enabled: isRefreshOnlyLastKnownMetric,
-        staleTime: 0,
-        gcTime: 0,
-    });
-
-    const monitorMetricQueryKey = ['metric', serviceId, activeMonitorMetricType, timePeriod];
-    const monitorMetricQueryFn = () =>
-        MonitorService.getMetrics(
-            serviceId,
-            undefined,
-            activeMonitorMetricType as Metric.monitorResourceType,
-            getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).from,
-            getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).to,
-            undefined,
-            false
-        );
-
-    const monitorMetricQuery = useQuery({
-        queryKey: monitorMetricQueryKey,
-        queryFn: monitorMetricQueryFn,
-        refetchInterval: isRefreshMonitorMetric ? fetchMonitorMetricDataTimeInterval : false,
-        refetchIntervalInBackground: isRefreshMonitorMetric,
-        refetchOnWindowFocus: false,
-        enabled: isRefreshMonitorMetric,
-        staleTime: 0,
-        gcTime: 0,
-    });
-
-    useEffect(() => {
-        if (onlyLastKnownMetricQuery.isLoading) {
-            getTipInfo(serviceId, false, undefined, '', '', true);
-            getIsLoading(true);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onlyLastKnownMetricQuery.isLoading, serviceId]);
-
-    useEffect(() => {
-        if (onlyLastKnownMetricQuery.isSuccess) {
-            getIsLoading(false);
-            const data: Metric[] | undefined = onlyLastKnownMetricQuery.data;
-            if (data.length > 0) {
-                getTipInfo(serviceId, false, undefined, '', '', false);
-                setOnlyLastKnownMonitorMetricsQueue((prevQueue: Metric[][] | undefined) => {
-                    let newQueue: Metric[][];
-
-                    if (prevQueue) {
-                        newQueue = [...prevQueue, data];
-                        if (newQueue.length > monitorMetricQueueSize) {
-                            newQueue.shift();
-                        }
-                    } else {
-                        newQueue = [data];
-                    }
-
-                    return newQueue;
-                });
-            } else {
-                setOnlyLastKnownMonitorMetricsQueue([]);
-                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', false);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onlyLastKnownMetricQuery.isSuccess, onlyLastKnownMetricQuery.data, serviceId]);
-
-    useEffect(() => {
-        if (onlyLastKnownMetricQuery.isError) {
-            getIsLoading(false);
-            setOnlyLastKnownMonitorMetricsQueue([]);
-            setTips(onlyLastKnownMetricQuery.error);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onlyLastKnownMetricQuery.isError, onlyLastKnownMetricQuery.error]);
-
-    useEffect(() => {
-        if (monitorMetricQuery.isSuccess) {
-            const rsp: Metric[] | undefined = monitorMetricQuery.data;
-            if (rsp.length > 0) {
-                getTipInfo(serviceId, false, undefined, '', '', false);
-                setMonitorMetricsQueue((prevQueue: MetricQueueParams[]) => {
-                    let newQueue: MetricQueueParams[];
-                    if (metricsIsEmpty(rsp)) {
-                        const currentItem: MetricQueueParams | undefined =
-                            lastNonEmptyMetricsByTimePeriodAndActiveMonitorMetricType(
-                                timePeriod,
-                                activeMonitorMetricType as Metric.monitorResourceType,
-                                prevQueue
-                            );
-                        if (currentItem === undefined) {
-                            newQueue = [
-                                ...prevQueue,
-                                getNewMetricQueueItem(
-                                    timePeriod,
-                                    activeMonitorMetricType as Metric.monitorResourceType,
-                                    rsp
-                                ),
-                            ];
-                        } else {
-                            newQueue = [...prevQueue, currentItem];
-                        }
-                    } else {
-                        newQueue = [
-                            ...prevQueue,
-                            getNewMetricQueueItem(
-                                timePeriod,
-                                activeMonitorMetricType as Metric.monitorResourceType,
-                                rsp
-                            ),
-                        ];
-                    }
-
-                    if (newQueue.length > monitorMetricQueueSize) {
-                        newQueue.shift();
-                    }
-
-                    return newQueue;
-                });
-            } else {
-                setMonitorMetricsQueue([]);
-                getTipInfo('', false, 'success', 'No metrics found for the selected service.', '', false);
-            }
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [monitorMetricQuery.isSuccess, monitorMetricQuery.data, serviceId, timePeriod, activeMonitorMetricType]);
-
-    useEffect(() => {
-        if (monitorMetricQuery.isError) {
-            setMonitorMetricsQueue([]);
-            setTips(monitorMetricQuery.error);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [monitorMetricQuery.isError, monitorMetricQuery.error]);
-
-    const setTips = (error: Error) => {
-        if (error instanceof ApiError && 'details' in error.body) {
-            const response: Response = error.body as Response;
-            tipMessageInfo.current = response.resultType.valueOf();
-            tipDescriptionInfo.current = response.details;
-        } else {
-            tipMessageInfo.current = 'Error while fetching metrics data.';
-            tipDescriptionInfo.current = [error.message];
-        }
-        getTipInfo('', false, 'error', tipMessageInfo.current, tipDescriptionInfo.current.join(), false);
-    };
-
-    useEffect(() => {
-        if (onlyLastKnownMonitorMetricsQueue === undefined || onlyLastKnownMonitorMetricsQueue.length === 0) {
-            return;
-        }
-        if (timePeriod === lastMinuteRadioButtonKeyId) {
-            const metrics: Metric[] = [];
-            onlyLastKnownMonitorMetricsQueue.forEach((item: Metric[]) => {
-                item.forEach((metric: Metric) => {
-                    metrics.push(metric);
-                });
-            });
-            showMonitorMetrics(metrics);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [onlyLastKnownMonitorMetricsQueue, timePeriod, activeMonitorMetricType]);
-
-    useEffect(() => {
-        if (monitorMetricsQueue.length === 0) {
-            return;
-        }
-        if (timePeriod !== lastMinuteRadioButtonKeyId) {
-            const metrics: Metric[] = [];
-            monitorMetricsQueue[monitorMetricsQueue.length - 1].metricList.forEach((metric: Metric) => {
-                metrics.push(metric);
-            });
-
-            showMonitorMetrics(metrics);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [monitorMetricsQueue, timePeriod, activeMonitorMetricType]);
-
-    const showMonitorMetrics = (metrics: Metric[]) => {
-        const currentMetrics: Map<string, Metric[]> = getCurrentMetrics(metrics);
-        new Map([...currentMetrics.entries()].sort()).forEach((v, k) => {
-            if (k === activeMonitorMetricType) {
-                const metricProps: MetricProps[] = getMetricProps(v);
-                getMetricOptions(metricProps);
-            }
-        });
-    };
-
-    const getMetricOptions = (metricProps: MetricProps[]) => {
+    const convertMetricToEchartOptions = (metricProps: MetricProps[]) => {
         const newCurrentTime = new Date();
         if (timePeriod === lastMinuteRadioButtonKeyId) {
             const totalSeconds: number = getTotalSecondsOfTimePeriod(timePeriod);
             newCurrentTime.setSeconds(newCurrentTime.getSeconds() - totalSeconds);
         }
 
-        const currentMetricProps: Map<string, MetricProps[]> = getCurrentMetricProps(metricProps);
+        const currentMetricProps: Map<string, MetricProps[]> = groupMetricsByResourceIds(metricProps);
         const currentChartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
         const currentOptions: EChartsCoreOption[] = [];
 
@@ -368,25 +146,118 @@ export const MonitorChart = ({
             };
             currentOptions.push(option);
         });
-        setOptions(currentOptions);
-        setChartsTitle(currentChartsTitle);
-        getOptionLength(currentOptions.length);
+        options = currentOptions;
+        chartsTitle = currentChartsTitle;
+        setNumberOfChartsAvailable(currentOptions.length);
+    };
+
+    const setErrorAlertData = (error: Error) => {
+        tipType = 'error';
+        if (error instanceof ApiError && 'details' in error.body) {
+            const response: Response = error.body as Response;
+            tipMessage = response.resultType.valueOf();
+            tipDescription = response.details.join();
+        } else {
+            tipMessage = 'Error while fetching metrics data.';
+            tipDescription = error.message;
+        }
+    };
+
+    if (useGetLastKnownMetric.isLoading || useGetMetricForSpecificTimePeriod.isLoading) {
+        tipType = undefined;
+        tipMessage = '';
+        tipDescription = '';
+    }
+
+    if (useGetLastKnownMetric.isSuccess) {
+        const data: Metric[] | undefined = useGetLastKnownMetric.data;
+        if (data.length > 0) {
+            tipType = undefined;
+            tipMessage = '';
+            tipDescription = '';
+            let newQueue: Metric[];
+            if (onlyLastKnownMetricsQueue.current.length > 0) {
+                newQueue = [...onlyLastKnownMetricsQueue.current, ...data];
+                if (newQueue.length > monitorMetricQueueSize) {
+                    newQueue.shift();
+                }
+            } else {
+                newQueue = data;
+            }
+            onlyLastKnownMetricsQueue.current = newQueue;
+            convertMetricToEchartOptions(convertMetricsToMetricProps(onlyLastKnownMetricsQueue.current));
+        } else {
+            onlyLastKnownMetricsQueue.current = [];
+            tipType = undefined;
+            tipMessage = 'No metrics found for the selected service.';
+            tipDescription = '';
+        }
+    }
+
+    if (useGetMetricForSpecificTimePeriod.isSuccess) {
+        const rsp: Metric[] | undefined = useGetMetricForSpecificTimePeriod.data;
+        if (rsp.length > 0) {
+            tipType = undefined;
+            tipMessage = '';
+            tipDescription = '';
+            let newQueue: Metric[];
+            if (isMetricEmpty(rsp)) {
+                const currentItem: Metric | undefined = metricsForSpecificTimePeriodQueue.current[0];
+                newQueue = [...metricsForSpecificTimePeriodQueue.current, currentItem];
+            } else {
+                newQueue = [...metricsForSpecificTimePeriodQueue.current, ...rsp];
+            }
+
+            if (newQueue.length > monitorMetricQueueSize) {
+                newQueue.shift();
+            }
+
+            metricsForSpecificTimePeriodQueue.current = newQueue;
+            convertMetricToEchartOptions(convertMetricsToMetricProps(metricsForSpecificTimePeriodQueue.current));
+        } else {
+            tipType = undefined;
+            tipMessage = 'No metrics found for the selected service.';
+            tipDescription = '';
+        }
+    }
+
+    if (useGetMetricForSpecificTimePeriod.isError) {
+        setErrorAlertData(useGetMetricForSpecificTimePeriod.error);
+    }
+
+    if (useGetLastKnownMetric.isError) {
+        onlyLastKnownMetricsQueue.current = [];
+        setErrorAlertData(useGetLastKnownMetric.error);
+    }
+
+    const onRemove = () => {
+        tipType = undefined;
+        tipMessage = '';
+        tipDescription = '';
+        if (timePeriod === lastMinuteRadioButtonKeyId) {
+            void useGetLastKnownMetric.refetch();
+        } else {
+            void useGetMetricForSpecificTimePeriod.refetch();
+        }
     };
 
     return (
         <>
-            {onlyLastKnownMetricQuery.isLoading ? (
+            <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
+            {useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading ? (
                 <div className={'monitor-search-loading-class'}>
-                    <Spin size='large' spinning={onlyLastKnownMetricQuery.isLoading} />
+                    <Spin
+                        size='large'
+                        spinning={useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading}
+                    />
                 </div>
             ) : (
                 <>
-                    <MonitorMetricsType getActiveMonitorMetricType={getActiveMonitorMetricType} />
-                    <MetricOptionDataByChartsPerRow
-                        chartsPerRow={chartsPerRow}
-                        options={options}
-                        chartsTitle={chartsTitle}
+                    <MonitorMetricsTypeTabs
+                        activeMonitorMetricType={activeMonitorMetricType}
+                        setActiveMonitorMetricType={setActiveMonitorMetricType}
                     />
+                    <BuildMetricGraphs chartsPerRow={chartsPerRow} graphData={options} chartsTitle={chartsTitle} />
                 </>
             )}
         </>

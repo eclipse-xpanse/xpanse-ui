@@ -3,30 +3,25 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import * as echarts from 'echarts/core';
 import { Button, Col, Row, Tooltip } from 'antd';
+import { EChartsCoreOption } from 'echarts';
 import EChartsReact from 'echarts-for-react';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-export const MetricOptionDataByChartsPerRow = ({
+export const BuildMetricGraphs = ({
     chartsPerRow,
-    options,
+    graphData,
     chartsTitle,
 }: {
     chartsPerRow: string;
-    options: echarts.EChartsCoreOption[];
+    graphData: EChartsCoreOption[];
     chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[];
 }): React.JSX.Element => {
-    const [chartCols, setChartCols] = useState<React.JSX.Element[]>([]);
-
-    useEffect(() => {
-        if (options.length === 0 || chartsTitle.length === 0) {
-            return;
-        }
-        const currentChartCols: React.JSX.Element[] = [];
-        for (let i = 0; i < options.length; i++) {
+    const currentChartCols: React.JSX.Element[] = [];
+    if (graphData.length > 0 && chartsTitle.length > 0) {
+        for (let i = 0; i < graphData.length; i++) {
             currentChartCols.push(
-                <Col key={i.toString()} span={options.length > 0 ? 24 / Number(chartsPerRow) : 24}>
+                <Col key={i.toString()} span={graphData.length > 0 ? 24 / Number(chartsPerRow) : 24}>
                     <div className={'charts-position-class'}>
                         <div className={'chart-title-class'}>
                             <Tooltip
@@ -42,17 +37,16 @@ export const MetricOptionDataByChartsPerRow = ({
                                 </Button>
                             </Tooltip>
                         </div>
-                        <EChartsReact option={options[i]} />
+                        <EChartsReact option={graphData[i]} />
                     </div>
                 </Col>
             );
         }
-        setChartCols(currentChartCols);
-    }, [options, chartsTitle, chartsPerRow]);
+    }
 
     return (
         <>
-            <Row gutter={[8, 8]}>{chartCols}</Row>
+            <Row gutter={[8, 8]}>{currentChartCols}</Row>
         </>
     );
 };
