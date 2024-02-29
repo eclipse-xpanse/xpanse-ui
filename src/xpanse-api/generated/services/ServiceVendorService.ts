@@ -120,6 +120,7 @@ export class ServiceVendorService {
      * @param serviceName name of the service
      * @param serviceVersion version of the service
      * @param serviceHostingType who hosts ths cloud resources
+     * @param serviceRegistrationState state of registration
      * @returns ServiceTemplateDetailVo OK
      * @throws ApiError
      */
@@ -138,7 +139,8 @@ export class ServiceVendorService {
         cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         serviceName?: string,
         serviceVersion?: string,
-        serviceHostingType?: 'self' | 'service-vendor'
+        serviceHostingType?: 'self' | 'service-vendor',
+        serviceRegistrationState?: 'approval pending' | 'approved' | 'rejected'
     ): CancelablePromise<Array<ServiceTemplateDetailVo>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -149,6 +151,7 @@ export class ServiceVendorService {
                 serviceName: serviceName,
                 serviceVersion: serviceVersion,
                 serviceHostingType: serviceHostingType,
+                serviceRegistrationState: serviceRegistrationState,
             },
             errors: {
                 400: `Bad Request`,

@@ -12,17 +12,17 @@
  */
 export type AutoFill = {
     /**
-     * Deployed resource type
+     * Type of the cloud resource to be reused.
      */
     deployResourceKind: AutoFill.deployResourceKind;
     /**
-     * Not whether the variable is allowed to be created
+     *  defines if the required cloud resource can be newly created or should the existing resources must only be used.
      */
     isAllowCreate: boolean;
 };
 export namespace AutoFill {
     /**
-     * Deployed resource type
+     * Type of the cloud resource to be reused.
      */
     export enum deployResourceKind {
         VM = 'vm',
