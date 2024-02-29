@@ -3,193 +3,49 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import '../../../../../styles/catalog.css';
 import { DataNode } from 'antd/es/tree';
-import ServiceProvider from '../details/ServiceProvider';
-import { HomeOutlined, TagOutlined } from '@ant-design/icons';
+import { TagOutlined } from '@ant-design/icons';
 import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { Alert, Empty, Skeleton, Tree } from 'antd';
+import { Alert, Empty, Skeleton } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-import { getCspMapper, getServiceMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
-import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
-import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
-    catalogPageRoute,
-    serviceCspQuery,
-    serviceHostingTypeQuery,
-    serviceNameKeyQuery,
-    serviceVersionKeyQuery,
-} from '../../../../utils/constants';
+    groupServiceTemplatesByName,
+    groupServicesByVersionForSpecificServiceName,
+} from '../../../common/catalog/catalogProps';
+import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
+import { CatalogFullView } from './CatalogFullView';
 
 function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
-    const [urlParams] = useSearchParams();
-    const [selectKey, setSelectKey] = useState<React.Key>('');
-    const [expandKeys, setExpandKeys] = useState<React.Key[]>([]);
-    const [treeData, setTreeData] = useState<DataNode[]>([]);
-    const [currentServiceName, setCurrentServiceName] = useState<string>(getServiceNameFromQuery());
-    const [currentVersion, setCurrentVersion] = useState<string>(getServiceVersionFromQuery());
-    const [currentCsp, setCurrentCsp] = useState<string>(getServiceCspFormQuery());
-    const [currentHostType, setCurrentHostType] = useState<string>(getServiceHostingTypeFormQuery());
-    const [categoryOclData, setCategoryOclData] = useState<Map<string, ServiceTemplateDetailVo[]>>(
-        new Map<string, ServiceTemplateDetailVo[]>()
-    );
-    const [unregisteredDisabled, setUnregisteredDisabled] = useState<boolean>(false);
-
-    const navigate = useNavigate();
+    const treeData: DataNode[] = [];
+    let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
-    useEffect(() => {
-        if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
-            const categoryTreeData: DataNode[] = [];
-            const tExpandKeys: React.Key[] = [];
-            const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
-            const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = getServiceMapper(userAvailableServiceList);
-            const serviceNameList: string[] = Array.from(serviceMapper.keys());
-            setCategoryOclData(serviceMapper);
-            let serviceName: string | undefined = undefined;
-            let version: string | undefined;
-            serviceNameList.forEach((serviceName: string) => {
-                const dataNode: DataNode = {
-                    title: serviceName,
-                    key: serviceName || '',
-                    children: [],
-                };
-                const versionMapper: Map<string, ServiceTemplateDetailVo[]> = getVersionMapper(
-                    serviceName,
-                    userAvailableServiceList
-                );
-                const versionList: string[] = Array.from(versionMapper.keys());
 
-                versionList.forEach((versionName: string) => {
-                    dataNode.children?.push({
-                        title: versionName,
-                        key: serviceName + '@' + versionName,
-                        icon: <TagOutlined />,
-                    });
-                    tExpandKeys.push(serviceName + '@' + versionName);
+    if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
+        const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
+        categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
+        categoryOclData.forEach((_value: ServiceTemplateDetailVo[], serviceName: string) => {
+            const dataNode: DataNode = {
+                title: serviceName,
+                key: serviceName || '',
+                children: [],
+            };
+            const versionMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByVersionForSpecificServiceName(
+                serviceName,
+                userAvailableServiceList
+            );
+            versionMapper.forEach((_value: ServiceTemplateDetailVo[], versionName: string) => {
+                dataNode.children?.push({
+                    title: versionName,
+                    key: serviceName + '@' + versionName,
+                    icon: <TagOutlined />,
                 });
-                categoryTreeData.push(dataNode);
             });
-            setTreeData(categoryTreeData);
-            setExpandKeys(tExpandKeys);
-
-            if (!currentServiceName || (currentServiceName && !serviceMapper.has(currentServiceName))) {
-                serviceName = tExpandKeys[0].toString().split('@')[0];
-                setCurrentServiceName(serviceName);
-            } else {
-                serviceName = currentServiceName;
-            }
-            const versionMapper = getVersionMapper(currentServiceName, userAvailableServiceList);
-            if (!currentVersion || (currentVersion && !versionMapper.has(currentVersion))) {
-                version = tExpandKeys[0].toString().split('@')[1];
-                setCurrentVersion(version);
-            } else {
-                version = currentVersion;
-            }
-            setSelectKey(serviceName && version ? serviceName + '@' + version : tExpandKeys[0]);
-        } else {
-            setTreeData([]);
-            setSelectKey('');
-            setExpandKeys([]);
-            setCategoryOclData(new Map<string, ServiceTemplateDetailVo[]>());
-            setCurrentServiceName('');
-            setCurrentVersion('');
-            setCurrentCsp('');
-            setCurrentHostType('');
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [availableServiceTemplatesQuery.isSuccess, category, availableServiceTemplatesQuery.data]);
-
-    useEffect(() => {
-        categoryOclData.forEach((serviceList, serviceName) => {
-            if (serviceName === currentServiceName) {
-                const versionMapper = getVersionMapper(serviceName, serviceList);
-                versionMapper.forEach((versionList, versionName) => {
-                    if (versionName === currentVersion) {
-                        const cspMapper = getCspMapper(serviceName, versionName, versionList);
-                        const firstCspList: ServiceTemplateDetailVo[] = cspMapper.values().next()
-                            .value as ServiceTemplateDetailVo[];
-                        if (!cspMapper.has(currentCsp)) {
-                            if (firstCspList.length > 0) {
-                                setCurrentCsp(firstCspList[0].csp.valueOf());
-                                setCurrentHostType(firstCspList[0].serviceHostingType);
-                            }
-                        }
-                    }
-                });
-            }
+            treeData.push(dataNode);
         });
-    }, [categoryOclData, currentCsp, currentServiceName, currentVersion]);
-
-    useEffect(() => {
-        navigate({
-            pathname: catalogPageRoute,
-            hash: '#' + category,
-            search: createSearchParams({
-                csp: currentCsp,
-                serviceName: currentServiceName,
-                version: currentVersion,
-                hostingType: currentHostType,
-            }).toString(),
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentServiceName, currentVersion, currentCsp, currentHostType, category]);
-
-    function getServiceNameFromQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
     }
-
-    function getServiceVersionFromQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function getServiceCspFormQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function getServiceHostingTypeFormQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function isParentTreeSelected(selectKey: React.Key): boolean {
-        let isParentNode: boolean = false;
-        treeData.forEach((dataNode: DataNode) => {
-            if (dataNode.key === selectKey) {
-                isParentNode = true;
-            }
-        });
-        return isParentNode;
-    }
-
-    const onSelect = (selectedKeys: React.Key[]) => {
-        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
-            return;
-        }
-        setSelectKey(selectedKeys[0]);
-        setCurrentServiceName(selectedKeys[0].toString().split('@')[0]);
-        setCurrentVersion(selectedKeys[0].toString().split('@')[1]);
-    };
-
-    const onConfirmUnregister = (disabled: boolean) => {
-        setUnregisteredDisabled(disabled);
-    };
 
     if (availableServiceTemplatesQuery.isError) {
         if (
@@ -239,48 +95,11 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             </div>
         );
     }
-    const getCsp = (csp: string) => {
-        if (csp.length > 0) {
-            setCurrentCsp(csp);
-        }
-    };
-    const getHostType = (hostType: string) => {
-        if (hostType.length > 0) {
-            setCurrentHostType(hostType);
-        }
-    };
 
     return (
         <div className={'catalog-middleware'}>
             <div className={'container'}>
-                <div className={'left-class'}>
-                    <div className={'left-title-class'}>
-                        <HomeOutlined />
-                        &nbsp;Service Tree
-                    </div>
-                    <Tree
-                        showIcon={true}
-                        defaultExpandAll={true}
-                        autoExpandParent={true}
-                        onSelect={onSelect}
-                        selectedKeys={[selectKey]}
-                        expandedKeys={expandKeys}
-                        treeData={treeData}
-                        disabled={unregisteredDisabled}
-                    />
-                </div>
-                <div className={'middle-class'} />
-                <div className={'right-class'}>
-                    <div className={'left-title-class'}>Cloud Provider</div>
-                    <ServiceProvider
-                        categoryOclData={categoryOclData}
-                        currentServiceName={selectKey.toString()}
-                        confirmUnregister={onConfirmUnregister}
-                        category={category}
-                        getCsp={getCsp}
-                        getHostType={getHostType}
-                    />
-                </div>
+                <CatalogFullView treeData={treeData} categoryOclData={categoryOclData} category={category} />
             </div>
         </div>
     );

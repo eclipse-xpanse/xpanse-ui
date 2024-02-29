@@ -16,7 +16,13 @@ import ServicePolicyListError from './ServicePolicyListError';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import '../../../../../styles/service_policies.css';
 
-export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }) => {
+export const ServicePolicies = ({
+    serviceDetails,
+    isViewDisabled,
+}: {
+    serviceDetails: ServiceTemplateDetailVo;
+    isViewDisabled: boolean;
+}) => {
     const [currentPolicyId, setCurrentPolicyId] = useState<string>('');
     const [currentServicePolicy, setCurrentServicePolicy] = useState<ServicePolicy | undefined>(undefined);
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
@@ -107,8 +113,9 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                                     updateServicePolicies(record);
                                 }}
                                 disabled={
-                                    currentPolicyId.length > 0 &&
-                                    (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
+                                    isViewDisabled ||
+                                    (currentPolicyId.length > 0 &&
+                                        (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess))
                                 }
                             >
                                 Update
@@ -131,8 +138,10 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                                         deleteServicePolicyRequest.isError
                                     }
                                     disabled={
-                                        currentPolicyId.length > 0 &&
-                                        (deleteServicePolicyRequest.isPending || deleteServicePolicyRequest.isSuccess)
+                                        isViewDisabled ||
+                                        (currentPolicyId.length > 0 &&
+                                            (deleteServicePolicyRequest.isPending ||
+                                                deleteServicePolicyRequest.isSuccess))
                                     }
                                 >
                                     Delete
@@ -202,10 +211,11 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                     onClick={refreshServicePoliciesList}
                     icon={<SyncOutlined />}
                     disabled={
-                        currentPolicyId.length > 0 &&
-                        (deleteServicePolicyRequest.isPending ||
-                            deleteServicePolicyRequest.isSuccess ||
-                            deleteServicePolicyRequest.isError)
+                        isViewDisabled ||
+                        (currentPolicyId.length > 0 &&
+                            (deleteServicePolicyRequest.isPending ||
+                                deleteServicePolicyRequest.isSuccess ||
+                                deleteServicePolicyRequest.isError))
                     }
                 >
                     Refresh
@@ -219,10 +229,11 @@ export const ServicePolicies = ({ serviceDetails }: { serviceDetails: ServiceTem
                     className={'add-service-policy'}
                     icon={<PlusCircleOutlined />}
                     disabled={
-                        currentPolicyId.length > 0 &&
-                        (deleteServicePolicyRequest.isPending ||
-                            deleteServicePolicyRequest.isSuccess ||
-                            deleteServicePolicyRequest.isError)
+                        isViewDisabled ||
+                        (currentPolicyId.length > 0 &&
+                            (deleteServicePolicyRequest.isPending ||
+                                deleteServicePolicyRequest.isSuccess ||
+                                deleteServicePolicyRequest.isError))
                     }
                 >
                     Add

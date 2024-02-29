@@ -4,33 +4,21 @@
  */
 
 import { Button, Popconfirm } from 'antd';
-import { ServiceVendorService } from '../../../../../xpanse-api/generated';
-import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { CloseCircleOutlined } from '@ant-design/icons';
-import { useQueryClient } from '@tanstack/react-query';
+import { useUnregisterRequest } from './UnregisterMutation';
 
 function UnregisterService({
     id,
-    onConfirmHandler,
+    setIsViewDisabled,
 }: {
     id: string;
-    onConfirmHandler: (message: string | Error, unregisterResult: boolean, id: string) => void;
+    setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
-    useQueryClient();
-    const unregisterRequest = useMutation({
-        mutationFn: () => {
-            return ServiceVendorService.unregister(id);
-        },
-        onSuccess: () => {
-            onConfirmHandler('Service Unregistered Successfully', true, id);
-        },
-        onError: (error: Error) => {
-            onConfirmHandler(error, false, id);
-        },
-    });
+    const unregisterRequest = useUnregisterRequest(id);
 
     const unregister = () => {
+        setIsViewDisabled(true);
         unregisterRequest.mutate();
     };
 

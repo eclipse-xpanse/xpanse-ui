@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { MutableRefObject, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import {
@@ -25,12 +25,12 @@ import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 function UpdateService({
     id,
-    unregisterStatus,
     category,
+    isViewDisabled,
 }: {
     id: string;
-    unregisterStatus: MutableRefObject<string>;
     category: DeployedService.category;
+    isViewDisabled: boolean;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -132,7 +132,7 @@ function UpdateService({
                 icon={<EditOutlined />}
                 onClick={showModal}
                 className={'catalog-update-btn-class'}
-                disabled={unregisterStatus.current === 'completed' || unregisterStatus.current === 'error'}
+                disabled={isViewDisabled}
             >
                 Update
             </Button>
