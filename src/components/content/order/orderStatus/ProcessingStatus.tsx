@@ -8,7 +8,13 @@ import React from 'react';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
-export const ProcessingStatus = (response: DeployedServiceDetails, operationType: OperationType): React.JSX.Element => {
+export const ProcessingStatus = ({
+    response,
+    operationType,
+}: {
+    response: DeployedServiceDetails;
+    operationType: OperationType;
+}): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
         if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {

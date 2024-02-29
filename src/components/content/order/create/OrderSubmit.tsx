@@ -11,14 +11,16 @@ import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { BooleanInput } from '../formElements/BooleanInput';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { DeployRequest, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, DeployRequest, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
-import OrderSubmitStatusPolling from './OrderSubmitStatusPolling';
+import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
+import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { v4 } from 'uuid';
 
 export function OrderItem({ item }: { item: DeployParam }) {
     if (item.type === 'string') {
@@ -50,10 +52,18 @@ export interface OrderSubmitProps {
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [form] = Form.useForm();
-    const [deploying, setDeploying] = useState<boolean>(false);
-    const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
+    const uniqueRequestId = useRef(v4());
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
+        submitDeploymentRequest.data,
+        submitDeploymentRequest.isSuccess,
+        state.serviceHostingType,
+        [
+            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
+        ]
+    );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
     // Avoid re-rendering of the component when variables are added to store.
@@ -67,9 +77,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     }
 
     function onSubmit() {
-        setRequestSubmitted(true);
-        setDeploying(true);
         setIsShowDeploymentResult(true);
+        uniqueRequestId.current = v4();
         const createRequest: DeployRequest = {
             category: state.category,
             csp: state.csp,
@@ -110,14 +119,12 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 </div>
             </div>
             {isShowDeploymentResult ? (
-                <OrderSubmitStatusPolling
+                <OrderSubmitStatusAlert
+                    key={uniqueRequestId.current}
                     uuid={submitDeploymentRequest.data}
-                    error={submitDeploymentRequest.error}
-                    isSuccess={submitDeploymentRequest.isSuccess}
-                    isLoading={submitDeploymentRequest.isPending}
-                    setIsDeploying={setDeploying}
-                    setRequestSubmitted={setRequestSubmitted}
-                    serviceHostingType={state.serviceHostingType}
+                    isSubmitFailed={submitDeploymentRequest.error}
+                    deployedServiceDetails={getServiceDetailsByIdQuery.data}
+                    isPollingError={getServiceDetailsByIdQuery.isError}
                     serviceProviderContactDetails={state.contactServiceDetails}
                 />
             ) : null}
@@ -130,7 +137,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 onFinish={onSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
-                disabled={requestSubmitted}
+                disabled={submitDeploymentRequest.isSuccess}
             >
                 <Form.Item
                     name={'Name'}
@@ -154,7 +161,14 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         }
                     />
                 </Form.Item>
-                <div className={deploying ? 'deploying order-param-item-row' : ''}>
+                <div
+                    className={
+                        getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                        DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
+                            ? 'deploying order-param-item-row'
+                            : ''
+                    }
+                >
                     {state.params.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
                             <OrderItem key={item.name} item={item} />
@@ -165,7 +179,20 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 <div className={'order-param-item-row'}>
                     <div className={'order-param-item-left'} />
                     <div className={'order-param-deploy'}>
-                        <Button type='primary' loading={deploying} htmlType='submit' disabled={requestSubmitted}>
+                        <Button
+                            type='primary'
+                            loading={
+                                submitDeploymentRequest.isPending ||
+                                getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                                    DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
+                            }
+                            htmlType='submit'
+                            disabled={
+                                submitDeploymentRequest.isPending ||
+                                getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                            }
+                        >
                             Deploy
                         </Button>
                     </div>
