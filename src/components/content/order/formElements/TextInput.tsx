@@ -3,22 +3,42 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Input, Select, Tooltip } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
-import { DeployVariable } from '../../../../xpanse-api/generated';
-import React, { ChangeEvent } from 'react';
+import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
+import React, { ChangeEvent, useState } from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
+import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 
-export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
+export function TextInput({
+    item,
+    csp,
+    region,
+}: {
+    item: DeployParam;
+    csp: DeployRequest.csp;
+    region: string;
+}): React.JSX.Element {
+    const [isExistingResourceDropDownDisabled, setIsExistingResourceDropDownDisabled] = useState<boolean>(false);
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];
     let regExp: RegExp;
     let valueList: string[] = [];
     let isEnum: boolean = false;
-
+    let autoFillDeployVariableList: string[] = [];
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
+
+    const autoFillDeployVariableRequest = useAutoFillDeployVariableQuery(
+        csp,
+        region,
+        item.autoFill?.deployResourceKind
+    );
+
+    if (autoFillDeployVariableRequest.isSuccess) {
+        autoFillDeployVariableList = autoFillDeployVariableRequest.data;
+    }
 
     const getStringEventHandler = (event: ChangeEvent<HTMLInputElement>) => {
         cacheFormVariable(event.target.name, event.target.value);
@@ -26,6 +46,14 @@ export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
 
     const getEventEventHandler = (event: string) => {
         cacheFormVariable(item.name, event);
+    };
+
+    const createVariable = () => {
+        setIsExistingResourceDropDownDisabled(true);
+    };
+
+    const selectVariable = () => {
+        setIsExistingResourceDropDownDisabled(false);
     };
 
     for (const key in item.valueSchema) {
@@ -63,7 +91,7 @@ export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
                                 </Select.Option>
                             ))}
                         </Select>
-                    ) : (
+                    ) : item.autoFill === undefined ? (
                         <Input
                             name={item.name}
                             placeholder={item.example}
@@ -74,6 +102,70 @@ export function TextInput({ item }: { item: DeployParam }): React.JSX.Element {
                             }
                             onChange={getStringEventHandler}
                         />
+                    ) : item.autoFill.isAllowCreate ? (
+                        <div>
+                            <Row>
+                                <Col span={10}>
+                                    <Select
+                                        disabled={isExistingResourceDropDownDisabled}
+                                        allowClear
+                                        showSearch
+                                        optionFilterProp='label'
+                                        onChange={getEventEventHandler}
+                                    >
+                                        {autoFillDeployVariableList.map((variableName) => (
+                                            <Select.Option
+                                                key={variableName}
+                                                value={variableName}
+                                                className={'order-deploy-select-option'}
+                                            >
+                                                {variableName}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Col>
+                                {isExistingResourceDropDownDisabled ? (
+                                    <>
+                                        <Col span={1}></Col>
+                                        <Col span={9}>
+                                            <Input
+                                                name={item.name}
+                                                placeholder={item.example}
+                                                suffix={
+                                                    <Tooltip title={item.description}>
+                                                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                                                    </Tooltip>
+                                                }
+                                                onChange={getStringEventHandler}
+                                            />
+                                        </Col>
+                                    </>
+                                ) : undefined}
+                                <Col span={4}>
+                                    {isExistingResourceDropDownDisabled ? (
+                                        <Button type={'link'} onClick={selectVariable}>
+                                            select existing
+                                        </Button>
+                                    ) : (
+                                        <Button type={'link'} onClick={createVariable}>
+                                            create new
+                                        </Button>
+                                    )}
+                                </Col>
+                            </Row>
+                        </div>
+                    ) : (
+                        <Select allowClear showSearch optionFilterProp='label' onChange={getEventEventHandler}>
+                            {autoFillDeployVariableList.map((variableName) => (
+                                <Select.Option
+                                    key={variableName}
+                                    value={variableName}
+                                    className={'order-deploy-select-option'}
+                                >
+                                    {variableName}
+                                </Select.Option>
+                            ))}
+                        </Select>
                     )}
                 </Form.Item>
             </div>

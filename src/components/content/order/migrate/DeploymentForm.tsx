@@ -128,7 +128,7 @@ export const DeploymentForm = ({
                     <div>
                         {props.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
-                                <OrderItem key={item.name} item={item} />
+                                <OrderItem key={item.name} item={item} csp={selectCsp} region={selectRegion} />
                             ) : undefined
                         )}
                     </div>

@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployVariable } from '../../../../xpanse-api/generated';
+import { AutoFill, DeployVariable } from '../../../../xpanse-api/generated';
 
 export interface DeployParam {
     name: string;
@@ -15,4 +15,5 @@ export interface DeployParam {
     mandatory: boolean;
     sensitiveScope: DeployVariable.sensitiveScope;
     valueSchema: Record<string, Record<string, unknown>> | undefined;
+    autoFill: AutoFill | undefined;
 }

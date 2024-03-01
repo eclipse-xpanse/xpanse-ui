@@ -57,6 +57,7 @@ export const getDeployParams = (
                 mandatory: param.mandatory,
                 sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
                 valueSchema: param.valueSchema ?? undefined,
+                autoFill: param.autoFill ?? undefined,
             });
         }
     }

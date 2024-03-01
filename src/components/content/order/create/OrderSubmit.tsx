@@ -20,9 +20,9 @@ import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 
-export function OrderItem({ item }: { item: DeployParam }) {
+export function OrderItem({ item, csp, region }: { item: DeployParam; csp: DeployRequest.csp; region: string }) {
     if (item.type === 'string') {
-        return <TextInput item={item} />;
+        return <TextInput item={item} csp={csp} region={region} />;
     }
     if (item.type === 'number') {
         return <NumberInput item={item} />;
@@ -157,7 +157,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 <div className={deploying ? 'deploying order-param-item-row' : ''}>
                     {state.params.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
-                            <OrderItem key={item.name} item={item} />
+                            <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
                         ) : undefined
                     )}
                 </div>
