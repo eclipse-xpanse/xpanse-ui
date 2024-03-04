@@ -22,6 +22,7 @@ import {
     registerPageRoute,
     registerSuccessfulRoute,
     reportsRoute,
+    serviceReviewsPageRoute,
     servicesPageRoute,
     workflowsPageRoute,
 } from './components/utils/constants';
@@ -43,6 +44,7 @@ import { SessionLost } from './components/content/login/SessionLost';
 import Policies from './components/content/policies/Policies';
 import Reports from './components/content/deployedServices/reports/Reports';
 import Workflows from './components/content/workflows/Workflows';
+import { ServiceReviews } from './components/content/serviceReviews/ServiceReviews';
 
 const queryClient = new QueryClient();
 
@@ -56,7 +58,7 @@ function App(): React.JSX.Element {
                         path={homePageRoute}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin']}>
+                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
                                     <Home />
                                 </Protected>
                             </OidcSecure>
@@ -67,7 +69,7 @@ function App(): React.JSX.Element {
                         path={''}
                         element={
                             <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin']}>
+                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
                                     <Home />
                                 </Protected>
                             </OidcSecure>
@@ -205,6 +207,17 @@ function App(): React.JSX.Element {
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
                                     <Workflows />
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        key={serviceReviewsPageRoute}
+                        path={serviceReviewsPageRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={['csp']}>
+                                    <ServiceReviews />
                                 </Protected>
                             </OidcSecure>
                         }

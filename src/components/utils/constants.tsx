@@ -46,3 +46,5 @@ export const serviceHostingTypeQuery: string = 'hostingType';
 
 export const workflowsPageRoute: string = '/workflows';
 export const workflowsLabelName: string = 'Workflows';
+export const serviceReviewsPageRoute: string = '/reviewService';
+export const serviceReviewsLabelName: string = 'Review Service';
