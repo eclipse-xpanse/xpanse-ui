@@ -4,116 +4,84 @@
  */
 
 import { ApiError, DeployedService, DeployedServiceDetails, Response } from '../../../../xpanse-api/generated';
-import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Alert } from 'antd';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 
-function DestroyServiceStatusPolling({
+function DestroyServiceStatusAlert({
     deployedService,
-    isError,
-    isSuccess,
-    error,
-    setIsDestroying,
+    destroySubmitError,
+    statusPollingError,
+    deployedServiceDetails,
     closeDestroyResultAlert,
-    serviceHostingType,
 }: {
     deployedService: DeployedService;
-    isError: boolean;
-    isSuccess: boolean;
-    error: Error | null;
-    setIsDestroying: (arg: boolean) => void;
+    destroySubmitError: Error | null;
+    statusPollingError: Error | null;
+    deployedServiceDetails: DeployedServiceDetails | undefined;
     closeDestroyResultAlert: (arg: boolean) => void;
-    serviceHostingType: DeployedServiceDetails.serviceHostingType;
 }): React.JSX.Element {
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        deployedService.id,
-        isSuccess,
-        serviceHostingType,
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
+    if (
+        deployedServiceDetails &&
         [
             DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
-        ]
-    );
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-
-    useEffect(() => {
-        if (
-            getServiceDetailsByIdQuery.isSuccess &&
-            [
-                DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
-                DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
-            ].includes(getServiceDetailsByIdQuery.data.serviceDeploymentState)
-        ) {
-            deployedService.serviceDeploymentState = getServiceDetailsByIdQuery.data.serviceDeploymentState;
-            deployedService.serviceState = getServiceDetailsByIdQuery.data.serviceState;
-            setIsDestroying(false);
-        }
-    }, [getServiceDetailsByIdQuery.isSuccess, getServiceDetailsByIdQuery.data, setIsDestroying, deployedService]);
-
-    useEffect(() => {
-        if (isError) {
-            setIsDestroying(false);
-        }
-    }, [isError, setIsDestroying]);
-
-    useEffect(() => {
-        if (getServiceDetailsByIdQuery.isError) {
-            setIsDestroying(false);
-        }
-    }, [getServiceDetailsByIdQuery.isError, setIsDestroying]);
+        ].includes(deployedServiceDetails.serviceDeploymentState)
+    ) {
+        deployedService.serviceDeploymentState = deployedServiceDetails.serviceDeploymentState;
+        deployedService.serviceState = deployedServiceDetails.serviceState;
+    }
 
     const onClose = () => {
-        setIsDestroying(false);
         closeDestroyResultAlert(true);
     };
 
-    if (isError) {
-        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
-        if (error instanceof ApiError && error.body && 'details' in error.body) {
-            const response: Response = error.body as Response;
-            return (
-                <div className={'submit-alert-tip'}>
-                    {' '}
-                    <Alert
-                        message={response.details}
-                        description={
-                            <OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.id} />
-                        }
-                        showIcon
-                        closable={true}
-                        onClose={onClose}
-                        type={'error'}
-                        action={
-                            <>
-                                {getOrderableServiceDetails.isSuccess ? (
-                                    <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
-                                        showFor={ContactDetailsShowType.Order}
-                                    />
-                                ) : (
-                                    <></>
-                                )}
-                            </>
-                        }
-                    />{' '}
-                </div>
-            );
+    if (destroySubmitError) {
+        let errorMessage;
+        if (destroySubmitError instanceof ApiError && destroySubmitError.body && 'details' in destroySubmitError.body) {
+            const response: Response = destroySubmitError.body as Response;
+            errorMessage = response.details;
+        } else {
+            errorMessage = destroySubmitError.message;
         }
+        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+        return (
+            <div className={'submit-alert-tip'}>
+                {' '}
+                <Alert
+                    message={errorMessage}
+                    description={<OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.id} />}
+                    showIcon
+                    closable={true}
+                    onClose={onClose}
+                    type={'error'}
+                    action={
+                        <>
+                            {getOrderableServiceDetails.isSuccess ? (
+                                <ContactDetailsText
+                                    serviceProviderContactDetails={
+                                        getOrderableServiceDetails.data.serviceProviderContactDetails
+                                    }
+                                    showFor={ContactDetailsShowType.Order}
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </>
+                    }
+                />{' '}
+            </div>
+        );
     }
 
-    if (getServiceDetailsByIdQuery.isError) {
+    if (statusPollingError) {
         deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
-        if (
-            getServiceDetailsByIdQuery.error instanceof ApiError &&
-            'details' in getServiceDetailsByIdQuery.error.body
-        ) {
-            const response: Response = getServiceDetailsByIdQuery.error.body as Response;
+        if (statusPollingError instanceof ApiError && 'details' in statusPollingError.body) {
+            const response: Response = statusPollingError.body as Response;
             return (
                 <div className={'submit-alert-tip'}>
                     {' '}
@@ -149,9 +117,9 @@ function DestroyServiceStatusPolling({
         }
     }
 
-    if (getServiceDetailsByIdQuery.data !== undefined) {
+    if (deployedServiceDetails !== undefined) {
         if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            deployedServiceDetails.serviceDeploymentState.toString() ===
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             return (
@@ -173,7 +141,7 @@ function DestroyServiceStatusPolling({
                 </div>
             );
         } else if (
-            getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
+            deployedServiceDetails.serviceDeploymentState.toString() ===
             DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED.toString()
         ) {
             return (
@@ -209,4 +177,4 @@ function DestroyServiceStatusPolling({
     return <></>;
 }
 
-export default DestroyServiceStatusPolling;
+export default DestroyServiceStatusAlert;
