@@ -7,7 +7,7 @@ import { env } from '../../config/config';
 import { OidcConfiguration } from '@axa-fr/react-oidc';
 import { defaultRole, grantedRolesKey, usernameKey } from './OidcUserInfo';
 
-export const allowRoleList: string[] = ['isv', 'user', 'admin'];
+export const allowRoleList: string[] = ['isv', 'user', 'admin', 'csp'];
 
 export const OidcConfig: OidcConfiguration = {
     authority: env.REACT_APP_ZITADEL_AUTHORITY_URL ?? '',

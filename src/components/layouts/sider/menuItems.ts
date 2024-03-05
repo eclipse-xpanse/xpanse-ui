@@ -11,6 +11,7 @@ import {
     myServicesMenu,
     policiesMenu,
     reportsMenu,
+    serviceReviewsMenu,
     servicesMenu,
     workflowsMenu,
 } from './servicesMenu';
@@ -25,6 +26,8 @@ export function getMenuItems(): ItemType[] {
         return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu(), reportsMenu()];
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
+    } else if (useCurrentUserRoleStore.getState().currentUserRole === 'csp') {
+        return [serviceReviewsMenu()];
     } else {
         return [
             servicesMenu(serviceCategories),

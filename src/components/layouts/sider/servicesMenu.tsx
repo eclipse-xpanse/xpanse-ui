@@ -5,6 +5,7 @@
 
 import {
     AreaChartOutlined,
+    AuditOutlined,
     BranchesOutlined,
     CloudServerOutlined,
     DashboardOutlined,
@@ -26,6 +27,8 @@ import {
     policiesRoute,
     reportsLabelName,
     reportsRoute,
+    serviceReviewsLabelName,
+    serviceReviewsPageRoute,
     servicesLabelName,
     servicesPageRoute,
     servicesSubPageRoute,
@@ -113,5 +116,14 @@ export const workflowsMenu = (): ItemType => {
         label: <Link to={workflowsPageRoute}>{workflowsLabelName}</Link>,
         icon: <BranchesOutlined />,
         title: 'Workflows',
+    };
+};
+
+export const serviceReviewsMenu = (): ItemType => {
+    return {
+        key: serviceReviewsPageRoute,
+        label: <Link to={serviceReviewsPageRoute}>{serviceReviewsLabelName}</Link>,
+        icon: <AuditOutlined />,
+        title: 'ReviewService',
     };
 };
