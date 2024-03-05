@@ -3,31 +3,35 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Form, Image, Popconfirm, Space, Tabs } from 'antd';
+import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
 import {
     Billing,
     CloudServiceProvider,
     DeployedService,
     DeployRequest,
     MigrateRequest,
-    ServiceProviderContactDetails,
+    ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useEffect, useState } from 'react';
-import MigrateServiceStatusPolling from './MigrateServiceStatusPolling';
+import React, { useState } from 'react';
+import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { MigrationStatus } from '../types/MigrationStatus';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
-import { useMigrateServiceQuery } from './useMigrateServiceQuery';
+import {
+    useMigrateServiceDetailsPollingQuery,
+    useMigrateServiceQuery,
+    useServiceDetailsPollingQuery,
+} from './useMigrateServiceQuery';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import migrationStatus = ServiceMigrationDetails.migrationStatus;
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -36,10 +40,10 @@ export const MigrateServiceSubmit = ({
     selectRegion,
     selectFlavor,
     selectServiceHostingType,
-    getCurrentMigrationStep,
+    setCurrentMigrationStep,
     deployParams,
     currentSelectedService,
-    getCurrentMigrationStepStatus,
+    stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: UserOrderableServiceVo.csp;
@@ -47,21 +51,12 @@ export const MigrateServiceSubmit = ({
     selectRegion: string;
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
-    getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
-    getCurrentMigrationStepStatus: (migrateStatus: MigrationStatus | undefined) => void;
+    stepItem: StepProps;
 }): React.JSX.Element => {
-    const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
-    const [isMigrating, setIsMigrating] = useState<boolean>(false);
-    const [requestSubmitted, setRequestSubmitted] = useState<boolean>(false);
-    const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
-        MigrationSteps.DestroyTheOldService
-    );
-    const [currentContactServiceDetails, setCurrentContactServiceDetails] = useState<
-        ServiceProviderContactDetails | undefined
-    >(undefined);
 
     const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
     const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
@@ -74,44 +69,73 @@ export const MigrateServiceSubmit = ({
     });
 
     const migrateServiceRequest = useMigrateServiceQuery();
+    const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
+        migrateServiceRequest.data,
+        migrateServiceRequest.isSuccess,
+        [
+            ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED,
+            ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED,
+            ServiceMigrationDetails.migrationStatus.DESTROY_FAILED,
+            ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED,
+            ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED,
+            ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED,
+        ]
+    );
+    const deployServiceDetailsQuery = useServiceDetailsPollingQuery(
+        migrateServiceDetailsQuery.data?.newServiceId,
+        selectServiceHostingType,
+        migrateServiceDetailsQuery.data?.migrationStatus
+    );
+    const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
+        currentSelectedService.id,
+        currentSelectedService.serviceHostingType,
+        migrateServiceDetailsQuery.data?.migrationStatus
+    );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(currentSelectedService.serviceTemplateId);
 
-    useEffect(() => {
-        if (getOrderableServiceDetails.isSuccess) {
-            setCurrentContactServiceDetails(getOrderableServiceDetails.data.serviceProviderContactDetails);
-        }
-    }, [getOrderableServiceDetails.isSuccess, getOrderableServiceDetails.data]);
     const migrate = () => {
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
             migrateRequest.id = currentSelectedService.id;
-            setIsMigrating(true);
-            setRequestSubmitted(true);
-            setIsPreviousDisabled(true);
             migrateServiceRequest.mutate(migrateRequest);
+            stepItem.status = 'process';
             setIsShowDeploymentResult(true);
         }
     };
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
-        getCurrentMigrationStep(MigrationSteps.ImportServiceData);
     };
+
+    if (migrateServiceDetailsQuery.data) {
+        if (migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_COMPLETED) {
+            stepItem.status = 'finish';
+        } else if (
+            migrateServiceDetailsQuery.data.migrationStatus ===
+                ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus ===
+                ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus ===
+                ServiceMigrationDetails.migrationStatus.DESTROY_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED
+        ) {
+            stepItem.status = 'error';
+        } else {
+            stepItem.status = 'process';
+        }
+    }
 
     return (
         <>
             {isShowDeploymentResult ? (
-                <MigrateServiceStatusPolling
-                    migrationId={migrateServiceRequest.data}
-                    isMigrateRequestSuccess={migrateServiceRequest.isSuccess}
+                <MigrateServiceStatusAlert
                     migrateRequestError={migrateServiceRequest.error}
-                    isMigrateRequestLoading={migrateServiceRequest.isPending}
-                    setIsMigrating={setIsMigrating}
-                    setMigrateDisable={setRequestSubmitted}
-                    setIsPreviousDisabled={setIsPreviousDisabled}
-                    getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
-                    serviceHostingType={selectServiceHostingType}
-                    currentContactServiceDetails={currentContactServiceDetails}
+                    deployedServiceDetails={deployServiceDetailsQuery.data}
+                    oldDeployedServiceDetails={destroyServiceDetailsQuery.data}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
+                    isPollingError={migrateServiceDetailsQuery.isError}
+                    migrationDetails={migrateServiceDetailsQuery.data}
                 />
             ) : null}
             <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
@@ -149,40 +173,32 @@ export const MigrateServiceSubmit = ({
                 <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>
                     <Space size={'large'}>
-                        {currentMigrationStep > MigrationSteps.ExportServiceData ? (
+                        <Button
+                            type='primary'
+                            className={'migrate-steps-operation-button-clas'}
+                            onClick={() => {
+                                prev();
+                            }}
+                            disabled={stepItem.status === 'finish' || stepItem.status === 'process'}
+                        >
+                            Previous
+                        </Button>
+                        <Popconfirm
+                            title='Migrate service'
+                            description='Are you sure to migrate service?'
+                            okText='No'
+                            cancelText='Yes'
+                            onCancel={migrate}
+                        >
                             <Button
                                 type='primary'
                                 className={'migrate-steps-operation-button-clas'}
-                                onClick={() => {
-                                    prev();
-                                }}
-                                disabled={isPreviousDisabled}
+                                loading={stepItem.status === 'process'}
+                                disabled={stepItem.status === 'finish' || stepItem.status === 'process'}
                             >
-                                Previous
+                                Migrate
                             </Button>
-                        ) : (
-                            <></>
-                        )}
-                        {currentMigrationStep === MigrationSteps.DestroyTheOldService ? (
-                            <Popconfirm
-                                title='Migrate service'
-                                description='Are you sure to migrate service?'
-                                okText='No'
-                                cancelText='Yes'
-                                onCancel={migrate}
-                            >
-                                <Button
-                                    type='primary'
-                                    className={'migrate-steps-operation-button-clas'}
-                                    loading={isMigrating}
-                                    disabled={requestSubmitted}
-                                >
-                                    Migrate
-                                </Button>
-                            </Popconfirm>
-                        ) : (
-                            <></>
-                        )}
+                        </Popconfirm>
                     </Space>
                 </div>
             </Form>

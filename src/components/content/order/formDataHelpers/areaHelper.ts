@@ -71,3 +71,24 @@ export function convertAreasToTabs(
     }
     return areaTabs;
 }
+
+export function getAreaForRegion(
+    selectCsp: UserOrderableServiceVo.csp,
+    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    userOrderableServices: UserOrderableServiceVo[],
+    inputRegion: string
+) {
+    const areaList: Area[] = getAreasForSelectedVersionHostingTypeAndCsp(
+        selectCsp,
+        selectServiceHostingType,
+        userOrderableServices
+    );
+    for (const area of areaList) {
+        for (const region of area.regions) {
+            if (region === inputRegion) {
+                return area.name;
+            }
+        }
+    }
+    return '';
+}

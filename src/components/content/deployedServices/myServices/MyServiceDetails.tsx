@@ -15,26 +15,17 @@ import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
 
 export const MyServiceDetails = ({
-    serviceDetails,
+    deployedService,
 }: {
-    serviceDetails: DeployedService | undefined;
+    deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
     const requestMap = new Map<string, unknown>();
     let resultMessage = undefined;
     let deployResourceMap: DeployResource[] = [];
-    let serviceTemplateId: string = '';
 
-    if (serviceDetails === undefined) {
-        return <></>;
-    }
-
-    if (serviceDetails.serviceTemplateId) {
-        serviceTemplateId = serviceDetails.serviceTemplateId;
-    }
-
-    if (serviceDetails.serviceHostingType === DeployedService.serviceHostingType.SELF) {
-        const serviceDetailVo = serviceDetails as DeployedServiceDetails;
+    if (deployedService.serviceHostingType.toString() === DeployedService.serviceHostingType.SELF.toString()) {
+        const serviceDetailVo = deployedService as DeployedServiceDetails;
         if (serviceDetailVo.deployedServiceProperties) {
             for (const key in serviceDetailVo.deployedServiceProperties) {
                 endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
@@ -52,7 +43,7 @@ export const MyServiceDetails = ({
             deployResourceMap = serviceDetailVo.deployResources;
         }
     } else {
-        const serviceDetailVo = serviceDetails as VendorHostedDeployedServiceDetails;
+        const serviceDetailVo = deployedService as VendorHostedDeployedServiceDetails;
         if (serviceDetailVo.deployedServiceProperties) {
             for (const key in serviceDetailVo.deployedServiceProperties) {
                 endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
@@ -72,7 +63,7 @@ export const MyServiceDetails = ({
                 requestParams={requestMap}
                 resultMessage={resultMessage}
                 deployResources={deployResourceMap}
-                serviceTemplateId={serviceTemplateId}
+                serviceTemplateId={deployedService.serviceTemplateId}
             />
         </>
     );

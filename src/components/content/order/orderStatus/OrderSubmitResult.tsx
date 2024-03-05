@@ -9,7 +9,7 @@ import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated'
 import React from 'react';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import DeploymentTimerNew from './DeploymentTimerNewOrder';
+import DeploymentTimerNew from './DeploymentTimer';
 import { StopwatchResult } from 'react-timer-hook';
 
 export const OrderSubmitResult = ({
