@@ -63,5 +63,7 @@ export function useServiceDetailsPollingQuery(
             (migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED ||
                 migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
                 migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED),
+        staleTime: Infinity,
+        gcTime: Infinity,
     });
 }

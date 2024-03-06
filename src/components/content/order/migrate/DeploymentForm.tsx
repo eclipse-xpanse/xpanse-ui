@@ -7,9 +7,9 @@ import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/ge
 import { OrderItem } from '../create/OrderSubmit';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
-import { Button, Form, Input, Space, Tooltip } from 'antd';
+import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { MigrationSteps } from '../types/MigrationSteps';
@@ -21,8 +21,9 @@ export const DeploymentForm = ({
     selectArea,
     selectRegion,
     selectFlavor,
-    getCurrentMigrationStep,
-    getDeployParameters,
+    setCurrentMigrationStep,
+    setDeployParameters,
+    stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: UserOrderableServiceVo.csp;
@@ -30,8 +31,9 @@ export const DeploymentForm = ({
     selectArea: string;
     selectRegion: string;
     selectFlavor: string;
-    getCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
-    getDeployParameters: (createRequest: DeployRequest) => void;
+    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setDeployParameters: (createRequest: DeployRequest) => void;
+    stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const props = getDeployParams(
@@ -43,22 +45,12 @@ export const DeploymentForm = ({
         selectFlavor,
         undefined
     );
-
-    const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(
-        MigrationSteps.DeployServiceOnTheNewDestination
-    );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
-    useEffect(() => useOrderFormStore.subscribe((state) => (deployParamsRef.current = state.deployParams)), []);
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.SelectADestination);
     };
-
-    useEffect(() => {
-        getCurrentMigrationStep(currentMigrationStep);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentMigrationStep]);
 
     const handleFinish = () => {
         const createRequest: DeployRequest = {
@@ -78,7 +70,8 @@ export const DeploymentForm = ({
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
-        getDeployParameters(createRequest);
+        setDeployParameters(createRequest);
+        stepItem.status = 'finish';
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
     };
 
@@ -133,34 +126,22 @@ export const DeploymentForm = ({
                         )}
                     </div>
                     <Space size={'large'}>
-                        {currentMigrationStep > MigrationSteps.ExportServiceData ? (
-                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                <Button
-                                    type='primary'
-                                    className={'migrate-steps-operation-button-clas'}
-                                    onClick={() => {
-                                        prev();
-                                    }}
-                                >
-                                    Previous
-                                </Button>
-                            </Form.Item>
-                        ) : (
-                            <></>
-                        )}
-                        {currentMigrationStep < MigrationSteps.DestroyTheOldService ? (
-                            <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                                <Button
-                                    type='primary'
-                                    htmlType='submit'
-                                    className={'migrate-steps-operation-button-clas'}
-                                >
-                                    Next
-                                </Button>
-                            </Form.Item>
-                        ) : (
-                            <></>
-                        )}
+                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                            <Button
+                                type='primary'
+                                className={'migrate-steps-operation-button-clas'}
+                                onClick={() => {
+                                    prev();
+                                }}
+                            >
+                                Previous
+                            </Button>
+                        </Form.Item>
+                        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                            <Button type='primary' htmlType='submit' className={'migrate-steps-operation-button-clas'}>
+                                Next
+                            </Button>
+                        </Form.Item>
                     </Space>
                 </Form>
             </div>

@@ -6,7 +6,7 @@
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
 import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { TextInput } from '../formElements/TextInput';
 import { NumberInput } from '../formElements/NumberInput';
 import { BooleanInput } from '../formElements/BooleanInput';
@@ -69,7 +69,6 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     // Avoid re-rendering of the component when variables are added to store.
     const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
     const navigate = useNavigate();
-    useEffect(() => useOrderFormStore.subscribe((state) => (deployParamsRef.current = state.deployParams)), []);
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (state === undefined || state === null) {

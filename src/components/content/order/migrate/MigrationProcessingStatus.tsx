@@ -7,10 +7,13 @@ import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../.
 import React from 'react';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 
-export const MigrationProcessingStatus = (
-    response: DeployedServiceDetails | VendorHostedDeployedServiceDetails,
-    serviceHostingType: DeployedServiceDetails.serviceHostingType
-): React.JSX.Element => {
+export function MigrationProcessingStatus({
+    response,
+    serviceHostingType,
+}: {
+    response: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
+    serviceHostingType: DeployedServiceDetails.serviceHostingType;
+}): React.JSX.Element {
     const endPointMap = new Map<string, string>();
     if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
         if (response.deployedServiceProperties) {
@@ -43,4 +46,4 @@ export const MigrationProcessingStatus = (
         );
     }
     return <></>;
-};
+}
