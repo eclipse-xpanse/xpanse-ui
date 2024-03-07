@@ -6,10 +6,10 @@
 import React, { useState } from 'react';
 import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
-import { Button, Modal, Row, Space, Table, Tag } from 'antd';
-import { CheckCircleOutlined, InfoCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Row, Space, Table, Tag } from 'antd';
+import { CheckCircleOutlined, InfoCircleOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
-import { ColumnFilterItem } from 'antd/es/table/interface';
+import { ColumnFilterItem, FilterDropdownProps } from 'antd/es/table/interface';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
 import '../../../styles/service_review.css';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
@@ -20,7 +20,8 @@ export const ServiceReviews = (): React.JSX.Element => {
     let versionFilters: ColumnFilterItem[] = [];
     let cspFilters: ColumnFilterItem[] = [];
     let categoryFilters: ColumnFilterItem[] = [];
-    const deployerTypeFilters: ColumnFilterItem[] = [];
+    let registrationStatusFilters: ColumnFilterItem[] = [];
+    let deployerTypeFilters: ColumnFilterItem[] = [];
     let serviceTemplateList: ServiceTemplateDetailVo[] = [];
     const [currentServiceTemplateVo, setCurrentServiceTemplateVo] = useState<ServiceTemplateDetailVo | undefined>(
         undefined
@@ -84,15 +85,97 @@ export const ServiceReviews = (): React.JSX.Element => {
         categoryFilters = filters;
     }
 
+    function getRegistrationStatusFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(ServiceTemplateDetailVo.serviceRegistrationState).forEach((status) => {
+            const filter = {
+                text: status,
+                value: status,
+            };
+            filters.push(filter);
+        });
+        registrationStatusFilters = filters;
+    }
+
+    function getDeployerTypeFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(Deployment.kind).forEach((kind) => {
+            const filter = {
+                text: kind,
+                value: kind,
+            };
+            filters.push(filter);
+        });
+        deployerTypeFilters = filters;
+    }
+
     if (allServiceTemplatesListQuery.isSuccess && allServiceTemplatesListQuery.data.length > 0) {
         serviceTemplateList = allServiceTemplatesListQuery.data;
         getServiceNameFilters(allServiceTemplatesListQuery.data);
         getVersionFilters(allServiceTemplatesListQuery.data);
         getCspFilters();
         getCategoryFilters();
+        getRegistrationStatusFilters();
+        getDeployerTypeFilters();
     }
 
+    const handleSearch = (selectedKeys: React.Key[], confirm: FilterDropdownProps['confirm']) => {
+        confirm();
+    };
+    const handleReset = (clearFilters: (() => void) | undefined) => {
+        if (clearFilters) {
+            clearFilters();
+        }
+    };
+
     const columns: ColumnsType<ServiceTemplateDetailVo> = [
+        {
+            title: 'Service Template Id',
+            dataIndex: 'id',
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div className={'search-container-class'}>
+                    <Input
+                        placeholder='Search ID'
+                        value={selectedKeys[0]}
+                        onChange={(e) => {
+                            setSelectedKeys(e.target.value ? [e.target.value] : []);
+                        }}
+                        onPressEnter={() => {
+                            handleSearch(selectedKeys, confirm);
+                        }}
+                        className={'search-input-class'}
+                    />
+                    <Button
+                        type='primary'
+                        onClick={() => {
+                            handleSearch(selectedKeys, confirm);
+                        }}
+                        icon={<SearchOutlined />}
+                        size='small'
+                        className={'search-button-class'}
+                    >
+                        Search
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            handleReset(clearFilters);
+                        }}
+                        size='small'
+                        className={'search-reset-class'}
+                    >
+                        Reset
+                    </Button>
+                </div>
+            ),
+            filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
+            onFilter: (value: React.Key | boolean, record) => {
+                if (record.id) {
+                    return record.id.toString().toLowerCase().includes(value.toString().toLowerCase());
+                }
+                return false;
+            },
+            align: 'left',
+        },
         {
             title: 'Service Name',
             dataIndex: 'name',
@@ -144,7 +227,7 @@ export const ServiceReviews = (): React.JSX.Element => {
         {
             title: 'Registration Status',
             dataIndex: 'serviceRegistrationState',
-            filters: deployerTypeFilters,
+            filters: registrationStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
@@ -156,6 +239,10 @@ export const ServiceReviews = (): React.JSX.Element => {
         {
             title: 'Deployer Type',
             dataIndex: 'deployment',
+            filters: deployerTypeFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.deployment.kind.startsWith(value.toString()),
             align: 'left',
             render: (deployment: Deployment) =>
                 deployment.kind === Deployment.kind.TERRAFORM ? (
@@ -186,19 +273,16 @@ export const ServiceReviews = (): React.JSX.Element => {
                     <>
                         <Space size='middle'>
                             <Button
-                                disabled={
-                                    !(
-                                        record.serviceRegistrationState ===
-                                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
-                                    )
-                                }
                                 type='primary'
                                 icon={<InfoCircleOutlined />}
                                 onClick={() => {
                                     handleServiceTemplateDetailsOpenModal(record);
                                 }}
                             >
-                                review
+                                {record.serviceRegistrationState ===
+                                ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                                    ? 'review'
+                                    : 'details'}
                             </Button>
                         </Space>
                     </>
