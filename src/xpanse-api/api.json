@@ -2699,20 +2699,11 @@
                 }
             }
         },
-        "/xpanse/csp": {
+        "/xpanse/csps/active": {
             "get": {
                 "tags": ["Admin"],
-                "description": "List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>",
-                "operationId": "getCsps",
-                "parameters": [
-                    {
-                        "name": "active",
-                        "in": "query",
-                        "description": "Whether only list cloud service provider with active plugin.",
-                        "required": true,
-                        "schema": { "type": "boolean" }
-                    }
-                ],
+                "description": "List cloud service providers with active plugin.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>",
+                "operationId": "getActiveCsps",
                 "responses": {
                     "500": {
                         "description": "Internal Server Error",
