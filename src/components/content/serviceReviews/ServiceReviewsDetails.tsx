@@ -14,6 +14,7 @@ import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
 import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import '../../../styles/service_review.css';
+import useGetRegistrationDetails from './query/useGetRegistrationDetails';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
@@ -25,6 +26,8 @@ export const ServiceReviewsDetails = ({
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
+    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo?.id);
+
     if (!currentServiceTemplateVo) {
         return <></>;
     }
@@ -44,10 +47,27 @@ export const ServiceReviewsDetails = ({
     return (
         <>
             {' '}
-            <Button type='primary' onClick={onClickApprove}>
+            <Button
+                type='primary'
+                onClick={onClickApprove}
+                disabled={
+                    getRegistrationDetailsQuery.isSuccess &&
+                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
+                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                }
+            >
                 Approve
             </Button>
-            <Button type='primary' onClick={onClickReject} className={'reject-btn-class'}>
+            <Button
+                type='primary'
+                onClick={onClickReject}
+                className={'reject-btn-class'}
+                disabled={
+                    getRegistrationDetailsQuery.isSuccess &&
+                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
+                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                }
+            >
                 Reject
             </Button>
             <ApproveOrRejectServiceTemplate
@@ -126,6 +146,7 @@ export const ServiceReviewsDetails = ({
                 </div>
                 <div>
                     <Descriptions title={'Basic Information'} column={2} bordered className={'ocl-data-info-table'}>
+                        <Descriptions.Item label='Service Template Id'>{currentServiceTemplateVo.id}</Descriptions.Item>
                         <Descriptions.Item label='Category'>
                             {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                             {currentServiceTemplateVo.category
@@ -160,6 +181,27 @@ export const ServiceReviewsDetails = ({
                             {currentServiceTemplateVo.description}
                         </Descriptions.Item>
                     </Descriptions>
+                    {getRegistrationDetailsQuery.isSuccess &&
+                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
+                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING ? (
+                        <>
+                            <Descriptions
+                                title={'Service Review Details'}
+                                column={1}
+                                bordered
+                                className={'ocl-data-info-table'}
+                            >
+                                <Descriptions.Item label='Registration Status'>
+                                    {currentServiceTemplateVo.serviceRegistrationState.valueOf()}
+                                </Descriptions.Item>
+                                <Descriptions.Item label='Comments'>
+                                    {currentServiceTemplateVo.reviewComment}
+                                </Descriptions.Item>
+                            </Descriptions>
+                        </>
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
         </>
