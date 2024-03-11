@@ -4,8 +4,9 @@
  */
 
 import { Col, Row, Skeleton, Space } from 'antd';
+import React from 'react';
 
-function ServicesSkeleton() {
+function ServicesSkeleton(): React.JSX.Element {
     return (
         <div className={'generic-table-container'}>
             <div className={'content-title'}>

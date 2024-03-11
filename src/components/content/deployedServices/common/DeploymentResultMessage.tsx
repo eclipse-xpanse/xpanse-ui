@@ -6,6 +6,7 @@
 import { Typography } from 'antd';
 import React from 'react';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { v4 as uuidv4 } from 'uuid';
 
 export function DeploymentResultMessage(resultMessage: string): React.JSX.Element {
     return (
@@ -14,8 +15,8 @@ export function DeploymentResultMessage(resultMessage: string): React.JSX.Elemen
             <Typography.Paragraph
                 copyable={{
                     icon: [
-                        <CopyOutlined className={'show-details-typography-copy'} />,
-                        <CheckOutlined className={'show-details-typography-copy'} />,
+                        <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                        <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
                     ],
                 }}
                 className={'deployment-details-with-scroll'}

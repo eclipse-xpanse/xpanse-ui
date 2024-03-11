@@ -7,6 +7,7 @@ import { Typography } from 'antd';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 function ServicePolicySubmitResult({
     msg,
@@ -27,8 +28,8 @@ function ServicePolicySubmitResult({
                         copyable={{
                             text: String(uuid),
                             icon: [
-                                <CopyOutlined className={'show-details-typography-copy'} />,
-                                <CheckOutlined className={'show-details-typography-copy'} />,
+                                <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                                <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
                             ],
                         }}
                     >

@@ -36,7 +36,7 @@ export const DeploymentForm = ({
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const props = getDeployParams(
+    const deployParams = getDeployParams(
         userOrderableServiceVoList,
         selectCsp,
         selectServiceHostingType,
@@ -54,14 +54,14 @@ export const DeploymentForm = ({
 
     const handleFinish = () => {
         const createRequest: DeployRequest = {
-            category: props.category,
-            csp: props.csp,
-            flavor: props.flavor,
-            region: props.region,
-            serviceName: props.name,
-            version: props.version,
+            category: deployParams.category,
+            csp: deployParams.csp,
+            flavor: deployParams.flavor,
+            region: deployParams.region,
+            serviceName: deployParams.name,
+            version: deployParams.version,
             customerServiceName: deployParamsRef.current.Name as string,
-            serviceHostingType: props.serviceHostingType,
+            serviceHostingType: deployParams.serviceHostingType,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {
@@ -81,7 +81,7 @@ export const DeploymentForm = ({
                 <div className={'generic-table-container'}>
                     <div className={'content-title'}>
                         <div className={'content-title-order'}>
-                            <ApiDoc id={props.id} styleClass={'content-title-api'}></ApiDoc>
+                            <ApiDoc id={deployParams.id} styleClass={'content-title-api'}></ApiDoc>
                         </div>
                     </div>
                 </div>
@@ -119,7 +119,7 @@ export const DeploymentForm = ({
                         />
                     </Form.Item>
                     <div>
-                        {props.params.map((item) =>
+                        {deployParams.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
                                 <OrderItem key={item.name} item={item} csp={selectCsp} region={selectRegion} />
                             ) : undefined

@@ -8,6 +8,7 @@ import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import React from 'react';
 import { myServicesRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Element; uuid: string }): React.JSX.Element {
     const { Paragraph } = Typography;
@@ -21,8 +22,8 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                     copyable={{
                         text: String(uuid),
                         icon: [
-                            <CopyOutlined className={'show-details-typography-copy'} />,
-                            <CheckOutlined className={'show-details-typography-copy'} />,
+                            <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                            <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
                         ],
                     }}
                 >

@@ -6,6 +6,7 @@
 import Home from '../Home';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import React from 'react';
 
 describe('Test Home Page', () => {
     it('should render Xpanse Website URLs', () => {
