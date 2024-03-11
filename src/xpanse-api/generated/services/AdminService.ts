@@ -13,7 +13,7 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class AdminService {
     /**
-     * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+     * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
      * @returns SystemStatus OK
      * @throws ApiError
      */
@@ -32,22 +32,16 @@ export class AdminService {
         });
     }
     /**
-     * List cloud service provider.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
-     * @param active Whether only list cloud service provider with active plugin.
+     * List cloud service providers with active plugin.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
      * @returns string OK
      * @throws ApiError
      */
-    public static getCsps(
-        active: boolean
-    ): CancelablePromise<
+    public static getActiveCsps(): CancelablePromise<
         Array<'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'>
     > {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/xpanse/csp',
-            query: {
-                active: active,
-            },
+            url: '/xpanse/csps/active',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

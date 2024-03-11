@@ -40,9 +40,9 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const credentialsQuery = useCredentialsListQuery();
 
-    const getCspsQuery = useQuery({
-        queryKey: ['getCspsQuery', true],
-        queryFn: () => AdminService.getCsps(true),
+    const getActiveCspsQuery = useQuery({
+        queryKey: ['getActiveCspsQuery'],
+        queryFn: () => AdminService.getActiveCsps(),
         staleTime: 60000,
     });
 
@@ -62,8 +62,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         credentialTypeList.current = credentialTypesQuery.data as CredentialVariables.type[];
     }
 
-    if (getCspsQuery.isSuccess) {
-        activeCspList.current = getCspsQuery.data as CredentialVariables.csp[];
+    if (getActiveCspsQuery.isSuccess) {
+        activeCspList.current = getActiveCspsQuery.data as CredentialVariables.csp[];
     }
 
     const credentialCapabilitiesQuery = useQuery({
@@ -356,7 +356,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
                 <div className={'credential-from-input'}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
-                        <Select loading={getCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
+                        <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
                             {activeCspList.current.map((csp: CredentialVariables.csp) => {
                                 return (
                                     <Select.Option key={csp} value={csp} className={'credential-select-option-csp'}>
