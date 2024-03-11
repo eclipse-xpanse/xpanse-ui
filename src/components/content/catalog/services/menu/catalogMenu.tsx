@@ -6,11 +6,12 @@
 import { catalogLabelName, catalogPageRoute, catalogSubPageRoute } from '../../../../utils/constants';
 import { BarsOutlined } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
+import React from 'react';
 
 export const catalogMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {
-        let subMenuLabelStr: string = '';
-        subMenuLabelStr = subMenu.charAt(0).toUpperCase() + subMenu.substring(1, subMenu.length).replace('_', '');
+        const subMenuLabelStr: string =
+            subMenu.charAt(0).toUpperCase() + subMenu.substring(1, subMenu.length).replace('_', '');
         return {
             key: catalogSubPageRoute + subMenu,
             label: subMenuLabelStr,

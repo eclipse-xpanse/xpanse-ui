@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 import { AppstoreAddOutlined } from '@ant-design/icons';
 import { registerPageRoute } from '../../utils/constants';
+import React from 'react';
 
 function registerPanelMenu(): MenuItemType {
     return {

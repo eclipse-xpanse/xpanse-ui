@@ -6,6 +6,7 @@
 import React from 'react';
 import { Input, Typography } from 'antd';
 import { CheckOutlined, CopyOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { v4 as uuidv4 } from 'uuid';
 
 export function convertMapToDetailsList(content: Map<string, unknown>, title: string): React.JSX.Element {
     if (content.size > 0) {
@@ -22,8 +23,8 @@ export function convertMapToDetailsList(content: Map<string, unknown>, title: st
                                     copyable={{
                                         text: String(v),
                                         icon: [
-                                            <CopyOutlined className={'show-details-typography-copy'} />,
-                                            <CheckOutlined className={'show-details-typography-copy'} />,
+                                            <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                                            <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
                                         ],
                                     }}
                                 >

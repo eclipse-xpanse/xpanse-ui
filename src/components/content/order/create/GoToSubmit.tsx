@@ -33,7 +33,7 @@ export default function GoToSubmit({
     const navigate = useNavigate();
 
     const gotoOrderSubmit = function () {
-        const props: OrderSubmitProps = getDeployParams(
+        const orderSubmitParams: OrderSubmitProps = getDeployParams(
             versionMapper.get(selectedVersion) ?? [],
             selectedCsp,
             selectedServiceHostingType,
@@ -45,11 +45,11 @@ export default function GoToSubmit({
 
         navigate(
             orderPageRoute
-                .concat('?serviceName=', props.name)
-                .concat('&version=', props.version)
-                .concat('#', props.category),
+                .concat('?serviceName=', orderSubmitParams.name)
+                .concat('&version=', orderSubmitParams.version)
+                .concat('#', orderSubmitParams.category),
             {
-                state: props,
+                state: orderSubmitParams,
             }
         );
     };
