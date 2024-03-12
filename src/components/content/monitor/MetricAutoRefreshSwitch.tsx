@@ -4,19 +4,19 @@
  */
 
 import { Switch } from 'antd';
-import React, { useState } from 'react';
+import React from 'react';
 
-export const MetricIsAutoRefresh = ({
+export const MetricAutoRefreshSwitch = ({
     isLoading,
-    getIsAutoRefresh,
+    isAutoRefresh,
+    setIsAutoRefresh,
 }: {
     isLoading: boolean;
-    getIsAutoRefresh: (currentIsAutoRefresh: boolean) => void;
+    isAutoRefresh: boolean;
+    setIsAutoRefresh: (currentIsAutoRefresh: boolean) => void;
 }): React.JSX.Element => {
-    const [isAutoRefresh, setIsAutoRefresh] = useState<boolean>(true);
     const onChangeAutoRefresh = (isChecked: boolean) => {
         setIsAutoRefresh(isChecked);
-        getIsAutoRefresh(isChecked);
     };
     return (
         <>

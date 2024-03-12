@@ -31,10 +31,10 @@ import { sortVersionNum } from '../../../utils/Sort';
 import { Migrate } from '../../order/migrate/Migrate';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
-import { PurgeServiceStatusPolling } from '../../order/purge/PurgeServiceStatusPolling';
+import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
-import DestroyServiceStatusPolling from '../../order/destroy/DestroyServiceStatusPolling';
+import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
 import DeployedServicesError from '../common/DeployedServicesError';
@@ -49,6 +49,8 @@ import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery
 import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { useServiceDetailsPollingQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
+import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -64,20 +66,13 @@ function MyServices(): React.JSX.Element {
     let serviceIdFilters: ColumnFilterItem[] = [];
     let serviceDeploymentStateFilters: ColumnFilterItem[] = [];
     let serviceStateFilters: ColumnFilterItem[] = [];
-    const [activeRecord, setActiveRecord] = useState<DeployedService | undefined>(undefined);
-    const [isDestroying, setIsDestroying] = useState<boolean>(false);
-    const [isShowDestroyResult, setIsShowDestroyResult] = useState<boolean>(false);
-    const [isPurging, setIsPurging] = useState<boolean>(false);
-    const [isShowPurgingResult, setIsShowPurgingResult] = useState<boolean>(false);
-    const [serviceIdInModal, setServiceIdInModal] = useState<string>('');
-    const [serviceHostingType, setServiceHostingType] = useState<DeployedService.serviceHostingType>(
-        DeployedService.serviceHostingType.SELF
-    );
-    const [currentServiceVo, setCurrentServiceVo] = useState<DeployedService | undefined>(undefined);
+    const [activeRecord, setActiveRecord] = useState<
+        DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
+    >(undefined);
+    const [isDestroyRequestSubmitted, setIsDestroyRequestSubmitted] = useState<boolean>(false);
+    const [isPurgeRequestSubmitted, setIsPurgeRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
-    const [title, setTitle] = useState<React.JSX.Element>(<></>);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
-    const [serviceTemplateId, setServiceTemplateId] = useState<string>('');
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
@@ -86,7 +81,21 @@ function MyServices(): React.JSX.Element {
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
     const navigate = useNavigate();
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(serviceTemplateId);
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceTemplateId);
+    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
+        activeRecord?.id,
+        serviceDestroyQuery.isSuccess,
+        activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
+        [
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
+            DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
+        ]
+    );
+    const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
+        activeRecord?.id,
+        activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
+        servicePurgeQuery.isSuccess
+    );
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
         if (serviceDeploymentStateInQuery) {
@@ -173,14 +182,15 @@ function MyServices(): React.JSX.Element {
                         className={'button-as-link'}
                         icon={<CopyOutlined />}
                         disabled={
-                            isDestroying ||
-                            isPurging ||
-                            record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                            record.serviceDeploymentState ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING ||
-                            record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROYING
+                            activeRecord !== undefined ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROYING.toString()
                         }
                         type={'link'}
                     >
@@ -190,15 +200,21 @@ function MyServices(): React.JSX.Element {
             },
             {
                 key:
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString()
                         ? 'purge'
                         : 'destroy',
                 label:
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                    record.serviceDeploymentState === DeployedService.serviceDeploymentState.ROLLBACK_FAILED ? (
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString() ? (
                         <Popconfirm
                             title='Purge the service'
                             description='Are you sure to purge the service?'
@@ -210,7 +226,7 @@ function MyServices(): React.JSX.Element {
                         >
                             <Button
                                 icon={<DeleteOutlined />}
-                                disabled={isPurging || isDestroying}
+                                disabled={activeRecord !== undefined}
                                 className={'button-as-link'}
                                 type={'link'}
                             >
@@ -230,11 +246,11 @@ function MyServices(): React.JSX.Element {
                             <Button
                                 icon={<CloseCircleOutlined />}
                                 disabled={
-                                    (record.serviceDeploymentState !==
-                                        DeployedService.serviceDeploymentState.DESTROY_FAILED &&
-                                        record.serviceDeploymentState !==
-                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) ||
-                                    isDestroying
+                                    (record.serviceDeploymentState.toString() !==
+                                        DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
+                                        record.serviceDeploymentState.toString() !==
+                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()) ||
+                                    activeRecord !== undefined
                                 }
                                 className={'button-as-link'}
                                 type={'link'}
@@ -388,18 +404,16 @@ function MyServices(): React.JSX.Element {
     const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
-            setIsDestroying(false);
             refreshData();
-            setIsShowDestroyResult(false);
+            setIsDestroyRequestSubmitted(false);
         }
     };
 
     const closePurgeResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
-            setIsPurging(false);
             refreshData();
-            setIsShowPurgingResult(false);
+            setIsPurgeRequestSubmitted(false);
         }
     };
 
@@ -539,8 +553,8 @@ function MyServices(): React.JSX.Element {
                                 onMonitor(record);
                             }}
                             disabled={
-                                record.serviceDeploymentState !==
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                                record.serviceDeploymentState.toString() !==
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
                             }
                         >
                             <FundOutlined />
@@ -553,9 +567,6 @@ function MyServices(): React.JSX.Element {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: DeployedService) => {
-                if (record.serviceTemplateId) {
-                    setServiceTemplateId(record.serviceTemplateId);
-                }
                 return (
                     <>
                         <Space size='middle'>
@@ -581,49 +592,72 @@ function MyServices(): React.JSX.Element {
     ];
 
     const purge = (record: DeployedService): void => {
-        setIsPurging(true);
-        setIsShowPurgingResult(true);
-        setServiceHostingType(record.serviceHostingType);
-        setActiveRecord(record);
+        setIsPurgeRequestSubmitted(true);
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
         servicePurgeQuery.mutate(record.id);
         record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
     };
 
-    function destroy(record: DeployedService): void {
-        setIsDestroying(true);
-        setIsShowDestroyResult(true);
-        setServiceHostingType(record.serviceHostingType);
-        setActiveRecord(record);
-        serviceDestroyQuery.mutate(record.id);
-        record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
-    }
-
-    function start(record: DeployedService): void {
-        setActiveRecord(record);
-        record.serviceState = DeployedService.serviceState.STARTING;
-        serviceStateStartQuery.mutate(record);
-    }
-
-    function stop(record: DeployedService): void {
-        setActiveRecord(record);
-        record.serviceState = DeployedService.serviceState.STOPPING;
-        serviceStateStopQuery.mutate(record);
-    }
-
-    function restart(record: DeployedService): void {
-        setActiveRecord(record);
-        record.serviceState = DeployedService.serviceState.STOPPING;
-        serviceStateRestartQuery.mutate(record);
-    }
-
-    function migrate(record: DeployedService): void {
-        setCurrentServiceVo(record);
-        setTitle(
+    const migrationTitle = (record: DeployedService): React.JSX.Element => {
+        return (
             <div className={'generic-table-container'}>
                 <div className={'content-title'}>
                     Service: {record.name}@{record.version}
                 </div>
             </div>
+        );
+    };
+
+    function destroy(record: DeployedService): void {
+        setIsDestroyRequestSubmitted(true);
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        serviceDestroyQuery.mutate(record.id);
+        record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
+    }
+
+    function start(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        record.serviceState = DeployedService.serviceState.STARTING;
+        serviceStateStartQuery.mutate(record);
+    }
+
+    function stop(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        record.serviceState = DeployedService.serviceState.STOPPING;
+        serviceStateStopQuery.mutate(record);
+    }
+
+    function restart(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        record.serviceState = DeployedService.serviceState.STOPPING;
+        serviceStateRestartQuery.mutate(record);
+    }
+
+    function migrate(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
         );
         setIsMigrateModalOpen(true);
     }
@@ -762,26 +796,28 @@ function MyServices(): React.JSX.Element {
 
     function refreshData(): void {
         clearFormVariables();
-        setIsShowPurgingResult(false);
+        setIsPurgeRequestSubmitted(false);
         void listDeployedServicesQuery.refetch();
     }
 
     const handleMyServiceDetailsOpenModal = (record: DeployedService) => {
-        setServiceIdInModal(record.id);
-        setActiveRecord(record);
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
         setIsMyServiceDetailsModalOpen(true);
     };
 
     const handleMyServiceDetailsModalClose = () => {
-        setServiceIdInModal('');
         setActiveRecord(undefined);
         setIsMyServiceDetailsModalOpen(false);
     };
 
     const handleCancelMigrateModel = () => {
+        setActiveRecord(undefined);
         clearFormVariables();
         refreshData();
-        setCurrentServiceVo(undefined);
         setIsMigrateModalOpen(false);
     };
 
@@ -809,42 +845,40 @@ function MyServices(): React.JSX.Element {
 
     return (
         <div className={'generic-table-container'}>
-            {isShowDestroyResult && activeRecord ? (
-                <DestroyServiceStatusPolling
+            {isDestroyRequestSubmitted && activeRecord ? (
+                <DestroyServiceStatusAlert
                     key={activeRecord.id}
                     deployedService={activeRecord}
-                    isError={serviceDestroyQuery.isError}
-                    isSuccess={serviceDestroyQuery.isSuccess}
-                    error={serviceDestroyQuery.error}
-                    setIsDestroying={setIsDestroying}
+                    destroySubmitError={serviceDestroyQuery.error}
+                    statusPollingError={getServiceDetailsByIdQuery.error}
+                    deployedServiceDetails={getServiceDetailsByIdQuery.data}
                     closeDestroyResultAlert={closeDestroyResultAlert}
-                    serviceHostingType={serviceHostingType}
                 />
             ) : null}
-            {isShowPurgingResult && activeRecord ? (
-                <PurgeServiceStatusPolling
+            {isPurgeRequestSubmitted && activeRecord ? (
+                <PurgeServiceStatusAlert
                     key={activeRecord.id}
                     deployedService={activeRecord}
-                    isError={servicePurgeQuery.isError}
-                    error={servicePurgeQuery.error}
-                    setIsPurging={setIsPurging}
+                    purgeSubmitError={servicePurgeQuery.error}
+                    statusPollingError={getPurgeServiceDetailsQuery.error}
                     closePurgeResultAlert={closePurgeResultAlert}
-                    serviceHostingType={serviceHostingType}
                 />
             ) : null}
-            <Modal
-                title={'Service Details'}
-                width={1000}
-                footer={null}
-                open={serviceIdInModal.length > 0 && isMyServiceDetailsModalOpen}
-                onCancel={handleMyServiceDetailsModalClose}
-            >
-                <MyServiceDetails serviceDetails={activeRecord} />
-            </Modal>
-            {currentServiceVo ? (
+            {activeRecord ? (
+                <Modal
+                    title={'Service Details'}
+                    width={1000}
+                    footer={null}
+                    open={isMyServiceDetailsModalOpen}
+                    onCancel={handleMyServiceDetailsModalClose}
+                >
+                    <MyServiceDetails deployedService={activeRecord} />
+                </Modal>
+            ) : null}
+            {activeRecord ? (
                 <Modal
                     open={isMigrateModalOpen}
-                    title={title}
+                    title={migrationTitle(activeRecord)}
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}
@@ -853,13 +887,13 @@ function MyServices(): React.JSX.Element {
                     width={1400}
                     mask={true}
                 >
-                    <Migrate currentSelectedService={currentServiceVo} />
+                    <Migrate currentSelectedService={activeRecord} />
                 </Modal>
             ) : null}
 
             <div>
                 <Button
-                    disabled={isDestroying}
+                    disabled={activeRecord !== undefined}
                     type='primary'
                     icon={<SyncOutlined />}
                     onClick={() => {

@@ -74,9 +74,13 @@ export type ServiceTemplateDetailVo = {
      */
     lastModifiedTime: string;
     /**
-     * State of registered service.
+     * State of registered service template.
      */
     serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    /**
+     * Comment of reviewed service template.
+     */
+    reviewComment?: string;
     serviceProviderContactDetails: ServiceProviderContactDetails;
     links?: Array<Link>;
 };
@@ -117,7 +121,7 @@ export namespace ServiceTemplateDetailVo {
         SERVICE_VENDOR = 'service-vendor',
     }
     /**
-     * State of registered service.
+     * State of registered service template.
      */
     export enum serviceRegistrationState {
         APPROVAL_PENDING = 'approval pending',

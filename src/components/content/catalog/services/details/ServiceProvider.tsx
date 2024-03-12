@@ -3,26 +3,22 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { MutableRefObject, useEffect, useRef, useState } from 'react';
-import { Alert, Divider, Image, Tabs } from 'antd';
+import React, { useMemo } from 'react';
+import { Divider, Empty, Image, Tabs } from 'antd';
 import ServiceDetail from './ServiceDetail';
-import {
-    ApiError,
-    CloudServiceProvider,
-    DeployedService,
-    Response,
-    ServiceTemplateDetailVo,
-} from '../../../../../xpanse-api/generated';
+import { CloudServiceProvider, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import UpdateService from '../update/UpdateService';
 import UnregisterService from '../unregister/UnregisterService';
-import { getCspMapper, getVersionMapper } from '../../../common/catalog/catalogProps';
-import { useQueryClient } from '@tanstack/react-query';
-import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
+import {
+    groupServicesByCspForSpecificServiceNameAndVersion,
+    groupServicesByVersionForSpecificServiceName,
+} from '../../../common/catalog/catalogProps';
 import { cspMap } from '../../../common/csp/CspLogo';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
-import { useSearchParams } from 'react-router-dom';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import {
+    catalogPageRoute,
     serviceCspQuery,
     serviceHostingTypeQuery,
     serviceNameKeyQuery,
@@ -30,53 +26,83 @@ import {
 } from '../../../../utils/constants';
 import { ServicePolicies } from '../policies/ServicePolicies';
 import { EnvironmentOutlined } from '@ant-design/icons';
+import { UnregisterResult } from '../unregister/UnregisterResult';
+import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
 
 function ServiceProvider({
     categoryOclData,
-    currentServiceName,
-    confirmUnregister,
+    selectedServiceNameInTree,
+    selectedServiceVersionInTree,
     category,
-    getCsp,
-    getHostType,
+    isViewDisabled,
+    setIsViewDisabled,
 }: {
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
-    currentServiceName: string;
-    confirmUnregister: (disabled: boolean) => void;
+    selectedServiceNameInTree: string;
+    selectedServiceVersionInTree: string;
     category: DeployedService.category;
-    getCsp: (arg: string) => void;
-    getHostType: (arg: string) => void;
+    isViewDisabled: boolean;
+    setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
-    const serviceCspInQuery = getServiceCspFormQuery();
-    const serviceHostingTypeInQuery = getServiceHostingTypeFormQuery();
-    const serviceVersionInQuery = getServiceVersionFromQuery();
-    const serviceNameInQuery = getServiceNameFromQuery();
-    const [activeKey, setActiveKey] = useState<string>('');
-    const [serviceDetails, setServiceDetails] = useState<ServiceTemplateDetailVo[] | undefined>(undefined);
-    const [activeServiceDetail, setActiveServiceDetail] = useState<ServiceTemplateDetailVo | undefined>(undefined);
+    const navigate = useNavigate();
 
-    const detailMapper: MutableRefObject<Map<string, ServiceTemplateDetailVo[]>> = useRef(
-        new Map<string, ServiceTemplateDetailVo[]>()
-    );
-    const [name, version] = currentServiceName.split('@');
-    const unregisterStatus = useRef<string>('');
-    const [unregisterTips, setUnregisterTips] = useState<React.JSX.Element | undefined>(undefined);
-    const [unregisterServiceId, setUnregisterServiceId] = useState<string>('');
-    const [unregisterTabsItemDisabled, setUnregisterTabsItemDisabled] = useState<boolean>(false);
-    const queryClient = useQueryClient();
+    const serviceCspInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceHostingTypeInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceVersionInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceNameInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    let activeServiceDetail: ServiceTemplateDetailVo | undefined = undefined;
+
+    const groupServiceTemplatesByCsp: Map<string, ServiceTemplateDetailVo[]> = new Map<
+        string,
+        ServiceTemplateDetailVo[]
+    >();
 
     const getCspTabs = (categoryOclData: Map<string, ServiceTemplateDetailVo[]>): Tab[] => {
         const items: Tab[] = [];
         categoryOclData.forEach((serviceList, serviceName) => {
-            if (serviceName === name) {
-                const versionMapper = getVersionMapper(serviceName, serviceList);
-                versionMapper.forEach((versionList, versionName) => {
-                    if (versionName === version) {
-                        const cspMapper = getCspMapper(serviceName, versionName, versionList);
-                        cspMapper.forEach((cspList, cspName) => {
-                            const key = currentServiceName + '@' + cspName;
-                            detailMapper.current.set(key, cspList);
-                            const name = cspName.toString();
+            if (serviceName === selectedServiceNameInTree) {
+                const versionsToServiceTemplatesMap = groupServicesByVersionForSpecificServiceName(
+                    serviceName,
+                    serviceList
+                );
+                versionsToServiceTemplatesMap.forEach((versionList, versionName) => {
+                    if (versionName === selectedServiceVersionInTree) {
+                        const cspToServiceTemplatesMap = groupServicesByCspForSpecificServiceNameAndVersion(
+                            serviceName,
+                            versionName,
+                            versionList
+                        );
+                        cspToServiceTemplatesMap.forEach((serviceTemplates, cspName) => {
+                            groupServiceTemplatesByCsp.set(cspName, serviceTemplates);
                             const item: Tab = {
                                 label: (
                                     <div>
@@ -87,9 +113,9 @@ function ServiceProvider({
                                         />
                                     </div>
                                 ),
-                                key: name,
+                                key: cspName.toString(),
                                 children: [],
-                                disabled: unregisterTabsItemDisabled,
+                                disabled: isViewDisabled,
                             };
                             items.push(item);
                         });
@@ -102,150 +128,83 @@ function ServiceProvider({
 
     const items: Tab[] = getCspTabs(categoryOclData);
 
-    function getServiceCspFormQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function getServiceHostingTypeFormQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function getServiceVersionFromQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    function getServiceNameFromQuery(): string {
-        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }
-
-    useEffect(() => {
-        setActiveKey(serviceCspInQuery);
-        const details = detailMapper.current.get(currentServiceName + '@' + serviceCspInQuery);
-        if (details) {
-            let isActiveDetailUpdated = false;
-            setServiceDetails(details);
-            if (serviceHostingTypeInQuery) {
-                for (const serviceTemplateDetailVo of details) {
-                    if (serviceTemplateDetailVo.serviceHostingType.toString() === serviceHostingTypeInQuery) {
-                        setActiveServiceDetail(serviceTemplateDetailVo);
-                        isActiveDetailUpdated = true;
-                    }
+    if (serviceNameInQuery) {
+        const serviceTemplates = categoryOclData.get(serviceNameInQuery);
+        if (serviceTemplates) {
+            for (const value of serviceTemplates) {
+                if (
+                    value.version === serviceVersionInQuery &&
+                    value.serviceHostingType.toString() === serviceHostingTypeInQuery &&
+                    value.csp.toString() === serviceCspInQuery
+                ) {
+                    activeServiceDetail = value;
                 }
             }
-            if (!isActiveDetailUpdated) {
-                setActiveServiceDetail(details[0]);
-                getHostType(details[0].serviceHostingType);
-            }
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [serviceHostingTypeInQuery, serviceCspInQuery, serviceVersionInQuery, serviceNameInQuery, categoryOclData]);
+    }
 
-    const onChange = (key: string) => {
-        getCsp(key);
+    const onChangeCsp = (key: string) => {
+        navigate({
+            pathname: catalogPageRoute,
+            hash: '#' + category,
+            search: createSearchParams({
+                csp: key,
+                serviceName: selectedServiceNameInTree,
+                version: selectedServiceVersionInTree,
+                hostingType: groupServiceTemplatesByCsp.get(key)?.[0].serviceHostingType ?? '',
+            }).toString(),
+        });
     };
 
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
-        getHostType(serviceTemplateDetailVo.serviceHostingType);
+        navigate({
+            pathname: catalogPageRoute,
+            hash: '#' + category,
+            search: createSearchParams({
+                csp: serviceCspInQuery,
+                serviceName: selectedServiceNameInTree,
+                version: selectedServiceVersionInTree,
+                hostingType: serviceTemplateDetailVo.serviceHostingType.toString(),
+            }).toString(),
+        });
     };
 
-    function setUnregisterTipsInfo(unregisterResult: boolean, msg: string | Error) {
-        setUnregisterTips(
-            <div className={'submit-alert-tip'}>
-                {' '}
-                {unregisterResult ? (
-                    <Alert
-                        message='Unregister:'
-                        description={msg as string}
-                        showIcon
-                        type={'success'}
-                        closable={true}
-                        onClose={onRemove}
-                    />
-                ) : (
-                    <div>
-                        {msg instanceof ApiError && msg.body && 'details' in msg.body ? (
-                            <Alert
-                                message='Unregister:'
-                                description={(msg.body as Response).details}
-                                showIcon
-                                type={'error'}
-                                closable={true}
-                                onClose={onRemove}
-                            />
-                        ) : (
-                            <Alert
-                                message='Unregister:'
-                                description={(msg as Error).message}
-                                showIcon
-                                type={'error'}
-                                closable={true}
-                                onClose={onRemove}
-                            />
-                        )}
-                    </div>
-                )}{' '}
-            </div>
-        );
+    // this component renders even before the values are set in the URL. We must wait until it is done.
+    if (!serviceCspInQuery && !serviceVersionInQuery && !serviceHostingTypeInQuery && !serviceNameInQuery) {
+        return <ServiceProviderSkeleton />;
     }
-
-    const onConfirmUnregister = (msg: string | Error, isUnregisterSuccessful: boolean, id: string) => {
-        setUnregisterTipsInfo(isUnregisterSuccessful, msg);
-        setUnregisterServiceId(id);
-        unregisterStatus.current = isUnregisterSuccessful ? 'completed' : 'error';
-        confirmUnregister(false);
-        setUnregisterTabsItemDisabled(true);
-        if (isUnregisterSuccessful) {
-            void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-        }
-    };
-
-    const onRemove = () => {
-        void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-    };
 
     return (
         <>
-            {serviceDetails && unregisterServiceId === serviceDetails[0].id ? unregisterTips : ''}
-            {currentServiceName.length > 0 ? (
+            {selectedServiceNameInTree.length > 0 ? (
                 <>
-                    {serviceDetails && activeServiceDetail ? (
+                    {activeServiceDetail ? (
                         <>
+                            <UnregisterResult id={activeServiceDetail.id} category={category} />
                             <Tabs
                                 items={items}
-                                onChange={onChange}
-                                activeKey={activeKey}
+                                onChange={onChangeCsp}
+                                activeKey={serviceCspInQuery}
                                 className={'ant-tabs-tab-btn'}
                             />
                             <div className={'update-unregister-btn-class'}>
                                 <UpdateService
                                     id={activeServiceDetail.id}
-                                    unregisterStatus={unregisterStatus}
                                     category={category}
+                                    isViewDisabled={isViewDisabled}
                                 />
-                                <UnregisterService id={activeServiceDetail.id} onConfirmHandler={onConfirmUnregister} />
+                                <UnregisterService
+                                    key={activeServiceDetail.id}
+                                    id={activeServiceDetail.id}
+                                    setIsViewDisabled={setIsViewDisabled}
+                                />
                             </div>
                             <h3 className={'catalog-details-h3'}>
                                 <EnvironmentOutlined />
                                 &nbsp;Service Hosting Options
                             </h3>
                             <ServiceHostingOptions
-                                serviceTemplateDetailVos={serviceDetails}
+                                serviceTemplateDetailVos={groupServiceTemplatesByCsp.get(serviceCspInQuery) ?? []}
                                 defaultDisplayedService={activeServiceDetail}
                                 serviceHostingTypeInQuery={serviceHostingTypeInQuery}
                                 updateServiceHostingType={onChangeServiceHostingType}
@@ -253,12 +212,19 @@ function ServiceProvider({
                             <ServiceDetail serviceDetails={activeServiceDetail} />
 
                             <Divider />
-                            <ServicePolicies key={activeServiceDetail.id} serviceDetails={activeServiceDetail} />
+                            <ServicePolicies
+                                key={activeServiceDetail.id}
+                                serviceDetails={activeServiceDetail}
+                                isViewDisabled={isViewDisabled}
+                            />
                         </>
-                    ) : null}
+                    ) : (
+                        // Necessary when user manually enters wrong details in the URL query parameters.
+                        <Empty description={'No services available for the provided query parameters in the url.'} />
+                    )}
                 </>
             ) : (
-                <></>
+                <Empty description={'No services available.'} />
             )}
         </>
     );

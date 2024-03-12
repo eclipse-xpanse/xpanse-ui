@@ -20,7 +20,7 @@ export default function CatalogMainPage(): React.JSX.Element {
     }
 
     if (category) {
-        return <CategoryCatalog category={category} />;
+        return <CategoryCatalog key={category} category={category} />;
     } else {
         return <></>;
     }

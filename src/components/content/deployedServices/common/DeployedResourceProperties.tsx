@@ -8,6 +8,7 @@ import { Button, Popover, Typography } from 'antd';
 import '../../../../styles/my_services.css';
 import React from 'react';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { v4 as uuidv4 } from 'uuid';
 
 function DeployedResourceProperties(deployResource: DeployResource): React.JSX.Element {
     if (Object.keys(deployResource).length) {
@@ -40,8 +41,8 @@ function getCopyablePropertyValue(value: string) {
             copyable={{
                 text: value,
                 icon: [
-                    <CopyOutlined className={'show-details-typography-copy'} />,
-                    <CheckOutlined className={'show-details-typography-copy'} />,
+                    <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                    <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
                 ],
             }}
         >

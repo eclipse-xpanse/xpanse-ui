@@ -61,7 +61,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <b>Available Regions</b>
                                 <br />
                                 {ocl.cloudServiceProvider.regions.map((region) => (
-                                    <Tag className={'ocl-display-tag'} color='orange'>
+                                    <Tag className={'ocl-display-tag'} color='orange' key={region.name}>
                                         {region.area ? `${region.area}: ${region.name}` : region.name}
                                     </Tag>
                                 ))}

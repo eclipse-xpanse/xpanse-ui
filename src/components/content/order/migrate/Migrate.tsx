@@ -3,37 +3,37 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
+    DeployedServiceDetails,
     DeployRequest,
     ServiceCatalogService,
-    DeployedService,
     UserOrderableServiceVo,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { SelectDestination } from './SelectDestination';
 import { DeploymentForm } from './DeploymentForm';
-import { Steps } from 'antd';
+import { StepProps, Steps } from 'antd';
 import { MigrateServiceSubmit } from './MigrateServiceSubmit';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
 import { useQuery } from '@tanstack/react-query';
 import { MigrationSteps } from '../types/MigrationSteps';
-import { MigrationStatus } from '../types/MigrationStatus';
 
-export const Migrate = ({ currentSelectedService }: { currentSelectedService: DeployedService }): React.JSX.Element => {
+export const Migrate = ({
+    currentSelectedService,
+}: {
+    currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
+}): React.JSX.Element => {
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
-    const [currentMigrationStepStatus, setCurrentMigrationStepStatus] = useState<MigrationStatus | undefined>(
-        undefined
+    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(currentSelectedService.csp);
+    const [selectServiceHostingType, setSelectServiceHostingType] = useState<UserOrderableServiceVo.serviceHostingType>(
+        currentSelectedService.serviceHostingType
     );
-    const [userOrderableServiceVoList, setUserOrderableServiceVoList] = useState<UserOrderableServiceVo[]>([]);
-    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp | undefined>(undefined);
-    const [selectServiceHostingType, setSelectServiceHostingType] = useState<
-        UserOrderableServiceVo.serviceHostingType | undefined
-    >(undefined);
-    const [selectArea, setSelectArea] = useState<string>('');
-    const [selectRegion, setSelectRegion] = useState<string>('');
-    const [selectFlavor, setSelectFlavor] = useState<string>('');
-    const [deployParams, setDeployParams] = useState<DeployRequest | undefined>(undefined);
+    const [selectArea, setSelectArea] = useState<string>(''); // to be fixed.
+    const [selectRegion, setSelectRegion] = useState<string>(currentSelectedService.deployRequest.region);
+    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
+    const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
     const listOrderableServices = useQuery({
         queryKey: [
@@ -52,24 +52,6 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: De
         refetchOnWindowFocus: false,
     });
 
-    useEffect(() => {
-        setCurrentMigrationStepStatus(MigrationStatus.Processing);
-        setCurrentMigrationStep(MigrationSteps.ExportServiceData);
-        if (listOrderableServices.data && listOrderableServices.data.length > 0) {
-            setUserOrderableServiceVoList(listOrderableServices.data);
-        } else {
-            return;
-        }
-    }, [listOrderableServices.data, listOrderableServices.isSuccess]);
-
-    useEffect(() => {
-        if (listOrderableServices.isError) {
-            setCurrentMigrationStepStatus(MigrationStatus.Processing);
-            setCurrentMigrationStep(MigrationSteps.ExportServiceData);
-            setUserOrderableServiceVoList([]);
-        }
-    }, [listOrderableServices.isError]);
-
     const updateSelectedParameters = (
         selectedCsp: UserOrderableServiceVo.csp,
         selectedArea: string,
@@ -84,96 +66,108 @@ export const Migrate = ({ currentSelectedService }: { currentSelectedService: De
         setSelectServiceHostingType(selectedServiceHostingType);
     };
 
-    const getDeployParameters = (values: DeployRequest) => {
-        setDeployParams(values);
-    };
+    const steps = useMemo(() => {
+        return [
+            {
+                title: 'Export data',
+                description: 'Export service data.',
+            },
+            {
+                title: 'Select a destination',
+                description: 'Select a destination for migrating the existing deployment.',
+            },
+            {
+                title: 'Prepare deployment parameters',
+                description: 'Prepare deployment parameters.',
+            },
+            {
+                title: 'Import Data',
+                description: 'Import service data.',
+            },
+            {
+                title: 'Migrate',
+                description: 'Migrate service to the new destination.',
+            },
+        ];
+    }, []);
 
-    const getCurrentMigrationStep = (step: MigrationSteps) => {
-        setCurrentMigrationStep(step);
-    };
+    const items: StepProps[] = useMemo(
+        () =>
+            steps.map((item) => ({
+                key: item.title,
+                title: item.title,
+                description: item.description,
+                status: 'wait',
+            })),
+        [steps]
+    );
 
-    const getCurrentMigrationStepStatus = (migrationStepStatus: MigrationStatus | undefined) => {
-        setCurrentMigrationStepStatus(migrationStepStatus);
-    };
-
-    const steps = [
-        {
-            title: 'Export data',
-            content: (
-                <ExportServiceData
-                    isQueryLoading={listOrderableServices.isLoading}
-                    getCurrentMigrationStep={getCurrentMigrationStep}
-                />
-            ),
-            description: 'Export service data.',
-        },
-        {
-            title: 'Select a destination',
-            content: (
-                <SelectDestination
-                    userOrderableServiceVoList={userOrderableServiceVoList}
-                    updateSelectedParameters={updateSelectedParameters}
-                    currentCsp={selectCsp}
-                    currentArea={selectArea}
-                    currentRegion={selectRegion}
-                    currentFlavor={selectFlavor}
-                    currentServiceHostingType={selectServiceHostingType}
-                    getCurrentMigrationStep={getCurrentMigrationStep}
-                />
-            ),
-            description: 'Select a destination for migrating the existing deployment.',
-        },
-        {
-            title: 'Prepare deployment parameters',
-            content: (
-                <DeploymentForm
-                    userOrderableServiceVoList={userOrderableServiceVoList}
-                    selectCsp={selectCsp ? selectCsp : currentSelectedService.csp}
-                    selectServiceHostingType={
-                        selectServiceHostingType ? selectServiceHostingType : currentSelectedService.serviceHostingType
-                    }
-                    selectArea={selectArea}
-                    selectRegion={selectRegion}
-                    selectFlavor={selectFlavor}
-                    getCurrentMigrationStep={getCurrentMigrationStep}
-                    getDeployParameters={getDeployParameters}
-                />
-            ),
-            description: 'Prepare deployment parameters.',
-        },
-        {
-            title: 'Import Data',
-            content: <ImportServiceData getCurrentMigrationStep={getCurrentMigrationStep} />,
-            description: 'Import service data.',
-        },
-        {
-            title: 'Migrate',
-            content: (
-                <MigrateServiceSubmit
-                    userOrderableServiceVoList={userOrderableServiceVoList}
-                    selectCsp={selectCsp ?? currentSelectedService.csp}
-                    selectArea={selectArea}
-                    selectRegion={selectRegion}
-                    selectFlavor={selectFlavor}
-                    selectServiceHostingType={
-                        selectServiceHostingType ? selectServiceHostingType : currentSelectedService.serviceHostingType
-                    }
-                    getCurrentMigrationStep={getCurrentMigrationStep}
-                    deployParams={deployParams}
-                    currentSelectedService={currentSelectedService}
-                    getCurrentMigrationStepStatus={getCurrentMigrationStepStatus}
-                />
-            ),
-            description: 'Migrate service to the new destination.',
-        },
-    ];
-
-    const items = steps.map((item) => ({ key: item.title, title: item.title, description: item.description }));
+    function renderStepContent(migrationStep: MigrationSteps): React.JSX.Element {
+        switch (migrationStep) {
+            case MigrationSteps.ExportServiceData:
+                return (
+                    <ExportServiceData
+                        isQueryLoading={listOrderableServices.isLoading}
+                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        stepItem={items[MigrationSteps.ExportServiceData]}
+                    />
+                );
+            case MigrationSteps.SelectADestination:
+                return (
+                    <SelectDestination
+                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        updateSelectedParameters={updateSelectedParameters}
+                        currentCsp={selectCsp}
+                        currentRegion={selectRegion}
+                        currentFlavor={selectFlavor}
+                        currentServiceHostingType={selectServiceHostingType}
+                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        stepItem={items[MigrationSteps.SelectADestination]}
+                    />
+                );
+            case MigrationSteps.ImportServiceData:
+                return (
+                    <ImportServiceData
+                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        stepItem={items[MigrationSteps.ImportServiceData]}
+                    />
+                );
+            case MigrationSteps.PrepareDeploymentParameters:
+                return (
+                    <DeploymentForm
+                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        selectCsp={selectCsp}
+                        selectServiceHostingType={selectServiceHostingType}
+                        selectArea={selectArea}
+                        selectRegion={selectRegion}
+                        selectFlavor={selectFlavor}
+                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        setDeployParameters={setDeployParams}
+                        stepItem={items[MigrationSteps.PrepareDeploymentParameters]}
+                    />
+                );
+            case MigrationSteps.MigrateService:
+                return (
+                    <MigrateServiceSubmit
+                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        selectCsp={selectCsp}
+                        selectArea={selectArea}
+                        selectRegion={selectRegion}
+                        selectFlavor={selectFlavor}
+                        selectServiceHostingType={selectServiceHostingType}
+                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        deployParams={deployParams}
+                        currentSelectedService={currentSelectedService}
+                        stepItem={items[MigrationSteps.MigrateService]}
+                    />
+                );
+        }
+    }
 
     return (
         <div className={'migrate-select-destination-class'}>
-            <Steps current={currentMigrationStep} items={items} status={currentMigrationStepStatus} />
-            {steps[currentMigrationStep].content}
+            <Steps current={currentMigrationStep} items={items} />
+            {renderStepContent(currentMigrationStep)}
         </div>
     );
 };

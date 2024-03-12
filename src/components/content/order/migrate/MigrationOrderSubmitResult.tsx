@@ -5,24 +5,27 @@
 
 import { Alert } from 'antd';
 import { StopwatchResult } from 'react-timer-hook';
-import { DeployedServiceDetails, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 
 import React from 'react';
-import { OperationType } from '../types/OperationType';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
-import DeploymentTimer from '../orderStatus/DeploymentTimer';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import DeploymentTimer from '../orderStatus/DeploymentTimer';
 
-export const MigrationOrderSubmitResult = (
-    msg: string | React.JSX.Element,
-    uuid: string,
-    type: 'success' | 'error',
-    deploymentStatus: DeployedServiceDetails.serviceDeploymentState,
-    stopWatch: StopwatchResult,
-    operationType: OperationType,
-    contactServiceDetails: ServiceProviderContactDetails | undefined
-): React.JSX.Element => {
+export const MigrationOrderSubmitResult = ({
+    msg,
+    uuid,
+    type,
+    stopWatch,
+    contactServiceDetails,
+}: {
+    msg: string | React.JSX.Element;
+    uuid: string;
+    type: 'success' | 'error';
+    stopWatch: StopwatchResult;
+    contactServiceDetails: ServiceProviderContactDetails | undefined;
+}): React.JSX.Element => {
     return (
         <div className={'submit-alert-tip'}>
             {' '}
@@ -42,11 +45,7 @@ export const MigrationOrderSubmitResult = (
                         ) : (
                             <></>
                         )}
-                        <DeploymentTimer
-                            stopWatch={stopWatch}
-                            deploymentStatus={deploymentStatus}
-                            operationType={operationType}
-                        />
+                        <DeploymentTimer stopWatch={stopWatch} />
                     </>
                 }
             />{' '}

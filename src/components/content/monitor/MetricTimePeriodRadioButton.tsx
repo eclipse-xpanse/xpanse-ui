@@ -4,22 +4,21 @@
  */
 
 import { Radio, RadioChangeEvent } from 'antd';
-import { lastMinuteRadioButtonKeyId, timePeriodList } from './metricProps';
-import React, { useState } from 'react';
+import { timePeriodList } from './metricProps';
+import React from 'react';
 
-export const MetricTimePeriod = ({
+export const MetricTimePeriodRadioButton = ({
     isLoading,
-    getTimePeriod,
+    timePeriod,
+    setTimePeriod,
 }: {
     isLoading: boolean;
-    getTimePeriod: (currentTimePeriod: number) => void;
+    timePeriod: number;
+    setTimePeriod: (currentTimePeriod: number) => void;
 }): React.JSX.Element => {
-    const [timePeriod, setTimePeriod] = useState<number>(lastMinuteRadioButtonKeyId.valueOf());
-
     const onChangeTimePeriod = (e: RadioChangeEvent) => {
         const selectedTimePeriod = Number(e.target.value);
         setTimePeriod(selectedTimePeriod);
-        getTimePeriod(selectedTimePeriod);
     };
     return (
         <div>

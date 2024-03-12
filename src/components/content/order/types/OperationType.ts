@@ -6,5 +6,4 @@
 export enum OperationType {
     Deploy = 'deploy',
     Destroy = 'destroy',
-    Migrate = 'migrate',
 }
