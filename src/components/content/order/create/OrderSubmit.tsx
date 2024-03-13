@@ -82,7 +82,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             category: state.category,
             csp: state.csp,
             flavor: state.flavor,
-            region: state.region,
+            region: {
+                name: state.region,
+                area: state.area,
+            },
             serviceName: state.name,
             version: state.version,
             customerServiceName: deployParamsRef.current.Name as string,

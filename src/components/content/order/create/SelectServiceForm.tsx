@@ -239,8 +239,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                     <GoToSubmit
                         selectedVersion={selectVersion}
                         selectedCsp={selectCsp}
-                        selectedRegion={selectRegion}
-                        selectedArea={selectArea}
+                        region={{ name: selectRegion, area: selectArea }}
                         selectedFlavor={selectFlavor}
                         versionMapper={versionToServicesMap}
                         selectedServiceHostingType={selectServiceHostType}

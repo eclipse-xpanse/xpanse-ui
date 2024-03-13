@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { OrderItem } from '../create/OrderSubmit';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -18,8 +18,7 @@ export const DeploymentForm = ({
     userOrderableServiceVoList,
     selectCsp,
     selectServiceHostingType,
-    selectArea,
-    selectRegion,
+    region,
     selectFlavor,
     setCurrentMigrationStep,
     setDeployParameters,
@@ -28,8 +27,7 @@ export const DeploymentForm = ({
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: UserOrderableServiceVo.csp;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
-    selectArea: string;
-    selectRegion: string;
+    region: Region;
     selectFlavor: string;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
@@ -40,8 +38,7 @@ export const DeploymentForm = ({
         userOrderableServiceVoList,
         selectCsp,
         selectServiceHostingType,
-        selectArea,
-        selectRegion,
+        region,
         selectFlavor,
         undefined
     );
@@ -57,7 +54,7 @@ export const DeploymentForm = ({
             category: deployParams.category,
             csp: deployParams.csp,
             flavor: deployParams.flavor,
-            region: deployParams.region,
+            region: region,
             serviceName: deployParams.name,
             version: deployParams.version,
             customerServiceName: deployParamsRef.current.Name as string,
@@ -121,7 +118,7 @@ export const DeploymentForm = ({
                     <div>
                         {deployParams.params.map((item) =>
                             item.kind === 'variable' || item.kind === 'env' ? (
-                                <OrderItem key={item.name} item={item} csp={selectCsp} region={selectRegion} />
+                                <OrderItem key={item.name} item={item} csp={selectCsp} region={region.name} />
                             ) : undefined
                         )}
                     </div>

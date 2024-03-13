@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Region } from './Region';
 export type MigrateRequest = {
     /**
      * The category of the service
@@ -27,7 +28,7 @@ export type MigrateRequest = {
     /**
      * The region of the provider.
      */
-    region: string;
+    region: Region;
     /**
      * The csp of the Service.
      */
