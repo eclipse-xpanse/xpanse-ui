@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Region, ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { Button } from 'antd';
 import { OrderSubmitProps } from './OrderSubmit';
@@ -14,8 +14,7 @@ import { orderPageRoute } from '../../../utils/constants';
 export default function GoToSubmit({
     selectedVersion,
     selectedCsp,
-    selectedRegion,
-    selectedArea,
+    region,
     selectedFlavor,
     versionMapper,
     selectedServiceHostingType,
@@ -23,8 +22,7 @@ export default function GoToSubmit({
 }: {
     selectedVersion: string;
     selectedCsp: UserOrderableServiceVo.csp;
-    selectedRegion: string;
-    selectedArea: string;
+    region: Region;
     selectedFlavor: string;
     selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     versionMapper: Map<string, UserOrderableServiceVo[]>;
@@ -37,8 +35,7 @@ export default function GoToSubmit({
             versionMapper.get(selectedVersion) ?? [],
             selectedCsp,
             selectedServiceHostingType,
-            selectedArea,
-            selectedRegion,
+            region,
             selectedFlavor,
             currentServiceProviderContactDetails
         );
