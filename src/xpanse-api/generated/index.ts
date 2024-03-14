@@ -14,6 +14,7 @@ export type { OpenAPIConfig } from './core/OpenAPI';
 
 export { AbstractCredentialInfo } from './models/AbstractCredentialInfo';
 export { AutoFill } from './models/AutoFill';
+export type { AvailabilityZoneConfig } from './models/AvailabilityZoneConfig';
 export { BackendSystemStatus } from './models/BackendSystemStatus';
 export { Billing } from './models/Billing';
 export { CloudServiceProvider } from './models/CloudServiceProvider';

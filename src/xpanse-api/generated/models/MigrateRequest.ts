@@ -25,9 +25,6 @@ export type MigrateRequest = {
      * The version of service
      */
     version: string;
-    /**
-     * The region of the provider.
-     */
     region: Region;
     /**
      * The csp of the Service.
@@ -45,6 +42,10 @@ export type MigrateRequest = {
      * The properties for the requested service
      */
     serviceRequestProperties?: Record<string, any>;
+    /**
+     * The availability zones to deploy the service instance.
+     */
+    availabilityZones?: Record<string, string>;
     /**
      * The id of the service to migrate
      */

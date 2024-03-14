@@ -282,6 +282,34 @@ export class ServiceService {
         });
     }
     /**
+     * Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param cspName name of the cloud service provider
+     * @param regionName name of the region
+     * @returns string OK
+     * @throws ApiError
+     */
+    public static getAvailabilityZones(
+        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        regionName: string
+    ): CancelablePromise<Array<string>> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/xpanse/csp/region/azs',
+            query: {
+                cspName: cspName,
+                regionName: regionName,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+    /**
      * Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id
      * @returns Response Accepted

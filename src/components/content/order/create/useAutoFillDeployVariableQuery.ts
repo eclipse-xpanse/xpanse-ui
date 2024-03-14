@@ -12,9 +12,9 @@ export default function useAutoFillDeployVariableQuery(
     kind: AutoFill.deployResourceKind | undefined
 ) {
     return useQuery({
-        queryKey: ['getExistingResourcesOfType', csp, region, kind],
+        queryKey: ['getExistingResourceNamesWithKind', csp, region, kind],
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        queryFn: () => CloudResourcesService.getExistingResourcesOfType(csp, region, kind!),
+        queryFn: () => CloudResourcesService.getExistingResourceNamesWithKind(csp, region, kind!),
         enabled: kind !== undefined,
     });
 }
