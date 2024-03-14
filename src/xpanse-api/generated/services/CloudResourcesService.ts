@@ -12,14 +12,14 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class CloudResourcesService {
     /**
-     * List existing cloud resource types<br>Required role:<b> admin</b> or <b>user</b>
+     * List existing cloud resource names with kind<br>Required role:<b> admin</b> or <b>user</b>
      * @param csp name of the cloud service provider
      * @param region name of he region
      * @param deployResourceKind kind of the CloudResource
      * @returns string OK
      * @throws ApiError
      */
-    public static getExistingResourcesOfType(
+    public static getExistingResourceNamesWithKind(
         csp: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
         region: string,
         deployResourceKind:

@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AvailabilityZoneConfig } from './AvailabilityZoneConfig';
 import type { DeployVariable } from './DeployVariable';
 import type { ScriptsRepo } from './ScriptsRepo';
 /**
@@ -25,6 +26,10 @@ export type Deployment = {
      * The credential type to do the deployment
      */
     credentialType?: Deployment.credentialType;
+    /**
+     * The list of availability zones of the service.
+     */
+    serviceAvailability?: Array<AvailabilityZoneConfig>;
     /**
      * The real deployer, something like terraform scripts. Either deployer or deployFromGitRepo must be provided.
      */

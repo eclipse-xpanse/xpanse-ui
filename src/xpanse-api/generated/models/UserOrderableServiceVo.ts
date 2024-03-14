@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { AvailabilityZoneConfig } from './AvailabilityZoneConfig';
 import type { Billing } from './Billing';
 import type { DeployVariable } from './DeployVariable';
 import type { FlavorBasic } from './FlavorBasic';
@@ -60,6 +61,10 @@ export type UserOrderableServiceVo = {
      */
     serviceHostingType: UserOrderableServiceVo.serviceHostingType;
     serviceProviderContactDetails: ServiceProviderContactDetails;
+    /**
+     * The list of availability zones of the service.
+     */
+    serviceAvailability?: Array<AvailabilityZoneConfig>;
     links?: Array<Link>;
 };
 export namespace UserOrderableServiceVo {
