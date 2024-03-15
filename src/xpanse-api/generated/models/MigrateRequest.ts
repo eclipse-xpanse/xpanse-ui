@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { Region } from './Region';
 export type MigrateRequest = {
     /**
      * The category of the service
@@ -24,10 +25,7 @@ export type MigrateRequest = {
      * The version of service
      */
     version: string;
-    /**
-     * The region of the provider.
-     */
-    region: string;
+    region: Region;
     /**
      * The csp of the Service.
      */
@@ -44,6 +42,10 @@ export type MigrateRequest = {
      * The properties for the requested service
      */
     serviceRequestProperties?: Record<string, any>;
+    /**
+     * The availability zones to deploy the service instance.
+     */
+    availabilityZones?: Record<string, string>;
     /**
      * The id of the service to migrate
      */

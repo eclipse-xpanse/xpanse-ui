@@ -10,6 +10,7 @@ import {
     DeployedService,
     DeployRequest,
     MigrateRequest,
+    Region,
     ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -36,8 +37,7 @@ import migrationStatus = ServiceMigrationDetails.migrationStatus;
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
     selectCsp,
-    selectArea,
-    selectRegion,
+    region,
     selectFlavor,
     selectServiceHostingType,
     setCurrentMigrationStep,
@@ -47,8 +47,7 @@ export const MigrateServiceSubmit = ({
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: UserOrderableServiceVo.csp;
-    selectArea: string;
-    selectRegion: string;
+    region: Region;
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
@@ -58,7 +57,7 @@ export const MigrateServiceSubmit = ({
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
-    const areaList: Tab[] = [{ key: selectArea, label: selectArea, disabled: true }];
+    const areaList: Tab[] = [{ key: region.area, label: region.area, disabled: true }];
     const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
     const currentBilling: Billing = getBilling(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
     let priceValue: string = '';
@@ -97,6 +96,7 @@ export const MigrateServiceSubmit = ({
     const migrate = () => {
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
+            migrateRequest.region = region;
             migrateRequest.id = currentSelectedService.id;
             migrateServiceRequest.mutate(migrateRequest);
             stepItem.status = 'process';
@@ -125,7 +125,6 @@ export const MigrateServiceSubmit = ({
             stepItem.status = 'process';
         }
     }
-
     return (
         <>
             {isShowDeploymentResult ? (
@@ -138,7 +137,7 @@ export const MigrateServiceSubmit = ({
                     migrationDetails={migrateServiceDetailsQuery.data}
                 />
             ) : null}
-            <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
+            <Form layout='vertical' initialValues={{ region, selectFlavor }}>
                 <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
                 <div className={'services-content-body'}>
                     <div className={'cloud-provider-select-hover'}>
@@ -166,9 +165,9 @@ export const MigrateServiceSubmit = ({
                 <br />
                 <br />
                 <div className={'cloud-provider-tab-class content-title'}>
-                    <Tabs type='card' size='middle' activeKey={selectArea} tabPosition={'top'} items={areaList} />
+                    <Tabs type='card' size='middle' activeKey={region.area} tabPosition={'top'} items={areaList} />
                 </div>
-                <RegionInfo selectRegion={selectRegion} disabled={true} />
+                <RegionInfo selectRegion={region.name} disabled={true} />
                 <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
                 <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>

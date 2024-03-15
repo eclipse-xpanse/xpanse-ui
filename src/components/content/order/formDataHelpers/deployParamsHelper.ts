@@ -6,6 +6,7 @@
 import {
     DeployRequest,
     DeployVariable,
+    Region,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -16,8 +17,7 @@ export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
-    selectArea: string,
-    selectRegion: string,
+    region: Region,
     selectFlavor: string,
     currentContactServiceDetails: ServiceProviderContactDetails | undefined
 ): OrderSubmitProps => {
@@ -36,8 +36,8 @@ export const getDeployParams = (
         category: service?.category as DeployRequest.category,
         name: service?.name ?? '',
         version: service?.version ?? '',
-        region: selectRegion,
-        area: selectArea,
+        region: region.name,
+        area: region.area,
         csp: service?.csp as DeployRequest.csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
