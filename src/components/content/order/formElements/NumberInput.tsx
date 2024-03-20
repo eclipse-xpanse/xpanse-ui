@@ -18,10 +18,10 @@ export function NumberInput({ item }: { item: DeployParam }): React.JSX.Element 
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const setValidator = (_: unknown, value: number) => {
         if (value < minimum) {
-            return Promise.reject(new Error(`Value does not satisfy criteria minimum ${minimum}!`));
+            return Promise.reject(new Error(`Value does not satisfy criteria minimum ${minimum.toString()}!`));
         }
         if (value > maximum) {
-            return Promise.reject(new Error(`Value does not satisfy criteria maximum ${maximum}!`));
+            return Promise.reject(new Error(`Value does not satisfy criteria maximum ${maximum.toString()}!`));
         } else {
             return Promise.resolve();
         }
