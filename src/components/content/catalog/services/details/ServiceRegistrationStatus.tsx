@@ -9,7 +9,7 @@ import { Tag } from 'antd';
 import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import React from 'react';
 
-export function ServiceStatus({
+export function ServiceRegistrationStatus({
     serviceStatus,
 }: {
     serviceStatus: ServiceTemplateDetailVo.serviceRegistrationState;
@@ -23,7 +23,7 @@ export function ServiceStatus({
             );
         case ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING:
             return (
-                <Tag icon={<CheckCircleOutlined />} color='orange' className={'catalog-service-status-size'}>
+                <Tag icon={<ExclamationCircleOutlined />} color='orange' className={'catalog-service-status-size'}>
                     {serviceStatus.valueOf()}
                 </Tag>
             );

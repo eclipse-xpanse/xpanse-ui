@@ -5,7 +5,7 @@
 
 import { HomeOutlined } from '@ant-design/icons';
 import ServiceProvider from '../details/ServiceProvider';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { ServiceTree } from './ServiceTree';
 import { DataNode } from 'antd/es/tree';
 import { DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
@@ -29,6 +29,21 @@ export function CatalogFullView({
     category: DeployedService.category;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
+    const serviceNameInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceVersionInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
     const navigate = useNavigate();
     const allKeysInTree: React.Key[] = getAllKeysFromCatalogTree(treeData);
     const [selectKey, setSelectKey] = useState<React.Key>(getDefaultSelectedKey());
@@ -37,12 +52,10 @@ export function CatalogFullView({
     const previousSelectedKey = useRef<React.Key>(getDefaultSelectedKey());
 
     function getDefaultSelectedKey() {
-        //if user directly opens a url.
-        if (urlParams.get(serviceNameKeyQuery) && urlParams.get(serviceVersionKeyQuery)) {
-            if (
-                allKeysInTree.includes(urlParams.get(serviceNameKeyQuery) + '@' + urlParams.get(serviceVersionKeyQuery))
-            ) {
-                return urlParams.get(serviceNameKeyQuery) + '@' + urlParams.get(serviceVersionKeyQuery);
+        //if user directly opens an url.
+        if (serviceNameInQuery && serviceVersionInQuery) {
+            if (allKeysInTree.includes(serviceNameInQuery + '@' + serviceVersionInQuery)) {
+                return serviceNameInQuery + '@' + serviceVersionInQuery;
             }
         }
         return allKeysInTree[0];
