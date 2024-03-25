@@ -6,10 +6,10 @@
 import { Region, ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { Button } from 'antd';
-import { OrderSubmitProps } from './OrderSubmit';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import { orderPageRoute } from '../../../utils/constants';
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 
 export default function GoToSubmit({
     selectedVersion,
@@ -19,6 +19,7 @@ export default function GoToSubmit({
     versionMapper,
     selectedServiceHostingType,
     currentServiceProviderContactDetails,
+    availabilityZones,
 }: {
     selectedVersion: string;
     selectedCsp: UserOrderableServiceVo.csp;
@@ -27,6 +28,7 @@ export default function GoToSubmit({
     selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     versionMapper: Map<string, UserOrderableServiceVo[]>;
     currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined;
+    availabilityZones: Record<string, string> | undefined;
 }): React.JSX.Element {
     const navigate = useNavigate();
 
@@ -37,7 +39,8 @@ export default function GoToSubmit({
             selectedServiceHostingType,
             region,
             selectedFlavor,
-            currentServiceProviderContactDetails
+            currentServiceProviderContactDetails,
+            availabilityZones
         );
 
         navigate(

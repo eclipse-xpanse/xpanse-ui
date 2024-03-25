@@ -32,12 +32,15 @@ import {
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
+import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import migrationStatus = ServiceMigrationDetails.migrationStatus;
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
     selectCsp,
     region,
+    availabilityZones,
     selectFlavor,
     selectServiceHostingType,
     setCurrentMigrationStep,
@@ -48,6 +51,7 @@ export const MigrateServiceSubmit = ({
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: UserOrderableServiceVo.csp;
     region: Region;
+    availabilityZones: Record<string, string>;
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
@@ -66,7 +70,6 @@ export const MigrateServiceSubmit = ({
             priceValue = flavorItem.price;
         }
     });
-
     const migrateServiceRequest = useMigrateServiceQuery();
     const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
         migrateServiceRequest.data,
@@ -168,6 +171,12 @@ export const MigrateServiceSubmit = ({
                     <Tabs type='card' size='middle' activeKey={region.area} tabPosition={'top'} items={areaList} />
                 </div>
                 <RegionInfo selectRegion={region.name} disabled={true} />
+                {Object.keys(availabilityZones).length > 0 ? (
+                    <MigrateServiceSubmitAvailabilityZoneInfo
+                        availabilityZoneConfigs={getAvailabilityZoneConfigs(selectCsp, userOrderableServiceVoList)}
+                        availabilityZones={availabilityZones}
+                    />
+                ) : undefined}
                 <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
                 <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>

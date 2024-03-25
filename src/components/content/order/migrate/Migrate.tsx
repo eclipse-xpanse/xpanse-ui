@@ -32,6 +32,9 @@ export const Migrate = ({
         currentSelectedService.serviceHostingType
     );
     const [selectRegion, setSelectRegion] = useState<Region>(currentSelectedService.deployRequest.region);
+    const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
+        currentSelectedService.deployRequest.availabilityZones ?? {}
+    );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
@@ -56,6 +59,7 @@ export const Migrate = ({
         selectedCsp: UserOrderableServiceVo.csp,
         selectAreaName: string,
         selectRegionName: string,
+        selectAvailabilityZonesName: Record<string, string>,
         selectedFlavor: string,
         selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
     ) => {
@@ -64,6 +68,7 @@ export const Migrate = ({
             name: selectRegionName,
             area: selectAreaName,
         });
+        setSelectAvailabilityZones(selectAvailabilityZonesName);
         setSelectFlavor(selectedFlavor);
         setSelectServiceHostingType(selectedServiceHostingType);
     };
@@ -121,6 +126,8 @@ export const Migrate = ({
                         updateSelectedParameters={updateSelectedParameters}
                         currentCsp={selectCsp}
                         currentRegion={selectRegion.name}
+                        selectAvailabilityZones={selectAvailabilityZones}
+                        setSelectAvailabilityZones={setSelectAvailabilityZones}
                         currentFlavor={selectFlavor}
                         currentServiceHostingType={selectServiceHostingType}
                         setCurrentMigrationStep={setCurrentMigrationStep}
@@ -141,6 +148,7 @@ export const Migrate = ({
                         selectCsp={selectCsp}
                         selectServiceHostingType={selectServiceHostingType}
                         region={selectRegion}
+                        availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         setDeployParameters={setDeployParams}
@@ -153,6 +161,7 @@ export const Migrate = ({
                         userOrderableServiceVoList={listOrderableServices.data ?? []}
                         selectCsp={selectCsp}
                         region={selectRegion}
+                        availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         selectServiceHostingType={selectServiceHostingType}
                         setCurrentMigrationStep={setCurrentMigrationStep}
