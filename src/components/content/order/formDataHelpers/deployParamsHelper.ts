@@ -10,8 +10,8 @@ import {
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { OrderSubmitProps } from '../create/OrderSubmit';
 import { DeployParam } from '../types/DeployParam';
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 
 export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],
@@ -19,7 +19,8 @@ export const getDeployParams = (
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     region: Region,
     selectFlavor: string,
-    currentContactServiceDetails: ServiceProviderContactDetails | undefined
+    currentContactServiceDetails: ServiceProviderContactDetails | undefined,
+    availabilityZones: Record<string, string> | undefined
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
@@ -43,6 +44,7 @@ export const getDeployParams = (
         params: new Array<DeployParam>(),
         serviceHostingType: selectServiceHostingType,
         contactServiceDetails: currentContactServiceDetails ?? undefined,
+        availabilityZones: availabilityZones,
     };
 
     if (service !== undefined) {

@@ -4,10 +4,10 @@
  */
 
 import CspSelect from '../formElements/CspSelect';
-import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { Region } from '../types/Region';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
@@ -21,12 +21,17 @@ import '../../../../styles/service_order.css';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { AvailabilityZoneInfo } from '../common/AvailabilityZoneInfo';
+import useAvailabilityZonesVariableQuery from '../common/utils/useAvailabilityZonesVariableQuery';
+import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
     updateSelectedParameters,
     currentCsp,
     currentRegion,
+    selectAvailabilityZones,
+    setSelectAvailabilityZones,
     currentFlavor,
     currentServiceHostingType,
     setCurrentMigrationStep,
@@ -37,11 +42,14 @@ export const SelectDestination = ({
         selectedCsp: UserOrderableServiceVo.csp,
         selectedArea: string,
         selectedRegion: string,
+        selectAvailabilityZones: Record<string, string>,
         selectedFlavor: string,
         selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
     ) => void;
     currentCsp: UserOrderableServiceVo.csp;
     currentRegion: string;
+    selectAvailabilityZones: Record<string, string>;
+    setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
     currentServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
@@ -74,6 +82,32 @@ export const SelectDestination = ({
     );
     const [selectRegion, setSelectRegion] = useState<string>(currentRegion);
 
+    const availabilityZonesVariableRequest = useAvailabilityZonesVariableQuery(selectCsp, selectRegion);
+    const availabilityZoneConfigs: AvailabilityZoneConfig[] | undefined = getAvailabilityZoneConfigs(
+        selectCsp,
+        userOrderableServiceVoList
+    );
+    const availabilityZones = useMemo<string[]>(() => {
+        if (availabilityZoneConfigs && availabilityZonesVariableRequest.isSuccess) {
+            availabilityZoneConfigs.forEach((availabilityZone) => {
+                setSelectAvailabilityZones((prevState: Record<string, string>) => ({
+                    ...prevState,
+                    [availabilityZone.varName]: availabilityZone.mandatory
+                        ? availabilityZonesVariableRequest.data[0]
+                        : '',
+                }));
+            });
+            return availabilityZonesVariableRequest.data;
+        } else {
+            return [];
+        }
+    }, [
+        availabilityZoneConfigs,
+        availabilityZonesVariableRequest.isSuccess,
+        availabilityZonesVariableRequest.data,
+        setSelectAvailabilityZones,
+    ]);
+
     let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, userOrderableServiceVoList);
     const [selectFlavor, setSelectFlavor] = useState<string>(currentFlavor);
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
@@ -93,7 +127,14 @@ export const SelectDestination = ({
 
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
         setSelectServiceHostType(serviceHostingType);
-        updateSelectedParameters(selectCsp, selectArea, selectRegion, selectFlavor, serviceHostingType);
+        updateSelectedParameters(
+            selectCsp,
+            selectArea,
+            selectRegion,
+            selectAvailabilityZones,
+            selectFlavor,
+            serviceHostingType
+        );
     };
 
     const onChangeFlavor = (newFlavor: string) => {
@@ -104,12 +145,26 @@ export const SelectDestination = ({
                 priceValue = flavor.price;
             }
         });
-        updateSelectedParameters(selectCsp, selectArea, selectRegion, newFlavor, selectServiceHostType);
+        updateSelectedParameters(
+            selectCsp,
+            selectArea,
+            selectRegion,
+            selectAvailabilityZones,
+            newFlavor,
+            selectServiceHostType
+        );
     };
 
     const onChangeRegion = (value: string) => {
         setSelectRegion(value);
-        updateSelectedParameters(selectCsp, selectArea, value, selectFlavor, selectServiceHostType);
+        updateSelectedParameters(
+            selectCsp,
+            selectArea,
+            value,
+            selectAvailabilityZones,
+            selectFlavor,
+            selectServiceHostType
+        );
     };
 
     const onChangeAreaValue = (newArea: string) => {
@@ -126,6 +181,7 @@ export const SelectDestination = ({
             selectCsp,
             newArea,
             currentRegionList[0]?.value ?? '',
+            selectAvailabilityZones,
             selectFlavor,
             selectServiceHostType
         );
@@ -153,6 +209,7 @@ export const SelectDestination = ({
             csp,
             areaList[0]?.key ?? '',
             regionList[0]?.value ?? '',
+            selectAvailabilityZones,
             flavorList[0]?.value ?? '',
             serviceHostTypes[0]
         );
@@ -190,6 +247,14 @@ export const SelectDestination = ({
                     />
                 </div>
                 <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
+                {availabilityZonesVariableRequest.isSuccess ? (
+                    <AvailabilityZoneInfo
+                        availabilityZones={availabilityZones}
+                        availabilityZoneConfigs={availabilityZoneConfigs}
+                        selectAvailabilityZones={selectAvailabilityZones}
+                        setSelectAvailabilityZones={setSelectAvailabilityZones}
+                    />
+                ) : undefined}
                 <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                 <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>
