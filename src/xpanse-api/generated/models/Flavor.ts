@@ -3,10 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ModificationImpact } from './ModificationImpact';
 /**
  * The flavors of the managed service
  */
@@ -23,4 +24,5 @@ export type Flavor = {
      * The properties of the flavor
      */
     properties: Record<string, string>;
+    modificationImpact: ModificationImpact;
 };

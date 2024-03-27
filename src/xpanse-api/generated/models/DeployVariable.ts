@@ -3,12 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
 import type { AutoFill } from './AutoFill';
 import type { DeployVariableKind } from './DeployVariableKind';
+import type { ModificationImpact } from './ModificationImpact';
 /**
  * The variables for the deployment, which will be passed to the deployer
  */
@@ -47,6 +48,7 @@ export type DeployVariable = {
      */
     sensitiveScope?: DeployVariable.sensitiveScope;
     autoFill?: AutoFill;
+    modificationImpact: ModificationImpact;
 };
 export namespace DeployVariable {
     /**

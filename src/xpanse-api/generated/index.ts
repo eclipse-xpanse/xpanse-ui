@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -34,6 +34,7 @@ export type { Link } from './models/Link';
 export { Metric } from './models/Metric';
 export { MetricItem } from './models/MetricItem';
 export { MigrateRequest } from './models/MigrateRequest';
+export type { ModificationImpact } from './models/ModificationImpact';
 export { Ocl } from './models/Ocl';
 export { OpenTofuResult } from './models/OpenTofuResult';
 export type { Region } from './models/Region';

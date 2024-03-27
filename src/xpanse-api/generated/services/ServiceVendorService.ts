@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -52,7 +52,7 @@ export class ServiceVendorService {
                 id: id,
             },
             body: requestBody,
-            mediaType: 'application/x-yaml',
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
@@ -174,7 +174,7 @@ export class ServiceVendorService {
             method: 'POST',
             url: '/xpanse/service_templates',
             body: requestBody,
-            mediaType: 'application/x-yaml',
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
