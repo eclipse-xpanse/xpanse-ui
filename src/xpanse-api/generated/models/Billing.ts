@@ -12,39 +12,19 @@
  */
 export type Billing = {
     /**
-     * The business model of the managed service
+     * The billing model of the managed service
      */
-    model: string;
-    /**
-     * The rental period of the managed service
-     */
-    period: Billing.period;
-    /**
-     * The billing currency of the managed service, valid values: euro,uso
-     */
-    currency: Billing.currency;
+    billingModel: Billing.billingModel;
 };
 export namespace Billing {
     /**
-     * The rental period of the managed service
+     * The billing model of the managed service
      */
-    export enum period {
-        DAILY = 'daily',
-        WEEKLY = 'weekly',
-        MONTHLY = 'monthly',
-        QUARTERLY = 'quarterly',
+    export enum billingModel {
         YEARLY = 'yearly',
-    }
-    /**
-     * The billing currency of the managed service, valid values: euro,uso
-     */
-    export enum currency {
-        USD = 'usd',
-        EURO = 'euro',
-        GBP = 'gbp',
-        CAD = 'cad',
-        DEM = 'dem',
-        FRF = 'frf',
-        CNY = 'cny',
+        MONTHLY = 'monthly',
+        DAILY = 'daily',
+        HOURLY = 'hourly',
+        PAY_PER_USE = 'pay_per_use',
     }
 }

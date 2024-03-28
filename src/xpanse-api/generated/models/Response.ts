@@ -40,7 +40,6 @@ export namespace Response {
         TERRAFORM_EXECUTION_FAILED = 'Terraform Execution Failed',
         PLUGIN_NOT_FOUND = 'Plugin Not Found',
         DEPLOYER_NOT_FOUND = 'Deployer Not Found',
-        TERRAFORM_PROVIDER_NOT_FOUND = 'Terraform Provider Not Found',
         NO_CREDENTIAL_DEFINITION_AVAILABLE = 'No Credential Definition Available',
         INVALID_SERVICE_STATE = 'Invalid Service State',
         RESOURCE_INVALID_FOR_MONITORING = 'Resource Invalid For Monitoring',
@@ -71,6 +70,7 @@ export namespace Response {
         SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
         MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
         SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
+        SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
         INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     }
 }

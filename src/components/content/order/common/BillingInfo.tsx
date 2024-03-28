@@ -14,11 +14,11 @@ export const BillingInfo = ({ priceValue, billing }: { priceValue: string; billi
             <div className={'cloud-provider-tab-class region-flavor-content'}>
                 <span className={'order-billing-title-class'}>Price:&nbsp;</span>
                 <Tag color={'blue'} className={'order-billing-value-class'}>
-                    {`${priceValue} ${billing.currency.toString()} ${billing.period.toString()}`}
+                    {priceValue}
                 </Tag>
                 <span className={'order-billing-model-title-class'}>Model:&nbsp;</span>
                 <Tag color={'blue'} className={'order-billing-model-value-class'}>
-                    {billing.model}
+                    {billing.billingModel}
                 </Tag>
             </div>
         </>

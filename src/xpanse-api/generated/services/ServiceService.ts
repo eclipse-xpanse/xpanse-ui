@@ -282,7 +282,7 @@ export class ServiceService {
         });
     }
     /**
-     * Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>user</b>
+     * Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
      * @param cspName name of the cloud service provider
      * @param regionName name of the region
      * @returns string OK
