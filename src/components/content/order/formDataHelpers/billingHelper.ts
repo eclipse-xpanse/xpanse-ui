@@ -11,9 +11,7 @@ export function getBilling(
     versionMapper: UserOrderableServiceVo[] | undefined
 ): Billing {
     let billing: Billing = {
-        model: '' as string,
-        period: 'daily' as Billing.period,
-        currency: 'euro' as Billing.currency,
+        billingModel: Billing.billingModel.MONTHLY,
     };
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {

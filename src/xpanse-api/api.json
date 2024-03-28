@@ -2983,7 +2983,7 @@
         "/xpanse/csp/region/azs": {
             "get": {
                 "tags": ["Service"],
-                "description": "Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>",
                 "operationId": "getAvailabilityZones",
                 "parameters": [
                     {
@@ -3658,7 +3658,6 @@
                             "Terraform Execution Failed",
                             "Plugin Not Found",
                             "Deployer Not Found",
-                            "Terraform Provider Not Found",
                             "No Credential Definition Available",
                             "Invalid Service State",
                             "Resource Invalid For Monitoring",
@@ -3689,6 +3688,7 @@
                             "Service Details No Accessible",
                             "Migrating activiti Task Not Found",
                             "Service Migration Failed Exception",
+                            "Service Migration Not Found",
                             "Invalid Git Repo Details"
                         ]
                     },
@@ -3898,19 +3898,13 @@
                 "description": "The list of availability zones of the service."
             },
             "Billing": {
-                "required": ["currency", "model", "period"],
+                "required": ["billingModel"],
                 "type": "object",
                 "properties": {
-                    "model": { "type": "string", "description": "The business model of the managed service" },
-                    "period": {
+                    "billingModel": {
                         "type": "string",
-                        "description": "The rental period of the managed service",
-                        "enum": ["daily", "weekly", "monthly", "quarterly", "yearly"]
-                    },
-                    "currency": {
-                        "type": "string",
-                        "description": "The billing currency of the managed service, valid values: euro,uso",
-                        "enum": ["usd", "euro", "gbp", "cad", "dem", "frf", "cny"]
+                        "description": "The billing model of the managed service",
+                        "enum": ["yearly", "monthly", "daily", "hourly", "pay_per_use"]
                     }
                 },
                 "description": "The billing policy of the managed service"
