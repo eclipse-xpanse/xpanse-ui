@@ -4,7 +4,7 @@
     "private": true,
     "type": "module",
     "dependencies": {
-        "@ant-design/icons": "^5.3.5",
+        "@ant-design/icons": "^5.3.6",
         "@axa-fr/react-oidc": "^7.21.0",
         "@tanstack/react-query": "^5.28.9",
         "antd": "^5.16.0",
