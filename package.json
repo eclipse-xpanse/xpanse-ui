@@ -12,7 +12,7 @@
         "echarts-for-react": "^3.0.2",
         "rc-field-form": "^1.44.0",
         "rc-menu": "^9.12.2",
-        "rc-tabs": "^14.0.0",
+        "rc-tabs": "^15.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router-dom": "^6.22.3",
