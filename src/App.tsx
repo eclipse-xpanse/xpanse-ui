@@ -44,7 +44,7 @@ import { SessionLost } from './components/content/login/SessionLost';
 import Policies from './components/content/policies/Policies';
 import Reports from './components/content/deployedServices/reports/Reports';
 import Workflows from './components/content/workflows/Workflows';
-import { ServiceReviews } from './components/content/serviceReviews/ServiceReviews';
+import { ServiceReviews } from './components/content/review/ServiceReviews';
 
 const queryClient = new QueryClient();
 
