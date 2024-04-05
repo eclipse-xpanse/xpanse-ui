@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { Button, Input, Modal, Row, Space, Table, Tag } from 'antd';
-import { CheckCircleOutlined, InfoCircleOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem, FilterDropdownProps } from 'antd/es/table/interface';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
@@ -246,21 +246,11 @@ export const ServiceReviews = (): React.JSX.Element => {
             align: 'left',
             render: (deployment: Deployment) =>
                 deployment.kind === Deployment.kind.TERRAFORM ? (
-                    <Tag
-                        bordered={false}
-                        icon={<CheckCircleOutlined />}
-                        color='success'
-                        className={'my-service-status-size'}
-                    >
+                    <Tag bordered={false} color='success' className={'my-service-status-size'}>
                         {'Terraform'}
                     </Tag>
                 ) : (
-                    <Tag
-                        bordered={false}
-                        icon={<CheckCircleOutlined />}
-                        color='success'
-                        className={'my-service-status-size'}
-                    >
+                    <Tag bordered={false} color='success' className={'my-service-status-size'}>
                         {'Opentofu'}
                     </Tag>
                 ),
@@ -317,19 +307,21 @@ export const ServiceReviews = (): React.JSX.Element => {
 
     return (
         <div className={'generic-table-container'}>
-            <Modal
-                title={'Service Details'}
-                width={1000}
-                footer={null}
-                destroyOnClose={true}
-                open={currentServiceTemplateVo && isServiceTemplateDetailsModalOpen}
-                onCancel={handleServiceTemplateDetailsModalClose}
-            >
-                <ServiceReviewsDetails
-                    currentServiceTemplateVo={currentServiceTemplateVo}
-                    setAlertTipCloseStatus={setAlertTipCloseStatus}
-                />
-            </Modal>
+            {currentServiceTemplateVo ? (
+                <Modal
+                    title={'Service Details'}
+                    width={1000}
+                    footer={null}
+                    destroyOnClose={true}
+                    open={isServiceTemplateDetailsModalOpen}
+                    onCancel={handleServiceTemplateDetailsModalClose}
+                >
+                    <ServiceReviewsDetails
+                        currentServiceTemplateVo={currentServiceTemplateVo}
+                        setAlertTipCloseStatus={setAlertTipCloseStatus}
+                    />
+                </Modal>
+            ) : null}
 
             <div>
                 <Button

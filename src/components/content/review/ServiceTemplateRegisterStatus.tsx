@@ -16,7 +16,7 @@ export function ServiceTemplateRegisterStatus(
             return (
                 <Tag
                     bordered={false}
-                    icon={<SyncOutlined spin />}
+                    icon={<SyncOutlined spin={false} />}
                     color='processing'
                     className={'my-service-status-size'}
                 >
