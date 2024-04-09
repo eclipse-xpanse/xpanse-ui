@@ -105,24 +105,24 @@ function Workflows(): React.JSX.Element {
         {
             title: 'TaskName',
             dataIndex: 'taskName',
-            render: (record: WorkFlowTask) => {
-                return <Tag color='blue'>{record.taskName}</Tag>;
+            render: (taskName: string) => {
+                return <Tag color='blue'>{taskName}</Tag>;
             },
         },
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (record: WorkFlowTask) => {
-                if (record.status === WorkFlowTask.status.FAILED) {
+            render: (status: WorkFlowTask.status) => {
+                if (status === WorkFlowTask.status.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
-                            {record.status.valueOf()}
+                            {status.valueOf()}
                         </Tag>
                     );
                 } else {
                     return (
                         <Tag bordered={false} icon={<CheckCircleOutlined />} color='success'>
-                            {record.status.valueOf()}
+                            {status.valueOf()}
                         </Tag>
                     );
                 }
