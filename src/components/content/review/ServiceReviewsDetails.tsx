@@ -15,33 +15,32 @@ import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-a
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import '../../../styles/service_review.css';
 import useGetRegistrationDetails from './query/useGetRegistrationDetails';
+import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
     setAlertTipCloseStatus,
 }: {
-    currentServiceTemplateVo: ServiceTemplateDetailVo | undefined;
+    currentServiceTemplateVo: ServiceTemplateDetailVo;
     setAlertTipCloseStatus: (arg: boolean) => void;
 }): React.JSX.Element => {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
-    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [isReviewCommentsModalOpen, setIsReviewCommentsModalOpen] = useState<boolean>(false);
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
-    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo?.id);
+    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo.id);
+    const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.id);
 
-    if (!currentServiceTemplateVo) {
-        return <></>;
-    }
     const onClickApprove = () => {
         setIsApproved(true);
-        setIsModalOpen(true);
+        setIsReviewCommentsModalOpen(true);
     };
     const onClickReject = () => {
         setIsApproved(false);
-        setIsModalOpen(true);
+        setIsReviewCommentsModalOpen(true);
     };
-    const handleModalClose = (isClose: boolean) => {
+    const handleReviewCommentsModalClose = (isClose: boolean) => {
         if (isClose) {
-            setIsModalOpen(false);
+            setIsReviewCommentsModalOpen(false);
         }
     };
     return (
@@ -51,9 +50,10 @@ export const ServiceReviewsDetails = ({
                 type='primary'
                 onClick={onClickApprove}
                 disabled={
-                    getRegistrationDetailsQuery.isSuccess &&
-                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                    useReviewRequestState[0]?.status === 'success' ||
+                    (getRegistrationDetailsQuery.isSuccess &&
+                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
+                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
                 }
             >
                 Approve
@@ -63,18 +63,20 @@ export const ServiceReviewsDetails = ({
                 onClick={onClickReject}
                 className={'reject-btn-class'}
                 disabled={
-                    getRegistrationDetailsQuery.isSuccess &&
-                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                    useReviewRequestState[0]?.status === 'success' ||
+                    (getRegistrationDetailsQuery.isSuccess &&
+                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
+                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
                 }
             >
                 Reject
             </Button>
             <ApproveOrRejectServiceTemplate
+                key={currentServiceTemplateVo.id}
                 currentServiceTemplateVo={currentServiceTemplateVo}
                 isApproved={isApproved}
-                isModalOpen={isModalOpen}
-                handleModalClose={handleModalClose}
+                isModalOpen={isReviewCommentsModalOpen}
+                handleModalClose={handleReviewCommentsModalClose}
                 setAlertTipCloseStatus={setAlertTipCloseStatus}
             />
             <div className={'ocl-data-display'}>

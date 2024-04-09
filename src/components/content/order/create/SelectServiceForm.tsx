@@ -5,7 +5,12 @@
 
 import { To, useLocation, useSearchParams } from 'react-router-dom';
 import React, { useMemo, useState } from 'react';
-import { Billing, ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    AvailabilityZoneConfig,
+    Billing,
+    ServiceProviderContactDetails,
+    UserOrderableServiceVo,
+} from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Region } from '../types/Region';
 import { Flavor } from '../types/Flavor';
@@ -17,7 +22,6 @@ import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { OrderSubmitProps } from './OrderSubmit';
 import { Col, Form, Row, Select, Tabs } from 'antd';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -29,6 +33,10 @@ import { FlavorInfo } from '../common/FlavorInfo';
 import { BillingInfo } from '../common/BillingInfo';
 import GoToSubmit from './GoToSubmit';
 import { servicesSubPageRoute } from '../../../utils/constants';
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
+import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
+import { AvailabilityZoneInfo } from '../common/AvailabilityZoneInfo';
+import useAvailabilityZonesVariableQuery from '../common/utils/useAvailabilityZonesVariableQuery';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -79,6 +87,36 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         versionToServicesMap.get(selectVersion)
     );
     const [selectRegion, setSelectRegion] = useState<string>(serviceInfo ? serviceInfo.region : regionList[0].value);
+
+    const availabilityZonesVariableRequest = useAvailabilityZonesVariableQuery(selectCsp, selectRegion);
+    const availabilityZoneConfigs: AvailabilityZoneConfig[] | undefined = getAvailabilityZoneConfigs(
+        selectCsp,
+        versionToServicesMap.get(selectVersion)
+    );
+    const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
+        serviceInfo?.availabilityZones ?? {}
+    );
+    const availabilityZones = useMemo<string[]>(() => {
+        if (availabilityZoneConfigs && availabilityZonesVariableRequest.isSuccess) {
+            availabilityZoneConfigs.forEach((availabilityZone) => {
+                setSelectAvailabilityZones((prevState: Record<string, string>) => ({
+                    ...prevState,
+                    [availabilityZone.varName]: availabilityZone.mandatory
+                        ? availabilityZonesVariableRequest.data[0]
+                        : '',
+                }));
+            });
+            return availabilityZonesVariableRequest.data;
+        } else {
+            return [];
+        }
+    }, [
+        availabilityZoneConfigs,
+        availabilityZonesVariableRequest.isSuccess,
+        availabilityZonesVariableRequest.data,
+        setSelectAvailabilityZones,
+    ]);
+
     let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].value);
     let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
@@ -231,6 +269,14 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         />
                     </div>
                     <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
+                    {availabilityZonesVariableRequest.isSuccess ? (
+                        <AvailabilityZoneInfo
+                            availabilityZones={availabilityZones}
+                            availabilityZoneConfigs={availabilityZoneConfigs}
+                            selectAvailabilityZones={selectAvailabilityZones}
+                            setSelectAvailabilityZones={setSelectAvailabilityZones}
+                        />
+                    ) : undefined}
                     <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                     <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 </div>
@@ -244,6 +290,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         versionMapper={versionToServicesMap}
                         selectedServiceHostingType={selectServiceHostType}
                         currentServiceProviderContactDetails={currentServiceProviderContactDetails}
+                        availabilityZones={selectAvailabilityZones}
                     />
                 </div>
             </Form>

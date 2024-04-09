@@ -27,7 +27,7 @@ function RegisterResult({
                 type={'success'}
                 message={
                     <>
-                        Service <b>{ocl.name}</b> Registered Successfully
+                        Service <b>{ocl.name}</b> registration request submitted successfully
                     </>
                 }
                 closable={true}
@@ -42,7 +42,7 @@ function RegisterResult({
                 type={'error'}
                 closable={true}
                 showIcon={true}
-                message={`Service Registration Failed`}
+                message={`Service registration request failed`}
                 description={convertStringArrayToUnorderedList(registerResult)}
                 onClose={onRemove}
                 className={'result'}

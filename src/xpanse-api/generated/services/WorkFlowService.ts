@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-/* generated using openapi-typescript-codegen -- do no edit */
+/* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
@@ -13,21 +13,22 @@ import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class WorkflowService {
     /**
-     * Complete tasks by task ID and set global process variables .<br>Required role:<b> admin</b> or <b>user</b>
+     * Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id ID of the workflow task that needs to be handled
-     * @param requestBody
+     * @param retryOrder Controls if the order must be retried again or simply closed.
      * @returns any OK
      * @throws ApiError
      */
-    public static completeTask(id: string, requestBody: Record<string, Record<string, any>>): CancelablePromise<any> {
+    public static manageFailedOrder(id: string, retryOrder: boolean): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
             url: '/xpanse/workflow/task/{id}',
             path: {
                 id: id,
             },
-            body: requestBody,
-            mediaType: 'application/json',
+            query: {
+                retryOrder: retryOrder,
+            },
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,
@@ -39,20 +40,21 @@ export class WorkflowService {
         });
     }
     /**
-     * Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>
+     * Complete tasks by task ID and set global process variables .<br>Required role:<b> admin</b> or <b>user</b>
      * @param id ID of the workflow task that needs to be handled
-     * @param retryOrder Controls if the order must be retried again or simply closed.
+     * @param requestBody
      * @returns any OK
      * @throws ApiError
      */
-    public static manageFailedOrder(id: string, retryOrder: boolean): CancelablePromise<any> {
+    public static completeTask(id: string, requestBody: Record<string, Record<string, any>>): CancelablePromise<any> {
         return __request(OpenAPI, {
             method: 'PUT',
-            url: '/xpanse/workflow/task/{id}/{retryOrder}',
+            url: '/xpanse/workflow/complete/task/{id}',
             path: {
                 id: id,
-                retryOrder: retryOrder,
             },
+            body: requestBody,
+            mediaType: 'application/json',
             errors: {
                 400: `Bad Request`,
                 401: `Unauthorized`,

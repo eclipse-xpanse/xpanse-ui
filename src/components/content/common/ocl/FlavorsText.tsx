@@ -18,7 +18,10 @@ export function FlavoursText({ flavors }: { flavors: Flavor[] }): React.JSX.Elem
         yamlDocument.contents = flavors;
         return (
             <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Flavors'} trigger='hover'>
-                <Button className={'ocl-data-hover'} type={'link'}>{`Available in ${flavors.length} flavor(s)`}</Button>
+                <Button
+                    className={'ocl-data-hover'}
+                    type={'link'}
+                >{`Available in ${flavors.length.toString()} flavor(s)`}</Button>
             </Popover>
         );
     }

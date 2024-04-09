@@ -7,48 +7,18 @@ import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
 import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import { TextInput } from '../formElements/TextInput';
-import { NumberInput } from '../formElements/NumberInput';
-import { BooleanInput } from '../formElements/BooleanInput';
 import { Button, Form, Input, Tooltip } from 'antd';
-import { DeployedServiceDetails, DeployRequest, ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
-import { DeployParam } from '../types/DeployParam';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import { v4 } from 'uuid';
-
-export function OrderItem({ item, csp, region }: { item: DeployParam; csp: DeployRequest.csp; region: string }) {
-    if (item.type === 'string') {
-        return <TextInput item={item} csp={csp} region={region} />;
-    }
-    if (item.type === 'number') {
-        return <NumberInput item={item} />;
-    }
-    if (item.type === 'boolean') {
-        return <BooleanInput item={item} />;
-    }
-
-    return <></>;
-}
-
-export interface OrderSubmitProps {
-    id: string;
-    category: DeployRequest.category;
-    name: string;
-    version: string;
-    region: string;
-    area: string;
-    csp: DeployRequest.csp;
-    flavor: string;
-    params: DeployParam[];
-    serviceHostingType: DeployRequest.serviceHostingType;
-    contactServiceDetails: ServiceProviderContactDetails | undefined;
-}
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
+import { OrderItem } from '../common/utils/OrderItem';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [form] = Form.useForm();
@@ -90,6 +60,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             version: state.version,
             customerServiceName: deployParamsRef.current.Name as string,
             serviceHostingType: state.serviceHostingType,
+            availabilityZones: state.availabilityZones,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {

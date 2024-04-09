@@ -4,7 +4,6 @@
  */
 
 import { DeployRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { OrderItem } from '../create/OrderSubmit';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
@@ -13,12 +12,14 @@ import React, { useRef } from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { MigrationSteps } from '../types/MigrationSteps';
+import { OrderItem } from '../common/utils/OrderItem';
 
 export const DeploymentForm = ({
     userOrderableServiceVoList,
     selectCsp,
     selectServiceHostingType,
     region,
+    availabilityZones,
     selectFlavor,
     setCurrentMigrationStep,
     setDeployParameters,
@@ -28,6 +29,7 @@ export const DeploymentForm = ({
     selectCsp: UserOrderableServiceVo.csp;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
     region: Region;
+    availabilityZones: Record<string, string>;
     selectFlavor: string;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
@@ -40,7 +42,8 @@ export const DeploymentForm = ({
         selectServiceHostingType,
         region,
         selectFlavor,
-        undefined
+        undefined,
+        availabilityZones
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
@@ -59,6 +62,7 @@ export const DeploymentForm = ({
             version: deployParams.version,
             customerServiceName: deployParamsRef.current.Name as string,
             serviceHostingType: deployParams.serviceHostingType,
+            availabilityZones: deployParams.availabilityZones,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsRef.current) {

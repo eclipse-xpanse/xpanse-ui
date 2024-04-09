@@ -12,7 +12,7 @@ import React from 'react';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavoursText } from '../../../common/ocl/FlavorsText';
 import { BillingText } from '../../../common/ocl/BillingText';
-import { ServiceStatus } from './ServiceStatus';
+import { ServiceRegistrationStatus } from './ServiceRegistrationStatus';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 
@@ -52,7 +52,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <Tag color='cyan'>{serviceDetails.namespace}</Tag>
                 </Descriptions.Item>
                 <Descriptions.Item label='Status'>
-                    <ServiceStatus serviceStatus={serviceDetails.serviceRegistrationState} />
+                    <ServiceRegistrationStatus serviceStatus={serviceDetails.serviceRegistrationState} />
                 </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
                 <Descriptions.Item label='Deployment'>

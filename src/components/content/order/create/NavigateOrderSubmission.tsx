@@ -5,10 +5,10 @@
 
 import { useNavigate, To } from 'react-router-dom';
 import '../../../../styles/service_order.css';
-import { OrderSubmitProps } from './OrderSubmit';
 import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { servicesSubPageRoute } from '../../../utils/constants';
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 
 function NavigateOrderSubmission({
     text,

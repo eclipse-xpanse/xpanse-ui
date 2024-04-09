@@ -15,7 +15,7 @@ export const ApproveOrRejectServiceTemplate = ({
     handleModalClose,
     setAlertTipCloseStatus,
 }: {
-    currentServiceTemplateVo: ServiceTemplateDetailVo | undefined;
+    currentServiceTemplateVo: ServiceTemplateDetailVo;
     isApproved: boolean | undefined;
     isModalOpen: boolean;
     handleModalClose: (arg: boolean) => void;
@@ -23,9 +23,9 @@ export const ApproveOrRejectServiceTemplate = ({
 }): React.JSX.Element => {
     const { TextArea } = Input;
     const [comments, setComments] = useState<string>('');
-    const approveOrRejectRequest = useApproveOrRejectRequest();
+    const approveOrRejectRequest = useApproveOrRejectRequest(currentServiceTemplateVo.id);
     const handleOk = () => {
-        if (currentServiceTemplateVo && isApproved !== undefined) {
+        if (isApproved !== undefined) {
             const request: ApproveOrRejectRequestParams = {
                 id: currentServiceTemplateVo.id,
                 reviewRegistrationRequest: {
@@ -42,7 +42,6 @@ export const ApproveOrRejectServiceTemplate = ({
     };
 
     const handleCancel = () => {
-        setComments('');
         handleModalClose(true);
     };
 
@@ -85,7 +84,7 @@ export const ApproveOrRejectServiceTemplate = ({
             <div className={'approve-reject-alert-class'}>
                 <Alert
                     message={'Processing Status'}
-                    description={'Register service review successfully.'}
+                    description={'Service template reviewed successfully.'}
                     showIcon
                     closable={true}
                     onClose={onClose}
