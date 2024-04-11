@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Flavor } from '../../../../xpanse-api/generated';
+import { ServiceFlavor } from '../../../../xpanse-api/generated';
 import React from 'react';
 import YAML from 'yaml';
 import { Button, Popover } from 'antd';
 
-export function FlavoursText({ flavors }: { flavors: Flavor[] }): React.JSX.Element {
+export function FlavorsText({ flavors }: { flavors: ServiceFlavor[] }): React.JSX.Element {
     // These warnings must be suppressed because the Ocl object here is created from the import file and the data not necessarily contains all the mandatory fields.
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (flavors) {

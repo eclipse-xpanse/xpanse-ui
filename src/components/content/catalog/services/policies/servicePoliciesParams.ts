@@ -10,7 +10,9 @@ export const servicePoliciesStatuses: boolean[] = [true, false];
 
 export const flavorNameList = (serviceDetails: ServiceTemplateDetailVo): string[] => {
     const flavorNameList: string[] = [];
-    serviceDetails.flavors.forEach((flavorItem) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access
+    serviceDetails.flavors.serviceFlavors.forEach((flavorItem) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument,@typescript-eslint/no-unsafe-member-access
         flavorNameList.push(flavorItem.name);
     });
     return flavorNameList;

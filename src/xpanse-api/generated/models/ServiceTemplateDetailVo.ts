@@ -10,7 +10,7 @@
 import type { Billing } from './Billing';
 import type { Deployment } from './Deployment';
 import type { DeployVariable } from './DeployVariable';
-import type { Flavor } from './Flavor';
+import type { Flavors } from './Flavors';
 import type { Link } from './Link';
 import type { Region } from './Region';
 import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
@@ -56,10 +56,7 @@ export type ServiceTemplateDetailVo = {
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
-    /**
-     * The flavors of the registered service.
-     */
-    flavors: Array<Flavor>;
+    flavors: Flavors;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.

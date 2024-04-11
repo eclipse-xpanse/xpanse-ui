@@ -7,11 +7,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ModificationImpact } from './ModificationImpact';
 /**
- * The flavors of the managed service
+ * The flavors of the managed service.
  */
-export type Flavor = {
+export type ServiceFlavor = {
     /**
      * The flavor name
      */
@@ -24,5 +23,4 @@ export type Flavor = {
      * The properties of the flavor
      */
     properties: Record<string, string>;
-    modificationImpact: ModificationImpact;
 };

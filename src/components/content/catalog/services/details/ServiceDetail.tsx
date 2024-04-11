@@ -10,7 +10,7 @@ import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { ShowIcon } from './ShowIcon';
 import React from 'react';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
-import { FlavoursText } from '../../../common/ocl/FlavorsText';
+import { FlavorsText } from '../../../common/ocl/FlavorsText';
 import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceRegistrationStatus } from './ServiceRegistrationStatus';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
@@ -59,7 +59,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <DeploymentText deployment={serviceDetails.deployment} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Flavors'>
-                    <FlavoursText flavors={serviceDetails.flavors} />
+                    <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Billing'>
                     <BillingText billing={serviceDetails.billing} />
