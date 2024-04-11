@@ -7,7 +7,7 @@ import CspSelect from '../formElements/CspSelect';
 import { AvailabilityZoneConfig, Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
 import { Region } from '../types/Region';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
@@ -21,9 +21,9 @@ import '../../../../styles/service_order.css';
 import { BillingInfo } from '../common/BillingInfo';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
-import { AvailabilityZoneInfo } from '../common/AvailabilityZoneInfo';
-import useAvailabilityZonesVariableQuery from '../common/utils/useAvailabilityZonesVariableQuery';
-import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
+import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -82,31 +82,27 @@ export const SelectDestination = ({
     );
     const [selectRegion, setSelectRegion] = useState<string>(currentRegion);
 
-    const availabilityZonesVariableRequest = useAvailabilityZonesVariableQuery(selectCsp, selectRegion);
-    const availabilityZoneConfigs: AvailabilityZoneConfig[] | undefined = getAvailabilityZoneConfigs(
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         userOrderableServiceVoList
     );
-    const availabilityZones = useMemo<string[]>(() => {
-        if (availabilityZoneConfigs && availabilityZonesVariableRequest.isSuccess) {
-            availabilityZoneConfigs.forEach((availabilityZone) => {
-                setSelectAvailabilityZones((prevState: Record<string, string>) => ({
-                    ...prevState,
-                    [availabilityZone.varName]: availabilityZone.mandatory
-                        ? availabilityZonesVariableRequest.data[0]
-                        : '',
-                }));
-            });
-            return availabilityZonesVariableRequest.data;
-        } else {
-            return [];
+
+    // Side effect needed to update initial state when data from backend is available.
+    useEffect(() => {
+        if (getAvailabilityZonesForRegionQuery.isSuccess && getAvailabilityZonesForRegionQuery.data.length > 0) {
+            if (availabilityZoneConfigs.length > 0) {
+                const defaultSelection: Record<string, string> = {};
+                availabilityZoneConfigs.forEach((availabilityZoneConfig) => {
+                    if (availabilityZoneConfig.mandatory) {
+                        defaultSelection[availabilityZoneConfig.varName] = getAvailabilityZonesForRegionQuery.data[0];
+                    }
+                });
+                setSelectAvailabilityZones(defaultSelection);
+            }
         }
-    }, [
-        availabilityZoneConfigs,
-        availabilityZonesVariableRequest.isSuccess,
-        availabilityZonesVariableRequest.data,
-        setSelectAvailabilityZones,
-    ]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getAvailabilityZonesForRegionQuery.isSuccess, getAvailabilityZonesForRegionQuery.data]);
 
     let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, userOrderableServiceVoList);
     const [selectFlavor, setSelectFlavor] = useState<string>(currentFlavor);
@@ -215,6 +211,20 @@ export const SelectDestination = ({
         );
     };
 
+    function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {
+        if (availabilityZone !== undefined) {
+            setSelectAvailabilityZones((prevState: Record<string, string>) => ({
+                ...prevState,
+                [varName]: availabilityZone,
+            }));
+        } else {
+            const newAvailabilityZone = selectAvailabilityZones;
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete newAvailabilityZone[varName];
+            setSelectAvailabilityZones({ ...newAvailabilityZone });
+        }
+    }
+
     return (
         <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
             <div>
@@ -247,14 +257,18 @@ export const SelectDestination = ({
                     />
                 </div>
                 <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
-                {availabilityZonesVariableRequest.isSuccess ? (
-                    <AvailabilityZoneInfo
-                        availabilityZones={availabilityZones}
-                        availabilityZoneConfigs={availabilityZoneConfigs}
-                        selectAvailabilityZones={selectAvailabilityZones}
-                        setSelectAvailabilityZones={setSelectAvailabilityZones}
-                    />
-                ) : undefined}
+                {availabilityZoneConfigs.map((availabilityZoneConfig) => {
+                    return (
+                        <AvailabilityZoneFormItem
+                            availabilityZoneConfig={availabilityZoneConfig}
+                            selectRegion={selectRegion}
+                            onAvailabilityZoneChange={onAvailabilityZoneChange}
+                            selectAvailabilityZones={selectAvailabilityZones}
+                            selectCsp={selectCsp}
+                            key={availabilityZoneConfig.varName}
+                        />
+                    );
+                })}
                 <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                 <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 <div className={'migrate-step-button-inner-class'}>

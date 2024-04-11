@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployedService } from '../../../../xpanse-api/generated';
 import { Skeleton } from 'antd';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
@@ -16,10 +16,7 @@ function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
     const categoryName = decodeURI(urlParams.get('catalog') ?? '');
-    const orderableServicesQuery = userOrderableServicesQuery(
-        categoryName as UserOrderableServiceVo.category,
-        serviceName
-    );
+    const orderableServicesQuery = userOrderableServicesQuery(categoryName as DeployedService.category, serviceName);
 
     if (orderableServicesQuery.isSuccess) {
         return <SelectServiceForm services={orderableServicesQuery.data} />;
