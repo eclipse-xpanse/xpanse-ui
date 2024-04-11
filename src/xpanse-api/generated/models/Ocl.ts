@@ -10,7 +10,7 @@
 import type { Billing } from './Billing';
 import type { CloudServiceProvider } from './CloudServiceProvider';
 import type { Deployment } from './Deployment';
-import type { Flavor } from './Flavor';
+import type { Flavors } from './Flavors';
 import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 export type Ocl = {
     /**
@@ -43,10 +43,7 @@ export type Ocl = {
     icon: string;
     cloudServiceProvider: CloudServiceProvider;
     deployment: Deployment;
-    /**
-     * The flavors of the managed service
-     */
-    flavors: Array<Flavor>;
+    flavors: Flavors;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.

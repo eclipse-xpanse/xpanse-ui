@@ -6,7 +6,7 @@
 import React, { useState } from 'react';
 import { Button, Descriptions, Image, Tag } from 'antd';
 import { cspMap } from '../common/csp/CspLogo';
-import { FlavoursText } from '../common/ocl/FlavorsText';
+import { FlavorsText } from '../common/ocl/FlavorsText';
 import { BillingText } from '../common/ocl/BillingText';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
@@ -160,7 +160,7 @@ export const ServiceReviewsDetails = ({
                             <Tag color='cyan'>{currentServiceTemplateVo.namespace}</Tag>
                         </Descriptions.Item>
                         <Descriptions.Item label='Flavors'>
-                            <FlavoursText flavors={currentServiceTemplateVo.flavors} />
+                            <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
                         </Descriptions.Item>
                         <Descriptions.Item label='Billing'>
                             <BillingText billing={currentServiceTemplateVo.billing} />
