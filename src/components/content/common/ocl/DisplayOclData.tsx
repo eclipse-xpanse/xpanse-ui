@@ -7,11 +7,11 @@ import React from 'react';
 import { Ocl } from '../../../../xpanse-api/generated';
 import { Descriptions, Image, Tag } from 'antd';
 import { DeploymentText } from './DeploymentText';
-import { FlavoursText } from './FlavorsText';
 import { BillingText } from './BillingText';
 import { cspMap } from '../csp/CspLogo';
 import { ContactDetailsText } from './ContactDetailsText';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
+import { FlavorsText } from './FlavorsText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -90,7 +90,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <Tag color='cyan'>{ocl.namespace}</Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label='Flavors'>
-                                <FlavoursText flavors={ocl.flavors} />
+                                <FlavorsText flavors={ocl.flavors.serviceFlavors} />
                             </Descriptions.Item>
                             <Descriptions.Item label='Billing'>
                                 <BillingText billing={ocl.billing} />
