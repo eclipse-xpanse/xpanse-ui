@@ -4,7 +4,7 @@
  */
 
 import { To, useLocation, useSearchParams } from 'react-router-dom';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
     AvailabilityZoneConfig,
     Billing,
@@ -34,9 +34,9 @@ import { BillingInfo } from '../common/BillingInfo';
 import GoToSubmit from './GoToSubmit';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
-import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
-import { AvailabilityZoneInfo } from '../common/AvailabilityZoneInfo';
-import useAvailabilityZonesVariableQuery from '../common/utils/useAvailabilityZonesVariableQuery';
+import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -69,14 +69,18 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const versionList: { value: string; label: string }[] = getSortedVersionList(versionToServicesMap);
     const [selectVersion, setSelectVersion] = useState<string>(serviceInfo ? serviceInfo.version : latestVersion);
     let cspList: UserOrderableServiceVo.csp[] = getCspListForVersion(selectVersion, versionToServicesMap);
-    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(serviceInfo ? serviceInfo.csp : cspList[0]);
+    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(
+        serviceInfo ? (serviceInfo.csp as UserOrderableServiceVo.csp) : cspList[0]
+    );
 
     let serviceHostTypes: UserOrderableServiceVo.serviceHostingType[] = getAvailableServiceHostingTypes(
         selectCsp,
         versionToServicesMap.get(selectVersion)
     );
     const [selectServiceHostType, setSelectServiceHostType] = useState<UserOrderableServiceVo.serviceHostingType>(
-        serviceInfo ? serviceInfo.serviceHostingType : serviceHostTypes[0]
+        serviceInfo
+            ? (serviceInfo.serviceHostingType as UserOrderableServiceVo.serviceHostingType)
+            : serviceHostTypes[0]
     );
     let areaList: Tab[] = convertAreasToTabs(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectArea, setSelectArea] = useState<string>(serviceInfo ? serviceInfo.area : areaList[0].key);
@@ -87,35 +91,9 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         versionToServicesMap.get(selectVersion)
     );
     const [selectRegion, setSelectRegion] = useState<string>(serviceInfo ? serviceInfo.region : regionList[0].value);
-
-    const availabilityZonesVariableRequest = useAvailabilityZonesVariableQuery(selectCsp, selectRegion);
-    const availabilityZoneConfigs: AvailabilityZoneConfig[] | undefined = getAvailabilityZoneConfigs(
-        selectCsp,
-        versionToServicesMap.get(selectVersion)
-    );
     const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
         serviceInfo?.availabilityZones ?? {}
     );
-    const availabilityZones = useMemo<string[]>(() => {
-        if (availabilityZoneConfigs && availabilityZonesVariableRequest.isSuccess) {
-            availabilityZoneConfigs.forEach((availabilityZone) => {
-                setSelectAvailabilityZones((prevState: Record<string, string>) => ({
-                    ...prevState,
-                    [availabilityZone.varName]: availabilityZone.mandatory
-                        ? availabilityZonesVariableRequest.data[0]
-                        : '',
-                }));
-            });
-            return availabilityZonesVariableRequest.data;
-        } else {
-            return [];
-        }
-    }, [
-        availabilityZoneConfigs,
-        availabilityZonesVariableRequest.isSuccess,
-        availabilityZonesVariableRequest.data,
-        setSelectAvailabilityZones,
-    ]);
 
     let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].value);
@@ -124,6 +102,31 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     let currentBilling: Billing = getBilling(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
+
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
+        selectCsp,
+        services
+    );
+
+    // Side effect needed to update initial state when data from backend is available.
+    useEffect(() => {
+        if (!serviceInfo?.availabilityZones) {
+            if (getAvailabilityZonesForRegionQuery.isSuccess && getAvailabilityZonesForRegionQuery.data.length > 0) {
+                if (availabilityZoneConfigs.length > 0) {
+                    const defaultSelection: Record<string, string> = {};
+                    availabilityZoneConfigs.forEach((availabilityZoneConfig) => {
+                        if (availabilityZoneConfig.mandatory) {
+                            defaultSelection[availabilityZoneConfig.varName] =
+                                getAvailabilityZonesForRegionQuery.data[0];
+                        }
+                    });
+                    setSelectAvailabilityZones(defaultSelection);
+                }
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [getAvailabilityZonesForRegionQuery.isSuccess, getAvailabilityZonesForRegionQuery.data]);
 
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
         location.state = undefined;
@@ -204,6 +207,24 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectServiceHostType(serviceHostTypes[0]);
     };
 
+    function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {
+        if (availabilityZone !== undefined) {
+            setSelectAvailabilityZones((prevState: Record<string, string>) => ({
+                ...prevState,
+                [varName]: availabilityZone,
+            }));
+        } else {
+            const newAvailabilityZone = selectAvailabilityZones;
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete newAvailabilityZone[varName];
+            setSelectAvailabilityZones({ ...newAvailabilityZone });
+        }
+    }
+
+    function isAvailabilityZoneRequired(): boolean {
+        return availabilityZoneConfigs.filter((availabilityZoneConfig) => availabilityZoneConfig.mandatory).length > 0;
+    }
+
     return (
         <>
             <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
@@ -269,14 +290,18 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         />
                     </div>
                     <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
-                    {availabilityZonesVariableRequest.isSuccess ? (
-                        <AvailabilityZoneInfo
-                            availabilityZones={availabilityZones}
-                            availabilityZoneConfigs={availabilityZoneConfigs}
-                            selectAvailabilityZones={selectAvailabilityZones}
-                            setSelectAvailabilityZones={setSelectAvailabilityZones}
-                        />
-                    ) : undefined}
+                    {availabilityZoneConfigs.map((availabilityZoneConfig) => {
+                        return (
+                            <AvailabilityZoneFormItem
+                                availabilityZoneConfig={availabilityZoneConfig}
+                                selectRegion={selectRegion}
+                                onAvailabilityZoneChange={onAvailabilityZoneChange}
+                                selectAvailabilityZones={selectAvailabilityZones}
+                                selectCsp={selectCsp}
+                                key={availabilityZoneConfig.varName}
+                            />
+                        );
+                    })}
                     <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                     <BillingInfo priceValue={priceValue} billing={currentBilling} />
                 </div>
@@ -291,6 +316,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         selectedServiceHostingType={selectServiceHostType}
                         currentServiceProviderContactDetails={currentServiceProviderContactDetails}
                         availabilityZones={selectAvailabilityZones}
+                        isDisableNextButton={
+                            getAvailabilityZonesForRegionQuery.isError ||
+                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
+                        }
                     />
                 </div>
             </Form>

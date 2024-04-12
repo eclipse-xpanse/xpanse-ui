@@ -4,11 +4,13 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployRequest, ServiceService } from '../../../../../xpanse-api/generated';
+import { ServiceService, UserOrderableServiceVo } from '../../../../../xpanse-api/generated';
 
-export default function useAvailabilityZonesVariableQuery(csp: DeployRequest.csp, region: string) {
+export default function useGetAvailabilityZonesForRegionQuery(csp: UserOrderableServiceVo.csp, region: string) {
     return useQuery({
         queryKey: ['getExistingResourceNamesWithKind', csp, region],
         queryFn: () => ServiceService.getAvailabilityZones(csp, region),
+        gcTime: 60000,
+        staleTime: Infinity,
     });
 }

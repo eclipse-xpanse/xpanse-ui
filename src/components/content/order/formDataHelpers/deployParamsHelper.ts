@@ -42,7 +42,7 @@ export const getDeployParams = (
         csp: service?.csp as DeployRequest.csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
-        serviceHostingType: selectServiceHostingType,
+        serviceHostingType: selectServiceHostingType as DeployRequest.serviceHostingType,
         contactServiceDetails: currentContactServiceDetails ?? undefined,
         availabilityZones: availabilityZones,
     };
