@@ -4,14 +4,14 @@
  */
 
 import { Flavor } from '../types/Flavor';
-import { FlavorBasic, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getFlavorList(
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Flavor[] {
-    const flavorMapper: Map<string, FlavorBasic[]> = new Map<string, FlavorBasic[]>();
+    const flavorMapper: Map<string, ServiceFlavor[]> = new Map<string, ServiceFlavor[]>();
     if (userOrderableServices) {
         userOrderableServices.forEach((userOrderableServiceVo) => {
             if (

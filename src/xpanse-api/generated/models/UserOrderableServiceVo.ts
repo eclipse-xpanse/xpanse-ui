@@ -10,9 +10,9 @@
 import type { AvailabilityZoneConfig } from './AvailabilityZoneConfig';
 import type { Billing } from './Billing';
 import type { DeployVariable } from './DeployVariable';
-import type { FlavorBasic } from './FlavorBasic';
 import type { Link } from './Link';
 import type { Region } from './Region';
+import type { ServiceFlavor } from './ServiceFlavor';
 import type { ServiceProviderContactDetails } from './ServiceProviderContactDetails';
 export type UserOrderableServiceVo = {
     /**
@@ -54,7 +54,7 @@ export type UserOrderableServiceVo = {
     /**
      * The flavors of the orderable service.
      */
-    flavors: Array<FlavorBasic>;
+    flavors: Array<ServiceFlavor>;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
