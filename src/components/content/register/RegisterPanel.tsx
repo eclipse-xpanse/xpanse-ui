@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Upload, UploadFile } from 'antd';
+import { Button, Col, Row, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import React, { useEffect, useRef, useState } from 'react';
 import { RcFile } from 'antd/es/upload';
@@ -105,7 +105,8 @@ function RegisterPanel(): React.JSX.Element {
         }
     }
 
-    const sendRequestRequest = () => {
+    const sendRequestRequest = ({ event }: { event: React.MouseEvent }) => {
+        event.stopPropagation();
         if (ocl.current !== undefined) {
             registerRequest.mutate(ocl.current);
         }
@@ -166,38 +167,55 @@ function RegisterPanel(): React.JSX.Element {
                         removeIcon: registerRequest.isPending,
                     }}
                 >
-                    <Button
-                        size={'large'}
-                        disabled={yamlSyntaxValidationStatus === 'completed'}
-                        loading={yamlSyntaxValidationStatus === 'inProgress'}
-                        type={'primary'}
-                        icon={<UploadOutlined />}
-                    >
-                        Upload File
-                    </Button>
+                    <Row>
+                        <Col>
+                            <div className={'register-buttons-upload'}>
+                                <Button
+                                    size={'large'}
+                                    disabled={yamlSyntaxValidationStatus === 'completed'}
+                                    loading={yamlSyntaxValidationStatus === 'inProgress'}
+                                    type={'primary'}
+                                    icon={<UploadOutlined />}
+                                >
+                                    Upload File
+                                </Button>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className={'register-buttons-register'}>
+                                <Button
+                                    size={'large'}
+                                    disabled={
+                                        yamlSyntaxValidationStatus === 'notStarted' ||
+                                        (registerRequest.isIdle && yamlSyntaxValidationStatus === 'error') ||
+                                        registerRequest.isError ||
+                                        registerRequest.isSuccess ||
+                                        oclValidationStatus === 'error'
+                                    }
+                                    type={'primary'}
+                                    icon={<CloudUploadOutlined />}
+                                    onClick={(event: React.MouseEvent) => {
+                                        sendRequestRequest({ event: event });
+                                    }}
+                                    loading={registerRequest.isPending}
+                                >
+                                    Register
+                                </Button>
+                            </div>
+                        </Col>
+                        <Col>
+                            <div className={'register-buttons-validate'}>
+                                {yamlSyntaxValidationStatus === 'completed' ||
+                                yamlSyntaxValidationStatus === 'error' ? (
+                                    <YamlSyntaxValidationResult
+                                        validationResult={yamlValidationResult.current}
+                                        yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
+                                    />
+                                ) : null}
+                            </div>
+                        </Col>
+                    </Row>
                 </Upload>
-                <Button
-                    size={'large'}
-                    disabled={
-                        yamlSyntaxValidationStatus === 'notStarted' ||
-                        (registerRequest.isIdle && yamlSyntaxValidationStatus === 'error') ||
-                        registerRequest.isError ||
-                        registerRequest.isSuccess ||
-                        oclValidationStatus === 'error'
-                    }
-                    type={'primary'}
-                    icon={<CloudUploadOutlined />}
-                    onClick={sendRequestRequest}
-                    loading={registerRequest.isPending}
-                >
-                    Register
-                </Button>
-                {yamlSyntaxValidationStatus === 'completed' || yamlSyntaxValidationStatus === 'error' ? (
-                    <YamlSyntaxValidationResult
-                        validationResult={yamlValidationResult.current}
-                        yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
-                    />
-                ) : null}
             </div>
             <div>{oclDisplayData.current}</div>
         </div>
