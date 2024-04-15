@@ -14,6 +14,19 @@
     margin-top: 20px;
 }
 
+.register-buttons-upload {
+    margin-right: 5px;
+}
+
+.register-buttons-register {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.register-buttons-validate {
+    margin-left: 5px;
+}
+
 .ocl-data-hover {
     padding: 0;
     font-size: 14px;
