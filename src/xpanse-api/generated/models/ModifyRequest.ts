@@ -7,10 +7,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TerraformResult = {
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: Record<string, string>;
-    commandSuccessful?: boolean;
+export type ModifyRequest = {
+    /**
+     * The flavor of the Service.
+     */
+    flavor?: string;
+    /**
+     * The properties for the requested service
+     */
+    serviceRequestProperties?: Record<string, any>;
 };
