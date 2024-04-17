@@ -128,6 +128,9 @@ export namespace DeployedServiceDetails {
         MIGRATION_FAILED = 'migration failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
+        MODIFYING = 'modifying',
+        MODIFICATION_FAILED = 'modification failed',
+        MODIFICATION_SUCCESSFUL = 'modification successful',
     }
     /**
      * The run state of the service
