@@ -68,13 +68,15 @@ export const AddOrUpdateServicePolicy = ({
             }
 
             const policyUpdateRequest: ServicePolicyUpdateRequest = {
-                id: currentServicePolicy.id,
                 enabled: policyRequest.enabled,
                 policy: policyRequest.policy,
                 flavorNameList: policyRequest.flavors,
             };
             setUpdatePolicyRequest(policyUpdateRequest);
-            updatePoliciesManagementServiceRequest.mutate(policyUpdateRequest);
+            updatePoliciesManagementServiceRequest.mutate({
+                id: currentServicePolicy.id,
+                policyUpdateRequest: policyUpdateRequest,
+            });
         }
     };
 
@@ -187,7 +189,7 @@ export const AddOrUpdateServicePolicy = ({
                     currentServicePolicy={createServicePoliciesRequest.data}
                 />
             ) : null}
-            {updatePolicyRequest !== undefined && updatePolicyRequest.id.length > 0 ? (
+            {updatePolicyRequest !== undefined ? (
                 <ServicePolicyUpdateResultStatus
                     isError={updatePoliciesManagementServiceRequest.isError}
                     isSuccess={updatePoliciesManagementServiceRequest.isSuccess}

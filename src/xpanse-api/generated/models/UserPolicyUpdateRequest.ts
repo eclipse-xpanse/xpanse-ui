@@ -9,10 +9,6 @@
 /* eslint-disable */
 export type UserPolicyUpdateRequest = {
     /**
-     * The id of the policy.
-     */
-    id: string;
-    /**
      * The csp which the policy belongs to.
      */
     csp?: UserPolicyUpdateRequest.csp;

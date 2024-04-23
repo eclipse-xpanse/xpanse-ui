@@ -9,10 +9,6 @@
 /* eslint-disable */
 export type ServicePolicyUpdateRequest = {
     /**
-     * The id of the policy.
-     */
-    id: string;
-    /**
      * The flavor name list which the policy belongs to. If the list is empty, then the policy will be executed for during service deployment of all flavors.
      */
     flavorNameList?: Array<string>;

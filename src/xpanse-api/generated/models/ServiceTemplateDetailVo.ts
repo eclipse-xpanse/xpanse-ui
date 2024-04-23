@@ -79,6 +79,10 @@ export type ServiceTemplateDetailVo = {
      */
     reviewComment?: string;
     serviceProviderContactDetails: ServiceProviderContactDetails;
+    /**
+     * End user license agreement content of the service.
+     */
+    eula: string;
     links?: Array<Link>;
 };
 export namespace ServiceTemplateDetailVo {
