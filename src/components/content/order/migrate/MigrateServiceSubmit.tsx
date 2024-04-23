@@ -32,7 +32,7 @@ import {
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
-import { getAvailabilityZoneConfigs } from '../formDataHelpers/getAvailabilityZoneConfigs';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import migrationStatus = ServiceMigrationDetails.migrationStatus;
 
@@ -85,7 +85,7 @@ export const MigrateServiceSubmit = ({
     );
     const deployServiceDetailsQuery = useServiceDetailsPollingQuery(
         migrateServiceDetailsQuery.data?.newServiceId,
-        selectServiceHostingType,
+        selectServiceHostingType as DeployedService.serviceHostingType,
         migrateServiceDetailsQuery.data?.migrationStatus
     );
     const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
@@ -173,7 +173,10 @@ export const MigrateServiceSubmit = ({
                 <RegionInfo selectRegion={region.name} disabled={true} />
                 {Object.keys(availabilityZones).length > 0 ? (
                     <MigrateServiceSubmitAvailabilityZoneInfo
-                        availabilityZoneConfigs={getAvailabilityZoneConfigs(selectCsp, userOrderableServiceVoList)}
+                        availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
+                            selectCsp,
+                            userOrderableServiceVoList
+                        )}
                         availabilityZones={availabilityZones}
                     />
                 ) : undefined}

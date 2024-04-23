@@ -5,15 +5,15 @@
 
 import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export function getAvailabilityZoneConfigs(
+export function getAvailabilityZoneRequirementsForAService(
     selectCsp: UserOrderableServiceVo.csp,
     services: UserOrderableServiceVo[] | undefined
-): AvailabilityZoneConfig[] | undefined {
-    let availabilityZoneConfigs: AvailabilityZoneConfig[] | undefined = undefined;
+): AvailabilityZoneConfig[] {
+    let availabilityZoneConfigs: AvailabilityZoneConfig[] = [];
     if (services) {
         services.forEach((userOrderableServiceVo) => {
             if (userOrderableServiceVo.csp === selectCsp) {
-                availabilityZoneConfigs = userOrderableServiceVo.serviceAvailability;
+                availabilityZoneConfigs = userOrderableServiceVo.serviceAvailability ?? [];
             }
         });
     }
