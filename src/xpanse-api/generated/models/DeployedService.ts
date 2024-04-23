@@ -7,6 +7,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { ServiceLockConfig } from './ServiceLockConfig';
 export type DeployedService = {
     /**
      * The ID of the service
@@ -41,6 +42,10 @@ export type DeployedService = {
      */
     serviceTemplateId?: string;
     /**
+     * The id of the user who deployed the service.
+     */
+    userId?: string;
+    /**
      * The deployment state of the service
      */
     serviceDeploymentState: DeployedService.serviceDeploymentState;
@@ -68,6 +73,7 @@ export type DeployedService = {
      * Time of stop service.
      */
     lastStoppedAt?: string;
+    lockConfig?: ServiceLockConfig;
 };
 export namespace DeployedService {
     /**
@@ -108,9 +114,6 @@ export namespace DeployedService {
         DESTROYING = 'destroying',
         DESTROY_SUCCESSFUL = 'destroy successful',
         DESTROY_FAILED = 'destroy failed',
-        MIGRATING = 'migrating',
-        MIGRATION_SUCCESSFUL = 'migration successful',
-        MIGRATION_FAILED = 'migration failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
         MODIFYING = 'modifying',

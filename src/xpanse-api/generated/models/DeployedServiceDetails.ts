@@ -9,6 +9,7 @@
 /* eslint-disable */
 import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
+import type { ServiceLockConfig } from './ServiceLockConfig';
 export type DeployedServiceDetails = {
     /**
      * The ID of the service
@@ -43,6 +44,10 @@ export type DeployedServiceDetails = {
      */
     serviceTemplateId?: string;
     /**
+     * The id of the user who deployed the service.
+     */
+    userId?: string;
+    /**
      * The deployment state of the service
      */
     serviceDeploymentState: DeployedServiceDetails.serviceDeploymentState;
@@ -70,6 +75,7 @@ export type DeployedServiceDetails = {
      * Time of stop service.
      */
     lastStoppedAt?: string;
+    lockConfig?: ServiceLockConfig;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -123,9 +129,6 @@ export namespace DeployedServiceDetails {
         DESTROYING = 'destroying',
         DESTROY_SUCCESSFUL = 'destroy successful',
         DESTROY_FAILED = 'destroy failed',
-        MIGRATING = 'migrating',
-        MIGRATION_SUCCESSFUL = 'migration successful',
-        MIGRATION_FAILED = 'migration failed',
         MANUAL_CLEANUP_REQUIRED = 'manual cleanup required',
         ROLLBACK_FAILED = 'rollback failed',
         MODIFYING = 'modifying',

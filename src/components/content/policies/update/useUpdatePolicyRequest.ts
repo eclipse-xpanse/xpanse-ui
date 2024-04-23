@@ -8,8 +8,8 @@ import { UserPoliciesManagementService, UserPolicyUpdateRequest } from '../../..
 
 export function useUpdatePolicyRequest() {
     return useMutation({
-        mutationFn: (requestBody: UserPolicyUpdateRequest) => {
-            return UserPoliciesManagementService.updateUserPolicy(requestBody);
+        mutationFn: ({ id, requestBody }: { id: string; requestBody: UserPolicyUpdateRequest }) => {
+            return UserPoliciesManagementService.updateUserPolicy(id, requestBody);
         },
     });
 }

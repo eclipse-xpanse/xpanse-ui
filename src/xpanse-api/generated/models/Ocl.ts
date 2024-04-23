@@ -50,6 +50,10 @@ export type Ocl = {
      */
     serviceHostingType: Ocl.serviceHostingType;
     serviceProviderContactDetails: ServiceProviderContactDetails;
+    /**
+     * End user license agreement content of the service.
+     */
+    eula?: string;
 };
 export namespace Ocl {
     /**

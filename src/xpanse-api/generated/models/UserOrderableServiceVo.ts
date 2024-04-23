@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 /* generated using openapi-typescript-codegen -- do not edit */
 /* istanbul ignore file */
 /* tslint:disable */
@@ -60,6 +65,10 @@ export type UserOrderableServiceVo = {
      * The list of availability zones of the service.
      */
     serviceAvailability?: Array<AvailabilityZoneConfig>;
+    /**
+     * End user license agreement content of the service.
+     */
+    eula: string;
     links?: Array<Link>;
 };
 export namespace UserOrderableServiceVo {

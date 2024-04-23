@@ -72,6 +72,8 @@ export namespace Response {
         MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
         SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
         SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
+        SERVICE_LOCKED = 'Service Locked',
+        EULA_NOT_ACCEPTED = 'Eula not accepted',
         INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     }
 }
