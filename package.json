@@ -7,7 +7,7 @@
         "@ant-design/icons": "^5.3.6",
         "@axa-fr/react-oidc": "^7.22.3",
         "@tanstack/react-query": "^5.31.0",
-        "antd": "^5.16.2",
+        "antd": "^5.16.4",
         "echarts": "5.5.0",
         "echarts-for-react": "^3.0.2",
         "rc-field-form": "^2.0.0",
