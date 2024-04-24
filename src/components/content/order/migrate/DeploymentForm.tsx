@@ -8,7 +8,7 @@ import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import React, { useRef } from 'react';
+import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { MigrationSteps } from '../types/MigrationSteps';
@@ -46,7 +46,6 @@ export const DeploymentForm = ({
         availabilityZones
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
-    const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
 
     const prev = () => {
         setCurrentMigrationStep(MigrationSteps.SelectADestination);
@@ -60,14 +59,17 @@ export const DeploymentForm = ({
             region: region,
             serviceName: deployParams.name,
             version: deployParams.version,
-            customerServiceName: deployParamsRef.current.Name as string,
+            customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
             serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
-        for (const variable in deployParamsRef.current) {
-            if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
-                serviceRequestProperties[variable] = deployParamsRef.current[variable];
+        for (const variable in useOrderFormStore.getState().deployParams) {
+            if (
+                variable !== CUSTOMER_SERVICE_NAME_FIELD &&
+                useOrderFormStore.getState().deployParams[variable] !== ''
+            ) {
+                serviceRequestProperties[variable] = useOrderFormStore.getState().deployParams[variable];
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
@@ -92,7 +94,7 @@ export const DeploymentForm = ({
                     layout='vertical'
                     autoComplete='off'
                     form={form}
-                    initialValues={deployParamsRef.current}
+                    initialValues={useOrderFormStore.getState().deployParams}
                     onFinish={handleFinish}
                     validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                     key='deploy'

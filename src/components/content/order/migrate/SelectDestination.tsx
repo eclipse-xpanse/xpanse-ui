@@ -219,7 +219,6 @@ export const SelectDestination = ({
             }));
         } else {
             const newAvailabilityZone = selectAvailabilityZones;
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete newAvailabilityZone[varName];
             setSelectAvailabilityZones({ ...newAvailabilityZone });
         }
