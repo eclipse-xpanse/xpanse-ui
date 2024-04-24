@@ -47,6 +47,37 @@ export const ProcessingStatus = ({
         }
     }
 
+    if (operationType === (OperationType.Modify as OperationType)) {
+        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.MODIFICATION_SUCCESSFUL) {
+            if (response.deployedServiceProperties) {
+                for (const key in response.deployedServiceProperties) {
+                    endPointMap.set(key, response.deployedServiceProperties[key]);
+                }
+            }
+            if (endPointMap.size > 0) {
+                return (
+                    <>
+                        <span>{'Modification Successful'}</span>
+                        <div className={'service-instance-detail-position'}>
+                            {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
+                        </div>
+                    </>
+                );
+            } else {
+                return <span>{'Modification Successful'}</span>;
+            }
+        } else if (
+            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED
+        ) {
+            return (
+                <div>
+                    <span>{'Modification Failed.'}</span>
+                    <div>{response.resultMessage}</div>
+                </div>
+            );
+        }
+    }
+
     if (operationType === (OperationType.Destroy as OperationType)) {
         if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL) {
             return (

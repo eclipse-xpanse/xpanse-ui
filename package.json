@@ -53,7 +53,8 @@
             "no-undef": "off",
             "@typescript-eslint/no-inferrable-types": "off",
             "@tanstack/query/exhaustive-deps": "error",
-            "no-console": "error"
+            "no-console": "error",
+            "@typescript-eslint/no-dynamic-delete": "off"
         },
         "ignorePatterns": [
             "src/xpanse-api/**",

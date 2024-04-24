@@ -31,5 +31,6 @@ export function useServiceDetailsPollingQuery(
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
         enabled: uuid !== undefined && isStartPolling,
+        gcTime: 0,
     });
 }

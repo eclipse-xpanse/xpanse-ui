@@ -1,0 +1,82 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.modify-select-class {
+    height: 80%;
+}
+
+.modify-select-flavor-billing {
+    margin-bottom: 20px;
+}
+
+.modify-title-class {
+    margin-left: 24px;
+    margin-bottom: 8px;
+}
+
+.flavor-select-hover {
+    border: 3px solid #1677ff;
+}
+
+.flavor-select-hover-disabled {
+    border: 3px solid #b5b5b5;
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.flavor-container {
+    border-radius: 8px;
+}
+
+.flavor-card-container {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.flavor-card-content {
+    text-align: center;
+}
+
+.flavor-card-content-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.modify-container {
+    margin-left: 5px;
+    max-width: 1300px;
+}
+
+.flavor-old-badge {
+    position: relative;
+}
+
+.flavor-card-custom-ribbon {
+    position: absolute;
+    top: 1%;
+    left: 70%;
+}
+
+.service-modify-submit-reset-container {
+    display: flex;
+    gap: 20px;
+    flex-direction: row;
+    margin-bottom: 15px;
+    justify-content: flex-end;
+    width: 600px;
+}
+
+.service-modify-submit-class {
+    display: flex;
+    flex-direction: row;
+    text-align: right;
+    justify-content: flex-end;
+}

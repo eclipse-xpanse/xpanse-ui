@@ -36,8 +36,6 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
-    // Avoid re-rendering of the component when variables are added to store.
-    const deployParamsRef = useRef(useOrderFormStore.getState().deployParams);
     const navigate = useNavigate();
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -58,14 +56,17 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             },
             serviceName: state.name,
             version: state.version,
-            customerServiceName: deployParamsRef.current.Name as string,
+            customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
             serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
-        for (const variable in deployParamsRef.current) {
-            if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsRef.current[variable] !== '') {
-                serviceRequestProperties[variable] = deployParamsRef.current[variable];
+        for (const variable in useOrderFormStore.getState().deployParams) {
+            if (
+                variable !== CUSTOMER_SERVICE_NAME_FIELD &&
+                useOrderFormStore.getState().deployParams[variable] !== ''
+            ) {
+                serviceRequestProperties[variable] = useOrderFormStore.getState().deployParams[variable];
             }
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
@@ -106,7 +107,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 form={form}
                 layout='vertical'
                 autoComplete='off'
-                initialValues={deployParamsRef.current}
+                initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onSubmit}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='deploy'
