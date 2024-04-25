@@ -19,6 +19,7 @@ export function DeployedServicesStatus(
 ): React.JSX.Element {
     switch (serviceDeploymentState) {
         case DeployedService.serviceDeploymentState.DEPLOYING:
+        case DeployedService.serviceDeploymentState.MODIFYING:
         case DeployedService.serviceDeploymentState.DESTROYING:
             return (
                 <Tag
@@ -31,6 +32,12 @@ export function DeployedServicesStatus(
                 </Tag>
             );
         case DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED:
+            return (
+                <Tag bordered={false} icon={<CloseCircleOutlined />} color='error' className={'my-service-status-size'}>
+                    {serviceDeploymentState.valueOf()}
+                </Tag>
+            );
+        case DeployedService.serviceDeploymentState.MODIFICATION_FAILED:
             return (
                 <Tag bordered={false} icon={<CloseCircleOutlined />} color='error' className={'my-service-status-size'}>
                     {serviceDeploymentState.valueOf()}
@@ -54,6 +61,17 @@ export function DeployedServicesStatus(
                 </Tag>
             );
         case DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
+            return (
+                <Tag
+                    bordered={false}
+                    icon={<CheckCircleOutlined />}
+                    color='success'
+                    className={'my-service-status-size'}
+                >
+                    {serviceDeploymentState.valueOf()}
+                </Tag>
+            );
+        case DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL:
             return (
                 <Tag
                     bordered={false}

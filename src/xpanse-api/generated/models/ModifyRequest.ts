@@ -9,6 +9,10 @@
 /* eslint-disable */
 export type ModifyRequest = {
     /**
+     * Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated
+     */
+    customerServiceName?: string;
+    /**
      * The flavor of the Service.
      */
     flavor?: string;

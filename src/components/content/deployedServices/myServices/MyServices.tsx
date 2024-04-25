@@ -20,10 +20,12 @@ import {
     CloseCircleOutlined,
     CopyOutlined,
     DeleteOutlined,
+    EditOutlined,
     FundOutlined,
     InfoCircleOutlined,
     PlayCircleOutlined,
     PoweroffOutlined,
+    RiseOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
 import '../../../../styles/my_services.css';
@@ -51,6 +53,9 @@ import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType'
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { useServiceDetailsPollingQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
+import { Modify } from '../../order/modify/Modify';
+import { Scale } from '../../order/scale/Scale';
+import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -69,10 +74,13 @@ function MyServices(): React.JSX.Element {
     const [activeRecord, setActiveRecord] = useState<
         DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
     >(undefined);
+    const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const [isDestroyRequestSubmitted, setIsDestroyRequestSubmitted] = useState<boolean>(false);
     const [isPurgeRequestSubmitted, setIsPurgeRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
+    const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
+    const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
@@ -173,6 +181,62 @@ function MyServices(): React.JSX.Element {
                 ),
             },
             {
+                key: 'scale',
+                label: (
+                    <Button
+                        onClick={() => {
+                            scale(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<RiseOutlined />}
+                        disabled={
+                            activeRecord !== undefined ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.MODIFYING.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROYING.toString()
+                        }
+                        type={'link'}
+                    >
+                        scale
+                    </Button>
+                ),
+            },
+            {
+                key: 'modify parameters',
+                label: (
+                    <Button
+                        onClick={() => {
+                            modify(record);
+                        }}
+                        className={'button-as-link'}
+                        icon={<EditOutlined />}
+                        disabled={
+                            activeRecord !== undefined ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.MODIFYING.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.DESTROYING.toString()
+                        }
+                        type={'link'}
+                    >
+                        modify parameters
+                    </Button>
+                ),
+            },
+            {
                 key: 'migrate',
                 label: (
                     <Button
@@ -185,6 +249,8 @@ function MyServices(): React.JSX.Element {
                             activeRecord !== undefined ||
                             record.serviceDeploymentState.toString() ===
                                 DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                            record.serviceDeploymentState.toString() ===
+                                DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                             record.serviceDeploymentState.toString() ===
                                 DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
                             record.serviceDeploymentState.toString() ===
@@ -205,6 +271,8 @@ function MyServices(): React.JSX.Element {
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
                     record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+                    record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString()
                         ? 'purge'
                         : 'destroy',
@@ -213,6 +281,8 @@ function MyServices(): React.JSX.Element {
                         DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                    record.serviceDeploymentState.toString() ===
+                        DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString() ? (
                         <Popconfirm
@@ -249,7 +319,9 @@ function MyServices(): React.JSX.Element {
                                     (record.serviceDeploymentState.toString() !==
                                         DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
                                         record.serviceDeploymentState.toString() !==
-                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()) ||
+                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
+                                        record.serviceDeploymentState.toString() !==
+                                            DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
                                     activeRecord !== undefined
                                 }
                                 className={'button-as-link'}
@@ -362,7 +434,10 @@ function MyServices(): React.JSX.Element {
     };
 
     const isDisableStartBtn = (record: DeployedService) => {
-        if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (
+            record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+            record.serviceDeploymentState !== DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        ) {
             if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED) {
                 return true;
             }
@@ -382,7 +457,10 @@ function MyServices(): React.JSX.Element {
     };
 
     const isDisabledStopOrRestartBtn = (record: DeployedService) => {
-        if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (
+            record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+            record.serviceDeploymentState !== DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        ) {
             if (record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DESTROY_FAILED) {
                 return true;
             }
@@ -554,7 +632,9 @@ function MyServices(): React.JSX.Element {
                             }}
                             disabled={
                                 record.serviceDeploymentState.toString() !==
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
+                                record.serviceDeploymentState.toString() !==
+                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()
                             }
                         >
                             <FundOutlined />
@@ -660,6 +740,32 @@ function MyServices(): React.JSX.Element {
                 : (record as VendorHostedDeployedServiceDetails)
         );
         setIsMigrateModalOpen(true);
+    }
+
+    function modify(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        const existingParameters = getExistingServiceParameters(record);
+        for (const existingServiceParametersKey in existingParameters) {
+            cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
+        }
+        setIsModifyModalOpen(true);
+    }
+
+    function scale(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        const existingParameters = getExistingServiceParameters(record);
+        for (const existingServiceParametersKey in existingParameters) {
+            cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
+        }
+        setIsScaleModalOpen(true);
     }
 
     function onMonitor(record: DeployedService): void {
@@ -821,6 +927,20 @@ function MyServices(): React.JSX.Element {
         setIsMigrateModalOpen(false);
     };
 
+    const handleCancelModifyModel = () => {
+        setActiveRecord(undefined);
+        clearFormVariables();
+        refreshData();
+        setIsModifyModalOpen(false);
+    };
+
+    const handleCancelScaleModel = () => {
+        setActiveRecord(undefined);
+        clearFormVariables();
+        refreshData();
+        setIsScaleModalOpen(false);
+    };
+
     function getServiceDeploymentStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
         const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
         if (queryInUri.length > 0) {
@@ -888,6 +1008,38 @@ function MyServices(): React.JSX.Element {
                     mask={true}
                 >
                     <Migrate currentSelectedService={activeRecord} />
+                </Modal>
+            ) : null}
+
+            {activeRecord ? (
+                <Modal
+                    open={isScaleModalOpen}
+                    title={migrationTitle(activeRecord)}
+                    closable={true}
+                    maskClosable={false}
+                    destroyOnClose={true}
+                    footer={null}
+                    onCancel={handleCancelScaleModel}
+                    width={1400}
+                    mask={true}
+                >
+                    <Scale currentSelectedService={activeRecord} />
+                </Modal>
+            ) : null}
+
+            {activeRecord ? (
+                <Modal
+                    open={isModifyModalOpen}
+                    title={migrationTitle(activeRecord)}
+                    closable={true}
+                    maskClosable={false}
+                    destroyOnClose={true}
+                    footer={null}
+                    onCancel={handleCancelModifyModel}
+                    width={1400}
+                    mask={true}
+                >
+                    <Modify currentSelectedService={activeRecord} />
                 </Modal>
             ) : null}
 

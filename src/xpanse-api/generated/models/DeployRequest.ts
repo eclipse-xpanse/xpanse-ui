@@ -46,6 +46,7 @@ export type DeployRequest = {
      * The availability zones to deploy the service instance.
      */
     availabilityZones?: Record<string, string>;
+    eulaAccepted?: boolean;
 };
 export namespace DeployRequest {
     /**

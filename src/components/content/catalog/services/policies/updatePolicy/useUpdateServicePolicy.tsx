@@ -8,8 +8,8 @@ import { ServicePoliciesManagementService, ServicePolicyUpdateRequest } from '..
 
 export const useUpdateServicePolicy = () => {
     return useMutation({
-        mutationFn: (policyUpdateRequest: ServicePolicyUpdateRequest) => {
-            return ServicePoliciesManagementService.updateServicePolicy(policyUpdateRequest);
+        mutationFn: ({ id, policyUpdateRequest }: { id: string; policyUpdateRequest: ServicePolicyUpdateRequest }) => {
+            return ServicePoliciesManagementService.updateServicePolicy(id, policyUpdateRequest);
         },
     });
 };

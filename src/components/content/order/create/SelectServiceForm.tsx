@@ -215,7 +215,6 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             }));
         } else {
             const newAvailabilityZone = selectAvailabilityZones;
-            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             delete newAvailabilityZone[varName];
             setSelectAvailabilityZones({ ...newAvailabilityZone });
         }

@@ -56,12 +56,14 @@ export const AddOrUpdatePolicy = ({
                 return;
             }
             const policyUpdateRequest: UserPolicyUpdateRequest = policyRequest as UserPolicyUpdateRequest;
-            policyUpdateRequest.id = currentPolicyService.id;
             policyUpdateRequest.csp = policyRequest.csp;
             policyUpdateRequest.enabled = policyRequest.enabled;
             policyUpdateRequest.policy = policyRequest.policy;
             setUpdatePolicyRequest(policyUpdateRequest);
-            updatePoliciesManagementServiceRequest.mutate(policyUpdateRequest);
+            updatePoliciesManagementServiceRequest.mutate({
+                id: currentPolicyService.id,
+                requestBody: policyUpdateRequest,
+            });
         }
     };
 
@@ -187,7 +189,7 @@ export const AddOrUpdatePolicy = ({
                     currentPolicyService={createPoliciesManagementServiceRequest.data}
                 />
             ) : null}
-            {updatePolicyRequest !== undefined && updatePolicyRequest.id.length > 0 ? (
+            {updatePolicyRequest !== undefined ? (
                 <PolicyUpdateResultStatus
                     isError={updatePoliciesManagementServiceRequest.isError}
                     isSuccess={updatePoliciesManagementServiceRequest.isSuccess}
