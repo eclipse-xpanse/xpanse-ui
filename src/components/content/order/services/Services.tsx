@@ -8,7 +8,7 @@ import '../../../../styles/service_order.css';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { createServicePageRoute } from '../../../utils/constants';
-import { Col, Empty, Row } from 'antd';
+import { Col, Empty, Row, Tooltip, Typography } from 'antd';
 import { Badge, Space } from 'antd';
 import { sortVersion } from '../../../utils/Sort';
 import { DeployedService, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
@@ -20,6 +20,7 @@ import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 import { UserServiceDisplayType } from './UserServiceDisplayType';
 
 function Services(): React.JSX.Element {
+    const { Paragraph } = Typography;
     const navigate = useNavigate();
     const location = useLocation();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
@@ -108,7 +109,16 @@ function Services(): React.JSX.Element {
                                                 />
                                             </div>
                                             <div className='service-type-option-info'>
-                                                <span className='service-type-option'>{item.name}</span>
+                                                <span className='service-type-option'>
+                                                    <Tooltip placement='topLeft' title={item.name}>
+                                                        <Paragraph
+                                                            className={'service-type-option-service-name'}
+                                                            ellipsis={true}
+                                                        >
+                                                            {item.name}
+                                                        </Paragraph>
+                                                    </Tooltip>
+                                                </span>
                                                 <span className='service-type-option-description'>{item.content}</span>
                                             </div>
                                         </div>

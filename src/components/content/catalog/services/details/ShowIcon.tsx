@@ -5,13 +5,19 @@
 
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import React from 'react';
+import { Tooltip, Typography } from 'antd';
 
 export function ShowIcon({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
+    const { Paragraph } = Typography;
     return (
         <div className={'catalog-service-icon'}>
-            <img width={25} height={25} src={serviceDetails.icon} alt='Service Icon' referrerPolicy='no-referrer' />
+            <img width={20} height={20} src={serviceDetails.icon} alt='Service Icon' referrerPolicy='no-referrer' />
             &nbsp;
-            {serviceDetails.name}
+            <Tooltip placement='topLeft' title={serviceDetails.name}>
+                <Paragraph ellipsis={true} className={'catalog-service-name'}>
+                    {serviceDetails.name}
+                </Paragraph>
+            </Tooltip>
         </div>
     );
 }

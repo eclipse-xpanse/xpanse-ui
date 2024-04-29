@@ -57,11 +57,19 @@
     width: 80%;
 }
 
+.catalog-tree-node {
+    width: 200px;
+}
+
 .catalog-service-icon {
     display: flex;
     align-items: center;
 }
 
+.catalog-service-name {
+    width: 200px;
+    margin-top: 15px;
+}
 .catalog-service-status-size {
     font-size: 14px;
 }
