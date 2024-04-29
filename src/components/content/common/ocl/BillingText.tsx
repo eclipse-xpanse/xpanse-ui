@@ -18,7 +18,8 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
         return (
             <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Billing'} trigger='hover'>
                 <Button className={'ocl-data-hover'} type={'link'}>
-                    {billing.billingModel}
+                    {/* TODO Will be fixed in #1591 or #1592 */}
+                    {billing.billingModes[0]}
                 </Button>
             </Popover>
         );

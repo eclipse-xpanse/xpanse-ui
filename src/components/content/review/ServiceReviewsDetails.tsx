@@ -16,6 +16,7 @@ import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate
 import '../../../styles/service_review.css';
 import useGetRegistrationDetails from './query/useGetRegistrationDetails';
 import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
+import { AgreementText } from '../common/ocl/AgreementText';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
@@ -181,6 +182,13 @@ export const ServiceReviewsDetails = ({
                         </Descriptions.Item>
                         <Descriptions.Item label='Description'>
                             {currentServiceTemplateVo.description}
+                        </Descriptions.Item>
+                        <Descriptions.Item label='EULA'>
+                            {currentServiceTemplateVo.eula ? (
+                                <AgreementText eula={currentServiceTemplateVo.eula} />
+                            ) : (
+                                <span>Not Provided</span>
+                            )}
                         </Descriptions.Item>
                     </Descriptions>
                     {getRegistrationDetailsQuery.isSuccess &&

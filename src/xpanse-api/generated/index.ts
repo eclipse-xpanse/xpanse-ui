@@ -16,7 +16,7 @@ export { AbstractCredentialInfo } from './models/AbstractCredentialInfo';
 export { AutoFill } from './models/AutoFill';
 export type { AvailabilityZoneConfig } from './models/AvailabilityZoneConfig';
 export { BackendSystemStatus } from './models/BackendSystemStatus';
-export { Billing } from './models/Billing';
+export type { Billing } from './models/Billing';
 export { CloudServiceProvider } from './models/CloudServiceProvider';
 export { CreateCredential } from './models/CreateCredential';
 export type { CredentialVariable } from './models/CredentialVariable';

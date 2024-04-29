@@ -19,9 +19,11 @@ import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsP
 import { v4 } from 'uuid';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import { OrderItem } from '../common/utils/OrderItem';
+import { EulaInfo } from '../common/EulaInfo';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [form] = Form.useForm();
+    const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const uniqueRequestId = useRef(v4());
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
@@ -59,6 +61,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
             serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
+            eulaAccepted: isEulaAccepted,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {
@@ -148,6 +151,16 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
                         ) : undefined
                     )}
+                </div>
+                <div className={'order-param-item-row'}>
+                    <div className={'order-param-item-left'} />
+                    <div className={'order-param-item-content'}>
+                        <EulaInfo
+                            eula={state.eula}
+                            isEulaAccepted={isEulaAccepted}
+                            setIsEulaAccepted={setIsEulaAccepted}
+                        />
+                    </div>
                 </div>
                 <div className={'Line'} />
                 <div className={'order-param-item-row'}>

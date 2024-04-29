@@ -68,7 +68,7 @@ export type UserOrderableServiceVo = {
     /**
      * End user license agreement content of the service.
      */
-    eula: string;
+    eula?: string;
     links?: Array<Link>;
 };
 export namespace UserOrderableServiceVo {

@@ -15,6 +15,7 @@ import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceRegistrationStatus } from './ServiceRegistrationStatus';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
+import { AgreementText } from '../../../common/ocl/AgreementText';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (
@@ -72,6 +73,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                         serviceProviderContactDetails={serviceDetails.serviceProviderContactDetails}
                         showFor={ContactDetailsShowType.Catalog}
                     />
+                </Descriptions.Item>
+                <Descriptions.Item label='EULA'>
+                    {serviceDetails.eula ? <AgreementText eula={serviceDetails.eula} /> : <span>Not Provided</span>}
                 </Descriptions.Item>
             </Descriptions>
         </>
