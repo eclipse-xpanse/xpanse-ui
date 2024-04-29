@@ -345,7 +345,7 @@ export const ServiceReviews = (): React.JSX.Element => {
                     <Table
                         columns={columns}
                         dataSource={serviceTemplateList}
-                        loading={allServiceTemplatesListQuery.isPending || allServiceTemplatesListQuery.isRefetching}
+                        loading={allServiceTemplatesListQuery.isLoading || allServiceTemplatesListQuery.isRefetching}
                         rowKey={'id'}
                     />
                 </div>
