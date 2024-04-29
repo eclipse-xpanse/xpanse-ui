@@ -22,7 +22,7 @@ import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { Button, Col, Form, Row, Select, Tabs } from 'antd';
+import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -40,6 +40,7 @@ import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
+    const { Paragraph } = Typography;
     const [form] = Form.useForm();
     const [urlParams] = useSearchParams();
     const location = useLocation();
@@ -268,19 +269,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 </div>
                 <div className={'generic-table-container'}>
                     <Row justify='start' gutter={10}>
-                        <Col span={4}>
-                            <div className={'content-title'}>Service: {serviceName}</div>
-                        </Col>
                         <Col span={6}>
-                            <div className={'content-title'}>
-                                Version:&nbsp;
-                                <Select
-                                    value={selectVersion}
-                                    className={'version-drop-down'}
-                                    onChange={onChangeVersion}
-                                    options={versionList}
-                                />
-                            </div>
+                            <Tooltip placement='topLeft' title={serviceName}>
+                                <Paragraph ellipsis={true} className={'content-title'}>
+                                    Service: {serviceName}
+                                </Paragraph>
+                            </Tooltip>
                         </Col>
                         {currentServiceProviderContactDetails !== undefined ? (
                             <Col span={4}>
@@ -293,6 +287,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             <></>
                         )}
                     </Row>
+                    <div className={'cloud-provider-tab-class'}>
+                        Version:&nbsp;
+                        <Select
+                            value={selectVersion}
+                            className={'version-drop-down'}
+                            onChange={onChangeVersion}
+                            options={versionList}
+                        />
+                    </div>
 
                     <br />
                     <CspSelect

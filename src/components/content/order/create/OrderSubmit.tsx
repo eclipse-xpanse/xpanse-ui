@@ -7,7 +7,7 @@ import NavigateOrderSubmission from './NavigateOrderSubmission';
 import '../../../../styles/service_order.css';
 import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
-import { Button, Form, Input, Tooltip } from 'antd';
+import { Button, Col, Form, Input, Row, Tooltip, Typography } from 'antd';
 import { DeployedServiceDetails, DeployRequest } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
@@ -22,6 +22,7 @@ import { OrderItem } from '../common/utils/OrderItem';
 import { EulaInfo } from '../common/EulaInfo';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
+    const { Paragraph } = Typography;
     const [form] = Form.useForm();
     const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
@@ -87,12 +88,18 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                 <NavigateOrderSubmission text={'<< Back'} to={createServicePageUrl as To} props={state} />
                 <div className={'Line'} />
                 <div className={'generic-table-container'}>
-                    <div className={'content-title'}>
-                        <div className={'content-title-order'}>
-                            Service: {state.name}@{state.version}
+                    <Row>
+                        <Col span={4}>
+                            <Tooltip placement='topLeft' title={state.name + '@' + state.version}>
+                                <Paragraph ellipsis={true} className={'content-title'}>
+                                    Service: {state.name + '@' + state.version}
+                                </Paragraph>
+                            </Tooltip>
+                        </Col>
+                        <Col span={4}>
                             <ApiDoc id={state.id} styleClass={'content-title-api'}></ApiDoc>
-                        </div>
-                    </div>
+                        </Col>
+                    </Row>
                 </div>
             </div>
             {isShowDeploymentResult ? (

@@ -191,11 +191,20 @@
     font-weight: 700;
 }
 
+.service-type-option-name {
+    width: 200px;
+    margin-top: 10px;
+}
+
+.service-type-option-service-name {
+    width: 200px;
+}
+
 .service-type-option-description {
     font-size: 12px;
     color: #5e6366;
     min-height: 35px;
-    margin-top: 5px;
+    //margin-top: 5px;
     word-break: normal;
     width: auto;
     display: block;
@@ -252,12 +261,12 @@
 .content-title-api {
     font-size: 13px;
     font-weight: bold;
-    float: right;
     background-color: transparent;
     border: none;
     cursor: pointer;
     display: inline;
     padding: 0;
+    margin-left: 155px;
     margin-top: 10px;
 }
 
