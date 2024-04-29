@@ -12,6 +12,7 @@ import { cspMap } from '../csp/CspLogo';
 import { ContactDetailsText } from './ContactDetailsText';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { FlavorsText } from './FlavorsText';
+import { AgreementText } from './AgreementText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -108,6 +109,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 />
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
+                            <Descriptions.Item label='EULA'>
+                                {ocl.eula ? <AgreementText eula={ocl.eula} /> : <span>Not Provided</span>}
+                            </Descriptions.Item>
                         </Descriptions>
                     </div>
                 </div>

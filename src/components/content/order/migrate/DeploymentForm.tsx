@@ -8,11 +8,13 @@ import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { OrderItem } from '../common/utils/OrderItem';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { EulaInfo } from '../common/EulaInfo';
 
 export const DeploymentForm = ({
     userOrderableServiceVoList,
@@ -21,6 +23,8 @@ export const DeploymentForm = ({
     region,
     availabilityZones,
     selectFlavor,
+    isEulaAccepted,
+    setIsEulaAccepted,
     setCurrentMigrationStep,
     setDeployParameters,
     stepItem,
@@ -31,11 +35,14 @@ export const DeploymentForm = ({
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
+    isEulaAccepted: boolean;
+    setIsEulaAccepted: Dispatch<SetStateAction<boolean>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
+    const currentEula: string | undefined = getEulaByCsp(selectCsp, userOrderableServiceVoList);
     const deployParams = getDeployParams(
         userOrderableServiceVoList,
         selectCsp,
@@ -43,7 +50,8 @@ export const DeploymentForm = ({
         region,
         selectFlavor,
         undefined,
-        availabilityZones
+        availabilityZones,
+        currentEula
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
@@ -62,6 +70,7 @@ export const DeploymentForm = ({
             customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
             serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
+            eulaAccepted: isEulaAccepted,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {
@@ -127,6 +136,16 @@ export const DeploymentForm = ({
                                 <OrderItem key={item.name} item={item} csp={selectCsp} region={region.name} />
                             ) : undefined
                         )}
+                    </div>
+                    <div className={'order-param-item-row'}>
+                        <div className={'order-param-item-left'} />
+                        <div className={'order-param-item-content'}>
+                            <EulaInfo
+                                eula={currentEula}
+                                isEulaAccepted={isEulaAccepted}
+                                setIsEulaAccepted={setIsEulaAccepted}
+                            />
+                        </div>
                     </div>
                     <Space size={'large'}>
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>

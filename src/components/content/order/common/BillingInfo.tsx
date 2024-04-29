@@ -18,7 +18,8 @@ export const BillingInfo = ({ priceValue, billing }: { priceValue: string; billi
                 </Tag>
                 <span className={'order-billing-model-title-class'}>Model:&nbsp;</span>
                 <Tag color={'blue'} className={'order-billing-model-value-class'}>
-                    {billing.billingModel}
+                    {/* TODO Will be fixed in #1591 or #1592 */}
+                    {billing.billingModes[0]}
                 </Tag>
             </div>
         </>

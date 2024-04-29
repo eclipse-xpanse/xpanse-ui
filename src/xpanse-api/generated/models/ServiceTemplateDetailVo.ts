@@ -82,7 +82,7 @@ export type ServiceTemplateDetailVo = {
     /**
      * End user license agreement content of the service.
      */
-    eula: string;
+    eula?: string;
     links?: Array<Link>;
 };
 export namespace ServiceTemplateDetailVo {

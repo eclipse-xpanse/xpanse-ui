@@ -20,7 +20,8 @@ export const getDeployParams = (
     region: Region,
     selectFlavor: string,
     currentContactServiceDetails: ServiceProviderContactDetails | undefined,
-    availabilityZones: Record<string, string> | undefined
+    availabilityZones: Record<string, string> | undefined,
+    eula: string | undefined
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
@@ -45,6 +46,7 @@ export const getDeployParams = (
         serviceHostingType: selectServiceHostingType as DeployRequest.serviceHostingType,
         contactServiceDetails: currentContactServiceDetails ?? undefined,
         availabilityZones: availabilityZones,
+        eula: eula,
     };
 
     if (service !== undefined) {

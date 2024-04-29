@@ -20,11 +20,11 @@ import { OrderItem } from '../common/utils/OrderItem';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import '../../../../styles/service_order.css';
 import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
-import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
 import { useMutation } from '@tanstack/react-query';
 import { getExistingServiceParameters } from '../common/utils/existingServiceParameters';
+import { DeployParam } from '../types/DeployParam';
 
 export const Modify = ({
     currentSelectedService,
@@ -32,7 +32,7 @@ export const Modify = ({
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    let getParams: OrderSubmitProps | undefined = undefined;
+    let getParams: DeployParam[] = [];
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [modifyStatus, setModifyStatus] = useState<DeployedService.serviceDeploymentState | undefined>(undefined);
@@ -53,11 +53,7 @@ export const Modify = ({
     };
 
     if (serviceTemplateDetailsQuery.isSuccess) {
-        getParams = getModifyParams(
-            currentSelectedService,
-            serviceTemplateDetailsQuery.data.serviceProviderContactDetails,
-            serviceTemplateDetailsQuery.data.variables
-        );
+        getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
     }
 
     const onFinish = () => {
@@ -145,9 +141,14 @@ export const Modify = ({
                             : ''
                     }
                 >
-                    {getParams?.params.map((item) =>
+                    {getParams.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
-                            <OrderItem key={item.name} item={item} csp={getParams.csp} region={getParams.region} />
+                            <OrderItem
+                                key={item.name}
+                                item={item}
+                                csp={currentSelectedService.deployRequest.csp}
+                                region={currentSelectedService.deployRequest.region.name}
+                            />
                         ) : undefined
                     )}
                 </div>

@@ -12,19 +12,7 @@
  */
 export type Billing = {
     /**
-     * The billing model of the managed service
+     * Supported billing modes by the managed service
      */
-    billingModel: Billing.billingModel;
+    billingModes: Array<'yearly' | 'monthly' | 'daily' | 'hourly' | 'pay_per_use'>;
 };
-export namespace Billing {
-    /**
-     * The billing model of the managed service
-     */
-    export enum billingModel {
-        YEARLY = 'yearly',
-        MONTHLY = 'monthly',
-        DAILY = 'daily',
-        HOURLY = 'hourly',
-        PAY_PER_USE = 'pay_per_use',
-    }
-}

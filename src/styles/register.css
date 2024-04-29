@@ -52,6 +52,13 @@
     max-width: 50vh;
 }
 
+.agreement-text {
+    max-height: 40vh;
+    position: relative;
+    overflow: auto;
+    max-width: 60vh;
+}
+
 .try-again-btn-class {
     margin-right: 20px;
 }
