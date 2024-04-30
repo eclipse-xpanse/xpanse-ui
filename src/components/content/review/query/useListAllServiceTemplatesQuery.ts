@@ -8,7 +8,7 @@ import { CloudServiceProviderService } from '../../../../xpanse-api/generated';
 
 export default function useListAllServiceTemplatesQuery() {
     return useQuery({
-        queryKey: ['listDeployedServicesDetails'],
+        queryKey: ['listManagedServiceTemplatesForCspUser'],
         queryFn: () =>
             CloudServiceProviderService.listManagedServiceTemplates(
                 undefined,

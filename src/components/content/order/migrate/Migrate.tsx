@@ -36,6 +36,7 @@ export const Migrate = ({
         currentSelectedService.deployRequest.availabilityZones ?? {}
     );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
+    const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
     const listOrderableServices = useQuery({
@@ -150,6 +151,8 @@ export const Migrate = ({
                         region={selectRegion}
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
+                        isEulaAccepted={isEulaAccepted}
+                        setIsEulaAccepted={setIsEulaAccepted}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         setDeployParameters={setDeployParams}
                         stepItem={items[MigrationSteps.PrepareDeploymentParameters]}

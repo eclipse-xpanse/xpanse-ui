@@ -22,10 +22,10 @@ import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { OrderItem } from '../common/utils/OrderItem';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
-import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { useMutation } from '@tanstack/react-query';
+import { DeployParam } from '../types/DeployParam';
 
 export const Scale = ({
     currentSelectedService,
@@ -34,7 +34,7 @@ export const Scale = ({
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     let flavorList: ServiceFlavor[] = [];
-    let getParams: OrderSubmitProps | undefined = undefined;
+    let getParams: DeployParam[] = [];
     let currentBilling: Billing | undefined = undefined;
     const [modifyStatus, setModifyStatus] = useState<DeployedService.serviceDeploymentState | undefined>(undefined);
     const [selectFlavor, setSelectFlavor] = useState<string>(
@@ -56,11 +56,7 @@ export const Scale = ({
         if (serviceTemplateDetailsQuery.data.flavors.serviceFlavors.length > 0) {
             flavorList = serviceTemplateDetailsQuery.data.flavors.serviceFlavors;
         }
-        getParams = getModifyParams(
-            currentSelectedService,
-            serviceTemplateDetailsQuery.data.serviceProviderContactDetails,
-            serviceTemplateDetailsQuery.data.variables
-        );
+        getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
     }
 
     const onFinish = () => {
@@ -170,8 +166,8 @@ export const Scale = ({
                                                                 <>
                                                                     <Tag color={'blue'}>
                                                                         {flavor.fixedPrice}
-                                                                        {'/'}
-                                                                        {currentBilling.billingModel}
+                                                                        {/* TODO Will be fixed in #1591 or #1592 */}
+                                                                        {currentBilling.billingModes[0]}
                                                                     </Tag>
                                                                 </>
                                                             ) : (
@@ -188,8 +184,9 @@ export const Scale = ({
                                                         <>
                                                             <Tag color={'blue'}>
                                                                 {flavor.fixedPrice}
-                                                                {'/'}
-                                                                {currentBilling.billingModel}
+                                                                {/* TODO Will be fixed in #1591 or #1592 */}
+                                                                {currentBilling.billingModes[0]}
+                                                                in #1591 or #1592
                                                             </Tag>
                                                         </>
                                                     ) : (
@@ -235,9 +232,14 @@ export const Scale = ({
                             : ''
                     }
                 >
-                    {getParams?.params.map((item) =>
+                    {getParams.map((item) =>
                         item.kind === 'variable' || item.kind === 'env' ? (
-                            <OrderItem key={item.name} item={item} csp={getParams.csp} region={getParams.region} />
+                            <OrderItem
+                                key={item.name}
+                                item={item}
+                                csp={currentSelectedService.deployRequest.csp}
+                                region={currentSelectedService.deployRequest.region.name}
+                            />
                         ) : undefined
                     )}
                 </div>

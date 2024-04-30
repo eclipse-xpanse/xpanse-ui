@@ -55,6 +55,7 @@ export const SelectDestination = ({
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
+    const [form] = Form.useForm();
     const cspList = useMemo(() => {
         const currentCspList: UserOrderableServiceVo.csp[] = [];
         userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
@@ -225,7 +226,14 @@ export const SelectDestination = ({
     }
 
     return (
-        <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
+        <Form
+            form={form}
+            layout='vertical'
+            autoComplete='off'
+            initialValues={{ selectRegion, selectFlavor }}
+            onFinish={next}
+            validateTrigger={['next']}
+        >
             <div>
                 <CspSelect
                     selectCsp={selectCsp}
@@ -282,13 +290,7 @@ export const SelectDestination = ({
                         >
                             Previous
                         </Button>
-                        <Button
-                            type='primary'
-                            className={'migrate-steps-operation-button-clas'}
-                            onClick={() => {
-                                next();
-                            }}
-                        >
+                        <Button type='primary' className={'migrate-steps-operation-button-clas'} htmlType='submit'>
                             Next
                         </Button>
                     </Space>

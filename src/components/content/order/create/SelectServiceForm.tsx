@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { To, useLocation, useSearchParams } from 'react-router-dom';
+import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
     AvailabilityZoneConfig,
@@ -22,7 +22,7 @@ import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
-import { Col, Form, Row, Select, Tabs } from 'antd';
+import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -31,19 +31,24 @@ import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
 import { BillingInfo } from '../common/BillingInfo';
-import GoToSubmit from './GoToSubmit';
-import { servicesSubPageRoute } from '../../../utils/constants';
+import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
+    const { Paragraph } = Typography;
+    const [form] = Form.useForm();
     const [urlParams] = useSearchParams();
     const location = useLocation();
+    const navigate = useNavigate();
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
     const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+
     const servicePageUrl = servicesSubPageRoute + categoryName;
     let serviceInfo: OrderSubmitProps | undefined;
     const versionToServicesMap = useMemo<Map<string, UserOrderableServiceVo[]>>(() => {
@@ -101,6 +106,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
+    const currentEula: string | undefined = getEulaByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     let currentBilling: Billing = getBilling(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
 
     const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
@@ -224,28 +230,51 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         return availabilityZoneConfigs.filter((availabilityZoneConfig) => availabilityZoneConfig.mandatory).length > 0;
     }
 
+    const gotoOrderSubmit = function () {
+        const orderSubmitParams: OrderSubmitProps = getDeployParams(
+            versionToServicesMap.get(selectVersion) ?? [],
+            selectCsp,
+            selectServiceHostType,
+            { name: selectRegion, area: selectArea },
+            selectFlavor,
+            currentServiceProviderContactDetails,
+            selectAvailabilityZones,
+            currentEula
+        );
+
+        navigate(
+            orderPageRoute
+                .concat('?serviceName=', orderSubmitParams.name)
+                .concat('&version=', orderSubmitParams.version)
+                .concat('#', orderSubmitParams.category),
+            {
+                state: orderSubmitParams,
+            }
+        );
+    };
+
     return (
         <>
-            <Form layout='vertical' initialValues={{ selectRegion, selectFlavor }}>
+            <Form
+                form={form}
+                layout='vertical'
+                autoComplete='off'
+                initialValues={{ selectRegion, selectFlavor }}
+                onFinish={gotoOrderSubmit}
+                validateTrigger={['gotoOrderSubmit']}
+            >
                 <div>
                     <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
                     <div className={'Line'} />
                 </div>
                 <div className={'generic-table-container'}>
                     <Row justify='start' gutter={10}>
-                        <Col span={4}>
-                            <div className={'content-title'}>Service: {serviceName}</div>
-                        </Col>
                         <Col span={6}>
-                            <div className={'content-title'}>
-                                Version:&nbsp;
-                                <Select
-                                    value={selectVersion}
-                                    className={'version-drop-down'}
-                                    onChange={onChangeVersion}
-                                    options={versionList}
-                                />
-                            </div>
+                            <Tooltip placement='topLeft' title={serviceName}>
+                                <Paragraph ellipsis={true} className={'content-title'}>
+                                    Service: {serviceName}
+                                </Paragraph>
+                            </Tooltip>
                         </Col>
                         {currentServiceProviderContactDetails !== undefined ? (
                             <Col span={4}>
@@ -258,6 +287,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             <></>
                         )}
                     </Row>
+                    <div className={'cloud-provider-tab-class'}>
+                        Version:&nbsp;
+                        <Select
+                            value={selectVersion}
+                            className={'version-drop-down'}
+                            onChange={onChangeVersion}
+                            options={versionList}
+                        />
+                    </div>
 
                     <br />
                     <CspSelect
@@ -306,20 +344,22 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 </div>
                 <div>
                     <div className={'Line'} />
-                    <GoToSubmit
-                        selectedVersion={selectVersion}
-                        selectedCsp={selectCsp}
-                        region={{ name: selectRegion, area: selectArea }}
-                        selectedFlavor={selectFlavor}
-                        versionMapper={versionToServicesMap}
-                        selectedServiceHostingType={selectServiceHostType}
-                        currentServiceProviderContactDetails={currentServiceProviderContactDetails}
-                        availabilityZones={selectAvailabilityZones}
-                        isDisableNextButton={
-                            getAvailabilityZonesForRegionQuery.isError ||
-                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
-                        }
-                    />
+                    <div className={'order-param-item-row'}>
+                        <div className={'order-param-item-left'} />
+                        <div className={'order-param-submit'}>
+                            <Button
+                                type='primary'
+                                htmlType='submit'
+                                disabled={
+                                    getAvailabilityZonesForRegionQuery.isError ||
+                                    (isAvailabilityZoneRequired() &&
+                                        getAvailabilityZonesForRegionQuery.data?.length === 0)
+                                }
+                            >
+                                &nbsp;&nbsp;Next&nbsp;&nbsp;
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </Form>
         </>

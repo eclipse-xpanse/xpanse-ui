@@ -5,17 +5,18 @@
 
 import React from 'react';
 import { Ocl } from '../../../../xpanse-api/generated';
-import { Descriptions, Image, Tag } from 'antd';
+import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import { DeploymentText } from './DeploymentText';
 import { BillingText } from './BillingText';
 import { cspMap } from '../csp/CspLogo';
 import { ContactDetailsText } from './ContactDetailsText';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { FlavorsText } from './FlavorsText';
+import { AgreementText } from './AgreementText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
-
+    const { Paragraph } = Typography;
     try {
         return (
             <>
@@ -39,9 +40,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <br />
                                 <b>Service Name</b>
                                 <br />
-                                <Tag className={'ocl-display-tag'} color='blue'>
-                                    {ocl.name}
-                                </Tag>
+                                <Tooltip placement='topLeft' title={ocl.name}>
+                                    <Paragraph ellipsis={true} className={'ocl-data-display-service-register-name'}>
+                                        {ocl.name}
+                                    </Paragraph>
+                                </Tooltip>
                                 <br />
                                 <br />
                             </div>
@@ -108,6 +111,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 />
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
+                            <Descriptions.Item label='EULA'>
+                                {ocl.eula ? <AgreementText eula={ocl.eula} /> : <span>Not Provided</span>}
+                            </Descriptions.Item>
                         </Descriptions>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Button, Descriptions, Image, Tag } from 'antd';
+import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import { cspMap } from '../common/csp/CspLogo';
 import { FlavorsText } from '../common/ocl/FlavorsText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -16,6 +16,7 @@ import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate
 import '../../../styles/service_review.css';
 import useGetRegistrationDetails from './query/useGetRegistrationDetails';
 import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
+import { AgreementText } from '../common/ocl/AgreementText';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
@@ -29,6 +30,7 @@ export const ServiceReviewsDetails = ({
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
     const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo.id);
     const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.id);
+    const { Paragraph } = Typography;
 
     const onClickApprove = () => {
         setIsApproved(true);
@@ -99,9 +101,11 @@ export const ServiceReviewsDetails = ({
                             <br />
                             <b>Service Name</b>
                             <br />
-                            <Tag className={'ocl-display-tag'} color='blue' key={currentServiceTemplateVo.name}>
-                                {currentServiceTemplateVo.name}
-                            </Tag>
+                            <Tooltip placement='topLeft' title={currentServiceTemplateVo.name}>
+                                <Paragraph ellipsis={true} className={'ocl-data-display-service-review-name'}>
+                                    {currentServiceTemplateVo.name}
+                                </Paragraph>
+                            </Tooltip>
                             <br />
                             <br />
                         </div>
@@ -181,6 +185,13 @@ export const ServiceReviewsDetails = ({
                         </Descriptions.Item>
                         <Descriptions.Item label='Description'>
                             {currentServiceTemplateVo.description}
+                        </Descriptions.Item>
+                        <Descriptions.Item label='EULA'>
+                            {currentServiceTemplateVo.eula ? (
+                                <AgreementText eula={currentServiceTemplateVo.eula} />
+                            ) : (
+                                <span>Not Provided</span>
+                            )}
                         </Descriptions.Item>
                     </Descriptions>
                     {getRegistrationDetailsQuery.isSuccess &&

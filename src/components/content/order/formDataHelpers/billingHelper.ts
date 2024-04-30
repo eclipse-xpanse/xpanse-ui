@@ -11,7 +11,8 @@ export function getBilling(
     versionMapper: UserOrderableServiceVo[] | undefined
 ): Billing {
     let billing: Billing = {
-        billingModel: Billing.billingModel.MONTHLY,
+        // TODO Will be fixed in #1591 or #1592
+        billingModes: ['monthly'],
     };
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {

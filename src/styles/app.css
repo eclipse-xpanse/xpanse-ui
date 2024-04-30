@@ -79,6 +79,15 @@
     margin-top: 10px;
     overflow-x: auto;
 }
+.ocl-data-display-service-review-name {
+    width: 400px;
+    margin-top: 15px;
+}
+
+.ocl-data-display-service-register-name {
+    width: 800px;
+    margin-top: 15px;
+}
 
 .home-data-display {
     padding: 24px;
@@ -91,7 +100,7 @@
 .content-title {
     font-size: 20px;
     font-weight: bold;
-    width: 600px;
+    width: 400px;
 }
 
 .menu-loading {

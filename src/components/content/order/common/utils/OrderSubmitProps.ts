@@ -14,4 +14,5 @@ export interface OrderSubmitProps {
     serviceHostingType: DeployRequest.serviceHostingType;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     availabilityZones?: Record<string, string>;
+    eula: string | undefined;
 }
