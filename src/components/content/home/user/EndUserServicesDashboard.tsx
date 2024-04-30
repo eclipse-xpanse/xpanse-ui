@@ -9,9 +9,9 @@ import useListDeployedServicesQuery from '../../deployedServices/myServices/quer
 import { myServicesRoute } from '../../../utils/constants';
 import { DeployedService } from '../../../../xpanse-api/generated';
 import { createSearchParams, useNavigate } from 'react-router-dom';
-import serviceDeploymentState = DeployedService.serviceDeploymentState;
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
+import serviceDeploymentState = DeployedService.serviceDeploymentState;
 
 export function EndUserServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
@@ -31,10 +31,16 @@ export function EndUserServicesDashboard(): React.JSX.Element {
 
     if (listDeployedServicesQuery.data.length > 0) {
         listDeployedServicesQuery.data.forEach((serviceItem: DeployedService) => {
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+            ) {
                 successfulDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED) {
+            if (
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_FAILED
+            ) {
                 failedDeploymentsCount++;
             }
             if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
@@ -46,11 +52,11 @@ export function EndUserServicesDashboard(): React.JSX.Element {
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState) => {
+    const getMyServicesRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState[]) => {
         navigate({
             pathname: myServicesRoute,
             search: createSearchParams({
-                serviceState: serviceState.valueOf(),
+                serviceState: serviceState,
             }).toString(),
         });
     };
@@ -62,7 +68,10 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_SUCCESSFUL);
+                                getMyServicesRedirectionUrl([
+                                    serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+                                    serviceDeploymentState.MODIFICATION_SUCCESSFUL,
+                                ]);
                             }}
                         >
                             <Statistic
@@ -77,7 +86,10 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl(serviceDeploymentState.DEPLOYMENT_FAILED);
+                                getMyServicesRedirectionUrl([
+                                    serviceDeploymentState.DEPLOYMENT_FAILED,
+                                    serviceDeploymentState.MODIFICATION_FAILED,
+                                ]);
                             }}
                         >
                             <Statistic
@@ -92,7 +104,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_SUCCESSFUL);
+                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_SUCCESSFUL]);
                             }}
                         >
                             <Statistic
@@ -107,7 +119,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl(serviceDeploymentState.DESTROY_FAILED);
+                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_FAILED]);
                             }}
                         >
                             <Statistic
