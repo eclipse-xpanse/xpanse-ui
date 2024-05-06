@@ -7,10 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { RatingMode } from './RatingMode';
 /**
- * The flavors of the orderable service.
+ * The flavors of the managed service.
  */
-export type ServiceFlavor = {
+export type ServiceFlavorWithPrice = {
     /**
      * The flavor name
      */
@@ -19,4 +20,5 @@ export type ServiceFlavor = {
      * The properties of the flavor
      */
     properties: Record<string, string>;
+    pricing: RatingMode;
 };

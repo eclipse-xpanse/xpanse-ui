@@ -11,6 +11,6 @@
  * The locks whether the service can be modified or destroyed.
  */
 export type ServiceLockConfig = {
-    destroyLocked?: boolean;
     modifyLocked?: boolean;
+    destroyLocked?: boolean;
 };
