@@ -26,10 +26,16 @@ export function IsvServicesDashBoard(): React.JSX.Element {
 
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+            ) {
                 successfulDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED) {
+            if (
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
+                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_FAILED
+            ) {
                 failedDeploymentsCount++;
             }
             if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
@@ -73,11 +79,11 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         });
     };
 
-    const getReportsRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState) => {
+    const getReportsRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState[]) => {
         navigate({
             pathname: reportsRoute,
             search: createSearchParams({
-                serviceState: serviceState.valueOf(),
+                serviceState: serviceState,
             }).toString(),
         });
     };
@@ -107,7 +113,10 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl(DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL);
+                                getReportsRedirectionUrl([
+                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL,
+                                ]);
                             }}
                         >
                             <Statistic
@@ -122,7 +131,10 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl(DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED);
+                                getReportsRedirectionUrl([
+                                    DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED,
+                                    DeployedService.serviceDeploymentState.MODIFICATION_FAILED,
+                                ]);
                             }}
                         >
                             <Statistic
@@ -137,7 +149,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl(DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL);
+                                getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL]);
                             }}
                         >
                             <Statistic
@@ -152,7 +164,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={'dashboard-container-class'}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl(DeployedService.serviceDeploymentState.DESTROY_FAILED);
+                                getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_FAILED]);
                             }}
                         >
                             <Statistic

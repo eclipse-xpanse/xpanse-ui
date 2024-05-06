@@ -45,8 +45,8 @@ function Reports(): React.JSX.Element {
         const serviceList: DeployedService[] = [];
         if (listDeployedServicesByIsvQuery.data.length > 0) {
             if (serviceStateInQuery) {
-                deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
-                    (service) => service.serviceDeploymentState === serviceStateInQuery
+                deployedServiceList = listDeployedServicesByIsvQuery.data.filter((service) =>
+                    serviceStateInQuery.includes(service.serviceDeploymentState)
                 );
             } else if (serviceIdInQuery) {
                 deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
@@ -344,16 +344,20 @@ function Reports(): React.JSX.Element {
         setIsMyServiceDetailsModalOpen(false);
     };
 
-    function getServiceStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
-        if (queryInUri.length > 0) {
-            if (
-                Object.values(DeployedService.serviceDeploymentState).includes(
-                    queryInUri as DeployedService.serviceDeploymentState
-                )
-            ) {
-                return queryInUri as DeployedService.serviceDeploymentState;
-            }
+    function getServiceStateFromQuery(): DeployedService.serviceDeploymentState[] | undefined {
+        const serviceStateList: DeployedService.serviceDeploymentState[] = [];
+        if (urlParams.size > 0) {
+            urlParams.forEach((value, key, parent) => {
+                if (
+                    key === serviceStateQuery &&
+                    Object.values(DeployedService.serviceDeploymentState).includes(
+                        value as DeployedService.serviceDeploymentState
+                    )
+                ) {
+                    serviceStateList.push(value as DeployedService.serviceDeploymentState);
+                }
+            });
+            return serviceStateList;
         }
         return undefined;
     }

@@ -107,8 +107,8 @@ function MyServices(): React.JSX.Element {
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
         if (serviceDeploymentStateInQuery) {
-            serviceVoList = listDeployedServicesQuery.data.filter(
-                (serviceVo) => serviceVo.serviceDeploymentState === serviceDeploymentStateInQuery
+            serviceVoList = listDeployedServicesQuery.data.filter((serviceVo) =>
+                serviceDeploymentStateInQuery.includes(serviceVo.serviceDeploymentState)
             );
         } else if (serviceIdInQuery) {
             serviceVoList = listDeployedServicesQuery.data.filter((serviceVo) => serviceVo.id === serviceIdInQuery);
@@ -941,16 +941,20 @@ function MyServices(): React.JSX.Element {
         setIsScaleModalOpen(false);
     };
 
-    function getServiceDeploymentStateFromQuery(): DeployedService.serviceDeploymentState | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceStateQuery) ?? '');
-        if (queryInUri.length > 0) {
-            if (
-                Object.values(DeployedService.serviceDeploymentState).includes(
-                    queryInUri as DeployedService.serviceDeploymentState
-                )
-            ) {
-                return queryInUri as DeployedService.serviceDeploymentState;
-            }
+    function getServiceDeploymentStateFromQuery(): DeployedService.serviceDeploymentState[] | undefined {
+        const serviceStateList: DeployedService.serviceDeploymentState[] = [];
+        if (urlParams.size > 0) {
+            urlParams.forEach((value, key, parent) => {
+                if (
+                    key === serviceStateQuery &&
+                    Object.values(DeployedService.serviceDeploymentState).includes(
+                        value as DeployedService.serviceDeploymentState
+                    )
+                ) {
+                    serviceStateList.push(value as DeployedService.serviceDeploymentState);
+                }
+            });
+            return serviceStateList;
         }
         return undefined;
     }
