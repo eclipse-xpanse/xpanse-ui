@@ -23,6 +23,7 @@ import {
     EditOutlined,
     FundOutlined,
     InfoCircleOutlined,
+    LockOutlined,
     PlayCircleOutlined,
     PoweroffOutlined,
     RiseOutlined,
@@ -56,6 +57,7 @@ import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestSta
 import { Modify } from '../../order/modify/Modify';
 import { Scale } from '../../order/scale/Scale';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
+import { Locks } from '../../order/locks/Locks';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();
@@ -81,6 +83,7 @@ function MyServices(): React.JSX.Element {
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
     const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
+    const [isLocksModalOpen, setIsLocksModalOpen] = useState<boolean>(false);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
@@ -181,14 +184,14 @@ function MyServices(): React.JSX.Element {
                 ),
             },
             {
-                key: 'scale',
+                key: 'locks',
                 label: (
                     <Button
                         onClick={() => {
-                            scale(record);
+                            locks(record);
                         }}
                         className={'button-as-link'}
-                        icon={<RiseOutlined />}
+                        icon={<LockOutlined />}
                         disabled={
                             activeRecord !== undefined ||
                             record.serviceDeploymentState.toString() ===
@@ -204,64 +207,153 @@ function MyServices(): React.JSX.Element {
                         }
                         type={'link'}
                     >
-                        scale
+                        locks
                     </Button>
+                ),
+            },
+            {
+                key: 'scale',
+                label: (
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'scaling has been locked for this service.'}
+                            >
+                                <Button
+                                    className={'button-as-link'}
+                                    icon={<RiseOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    modify parameters
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    scale(record);
+                                }}
+                                className={'button-as-link'}
+                                icon={<RiseOutlined />}
+                                disabled={
+                                    activeRecord !== undefined ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.MODIFYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROYING.toString()
+                                }
+                                type={'link'}
+                            >
+                                scale
+                            </Button>
+                        )}
+                    </>
                 ),
             },
             {
                 key: 'modify parameters',
                 label: (
-                    <Button
-                        onClick={() => {
-                            modify(record);
-                        }}
-                        className={'button-as-link'}
-                        icon={<EditOutlined />}
-                        disabled={
-                            activeRecord !== undefined ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.MODIFYING.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROYING.toString()
-                        }
-                        type={'link'}
-                    >
-                        modify parameters
-                    </Button>
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'modifications has been locked for this service.'}
+                            >
+                                <Button
+                                    className={'button-as-link'}
+                                    icon={<EditOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    modify parameters
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    modify(record);
+                                }}
+                                className={'button-as-link'}
+                                icon={<EditOutlined />}
+                                disabled={
+                                    activeRecord !== undefined ||
+                                    (record.lockConfig?.modifyLocked !== undefined && record.lockConfig.modifyLocked) ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.MODIFYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROYING.toString()
+                                }
+                                type={'link'}
+                            >
+                                modify parameters
+                            </Button>
+                        )}
+                    </>
                 ),
             },
             {
                 key: 'migrate',
                 label: (
-                    <Button
-                        onClick={() => {
-                            migrate(record);
-                        }}
-                        className={'button-as-link'}
-                        icon={<CopyOutlined />}
-                        disabled={
-                            activeRecord !== undefined ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROYING.toString()
-                        }
-                        type={'link'}
-                    >
-                        migrate
-                    </Button>
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'migration has been locked for this service.'}
+                            >
+                                <Button
+                                    className={'button-as-link'}
+                                    icon={<CopyOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    migrate
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    migrate(record);
+                                }}
+                                className={'button-as-link'}
+                                icon={<CopyOutlined />}
+                                disabled={
+                                    activeRecord !== undefined ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROYING.toString()
+                                }
+                                type={'link'}
+                            >
+                                migrate
+                            </Button>
+                        )}
+                    </>
                 ),
             },
             {
@@ -285,51 +377,95 @@ function MyServices(): React.JSX.Element {
                         DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString() ? (
-                        <Popconfirm
-                            title='Purge the service'
-                            description='Are you sure to purge the service?'
-                            cancelText='Yes'
-                            okText='No'
-                            onCancel={() => {
-                                purge(record);
-                            }}
-                        >
-                            <Button
-                                icon={<DeleteOutlined />}
-                                disabled={activeRecord !== undefined}
-                                className={'button-as-link'}
-                                type={'link'}
-                            >
-                                purge
-                            </Button>
-                        </Popconfirm>
+                        <>
+                            {record.lockConfig?.destroyLocked ? (
+                                <Tooltip
+                                    placement={'left'}
+                                    style={{ maxWidth: '100%' }}
+                                    title={'purging has been locked for this service.'}
+                                >
+                                    <Button
+                                        icon={<DeleteOutlined />}
+                                        disabled={true}
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        purge
+                                    </Button>
+                                    <LockOutlined />
+                                </Tooltip>
+                            ) : (
+                                <Popconfirm
+                                    title='Purge the service'
+                                    description='Are you sure to purge the service?'
+                                    cancelText='Yes'
+                                    okText='No'
+                                    onCancel={() => {
+                                        purge(record);
+                                    }}
+                                >
+                                    <Button
+                                        icon={<DeleteOutlined />}
+                                        disabled={
+                                            activeRecord !== undefined ||
+                                            (record.lockConfig?.destroyLocked !== undefined &&
+                                                record.lockConfig.destroyLocked)
+                                        }
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        purge
+                                    </Button>
+                                </Popconfirm>
+                            )}
+                        </>
                     ) : (
-                        <Popconfirm
-                            title='Destroy the service'
-                            description='Are you sure to destroy the service?'
-                            cancelText='Yes'
-                            okText='No'
-                            onCancel={() => {
-                                destroy(record);
-                            }}
-                        >
-                            <Button
-                                icon={<CloseCircleOutlined />}
-                                disabled={
-                                    (record.serviceDeploymentState.toString() !==
-                                        DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
-                                        record.serviceDeploymentState.toString() !==
-                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
-                                        record.serviceDeploymentState.toString() !==
-                                            DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
-                                    activeRecord !== undefined
-                                }
-                                className={'button-as-link'}
-                                type={'link'}
-                            >
-                                destroy
-                            </Button>
-                        </Popconfirm>
+                        <>
+                            {record.lockConfig?.destroyLocked ? (
+                                <Tooltip
+                                    placement={'left'}
+                                    style={{ maxWidth: '100%' }}
+                                    title={'destroy has been locked for this service.'}
+                                >
+                                    <Button
+                                        icon={<CloseCircleOutlined />}
+                                        disabled={true}
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        purge
+                                    </Button>
+                                    <LockOutlined />
+                                </Tooltip>
+                            ) : (
+                                <Popconfirm
+                                    title='Destroy the service'
+                                    description='Are you sure to destroy the service?'
+                                    cancelText='Yes'
+                                    okText='No'
+                                    onCancel={() => {
+                                        destroy(record);
+                                    }}
+                                >
+                                    <Button
+                                        icon={<CloseCircleOutlined />}
+                                        disabled={
+                                            (record.serviceDeploymentState.toString() !==
+                                                DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
+                                                record.serviceDeploymentState.toString() !==
+                                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
+                                                record.serviceDeploymentState.toString() !==
+                                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
+                                            activeRecord !== undefined
+                                        }
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        destroy
+                                    </Button>
+                                </Popconfirm>
+                            )}
+                        </>
                     ),
             },
             {
@@ -692,6 +828,10 @@ function MyServices(): React.JSX.Element {
         );
     };
 
+    const locksTitle = (): React.JSX.Element => {
+        return <div className={'content-title'}>Service Lock Config</div>;
+    };
+
     function destroy(record: DeployedService): void {
         setIsDestroyRequestSubmitted(true);
         setActiveRecord(
@@ -766,6 +906,19 @@ function MyServices(): React.JSX.Element {
             cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
         }
         setIsScaleModalOpen(true);
+    }
+
+    function locks(record: DeployedService): void {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        const existingParameters = getExistingServiceParameters(record);
+        for (const existingServiceParametersKey in existingParameters) {
+            cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
+        }
+        setIsLocksModalOpen(true);
     }
 
     function onMonitor(record: DeployedService): void {
@@ -941,6 +1094,13 @@ function MyServices(): React.JSX.Element {
         setIsScaleModalOpen(false);
     };
 
+    const handleCancelLocksModel = () => {
+        setActiveRecord(undefined);
+        clearFormVariables();
+        refreshData();
+        setIsLocksModalOpen(false);
+    };
+
     function getServiceDeploymentStateFromQuery(): DeployedService.serviceDeploymentState[] | undefined {
         const serviceStateList: DeployedService.serviceDeploymentState[] = [];
         if (urlParams.size > 0) {
@@ -1012,6 +1172,22 @@ function MyServices(): React.JSX.Element {
                     mask={true}
                 >
                     <Migrate currentSelectedService={activeRecord} />
+                </Modal>
+            ) : null}
+
+            {activeRecord ? (
+                <Modal
+                    open={isLocksModalOpen}
+                    title={locksTitle()}
+                    closable={true}
+                    maskClosable={false}
+                    destroyOnClose={true}
+                    footer={null}
+                    onCancel={handleCancelLocksModel}
+                    width={400}
+                    mask={true}
+                >
+                    <Locks currentSelectedService={activeRecord} />
                 </Modal>
             ) : null}
 
