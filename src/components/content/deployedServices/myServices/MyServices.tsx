@@ -214,29 +214,49 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'scale',
                 label: (
-                    <Button
-                        onClick={() => {
-                            scale(record);
-                        }}
-                        className={'button-as-link'}
-                        icon={<RiseOutlined />}
-                        disabled={
-                            activeRecord !== undefined ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.MODIFYING.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
-                            record.serviceDeploymentState.toString() ===
-                                DeployedService.serviceDeploymentState.DESTROYING.toString()
-                        }
-                        type={'link'}
-                    >
-                        scale
-                    </Button>
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'scaling has been locked for this service.'}
+                            >
+                                <Button
+                                    className={'button-as-link'}
+                                    icon={<RiseOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    modify parameters
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Button
+                                onClick={() => {
+                                    scale(record);
+                                }}
+                                className={'button-as-link'}
+                                icon={<RiseOutlined />}
+                                disabled={
+                                    activeRecord !== undefined ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.MODIFYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DEPLOYING.toString() ||
+                                    record.serviceDeploymentState.toString() ===
+                                        DeployedService.serviceDeploymentState.DESTROYING.toString()
+                                }
+                                type={'link'}
+                            >
+                                scale
+                            </Button>
+                        )}
+                    </>
                 ),
             },
             {
@@ -250,9 +270,6 @@ function MyServices(): React.JSX.Element {
                                 title={'modifications has been locked for this service.'}
                             >
                                 <Button
-                                    onClick={() => {
-                                        modify(record);
-                                    }}
                                     className={'button-as-link'}
                                     icon={<EditOutlined />}
                                     disabled={true}
@@ -302,9 +319,6 @@ function MyServices(): React.JSX.Element {
                                 title={'migration has been locked for this service.'}
                             >
                                 <Button
-                                    onClick={() => {
-                                        migrate(record);
-                                    }}
                                     className={'button-as-link'}
                                     icon={<CopyOutlined />}
                                     disabled={true}
@@ -406,32 +420,52 @@ function MyServices(): React.JSX.Element {
                             )}
                         </>
                     ) : (
-                        <Popconfirm
-                            title='Destroy the service'
-                            description='Are you sure to destroy the service?'
-                            cancelText='Yes'
-                            okText='No'
-                            onCancel={() => {
-                                destroy(record);
-                            }}
-                        >
-                            <Button
-                                icon={<CloseCircleOutlined />}
-                                disabled={
-                                    (record.serviceDeploymentState.toString() !==
-                                        DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
-                                        record.serviceDeploymentState.toString() !==
-                                            DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
-                                        record.serviceDeploymentState.toString() !==
-                                            DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
-                                    activeRecord !== undefined
-                                }
-                                className={'button-as-link'}
-                                type={'link'}
-                            >
-                                destroy
-                            </Button>
-                        </Popconfirm>
+                        <>
+                            {record.lockConfig?.destroyLocked ? (
+                                <Tooltip
+                                    placement={'left'}
+                                    style={{ maxWidth: '100%' }}
+                                    title={'destroy has been locked for this service.'}
+                                >
+                                    <Button
+                                        icon={<CloseCircleOutlined />}
+                                        disabled={true}
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        purge
+                                    </Button>
+                                    <LockOutlined />
+                                </Tooltip>
+                            ) : (
+                                <Popconfirm
+                                    title='Destroy the service'
+                                    description='Are you sure to destroy the service?'
+                                    cancelText='Yes'
+                                    okText='No'
+                                    onCancel={() => {
+                                        destroy(record);
+                                    }}
+                                >
+                                    <Button
+                                        icon={<CloseCircleOutlined />}
+                                        disabled={
+                                            (record.serviceDeploymentState.toString() !==
+                                                DeployedService.serviceDeploymentState.DESTROY_FAILED.toString() &&
+                                                record.serviceDeploymentState.toString() !==
+                                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
+                                                record.serviceDeploymentState.toString() !==
+                                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
+                                            activeRecord !== undefined
+                                        }
+                                        className={'button-as-link'}
+                                        type={'link'}
+                                    >
+                                        destroy
+                                    </Button>
+                                </Popconfirm>
+                            )}
+                        </>
                     ),
             },
             {
