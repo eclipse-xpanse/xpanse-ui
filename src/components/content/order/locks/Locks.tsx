@@ -3,19 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useRef } from 'react';
+import React from 'react';
 import { Button, Form, Space, Switch } from 'antd';
 import '../../../../styles/locks.css';
 import {
-    ApiError,
     DeployedServiceDetails,
-    Response,
     ServiceLockConfig,
-    ServiceService,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { useMutation } from '@tanstack/react-query';
 import LocksResult from './LocksResult';
+import { useLockRequest } from './useLockRequest';
 
 export const Locks = ({
     currentSelectedService,
@@ -23,24 +20,8 @@ export const Locks = ({
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const requestResult = useRef<string[]>([]);
 
-    const lockRequest = useMutation({
-        mutationFn: (requestBody: { id: string; lockConfig: ServiceLockConfig }) => {
-            return ServiceService.changeServiceLockConfig(requestBody.id, requestBody.lockConfig);
-        },
-        onSuccess: () => {
-            requestResult.current = [];
-        },
-        onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
-                const response: Response = error.body as Response;
-                requestResult.current = response.details;
-            } else {
-                requestResult.current = [error.message];
-            }
-        },
-    });
+    const lockRequest = useLockRequest(currentSelectedService.id);
 
     const onFinish = (values: { destroyChecked: boolean; modifyChecked: boolean }) => {
         const serviceLockConfig: { id: string; lockConfig: ServiceLockConfig } = {
@@ -60,11 +41,7 @@ export const Locks = ({
     return (
         <div className={'locks-select-class'}>
             {currentSelectedService.lockConfig !== undefined && !lockRequest.isPending && !lockRequest.isIdle ? (
-                <LocksResult
-                    currentSelectedService={currentSelectedService}
-                    lockRequestStatus={lockRequest.status}
-                    requestResult={requestResult.current}
-                />
+                <LocksResult currentSelectedService={currentSelectedService} />
             ) : null}
             <div className={'locks-param-item-left'} />
             <Form

@@ -7,18 +7,21 @@ import { Alert } from 'antd';
 import React from 'react';
 import '../../../../styles/locks.css';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../../../../xpanse-api/generated';
+import {
+    ApiError,
+    DeployedServiceDetails,
+    Response,
+    VendorHostedDeployedServiceDetails,
+} from '../../../../xpanse-api/generated';
+import { useLockRequestState } from './useLockRequest';
 
 function LocksResult({
     currentSelectedService,
-    lockRequestStatus,
-    requestResult,
 }: {
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
-    lockRequestStatus: string;
-    requestResult: string[];
 }): React.JSX.Element {
-    if (lockRequestStatus === 'success') {
+    const lockRequestState = useLockRequestState(currentSelectedService.id);
+    if (lockRequestState[0]?.status === 'success') {
         return (
             <Alert
                 type={'success'}
@@ -28,16 +31,30 @@ function LocksResult({
                     </>
                 }
                 className={'alert-result'}
-                description={convertStringArrayToUnorderedList(requestResult)}
             />
         );
-    } else if (lockRequestStatus === 'error') {
+    } else if (lockRequestState[0]?.status === 'error') {
+        let errMsg: string[];
+        if (
+            lockRequestState[0] &&
+            lockRequestState[0].error instanceof ApiError &&
+            lockRequestState[0]?.error.body &&
+            'details' in lockRequestState[0].error.body
+        ) {
+            const response: Response = lockRequestState[0].error.body as Response;
+            errMsg = response.details;
+        } else {
+            errMsg = [
+                lockRequestState[0].error !== null && lockRequestState[0] ? lockRequestState[0].error.message : '',
+            ];
+        }
+
         return (
             <Alert
                 type={'error'}
                 showIcon={true}
                 message={`Service lock configuration update failed`}
-                description={convertStringArrayToUnorderedList(requestResult)}
+                description={convertStringArrayToUnorderedList(errMsg)}
                 className={'alert-result'}
             />
         );
