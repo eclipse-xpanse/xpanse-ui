@@ -87,7 +87,7 @@
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@tanstack/eslint-plugin-query": "^5.32.1",
         "@testing-library/jest-dom": "^6.4.5",
-        "@testing-library/react": "^15.0.6",
+        "@testing-library/react": "^15.0.7",
         "@types/jest": "^29.5.12",
         "@types/node": "^20.12.10",
         "@types/react": "^18.3.1",
