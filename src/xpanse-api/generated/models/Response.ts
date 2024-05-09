@@ -50,6 +50,7 @@ export namespace Response {
         SERVICE_TEMPLATE_NOT_APPROVED = 'Service Template Not Approved',
         SERVICE_TEMPLATE_ALREADY_REVIEWED = 'Service Template Already Reviewed',
         INVALID_SERVICE_VERSION = 'Invalid Service Version',
+        INVALID_SERVICE_FLAVORS = 'Invalid Service Flavors',
         SERVICE_DEPLOYMENT_NOT_FOUND = 'Service Deployment Not Found',
         RESOURCE_NOT_FOUND = 'Resource Not Found',
         DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
@@ -73,7 +74,8 @@ export namespace Response {
         SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
         SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
         SERVICE_LOCKED = 'Service Locked',
-        EULA_NOT_ACCEPTED = 'Eula not accepted',
+        EULA_NOT_ACCEPTED = 'Eula Not Accepted',
+        SERVICE_FLAVOR_DOWNGRADE_NOT_ALLOWED = 'Service Flavor Downgrade Not Allowed',
         INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     }
 }

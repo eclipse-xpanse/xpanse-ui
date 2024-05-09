@@ -12,7 +12,7 @@ export function getBilling(
 ): Billing {
     let billing: Billing = {
         // TODO Will be fixed in #1591 or #1592
-        billingModes: ['monthly'],
+        billingModes: ['fixed'],
     };
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {

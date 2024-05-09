@@ -8,14 +8,19 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ModificationImpact } from './ModificationImpact';
-import type { ServiceFlavor } from './ServiceFlavor';
+import type { ServiceFlavorWithPrice } from './ServiceFlavorWithPrice';
 /**
  * The flavors of the managed service
  */
-export type Flavors = {
+export type FlavorsWithPrice = {
     /**
      * The flavors of the managed service.
      */
-    serviceFlavors: Array<ServiceFlavor>;
+    serviceFlavors: Array<ServiceFlavorWithPrice>;
     modificationImpact: ModificationImpact;
+    /**
+     * Whether the downgrading is allowed, default value: true.
+     */
+    isDowngradeAllowed: boolean;
+    downgradeAllowed?: boolean;
 };

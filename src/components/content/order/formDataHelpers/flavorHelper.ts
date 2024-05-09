@@ -27,7 +27,8 @@ export function getFlavorList(
     const flavors: Flavor[] = [];
     if (flavorList.length > 0) {
         for (const flavor of flavorList) {
-            const flavorItem = { value: flavor.name, label: flavor.name, price: flavor.fixedPrice.toString() };
+            // TODO will be fixed after #1597 is fixed
+            const flavorItem = { value: flavor.name, label: flavor.name, price: (20).toString() };
             flavors.push(flavorItem);
         }
     }
