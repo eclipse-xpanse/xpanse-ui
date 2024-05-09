@@ -7,11 +7,10 @@ import CspSelect from '../formElements/CspSelect';
 import { AvailabilityZoneConfig, Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
-import { Region } from '../types/Region';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { convertAreasToTabs, getAreaForRegion } from '../formDataHelpers/areaHelper';
+import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { getBilling } from '../formDataHelpers/billingHelper';
@@ -24,16 +23,26 @@ import { FlavorInfo } from '../common/FlavorInfo';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
     updateSelectedParameters,
-    currentCsp,
-    currentRegion,
+    cspList,
+    selectCsp,
+    setSelectCsp,
+    serviceHostTypes,
+    selectServiceHostType,
+    setSelectServiceHostingType,
+    areaList,
+    selectArea,
+    setSelectArea,
+    regionList,
+    selectRegion,
+    setSelectRegion,
     selectAvailabilityZones,
     setSelectAvailabilityZones,
     currentFlavor,
-    currentServiceHostingType,
     setCurrentMigrationStep,
     stepItem,
 }: {
@@ -46,43 +55,26 @@ export const SelectDestination = ({
         selectedFlavor: string,
         selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
     ) => void;
-    currentCsp: UserOrderableServiceVo.csp;
-    currentRegion: string;
+    cspList: UserOrderableServiceVo.csp[];
+    selectCsp: UserOrderableServiceVo.csp;
+    setSelectCsp: Dispatch<SetStateAction<UserOrderableServiceVo.csp>>;
+    serviceHostTypes: UserOrderableServiceVo.serviceHostingType[];
+    selectServiceHostType: UserOrderableServiceVo.serviceHostingType;
+    setSelectServiceHostingType: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType>>;
+    areaList: Tab[];
+    selectArea: string;
+    setSelectArea: Dispatch<SetStateAction<string>>;
+    regionList: RegionDropDownInfo[];
+    selectRegion: string;
+    setSelectRegion: Dispatch<SetStateAction<string>>;
     selectAvailabilityZones: Record<string, string>;
     setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
-    currentServiceHostingType: UserOrderableServiceVo.serviceHostingType;
+
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const cspList = useMemo(() => {
-        const currentCspList: UserOrderableServiceVo.csp[] = [];
-        userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
-            if (!currentCspList.includes(userOrderableServiceVo.csp)) {
-                currentCspList.push(userOrderableServiceVo.csp);
-            }
-        });
-        return currentCspList;
-    }, [userOrderableServiceVoList]);
-    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(currentCsp);
-    let serviceHostTypes = getAvailableServiceHostingTypes(selectCsp, userOrderableServiceVoList);
-    const [selectServiceHostType, setSelectServiceHostType] =
-        useState<UserOrderableServiceVo.serviceHostingType>(currentServiceHostingType);
-
-    let areaList: Tab[] = convertAreasToTabs(selectCsp, selectServiceHostType, userOrderableServiceVoList);
-    const [selectArea, setSelectArea] = useState<string>(
-        getAreaForRegion(selectCsp, selectServiceHostType, userOrderableServiceVoList, currentRegion)
-    );
-
-    let regionList: Region[] = getRegionDropDownValues(
-        selectCsp,
-        selectServiceHostType,
-        selectArea,
-        userOrderableServiceVoList
-    );
-    const [selectRegion, setSelectRegion] = useState<string>(currentRegion);
-
     const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
@@ -113,7 +105,7 @@ export const SelectDestination = ({
 
     const prev = () => {
         stepItem.status = 'wait';
-        setCurrentMigrationStep(MigrationSteps.ExportServiceData);
+        setCurrentMigrationStep(MigrationSteps.SelectMigrateTarget);
     };
 
     const next = () => {
@@ -123,7 +115,7 @@ export const SelectDestination = ({
     };
 
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
-        setSelectServiceHostType(serviceHostingType);
+        setSelectServiceHostingType(selectServiceHostType);
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -201,7 +193,7 @@ export const SelectDestination = ({
         setSelectArea(areaList[0]?.key ?? '');
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.value ?? '');
-        setSelectServiceHostType(serviceHostTypes[0]);
+        setSelectServiceHostingType(serviceHostTypes[0]);
         updateSelectedParameters(
             csp,
             areaList[0]?.key ?? '',

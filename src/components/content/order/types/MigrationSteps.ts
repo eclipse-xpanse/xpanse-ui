@@ -5,8 +5,10 @@
 
 export enum MigrationSteps {
     ExportServiceData = 0,
-    SelectADestination = 1,
-    PrepareDeploymentParameters = 2,
-    ImportServiceData = 3,
-    MigrateService = 4,
+
+    SelectMigrateTarget = 1,
+    SelectADestination = 2,
+    PrepareDeploymentParameters = 3,
+    ImportServiceData = 4,
+    MigrateService = 5,
 }
