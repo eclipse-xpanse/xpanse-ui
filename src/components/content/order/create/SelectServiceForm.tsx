@@ -12,7 +12,7 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Region } from '../types/Region';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { Flavor } from '../types/Flavor';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import { getCspListForVersion } from '../formDataHelpers/cspHelper';
@@ -89,7 +89,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     );
     let areaList: Tab[] = convertAreasToTabs(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectArea, setSelectArea] = useState<string>(serviceInfo ? serviceInfo.area : areaList[0].key);
-    let regionList: Region[] = getRegionDropDownValues(
+    let regionList: RegionDropDownInfo[] = getRegionDropDownValues(
         selectCsp,
         selectServiceHostType,
         selectArea,

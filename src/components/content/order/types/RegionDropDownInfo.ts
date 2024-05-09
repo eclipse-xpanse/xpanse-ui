@@ -6,7 +6,7 @@
 /**
  * The regions inside Area
  */
-export interface Region {
+export interface RegionDropDownInfo {
     /**
      * The name of the area
      */

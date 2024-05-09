@@ -20,7 +20,7 @@ export const ExportServiceData = ({
 
     const next = () => {
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.SelectADestination);
+        setCurrentMigrationStep(MigrationSteps.SelectMigrateTarget);
     };
 
     return (
