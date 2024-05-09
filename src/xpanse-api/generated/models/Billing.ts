@@ -14,5 +14,5 @@ export type Billing = {
     /**
      * Supported billing modes by the managed service
      */
-    billingModes: Array<'yearly' | 'monthly' | 'daily' | 'hourly' | 'pay_per_use'>;
+    billingModes: Array<'fixed' | 'pay_per_use'>;
 };

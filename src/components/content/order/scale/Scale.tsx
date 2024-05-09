@@ -165,7 +165,8 @@ export const Scale = ({
                                                             {currentBilling ? (
                                                                 <>
                                                                     <Tag color={'blue'}>
-                                                                        {flavor.fixedPrice}
+                                                                        {/* TODO Will be fixed after #1597 is fixed */}
+                                                                        {(20).toString()}
                                                                         {/* TODO Will be fixed in #1591 or #1592 */}
                                                                         {currentBilling.billingModes[0]}
                                                                     </Tag>
@@ -183,7 +184,8 @@ export const Scale = ({
                                                     {currentBilling ? (
                                                         <>
                                                             <Tag color={'blue'}>
-                                                                {flavor.fixedPrice}
+                                                                {/* TODO Will be fixed after #1597 is fixed */}
+                                                                {(20).toString()}
                                                                 {/* TODO Will be fixed in #1591 or #1592 */}
                                                                 {currentBilling.billingModes[0]}
                                                                 in #1591 or #1592
