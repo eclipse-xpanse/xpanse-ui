@@ -6,7 +6,7 @@
 import React from 'react';
 import { Form, Select, Space } from 'antd';
 import '../../../../styles/service_order.css';
-import { Region } from '../types/Region';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
 export const RegionInfo = ({
     selectRegion,
@@ -16,7 +16,7 @@ export const RegionInfo = ({
 }: {
     selectRegion: string;
     onChangeRegion?: (newRegion: string) => void;
-    regionList?: Region[];
+    regionList?: RegionDropDownInfo[];
     disabled?: boolean;
 }): React.JSX.Element => {
     return (

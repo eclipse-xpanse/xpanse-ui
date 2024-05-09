@@ -26,6 +26,11 @@
     padding: 0;
     background: #f2f2f2;
 }
+.order-select-migrate-target {
+    display: flex;
+    margin-top: 2%;
+    margin-bottom: 3%;
+}
 
 .order-param-item-row {
     display: table;
