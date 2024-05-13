@@ -47,6 +47,10 @@ export type MigrateRequest = {
      */
     availabilityZones?: Record<string, string>;
     /**
+     * The billing mode of the managed service.
+     */
+    billingMode: MigrateRequest.billingMode;
+    /**
      * The id of the service to migrate
      */
     id: string;
@@ -87,5 +91,12 @@ export namespace MigrateRequest {
     export enum serviceHostingType {
         SELF = 'self',
         SERVICE_VENDOR = 'service-vendor',
+    }
+    /**
+     * The billing mode of the managed service.
+     */
+    export enum billingMode {
+        FIXED = 'Fixed',
+        PAY_PER_USE = 'Pay per Use',
     }
 }

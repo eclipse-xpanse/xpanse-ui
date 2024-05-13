@@ -8,6 +8,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { MigrationSteps } from '../types/MigrationSteps';
 import {
     DeployedServiceDetails,
+    MigrateRequest,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -16,6 +17,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import { getBillingModes } from '../formDataHelpers/billingHelper';
 export const SelectMigrationTarget = ({
     target,
     setTarget,
@@ -29,6 +31,8 @@ export const SelectMigrationTarget = ({
     setSelectArea,
     setRegionList,
     setSelectRegion,
+    setBillingModes,
+    setSelectBillingMode,
     setCurrentMigrationStep,
     stepItem,
 }: {
@@ -44,6 +48,8 @@ export const SelectMigrationTarget = ({
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<string>>;
+    setBillingModes: Dispatch<SetStateAction<MigrateRequest.billingMode[] | undefined>>;
+    setSelectBillingMode: Dispatch<SetStateAction<string>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -71,6 +77,13 @@ export const SelectMigrationTarget = ({
         );
         setRegionList(regionList);
         setSelectRegion(regionList.length > 0 ? regionList[0].value : currentSelectedService.deployRequest.region.name);
+        const billingModes: MigrateRequest.billingMode[] | undefined = getBillingModes(
+            cspList[0],
+            serviceHostTypes[0],
+            userOrderableServiceVoList
+        );
+        setBillingModes(billingModes);
+        setSelectBillingMode(billingModes ? billingModes[0] : currentSelectedService.deployRequest.billingMode);
     };
 
     const getRegionList = (
@@ -148,7 +161,11 @@ export const SelectMigrationTarget = ({
                                         Migrate service to a different region offered by the same cloud service
                                         provider.
                                     </Radio>
-                                    <Radio value={'csp'}>Migrate service to a different cloud service provider.</Radio>
+                                    {userOrderableServiceVoList.length > 1 ? (
+                                        <Radio value={'csp'}>
+                                            Migrate service to a different cloud service provider.
+                                        </Radio>
+                                    ) : null}
                                 </Radio.Group>
                             </Form.Item>
                         </div>

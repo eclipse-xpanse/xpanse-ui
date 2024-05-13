@@ -5,7 +5,6 @@
 
 import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
 import {
-    Billing,
     CloudServiceProvider,
     DeployedService,
     DeployRequest,
@@ -20,7 +19,6 @@ import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import { cspMap } from '../../common/csp/CspLogo';
 import { Flavor } from '../types/Flavor';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { getBilling } from '../formDataHelpers/billingHelper';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { BillingInfo } from '../common/BillingInfo';
@@ -35,6 +33,7 @@ import useGetOrderableServiceDetailsQuery from '../../deployedServices/myService
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import migrationStatus = ServiceMigrationDetails.migrationStatus;
+import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -43,6 +42,7 @@ export const MigrateServiceSubmit = ({
     availabilityZones,
     selectFlavor,
     selectServiceHostingType,
+    selectBillingMode,
     setCurrentMigrationStep,
     deployParams,
     currentSelectedService,
@@ -54,6 +54,7 @@ export const MigrateServiceSubmit = ({
     availabilityZones: Record<string, string>;
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
+    selectBillingMode: string;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
@@ -63,7 +64,6 @@ export const MigrateServiceSubmit = ({
 
     const areaList: Tab[] = [{ key: region.area, label: region.area, disabled: true }];
     const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
-    const currentBilling: Billing = getBilling(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
     let priceValue: string = '';
     currentFlavorList.forEach((flavorItem) => {
         if (flavorItem.value === selectFlavor) {
@@ -101,6 +101,7 @@ export const MigrateServiceSubmit = ({
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
             migrateRequest.region = region;
             migrateRequest.id = currentSelectedService.id;
+            migrateRequest.billingMode = selectBillingMode as MigrateRequest.billingMode;
             migrateServiceRequest.mutate(migrateRequest);
             stepItem.status = 'process';
             setIsShowDeploymentResult(true);
@@ -181,7 +182,8 @@ export const MigrateServiceSubmit = ({
                     />
                 ) : undefined}
                 <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
-                <BillingInfo priceValue={priceValue} billing={currentBilling} />
+                <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
+                <BillingInfo priceValue={priceValue} />
                 <div className={'migrate-step-button-inner-class'}>
                     <Space size={'large'}>
                         <Button
