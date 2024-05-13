@@ -7,6 +7,7 @@ import React, { useMemo, useState } from 'react';
 import {
     DeployedServiceDetails,
     DeployRequest,
+    MigrateRequest,
     ServiceCatalogService,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
@@ -50,6 +51,12 @@ export const Migrate = ({
         currentSelectedService.deployRequest.availabilityZones ?? {}
     );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
+
+    const [billingModes, setBillingModes] = useState<MigrateRequest.billingMode[] | undefined>(undefined);
+    const [selectBillingMode, setSelectBillingMode] = useState<string>(
+        currentSelectedService.deployRequest.billingMode
+    );
+
     const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
@@ -151,6 +158,8 @@ export const Migrate = ({
                         setSelectArea={setSelectArea}
                         setRegionList={setRegionList}
                         setSelectRegion={setSelectRegion}
+                        setBillingModes={setBillingModes}
+                        setSelectBillingMode={setSelectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.SelectMigrateTarget]}
                     />
@@ -175,6 +184,9 @@ export const Migrate = ({
                         selectAvailabilityZones={selectAvailabilityZones}
                         setSelectAvailabilityZones={setSelectAvailabilityZones}
                         currentFlavor={selectFlavor}
+                        billingModes={billingModes}
+                        selectBillingMode={selectBillingMode}
+                        setSelectBillingMode={setSelectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.SelectADestination]}
                     />
@@ -197,6 +209,7 @@ export const Migrate = ({
                         selectFlavor={selectFlavor}
                         isEulaAccepted={isEulaAccepted}
                         setIsEulaAccepted={setIsEulaAccepted}
+                        selectBillingMode={selectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         setDeployParameters={setDeployParams}
                         stepItem={items[MigrationSteps.PrepareDeploymentParameters]}
@@ -211,6 +224,7 @@ export const Migrate = ({
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         selectServiceHostingType={selectServiceHostingType}
+                        selectBillingMode={selectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         deployParams={deployParams}
                         currentSelectedService={currentSelectedService}

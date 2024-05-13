@@ -4,7 +4,7 @@
  */
 
 import CspSelect from '../formElements/CspSelect';
-import { AvailabilityZoneConfig, Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHosti
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { getBilling } from '../formDataHelpers/billingHelper';
+import { getBillingModes } from '../formDataHelpers/billingHelper';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { MigrationSteps } from '../types/MigrationSteps';
 import '../../../../styles/service_order.css';
@@ -24,6 +24,7 @@ import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailab
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import { BillingModeSelection } from '../common/BillingModeSelection';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -43,6 +44,9 @@ export const SelectDestination = ({
     selectAvailabilityZones,
     setSelectAvailabilityZones,
     currentFlavor,
+    billingModes,
+    selectBillingMode,
+    setSelectBillingMode,
     setCurrentMigrationStep,
     stepItem,
 }: {
@@ -70,7 +74,9 @@ export const SelectDestination = ({
     selectAvailabilityZones: Record<string, string>;
     setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
-
+    billingModes: DeployRequest.billingMode[] | undefined;
+    selectBillingMode: string;
+    setSelectBillingMode: Dispatch<SetStateAction<string>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -80,7 +86,6 @@ export const SelectDestination = ({
         selectCsp,
         userOrderableServiceVoList
     );
-
     // Side effect needed to update initial state when data from backend is available.
     useEffect(() => {
         if (getAvailabilityZonesForRegionQuery.isSuccess && getAvailabilityZonesForRegionQuery.data.length > 0) {
@@ -101,7 +106,6 @@ export const SelectDestination = ({
     const [selectFlavor, setSelectFlavor] = useState<string>(currentFlavor);
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
     let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
-    let currentBilling: Billing = getBilling(selectCsp, selectServiceHostType, userOrderableServiceVoList);
 
     const prev = () => {
         stepItem.status = 'wait';
@@ -116,6 +120,8 @@ export const SelectDestination = ({
 
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
         setSelectServiceHostingType(selectServiceHostType);
+        billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
+        setSelectBillingMode(billingModes ? billingModes[0] : '');
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -128,7 +134,8 @@ export const SelectDestination = ({
 
     const onChangeFlavor = (newFlavor: string) => {
         setSelectFlavor(newFlavor);
-        currentBilling = getBilling(selectCsp, selectServiceHostType, userOrderableServiceVoList);
+        billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
+        setSelectBillingMode(billingModes ? billingModes[0] : '');
         flavorList.forEach((flavor) => {
             if (newFlavor === flavor.value) {
                 priceValue = flavor.price;
@@ -186,7 +193,7 @@ export const SelectDestination = ({
             userOrderableServiceVoList
         );
         flavorList = getFlavorList(csp, serviceHostTypes[0], userOrderableServiceVoList);
-        currentBilling = getBilling(csp, serviceHostTypes[0], userOrderableServiceVoList);
+        billingModes = getBillingModes(csp, serviceHostTypes[0], userOrderableServiceVoList);
         priceValue = flavorList[0].value;
         serviceHostTypes = getAvailableServiceHostingTypes(csp, userOrderableServiceVoList);
         setSelectCsp(csp);
@@ -194,6 +201,7 @@ export const SelectDestination = ({
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.value ?? '');
         setSelectServiceHostingType(serviceHostTypes[0]);
+        setSelectBillingMode(billingModes ? billingModes[0] : '');
         updateSelectedParameters(
             csp,
             areaList[0]?.key ?? '',
@@ -269,7 +277,12 @@ export const SelectDestination = ({
                     );
                 })}
                 <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
-                <BillingInfo priceValue={priceValue} billing={currentBilling} />
+                <BillingModeSelection
+                    selectBillingMode={selectBillingMode}
+                    setSelectBillingMode={setSelectBillingMode}
+                    billingModes={billingModes}
+                />
+                <BillingInfo priceValue={priceValue} />
                 <div className={'migrate-step-button-inner-class'}>
                     <Space size={'large'}>
                         <Button

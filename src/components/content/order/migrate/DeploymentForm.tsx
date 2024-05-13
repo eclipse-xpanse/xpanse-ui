@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
@@ -25,6 +25,7 @@ export const DeploymentForm = ({
     selectFlavor,
     isEulaAccepted,
     setIsEulaAccepted,
+    selectBillingMode,
     setCurrentMigrationStep,
     setDeployParameters,
     stepItem,
@@ -37,6 +38,7 @@ export const DeploymentForm = ({
     selectFlavor: string;
     isEulaAccepted: boolean;
     setIsEulaAccepted: Dispatch<SetStateAction<boolean>>;
+    selectBillingMode: string;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;
@@ -51,7 +53,8 @@ export const DeploymentForm = ({
         selectFlavor,
         undefined,
         availabilityZones,
-        currentEula
+        currentEula,
+        selectBillingMode as MigrateRequest.billingMode
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
@@ -71,6 +74,7 @@ export const DeploymentForm = ({
             serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
             eulaAccepted: isEulaAccepted,
+            billingMode: selectBillingMode as DeployRequest.billingMode,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {

@@ -63,6 +63,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
             eulaAccepted: isEulaAccepted,
+            billingMode: state.billingMode as DeployRequest.billingMode,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {
@@ -80,7 +81,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const createServicePageUrl: string = createServicePageRoute
         .concat('?catalog=', state.category)
         .concat('&serviceName=', state.name)
-        .concat('&latestVersion=', state.version);
+        .concat('&latestVersion=', state.version)
+        .concat('&billingMode=', state.billingMode);
 
     return (
         <>

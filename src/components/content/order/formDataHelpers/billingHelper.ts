@@ -3,26 +3,23 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Billing, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export function getBilling(
+export function getBillingModes(
     csp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     versionMapper: UserOrderableServiceVo[] | undefined
-): Billing {
-    let billing: Billing = {
-        // TODO Will be fixed in #1591 or #1592
-        billingModes: ['fixed'],
-    };
+): DeployRequest.billingMode[] | undefined {
+    let billingMode: DeployRequest.billingMode[] = [];
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
                 csp === userOrderableServiceVo.csp &&
                 selectServiceHostingType === userOrderableServiceVo.serviceHostingType
             ) {
-                billing = userOrderableServiceVo.billing;
+                billingMode = userOrderableServiceVo.billing.billingModes as DeployRequest.billingMode[];
             }
         });
     }
-    return billing;
+    return billingMode;
 }
