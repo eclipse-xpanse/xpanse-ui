@@ -7,7 +7,7 @@ import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import React, { useEffect, useMemo, useState } from 'react';
 import {
     AvailabilityZoneConfig,
-    Billing,
+    DeployRequest,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -21,7 +21,7 @@ import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/conta
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { getBilling } from '../formDataHelpers/billingHelper';
+import { getBillingModes } from '../formDataHelpers/billingHelper';
 import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -38,6 +38,7 @@ import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/g
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
+import { BillingModeSelection } from '../common/BillingModeSelection';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const { Paragraph } = Typography;
@@ -102,12 +103,21 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
     let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].value);
+
+    let billingModes: DeployRequest.billingMode[] | undefined = getBillingModes(
+        selectCsp,
+        selectServiceHostType,
+        versionToServicesMap.get(selectVersion)
+    );
+    const [selectBillingMode, setSelectBillMode] = useState<string>(
+        serviceInfo ? serviceInfo.billingMode : billingModes ? billingModes[0] : ''
+    );
+
     let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
 
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     const currentEula: string | undefined = getEulaByCsp(selectCsp, versionToServicesMap.get(selectVersion));
-    let currentBilling: Billing = getBilling(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
 
     const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
@@ -141,7 +151,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
     const onChangeFlavor = (newFlavor: string) => {
         setSelectFlavor(newFlavor);
-        currentBilling = getBilling(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
+        billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
+        setSelectBillMode(billingModes ? billingModes[0] : '');
         flavorList.forEach((flavor) => {
             if (newFlavor === flavor.value) {
                 priceValue = flavor.price;
@@ -176,7 +187,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             versionToServicesMap.get(currentVersion)
         );
         flavorList = getFlavorList(cspList[0], selectServiceHostType, versionToServicesMap.get(currentVersion));
-        currentBilling = getBilling(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
+        billingModes = getBillingModes(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             cspList[0],
             versionToServicesMap.get(currentVersion)
@@ -187,6 +198,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);
+        setSelectBillMode(billingModes ? billingModes[0] : '');
     };
 
     const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
@@ -199,7 +211,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             versionToServicesMap.get(selectVersion)
         );
         flavorList = getFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
-        currentBilling = getBilling(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        billingModes = getBillingModes(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             csp,
             versionToServicesMap.get(selectVersion)
@@ -211,6 +223,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.value ?? '');
         setSelectServiceHostType(serviceHostTypes[0]);
+        setSelectBillMode(billingModes ? billingModes[0] : '');
     };
 
     function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {
@@ -239,7 +252,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             selectFlavor,
             currentServiceProviderContactDetails,
             selectAvailabilityZones,
-            currentEula
+            currentEula,
+            selectBillingMode
         );
 
         navigate(
@@ -340,7 +354,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         );
                     })}
                     <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
-                    <BillingInfo priceValue={priceValue} billing={currentBilling} />
+                    <BillingModeSelection
+                        selectBillingMode={selectBillingMode}
+                        setSelectBillingMode={setSelectBillMode}
+                        billingModes={billingModes}
+                    />
+                    <BillingInfo priceValue={priceValue} />
                 </div>
                 <div>
                     <div className={'Line'} />
