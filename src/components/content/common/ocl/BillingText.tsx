@@ -5,7 +5,7 @@
 
 import { Billing } from '../../../../xpanse-api/generated';
 import YAML from 'yaml';
-import { Button, Popover } from 'antd';
+import { Col, Row, Tag } from 'antd';
 import React from 'react';
 
 export function BillingText({ billing }: { billing: Billing }): React.JSX.Element {
@@ -16,12 +16,15 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
         // @ts-expect-error
         yamlDocument.contents = billing;
         return (
-            <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Billing'} trigger='hover'>
-                <Button className={'ocl-data-hover'} type={'link'}>
-                    {/* TODO Will be fixed in #1591 or #1592 */}
-                    {billing.billingModes[0]}
-                </Button>
-            </Popover>
+            <Row>
+                {billing.billingModes.map((billingMode) => {
+                    return (
+                        <Col key={billingMode}>
+                            <Tag color={'blue'}>{billingMode}</Tag>
+                        </Col>
+                    );
+                })}
+            </Row>
         );
     }
     return <></>;

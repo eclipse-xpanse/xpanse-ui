@@ -24,7 +24,7 @@ export const BillingModeSelection = ({
         <>
             <Form.Item
                 key={'BillingMode'}
-                label={<p style={{ fontWeight: 'bold' }}>{'BillingMode'}</p>}
+                label={<p style={{ fontWeight: 'bold' }}>{'Billing Mode'}</p>}
                 required={true}
                 rules={[
                     {
