@@ -166,7 +166,7 @@ export const ServiceReviewsDetails = ({
                         <Descriptions.Item label='Flavors'>
                             <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
                         </Descriptions.Item>
-                        <Descriptions.Item label='Billing'>
+                        <Descriptions.Item label='Billing Modes'>
                             <BillingText billing={currentServiceTemplateVo.billing} />
                         </Descriptions.Item>
                         <Descriptions.Item label='Deployment'>
