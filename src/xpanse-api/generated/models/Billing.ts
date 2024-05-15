@@ -15,4 +15,17 @@ export type Billing = {
      * Supported billing modes by the managed service
      */
     billingModes: Array<'Fixed' | 'Pay per Use'>;
+    /**
+     *  This is used only for display purposes. When provided, this billingMode will be selected in the frontends by default.
+     */
+    defaultBillingMode?: Billing.defaultBillingMode;
 };
+export namespace Billing {
+    /**
+     *  This is used only for display purposes. When provided, this billingMode will be selected in the frontends by default.
+     */
+    export enum defaultBillingMode {
+        FIXED = 'Fixed',
+        PAY_PER_USE = 'Pay per Use',
+    }
+}
