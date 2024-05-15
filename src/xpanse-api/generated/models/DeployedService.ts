@@ -8,6 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type DeployedService = {
     /**
      * The ID of the service
@@ -74,6 +75,7 @@ export type DeployedService = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
 };
 export namespace DeployedService {
     /**
@@ -127,10 +129,9 @@ export namespace DeployedService {
         NOT_RUNNING = 'not running',
         RUNNING = 'running',
         STARTING = 'starting',
-        STARTING_FAILED = 'starting failed',
         STOPPING = 'stopping',
         STOPPED = 'stopped',
-        STOPPING_FAILED = 'stopping failed',
+        RESTARTING = 'restarting',
     }
     /**
      * Defines which cloud service account is used for deploying cloud resources.

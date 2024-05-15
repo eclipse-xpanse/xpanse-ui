@@ -9,6 +9,7 @@
 /* eslint-disable */
 import type { DeployRequest } from './DeployRequest';
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type VendorHostedDeployedServiceDetails = {
     /**
      * The ID of the service
@@ -75,6 +76,7 @@ export type VendorHostedDeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
@@ -133,10 +135,9 @@ export namespace VendorHostedDeployedServiceDetails {
         NOT_RUNNING = 'not running',
         RUNNING = 'running',
         STARTING = 'starting',
-        STARTING_FAILED = 'starting failed',
         STOPPING = 'stopping',
         STOPPED = 'stopped',
-        STOPPING_FAILED = 'stopping failed',
+        RESTARTING = 'restarting',
     }
     /**
      * Defines which cloud service account is used for deploying cloud resources.

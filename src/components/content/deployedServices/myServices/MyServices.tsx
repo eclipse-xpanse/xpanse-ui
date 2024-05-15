@@ -586,10 +586,7 @@ function MyServices(): React.JSX.Element {
             return true;
         }
 
-        return (
-            record.serviceState === DeployedService.serviceState.RUNNING ||
-            record.serviceState === DeployedService.serviceState.STOPPING_FAILED
-        );
+        return record.serviceState === DeployedService.serviceState.RUNNING;
     };
 
     const isDisabledStopOrRestartBtn = (record: DeployedService) => {
@@ -609,10 +606,7 @@ function MyServices(): React.JSX.Element {
             return true;
         }
 
-        return (
-            record.serviceState === DeployedService.serviceState.STOPPED ||
-            record.serviceState === DeployedService.serviceState.STARTING_FAILED
-        );
+        return record.serviceState === DeployedService.serviceState.STOPPED;
     };
 
     const closeDestroyResultAlert = (isClose: boolean) => {
