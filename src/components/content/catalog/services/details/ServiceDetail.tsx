@@ -62,7 +62,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Flavors'>
                     <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
                 </Descriptions.Item>
-                <Descriptions.Item label='Billing'>
+                <Descriptions.Item label='Billing Modes'>
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>

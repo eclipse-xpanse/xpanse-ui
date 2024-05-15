@@ -95,7 +95,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <Descriptions.Item label='Flavors'>
                                 <FlavorsText flavors={ocl.flavors.serviceFlavors} />
                             </Descriptions.Item>
-                            <Descriptions.Item label='Billing'>
+                            <Descriptions.Item label='Billing Modes'>
                                 <BillingText billing={ocl.billing} />
                             </Descriptions.Item>
                             <Descriptions.Item label='Deployment'>

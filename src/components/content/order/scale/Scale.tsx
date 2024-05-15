@@ -167,8 +167,10 @@ export const Scale = ({
                                                                     <Tag color={'blue'}>
                                                                         {/* TODO Will be fixed after #1597 is fixed */}
                                                                         {(20).toString()}
-                                                                        {/* TODO Will be fixed in #1591 or #1592 */}
-                                                                        {currentBilling.billingModes[0]}
+                                                                        {
+                                                                            currentSelectedService.deployRequest
+                                                                                .billingMode
+                                                                        }
                                                                     </Tag>
                                                                 </>
                                                             ) : (
@@ -186,9 +188,7 @@ export const Scale = ({
                                                             <Tag color={'blue'}>
                                                                 {/* TODO Will be fixed after #1597 is fixed */}
                                                                 {(20).toString()}
-                                                                {/* TODO Will be fixed in #1591 or #1592 */}
-                                                                {currentBilling.billingModes[0]}
-                                                                in #1591 or #1592
+                                                                {currentSelectedService.deployRequest.billingMode}
                                                             </Tag>
                                                         </>
                                                     ) : (
