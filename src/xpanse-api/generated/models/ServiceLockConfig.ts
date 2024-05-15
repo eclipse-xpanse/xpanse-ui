@@ -7,9 +7,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-/**
- * The locks whether the service can be modified or destroyed.
- */
 export type ServiceLockConfig = {
     modifyLocked?: boolean;
     destroyLocked?: boolean;

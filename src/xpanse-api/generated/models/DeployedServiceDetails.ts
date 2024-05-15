@@ -10,6 +10,7 @@
 import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type DeployedServiceDetails = {
     /**
      * The ID of the service
@@ -76,6 +77,7 @@ export type DeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -142,10 +144,9 @@ export namespace DeployedServiceDetails {
         NOT_RUNNING = 'not running',
         RUNNING = 'running',
         STARTING = 'starting',
-        STARTING_FAILED = 'starting failed',
         STOPPING = 'stopping',
         STOPPED = 'stopped',
-        STOPPING_FAILED = 'stopping failed',
+        RESTARTING = 'restarting',
     }
     /**
      * Defines which cloud service account is used for deploying cloud resources.

@@ -9,10 +9,7 @@ import { Row, Tag, Tooltip } from 'antd';
 import { PlayCircleOutlined, PoweroffOutlined, StopOutlined, SyncOutlined } from '@ant-design/icons';
 
 export function DeployedServicesRunningStatus(record: DeployedService): React.JSX.Element {
-    if (
-        record.serviceState === DeployedService.serviceState.RUNNING ||
-        record.serviceState === DeployedService.serviceState.STOPPING_FAILED
-    ) {
+    if (record.serviceState === DeployedService.serviceState.RUNNING) {
         return (
             <Tooltip
                 title={
@@ -24,10 +21,7 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
                 </Tag>
             </Tooltip>
         );
-    } else if (
-        record.serviceState === DeployedService.serviceState.STOPPED ||
-        record.serviceState === DeployedService.serviceState.STARTING_FAILED
-    ) {
+    } else if (record.serviceState === DeployedService.serviceState.STOPPED) {
         return (
             <Tooltip
                 title={<Row className={'service-instance-list-service-state'}>stopped at - {record.lastStoppedAt}</Row>}
@@ -39,7 +33,8 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
         );
     } else if (
         record.serviceState === DeployedService.serviceState.STOPPING ||
-        record.serviceState === DeployedService.serviceState.STARTING
+        record.serviceState === DeployedService.serviceState.STARTING ||
+        record.serviceState === DeployedService.serviceState.RESTARTING
     ) {
         return (
             <Tag icon={<SyncOutlined />} color='processing'>
