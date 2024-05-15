@@ -13,7 +13,7 @@ function ServicesSkeleton(): React.JSX.Element {
                 <Skeleton active={true} paragraph={{ rows: 0 }} />
             </div>
             <div className={'services-content-body'}>
-                {Array.from({ length: 9 }, (element, index) => (
+                {Array.from({ length: 9 }, (_, index) => (
                     <Row key={index}>
                         <Col span={8} className={'services-content-body-col'}>
                             <Space direction='vertical' size='middle'>

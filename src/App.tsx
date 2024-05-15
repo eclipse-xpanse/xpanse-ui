@@ -5,7 +5,6 @@
 
 import { Route, Routes } from 'react-router-dom';
 import './styles/app.css';
-import Home from './components/content/home/Home';
 import Protected from './components/protectedRoutes/ProtectedRoute';
 import {
     catalogPageRoute,
@@ -26,27 +25,30 @@ import {
     servicesPageRoute,
     workflowsPageRoute,
 } from './components/utils/constants';
-import RegisterPanel from './components/content/register/RegisterPanel';
-import Services from './components/content/order/services/Services';
-import CreateService from './components/content/order/create/CreateService';
-import OrderSubmitPage from './components/content/order/create/OrderSubmit';
-import MyServices from './components/content/deployedServices/myServices/MyServices';
-import Monitor from './components/content/monitor/Monitor';
-import Credentials from './components/content/credentials/Credentials';
 import { OidcConfig } from './components/oidc/OidcConfig';
 import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
-import { NotFoundPage } from './components/notFound/NotFoundPage';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { HealthCheckStatus } from './components/content/systemStatus/HealthCheckStatus';
 import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
-import React from 'react';
-import { SessionLost } from './components/content/login/SessionLost';
-import Policies from './components/content/policies/Policies';
-import Reports from './components/content/deployedServices/reports/Reports';
-import Workflows from './components/content/workflows/Workflows';
-import { ServiceReviews } from './components/content/review/ServiceReviews';
+import React, { lazy, Suspense } from 'react';
+import FallbackSkeleton from './components/content/common/lazy/FallBackSkeleton.tsx';
 
 const queryClient = new QueryClient();
+
+const Home = lazy(() => import('./components/content/home/Home.tsx'));
+const RegisterPanel = lazy(() => import('./components/content/register/RegisterPanel.tsx'));
+const Services = lazy(() => import('./components/content/order/services/Services.tsx'));
+const MyServices = lazy(() => import('./components/content/deployedServices/myServices/MyServices.tsx'));
+const Monitor = lazy(() => import('./components/content/monitor/Monitor.tsx'));
+const Credentials = lazy(() => import('./components/content/credentials/Credentials.tsx'));
+const Policies = lazy(() => import('.//components/content/policies/Policies.tsx'));
+const Reports = lazy(() => import('./components/content/deployedServices/reports/Reports.tsx'));
+const Workflows = lazy(() => import('./components/content/workflows/Workflows.tsx'));
+const ServiceReviews = lazy(() => import('./components/content/review/ServiceReviews.tsx'));
+const CreateService = lazy(() => import('./components/content/order/create/CreateService.tsx'));
+const OrderSubmitPage = lazy(() => import('./components/content/order/create/OrderSubmit.tsx'));
+const NotFoundPage = lazy(() => import('./components/notFound/NotFoundPage.tsx'));
+const HealthCheckStatus = lazy(() => import('./components/content/systemStatus/HealthCheckStatus.tsx'));
+const SessionLost = lazy(() => import('./components/content/login/SessionLost.tsx'));
 
 function App(): React.JSX.Element {
     return (
@@ -59,7 +61,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Home />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Home />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -70,7 +74,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Home />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Home />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -83,7 +89,9 @@ function App(): React.JSX.Element {
                                 element={
                                     <OidcSecure>
                                         <Protected allowedRole={['isv']}>
-                                            <RegisterPanel />
+                                            <Suspense fallback={<FallbackSkeleton />}>
+                                                <RegisterPanel />
+                                            </Suspense>
                                         </Protected>
                                     </OidcSecure>
                                 }
@@ -96,7 +104,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['isv']}>
-                                    <CatalogMainPage />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <CatalogMainPage />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -107,7 +117,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <OrderSubmitPage />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <OrderSubmitPage />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -118,7 +130,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <Services />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Services />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -129,7 +143,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <MyServices />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <MyServices />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -140,7 +156,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <CreateService />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <CreateService />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -151,7 +169,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <Monitor />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Monitor />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -162,7 +182,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user', 'isv']}>
-                                    <Credentials />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Credentials />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -173,7 +195,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['admin']}>
-                                    <HealthCheckStatus />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <HealthCheckStatus />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -184,7 +208,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <Policies />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Policies />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -195,7 +221,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['isv']}>
-                                    <Reports />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Reports />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -206,7 +234,9 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['user']}>
-                                    <Workflows />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <Workflows />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
@@ -217,12 +247,21 @@ function App(): React.JSX.Element {
                         element={
                             <OidcSecure>
                                 <Protected allowedRole={['csp']}>
-                                    <ServiceReviews />
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <ServiceReviews />
+                                    </Suspense>
                                 </Protected>
                             </OidcSecure>
                         }
                     />
-                    <Route path='*' element={<NotFoundPage />} />
+                    <Route
+                        path='*'
+                        element={
+                            <Suspense fallback={<FallbackSkeleton />}>
+                                <NotFoundPage />
+                            </Suspense>
+                        }
+                    />
                 </Routes>
             </OidcProvider>
         </QueryClientProvider>

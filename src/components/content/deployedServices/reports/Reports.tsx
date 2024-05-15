@@ -347,7 +347,7 @@ function Reports(): React.JSX.Element {
     function getServiceStateFromQuery(): DeployedService.serviceDeploymentState[] | undefined {
         const serviceStateList: DeployedService.serviceDeploymentState[] = [];
         if (urlParams.size > 0) {
-            urlParams.forEach((value, key, parent) => {
+            urlParams.forEach((value, key) => {
                 if (
                     key === serviceStateQuery &&
                     Object.values(DeployedService.serviceDeploymentState).includes(

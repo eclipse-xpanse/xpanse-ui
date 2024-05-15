@@ -14,7 +14,7 @@ export function getSortedVersionList(currentVersions: Map<string, UserOrderableS
     const versionSet: string[] = Array.from(currentVersions.keys());
     const versions: { value: string; label: string }[] = [];
     sortVersion(versionSet).forEach((version) => {
-        currentVersions.forEach((v, k) => {
+        currentVersions.forEach((_, k) => {
             if (version === k) {
                 const versionItem = { value: k || '', label: k || '' };
                 versions.push(versionItem);

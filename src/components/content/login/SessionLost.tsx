@@ -6,7 +6,7 @@
 import { useOidc } from '@axa-fr/react-oidc';
 import React from 'react';
 
-export function SessionLost(): React.JSX.Element {
+export default function SessionLost(): React.JSX.Element {
     const { login } = useOidc();
     void login();
     return <></>;

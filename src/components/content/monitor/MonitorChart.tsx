@@ -25,7 +25,7 @@ import {
 } from './MetricQueries';
 import { MonitorTip } from './MonitorTip';
 
-export const MonitorChart = ({
+export default function MonitorChart({
     serviceId,
     timePeriod,
     isAutoRefresh,
@@ -37,7 +37,7 @@ export const MonitorChart = ({
     isAutoRefresh: boolean;
     chartsPerRow: string;
     setNumberOfChartsAvailable: (chartCount: number) => void;
-}): React.JSX.Element => {
+}): React.JSX.Element {
     let tipType: 'error' | 'success' | undefined = undefined;
     let tipMessage: string = '';
     let tipDescription: string = '';
@@ -262,4 +262,4 @@ export const MonitorChart = ({
             )}
         </>
     );
-};
+}

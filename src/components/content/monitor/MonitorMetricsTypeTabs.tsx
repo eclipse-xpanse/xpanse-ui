@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { MonitorTypeList } from './metricProps';

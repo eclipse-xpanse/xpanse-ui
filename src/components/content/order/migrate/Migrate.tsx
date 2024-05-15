@@ -90,6 +90,7 @@ export const Migrate = ({
         setSelectAvailabilityZones(selectAvailabilityZonesName);
         setSelectFlavor(selectedFlavor);
         setSelectServiceHostingType(selectedServiceHostingType);
+        setSelectArea(selectAreaName);
     };
 
     const steps = useMemo(() => {

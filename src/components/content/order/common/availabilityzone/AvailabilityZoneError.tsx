@@ -8,7 +8,7 @@ import { Alert } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import React from 'react';
 
-export function AvailabilityZoneError({ error }: { error: Error }) {
+export function AvailabilityZoneError({ error }: { error: Error }): React.JSX.Element {
     if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (

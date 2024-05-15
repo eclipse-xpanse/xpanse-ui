@@ -1,0 +1,10 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.lazy-loading-common-skeleton {
+    margin: 30px;
+    position: absolute;
+    width: 80%;
+}
