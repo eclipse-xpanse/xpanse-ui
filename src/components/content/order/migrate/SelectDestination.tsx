@@ -4,12 +4,7 @@
  */
 
 import CspSelect from '../formElements/CspSelect';
-import {
-    AvailabilityZoneConfig,
-    Billing,
-    DeployRequest,
-    UserOrderableServiceVo,
-} from '../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -79,9 +74,9 @@ export const SelectDestination = ({
     selectAvailabilityZones: Record<string, string>;
     setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
-    billingModes: DeployRequest.billingMode[] | undefined;
-    selectBillingMode: string;
-    setSelectBillingMode: Dispatch<SetStateAction<string>>;
+    billingModes: MigrateRequest.billingMode[] | undefined;
+    selectBillingMode: MigrateRequest.billingMode;
+    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -127,12 +122,14 @@ export const SelectDestination = ({
         setSelectServiceHostingType(selectServiceHostType);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
 
-        const defaultBillingMode: Billing.defaultBillingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
             selectCsp,
             selectServiceHostType,
             userOrderableServiceVoList
         );
-        setSelectBillingMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : '');
+        setSelectBillingMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
+        );
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -146,12 +143,14 @@ export const SelectDestination = ({
     const onChangeFlavor = (newFlavor: string) => {
         setSelectFlavor(newFlavor);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
-        const defaultBillingMode: Billing.defaultBillingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
             selectCsp,
             selectServiceHostType,
             userOrderableServiceVoList
         );
-        setSelectBillingMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : '');
+        setSelectBillingMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
+        );
         flavorList.forEach((flavor) => {
             if (newFlavor === flavor.value) {
                 priceValue = flavor.price;
@@ -217,12 +216,14 @@ export const SelectDestination = ({
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.value ?? '');
         setSelectServiceHostingType(serviceHostTypes[0]);
-        const defaultBillingMode: Billing.defaultBillingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
             selectCsp,
             selectServiceHostType,
             userOrderableServiceVoList
         );
-        setSelectBillingMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : '');
+        setSelectBillingMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
+        );
         updateSelectedParameters(
             csp,
             areaList[0]?.key ?? '',

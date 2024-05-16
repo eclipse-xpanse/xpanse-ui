@@ -54,7 +54,7 @@ export const MigrateServiceSubmit = ({
     availabilityZones: Record<string, string>;
     selectFlavor: string;
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
-    selectBillingMode: string;
+    selectBillingMode: MigrateRequest.billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
@@ -101,7 +101,7 @@ export const MigrateServiceSubmit = ({
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
             migrateRequest.region = region;
             migrateRequest.id = currentSelectedService.id;
-            migrateRequest.billingMode = selectBillingMode as MigrateRequest.billingMode;
+            migrateRequest.billingMode = selectBillingMode;
             migrateServiceRequest.mutate(migrateRequest);
             stepItem.status = 'process';
             setIsShowDeploymentResult(true);

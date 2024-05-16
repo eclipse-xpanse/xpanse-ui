@@ -63,7 +63,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
             eulaAccepted: isEulaAccepted,
-            billingMode: state.billingMode as DeployRequest.billingMode,
+            billingMode: state.billingMode,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {

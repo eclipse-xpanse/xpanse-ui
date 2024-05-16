@@ -53,8 +53,8 @@ export const Migrate = ({
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
 
     const [billingModes, setBillingModes] = useState<MigrateRequest.billingMode[] | undefined>(undefined);
-    const [selectBillingMode, setSelectBillingMode] = useState<string>(
-        currentSelectedService.deployRequest.billingMode
+    const [selectBillingMode, setSelectBillingMode] = useState<MigrateRequest.billingMode>(
+        currentSelectedService.deployRequest.billingMode.toString() as MigrateRequest.billingMode
     );
 
     const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);

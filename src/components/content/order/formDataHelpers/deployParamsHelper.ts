@@ -22,7 +22,7 @@ export const getDeployParams = (
     currentContactServiceDetails: ServiceProviderContactDetails | undefined,
     availabilityZones: Record<string, string> | undefined,
     eula: string | undefined,
-    selectBillingMode: string
+    selectBillingMode: DeployRequest.billingMode
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
