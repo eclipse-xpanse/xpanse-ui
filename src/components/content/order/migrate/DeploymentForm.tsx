@@ -38,7 +38,7 @@ export const DeploymentForm = ({
     selectFlavor: string;
     isEulaAccepted: boolean;
     setIsEulaAccepted: Dispatch<SetStateAction<boolean>>;
-    selectBillingMode: string;
+    selectBillingMode: MigrateRequest.billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;
@@ -54,7 +54,7 @@ export const DeploymentForm = ({
         undefined,
         availabilityZones,
         currentEula,
-        selectBillingMode as MigrateRequest.billingMode
+        selectBillingMode
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
@@ -74,7 +74,7 @@ export const DeploymentForm = ({
             serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
             eulaAccepted: isEulaAccepted,
-            billingMode: selectBillingMode as DeployRequest.billingMode,
+            billingMode: selectBillingMode,
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {

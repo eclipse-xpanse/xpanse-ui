@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Billing, DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getBillingModes(
     csp: UserOrderableServiceVo.csp,
@@ -28,15 +28,17 @@ export function getDefaultBillingMode(
     csp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     versionMapper: UserOrderableServiceVo[] | undefined
-): Billing.defaultBillingMode | undefined {
-    let defaultBillingMode: Billing.defaultBillingMode | undefined = undefined;
+): DeployRequest.billingMode | undefined {
+    let defaultBillingMode: DeployRequest.billingMode | undefined = undefined;
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
                 csp === userOrderableServiceVo.csp &&
-                selectServiceHostingType === userOrderableServiceVo.serviceHostingType
+                selectServiceHostingType === userOrderableServiceVo.serviceHostingType &&
+                userOrderableServiceVo.billing.defaultBillingMode
             ) {
-                defaultBillingMode = userOrderableServiceVo.billing.defaultBillingMode;
+                defaultBillingMode =
+                    userOrderableServiceVo.billing.defaultBillingMode.toString() as DeployRequest.billingMode;
             }
         });
     }

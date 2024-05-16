@@ -7,7 +7,6 @@ import { Button, Form, Radio, RadioChangeEvent, Space, StepProps } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
 import { MigrationSteps } from '../types/MigrationSteps';
 import {
-    Billing,
     DeployedServiceDetails,
     MigrateRequest,
     UserOrderableServiceVo,
@@ -50,7 +49,7 @@ export const SelectMigrationTarget = ({
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<string>>;
     setBillingModes: Dispatch<SetStateAction<MigrateRequest.billingMode[] | undefined>>;
-    setSelectBillingMode: Dispatch<SetStateAction<string>>;
+    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -84,7 +83,7 @@ export const SelectMigrationTarget = ({
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        const defaultBillingMode: Billing.defaultBillingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
@@ -94,7 +93,7 @@ export const SelectMigrationTarget = ({
                 ? defaultBillingMode
                 : billingModes
                   ? billingModes[0]
-                  : currentSelectedService.deployRequest.billingMode
+                  : (currentSelectedService.deployRequest.billingMode as MigrateRequest.billingMode)
         );
     };
 
