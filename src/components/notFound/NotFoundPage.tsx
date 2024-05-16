@@ -8,11 +8,12 @@ import { Button, Result } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { homePageRoute } from '../utils/constants';
 
-export const NotFoundPage = (): React.JSX.Element => {
+export default function NotFoundPage(): React.JSX.Element {
     const navigate = useNavigate();
     const backHome = () => {
         navigate(homePageRoute);
     };
+
     return (
         <>
             <Result
@@ -27,4 +28,4 @@ export const NotFoundPage = (): React.JSX.Element => {
             />
         </>
     );
-};
+}

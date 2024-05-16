@@ -36,7 +36,6 @@ import {
     workflowsPageRoute,
 } from '../../utils/constants';
 import { Link } from 'react-router-dom';
-import React from 'react';
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {

@@ -23,7 +23,7 @@ interface DataType {
     details: string | undefined;
 }
 
-export const HealthCheckStatus = (): React.JSX.Element => {
+export default function HealthCheckStatus(): React.JSX.Element {
     let nameFilters: ColumnFilterItem[] = [];
     let backendSystemTypeFilters: ColumnFilterItem[] = [];
     let healthStatusFilters: ColumnFilterItem[] = [];
@@ -225,4 +225,4 @@ export const HealthCheckStatus = (): React.JSX.Element => {
             </div>
         </>
     );
-};
+}

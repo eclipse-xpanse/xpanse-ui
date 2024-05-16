@@ -23,7 +23,7 @@ export function AvailabilityZoneFormItem({
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
     selectCsp: UserOrderableServiceVo.csp;
-}) {
+}): React.JSX.Element {
     const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
 
     function getFormContent() {

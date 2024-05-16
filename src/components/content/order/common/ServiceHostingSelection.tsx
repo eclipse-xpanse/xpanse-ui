@@ -17,7 +17,7 @@ export function ServiceHostingSelection({
     updateServiceHostingType?: (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => void;
     disabledAlways: boolean;
     previousSelection: UserOrderableServiceVo.serviceHostingType | undefined;
-}) {
+}): React.JSX.Element {
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
             updateServiceHostingType(e.target.value as UserOrderableServiceVo.serviceHostingType);

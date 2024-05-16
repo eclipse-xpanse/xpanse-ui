@@ -7,7 +7,7 @@
 # the script reads all available environment vars with names starting with REACT_APP_ and adds them to the
 # inject.js file as a JS object.
 WWW_DIR=/usr/share/nginx/html
-ENV_PREFIX=REACT_APP_
+ENV_PREFIX=VITE_APP_
 INJECT_FILE_PATH="${WWW_DIR}/inject.js"
 rm -f ${INJECT_FILE_PATH}
 echo "window.injectedEnv = {" >> "${INJECT_FILE_PATH}"
