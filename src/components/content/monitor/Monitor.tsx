@@ -5,17 +5,18 @@
 
 import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
-import { Button, Col, Empty, Form, Input, Row, Select } from 'antd';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Col, Empty, Form, Input, Row, Select, Skeleton } from 'antd';
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { ApiError, Response, DeployedService } from '../../../xpanse-api/generated';
 import { MonitorTip } from './MonitorTip';
-import { MonitorChart } from './MonitorChart';
 import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
 import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
 import { useLocation } from 'react-router-dom';
+
+const MonitorChart = lazy(() => import('./MonitorChart.tsx'));
 
 function Monitor(): React.JSX.Element {
     const [form] = Form.useForm();
@@ -277,13 +278,15 @@ function Monitor(): React.JSX.Element {
             </div>
             {serviceId.length > 0 ? (
                 <div>
-                    <MonitorChart
-                        serviceId={serviceId}
-                        timePeriod={timePeriod}
-                        isAutoRefresh={isAutoRefresh}
-                        chartsPerRow={chartsPerRow}
-                        setNumberOfChartsAvailable={setNumberOfChartsAvailable}
-                    />
+                    <Suspense fallback={<Skeleton />}>
+                        <MonitorChart
+                            serviceId={serviceId}
+                            timePeriod={timePeriod}
+                            isAutoRefresh={isAutoRefresh}
+                            chartsPerRow={chartsPerRow}
+                            setNumberOfChartsAvailable={setNumberOfChartsAvailable}
+                        />
+                    </Suspense>
                 </div>
             ) : (
                 <div className={'service-blank-class'}>

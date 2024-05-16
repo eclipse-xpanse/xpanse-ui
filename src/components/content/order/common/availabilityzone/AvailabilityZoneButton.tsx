@@ -19,7 +19,7 @@ export function AvailabilityZoneButton({
     selectRegion: string;
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
-}) {
+}): React.JSX.Element {
     const DEFAULT_OPTIONAL_AZ = 'Not Selected';
     function onChange(varName: string, availabilityZone: string) {
         onAvailabilityZoneChange(varName, availabilityZone !== DEFAULT_OPTIONAL_AZ ? availabilityZone : undefined);

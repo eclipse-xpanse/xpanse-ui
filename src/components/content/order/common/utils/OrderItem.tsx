@@ -10,7 +10,15 @@ import { TextInput } from '../../formElements/TextInput';
 import { NumberInput } from '../../formElements/NumberInput';
 import { BooleanInput } from '../../formElements/BooleanInput';
 
-export function OrderItem({ item, csp, region }: { item: DeployParam; csp: DeployRequest.csp; region: string }) {
+export function OrderItem({
+    item,
+    csp,
+    region,
+}: {
+    item: DeployParam;
+    csp: DeployRequest.csp;
+    region: string;
+}): React.JSX.Element {
     if (item.type === 'string') {
         return <TextInput item={item} csp={csp} region={region} />;
     }

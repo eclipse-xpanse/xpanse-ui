@@ -15,3 +15,4 @@ node_modules
 *.db
 build
 *.zip
+dist

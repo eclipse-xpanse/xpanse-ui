@@ -21,7 +21,7 @@ import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/conta
 import { getFlavorList } from '../formDataHelpers/flavorHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { getBillingModes } from '../formDataHelpers/billingHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
 import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -109,8 +109,19 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
     );
-    const [selectBillingMode, setSelectBillMode] = useState<string>(
-        serviceInfo ? serviceInfo.billingMode : billingModes ? billingModes[0] : ''
+    const defaultBillingMode: DeployRequest.billingMode | undefined = getDefaultBillingMode(
+        selectCsp,
+        selectServiceHostType,
+        versionToServicesMap.get(selectVersion)
+    );
+    const [selectBillingMode, setSelectBillMode] = useState<DeployRequest.billingMode>(
+        serviceInfo
+            ? serviceInfo.billingMode
+            : defaultBillingMode
+              ? defaultBillingMode
+              : billingModes
+                ? billingModes[0]
+                : DeployRequest.billingMode.FIXED
     );
 
     let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
@@ -152,7 +163,9 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const onChangeFlavor = (newFlavor: string) => {
         setSelectFlavor(newFlavor);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
-        setSelectBillMode(billingModes ? billingModes[0] : '');
+        setSelectBillMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
+        );
         flavorList.forEach((flavor) => {
             if (newFlavor === flavor.value) {
                 priceValue = flavor.price;
@@ -198,7 +211,9 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);
-        setSelectBillMode(billingModes ? billingModes[0] : '');
+        setSelectBillMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
+        );
     };
 
     const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
@@ -223,7 +238,9 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.value ?? '');
         setSelectServiceHostType(serviceHostTypes[0]);
-        setSelectBillMode(billingModes ? billingModes[0] : '');
+        setSelectBillMode(
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
+        );
     };
 
     function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {

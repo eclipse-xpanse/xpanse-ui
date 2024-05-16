@@ -6,11 +6,11 @@
     "dependencies": {
         "@ant-design/icons": "^5.3.7",
         "@axa-fr/react-oidc": "^7.22.4",
-        "@tanstack/react-query": "^5.36.0",
+        "@tanstack/react-query": "^5.36.2",
         "antd": "^5.17.2",
         "echarts": "5.5.0",
         "echarts-for-react": "^3.0.2",
-        "rc-field-form": "^2.1.0",
+        "rc-field-form": "^2.2.0",
         "rc-menu": "^9.12.2",
         "rc-tabs": "^15.0.0",
         "react": "^18.2.0",
@@ -21,12 +21,12 @@
         "zustand": "^4.5.2"
     },
     "scripts": {
-        "start": "react-scripts start",
-        "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed react-scripts start",
-        "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed react-scripts build",
-        "build": "react-scripts build",
+        "start": "vite --port 3000",
+        "build": "vite build",
+        "serve": "vite preview",
+        "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite --port 3000",
+        "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build",
         "test": "jest",
-        "eject": "react-scripts eject",
         "update-service-worker-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
     },
     "eslintConfig": {
@@ -54,13 +54,14 @@
             "@typescript-eslint/no-inferrable-types": "off",
             "@tanstack/query/exhaustive-deps": "error",
             "no-console": "error",
-            "@typescript-eslint/no-dynamic-delete": "off"
+            "@typescript-eslint/no-dynamic-delete": "off",
+            "react/react-in-jsx-scope": "off"
         },
         "ignorePatterns": [
             "src/xpanse-api/**",
             "/public/OidcServiceWorker.js",
             "/public/inject.js",
-            "build",
+            "dist",
             "node_modules",
             "/public/OidcTrustedDomains.js"
         ],
@@ -95,6 +96,7 @@
         "@types/uuid": "^9.0.8",
         "@typescript-eslint/eslint-plugin": "^7.9.0",
         "@typescript-eslint/parser": "^7.9.0",
+        "@vitejs/plugin-react": "^4.2.1",
         "env-cmd": "^10.1.0",
         "eslint": "^8.57.0",
         "eslint-config-prettier": "^9.0.0",
@@ -109,11 +111,11 @@
         "knip": "^5.16.0",
         "openapi-typescript-codegen": "^0.29.0",
         "prettier": "3.2.5",
-        "react-scripts": "5.0.1",
         "release-it": "^17.2.1",
         "ts-jest": "^29.1.2",
         "typescript": "5.4.5",
-        "uuid": "^9.0.1"
+        "uuid": "^9.0.1",
+        "vite": "^5.2.11"
     },
     "overrides": {
         "react-scripts": {

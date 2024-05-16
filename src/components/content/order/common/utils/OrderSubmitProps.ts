@@ -15,5 +15,5 @@ export interface OrderSubmitProps {
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     availabilityZones?: Record<string, string>;
     eula: string | undefined;
-    billingMode: string;
+    billingMode: DeployRequest.billingMode;
 }

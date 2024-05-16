@@ -17,7 +17,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
-import { getBillingModes } from '../formDataHelpers/billingHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
 export const SelectMigrationTarget = ({
     target,
     setTarget,
@@ -49,7 +49,7 @@ export const SelectMigrationTarget = ({
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<string>>;
     setBillingModes: Dispatch<SetStateAction<MigrateRequest.billingMode[] | undefined>>;
-    setSelectBillingMode: Dispatch<SetStateAction<string>>;
+    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -83,7 +83,18 @@ export const SelectMigrationTarget = ({
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        setSelectBillingMode(billingModes ? billingModes[0] : currentSelectedService.deployRequest.billingMode);
+        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
+            cspList[0],
+            serviceHostTypes[0],
+            userOrderableServiceVoList
+        );
+        setSelectBillingMode(
+            defaultBillingMode
+                ? defaultBillingMode
+                : billingModes
+                  ? billingModes[0]
+                  : (currentSelectedService.deployRequest.billingMode as MigrateRequest.billingMode)
+        );
     };
 
     const getRegionList = (

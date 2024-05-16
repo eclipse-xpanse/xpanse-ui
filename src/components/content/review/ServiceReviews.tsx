@@ -15,7 +15,7 @@ import '../../../styles/service_review.css';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceTemplateRegisterStatus } from './ServiceTemplateRegisterStatus';
 
-export const ServiceReviews = (): React.JSX.Element => {
+export default function ServiceReviews(): React.JSX.Element {
     let serviceNameFilters: ColumnFilterItem[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let cspFilters: ColumnFilterItem[] = [];
@@ -119,7 +119,7 @@ export const ServiceReviews = (): React.JSX.Element => {
         getDeployerTypeFilters();
     }
 
-    const handleSearch = (selectedKeys: React.Key[], confirm: FilterDropdownProps['confirm']) => {
+    const handleSearch = (confirm: FilterDropdownProps['confirm']) => {
         confirm();
     };
     const handleReset = (clearFilters: (() => void) | undefined) => {
@@ -141,14 +141,14 @@ export const ServiceReviews = (): React.JSX.Element => {
                             setSelectedKeys(e.target.value ? [e.target.value] : []);
                         }}
                         onPressEnter={() => {
-                            handleSearch(selectedKeys, confirm);
+                            handleSearch(confirm);
                         }}
                         className={'search-input-class'}
                     />
                     <Button
                         type='primary'
                         onClick={() => {
-                            handleSearch(selectedKeys, confirm);
+                            handleSearch(confirm);
                         }}
                         icon={<SearchOutlined />}
                         size='small'
@@ -352,4 +352,4 @@ export const ServiceReviews = (): React.JSX.Element => {
             </Row>
         </div>
     );
-};
+}

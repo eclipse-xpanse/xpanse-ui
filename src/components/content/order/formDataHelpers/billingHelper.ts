@@ -23,3 +23,24 @@ export function getBillingModes(
     }
     return billingMode;
 }
+
+export function getDefaultBillingMode(
+    csp: UserOrderableServiceVo.csp,
+    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    versionMapper: UserOrderableServiceVo[] | undefined
+): DeployRequest.billingMode | undefined {
+    let defaultBillingMode: DeployRequest.billingMode | undefined = undefined;
+    if (versionMapper) {
+        versionMapper.forEach((userOrderableServiceVo) => {
+            if (
+                csp === userOrderableServiceVo.csp &&
+                selectServiceHostingType === userOrderableServiceVo.serviceHostingType &&
+                userOrderableServiceVo.billing.defaultBillingMode
+            ) {
+                defaultBillingMode =
+                    userOrderableServiceVo.billing.defaultBillingMode.toString() as DeployRequest.billingMode;
+            }
+        });
+    }
+    return defaultBillingMode;
+}

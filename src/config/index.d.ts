@@ -5,7 +5,7 @@
 
 declare global {
     interface Window {
-        injectedEnv: record<string, never>;
+        injectedEnv: Record<string, never>;
     }
 }
 
