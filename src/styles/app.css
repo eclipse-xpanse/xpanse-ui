@@ -88,6 +88,22 @@
     width: 800px;
     margin-top: 15px;
 }
+.ocl-data-display-default-billing-mode {
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10px;
+    margin-top: -12px;
+    transform: translateX(-20%);
+}
+.ocl-data-display-default-billing-mode-tag {
+    margin-top: 8px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .home-data-display {
     padding: 24px;

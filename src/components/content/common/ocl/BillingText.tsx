@@ -5,7 +5,7 @@
 
 import { Billing } from '../../../../xpanse-api/generated';
 import YAML from 'yaml';
-import { Col, Row, Tag } from 'antd';
+import { Badge, Col, Row, Tag } from 'antd';
 import React from 'react';
 
 export function BillingText({ billing }: { billing: Billing }): React.JSX.Element {
@@ -18,11 +18,29 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
         return (
             <Row>
                 {billing.billingModes.map((billingMode) => {
-                    return (
-                        <Col key={billingMode}>
-                            <Tag color={'blue'}>{billingMode}</Tag>
-                        </Col>
-                    );
+                    if (billingMode === billing.defaultBillingMode) {
+                        return (
+                            <Col key={billingMode}>
+                                <Badge.Ribbon
+                                    className={'ocl-data-display-default-billing-mode'}
+                                    text='default'
+                                    color={'green'}
+                                >
+                                    <Tag className={'ocl-data-display-default-billing-mode-tag'} color={'blue'}>
+                                        {billingMode}
+                                    </Tag>
+                                </Badge.Ribbon>
+                            </Col>
+                        );
+                    } else {
+                        return (
+                            <Col key={billingMode}>
+                                <Tag className={'ocl-data-display-default-billing-mode-tag'} color={'blue'}>
+                                    {billingMode}
+                                </Tag>
+                            </Col>
+                        );
+                    }
                 })}
             </Row>
         );

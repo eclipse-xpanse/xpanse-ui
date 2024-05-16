@@ -7,6 +7,7 @@ import { Button, Form, Radio, RadioChangeEvent, Space, StepProps } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
 import { MigrationSteps } from '../types/MigrationSteps';
 import {
+    Billing,
     DeployedServiceDetails,
     MigrateRequest,
     UserOrderableServiceVo,
@@ -17,7 +18,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
-import { getBillingModes } from '../formDataHelpers/billingHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
 export const SelectMigrationTarget = ({
     target,
     setTarget,
@@ -83,7 +84,18 @@ export const SelectMigrationTarget = ({
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        setSelectBillingMode(billingModes ? billingModes[0] : currentSelectedService.deployRequest.billingMode);
+        const defaultBillingMode: Billing.defaultBillingMode | undefined = getDefaultBillingMode(
+            cspList[0],
+            serviceHostTypes[0],
+            userOrderableServiceVoList
+        );
+        setSelectBillingMode(
+            defaultBillingMode
+                ? defaultBillingMode
+                : billingModes
+                  ? billingModes[0]
+                  : currentSelectedService.deployRequest.billingMode
+        );
     };
 
     const getRegionList = (
