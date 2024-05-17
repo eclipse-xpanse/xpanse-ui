@@ -36,6 +36,7 @@ export { MigrateRequest } from './models/MigrateRequest';
 export type { ModificationImpact } from './models/ModificationImpact';
 export type { ModifyRequest } from './models/ModifyRequest';
 export { Ocl } from './models/Ocl';
+export type { OpenTofuResult } from './models/OpenTofuResult';
 export { Price } from './models/Price';
 export type { RatingMode } from './models/RatingMode';
 export type { Region } from './models/Region';
@@ -55,6 +56,7 @@ export type { ServiceProviderContactDetails } from './models/ServiceProviderCont
 export { ServiceStateManagementTaskDetails } from './models/ServiceStateManagementTaskDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
 export { SystemStatus } from './models/SystemStatus';
+export type { TerraformResult } from './models/TerraformResult';
 export type { TokenResponse } from './models/TokenResponse';
 export { UserOrderableServiceVo } from './models/UserOrderableServiceVo';
 export { UserPolicy } from './models/UserPolicy';
