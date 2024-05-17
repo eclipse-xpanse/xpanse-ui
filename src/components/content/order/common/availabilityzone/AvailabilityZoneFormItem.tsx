@@ -25,7 +25,11 @@ export function AvailabilityZoneFormItem({
     selectCsp: UserOrderableServiceVo.csp;
 }): React.JSX.Element {
     const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
-
+    const retryRequest = () => {
+        if (availabilityZonesVariableRequest.isError) {
+            void availabilityZonesVariableRequest.refetch();
+        }
+    };
     function getFormContent() {
         if (availabilityZonesVariableRequest.isLoading || availabilityZonesVariableRequest.isFetching) {
             return <AvailabilityZoneLoading key={availabilityZoneConfig.varName} />;
@@ -33,6 +37,7 @@ export function AvailabilityZoneFormItem({
         if (availabilityZonesVariableRequest.isError) {
             return (
                 <AvailabilityZoneError
+                    retryRequest={retryRequest}
                     error={availabilityZonesVariableRequest.error}
                     key={availabilityZoneConfig.varName}
                 />
