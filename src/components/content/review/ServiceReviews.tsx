@@ -3,17 +3,17 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
-import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
-import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
-import { Button, Input, Modal, Row, Space, Table, Tag } from 'antd';
 import { InfoCircleOutlined, SearchOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Input, Modal, Row, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem, FilterDropdownProps } from 'antd/es/table/interface';
-import { ServiceReviewsDetails } from './ServiceReviewsDetails';
+import React, { useState } from 'react';
 import '../../../styles/service_review.css';
+import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
+import { ServiceReviewsDetails } from './ServiceReviewsDetails';
 import { ServiceTemplateRegisterStatus } from './ServiceTemplateRegisterStatus';
+import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
 
 export default function ServiceReviews(): React.JSX.Element {
     let serviceNameFilters: ColumnFilterItem[] = [];

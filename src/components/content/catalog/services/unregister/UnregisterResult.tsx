@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useGetUnregisterMutationState } from './UnregisterMutation';
+import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
-import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
-import { catalogPageRoute } from '../../../../utils/constants';
-import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { catalogPageRoute } from '../../../../utils/constants';
+import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
+import { useGetUnregisterMutationState } from './UnregisterMutation';
 
 export function UnregisterResult({
     id,

@@ -8,10 +8,10 @@ import { StopwatchResult } from 'react-timer-hook';
 import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 
 import React from 'react';
-import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import DeploymentTimer from '../orderStatus/DeploymentTimer';
+import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 export const MigrationOrderSubmitResult = ({
     msg,

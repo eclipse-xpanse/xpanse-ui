@@ -3,15 +3,15 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
-import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
-import React, { ChangeEvent, useState } from 'react';
+import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
+import React, { ChangeEvent, useState } from 'react';
+import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
+import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
-import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 
 export function TextInput({
     item,

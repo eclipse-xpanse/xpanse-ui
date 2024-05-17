@@ -3,15 +3,15 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
+import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
 import { ApiError, Response, WorkFlowTask } from '../../../xpanse-api/generated';
-import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
-import { useMutation } from '@tanstack/react-query';
-import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
 
 function Workflows(): React.JSX.Element {
     const [tipMessage, setTipMessage] = useState<string>('');

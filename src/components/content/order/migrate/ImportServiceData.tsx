@@ -4,8 +4,8 @@
  */
 
 import { Button, Space, StepProps } from 'antd';
-import { MigrationSteps } from '../types/MigrationSteps';
 import React from 'react';
+import { MigrationSteps } from '../types/MigrationSteps';
 
 export const ImportServiceData = ({
     setCurrentMigrationStep,

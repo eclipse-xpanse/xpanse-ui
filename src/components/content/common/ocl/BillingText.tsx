@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Billing } from '../../../../xpanse-api/generated';
-import YAML from 'yaml';
 import { Badge, Col, Row, Tag } from 'antd';
 import React from 'react';
+import YAML from 'yaml';
+import { Billing } from '../../../../xpanse-api/generated';
 
 export function BillingText({ billing }: { billing: Billing }): React.JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

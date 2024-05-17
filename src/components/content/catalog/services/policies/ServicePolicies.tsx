@@ -3,18 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Modal, Popconfirm, Popover, Space, Table } from 'antd';
-import React, { useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
-import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SafetyOutlined, SyncOutlined } from '@ant-design/icons';
-import { useGetServicePolicyList } from './policyList/useGetServicePolicyList';
-import { useDeleteServicePolicy } from './deletePolicy/useDeleteServicePolicy';
-import { AddOrUpdateServicePolicy } from './AddOrUpdateServicePolicy';
-import ServicePolicyDeleteStatus from './deletePolicy/ServicePolicyDeleteStatus';
-import ServicePolicyListError from './ServicePolicyListError';
+import { Button, Modal, Popconfirm, Popover, Space, Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
+import React, { useState } from 'react';
 import '../../../../../styles/service_policies.css';
+import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { AddOrUpdateServicePolicy } from './AddOrUpdateServicePolicy';
+import ServicePolicyListError from './ServicePolicyListError';
+import ServicePolicyDeleteStatus from './deletePolicy/ServicePolicyDeleteStatus';
+import { useDeleteServicePolicy } from './deletePolicy/useDeleteServicePolicy';
+import { useGetServicePolicyList } from './policyList/useGetServicePolicyList';
 
 export const ServicePolicies = ({
     serviceDetails,

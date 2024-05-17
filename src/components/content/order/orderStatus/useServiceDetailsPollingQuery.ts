@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployedServiceDetails, ServiceService, DeployedService } from '../../../../xpanse-api/generated';
+import { DeployedService, DeployedServiceDetails, ServiceService } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(

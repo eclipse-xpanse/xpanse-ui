@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Tab } from 'rc-tabs/lib/interface';
 import { Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../types/Area';
-import { Tab } from 'rc-tabs/lib/interface';
 
 export function getAreasForSelectedVersionHostingTypeAndCsp(
     selectCsp: UserOrderableServiceVo.csp,

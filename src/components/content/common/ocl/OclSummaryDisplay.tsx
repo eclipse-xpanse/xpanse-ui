@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import DisplayOclData from './DisplayOclData';
 import { Alert, UploadFile } from 'antd';
-import { Ocl } from '../../../../xpanse-api/generated';
-import { ValidationStatus } from './ValidationStatus';
 import React from 'react';
+import { Ocl } from '../../../../xpanse-api/generated';
+import DisplayOclData from './DisplayOclData';
+import { ValidationStatus } from './ValidationStatus';
 
 function OclSummaryDisplay(
     setOclValidationStatus: (newState: ValidationStatus) => void,

@@ -4,8 +4,8 @@
  */
 
 import { Radio, RadioChangeEvent } from 'antd';
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import React from 'react';
+import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function ServiceHostingSelection({
     serviceHostingTypes,

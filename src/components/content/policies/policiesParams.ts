@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedService } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
+import { DeployedService } from '../../../xpanse-api/generated';
 
 export const policiesStatuses: boolean[] = [true, false];
 

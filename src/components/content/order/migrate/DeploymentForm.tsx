@@ -3,18 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
-import { ApiDoc } from '../../common/doc/ApiDoc';
-import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
-import { useOrderFormStore } from '../store/OrderFormStore';
+import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import { MigrationSteps } from '../types/MigrationSteps';
-import { OrderItem } from '../common/utils/OrderItem';
-import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
+import { OrderItem } from '../common/utils/OrderItem';
+import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { useOrderFormStore } from '../store/OrderFormStore';
+import { MigrationSteps } from '../types/MigrationSteps';
 
 export const DeploymentForm = ({
     userOrderableServiceVoList,

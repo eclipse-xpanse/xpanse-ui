@@ -7,10 +7,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { SystemStatus } from '../models/SystemStatus';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { SystemStatus } from '../models/SystemStatus';
 export class AdminService {
     /**
      * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>

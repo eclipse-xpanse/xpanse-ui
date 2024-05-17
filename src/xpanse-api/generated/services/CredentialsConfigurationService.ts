@@ -7,11 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
-import type { Link } from '../models/Link';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
+import type { Link } from '../models/Link';
 export class CredentialsConfigurationService {
     /**
      * Returns the OpenAPI document for adding a credential.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>

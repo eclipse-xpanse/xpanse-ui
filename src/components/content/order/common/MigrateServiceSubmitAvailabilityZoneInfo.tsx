@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Flex, Form, Radio } from 'antd';
+import React from 'react';
 import '../../../../styles/service_order.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 

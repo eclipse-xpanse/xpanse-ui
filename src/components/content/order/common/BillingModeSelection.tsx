@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { Dispatch, SetStateAction } from 'react';
 import { Alert, Flex, Form, Radio } from 'antd';
+import React, { Dispatch, SetStateAction } from 'react';
 import { DeployRequest } from '../../../../xpanse-api/generated';
 
 export const BillingModeSelection = ({

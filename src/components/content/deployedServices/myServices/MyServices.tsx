@@ -3,18 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
-import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import {
-    AbstractCredentialInfo,
-    CloudServiceProvider,
-    DeployedService,
-    DeployedServiceDetails,
-    ServiceProviderContactDetails,
-    VendorHostedDeployedServiceDetails,
-} from '../../../../xpanse-api/generated';
-import { ColumnFilterItem } from 'antd/es/table/interface';
 import {
     CaretDownOutlined,
     CloseCircleOutlined,
@@ -29,35 +17,47 @@ import {
     RiseOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
-import '../../../../styles/my_services.css';
-import { sortVersionNum } from '../../../utils/Sort';
-import { Migrate } from '../../order/migrate/Migrate';
+import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import { ColumnFilterItem } from 'antd/es/table/interface';
+import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useOrderFormStore } from '../../order/store/OrderFormStore';
-import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
-import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
-import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
-import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
+import '../../../../styles/my_services.css';
+import {
+    AbstractCredentialInfo,
+    CloudServiceProvider,
+    DeployedService,
+    DeployedServiceDetails,
+    ServiceProviderContactDetails,
+    VendorHostedDeployedServiceDetails,
+} from '../../../../xpanse-api/generated';
+import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
-import DeployedServicesError from '../common/DeployedServicesError';
-import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
-import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
-import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
-import { MyServiceDetails } from './MyServiceDetails';
-import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
-import { useServiceStateStartQuery } from './query/useServiceStateStartQuery';
-import { useServiceStateStopQuery } from './query/useServiceStateStopQuery';
-import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery';
-import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { useServiceDetailsPollingQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
-import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
-import { Modify } from '../../order/modify/Modify';
-import { Scale } from '../../order/scale/Scale';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
+import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
+import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
 import { Locks } from '../../order/locks/Locks';
+import { Migrate } from '../../order/migrate/Migrate';
+import { Modify } from '../../order/modify/Modify';
+import { useServiceDetailsPollingQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
+import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
+import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
+import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
+import { Scale } from '../../order/scale/Scale';
+import { useOrderFormStore } from '../../order/store/OrderFormStore';
+import DeployedServicesError from '../common/DeployedServicesError';
+import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
+import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
+import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
+import { MyServiceDetails } from './MyServiceDetails';
+import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
+import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
+import { useServiceStateRestartQuery } from './query/useServiceStateRestartQuery';
+import { useServiceStateStartQuery } from './query/useServiceStateStartQuery';
+import { useServiceStateStopQuery } from './query/useServiceStateStopQuery';
 
 function MyServices(): React.JSX.Element {
     const [urlParams] = useSearchParams();

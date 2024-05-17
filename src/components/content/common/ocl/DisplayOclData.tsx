@@ -3,16 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { Ocl } from '../../../../xpanse-api/generated';
-import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
-import { DeploymentText } from './DeploymentText';
-import { BillingText } from './BillingText';
 import { cspMap } from '../csp/CspLogo';
-import { ContactDetailsText } from './ContactDetailsText';
-import { ContactDetailsShowType } from './ContactDetailsShowType';
-import { FlavorsText } from './FlavorsText';
 import { AgreementText } from './AgreementText';
+import { BillingText } from './BillingText';
+import { ContactDetailsShowType } from './ContactDetailsShowType';
+import { ContactDetailsText } from './ContactDetailsText';
+import { DeploymentText } from './DeploymentText';
+import { FlavorsText } from './FlavorsText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';

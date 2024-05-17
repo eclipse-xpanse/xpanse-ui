@@ -3,7 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UploadOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
+import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
+import '../../../styles/policies.css';
 import {
     CloudServiceProvider,
     CredentialVariables,
@@ -11,18 +15,14 @@ import {
     UserPolicyCreateRequest,
     UserPolicyUpdateRequest,
 } from '../../../xpanse-api/generated';
-import '../../../styles/policies.css';
-import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { policiesStatuses, PolicyUploadFileStatus } from './policiesParams';
-import { RcFile } from 'antd/es/upload';
-import { useCreatePolicyRequest } from './add/useCreatePolicyRequest';
-import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
-import PolicyUpdateResultStatus from './update/PolicyUpdateResultStatus';
-import { useUpdatePolicyRequest } from './update/useUpdatePolicyRequest';
-import PolicySubmitResultDetails from './PolicySubmitResultDetails';
 import { cspMap } from '../common/csp/CspLogo';
+import PolicySubmitResultDetails from './PolicySubmitResultDetails';
+import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
+import { useCreatePolicyRequest } from './add/useCreatePolicyRequest';
+import { PolicyUploadFileStatus, policiesStatuses } from './policiesParams';
+import PolicyUpdateResultStatus from './update/PolicyUpdateResultStatus';
 import UpdateSubmitResult from './update/UpdateSubmitResult';
+import { useUpdatePolicyRequest } from './update/useUpdatePolicyRequest';
 
 export const AddOrUpdatePolicy = ({
     currentPolicyService,

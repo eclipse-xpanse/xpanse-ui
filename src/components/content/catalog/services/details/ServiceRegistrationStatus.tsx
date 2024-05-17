@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
+import { Tag } from 'antd';
+import React from 'react';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import serviceRegistrationState = ServiceTemplateDetailVo.serviceRegistrationState;
-import { Tag } from 'antd';
-import { CheckCircleOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
-import React from 'react';
 
 export function ServiceRegistrationStatus({
     serviceStatus,

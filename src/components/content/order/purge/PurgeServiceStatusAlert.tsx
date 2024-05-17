@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Alert } from 'antd';
 import React from 'react';
 import { ApiError, DeployedService, Response } from '../../../../xpanse-api/generated';
-import { Alert } from 'antd';
-import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 export function PurgeServiceStatusAlert({
     deployedService,

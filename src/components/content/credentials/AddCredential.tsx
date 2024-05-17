@@ -3,26 +3,26 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import {
     AdminService,
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsConfigurationService,
     CredentialVariable,
     CredentialVariables,
+    CredentialsConfigurationService,
     IsvCloudCredentialsManagementService,
     Response,
     UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
-import { CredentialTip } from './CredentialTip';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
+import { CredentialApiDoc } from './CredentialApiDoc';
+import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {

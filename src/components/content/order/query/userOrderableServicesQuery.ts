@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceCatalogService, DeployedService } from '../../../../xpanse-api/generated';
+import { DeployedService, ServiceCatalogService } from '../../../../xpanse-api/generated';
 
 export default function UserOrderableServicesQuery(
     category: DeployedService.category,

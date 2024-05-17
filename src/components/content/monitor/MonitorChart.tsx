@@ -4,26 +4,26 @@
  */
 
 import { Spin } from 'antd';
+import { EChartsCoreOption } from 'echarts';
+import React, { useRef, useState } from 'react';
+import { ApiError, Metric, Response } from '../../../xpanse-api/generated';
+import { monitorMetricQueueSize } from '../../utils/constants';
+import { BuildMetricGraphs } from './BuildMetricGraphs';
 import {
+    useGetLastKnownMetricForASpecificTypeQuery,
+    useGetMetricsForSpecificTimePeriodAndSpecificType,
+} from './MetricQueries';
+import { MonitorMetricsTypeTabs } from './MonitorMetricsTypeTabs';
+import { MonitorTip } from './MonitorTip';
+import {
+    MetricProps,
     convertMetricsToMetricProps,
     getOptionData,
     getTotalSecondsOfTimePeriod,
     groupMetricsByResourceIds,
     isMetricEmpty,
     lastMinuteRadioButtonKeyId,
-    MetricProps,
 } from './metricProps';
-import React, { useRef, useState } from 'react';
-import { MonitorMetricsTypeTabs } from './MonitorMetricsTypeTabs';
-import { ApiError, Metric, Response } from '../../../xpanse-api/generated';
-import { monitorMetricQueueSize } from '../../utils/constants';
-import { BuildMetricGraphs } from './BuildMetricGraphs';
-import { EChartsCoreOption } from 'echarts';
-import {
-    useGetLastKnownMetricForASpecificTypeQuery,
-    useGetMetricsForSpecificTimePeriodAndSpecificType,
-} from './MetricQueries';
-import { MonitorTip } from './MonitorTip';
 
 export default function MonitorChart({
     serviceId,

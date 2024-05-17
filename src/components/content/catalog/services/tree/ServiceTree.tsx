@@ -4,8 +4,8 @@
  */
 
 import { Tree } from 'antd';
-import React from 'react';
 import { DataNode } from 'antd/es/tree';
+import React from 'react';
 
 export function ServiceTree({
     treeData,

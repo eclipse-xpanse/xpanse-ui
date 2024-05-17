@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { createWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
+import { createWithEqualityFn } from 'zustand/traditional';
 
 interface OrderFormStore {
     deployParams: Record<string, unknown>;

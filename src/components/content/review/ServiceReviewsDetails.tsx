@@ -3,20 +3,20 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
-import { cspMap } from '../common/csp/CspLogo';
-import { FlavorsText } from '../common/ocl/FlavorsText';
-import { BillingText } from '../common/ocl/BillingText';
-import { DeploymentText } from '../common/ocl/DeploymentText';
-import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
-import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
-import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
+import React, { useState } from 'react';
 import '../../../styles/service_review.css';
-import useGetRegistrationDetails from './query/useGetRegistrationDetails';
-import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
+import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
+import { BillingText } from '../common/ocl/BillingText';
+import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
+import { DeploymentText } from '../common/ocl/DeploymentText';
+import { FlavorsText } from '../common/ocl/FlavorsText';
+import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
+import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
+import useGetRegistrationDetails from './query/useGetRegistrationDetails';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,

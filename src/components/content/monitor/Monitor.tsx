@@ -3,18 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import '../../../styles/monitor.css';
 import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Form, Input, Row, Select, Skeleton } from 'antd';
-import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
-import { ApiError, Response, DeployedService } from '../../../xpanse-api/generated';
-import { MonitorTip } from './MonitorTip';
-import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
-import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
+import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import '../../../styles/monitor.css';
+import { ApiError, DeployedService, Response } from '../../../xpanse-api/generated';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
+import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
+import { MonitorTip } from './MonitorTip';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
-import { useLocation } from 'react-router-dom';
+import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
 
 const MonitorChart = lazy(() => import('./MonitorChart.tsx'));
 

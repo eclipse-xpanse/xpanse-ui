@@ -10,8 +10,8 @@ import {
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { DeployParam } from '../types/DeployParam';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
+import { DeployParam } from '../types/DeployParam';
 
 export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],

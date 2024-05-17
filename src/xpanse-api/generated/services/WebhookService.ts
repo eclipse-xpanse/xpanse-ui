@@ -7,11 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { OpenTofuResult } from '../models/OpenTofuResult';
-import type { TerraformResult } from '../models/TerraformResult';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { OpenTofuResult } from '../models/OpenTofuResult';
+import type { TerraformResult } from '../models/TerraformResult';
 export class WebhookService {
     /**
      * Process the execution result after openTofu executes the command line to rollback service deployment.

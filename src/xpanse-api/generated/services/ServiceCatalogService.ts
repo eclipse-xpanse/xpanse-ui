@@ -7,11 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Link } from '../models/Link';
-import type { UserOrderableServiceVo } from '../models/UserOrderableServiceVo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { Link } from '../models/Link';
+import type { UserOrderableServiceVo } from '../models/UserOrderableServiceVo';
 export class ServiceCatalogService {
     /**
      * List of all approved services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>

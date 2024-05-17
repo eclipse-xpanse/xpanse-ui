@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
-import { CloseCircleOutlined } from '@ant-design/icons';
 import { useUnregisterRequest } from './UnregisterMutation';
 
 function UnregisterService({

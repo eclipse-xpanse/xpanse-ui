@@ -55,7 +55,13 @@
             "@tanstack/query/exhaustive-deps": "error",
             "no-console": "error",
             "@typescript-eslint/no-dynamic-delete": "off",
-            "react/react-in-jsx-scope": "off"
+            "react/react-in-jsx-scope": "off",
+            "import/newline-after-import": [
+                "error",
+                {
+                    "count": 1
+                }
+            ]
         },
         "ignorePatterns": [
             "src/xpanse-api/**",
@@ -111,6 +117,7 @@
         "knip": "^5.16.0",
         "openapi-typescript-codegen": "^0.29.0",
         "prettier": "3.2.5",
+        "prettier-plugin-organize-imports": "^3.2.4",
         "release-it": "^17.2.1",
         "ts-jest": "^29.1.2",
         "typescript": "5.4.5",

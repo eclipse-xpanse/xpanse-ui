@@ -7,12 +7,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ServicePolicy } from '../models/ServicePolicy';
-import type { ServicePolicyCreateRequest } from '../models/ServicePolicyCreateRequest';
-import type { ServicePolicyUpdateRequest } from '../models/ServicePolicyUpdateRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { ServicePolicy } from '../models/ServicePolicy';
+import type { ServicePolicyCreateRequest } from '../models/ServicePolicyCreateRequest';
+import type { ServicePolicyUpdateRequest } from '../models/ServicePolicyUpdateRequest';
 export class ServicePoliciesManagementService {
     /**
      * Get details of policy belongs to the registered service template.<br>Required role:<b> admin</b> or <b>isv</b>

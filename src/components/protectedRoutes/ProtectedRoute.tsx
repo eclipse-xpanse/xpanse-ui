@@ -4,13 +4,13 @@
  */
 
 import { Layout } from 'antd';
+import React from 'react';
+import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 import LayoutFooter from '../layouts/footer/LayoutFooter';
 import LayoutHeader from '../layouts/header/LayoutHeader';
+import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
-import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
-import React from 'react';
-import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 
 interface ProtectedRouteProperties {
     children: React.JSX.Element;

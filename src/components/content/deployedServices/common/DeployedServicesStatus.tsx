@@ -3,9 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
-import { DeployedService } from '../../../../xpanse-api/generated';
-import { Tag } from 'antd';
 import {
     CheckCircleOutlined,
     CloseCircleOutlined,
@@ -13,6 +10,9 @@ import {
     MinusCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
+import { Tag } from 'antd';
+import React from 'react';
+import { DeployedService } from '../../../../xpanse-api/generated';
 
 export function DeployedServicesStatus(
     serviceDeploymentState: DeployedService.serviceDeploymentState

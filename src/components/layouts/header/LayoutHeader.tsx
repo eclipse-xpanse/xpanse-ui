@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useOidcIdToken } from '@axa-fr/react-oidc';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { Space } from 'antd';
 import { Header } from 'antd/es/layout/layout';
+import React from 'react';
 import SystemStatusBar from '../../content/systemStatus/SystemStatusBar';
 import { HeaderUserRoles } from './HeaderUserRoles';
-import React from 'react';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
-import { useOidcIdToken } from '@axa-fr/react-oidc';
 
 function LayoutHeader(): React.JSX.Element {
     const oidcIdToken: OidcIdToken = useOidcIdToken();

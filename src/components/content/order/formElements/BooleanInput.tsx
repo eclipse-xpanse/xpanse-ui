@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Switch as AntdSwitch } from 'antd';
+import { Switch as AntdSwitch, Form } from 'antd';
 import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';

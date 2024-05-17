@@ -4,9 +4,9 @@
  */
 
 import { Alert, Button } from 'antd';
+import React from 'react';
 import { Ocl } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-import React from 'react';
 
 function UpdateResult({
     ocl,

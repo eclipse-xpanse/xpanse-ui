@@ -3,29 +3,29 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UploadOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
+import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import '../../../../../styles/service_policies.css';
-import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { RcFile } from 'antd/es/upload';
 import {
     ServicePolicy,
     ServicePolicyCreateRequest,
     ServicePolicyUpdateRequest,
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
+import ServicePolicySubmitResult from './ServicePolicySubmitResult';
+import ServicePolicyCreateResultStatus from './addPolicy/ServicePolicyCreateResultStatus';
+import { useAddServicePolicy } from './addPolicy/useAddServicePolicy';
 import {
+    ServicePolicyUploadFileStatus,
     comparePolicyUpdateRequestResult,
     flavorNameList,
     servicePoliciesStatuses,
-    ServicePolicyUploadFileStatus,
 } from './servicePoliciesParams';
-import { useAddServicePolicy } from './addPolicy/useAddServicePolicy';
-import { useUpdateServicePolicy } from './updatePolicy/useUpdateServicePolicy';
-import ServicePolicySubmitResult from './ServicePolicySubmitResult';
-import ServicePolicyCreateResultStatus from './addPolicy/ServicePolicyCreateResultStatus';
 import ServicePolicyUpdateResultStatus from './updatePolicy/ServicePolicyUpdateResultStatus';
 import ServicePolicyUpdateSubmitResult from './updatePolicy/ServicePolicyUpdateSubmitResult';
+import { useUpdateServicePolicy } from './updatePolicy/useUpdateServicePolicy';
 
 export const AddOrUpdateServicePolicy = ({
     serviceTemplateId,

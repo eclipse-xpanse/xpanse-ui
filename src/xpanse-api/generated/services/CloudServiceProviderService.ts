@@ -7,11 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ReviewRegistrationRequest } from '../models/ReviewRegistrationRequest';
-import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { ReviewRegistrationRequest } from '../models/ReviewRegistrationRequest';
+import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
 export class CloudServiceProviderService {
     /**
      * Review service template registration.<br>Required role:<b> admin</b> or <b>csp</b>

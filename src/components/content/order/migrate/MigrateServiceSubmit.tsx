@@ -4,36 +4,36 @@
  */
 
 import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
+import React, { useState } from 'react';
 import {
     CloudServiceProvider,
-    DeployedService,
     DeployRequest,
+    DeployedService,
     MigrateRequest,
     Region,
     ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Tab } from 'rc-tabs/lib/interface';
-import React, { useState } from 'react';
-import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import { cspMap } from '../../common/csp/CspLogo';
-import { Flavor } from '../types/Flavor';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { MigrationSteps } from '../types/MigrationSteps';
-import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { BillingInfo } from '../common/BillingInfo';
-import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
+import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
+import { RegionInfo } from '../common/RegionInfo';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { Flavor } from '../types/Flavor';
+import { MigrationSteps } from '../types/MigrationSteps';
+import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import {
     useMigrateServiceDetailsPollingQuery,
     useMigrateServiceQuery,
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
-import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import migrationStatus = ServiceMigrationDetails.migrationStatus;
-import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,

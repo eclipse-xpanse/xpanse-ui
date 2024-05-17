@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployResource } from '../../../../xpanse-api/generated';
-import { Button, Popover, Typography } from 'antd';
-import '../../../../styles/my_services.css';
-import React from 'react';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { Button, Popover, Typography } from 'antd';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import '../../../../styles/my_services.css';
+import { DeployResource } from '../../../../xpanse-api/generated';
 
 function DeployedResourceProperties(deployResource: DeployResource): React.JSX.Element {
     if (Object.keys(deployResource).length) {

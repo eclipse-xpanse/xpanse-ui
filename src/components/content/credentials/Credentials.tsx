@@ -3,13 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
-import AddCredential from './AddCredential';
-import UpdateCredential from './UpdateCredential';
-import { CredentialTip } from './CredentialTip';
-import CredentialDetails from './CredentialDetails';
-import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import {
     FullscreenOutlined,
     InfoCircleOutlined,
@@ -17,6 +10,11 @@ import {
     PlusCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
+import { v4 } from 'uuid';
 import {
     AbstractCredentialInfo,
     ApiError,
@@ -26,11 +24,13 @@ import {
     Response,
     UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
-import { useMutation } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
+import AddCredential from './AddCredential';
+import CredentialDetails from './CredentialDetails';
+import { CredentialTip } from './CredentialTip';
+import UpdateCredential from './UpdateCredential';
 import useCredentialsListQuery from './query/queryCredentialsList';
-import { v4 } from 'uuid';
 
 function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);

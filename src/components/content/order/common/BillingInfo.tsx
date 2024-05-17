@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Tag } from 'antd';
+import React from 'react';
 import '../../../../styles/service_order.css';
 
 export const BillingInfo = ({ priceValue }: { priceValue: string }): React.JSX.Element => {

@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../../xpanse-api/generated';
 import { Form } from 'antd';
 import React from 'react';
-import { AvailabilityZoneButton } from './AvailabilityZoneButton';
+import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../../xpanse-api/generated';
 import useGetAvailabilityZonesForRegionQuery from '../utils/useGetAvailabilityZonesForRegionQuery';
-import { AvailabilityZoneLoading } from './AvailabilityZoneLoading';
+import { AvailabilityZoneButton } from './AvailabilityZoneButton';
 import { AvailabilityZoneError } from './AvailabilityZoneError';
+import { AvailabilityZoneLoading } from './AvailabilityZoneLoading';
 
 export function AvailabilityZoneFormItem({
     availabilityZoneConfig,

@@ -4,12 +4,10 @@
  */
 
 import { HomeOutlined } from '@ant-design/icons';
-import ServiceProvider from '../details/ServiceProvider';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ServiceTree } from './ServiceTree';
 import { DataNode } from 'antd/es/tree';
-import { DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -18,6 +16,8 @@ import {
     serviceVersionKeyQuery,
 } from '../../../../utils/constants';
 import { getAllKeysFromCatalogTree } from '../../../common/catalog/catalogProps';
+import ServiceProvider from '../details/ServiceProvider';
+import { ServiceTree } from './ServiceTree';
 
 export function CatalogFullView({
     treeData,

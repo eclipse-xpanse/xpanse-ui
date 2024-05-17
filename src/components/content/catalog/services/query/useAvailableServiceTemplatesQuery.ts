@@ -4,7 +4,7 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceVendorService, DeployedService } from '../../../../../xpanse-api/generated';
+import { DeployedService, ServiceVendorService } from '../../../../../xpanse-api/generated';
 
 export function useAvailableServiceTemplatesQuery(category: DeployedService.category) {
     return useQuery({
