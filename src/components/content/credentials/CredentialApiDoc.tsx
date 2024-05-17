@@ -4,9 +4,9 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
+import React from 'react';
 import '../../../styles/app.css';
 import { CredentialsConfigurationService, CredentialVariables, Link } from '../../../xpanse-api/generated';
-import React from 'react';
 
 export function CredentialApiDoc({
     csp,

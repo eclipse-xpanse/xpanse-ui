@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Typography } from 'antd';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { Typography } from 'antd';
 import React from 'react';
-import { myServicesRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { myServicesRoute } from '../../../utils/constants';
 
 function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Element; uuid: string }): React.JSX.Element {
     const { Paragraph } = Typography;

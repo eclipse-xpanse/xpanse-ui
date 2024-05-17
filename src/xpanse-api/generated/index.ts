@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export { ApiError } from './core/ApiError';
-export { CancelablePromise, CancelError } from './core/CancelablePromise';
+export { CancelError, CancelablePromise } from './core/CancelablePromise';
 export { OpenAPI } from './core/OpenAPI';
 export type { OpenAPIConfig } from './core/OpenAPI';
 
@@ -21,13 +21,13 @@ export { CloudServiceProvider } from './models/CloudServiceProvider';
 export { CreateCredential } from './models/CreateCredential';
 export type { CredentialVariable } from './models/CredentialVariable';
 export { CredentialVariables } from './models/CredentialVariables';
-export { DeployedService } from './models/DeployedService';
-export { DeployedServiceDetails } from './models/DeployedServiceDetails';
-export { Deployment } from './models/Deployment';
 export { DeployRequest } from './models/DeployRequest';
 export { DeployResource } from './models/DeployResource';
 export { DeployVariable } from './models/DeployVariable';
 export { DeployVariableKind } from './models/DeployVariableKind';
+export { DeployedService } from './models/DeployedService';
+export { DeployedServiceDetails } from './models/DeployedServiceDetails';
+export { Deployment } from './models/Deployment';
 export type { FlavorsWithPrice } from './models/FlavorsWithPrice';
 export type { Link } from './models/Link';
 export { Metric } from './models/Metric';
@@ -71,9 +71,9 @@ export { CredentialsConfigurationService } from './services/CredentialsConfigura
 export { IsvCloudCredentialsManagementService } from './services/IsvCloudCredentialsManagementService';
 export { MigrationService } from './services/MigrationService';
 export { MonitorService } from './services/MonitorService';
-export { ServiceService } from './services/ServiceService';
 export { ServiceCatalogService } from './services/ServiceCatalogService';
 export { ServicePoliciesManagementService } from './services/ServicePoliciesManagementService';
+export { ServiceService } from './services/ServiceService';
 export { ServiceStatusManagementService } from './services/ServiceStatusManagementService';
 export { ServiceVendorService } from './services/ServiceVendorService';
 export { UserCloudCredentialsManagementService } from './services/UserCloudCredentialsManagementService';

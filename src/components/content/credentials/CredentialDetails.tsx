@@ -4,9 +4,9 @@
  */
 
 import { Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import { CredentialVariable } from '../../../xpanse-api/generated';
-import { ColumnsType } from 'antd/es/table';
 
 function CredentialDetails({ credentialDetails }: { credentialDetails: CredentialVariable[] }): React.JSX.Element {
     const columns: ColumnsType<CredentialVariable> = [

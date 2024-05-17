@@ -3,10 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, Response } from '../../../../../xpanse-api/generated';
 import { Alert, Button } from 'antd';
+import React from 'react';
+import { ApiError, Response } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-export function AvailabilityZoneError({ retryRequest, error }: { retryRequest: () => void; error: Error }) {
+
+export function AvailabilityZoneError({
+    retryRequest,
+    error,
+}: {
+    retryRequest: () => void;
+    error: Error;
+}): React.JSX.Element {
     if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (

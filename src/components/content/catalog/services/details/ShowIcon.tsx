@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import React from 'react';
 import { Tooltip, Typography } from 'antd';
+import React from 'react';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 
 export function ShowIcon({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     const { Paragraph } = Typography;

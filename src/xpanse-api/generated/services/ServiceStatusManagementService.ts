@@ -7,10 +7,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ServiceStateManagementTaskDetails } from '../models/ServiceStateManagementTaskDetails';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { ServiceStateManagementTaskDetails } from '../models/ServiceStateManagementTaskDetails';
 export class ServiceStatusManagementService {
     /**
      * Start a task to stop the service instance.<br>Required role:<b> admin</b> or <b>user</b>

@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import React, { useMemo } from 'react';
+import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedService,
@@ -11,13 +13,11 @@ import {
     ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import React, { useMemo } from 'react';
-import { useStopwatch } from 'react-timer-hook';
-import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
-import { OperationType } from '../types/OperationType';
-import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
+import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { OperationType } from '../types/OperationType';
 
 function ScaleOrModifySubmitStatusAlert({
     isSubmitFailed,

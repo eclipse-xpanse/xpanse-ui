@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactsOutlined, GlobalOutlined, MailOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Popover, Typography } from 'antd';
 import React from 'react';
-import { ContactsOutlined, GlobalOutlined, MailOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
-import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { v4 as uuidv4 } from 'uuid';
+import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactDetailsShowType } from './ContactDetailsShowType';
 
 export function ContactDetailsText({
     serviceProviderContactDetails,

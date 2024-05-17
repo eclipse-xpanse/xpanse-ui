@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { DeployedService } from '../../../../../xpanse-api/generated';
 import CategoryCatalog from '../tree/CategoryCatalog';
-import React from 'react';
 
 export default function CatalogMainPage(): React.JSX.Element {
     const location = useLocation();

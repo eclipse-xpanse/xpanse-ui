@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Typography } from 'antd';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { Typography } from 'antd';
 import React from 'react';
-import { policiesRoute } from '../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import { policiesRoute } from '../../utils/constants';
 
 function PolicySubmitResultDetails({
     msg,

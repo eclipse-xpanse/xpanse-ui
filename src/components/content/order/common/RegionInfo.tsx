@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Form, Select, Space } from 'antd';
+import React from 'react';
 import '../../../../styles/service_order.css';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 

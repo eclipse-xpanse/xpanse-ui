@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Deployment } from '../../../../xpanse-api/generated';
+import { Button, Popover } from 'antd';
 import React from 'react';
 import YAML from 'yaml';
-import { Button, Popover } from 'antd';
+import { Deployment } from '../../../../xpanse-api/generated';
 
 export function DeploymentText({ deployment }: { deployment: Deployment }): React.JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition

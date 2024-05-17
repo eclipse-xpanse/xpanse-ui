@@ -3,19 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Descriptions, Space, Tag } from 'antd';
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Descriptions, Space, Tag } from 'antd';
+import React from 'react';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
-import { ShowIcon } from './ShowIcon';
-import React from 'react';
+import { AgreementText } from '../../../common/ocl/AgreementText';
+import { BillingText } from '../../../common/ocl/BillingText';
+import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
-import { BillingText } from '../../../common/ocl/BillingText';
 import { ServiceRegistrationStatus } from './ServiceRegistrationStatus';
-import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
-import { AgreementText } from '../../../common/ocl/AgreementText';
+import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (

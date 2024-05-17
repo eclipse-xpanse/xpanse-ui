@@ -4,20 +4,19 @@
  */
 
 import { FormOutlined } from '@ant-design/icons';
-import '../../../../styles/service_order.css';
+import { Badge, Col, Empty, Row, Space, Tooltip, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { createServicePageRoute } from '../../../utils/constants';
-import { Col, Empty, Row, Tooltip, Typography } from 'antd';
-import { Badge, Space } from 'antd';
-import { sortVersion } from '../../../utils/Sort';
+import '../../../../styles/service_order.css';
 import { DeployedService, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import ServicesSkeleton from './ServicesSkeleton';
+import { sortVersion } from '../../../utils/Sort';
+import { createServicePageRoute } from '../../../utils/constants';
 import ServicesLoadingError from '../query/ServicesLoadingError';
-import { groupServicesByName, groupVersionsForService } from './userServiceHelper';
-import { useOrderFormStore } from '../store/OrderFormStore';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
+import { useOrderFormStore } from '../store/OrderFormStore';
+import ServicesSkeleton from './ServicesSkeleton';
 import { UserServiceDisplayType } from './UserServiceDisplayType';
+import { groupServicesByName, groupVersionsForService } from './userServiceHelper';
 
 function Services(): React.JSX.Element {
     const { Paragraph } = Typography;

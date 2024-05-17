@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { env } from '../../config/config';
 import { OidcConfiguration } from '@axa-fr/react-oidc';
+import { env } from '../../config/config';
 import { defaultRole, grantedRolesKey, usernameKey } from './OidcUserInfo';
 
 export const allowRoleList: string[] = ['isv', 'user', 'admin', 'csp'];

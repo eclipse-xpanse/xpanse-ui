@@ -3,9 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, Tooltip } from 'antd';
+import React, { useState } from 'react';
 import '../../../../styles/service_modify.css';
+import '../../../../styles/service_order.css';
 import {
     DeployedService,
     DeployedServiceDetails,
@@ -13,17 +16,14 @@ import {
     ServiceService,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import { OrderItem } from '../common/utils/OrderItem';
-import { useOrderFormStore } from '../store/OrderFormStore';
-import '../../../../styles/service_order.css';
-import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
+import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
-import { useMutation } from '@tanstack/react-query';
+import { OrderItem } from '../common/utils/OrderItem';
 import { getExistingServiceParameters } from '../common/utils/existingServiceParameters';
+import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
+import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 
 export const Modify = ({

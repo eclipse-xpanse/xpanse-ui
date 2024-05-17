@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { PlayCircleOutlined, PoweroffOutlined, StopOutlined, SyncOutlined } from '@ant-design/icons';
+import { Row, Tag, Tooltip } from 'antd';
 import React from 'react';
 import { DeployedService } from '../../../../xpanse-api/generated';
-import { Row, Tag, Tooltip } from 'antd';
-import { PlayCircleOutlined, PoweroffOutlined, StopOutlined, SyncOutlined } from '@ant-design/icons';
 
 export function DeployedServicesRunningStatus(record: DeployedService): React.JSX.Element {
     if (record.serviceState === DeployedService.serviceState.RUNNING) {

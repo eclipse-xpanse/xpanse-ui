@@ -11,6 +11,5 @@ const env: Record<string, string | undefined> = {
     ...import.meta.env,
     ...window.injectedEnv,
 };
-// eslint-disable-next-line no-console
-console.warn(env);
+
 export { env };

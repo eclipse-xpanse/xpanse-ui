@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
+import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
 export const groupServiceTemplatesByName = (
     serviceTemplateList: ServiceTemplateDetailVo[]

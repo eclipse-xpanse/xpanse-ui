@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Button, Popover } from 'antd';
+import React from 'react';
 
 export function AgreementText({ eula }: { eula: string }): React.JSX.Element {
     return (

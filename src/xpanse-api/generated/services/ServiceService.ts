@@ -7,16 +7,16 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
+import type { CancelablePromise } from '../core/CancelablePromise';
+import { OpenAPI } from '../core/OpenAPI';
+import { request as __request } from '../core/request';
+import type { DeployRequest } from '../models/DeployRequest';
 import type { DeployedService } from '../models/DeployedService';
 import type { DeployedServiceDetails } from '../models/DeployedServiceDetails';
-import type { DeployRequest } from '../models/DeployRequest';
 import type { ModifyRequest } from '../models/ModifyRequest';
 import type { Response } from '../models/Response';
 import type { ServiceLockConfig } from '../models/ServiceLockConfig';
 import type { VendorHostedDeployedServiceDetails } from '../models/VendorHostedDeployedServiceDetails';
-import type { CancelablePromise } from '../core/CancelablePromise';
-import { OpenAPI } from '../core/OpenAPI';
-import { request as __request } from '../core/request';
 export class ServiceService {
     /**
      * Start a task to modify service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>

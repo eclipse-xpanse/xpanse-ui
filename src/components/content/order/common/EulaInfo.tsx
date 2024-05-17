@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { Dispatch, SetStateAction } from 'react';
 import { Checkbox, Form, Space } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import React, { Dispatch, SetStateAction } from 'react';
 import '../../../../styles/service_order.css';
 import { AgreementText } from '../../common/ocl/AgreementText';
-import { CheckboxChangeEvent } from 'antd/es/checkbox';
 
 export const EulaInfo = ({
     eula,

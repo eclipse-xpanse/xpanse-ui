@@ -3,16 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Card, Col, Divider, Row, Statistic } from 'antd';
+import React from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import '../../../../styles/dashboard.css';
-import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
-import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
-import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
 import { DeployedService, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 import { catalogPageRoute, reportsRoute } from '../../../utils/constants';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import DashBoardError from '../common/DashBoardError';
+import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
+import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
 
 export function IsvServicesDashBoard(): React.JSX.Element {
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();

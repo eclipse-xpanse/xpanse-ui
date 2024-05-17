@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import React, { useMemo } from 'react';
+import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedServiceDetails,
@@ -10,11 +12,9 @@ import {
     ServiceMigrationDetails,
     ServiceProviderContactDetails,
 } from '../../../../xpanse-api/generated';
-import { useStopwatch } from 'react-timer-hook';
-import React, { useMemo } from 'react';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { MigrationOrderSubmitResult } from './MigrationOrderSubmitResult';
 import { MigrationProcessingStatus } from './MigrationProcessingStatus';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
 function MigrateServiceStatusAlert({
     migrateRequestError,

@@ -4,13 +4,13 @@
  */
 
 import { Alert } from 'antd';
-import OrderSubmitResultDetails from './OrderSubmitResultDetails';
-import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import DeploymentTimerNew from './DeploymentTimer';
 import { StopwatchResult } from 'react-timer-hook';
+import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import DeploymentTimerNew from './DeploymentTimer';
+import OrderSubmitResultDetails from './OrderSubmitResultDetails';
 
 export const OrderSubmitResult = ({
     msg,

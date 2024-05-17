@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { StopwatchResult } from 'react-timer-hook';
 import { HourglassOutlined } from '@ant-design/icons';
 import React from 'react';
+import { StopwatchResult } from 'react-timer-hook';
 
 function DeploymentTimer({ stopWatch }: { stopWatch: StopwatchResult }): React.JSX.Element {
     return (

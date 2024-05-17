@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
 import { Alert, Input, Modal } from 'antd';
-import useApproveOrRejectRequest, { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
+import React, { useState } from 'react';
 import { ApiError, Response, ReviewRegistrationRequest, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import useApproveOrRejectRequest, { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
 export const ApproveOrRejectServiceTemplate = ({
     currentServiceTemplateVo,

@@ -3,9 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Image, Input, InputNumber, Table, Tooltip } from 'antd';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import TextArea from 'antd/es/input/TextArea';
+import { ColumnsType } from 'antd/es/table';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { v4 } from 'uuid';
+import '../../../styles/credential.css';
 import {
     ApiError,
     CloudServiceProvider,
@@ -16,14 +20,10 @@ import {
     Response,
     UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
-import { ColumnsType } from 'antd/es/table';
-import '../../../styles/credential.css';
-import { CredentialTip } from './CredentialTip';
-import { useMutation } from '@tanstack/react-query';
-import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
+import { CredentialApiDoc } from './CredentialApiDoc';
+import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
-import { v4 } from 'uuid';
 
 function UpdateCredential({
     role,

@@ -3,26 +3,26 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Col, Row, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import React, { useEffect, useRef, useState } from 'react';
-import { RcFile } from 'antd/es/upload';
-import { ApiError, Ocl, Response, ServiceTemplateDetailVo, ServiceVendorService } from '../../../xpanse-api/generated';
-import '../../../styles/register.css';
-import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
-import loadOclFile from '../common/ocl/loadOclFile';
-import { ValidationStatus } from '../common/ocl/ValidationStatus';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Col, Row, Upload, UploadFile } from 'antd';
+import { RcFile } from 'antd/es/upload';
+import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import '../../../styles/register.css';
+import { ApiError, Ocl, Response, ServiceTemplateDetailVo, ServiceVendorService } from '../../../xpanse-api/generated';
 import {
     registerFailedRoute,
     registerInvalidRoute,
     registerPageRoute,
     registerSuccessfulRoute,
 } from '../../utils/constants';
-import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
-import RegisterResult from './RegisterResult';
 import { getQueryKey } from '../catalog/services/query/useAvailableServiceTemplatesQuery';
+import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
+import { ValidationStatus } from '../common/ocl/ValidationStatus';
+import YamlSyntaxValidationResult from '../common/ocl/YamlSyntaxValidationResult';
+import loadOclFile from '../common/ocl/loadOclFile';
+import RegisterResult from './RegisterResult';
 
 function RegisterPanel(): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);

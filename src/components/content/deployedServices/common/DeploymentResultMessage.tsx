@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 import React from 'react';
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
 
 export function DeploymentResultMessage(resultMessage: string): React.JSX.Element {

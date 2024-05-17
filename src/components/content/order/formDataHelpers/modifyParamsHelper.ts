@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployParam } from '../types/DeployParam';
 import { DeployVariable } from '../../../../xpanse-api/generated';
+import { DeployParam } from '../types/DeployParam';
 
 export const getModifyParams = (variables: DeployVariable[]): DeployParam[] => {
     const params: DeployParam[] = [];

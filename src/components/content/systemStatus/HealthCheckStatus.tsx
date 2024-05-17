@@ -3,16 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
+import { SyncOutlined } from '@ant-design/icons';
 import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
-import { SyncOutlined } from '@ant-design/icons';
-import SystemStatusIcon from './SystemStatusIcon';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import React from 'react';
 import '../../../styles/health_status.css';
+import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import SystemStatusIcon from './SystemStatusIcon';
+import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
 interface DataType {
     key: React.Key;

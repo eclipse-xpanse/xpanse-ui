@@ -4,8 +4,8 @@
  */
 
 import { Form, InputNumber } from 'antd';
-import React from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
+import React from 'react';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';

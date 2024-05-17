@@ -6,13 +6,13 @@
 import { Alert } from 'antd';
 import React from 'react';
 import '../../../../styles/locks.css';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import {
     ApiError,
     DeployedServiceDetails,
     Response,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { useLockRequestState } from './useLockRequest';
 
 function LocksResult({

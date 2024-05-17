@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Card, Skeleton } from 'antd';
 import React from 'react';
 import '../../../../styles/dashboard.css';
-import { Card, Skeleton } from 'antd';
 
 export function DashBoardSkeleton(): React.JSX.Element {
     return (

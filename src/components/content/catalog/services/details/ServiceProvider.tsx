@@ -3,20 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useMemo } from 'react';
+import { EnvironmentOutlined } from '@ant-design/icons';
 import { Divider, Empty, Image, Tabs } from 'antd';
-import ServiceDetail from './ServiceDetail';
-import { CloudServiceProvider, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Tab } from 'rc-tabs/lib/interface';
-import UpdateService from '../update/UpdateService';
-import UnregisterService from '../unregister/UnregisterService';
-import {
-    groupServicesByCspForSpecificServiceNameAndVersion,
-    groupServicesByVersionForSpecificServiceName,
-} from '../../../common/catalog/catalogProps';
-import { cspMap } from '../../../common/csp/CspLogo';
-import { ServiceHostingOptions } from './ServiceHostingOptions';
+import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import { CloudServiceProvider, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -24,9 +16,17 @@ import {
     serviceNameKeyQuery,
     serviceVersionKeyQuery,
 } from '../../../../utils/constants';
+import {
+    groupServicesByCspForSpecificServiceNameAndVersion,
+    groupServicesByVersionForSpecificServiceName,
+} from '../../../common/catalog/catalogProps';
+import { cspMap } from '../../../common/csp/CspLogo';
 import { ServicePolicies } from '../policies/ServicePolicies';
-import { EnvironmentOutlined } from '@ant-design/icons';
 import { UnregisterResult } from '../unregister/UnregisterResult';
+import UnregisterService from '../unregister/UnregisterService';
+import UpdateService from '../update/UpdateService';
+import ServiceDetail from './ServiceDetail';
+import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
 
 function ServiceProvider({

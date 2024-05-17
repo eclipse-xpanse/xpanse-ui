@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AvailabilityZoneConfig } from '../../../../../xpanse-api/generated';
 import { Alert, Flex, Radio } from 'antd';
 import React from 'react';
+import { AvailabilityZoneConfig } from '../../../../../xpanse-api/generated';
 
 export function AvailabilityZoneButton({
     availabilityZoneConfig,

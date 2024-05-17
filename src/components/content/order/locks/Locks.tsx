@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Button, Form, Space, Switch } from 'antd';
+import React from 'react';
 import '../../../../styles/locks.css';
 import {
     DeployedServiceDetails,

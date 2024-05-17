@@ -5,8 +5,8 @@
 
 import { Alert } from 'antd';
 import React from 'react';
-import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 import { ApiError, Response, ServicePolicy } from '../../../../../../xpanse-api/generated';
+import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 
 export default function ServicePolicyCreateResultStatus({
     isError,

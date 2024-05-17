@@ -3,42 +3,42 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
+import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
     AvailabilityZoneConfig,
     DeployRequest,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Tab } from 'rc-tabs/lib/interface';
-import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
-import { Flavor } from '../types/Flavor';
-import { getSortedVersionList } from '../formDataHelpers/versionHelper';
-import { getCspListForVersion } from '../formDataHelpers/cspHelper';
-import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/contactServiceDetailsHelper';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
-import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
-import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
-import NavigateOrderSubmission from './NavigateOrderSubmission';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import CspSelect from '../formElements/CspSelect';
-import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { RegionInfo } from '../common/RegionInfo';
-import { FlavorInfo } from '../common/FlavorInfo';
-import { BillingInfo } from '../common/BillingInfo';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { BillingInfo } from '../common/BillingInfo';
+import { BillingModeSelection } from '../common/BillingModeSelection';
+import { FlavorInfo } from '../common/FlavorInfo';
+import { RegionInfo } from '../common/RegionInfo';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
-import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
-import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
+import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/contactServiceDetailsHelper';
+import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
-import { BillingModeSelection } from '../common/BillingModeSelection';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
+import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { getSortedVersionList } from '../formDataHelpers/versionHelper';
+import CspSelect from '../formElements/CspSelect';
+import { Flavor } from '../types/Flavor';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const { Paragraph } = Typography;

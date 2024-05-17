@@ -4,8 +4,8 @@
  */
 
 import { Radio, RadioChangeEvent } from 'antd';
-import { timePeriodList } from './metricProps';
 import React from 'react';
+import { timePeriodList } from './metricProps';
 
 export const MetricTimePeriodRadioButton = ({
     isLoading,

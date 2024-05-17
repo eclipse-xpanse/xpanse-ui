@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
-import { myServicesRoute } from '../../../utils/constants';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import { DeployedService } from '../../../../xpanse-api/generated';
+import { myServicesRoute } from '../../../utils/constants';
+import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 import serviceDeploymentState = DeployedService.serviceDeploymentState;

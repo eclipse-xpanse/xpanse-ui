@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
+import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 
 export function MigrationProcessingStatus({

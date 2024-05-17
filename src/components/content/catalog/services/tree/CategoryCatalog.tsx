@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { TagOutlined } from '@ant-design/icons';
+import { Alert, Empty, Skeleton, Tooltip, Typography } from 'antd';
+import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import '../../../../../styles/catalog.css';
-import { DataNode } from 'antd/es/tree';
-import { TagOutlined } from '@ant-design/icons';
 import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { Alert, Empty, Skeleton, Tooltip, Typography } from 'antd';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import {
     groupServiceTemplatesByName,

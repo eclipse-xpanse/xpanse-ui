@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
-import { Input, Typography } from 'antd';
 import { CheckOutlined, CopyOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Input, Typography } from 'antd';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 export function convertMapToDetailsList(content: Map<string, unknown>, title: string): React.JSX.Element {

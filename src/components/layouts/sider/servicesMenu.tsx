@@ -14,6 +14,7 @@ import {
     VerifiedOutlined,
 } from '@ant-design/icons';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { Link } from 'react-router-dom';
 import {
     credentialLabelName,
     credentialPageRoute,
@@ -35,7 +36,6 @@ import {
     workflowsLabelName,
     workflowsPageRoute,
 } from '../../utils/constants';
-import { Link } from 'react-router-dom';
 
 export const servicesMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {

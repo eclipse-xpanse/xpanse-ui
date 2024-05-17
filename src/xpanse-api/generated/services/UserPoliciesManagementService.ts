@@ -7,12 +7,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { UserPolicy } from '../models/UserPolicy';
-import type { UserPolicyCreateRequest } from '../models/UserPolicyCreateRequest';
-import type { UserPolicyUpdateRequest } from '../models/UserPolicyUpdateRequest';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { UserPolicy } from '../models/UserPolicy';
+import type { UserPolicyCreateRequest } from '../models/UserPolicyCreateRequest';
+import type { UserPolicyUpdateRequest } from '../models/UserPolicyUpdateRequest';
 export class UserPoliciesManagementService {
     /**
      * Get the details of the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>

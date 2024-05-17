@@ -4,11 +4,11 @@
  */
 
 import React from 'react';
-import { DeployParam } from '../../types/DeployParam';
 import { DeployRequest } from '../../../../../xpanse-api/generated';
-import { TextInput } from '../../formElements/TextInput';
-import { NumberInput } from '../../formElements/NumberInput';
 import { BooleanInput } from '../../formElements/BooleanInput';
+import { NumberInput } from '../../formElements/NumberInput';
+import { TextInput } from '../../formElements/TextInput';
+import { DeployParam } from '../../types/DeployParam';
 
 export function OrderItem({
     item,

@@ -3,9 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useRef, useState } from 'react';
-import { Button, Modal, Upload, UploadFile } from 'antd';
 import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button, Modal, Upload, UploadFile } from 'antd';
+import { RcFile } from 'antd/es/upload';
+import React, { useRef, useState } from 'react';
 import {
     ApiError,
     DeployedService,
@@ -14,14 +16,12 @@ import {
     ServiceTemplateDetailVo,
     ServiceVendorService,
 } from '../../../../../xpanse-api/generated';
-import { RcFile } from 'antd/es/upload';
-import UpdateResult from './UpdateResult';
-import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
-import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
-import loadOclFile from '../../../common/ocl/loadOclFile';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
+import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
+import loadOclFile from '../../../common/ocl/loadOclFile';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
+import UpdateResult from './UpdateResult';
 
 function UpdateService({
     id,

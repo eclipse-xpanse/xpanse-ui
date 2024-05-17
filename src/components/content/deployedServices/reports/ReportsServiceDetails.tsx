@@ -6,11 +6,11 @@
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 import '../../../../styles/app.css';
-import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
 import { ApiError, DeployResource, Response } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
+import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
+import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
 
 export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useGetServiceDetailsByIdForIsvQuery(serviceId);

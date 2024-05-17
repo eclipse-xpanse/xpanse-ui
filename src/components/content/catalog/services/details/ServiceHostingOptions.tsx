@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 
 export function ServiceHostingOptions({
     serviceTemplateDetailVos,
