@@ -7,7 +7,7 @@ import CspSelect from '../formElements/CspSelect';
 import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { Flavor } from '../types/Flavor';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
@@ -247,6 +247,10 @@ export const SelectDestination = ({
         }
     }
 
+    function isAvailabilityZoneRequired(): boolean {
+        return availabilityZoneConfigs.filter((availabilityZoneConfig) => availabilityZoneConfig.mandatory).length > 0;
+    }
+
     return (
         <Form
             form={form}
@@ -317,7 +321,15 @@ export const SelectDestination = ({
                         >
                             Previous
                         </Button>
-                        <Button type='primary' className={'migrate-steps-operation-button-clas'} htmlType='submit'>
+                        <Button
+                            type='primary'
+                            disabled={
+                                getAvailabilityZonesForRegionQuery.isError ||
+                                (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
+                            }
+                            className={'migrate-steps-operation-button-clas'}
+                            htmlType='submit'
+                        >
                             Next
                         </Button>
                     </Space>
