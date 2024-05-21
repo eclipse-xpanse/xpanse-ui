@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/interface';
 import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
