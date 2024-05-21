@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { InfoCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { Badge, Button, Card, Col, Form, Input, Row, Tag, Tooltip } from 'antd';
+import { Badge, Button, Card, Col, Form, Input, Popconfirm, PopconfirmProps, Row, Tag, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import '../../../../styles/service_modify.css';
 import '../../../../styles/service_order.css';
@@ -23,6 +23,11 @@ import useGetServiceTemplateDetails from '../../deployedServices/myServices/quer
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
 import { OrderItem } from '../common/utils/OrderItem';
+import {
+    ChangeFlavorServiceDataWillBeLost,
+    ChangeFlavorServiceWillBeRestarted,
+    ChangeFlavorServiceWillBeRestartedAndDataWillBeLost,
+} from '../common/utils/ScaleOrModifyWarnings';
 import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
@@ -40,8 +45,9 @@ export const Scale = ({
     const [selectFlavor, setSelectFlavor] = useState<string>(
         currentSelectedService.flavor ? currentSelectedService.flavor : ''
     );
-    const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
+    const [scaleWarning, setScaleWarning] = useState<string>('Are you sure to scale the service?');
 
+    const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
     const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
@@ -83,6 +89,33 @@ export const Scale = ({
 
     const getModifyDetailsStatus = (status: DeployedService.serviceDeploymentState | undefined) => {
         setModifyStatus(status);
+    };
+
+    const onClickScale = () => {
+        if (
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceWillBeRestartedAndDataWillBeLost);
+        } else if (
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            !serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceDataWillBeLost);
+        } else if (
+            !serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceWillBeRestarted);
+        }
+    };
+
+    const confirm: PopconfirmProps['onConfirm'] = () => {
+        onFinish();
+    };
+
+    const cancel: PopconfirmProps['onCancel'] = () => {
+        setScaleWarning('');
     };
 
     return (
@@ -248,17 +281,30 @@ export const Scale = ({
                 <div className={'order-param-item-left'} />
                 <div className={'service-modify-submit-reset-container'}>
                     <div className={'service-modify-submit-class'}>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            disabled={
-                                currentSelectedService.flavor === selectFlavor ||
-                                (modifyStatus &&
-                                    modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
-                            }
+                        <Popconfirm
+                            placement='top'
+                            title='Scale'
+                            description={scaleWarning}
+                            icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
+                            onConfirm={cancel}
+                            onCancel={confirm}
+                            okText='No'
+                            cancelText='Yes'
                         >
-                            Scale
-                        </Button>
+                            <Button
+                                type='primary'
+                                disabled={
+                                    currentSelectedService.flavor === selectFlavor ||
+                                    (modifyStatus &&
+                                        modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                }
+                                onClick={() => {
+                                    onClickScale();
+                                }}
+                            >
+                                Scale
+                            </Button>
+                        </Popconfirm>
                     </div>
                 </div>
             </Form>

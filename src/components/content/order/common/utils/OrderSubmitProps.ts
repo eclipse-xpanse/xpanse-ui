@@ -1,3 +1,8 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
 import { DeployRequest, ServiceProviderContactDetails } from '../../../../../xpanse-api/generated';
 import { DeployParam } from '../../types/DeployParam';
 
