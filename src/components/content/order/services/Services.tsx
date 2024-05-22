@@ -7,7 +7,10 @@ import { FormOutlined } from '@ant-design/icons';
 import { Badge, Col, Empty, Row, Space, Tooltip, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import { DeployedService, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { sortVersion } from '../../../utils/Sort';
 import { createServicePageRoute } from '../../../utils/constants';
@@ -73,52 +76,54 @@ function Services(): React.JSX.Element {
 
     if (serviceList.length === 0) {
         return (
-            <div className={'service-blank-class'}>
+            <div className={serviceEmptyStyles.serviceBlankClass}>
                 <Empty description={'No services available.'} />
             </div>
         );
     }
 
     return (
-        <div className={'generic-table-container'}>
-            <div className={'content-title'}>
+        <div className={tableStyles.genericTableContainer}>
+            <div className={appStyles.contentTitle}>
                 <FormOutlined />
                 &nbsp;Select Service
             </div>
 
-            <div className={'services-content-body'}>
+            <div className={serviceOrderStyles.servicesContentBody}>
                 {serviceList.map((item, index) => {
                     return (
                         <Row key={index}>
-                            <Col span={8} className={'services-content-body-col'}>
+                            <Col span={8} className={serviceOrderStyles.servicesContentBodyCol}>
                                 <Space direction='vertical' size='middle'>
                                     <Badge.Ribbon text={item.latestVersion}>
                                         <div
                                             key={index}
-                                            className={'service-type-option-detail'}
+                                            className={serviceOrderStyles.serviceTypeOptionDetail}
                                             onClick={() => {
                                                 onSelectService(item.name, item.latestVersion);
                                             }}
                                         >
-                                            <div className='service-type-option-image'>
+                                            <div className={serviceOrderStyles.serviceTypeOptionImage}>
                                                 <img
-                                                    className='service-type-option-service-icon'
+                                                    className={serviceOrderStyles.serviceTypeOptionServiceIcon}
                                                     src={item.icon}
                                                     alt={'App'}
                                                 />
                                             </div>
-                                            <div className='service-type-option-info'>
-                                                <span className='service-type-option'>
+                                            <div className={serviceOrderStyles.serviceTypeOptionInfo}>
+                                                <span className={serviceOrderStyles.serviceTypeOption}>
                                                     <Tooltip placement='topLeft' title={item.name}>
                                                         <Paragraph
-                                                            className={'service-type-option-service-name'}
+                                                            className={serviceOrderStyles.serviceTypeOptionServiceName}
                                                             ellipsis={true}
                                                         >
                                                             {item.name}
                                                         </Paragraph>
                                                     </Tooltip>
                                                 </span>
-                                                <span className='service-type-option-description'>{item.content}</span>
+                                                <span className={serviceOrderStyles.serviceTypeOptionDescription}>
+                                                    {item.content}
+                                                </span>
                                             </div>
                                         </div>
                                     </Badge.Ribbon>

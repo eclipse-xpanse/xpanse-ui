@@ -5,7 +5,7 @@
 
 import React from 'react';
 import { To, useNavigate } from 'react-router-dom';
-import '../../../../styles/service_order.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { servicesSubPageRoute } from '../../../utils/constants';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import { useOrderFormStore } from '../store/OrderFormStore';
@@ -35,7 +35,7 @@ function NavigateOrderSubmission({
                 onClick={() => {
                     goBack(props);
                 }}
-                className='order-navigate'
+                className={serviceOrderStyles.orderNavigate}
             >
                 {text}
             </div>

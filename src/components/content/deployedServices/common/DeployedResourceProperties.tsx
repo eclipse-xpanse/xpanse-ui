@@ -7,7 +7,7 @@ import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { Button, Popover, Typography } from 'antd';
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import '../../../../styles/my_services.css';
+import myServiceStyles from '../../../../styles/my-services.module.css';
 import { DeployResource } from '../../../../xpanse-api/generated';
 
 function DeployedResourceProperties(deployResource: DeployResource): React.JSX.Element {
@@ -26,8 +26,9 @@ function convertRecordToList(record: Record<string, string>): React.JSX.Element 
     const properties: React.JSX.Element[] = [];
     for (const propertyName in record) {
         properties.push(
-            <div className={'deployed-resource-properties'}>
-                <b>{propertyName}:</b> &nbsp;{getCopyablePropertyValue(record[propertyName])}
+            <div className={myServiceStyles.deployedResourceProperties}>
+                <b className={myServiceStyles.resourcePropertiesKey}>{propertyName}:</b> &nbsp;
+                {getCopyablePropertyValue(record[propertyName])}
             </div>
         );
     }
@@ -41,8 +42,8 @@ function getCopyablePropertyValue(value: string) {
             copyable={{
                 text: value,
                 icon: [
-                    <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
-                    <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                    <CopyOutlined className={myServiceStyles.showDetailsTypographyCopy} key={uuidv4()} />,
+                    <CheckOutlined className={myServiceStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                 ],
             }}
         >

@@ -5,14 +5,14 @@
 
 import { Tag } from 'antd';
 import React from 'react';
-import '../../../../styles/service_order.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 
 export const BillingInfo = ({ priceValue }: { priceValue: string }): React.JSX.Element => {
     return (
         <>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
-                <span className={'order-billing-title-class'}>Price:&nbsp;</span>
-                <Tag color={'blue'} className={'order-billing-value-class'}>
+            <div className={serviceOrderStyles.orderFormSelectionStyle}>
+                <span className={serviceOrderStyles.orderBillingTitleClass}>Price:&nbsp;</span>
+                <Tag color={'blue'} className={serviceOrderStyles.orderBillingValueClass}>
                     {priceValue}
                 </Tag>
             </div>

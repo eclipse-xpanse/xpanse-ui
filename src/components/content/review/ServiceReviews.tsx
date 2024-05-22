@@ -8,7 +8,8 @@ import { Button, Input, Modal, Row, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem, FilterDropdownProps } from 'antd/es/table/interface';
 import React, { useState } from 'react';
-import '../../../styles/service_review.css';
+import serviceReviewStyles from '../../../styles/service-review.module.css';
+import tableStyles from '../../../styles/table.module.css';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
@@ -133,7 +134,7 @@ export default function ServiceReviews(): React.JSX.Element {
             title: 'Service Template Id',
             dataIndex: 'id',
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-                <div className={'search-container-class'}>
+                <div className={serviceReviewStyles.searchContainerClass}>
                     <Input
                         placeholder='Search ID'
                         value={selectedKeys[0]}
@@ -143,7 +144,7 @@ export default function ServiceReviews(): React.JSX.Element {
                         onPressEnter={() => {
                             handleSearch(confirm);
                         }}
-                        className={'search-input-class'}
+                        className={serviceReviewStyles.searchInputClass}
                     />
                     <Button
                         type='primary'
@@ -152,7 +153,7 @@ export default function ServiceReviews(): React.JSX.Element {
                         }}
                         icon={<SearchOutlined />}
                         size='small'
-                        className={'search-button-class'}
+                        className={serviceReviewStyles.searchButtonClass}
                     >
                         Search
                     </Button>
@@ -161,7 +162,7 @@ export default function ServiceReviews(): React.JSX.Element {
                             handleReset(clearFilters);
                         }}
                         size='small'
-                        className={'search-reset-class'}
+                        className={serviceReviewStyles.searchResetClass}
                     >
                         Reset
                     </Button>
@@ -246,11 +247,11 @@ export default function ServiceReviews(): React.JSX.Element {
             align: 'left',
             render: (deployment: Deployment) =>
                 deployment.kind === Deployment.kind.TERRAFORM ? (
-                    <Tag bordered={false} color='success' className={'my-service-status-size'}>
+                    <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
                         {'Terraform'}
                     </Tag>
                 ) : (
-                    <Tag bordered={false} color='success' className={'my-service-status-size'}>
+                    <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
                         {'Opentofu'}
                     </Tag>
                 ),
@@ -306,7 +307,7 @@ export default function ServiceReviews(): React.JSX.Element {
     };
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tableStyles.genericTableContainer}>
             {currentServiceTemplateVo ? (
                 <Modal
                     title={'Service Details'}
@@ -341,7 +342,7 @@ export default function ServiceReviews(): React.JSX.Element {
             )}
 
             <Row>
-                <div className={'service-instance-list'}>
+                <div className={serviceReviewStyles.serviceInstanceList}>
                     <Table
                         columns={columns}
                         dataSource={serviceTemplateList}

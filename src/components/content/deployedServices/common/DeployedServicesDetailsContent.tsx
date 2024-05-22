@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import myServicesStyle from '../../../../styles/my-services.module.css';
 import { DeployResource } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -29,8 +30,8 @@ export function DeployedServicesDetailsContent({
 
     if (getOrderableServiceDetails.isSuccess) {
         items.push(
-            <div className={'my-service-contact-container'}>
-                <div className={'my-service-contact-container-content-position'}>
+            <div className={myServicesStyle.myServiceContactContainer}>
+                <div className={myServicesStyle.myServiceContactContainerContentPosition}>
                     <ContactDetailsText
                         serviceProviderContactDetails={getOrderableServiceDetails.data.serviceProviderContactDetails}
                         showFor={ContactDetailsShowType.Order}

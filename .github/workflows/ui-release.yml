@@ -63,6 +63,7 @@ jobs:
               working-directory: ./
               run: tsc
 
+            # This step also builds the application. Please check package.json for more details.
             - name: Release application
               working-directory: ./
               run: npx release-it ${{github.event.inputs.ReleaseType}} --ci

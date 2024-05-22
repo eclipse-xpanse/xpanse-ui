@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import errorAlertStyles from '../../../styles/error-alert.module.css';
 import { ApiError, Response } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
@@ -17,7 +18,7 @@ export default function GetServiceTemplatesListError({ error }: { error: unknown
                 description={convertStringArrayToUnorderedList(response.details)}
                 type={'error'}
                 closable={true}
-                className={'failure-alert'}
+                className={errorAlertStyles.errorFailureAlert}
             />
         );
     } else {
@@ -27,7 +28,7 @@ export default function GetServiceTemplatesListError({ error }: { error: unknown
                 description={(error as Error).message}
                 type={'error'}
                 closable={true}
-                className={'failure-alert'}
+                className={errorAlertStyles.errorFailureAlert}
             />
         );
     }

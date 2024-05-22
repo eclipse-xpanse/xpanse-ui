@@ -7,8 +7,9 @@ import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons
 import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, Popconfirm, PopconfirmProps, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
-import '../../../../styles/service_modify.css';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployVariable,
     DeployedService,
@@ -165,8 +166,10 @@ export const Modify = ({
     };
 
     return (
-        <div className={'modify-select-class'}>
-            <div className={'modify-title-class content-title'}>Modify Parameters:</div>
+        <div className={serviceModifyStyles.modifySelectClass}>
+            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>
+                Modify Parameters:
+            </div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
                     isSubmitFailed={modifyServiceRequest.isError}
@@ -187,12 +190,12 @@ export const Modify = ({
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={'modify-container'}
+                className={serviceModifyStyles.modifyContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={modifyServiceRequest.isPending || modifyServiceRequest.isSuccess}
             >
-                <div className={'order-param-item-left'} />
+                <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form.Item
                     name={'Name'}
                     label={'Name: Service Name'}
@@ -207,7 +210,7 @@ export const Modify = ({
                         onChange={(e) => {
                             cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                         }}
-                        className={'order-param-item-content'}
+                        className={serviceOrderStyles.orderParamItemContent}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
                                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -234,14 +237,14 @@ export const Modify = ({
                         ) : undefined
                     )}
                 </div>
-                <div className={'order-param-item-left'} />
-                <div className={'service-modify-submit-reset-container'}>
-                    <div className={'service-modify-submit-class'}>
+                <div className={serviceOrderStyles.orderParamItemLeft} />
+                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
+                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
                         <Popconfirm
                             placement='top'
                             title='Modify parameters'
                             description={
-                                <div className={'service-modify-warnings-content'}>
+                                <div className={serviceModifyStyles.serviceModifyWarningsContent}>
                                     <Paragraph>{modifyWarning}</Paragraph>
                                 </div>
                             }

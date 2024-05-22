@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ApiError, Response, UserPolicy } from '../../../../xpanse-api/generated';
 import PolicySubmitResultDetails from '../PolicySubmitResultDetails';
 
@@ -23,7 +24,7 @@ export default function PolicyCreateResultStatus({
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Policy Process Status'}
@@ -36,7 +37,7 @@ export default function PolicyCreateResultStatus({
             );
         } else {
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Policy Process Status'}
@@ -54,7 +55,7 @@ export default function PolicyCreateResultStatus({
 
     if (isSuccess) {
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={'Policy Process Status'}

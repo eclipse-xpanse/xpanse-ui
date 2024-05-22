@@ -1,0 +1,11 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.workflow-tip {
+    padding-top: 10px;
+    height: 10vh;
+    padding-right: 10px;
+    padding-left: 10px;
+}

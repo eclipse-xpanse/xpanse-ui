@@ -6,6 +6,9 @@
 import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Space, Tag } from 'antd';
 import React from 'react';
+import appStyles from '../../../../../styles/app.module.css';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import registerStyles from '../../../../../styles/register.module.css';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
@@ -20,20 +23,20 @@ import { ShowIcon } from './ShowIcon';
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
     return (
         <>
-            <div className={'catalog-detail-class'}>
-                <h3 className={'catalog-details-h3'}>
+            <div className={catalogStyles.catalogDetailClass}>
+                <h3 className={catalogStyles.catalogDetailsH3}>
                     <CloudUploadOutlined />
                     &nbsp;Available Regions
                 </h3>
                 <Space size={[0, 8]} wrap>
                     {serviceDetails.regions.map((region) => (
-                        <Tag key={region.name} className={'ocl-display-tag'} color='orange'>
+                        <Tag key={region.name} className={registerStyles.oclDisplayTag} color='orange'>
                             {region.area ? `${region.area}: ${region.name}` : region.name}
                         </Tag>
                     ))}
                 </Space>
             </div>
-            <h3 className={'catalog-details-h3'}>
+            <h3 className={catalogStyles.catalogDetailsH3}>
                 <InfoCircleOutlined />
                 &nbsp;Basic Information
             </h3>
@@ -66,7 +69,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
-                    <ApiDoc id={serviceDetails.id} styleClass={'service-api-doc-link'} />
+                    <ApiDoc id={serviceDetails.id} styleClass={appStyles.serviceApiDocLink} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Contact Details'>
                     <ContactDetailsText

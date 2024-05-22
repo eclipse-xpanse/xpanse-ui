@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React, { useState } from 'react';
+import credentialStyles from '../../../styles/credential.module.css';
 
 export const CredentialTip = ({
     type,
@@ -26,7 +27,7 @@ export const CredentialTip = ({
     }
 
     return (
-        <div className={'credential-tip'}>
+        <div className={credentialStyles.credentialTip}>
             {' '}
             <Alert description={msg} type={type} onClose={onRemoveAlert} closable={true} />{' '}
         </div>

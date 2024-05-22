@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ApiError, DeployedService, DeployedServiceDetails, Response } from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -50,7 +51,7 @@ function DestroyServiceStatusAlert({
         }
         deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={errorMessage}
@@ -83,7 +84,7 @@ function DestroyServiceStatusAlert({
         if (statusPollingError instanceof ApiError && 'details' in statusPollingError.body) {
             const response: Response = statusPollingError.body as Response;
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={response.details}
@@ -123,7 +124,7 @@ function DestroyServiceStatusAlert({
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
         ) {
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Processing Status'}
@@ -145,7 +146,7 @@ function DestroyServiceStatusAlert({
             DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED.toString()
         ) {
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Processing Status'}

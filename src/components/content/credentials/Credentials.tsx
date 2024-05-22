@@ -15,6 +15,8 @@ import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
 import { v4 } from 'uuid';
+import tableButtonStyles from '../../../styles/table-buttons.module.css';
+import tableStyles from '../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
     ApiError,
@@ -221,7 +223,7 @@ function Credentials(): React.JSX.Element {
     };
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tableStyles.genericTableContainer}>
             <CredentialTip key={v4().toString()} type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
             <div>
                 {/* this condition will unmount and mount the modal completely. So that the old values are not retained. */}
@@ -272,7 +274,7 @@ function Credentials(): React.JSX.Element {
                 </Modal>
             </div>
             <div>
-                <div className={'policy-manage-buttons-container'}>
+                <div className={tableButtonStyles.tableManageButtons}>
                     <Button
                         type='primary'
                         loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}

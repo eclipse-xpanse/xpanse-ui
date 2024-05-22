@@ -3,10 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-.generic-table-container {
-    padding: 24px;
-}
-
 .reject-btn-class {
     margin-left: 10px;
 }
@@ -32,4 +28,17 @@
 
 .search-reset-class {
     width: 90px;
+}
+
+.service-instance-list {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.deployer-type-size {
+    font-size: 14px;
+}
+
+.service-template-state-size {
+    font-size: 14px;
 }

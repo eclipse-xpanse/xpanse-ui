@@ -5,11 +5,12 @@
 
 import { Skeleton } from 'antd';
 import React from 'react';
+import catalogStyles from '../../../../../styles/catalog.module.css';
 
 export function ServiceProviderSkeleton(): React.JSX.Element {
     return (
         <Skeleton
-            className={'catalog-csp-details-skeleton'}
+            className={catalogStyles.catalogCspDetailsSkeleton}
             active={true}
             loading={true}
             paragraph={{ rows: 2, width: ['20%', '20%'] }}

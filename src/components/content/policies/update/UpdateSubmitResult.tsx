@@ -5,12 +5,13 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import PolicySubmitResultDetails from '../PolicySubmitResultDetails';
 
 export default function UpdateSubmitResult({ isUpdated }: { isUpdated: boolean }): React.JSX.Element {
     if (isUpdated) {
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={'There is no change in the current data'}

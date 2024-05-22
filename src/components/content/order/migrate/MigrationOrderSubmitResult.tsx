@@ -8,6 +8,7 @@ import { StopwatchResult } from 'react-timer-hook';
 import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 
 import React from 'react';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import DeploymentTimer from '../orderStatus/DeploymentTimer';
@@ -27,7 +28,7 @@ export const MigrationOrderSubmitResult = ({
     contactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element => {
     return (
-        <div className={'submit-alert-tip'}>
+        <div className={submitAlertStyles.submitAlertTip}>
             {' '}
             <Alert
                 message={`Processing Status`}

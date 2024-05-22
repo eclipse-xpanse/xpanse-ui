@@ -7,8 +7,9 @@ import { TagOutlined } from '@ant-design/icons';
 import { Alert, Empty, Skeleton, Tooltip, Typography } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
-import '../../../../../styles/catalog.css';
-import { ApiError, DeployedService, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
+import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import {
     groupServiceTemplatesByName,
@@ -17,7 +18,7 @@ import {
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
-function CategoryCatalog({ category }: { category: DeployedService.category }): React.JSX.Element {
+function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.category }): React.JSX.Element {
     const treeData: DataNode[] = [];
     const { Paragraph } = Typography;
     let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
@@ -31,7 +32,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
             const dataNode: DataNode = {
                 title: (
                     <Tooltip placement='topLeft' title={serviceName}>
-                        <Paragraph ellipsis={true} className={'catalog-tree-node'}>
+                        <Paragraph ellipsis={true} className={catalogStyles.catalogTreeNode}>
                             {serviceName}
                         </Paragraph>
                     </Tooltip>
@@ -67,7 +68,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}
-                    className={'catalog-skeleton'}
+                    className={catalogStyles.catalogSkeleton}
                 />
             );
         } else {
@@ -77,7 +78,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
                     description={availableServiceTemplatesQuery.error.message}
                     type={'error'}
                     closable={true}
-                    className={'catalog-skeleton'}
+                    className={catalogStyles.catalogSkeleton}
                 />
             );
         }
@@ -86,7 +87,7 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
     if (availableServiceTemplatesQuery.isLoading || availableServiceTemplatesQuery.isFetching) {
         return (
             <Skeleton
-                className={'catalog-skeleton'}
+                className={catalogStyles.catalogSkeleton}
                 active={true}
                 loading={true}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
@@ -97,15 +98,15 @@ function CategoryCatalog({ category }: { category: DeployedService.category }): 
 
     if (availableServiceTemplatesQuery.data && availableServiceTemplatesQuery.data.length === 0) {
         return (
-            <div className={'service-blank-class'}>
+            <div className={servicesEmptyStyles.serviceBlankClass}>
                 <Empty description={'No services available.'} />
             </div>
         );
     }
 
     return (
-        <div className={'catalog-middleware'}>
-            <div className={'container'}>
+        <div className={catalogStyles.catalogMiddleware}>
+            <div className={catalogStyles.container}>
                 <CatalogFullView treeData={treeData} categoryOclData={categoryOclData} category={category} />
             </div>
         </div>

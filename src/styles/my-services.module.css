@@ -13,14 +13,6 @@
     white-space: nowrap;
 }
 
-.service-instance-detail-position {
-    display: flex;
-}
-
-.failure-alert {
-    margin: 30px;
-}
-
 .my-service-details-skeleton {
     margin: 30px;
     position: relative;
@@ -42,15 +34,6 @@
 
 .show-details-typography-copy {
     color: rgba(0, 0, 0, 0.45) !important;
-}
-
-.service-instance-Paragraph {
-    margin-bottom: 0 !important;
-}
-
-.show-details-typography-copy-info {
-    font-weight: bold;
-    cursor: pointer;
 }
 
 .deployment-details-with-scroll {
@@ -110,4 +93,12 @@
     position: absolute;
     top: 0;
     right: 0;
+}
+
+.service-instance-detail-position {
+    display: flex;
+}
+
+.resource-properties-key {
+    padding-top: 7px;
 }

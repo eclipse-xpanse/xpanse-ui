@@ -5,7 +5,7 @@
 
 import { Button, Form, Space, Switch } from 'antd';
 import React from 'react';
-import '../../../../styles/locks.css';
+import locksStyles from '../../../../styles/locks.module.css';
 import {
     DeployedServiceDetails,
     ServiceLockConfig,
@@ -39,11 +39,11 @@ export const Locks = ({
     };
 
     return (
-        <div className={'locks-select-class'}>
+        <div className={locksStyles.locksSelectClass}>
             {currentSelectedService.lockConfig !== undefined && !lockRequest.isPending && !lockRequest.isIdle ? (
                 <LocksResult currentSelectedService={currentSelectedService} />
             ) : null}
-            <div className={'locks-param-item-left'} />
+            <div className={locksStyles.locksParamItemLeft} />
             <Form
                 form={form}
                 layout='horizontal'

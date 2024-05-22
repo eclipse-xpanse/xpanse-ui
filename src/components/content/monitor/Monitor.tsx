@@ -7,7 +7,9 @@ import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Form, Input, Row, Select, Skeleton } from 'antd';
 import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import '../../../styles/monitor.css';
+import monitorStyles from '../../../styles/monitor.module.css';
+import emptyServicesStyle from '../../../styles/services-empty.module.css';
+import tablesStyle from '../../../styles/table.module.css';
 import { ApiError, DeployedService, Response } from '../../../xpanse-api/generated';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
@@ -185,8 +187,8 @@ function Monitor(): React.JSX.Element {
     };
 
     return (
-        <div className={'generic-table-container'}>
-            <div className={'monitor-service-select-title'}>
+        <div className={tablesStyle.genericTableContainer}>
+            <div className={monitorStyles.monitorServiceSelectTitle}>
                 <h3>
                     <MonitorOutlined />
                     &nbsp; Operating System Monitor
@@ -245,7 +247,7 @@ function Monitor(): React.JSX.Element {
                                 type='primary'
                                 htmlType='submit'
                                 disabled={deployedServiceQuery.isError}
-                                className={'monitor-search-button-class'}
+                                className={monitorStyles.monitorSearchButtonClass}
                             >
                                 Search
                             </Button>{' '}
@@ -257,7 +259,7 @@ function Monitor(): React.JSX.Element {
                     </Col>
                 </Row>
             </Form>
-            <div className={'chart-operation-class'}>
+            <div className={monitorStyles.chartOperationClass}>
                 <MetricTimePeriodRadioButton isLoading={false} timePeriod={timePeriod} setTimePeriod={setTimePeriod} />
                 <br />
                 <br />
@@ -289,7 +291,7 @@ function Monitor(): React.JSX.Element {
                     </Suspense>
                 </div>
             ) : (
-                <div className={'service-blank-class'}>
+                <div className={emptyServicesStyle.serviceBlankClass}>
                     <Empty description={'No metrics data available.'} />
                 </div>
             )}

@@ -7,6 +7,9 @@ import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd'
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
     DeployRequest,
@@ -296,13 +299,13 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             >
                 <div>
                     <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
-                    <div className={'Line'} />
+                    <div className={serviceOrderStyles.Line} />
                 </div>
-                <div className={'generic-table-container'}>
+                <div className={tableStyles.genericTableContainer}>
                     <Row justify='start' gutter={10}>
                         <Col span={6}>
                             <Tooltip placement='topLeft' title={serviceName}>
-                                <Paragraph ellipsis={true} className={'content-title'}>
+                                <Paragraph ellipsis={true} className={appStyles.contentTitle}>
                                     Service: {serviceName}
                                 </Paragraph>
                             </Tooltip>
@@ -318,11 +321,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             <></>
                         )}
                     </Row>
-                    <div className={'cloud-provider-tab-class'}>
+                    <div className={serviceOrderStyles.orderFormSelectionStyle}>
                         Version:&nbsp;
                         <Select
                             value={selectVersion}
-                            className={'version-drop-down'}
+                            className={serviceOrderStyles.versionDropDown}
                             onChange={onChangeVersion}
                             options={versionList}
                         />
@@ -345,7 +348,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                     ></ServiceHostingSelection>
                     <br />
                     <br />
-                    <div className={'cloud-provider-tab-class content-title'}>
+                    <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
                         <Tabs
                             type='card'
                             size='middle'
@@ -379,10 +382,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                     <BillingInfo priceValue={priceValue} />
                 </div>
                 <div>
-                    <div className={'Line'} />
-                    <div className={'order-param-item-row'}>
-                        <div className={'order-param-item-left'} />
-                        <div className={'order-param-submit'}>
+                    <div className={serviceOrderStyles.Line} />
+                    <div className={serviceOrderStyles.orderParamItemRow}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <div className={serviceOrderStyles.orderParamSubmit}>
                             <Button
                                 type='primary'
                                 htmlType='submit'

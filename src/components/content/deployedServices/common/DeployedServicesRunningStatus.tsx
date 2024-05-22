@@ -6,6 +6,7 @@
 import { PlayCircleOutlined, PoweroffOutlined, StopOutlined, SyncOutlined } from '@ant-design/icons';
 import { Row, Tag, Tooltip } from 'antd';
 import React from 'react';
+import myServicesStyle from '../../../../styles/my-services.module.css';
 import { DeployedService } from '../../../../xpanse-api/generated';
 
 export function DeployedServicesRunningStatus(record: DeployedService): React.JSX.Element {
@@ -13,7 +14,9 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
         return (
             <Tooltip
                 title={
-                    <Row className={'service-instance-list-service-state'}>running since - {record.lastStartedAt}</Row>
+                    <Row className={myServicesStyle.serviceInstanceListServiceState}>
+                        running since - {record.lastStartedAt}
+                    </Row>
                 }
             >
                 <Tag icon={<PlayCircleOutlined />} color='success'>
@@ -24,7 +27,11 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
     } else if (record.serviceState === DeployedService.serviceState.STOPPED) {
         return (
             <Tooltip
-                title={<Row className={'service-instance-list-service-state'}>stopped at - {record.lastStoppedAt}</Row>}
+                title={
+                    <Row className={myServicesStyle.serviceInstanceListServiceState}>
+                        stopped at - {record.lastStoppedAt}
+                    </Row>
+                }
             >
                 <Tag icon={<PoweroffOutlined />} color='error'>
                     {record.serviceState}

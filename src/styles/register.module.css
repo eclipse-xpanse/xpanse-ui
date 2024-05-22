@@ -1,0 +1,36 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.register-content {
+    padding: 24px;
+}
+
+.register-buttons {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.register-buttons-upload {
+    margin-right: 5px;
+}
+
+.register-buttons-register {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.register-buttons-validate {
+    margin-left: 5px;
+}
+
+.result {
+    margin-top: 20px;
+}
+
+.ant-upload-list-item-name {
+    padding: 0 !important;
+}

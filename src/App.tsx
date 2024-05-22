@@ -30,7 +30,7 @@ import {
     servicesPageRoute,
     workflowsPageRoute,
 } from './components/utils/constants';
-import './styles/app.css';
+import './styles/app.module.css';
 
 const queryClient = new QueryClient();
 

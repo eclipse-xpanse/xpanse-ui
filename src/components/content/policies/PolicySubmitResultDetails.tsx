@@ -8,6 +8,7 @@ import { Typography } from 'antd';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import submitResultStyles from '../../../styles/submit-result.module.css';
 import { policiesRoute } from '../../utils/constants';
 
 function PolicySubmitResultDetails({
@@ -22,15 +23,21 @@ function PolicySubmitResultDetails({
     return (
         <div>
             {uuid.length > 0 ? (
-                <div className={'service-instance-detail-position'}>
+                <div className={submitResultStyles.resultContainer}>
                     Policy ID:&nbsp;
                     <Paragraph
-                        className={'service-instance-Paragraph'}
+                        className={submitResultStyles.resultMainDetails}
                         copyable={{
                             text: String(uuid),
                             icon: [
-                                <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
-                                <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                                <CopyOutlined
+                                    className={submitResultStyles.showDetailsTypographyCopy}
+                                    key={uuidv4()}
+                                />,
+                                <CheckOutlined
+                                    className={submitResultStyles.showDetailsTypographyCopy}
+                                    key={uuidv4()}
+                                />,
                             ],
                         }}
                     >
@@ -43,7 +50,7 @@ function PolicySubmitResultDetails({
                                     }).toString(),
                                 });
                             }}
-                            className={'show-details-typography-copy-info'}
+                            className={submitResultStyles.showDetailsTypographyCopyInfo}
                         >
                             {uuid}
                         </span>

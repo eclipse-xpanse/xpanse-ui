@@ -23,7 +23,7 @@
     "scripts": {
         "start": "vite --port 3000",
         "build": "vite build",
-        "serve": "vite preview",
+        "serve": "vite preview --port 3000",
         "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite --port 3000",
         "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build",
         "test": "jest",
@@ -166,6 +166,7 @@
                 "git update-index -q --refresh"
             ],
             "after:bump": [
+                "npm run update-service-worker-file",
                 "npm run build",
                 "zip -r -q xpanse-ui-${version}.zip build"
             ]

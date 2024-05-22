@@ -5,6 +5,8 @@
 
 import { Alert, Button } from 'antd';
 import React from 'react';
+import errorAlertStyles from '../../../styles/error-alert.module.css';
+import registerStyles from '../../../styles/register.module.css';
 import { Ocl } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
@@ -32,7 +34,7 @@ function RegisterResult({
                 }
                 closable={true}
                 onClose={onRemove}
-                className={'result'}
+                className={registerStyles.result}
                 description={convertStringArrayToUnorderedList(registerResult)}
             />
         );
@@ -45,11 +47,11 @@ function RegisterResult({
                 message={`Service registration request failed`}
                 description={convertStringArrayToUnorderedList(registerResult)}
                 onClose={onRemove}
-                className={'result'}
+                className={registerStyles.result}
                 action={
                     <>
                         <Button
-                            className={'try-again-btn-class'}
+                            className={errorAlertStyles.tryAgainBtnInAlertClass}
                             size='small'
                             type='primary'
                             onClick={retryRequest}

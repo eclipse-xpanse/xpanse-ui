@@ -22,7 +22,9 @@ import type { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React, { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import '../../../../styles/my_services.css';
+import appStyles from '../../../../styles/app.module.css';
+import myServicesStyles from '../../../../styles/my-services.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
     CloudServiceProvider,
@@ -163,7 +165,7 @@ function MyServices(): React.JSX.Element {
                     >
                         <Button
                             disabled={true}
-                            className={'button-as-link'}
+                            className={myServicesStyles.buttonAsLink}
                             icon={<InfoCircleOutlined />}
                             type={'link'}
                         >
@@ -175,7 +177,7 @@ function MyServices(): React.JSX.Element {
                         onClick={() => {
                             handleMyServiceDetailsOpenModal(record);
                         }}
-                        className={'button-as-link'}
+                        className={myServicesStyles.buttonAsLink}
                         icon={<InfoCircleOutlined />}
                         type={'link'}
                     >
@@ -190,7 +192,7 @@ function MyServices(): React.JSX.Element {
                         onClick={() => {
                             locks(record);
                         }}
-                        className={'button-as-link'}
+                        className={myServicesStyles.buttonAsLink}
                         icon={<LockOutlined />}
                         disabled={
                             activeRecord !== undefined ||
@@ -222,7 +224,7 @@ function MyServices(): React.JSX.Element {
                                 title={'scaling has been locked for this service.'}
                             >
                                 <Button
-                                    className={'button-as-link'}
+                                    className={myServicesStyles.buttonAsLink}
                                     icon={<RiseOutlined />}
                                     disabled={true}
                                     type={'link'}
@@ -236,7 +238,7 @@ function MyServices(): React.JSX.Element {
                                 onClick={() => {
                                     scale(record);
                                 }}
-                                className={'button-as-link'}
+                                className={myServicesStyles.buttonAsLink}
                                 icon={<RiseOutlined />}
                                 disabled={
                                     activeRecord !== undefined ||
@@ -270,7 +272,7 @@ function MyServices(): React.JSX.Element {
                                 title={'modifications has been locked for this service.'}
                             >
                                 <Button
-                                    className={'button-as-link'}
+                                    className={myServicesStyles.buttonAsLink}
                                     icon={<EditOutlined />}
                                     disabled={true}
                                     type={'link'}
@@ -284,7 +286,7 @@ function MyServices(): React.JSX.Element {
                                 onClick={() => {
                                     modify(record);
                                 }}
-                                className={'button-as-link'}
+                                className={myServicesStyles.buttonAsLink}
                                 icon={<EditOutlined />}
                                 disabled={
                                     activeRecord !== undefined ||
@@ -319,7 +321,7 @@ function MyServices(): React.JSX.Element {
                                 title={'migration has been locked for this service.'}
                             >
                                 <Button
-                                    className={'button-as-link'}
+                                    className={myServicesStyles.buttonAsLink}
                                     icon={<CopyOutlined />}
                                     disabled={true}
                                     type={'link'}
@@ -333,7 +335,7 @@ function MyServices(): React.JSX.Element {
                                 onClick={() => {
                                     migrate(record);
                                 }}
-                                className={'button-as-link'}
+                                className={myServicesStyles.buttonAsLink}
                                 icon={<CopyOutlined />}
                                 disabled={
                                     activeRecord !== undefined ||
@@ -387,7 +389,7 @@ function MyServices(): React.JSX.Element {
                                     <Button
                                         icon={<DeleteOutlined />}
                                         disabled={true}
-                                        className={'button-as-link'}
+                                        className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
                                         purge
@@ -411,7 +413,7 @@ function MyServices(): React.JSX.Element {
                                             (record.lockConfig?.destroyLocked !== undefined &&
                                                 record.lockConfig.destroyLocked)
                                         }
-                                        className={'button-as-link'}
+                                        className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
                                         purge
@@ -430,7 +432,7 @@ function MyServices(): React.JSX.Element {
                                     <Button
                                         icon={<CloseCircleOutlined />}
                                         disabled={true}
-                                        className={'button-as-link'}
+                                        className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
                                         purge
@@ -458,7 +460,7 @@ function MyServices(): React.JSX.Element {
                                                     DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
                                             activeRecord !== undefined
                                         }
-                                        className={'button-as-link'}
+                                        className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
                                         destroy
@@ -475,7 +477,7 @@ function MyServices(): React.JSX.Element {
                         onClick={() => {
                             start(record);
                         }}
-                        className={'button-as-link'}
+                        className={myServicesStyles.buttonAsLink}
                         icon={<PlayCircleOutlined />}
                         disabled={isDisableStartBtn(record)}
                         type={'link'}
@@ -498,7 +500,7 @@ function MyServices(): React.JSX.Element {
                     >
                         <Button
                             icon={<PoweroffOutlined />}
-                            className={'button-as-link'}
+                            className={myServicesStyles.buttonAsLink}
                             disabled={isDisabledStopOrRestartBtn(record)}
                             type={'link'}
                         >
@@ -514,7 +516,7 @@ function MyServices(): React.JSX.Element {
                         onClick={() => {
                             restart(record);
                         }}
-                        className={'button-as-link'}
+                        className={myServicesStyles.buttonAsLink}
                         icon={<SyncOutlined />}
                         disabled={isDisabledStopOrRestartBtn(record)}
                         type={'link'}
@@ -814,8 +816,8 @@ function MyServices(): React.JSX.Element {
 
     const migrationTitle = (record: DeployedService): React.JSX.Element => {
         return (
-            <div className={'generic-table-container'}>
-                <div className={'content-title'}>
+            <div className={tableStyles.genericTableContainer}>
+                <div className={appStyles.contentTitle}>
                     Service: {record.name}@{record.version}
                 </div>
             </div>
@@ -823,7 +825,7 @@ function MyServices(): React.JSX.Element {
     };
 
     const locksTitle = (): React.JSX.Element => {
-        return <div className={'content-title'}>Service Lock Config</div>;
+        return <div className={appStyles.contentTitle}>Service Lock Config</div>;
     };
 
     function destroy(record: DeployedService): void {
@@ -1122,7 +1124,7 @@ function MyServices(): React.JSX.Element {
     }
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
                 <DestroyServiceStatusAlert
                     key={activeRecord.id}
@@ -1238,7 +1240,7 @@ function MyServices(): React.JSX.Element {
             )}
 
             <Row>
-                <div className={'service-instance-list'}>
+                <div className={myServicesStyles.serviceInstanceList}>
                     <Table
                         columns={columns}
                         dataSource={serviceVoList}

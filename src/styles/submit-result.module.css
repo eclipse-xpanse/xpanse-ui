@@ -1,0 +1,21 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.show-details-typography-copy-info {
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.show-details-typography-copy {
+    color: rgba(0, 0, 0, 0.45) !important;
+}
+
+.result-container {
+    display: flex;
+}
+
+.result-main-details {
+    margin-bottom: 0 !important;
+}

@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import errorAlertStyles from '../../../styles/error-alert.module.css';
 import { ApiError, Response } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
@@ -18,7 +19,7 @@ export default function PoliciesManagementServiceListError({ error }: { error: u
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={false}
-                    className={'failure-alert'}
+                    className={errorAlertStyles.errorFailureAlert}
                 />
             </div>
         );
@@ -30,7 +31,7 @@ export default function PoliciesManagementServiceListError({ error }: { error: u
                     description={(error as Error).message}
                     type={'error'}
                     closable={false}
-                    className={'failure-alert'}
+                    className={errorAlertStyles.errorFailureAlert}
                 />
             </div>
         );

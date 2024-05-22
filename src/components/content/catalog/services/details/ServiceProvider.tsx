@@ -8,7 +8,8 @@ import { Divider, Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { CloudServiceProvider, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -40,7 +41,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
-    category: DeployedService.category;
+    category: ServiceTemplateDetailVo.category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
@@ -185,9 +186,9 @@ function ServiceProvider({
                                 items={items}
                                 onChange={onChangeCsp}
                                 activeKey={serviceCspInQuery}
-                                className={'ant-tabs-tab-btn'}
+                                className={catalogStyles.antTabsTabBtn}
                             />
-                            <div className={'update-unregister-btn-class'}>
+                            <div className={catalogStyles.updateUnregisterBtnClass}>
                                 <UpdateService
                                     id={activeServiceDetail.id}
                                     category={category}
@@ -199,7 +200,7 @@ function ServiceProvider({
                                     setIsViewDisabled={setIsViewDisabled}
                                 />
                             </div>
-                            <h3 className={'catalog-details-h3'}>
+                            <h3 className={catalogStyles.catalogDetailsH3}>
                                 <EnvironmentOutlined />
                                 &nbsp;Service Hosting Options
                             </h3>
