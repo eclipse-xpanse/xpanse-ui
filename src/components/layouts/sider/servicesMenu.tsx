@@ -13,7 +13,7 @@ import {
     SafetyOutlined,
     VerifiedOutlined,
 } from '@ant-design/icons';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/interface';
 import { Link } from 'react-router-dom';
 import {
     credentialLabelName,
