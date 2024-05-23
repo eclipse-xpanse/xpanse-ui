@@ -85,7 +85,7 @@ export class ServiceStatusManagementService {
      * List state management tasks of the service.<br>Required role:<b> admin</b> or <b>user</b>
      * @param serviceId id of the service
      * @param taskType type of the management task
-     * @param taskStatus status of the management task
+     * @param taskStatus status of the task
      * @returns ServiceStateManagementTaskDetails OK
      * @throws ApiError
      */

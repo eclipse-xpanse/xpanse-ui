@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * The resource list of the deployed service.
+ * The deployed resource list of the service before this modification.
  */
 export type DeployResource = {
     /**
