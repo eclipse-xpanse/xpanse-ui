@@ -7,7 +7,8 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
-import '../../../../../styles/service_policies.css';
+import servicePolicyStyles from '../../../../../styles/service-policies.module.css';
+import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     ServicePolicy,
     ServicePolicyCreateRequest,
@@ -118,7 +119,7 @@ export const AddOrUpdateServicePolicy = ({
                         setRegoFileUploadStatus('error');
                         if (e instanceof Error) {
                             return (
-                                <div className={'service-policy-submit-alert-tip'}>
+                                <div className={submitAlertStyles.submitAlertTip}>
                                     {' '}
                                     <Alert
                                         message={e.message}
@@ -133,7 +134,7 @@ export const AddOrUpdateServicePolicy = ({
                             );
                         } else {
                             return (
-                                <div className={'service-policy-submit-alert-tip'}>
+                                <div className={submitAlertStyles.submitAlertTip}>
                                     {' '}
                                     <Alert
                                         message={'unhandled error occurred'}
@@ -209,7 +210,7 @@ export const AddOrUpdateServicePolicy = ({
                     updatePoliciesManagementServiceRequest.isPending ||
                     updatePoliciesManagementServiceRequest.isSuccess
                 }
-                className={'service-policy-edit-form-class'}
+                className={servicePolicyStyles.servicePolicyEditFormClass}
                 initialValues={{
                     remember: true,
                     enabled:
@@ -245,14 +246,14 @@ export const AddOrUpdateServicePolicy = ({
                         size={'large'}
                         onChange={handleFlavorSelect}
                         placeholder={'Please select'}
-                        className={'service-policies-select-option-flavor'}
+                        className={servicePolicyStyles.servicePoliciesSelectOptionFlavor}
                         value={[]}
                     >
                         {flavorList.current.map((flavor: string) => (
                             <Select.Option
                                 key={flavor}
                                 value={flavor}
-                                className={'service-policies-select-option-flavor'}
+                                className={servicePolicyStyles.servicePoliciesSelectOptionFlavor}
                             >
                                 {flavor}
                             </Select.Option>
@@ -265,7 +266,7 @@ export const AddOrUpdateServicePolicy = ({
                     rules={[{ required: true, message: 'Please upload policy file!' }]}
                 >
                     <div>
-                        <div className={'service-policy-upload-file-remove-buttons'}>
+                        <div className={servicePolicyStyles.servicePolicyUploadFileRemoveButtons}>
                             <Upload
                                 name={'Policy Content File'}
                                 multiple={false}
@@ -294,9 +295,9 @@ export const AddOrUpdateServicePolicy = ({
                         <br />
                         <div>
                             {policyContent.current ? (
-                                <Card className={'service-policy-content-upload-preview'}>
+                                <Card className={servicePolicyStyles.servicePolicyContentUploadPreview}>
                                     <pre>
-                                        <div className={'service-policy-content-read-only-preview'}>
+                                        <div className={servicePolicyStyles.servicePolicyContentReadOnlyPreview}>
                                             {policyContent.current}
                                         </div>
                                     </pre>
@@ -308,21 +309,21 @@ export const AddOrUpdateServicePolicy = ({
                     </div>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <div className={'service-policy-submit-reset-container'}>
-                        <div className={'service-policy-submit-class'}>
+                    <div className={servicePolicyStyles.servicePolicySubmitResetContainer}>
+                        <div className={servicePolicyStyles.servicePolicySubmitClass}>
                             <Button type='primary' htmlType='submit'>
                                 Submit
                             </Button>
                         </div>
                         {currentServicePolicy === undefined ? (
-                            <div className={'service-policy-reset-class'}>
+                            <div className={servicePolicyStyles.servicePolicyResetClass}>
                                 {' '}
                                 <Button htmlType='button' onClick={onReset}>
                                     Reset
                                 </Button>
                             </div>
                         ) : (
-                            <div className={'service-policy-reset-class'}>
+                            <div className={servicePolicyStyles.servicePolicyResetClass}>
                                 {' '}
                                 <Button htmlType='button' onClick={onCancelUploadFile}>
                                     Cancel

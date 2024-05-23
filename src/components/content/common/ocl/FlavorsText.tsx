@@ -6,6 +6,7 @@
 import { Button, Popover } from 'antd';
 import React from 'react';
 import YAML from 'yaml';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { ServiceFlavor } from '../../../../xpanse-api/generated';
 
 export function FlavorsText({ flavors }: { flavors: ServiceFlavor[] }): React.JSX.Element {
@@ -19,7 +20,7 @@ export function FlavorsText({ flavors }: { flavors: ServiceFlavor[] }): React.JS
         return (
             <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Flavors'} trigger='hover'>
                 <Button
-                    className={'ocl-data-hover'}
+                    className={oclDisplayStyles.oclDataHover}
                     type={'link'}
                 >{`Available in ${flavors.length.toString()} flavor(s)`}</Button>
             </Popover>

@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import submitAlertStyles from '../../../../../../styles/submit-alert.module.css';
 import { ApiError, Response } from '../../../../../../xpanse-api/generated';
 import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 
@@ -29,7 +30,7 @@ export default function ServicePolicyDeleteStatus({
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={response.resultType.valueOf()}
@@ -43,7 +44,7 @@ export default function ServicePolicyDeleteStatus({
             );
         } else {
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Deleting Policy Failed'}
@@ -62,7 +63,7 @@ export default function ServicePolicyDeleteStatus({
 
     if (isSuccess) {
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={'Policy Process Status'}

@@ -5,6 +5,7 @@
 
 import { Button, Space, Spin, StepProps } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { MigrationSteps } from '../types/MigrationSteps';
 
 export const ExportServiceData = ({
@@ -27,16 +28,17 @@ export const ExportServiceData = ({
         <>
             {isQueryLoading ? (
                 <Spin tip='Loading' size='large'>
-                    <div className={'migrate-export-import-data-class'} />
+                    <div className={serviceOrderStyles.migrateExportImportDataClass} />
                 </Spin>
             ) : (
                 <>
-                    <div className={'migrate-export-import-data-class'}>{exportDataContentDescription}</div>
-                    <div className={'migrate-step-button-inner-class'}>
+                    <div className={serviceOrderStyles.migrateExportImportDataClass}>
+                        {exportDataContentDescription}
+                    </div>
+                    <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                         <Space size={'large'}>
                             <Button
                                 type='primary'
-                                className={'migrate-steps-operation-button-clas'}
                                 onClick={() => {
                                     next();
                                 }}

@@ -8,7 +8,8 @@ import { Button, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React, { useState } from 'react';
-import '../../../../../styles/service_policies.css';
+import policyStyles from '../../../../../styles/policies.module.css';
+import servicePolicyStyles from '../../../../../styles/service-policies.module.css';
 import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { AddOrUpdateServicePolicy } from './AddOrUpdateServicePolicy';
 import ServicePolicyListError from './ServicePolicyListError';
@@ -62,13 +63,13 @@ export const ServicePolicies = ({
                         content={
                             <pre>
                                 {' '}
-                                <div className={'policy-content-hover'}>{record.policy.toString()}</div>
+                                <div className={policyStyles.policyContentHover}>{record.policy.toString()}</div>
                             </pre>
                         }
                         title={'Policy Content'}
                         trigger='hover'
                     >
-                        <Button className={'policy-data-hover'} type={'link'}>{`policy`}</Button>
+                        <Button className={policyStyles.policyDataHover} type={'link'}>{`policy`}</Button>
                     </Popover>
                 );
             },
@@ -191,7 +192,7 @@ export const ServicePolicies = ({
 
     return (
         <>
-            <h3 className={'catalog-service-policies-title-h3'}>
+            <h3 className={servicePolicyStyles.catalogServicePoliciesTitleH3}>
                 <SafetyOutlined />
                 &nbsp;Service Policies
             </h3>
@@ -204,10 +205,10 @@ export const ServicePolicies = ({
                     getDeleteCloseStatus={getDeleteCloseStatus}
                 />
             ) : null}
-            <div className={'service-policies-container'}>
+            <div className={servicePolicyStyles.servicePoliciesContainer}>
                 <Button
                     type='primary'
-                    className={'refresh-service-policy'}
+                    className={servicePolicyStyles.refreshServicePolicy}
                     onClick={refreshServicePoliciesList}
                     icon={<SyncOutlined />}
                     disabled={
@@ -226,7 +227,7 @@ export const ServicePolicies = ({
                         addServicePolicies();
                     }}
                     type='primary'
-                    className={'add-service-policy'}
+                    className={servicePolicyStyles.addServicePolicy}
                     icon={<PlusCircleOutlined />}
                     disabled={
                         isViewDisabled ||
@@ -257,7 +258,7 @@ export const ServicePolicies = ({
             </Modal>
             <Table
                 columns={columns}
-                className={'service-policies-table'}
+                className={servicePolicyStyles.servicePoliciesTable}
                 dataSource={
                     servicePolicyListQuery.data !== undefined && servicePolicyListQuery.data.length > 0
                         ? servicePolicyListQuery.data

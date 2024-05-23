@@ -6,6 +6,7 @@
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
+import credentialStyles from '../../../styles/credential.module.css';
 import { CredentialVariable } from '../../../xpanse-api/generated';
 
 function CredentialDetails({ credentialDetails }: { credentialDetails: CredentialVariable[] }): React.JSX.Element {
@@ -25,7 +26,7 @@ function CredentialDetails({ credentialDetails }: { credentialDetails: Credentia
     ];
 
     return (
-        <div className={'credential-details'}>
+        <div className={credentialStyles.credentialDetails}>
             <Table columns={columns} dataSource={credentialDetails}></Table>
         </div>
     );

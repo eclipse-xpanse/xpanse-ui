@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import workflowStyles from '../../../styles/workflows.module.css';
 
 export const WorkflowsTip = ({
     type,
@@ -20,7 +21,7 @@ export const WorkflowsTip = ({
     }
 
     return (
-        <div className={'credential-tip'}>
+        <div className={workflowStyles.workflowTip}>
             {' '}
             <Alert description={msg} type={type} onClose={onRemove} closable={true} />{' '}
         </div>

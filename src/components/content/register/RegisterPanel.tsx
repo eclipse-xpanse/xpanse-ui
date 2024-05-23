@@ -9,7 +9,8 @@ import { Button, Col, Row, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import '../../../styles/register.css';
+import appStyles from '../../../styles/app.module.css';
+import registerStyles from '../../../styles/register.module.css';
 import { ApiError, Ocl, Response, ServiceTemplateDetailVo, ServiceVendorService } from '../../../xpanse-api/generated';
 import {
     registerFailedRoute,
@@ -139,8 +140,8 @@ function RegisterPanel(): React.JSX.Element {
     };
 
     return (
-        <div className={'register-content'}>
-            <div className={'content-title'}>
+        <div className={registerStyles.registerContent}>
+            <div className={appStyles.contentTitle}>
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
@@ -153,7 +154,7 @@ function RegisterPanel(): React.JSX.Element {
                     retryRequest={retryRequest}
                 />
             ) : null}
-            <div className={'register-buttons'}>
+            <div className={registerStyles.registerButtons}>
                 <Upload
                     name={'OCL File'}
                     multiple={false}
@@ -169,7 +170,7 @@ function RegisterPanel(): React.JSX.Element {
                 >
                     <Row>
                         <Col>
-                            <div className={'register-buttons-upload'}>
+                            <div className={registerStyles.registerButtonsUpload}>
                                 <Button
                                     size={'large'}
                                     disabled={yamlSyntaxValidationStatus === 'completed'}
@@ -182,7 +183,7 @@ function RegisterPanel(): React.JSX.Element {
                             </div>
                         </Col>
                         <Col>
-                            <div className={'register-buttons-register'}>
+                            <div className={registerStyles.registerButtonsRegister}>
                                 <Button
                                     size={'large'}
                                     disabled={
@@ -204,7 +205,7 @@ function RegisterPanel(): React.JSX.Element {
                             </div>
                         </Col>
                         <Col>
-                            <div className={'register-buttons-validate'}>
+                            <div className={registerStyles.registerButtonsValidate}>
                                 {yamlSyntaxValidationStatus === 'completed' ||
                                 yamlSyntaxValidationStatus === 'error' ? (
                                     <YamlSyntaxValidationResult

@@ -6,6 +6,7 @@
 import { Badge, Col, Row, Tag } from 'antd';
 import React from 'react';
 import YAML from 'yaml';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Billing } from '../../../../xpanse-api/generated';
 
 export function BillingText({ billing }: { billing: Billing }): React.JSX.Element {
@@ -22,11 +23,14 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
                         return (
                             <Col key={billingMode}>
                                 <Badge.Ribbon
-                                    className={'ocl-data-display-default-billing-mode'}
+                                    className={oclDisplayStyles.oclDataDisplayDefaultBillingMode}
                                     text='default'
                                     color={'green'}
                                 >
-                                    <Tag className={'ocl-data-display-default-billing-mode-tag'} color={'blue'}>
+                                    <Tag
+                                        className={oclDisplayStyles.oclDataDisplayDefaultBillingModeTag}
+                                        color={'blue'}
+                                    >
                                         {billingMode}
                                     </Tag>
                                 </Badge.Ribbon>
@@ -35,7 +39,7 @@ export function BillingText({ billing }: { billing: Billing }): React.JSX.Elemen
                     } else {
                         return (
                             <Col key={billingMode}>
-                                <Tag className={'ocl-data-display-default-billing-mode-tag'} color={'blue'}>
+                                <Tag className={oclDisplayStyles.oclDataDisplayDefaultBillingModeTag} color={'blue'}>
                                     {billingMode}
                                 </Tag>
                             </Col>

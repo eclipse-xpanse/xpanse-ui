@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import '../../../../styles/app.css';
+import '../../../../styles/app.module.css';
 import {
     DeployedService,
     DeployedServiceDetails,

@@ -8,7 +8,9 @@ import { Alert, Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
-import '../../../styles/health_status.css';
+import appStyles from '../../../styles/app.module.css';
+import healthStatusStyles from '../../../styles/health-status.module.css';
+import tableStyles from '../../../styles/table.module.css';
 import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import SystemStatusIcon from './SystemStatusIcon';
@@ -112,7 +114,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
         ) {
             const response: Response = healthCheckQuery.error.body as Response;
             healthCheckError = (
-                <div className={'health-refresh-alert-tip'}>
+                <div className={healthStatusStyles.healthRefreshAlertTip}>
                     <Alert
                         message={response.resultType.valueOf()}
                         description={convertStringArrayToUnorderedList(response.details)}
@@ -123,7 +125,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
             );
         } else {
             healthCheckError = (
-                <div className={'health-refresh-alert-tip'}>
+                <div className={healthStatusStyles.healthRefreshAlertTip}>
                     <Alert
                         message='Fetching Health Check Status Failed'
                         description={healthCheckQuery.error.message}
@@ -171,7 +173,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
             render: (_, record) => (
                 <Space size='middle'>
                     <Button
-                        className={'header-menu-button'}
+                        className={appStyles.headerMenuButton}
                         icon={
                             <SystemStatusIcon
                                 isSystemUp={record.healthStatus.valueOf() === SystemStatus.healthStatus.OK.valueOf()}
@@ -208,9 +210,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
 
     return (
         <>
-            <div className={'generic-table-container'}>
+            <div className={tableStyles.genericTableContainer}>
                 {healthCheckQuery.isError ? healthCheckError : undefined}
-                <div className={'health-status-refresh'}>
+                <div className={healthStatusStyles.healthStatusRefresh}>
                     <Button
                         type='primary'
                         icon={<SyncOutlined />}

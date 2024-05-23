@@ -5,7 +5,7 @@
 
 import { Flex, Form, Radio } from 'antd';
 import React from 'react';
-import '../../../../styles/service_order.css';
+import '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 
 export const MigrateServiceSubmitAvailabilityZoneInfo = ({

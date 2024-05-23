@@ -8,9 +8,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Modal, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
+import appStyles from '../../../../../styles/app.module.css';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import registerStyles from '../../../../../styles/register.module.css';
 import {
     ApiError,
-    DeployedService,
     Ocl,
     Response,
     ServiceTemplateDetailVo,
@@ -29,7 +31,7 @@ function UpdateService({
     isViewDisabled,
 }: {
     id: string;
-    category: DeployedService.category;
+    category: ServiceTemplateDetailVo.category;
     isViewDisabled: boolean;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -126,12 +128,12 @@ function UpdateService({
     };
 
     return (
-        <div className={'update-unregister-btn-class'}>
+        <div className={catalogStyles.updateUnregisterBtnClass}>
             <Button
                 type='primary'
                 icon={<EditOutlined />}
                 onClick={showModal}
-                className={'catalog-update-btn-class'}
+                className={catalogStyles.catalogManageBtnClass}
                 disabled={isViewDisabled}
             >
                 Update
@@ -146,8 +148,8 @@ function UpdateService({
                 onCancel={handleCancel}
                 width={'80em'}
             >
-                <div className={'register-content'}>
-                    <div className={'content-title'}>
+                <div className={registerStyles.registerContent}>
+                    <div className={appStyles.contentTitle}>
                         <AppstoreAddOutlined />
                         &nbsp;Update Service
                     </div>
@@ -159,7 +161,7 @@ function UpdateService({
                             onRemove={handleCancel}
                         />
                     ) : null}
-                    <div className={'register-buttons'}>
+                    <div className={registerStyles.registerButtons}>
                         <Upload
                             name={'OCL File'}
                             multiple={false}

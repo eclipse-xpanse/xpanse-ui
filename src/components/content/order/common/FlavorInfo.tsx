@@ -5,7 +5,7 @@
 
 import { Form, Select, Space } from 'antd';
 import React from 'react';
-import '../../../../styles/service_order.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { Flavor } from '../types/Flavor';
 
 export const FlavorInfo = ({
@@ -21,7 +21,7 @@ export const FlavorInfo = ({
 }): React.JSX.Element => {
     return (
         <>
-            <div className={'cloud-provider-tab-class region-flavor-content'}>
+            <div className={serviceOrderStyles.orderFormSelectionStyle}>
                 <Form.Item
                     name='selectFlavor'
                     label='Flavor'
@@ -29,7 +29,7 @@ export const FlavorInfo = ({
                 >
                     <Space wrap>
                         <Select
-                            className={'select-box-class'}
+                            className={serviceOrderStyles.selectBoxClass}
                             value={selectFlavor}
                             style={{ width: 450 }}
                             onChange={(newFlavor) => {

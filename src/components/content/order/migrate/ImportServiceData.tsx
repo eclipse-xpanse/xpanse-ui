@@ -5,6 +5,7 @@
 
 import { Button, Space, StepProps } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { MigrationSteps } from '../types/MigrationSteps';
 
 export const ImportServiceData = ({
@@ -28,12 +29,11 @@ export const ImportServiceData = ({
 
     return (
         <>
-            <div className={'migrate-export-import-data-class'}>{importDataContentDescription}</div>
-            <div className={'migrate-step-button-inner-class'}>
+            <div className={serviceOrderStyles.migrateExportImportDataClass}>{importDataContentDescription}</div>
+            <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                 <Space size={'large'}>
                     <Button
                         type='primary'
-                        className={'migrate-steps-operation-button-clas'}
                         onClick={() => {
                             prev();
                         }}
@@ -42,7 +42,6 @@ export const ImportServiceData = ({
                     </Button>
                     <Button
                         type='primary'
-                        className={'migrate-steps-operation-button-clas'}
                         onClick={() => {
                             next();
                         }}

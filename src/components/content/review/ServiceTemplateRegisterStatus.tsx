@@ -6,6 +6,7 @@
 import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import React from 'react';
+import serviceReviewStyles from '../../../styles/service-review.module.css';
 import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 
 export function ServiceTemplateRegisterStatus(
@@ -18,7 +19,7 @@ export function ServiceTemplateRegisterStatus(
                     bordered={false}
                     icon={<SyncOutlined spin={false} />}
                     color='processing'
-                    className={'my-service-status-size'}
+                    className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationState.valueOf()}
                 </Tag>
@@ -29,7 +30,7 @@ export function ServiceTemplateRegisterStatus(
                     bordered={false}
                     icon={<CloseCircleOutlined />}
                     color='magenta'
-                    className={'my-service-status-size'}
+                    className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationState.valueOf()}
                 </Tag>
@@ -40,7 +41,7 @@ export function ServiceTemplateRegisterStatus(
                     bordered={false}
                     icon={<CheckCircleOutlined />}
                     color='success'
-                    className={'my-service-status-size'}
+                    className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationState.valueOf()}
                 </Tag>
@@ -51,7 +52,7 @@ export function ServiceTemplateRegisterStatus(
                     bordered={false}
                     icon={<ExclamationCircleOutlined />}
                     color='warning'
-                    className={'my-service-status-size'}
+                    className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationState as string}
                 </Tag>

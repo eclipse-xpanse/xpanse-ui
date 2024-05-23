@@ -5,6 +5,7 @@
 
 import { Image } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 
@@ -19,8 +20,8 @@ export default function CspSelect({
 }): React.JSX.Element {
     return (
         <>
-            <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
-            <div className={'services-content-body'}>
+            <div className={serviceOrderStyles.orderFormSelectionStyle}>Cloud Service Provider:</div>
+            <div className={serviceOrderStyles.servicesContentBody}>
                 {cspList.map((item, index) => {
                     return (
                         <div
@@ -30,8 +31,8 @@ export default function CspSelect({
                             key={index}
                             className={
                                 selectCsp.valueOf() === item.valueOf()
-                                    ? 'cloud-provider-select-hover'
-                                    : 'cloud-provider-select'
+                                    ? serviceOrderStyles.cloudProviderSelectHover
+                                    : serviceOrderStyles.cloudProviderSelect
                             }
                         >
                             <Image
@@ -42,7 +43,7 @@ export default function CspSelect({
                                 preview={false}
                                 fallback={'https://img.shields.io/badge/-' + item + '-gray'}
                             />
-                            <div className='service-type-option-info' />
+                            <div className={serviceOrderStyles.serviceTypeOptionInfo} />
                         </div>
                     );
                 })}

@@ -7,8 +7,9 @@ import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons
 import { useMutation } from '@tanstack/react-query';
 import { Badge, Button, Card, Col, Form, Input, Popconfirm, PopconfirmProps, Row, Tag, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import '../../../../styles/service_modify.css';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     Billing,
     DeployedService,
@@ -122,8 +123,8 @@ export const Scale = ({
     };
 
     return (
-        <div className={'modify-select-class'}>
-            <div className={'modify-title-class content-title'}>Change Flavor:</div>
+        <div className={serviceModifyStyles.modifySelectClass}>
+            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>Change Flavor:</div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
                     isSubmitFailed={modifyServiceRequest.isError}
@@ -138,14 +139,14 @@ export const Scale = ({
                     getModifyDetailsStatus={getModifyDetailsStatus}
                 />
             ) : null}
-            <div className={'order-param-item-left'} />
+            <div className={serviceOrderStyles.orderParamItemLeft} />
             <Form
                 form={form}
                 layout='vertical'
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={'modify-container'}
+                className={serviceModifyStyles.modifyContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={
@@ -158,13 +159,17 @@ export const Scale = ({
                     <Row gutter={16}>
                         {flavorList.map((flavor) => {
                             return (
-                                <Col span={4} key={flavor.name} className={'modify-select-flavor-billing'}>
+                                <Col
+                                    span={4}
+                                    key={flavor.name}
+                                    className={serviceModifyStyles.modifySelectFlavorBilling}
+                                >
                                     <div
-                                        className={`flavor-card-container ${
+                                        className={`${serviceModifyStyles.flavorCardContainer} ${
                                             currentSelectedService.flavor === flavor.name
-                                                ? 'flavor-select-hover-disabled'
+                                                ? serviceModifyStyles.flavorSelectHoverDisabled
                                                 : selectFlavor === flavor.name
-                                                  ? 'flavor-select-hover'
+                                                  ? serviceModifyStyles.flavorSelectHover
                                                   : ''
                                         }`}
                                         onClick={() => {
@@ -190,14 +195,14 @@ export const Scale = ({
                                         }}
                                     >
                                         {currentSelectedService.flavor === flavor.name ? (
-                                            <div className={'flavor-old-badge'}>
+                                            <div className={serviceModifyStyles.flavorOldBadge}>
                                                 <Badge.Ribbon
                                                     text='current'
-                                                    className={'flavor-card-custom-ribbon'}
+                                                    className={serviceModifyStyles.flavorCardCustomRibbon}
                                                     color={'#b5b5b5'}
                                                 >
                                                     <Card title={flavor.name}>
-                                                        <p className={'flavor-card-content'}>
+                                                        <p className={serviceModifyStyles.flavorCardContent}>
                                                             {currentBilling ? (
                                                                 <>
                                                                     <Tag color={'blue'}>
@@ -218,7 +223,7 @@ export const Scale = ({
                                             </div>
                                         ) : (
                                             <Card title={flavor.name}>
-                                                <p className={'flavor-card-content'}>
+                                                <p className={serviceModifyStyles.flavorCardContent}>
                                                     {currentBilling ? (
                                                         <>
                                                             <Tag color={'blue'}>
@@ -239,7 +244,7 @@ export const Scale = ({
                         })}
                     </Row>
                 </Form.Item>
-                <div className={'order-param-item-left'} />
+                <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form.Item
                     name={'Name'}
                     label={'Name: Service Name'}
@@ -254,7 +259,7 @@ export const Scale = ({
                         onChange={(e) => {
                             cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                         }}
-                        className={'order-param-item-content'}
+                        className={serviceOrderStyles.orderParamItemContent}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
                                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -266,7 +271,7 @@ export const Scale = ({
                     className={
                         currentSelectedService.serviceDeploymentState.toString() ===
                         DeployedServiceDetails.serviceDeploymentState.MODIFYING.toString()
-                            ? 'deploying order-param-item-row'
+                            ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                             : ''
                     }
                 >
@@ -281,9 +286,9 @@ export const Scale = ({
                         ) : undefined
                     )}
                 </div>
-                <div className={'order-param-item-left'} />
-                <div className={'service-modify-submit-reset-container'}>
-                    <div className={'service-modify-submit-class'}>
+                <div className={serviceOrderStyles.orderParamItemLeft} />
+                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
+                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
                         <Popconfirm
                             placement='top'
                             title='Scale'

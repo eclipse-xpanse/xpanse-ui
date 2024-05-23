@@ -7,6 +7,7 @@ import { Button, Col, Row, Tooltip } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import EChartsReact from 'echarts-for-react';
 import React from 'react';
+import monitorStyles from '../../../styles/monitor.module.css';
 
 export const BuildMetricGraphs = ({
     chartsPerRow,
@@ -22,15 +23,15 @@ export const BuildMetricGraphs = ({
         for (let i = 0; i < graphData.length; i++) {
             currentChartCols.push(
                 <Col key={i.toString()} span={graphData.length > 0 ? 24 / Number(chartsPerRow) : 24}>
-                    <div className={'charts-position-class'}>
-                        <div className={'chart-title-class'}>
+                    <div className={monitorStyles.chartsPositionClass}>
+                        <div className={monitorStyles.chartTitleClass}>
                             <Tooltip
                                 placement='bottom'
                                 title={chartsTitle[i].Id}
                                 color={'#8ca2e4'}
                                 overlayStyle={{ maxWidth: 300 }}
                             >
-                                <Button className={'chart-subtitle-hover-class'}>
+                                <Button className={monitorStyles.chartSubtitleHoverClass}>
                                     {chartsTitle[i].metricTitle}
                                     {'  '}
                                     {chartsTitle[i].metricSubTitle}

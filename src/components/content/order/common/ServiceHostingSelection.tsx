@@ -5,6 +5,7 @@
 
 import { Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function ServiceHostingSelection({
@@ -32,7 +33,7 @@ export function ServiceHostingSelection({
 
     return (
         <>
-            <div className={'cloud-provider-tab-class'}>Service Hosted By:</div>
+            <div className={serviceOrderStyles.orderFormSelectionStyle}>Service Hosted By:</div>
             <Radio.Group
                 onChange={onChange}
                 disabled={disabledAlways || serviceHostingTypes.length === 1}

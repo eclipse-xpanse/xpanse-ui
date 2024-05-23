@@ -9,7 +9,8 @@ import type { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import '../../../../styles/my_services.css';
+import myServicesStyle from '../../../../styles/my-services.module.css';
+import tablesStyle from '../../../../styles/table.module.css';
 import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
 import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
@@ -371,7 +372,7 @@ function Reports(): React.JSX.Element {
     }
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tablesStyle.genericTableContainer}>
             <Modal
                 title={'Service Details'}
                 width={1000}
@@ -399,7 +400,7 @@ function Reports(): React.JSX.Element {
                 <></>
             )}
             <Row>
-                <div className={'service-instance-list'}>
+                <div className={myServicesStyle.serviceInstanceList}>
                     <Table
                         columns={columns}
                         dataSource={deployedServiceList}

@@ -9,7 +9,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
-import '../../../styles/credential.css';
+import styles from '../../../styles/credential.module.css';
 import {
     ApiError,
     CloudServiceProvider,
@@ -135,7 +135,7 @@ function UpdateCredential({
             render: (value: string, record) =>
                 record.isMandatory ? (
                     <Tooltip placement='topLeft' title={value}>
-                        <span className={'add-credential-from-variables-value'}>*</span>
+                        <span className={styles.addCredentialFromVariablesValue}>*</span>
                         {value}
                     </Tooltip>
                 ) : (
@@ -215,11 +215,11 @@ function UpdateCredential({
     ];
 
     return (
-        <div className={'credential-from'}>
+        <div>
             <CredentialApiDoc
                 csp={credentialVariables.csp}
                 credentialType={credentialVariables.type}
-                styleClass={'update-credential-api-doc'}
+                styleClass={styles.updateCredentialApiDoc}
             />
             <Form
                 form={form}
@@ -235,7 +235,7 @@ function UpdateCredential({
                     msg={tipMessage}
                     onRemove={onRemove}
                 ></CredentialTip>
-                <div className={'credential-from-input'}>
+                <div className={styles.credentialFromInput}>
                     <Form.Item label='Csp' name='csp'>
                         <Image
                             width={100}
@@ -264,7 +264,7 @@ function UpdateCredential({
                         ></Table>
                     </Form.Item>
                 </div>
-                <Form.Item className={'credential-from-button'}>
+                <Form.Item className={styles.credentialFromButton}>
                     <Button
                         type='primary'
                         loading={updateCredentialRequest.isPending}
@@ -275,7 +275,7 @@ function UpdateCredential({
                     </Button>
                     <Button
                         htmlType='button'
-                        className={'update-credential-from-button-cancel'}
+                        className={styles.updateCredentialFromButtonCancel}
                         onClick={onUpdateCancel}
                     >
                         cancel

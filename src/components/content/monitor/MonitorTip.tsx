@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import monitorStyles from '../../../styles/monitor.module.css';
 
 export const MonitorTip = ({
     type,
@@ -22,11 +23,10 @@ export const MonitorTip = ({
     }
 
     return (
-        <div className={'monitor-tip-class'}>
+        <div className={monitorStyles.monitorTipClass}>
             {' '}
             <Alert
                 showIcon={true}
-                className={''}
                 message={msg}
                 description={description}
                 type={type}

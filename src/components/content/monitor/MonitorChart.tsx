@@ -6,6 +6,7 @@
 import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import React, { useRef, useState } from 'react';
+import monitorStyles from '../../../styles/monitor.module.css';
 import { ApiError, Metric, Response } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
@@ -245,7 +246,7 @@ export default function MonitorChart({
         <>
             <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
             {useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading ? (
-                <div className={'monitor-search-loading-class'}>
+                <div className={monitorStyles.monitorSearchLoadingClass}>
                     <Spin
                         size='large'
                         spinning={useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading}

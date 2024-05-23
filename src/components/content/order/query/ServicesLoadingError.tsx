@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { ApiError, Response } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
@@ -17,7 +18,7 @@ function ServicesLoadingError({ error }: { error: unknown }): React.JSX.Element 
                 description={convertStringArrayToUnorderedList(response.details)}
                 type={'error'}
                 closable={true}
-                className={'services-loading-error'}
+                className={serviceOrderStyles.servicesLoadingError}
             />
         );
     } else {
@@ -27,7 +28,7 @@ function ServicesLoadingError({ error }: { error: unknown }): React.JSX.Element 
                 description={(error as Error).message}
                 type={'error'}
                 closable={true}
-                className={'services-loading-error'}
+                className={serviceOrderStyles.servicesLoadingError}
             />
         );
     }

@@ -5,6 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ApiError, DeployedService, Response } from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -38,7 +39,7 @@ export function PurgeServiceStatusAlert({
         }
         deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={errorMessage}
@@ -72,7 +73,7 @@ export function PurgeServiceStatusAlert({
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
                 return (
-                    <div className={'submit-alert-tip'}>
+                    <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
                         <Alert
                             message={response.details}
@@ -103,7 +104,7 @@ export function PurgeServiceStatusAlert({
             } else {
                 deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
                 return (
-                    <div className={'submit-alert-tip'}>
+                    <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
                         <Alert
                             message={'Processing Status'}

@@ -6,7 +6,7 @@
 import { Checkbox, Form, Space } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import React, { Dispatch, SetStateAction } from 'react';
-import '../../../../styles/service_order.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { AgreementText } from '../../common/ocl/AgreementText';
 
 export const EulaInfo = ({
@@ -25,10 +25,11 @@ export const EulaInfo = ({
     return (
         <>
             {eula && eula.length > 0 ? (
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                <div className={serviceOrderStyles.orderFormSelectionStyle}>
                     <Form.Item
                         name='Terms and Conditions'
                         label='Terms and Conditions'
+                        required={true}
                         rules={[{ required: true, message: 'Eula needs to be accepted' }]}
                     >
                         <Space wrap>

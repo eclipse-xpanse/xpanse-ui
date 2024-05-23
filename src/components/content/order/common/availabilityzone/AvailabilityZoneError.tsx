@@ -5,6 +5,7 @@
 
 import { Alert, Button } from 'antd';
 import React from 'react';
+import errorAlertStyles from '../../../../../styles/error-alert.module.css';
 import { ApiError, Response } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
@@ -25,7 +26,7 @@ export function AvailabilityZoneError({
                 closable={false}
                 action={
                     <Button
-                        className={'try-again-btn-class'}
+                        className={errorAlertStyles.tryAgainBtnInAlertClass}
                         size='small'
                         type='primary'
                         onClick={retryRequest}
@@ -45,7 +46,7 @@ export function AvailabilityZoneError({
                 closable={false}
                 action={
                     <Button
-                        className={'try-again-btn-class'}
+                        className={errorAlertStyles.tryAgainBtnInAlertClass}
                         size='small'
                         type='primary'
                         onClick={retryRequest}

@@ -5,7 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
-import '../../../../styles/locks.css';
+import locksStyles from '../../../../styles/locks.module.css';
 import {
     ApiError,
     DeployedServiceDetails,
@@ -30,7 +30,7 @@ function LocksResult({
                         Service <b>{currentSelectedService.customerServiceName}</b> lock configuration updated
                     </>
                 }
-                className={'alert-result'}
+                className={locksStyles.alertResult}
             />
         );
     } else if (lockRequestState[0]?.status === 'error') {
@@ -55,7 +55,7 @@ function LocksResult({
                 showIcon={true}
                 message={`Service lock configuration update failed`}
                 description={convertStringArrayToUnorderedList(errMsg)}
-                className={'alert-result'}
+                className={locksStyles.alertResult}
             />
         );
     }

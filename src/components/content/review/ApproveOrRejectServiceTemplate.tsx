@@ -5,6 +5,7 @@
 
 import { Alert, Input, Modal } from 'antd';
 import React, { useState } from 'react';
+import serviceReviewStyles from '../../../styles/service-review.module.css';
 import { ApiError, Response, ReviewRegistrationRequest, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import useApproveOrRejectRequest, { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
@@ -66,7 +67,7 @@ export const ApproveOrRejectServiceTemplate = ({
             errorMessage = approveOrRejectRequest.error.message;
         }
         return (
-            <div className={'approve-reject-alert-class'}>
+            <div className={serviceReviewStyles.approveRejectAlertClass}>
                 <Alert
                     message={errorMessage}
                     description={'Register service review failed.'}
@@ -81,7 +82,7 @@ export const ApproveOrRejectServiceTemplate = ({
 
     if (approveOrRejectRequest.isSuccess) {
         return (
-            <div className={'approve-reject-alert-class'}>
+            <div className={serviceReviewStyles.approveRejectAlertClass}>
                 <Alert
                     message={'Processing Status'}
                     description={'Service template reviewed successfully.'}

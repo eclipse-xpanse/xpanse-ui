@@ -90,10 +90,6 @@
     pointer-events: none;
 }
 
-.generic-table-container {
-    padding: 24px;
-}
-
 .services-content-body {
     display: flex;
     flex-wrap: wrap;
@@ -102,7 +98,7 @@
 .service-type-option-detail {
     display: flex;
     flex-flow: nowrap row;
-    padding: 20px;
+    padding: 15px;
     width: 300px;
     height: 100px;
     border: 1px solid #edeeee;
@@ -221,9 +217,10 @@
     margin-top: 15px;
 }
 
-.cloud-provider-tab-class {
+.order-form-selection-style {
     margin: 0 0 20px 0;
     font-weight: bold;
+    font-size: 14px;
 }
 
 .select-box-class {
@@ -232,26 +229,6 @@
 
 .select-cloud-provider-class {
     width: 450px;
-}
-
-.region-flavor-content {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.service-blank-class {
-    display: flex;
-    align-items: center;
-    text-align: justify;
-    width: 400px;
-    height: 200px;
-    margin: 0 auto;
-}
-
-.submit-alert-tip {
-    margin-bottom: 20px;
-    margin-left: 30px;
-    margin-right: 30px;
 }
 
 .services-content-body-col {

@@ -6,7 +6,8 @@
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { BillingInfo } from '../common/BillingInfo';
 import { BillingModeSelection } from '../common/BillingModeSelection';
@@ -277,7 +278,7 @@ export const SelectDestination = ({
                 ></ServiceHostingSelection>
                 <br />
                 <br />
-                <div className={'cloud-provider-tab-class content-title'}>
+                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
                     <Tabs
                         type='card'
                         size='middle'
@@ -309,11 +310,10 @@ export const SelectDestination = ({
                     billingModes={billingModes}
                 />
                 <BillingInfo priceValue={priceValue} />
-                <div className={'migrate-step-button-inner-class'}>
+                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button
                             type='primary'
-                            className={'migrate-steps-operation-button-clas'}
                             onClick={() => {
                                 prev();
                             }}
@@ -327,7 +327,6 @@ export const SelectDestination = ({
                                 getAvailabilityZonesForRegionQuery.isError ||
                                 (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
                             }
-                            className={'migrate-steps-operation-button-clas'}
                             htmlType='submit'
                         >
                             Next

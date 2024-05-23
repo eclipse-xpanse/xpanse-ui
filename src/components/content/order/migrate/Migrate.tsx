@@ -7,6 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { StepProps, Steps } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo, useState } from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployRequest,
     DeployedServiceDetails,
@@ -236,7 +237,7 @@ export const Migrate = ({
     }
 
     return (
-        <div className={'migrate-select-destination-class'}>
+        <div className={serviceOrderStyles.migrateSelectDestinationClass}>
             <Steps current={currentMigrationStep} items={items} />
             {renderStepContent(currentMigrationStep)}
         </div>

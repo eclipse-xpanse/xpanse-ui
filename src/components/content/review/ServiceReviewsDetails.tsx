@@ -5,7 +5,8 @@
 
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
-import '../../../styles/service_review.css';
+import oclDisplayStyles from '../../../styles/ocl-display.module.css';
+import serviceReviewStyles from '../../../styles/service-review.module.css';
 import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
@@ -63,7 +64,7 @@ export const ServiceReviewsDetails = ({
             <Button
                 type='primary'
                 onClick={onClickReject}
-                className={'reject-btn-class'}
+                className={serviceReviewStyles.rejectBtnClass}
                 disabled={
                     useReviewRequestState[0]?.status === 'success' ||
                     (getRegistrationDetailsQuery.isSuccess &&
@@ -81,8 +82,8 @@ export const ServiceReviewsDetails = ({
                 handleModalClose={handleReviewCommentsModalClose}
                 setAlertTipCloseStatus={setAlertTipCloseStatus}
             />
-            <div className={'ocl-data-display'}>
-                <div className={'ocl-data-main-info'}>
+            <div className={oclDisplayStyles.oclDataDisplay}>
+                <div className={oclDisplayStyles.oclDataMainInfo}>
                     <div>
                         {
                             <Image
@@ -102,7 +103,7 @@ export const ServiceReviewsDetails = ({
                             <b>Service Name</b>
                             <br />
                             <Tooltip placement='topLeft' title={currentServiceTemplateVo.name}>
-                                <Paragraph ellipsis={true} className={'ocl-data-display-service-review-name'}>
+                                <Paragraph ellipsis={true} className={oclDisplayStyles.oclDataDisplayServiceReviewName}>
                                     {currentServiceTemplateVo.name}
                                 </Paragraph>
                             </Tooltip>
@@ -112,7 +113,7 @@ export const ServiceReviewsDetails = ({
                         <div>
                             <b>Cloud Service Provider</b>
                             <br />
-                            <div className={'ocl-display-tag'}>
+                            <div className={oclDisplayStyles.oclDisplayTag}>
                                 <Image
                                     width={120}
                                     preview={false}
@@ -128,7 +129,7 @@ export const ServiceReviewsDetails = ({
                             <b>Available Regions</b>
                             <br />
                             {currentServiceTemplateVo.regions.map((region) => (
-                                <Tag className={'ocl-display-tag'} color='orange' key={region.name}>
+                                <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
                                     {region.area ? `${region.area}: ${region.name}` : region.name}
                                 </Tag>
                             ))}
@@ -139,7 +140,7 @@ export const ServiceReviewsDetails = ({
                             <b>Service Hosted By</b>
                             <br />
                             <Tag
-                                className={'ocl-display-tag'}
+                                className={oclDisplayStyles.oclDisplayTag}
                                 color='red'
                                 key={currentServiceTemplateVo.serviceHostingType.toString()}
                             >
@@ -151,7 +152,12 @@ export const ServiceReviewsDetails = ({
                     </div>
                 </div>
                 <div>
-                    <Descriptions title={'Basic Information'} column={2} bordered className={'ocl-data-info-table'}>
+                    <Descriptions
+                        title={'Basic Information'}
+                        column={2}
+                        bordered
+                        className={oclDisplayStyles.oclDataInfoTable}
+                    >
                         <Descriptions.Item label='Service Template Id'>{currentServiceTemplateVo.id}</Descriptions.Item>
                         <Descriptions.Item label='Category'>
                             {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
@@ -202,7 +208,7 @@ export const ServiceReviewsDetails = ({
                                 title={'Service Review Details'}
                                 column={1}
                                 bordered
-                                className={'ocl-data-info-table'}
+                                className={oclDisplayStyles.oclDataInfoTable}
                             >
                                 <Descriptions.Item label='Registration Status'>
                                     {currentServiceTemplateVo.serviceRegistrationState.valueOf()}
