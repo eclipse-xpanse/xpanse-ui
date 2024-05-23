@@ -8,6 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceModificationAuditDetails } from './ServiceModificationAuditDetails';
 import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type DeployedService = {
     /**
@@ -76,6 +77,7 @@ export type DeployedService = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
+    latestModificationAudit?: ServiceModificationAuditDetails;
 };
 export namespace DeployedService {
     /**

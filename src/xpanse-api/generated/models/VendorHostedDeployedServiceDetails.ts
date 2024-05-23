@@ -9,6 +9,7 @@
 /* eslint-disable */
 import type { DeployRequest } from './DeployRequest';
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceModificationAuditDetails } from './ServiceModificationAuditDetails';
 import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type VendorHostedDeployedServiceDetails = {
     /**
@@ -77,6 +78,7 @@ export type VendorHostedDeployedServiceDetails = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
+    latestModificationAudit?: ServiceModificationAuditDetails;
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.

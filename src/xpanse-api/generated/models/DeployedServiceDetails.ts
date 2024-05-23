@@ -10,6 +10,7 @@
 import type { DeployRequest } from './DeployRequest';
 import type { DeployResource } from './DeployResource';
 import type { ServiceLockConfig } from './ServiceLockConfig';
+import type { ServiceModificationAuditDetails } from './ServiceModificationAuditDetails';
 import type { ServiceStateManagementTaskDetails } from './ServiceStateManagementTaskDetails';
 export type DeployedServiceDetails = {
     /**
@@ -78,6 +79,7 @@ export type DeployedServiceDetails = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
+    latestModificationAudit?: ServiceModificationAuditDetails;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.

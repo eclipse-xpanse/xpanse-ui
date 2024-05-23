@@ -13,37 +13,10 @@ import { request as __request } from '../core/request';
 import type { DeployRequest } from '../models/DeployRequest';
 import type { DeployedService } from '../models/DeployedService';
 import type { DeployedServiceDetails } from '../models/DeployedServiceDetails';
-import type { ModifyRequest } from '../models/ModifyRequest';
 import type { Response } from '../models/Response';
 import type { ServiceLockConfig } from '../models/ServiceLockConfig';
 import type { VendorHostedDeployedServiceDetails } from '../models/VendorHostedDeployedServiceDetails';
 export class ServiceService {
-    /**
-     * Start a task to modify service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
-     * @param id The id of modify service
-     * @param requestBody
-     * @returns string Accepted
-     * @throws ApiError
-     */
-    public static modify(id: string, requestBody: ModifyRequest): CancelablePromise<string> {
-        return __request(OpenAPI, {
-            method: 'PUT',
-            url: '/xpanse/services/modify/{id}',
-            path: {
-                id: id,
-            },
-            body: requestBody,
-            mediaType: 'application/json',
-            errors: {
-                400: `Bad Request`,
-                401: `Unauthorized`,
-                403: `Forbidden`,
-                422: `Unprocessable Entity`,
-                500: `Internal Server Error`,
-                502: `Bad Gateway`,
-            },
-        });
-    }
     /**
      * Change the lock config of the service.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id The id of the service

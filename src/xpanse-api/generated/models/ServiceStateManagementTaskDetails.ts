@@ -34,11 +34,11 @@ export type ServiceStateManagementTaskDetails = {
     /**
      * The started time of the task.
      */
-    startedTime: string;
+    startedTime?: string;
     /**
      * The completed time of the task.
      */
-    completedTime: string;
+    completedTime?: string;
 };
 export namespace ServiceStateManagementTaskDetails {
     /**

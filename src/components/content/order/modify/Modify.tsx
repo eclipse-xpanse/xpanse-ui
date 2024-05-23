@@ -14,7 +14,7 @@ import {
     DeployedService,
     DeployedServiceDetails,
     ModifyRequest,
-    ServiceService,
+    ServiceModificationService,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
@@ -47,7 +47,10 @@ export const Modify = ({
     const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            return ServiceService.modify(modifyServiceRequestParams.id, modifyServiceRequestParams.modifyRequest);
+            return ServiceModificationService.modify(
+                modifyServiceRequestParams.id,
+                modifyServiceRequestParams.modifyRequest
+            );
         },
     });
 
