@@ -49,8 +49,6 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                         {ocl.name}
                                     </Paragraph>
                                 </Tooltip>
-                                <br />
-                                <br />
                             </div>
                             <div>
                                 <b>Cloud Service Provider</b>
