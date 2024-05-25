@@ -168,7 +168,7 @@
             "after:bump": [
                 "npm run update-service-worker-file",
                 "npm run build",
-                "zip -r -q xpanse-ui-${version}.zip build"
+                "zip -r -q xpanse-ui-${version}.zip dist"
             ]
         }
     }
