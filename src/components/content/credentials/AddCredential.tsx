@@ -9,6 +9,8 @@ import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import credentialStyles from '../../../styles/credential.module.css';
+import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
+
 import {
     AdminService,
     ApiError,
@@ -360,7 +362,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
                             {activeCspList.current.map((csp: CredentialVariables.csp) => {
                                 return (
-                                    <Select.Option key={csp} value={csp} className={credentialStyles.cspSelectDropDown}>
+                                    <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                         <Image
                                             className={credentialStyles.customSelect}
                                             width={100}

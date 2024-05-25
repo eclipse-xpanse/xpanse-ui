@@ -8,7 +8,7 @@ import { Descriptions, Space, Tag } from 'antd';
 import React from 'react';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import registerStyles from '../../../../../styles/register.module.css';
+import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
@@ -30,7 +30,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </h3>
                 <Space size={[0, 8]} wrap>
                     {serviceDetails.regions.map((region) => (
-                        <Tag key={region.name} className={registerStyles.oclDisplayTag} color='orange'>
+                        <Tag key={region.name} className={oclDisplayStyles.oclDisplayTag} color='orange'>
                             {region.area ? `${region.area}: ${region.name}` : region.name}
                         </Tag>
                     ))}

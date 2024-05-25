@@ -135,7 +135,7 @@ function UpdateCredential({
             render: (value: string, record) =>
                 record.isMandatory ? (
                     <Tooltip placement='topLeft' title={value}>
-                        <span className={styles.addCredentialFromVariablesValue}>*</span>
+                        <span className={styles.addCredentialFormVariablesValue}>*</span>
                         {value}
                     </Tooltip>
                 ) : (
@@ -235,7 +235,7 @@ function UpdateCredential({
                     msg={tipMessage}
                     onRemove={onRemove}
                 ></CredentialTip>
-                <div className={styles.credentialFromInput}>
+                <div className={styles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp'>
                         <Image
                             width={100}
@@ -264,7 +264,7 @@ function UpdateCredential({
                         ></Table>
                     </Form.Item>
                 </div>
-                <Form.Item className={styles.credentialFromButton}>
+                <Form.Item className={styles.credentialFormButton}>
                     <Button
                         type='primary'
                         loading={updateCredentialRequest.isPending}

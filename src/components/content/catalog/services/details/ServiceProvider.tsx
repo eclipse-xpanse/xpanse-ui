@@ -4,7 +4,7 @@
  */
 
 import { EnvironmentOutlined } from '@ant-design/icons';
-import { Divider, Empty, Image, Tabs } from 'antd';
+import { Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
@@ -211,8 +211,6 @@ function ServiceProvider({
                                 updateServiceHostingType={onChangeServiceHostingType}
                             />
                             <ServiceDetail serviceDetails={activeServiceDetail} />
-
-                            <Divider />
                             <ServicePolicies
                                 key={activeServiceDetail.id}
                                 serviceDetails={activeServiceDetail}
