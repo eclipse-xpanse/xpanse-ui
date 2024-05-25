@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 const scriptFilename = "OidcTrustedDomains.js";
 const acceptAnyDomainToken = "*";
 const TOKEN = {
