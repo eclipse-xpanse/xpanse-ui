@@ -10,6 +10,7 @@ import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
 import { BillingText } from '../../../common/ocl/BillingText';
@@ -17,7 +18,6 @@ import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowTy
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
-import { ServiceRegistrationStatus } from './ServiceRegistrationStatus';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -56,7 +56,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <Tag color='cyan'>{serviceDetails.namespace}</Tag>
                 </Descriptions.Item>
                 <Descriptions.Item label='Status'>
-                    <ServiceRegistrationStatus serviceStatus={serviceDetails.serviceRegistrationState} />
+                    <ServiceTemplateRegisterStatus serviceRegistrationState={serviceDetails.serviceRegistrationState} />
                 </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
                 <Descriptions.Item label='Deployment'>

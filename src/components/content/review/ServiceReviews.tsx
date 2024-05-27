@@ -11,9 +11,9 @@ import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
-import { ServiceTemplateRegisterStatus } from './ServiceTemplateRegisterStatus';
 import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
 
 export default function ServiceReviews(): React.JSX.Element {
@@ -234,8 +234,9 @@ export default function ServiceReviews(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceRegistrationState.startsWith(value.toString()),
             align: 'left',
-            render: (serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState) =>
-                ServiceTemplateRegisterStatus(serviceRegistrationState),
+            render: (serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState) => (
+                <ServiceTemplateRegisterStatus serviceRegistrationState={serviceRegistrationState} />
+            ),
         },
         {
             title: 'Deployer Type',
