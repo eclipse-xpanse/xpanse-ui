@@ -22,7 +22,7 @@ export type Price = {
     /**
      * The period of the cost.
      */
-    period: Price.period;
+    period?: Price.period;
 };
 export namespace Price {
     /**

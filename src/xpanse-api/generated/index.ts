@@ -52,6 +52,7 @@ export { ServiceModificationAuditDetails } from './models/ServiceModificationAud
 export type { ServicePolicy } from './models/ServicePolicy';
 export type { ServicePolicyCreateRequest } from './models/ServicePolicyCreateRequest';
 export type { ServicePolicyUpdateRequest } from './models/ServicePolicyUpdateRequest';
+export type { ServicePrice } from './models/ServicePrice';
 export type { ServiceProviderContactDetails } from './models/ServiceProviderContactDetails';
 export { ServiceStateManagementTaskDetails } from './models/ServiceStateManagementTaskDetails';
 export { ServiceTemplateDetailVo } from './models/ServiceTemplateDetailVo';
