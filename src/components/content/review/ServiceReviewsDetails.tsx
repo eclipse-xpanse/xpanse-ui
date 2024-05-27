@@ -107,8 +107,6 @@ export const ServiceReviewsDetails = ({
                                     {currentServiceTemplateVo.name}
                                 </Paragraph>
                             </Tooltip>
-                            <br />
-                            <br />
                         </div>
                         <div>
                             <b>Cloud Service Provider</b>
