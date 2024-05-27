@@ -3,7 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UploadOutlined } from '@ant-design/icons';
+import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
+import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
+import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
+import policyStyles from '../../../styles/policies.module.css';
+import submitAlertStyles from '../../../styles/submit-alert.module.css';
 import {
     CloudServiceProvider,
     CredentialVariables,
@@ -11,18 +17,14 @@ import {
     UserPolicyCreateRequest,
     UserPolicyUpdateRequest,
 } from '../../../xpanse-api/generated';
-import '../../../styles/policies.css';
-import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { policiesStatuses, PolicyUploadFileStatus } from './policiesParams';
-import { RcFile } from 'antd/es/upload';
-import { useCreatePolicyRequest } from './add/useCreatePolicyRequest';
-import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
-import PolicyUpdateResultStatus from './update/PolicyUpdateResultStatus';
-import { useUpdatePolicyRequest } from './update/useUpdatePolicyRequest';
-import PolicySubmitResultDetails from './PolicySubmitResultDetails';
 import { cspMap } from '../common/csp/CspLogo';
+import PolicySubmitResultDetails from './PolicySubmitResultDetails';
+import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
+import { useCreatePolicyRequest } from './add/useCreatePolicyRequest';
+import { PolicyUploadFileStatus, policiesStatuses } from './policiesParams';
+import PolicyUpdateResultStatus from './update/PolicyUpdateResultStatus';
 import UpdateSubmitResult from './update/UpdateSubmitResult';
+import { useUpdatePolicyRequest } from './update/useUpdatePolicyRequest';
 
 export const AddOrUpdatePolicy = ({
     currentPolicyService,
@@ -123,7 +125,7 @@ export const AddOrUpdatePolicy = ({
                         setRegoFileUploadStatus('error');
                         if (e instanceof Error) {
                             return (
-                                <div className={'submit-alert-tip'}>
+                                <div className={submitAlertStyles.submitAlertTip}>
                                     {' '}
                                     <Alert
                                         message={e.message}
@@ -138,7 +140,7 @@ export const AddOrUpdatePolicy = ({
                             );
                         } else {
                             return (
-                                <div className={'submit-alert-tip'}>
+                                <div className={submitAlertStyles.submitAlertTip}>
                                     {' '}
                                     <Alert
                                         message={'unhandled error occurred'}
@@ -203,7 +205,7 @@ export const AddOrUpdatePolicy = ({
                 name='basic'
                 labelCol={{ span: 8 }}
                 wrapperCol={{ span: 16 }}
-                className={'edit-form-class'}
+                className={policyStyles.editFormClass}
                 initialValues={{
                     remember: true,
                     csp:
@@ -220,11 +222,11 @@ export const AddOrUpdatePolicy = ({
                 autoComplete='off'
             >
                 <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select csp!' }]}>
-                    <Select onSelect={handleCspSelect} size={'large'} className={'policy-form-select'}>
+                    <Select onSelect={handleCspSelect} size={'large'} className={policyStyles.policyFormSelect}>
                         {Object.values(CredentialVariables.csp).map((csp: CredentialVariables.csp) => (
-                            <Select.Option key={csp} value={csp} className={'credential-select-option-csp'}>
+                            <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                 <Image
-                                    className={'custom-select-image'}
+                                    className={policyStyles.customSelectImage}
                                     width={100}
                                     preview={false}
                                     src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
@@ -250,7 +252,7 @@ export const AddOrUpdatePolicy = ({
                     rules={[{ required: true, message: 'Please upload policy file!' }]}
                 >
                     <div>
-                        <div className={'policy-upload-file-remove-buttons'}>
+                        <div className={policyStyles.policyUploadFileRemoveButtons}>
                             <Upload
                                 name={'Policy Content File'}
                                 multiple={false}
@@ -275,9 +277,9 @@ export const AddOrUpdatePolicy = ({
                         <br />
                         <div>
                             {policyContent.current ? (
-                                <Card className={'policy-content-upload-preview'}>
+                                <Card className={policyStyles.policyContentUploadPreview}>
                                     <pre>
-                                        <div className={'policy-content-read-only-preview'}>
+                                        <div className={policyStyles.policyContentReadOnlyPreview}>
                                             {policyContent.current}
                                         </div>
                                     </pre>
@@ -289,12 +291,11 @@ export const AddOrUpdatePolicy = ({
                     </div>
                 </Form.Item>
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                    <div className={'submit-reset-container'}>
-                        <div className={'submit-class'}>
+                    <div className={policyStyles.submitResetContainer}>
+                        <div className={policyStyles.submitClass}>
                             <Button
                                 type='primary'
                                 htmlType='submit'
-                                className={'submit-policy-class'}
                                 disabled={
                                     createPoliciesManagementServiceRequest.isSuccess ||
                                     updatePoliciesManagementServiceRequest.isSuccess
@@ -304,14 +305,14 @@ export const AddOrUpdatePolicy = ({
                             </Button>
                         </div>
                         {currentPolicyService === undefined ? (
-                            <div className={'reset-class'}>
+                            <div className={policyStyles.resetClass}>
                                 {' '}
                                 <Button htmlType='button' onClick={onReset}>
                                     Reset
                                 </Button>
                             </div>
                         ) : (
-                            <div className={'reset-class'}>
+                            <div className={policyStyles.resetClass}>
                                 {' '}
                                 <Button htmlType='button' onClick={onCancelUploadFile}>
                                     Cancel

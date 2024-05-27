@@ -3,27 +3,29 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Form, Input, Popconfirm, PopconfirmProps, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
-import { Button, Form, Input, Tooltip } from 'antd';
-import '../../../../styles/service_modify.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
+    DeployVariable,
     DeployedService,
     DeployedServiceDetails,
     ModifyRequest,
-    ServiceService,
+    ServiceModificationService,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import { OrderItem } from '../common/utils/OrderItem';
-import { useOrderFormStore } from '../store/OrderFormStore';
-import '../../../../styles/service_order.css';
-import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
+import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
-import { useMutation } from '@tanstack/react-query';
+import { OrderItem } from '../common/utils/OrderItem';
 import { getExistingServiceParameters } from '../common/utils/existingServiceParameters';
+import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
+import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 
 export const Modify = ({
@@ -32,7 +34,11 @@ export const Modify = ({
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
+    const { Paragraph } = Typography;
     let getParams: DeployParam[] = [];
+    let getVariables: DeployVariable[] = [];
+
+    const [modifyWarning, setModifyWarning] = useState<React.JSX.Element[]>([]);
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [modifyStatus, setModifyStatus] = useState<DeployedService.serviceDeploymentState | undefined>(undefined);
@@ -42,7 +48,10 @@ export const Modify = ({
     const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            return ServiceService.modify(modifyServiceRequestParams.id, modifyServiceRequestParams.modifyRequest);
+            return ServiceModificationService.modify(
+                modifyServiceRequestParams.id,
+                modifyServiceRequestParams.modifyRequest
+            );
         },
     });
 
@@ -54,6 +63,7 @@ export const Modify = ({
 
     if (serviceTemplateDetailsQuery.isSuccess) {
         getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
+        getVariables = serviceTemplateDetailsQuery.data.variables;
     }
 
     const onFinish = () => {
@@ -82,9 +92,84 @@ export const Modify = ({
         setModifyStatus(status);
     };
 
+    function getModifiedProperties(
+        originalDeployParams: Record<string, unknown>,
+        updatedDeployParams: Record<string, unknown>
+    ): string[] {
+        const originalKeys = Object.keys(originalDeployParams);
+        const updatedKeys = Object.keys(updatedDeployParams);
+
+        const allKeys = new Set([...originalKeys, ...updatedKeys]);
+
+        const modifiedKeys: string[] = [];
+        allKeys.forEach((key) => {
+            if (originalDeployParams[key] !== updatedDeployParams[key]) {
+                modifiedKeys.push(key);
+            }
+        });
+
+        return modifiedKeys;
+    }
+
+    const onClickModify = () => {
+        const modifiedKeys = getModifiedProperties(
+            getExistingServiceParameters(currentSelectedService),
+            storedDeployVariables
+        );
+        if (modifiedKeys.length > 0) {
+            const warnings: React.JSX.Element[] = [];
+
+            const variableMap = new Map(getVariables.map((variable) => [variable.name, variable.modificationImpact]));
+
+            modifiedKeys.forEach((updatedKey) => {
+                const impact = variableMap.get(updatedKey);
+
+                if (impact) {
+                    if (impact.isDataLost && impact.isServiceInterrupted) {
+                        warnings.push(
+                            <Paragraph key={updatedKey} style={{ margin: 0 }}>
+                                <span>{`Changing ${updatedKey} - will delete the existing data and restart the service.`}</span>
+                            </Paragraph>
+                        );
+                    } else if (impact.isDataLost && !impact.isServiceInterrupted) {
+                        warnings.push(
+                            <Paragraph key={updatedKey} style={{ margin: 0 }}>
+                                <span>{`Changing ${updatedKey} - will delete the existing service data.`}</span>
+                            </Paragraph>
+                        );
+                    } else if (!impact.isDataLost && impact.isServiceInterrupted) {
+                        warnings.push(
+                            <Paragraph key={updatedKey} style={{ margin: 0 }}>
+                                <span>{`Changing ${updatedKey} - will restart the service.`}</span>
+                            </Paragraph>
+                        );
+                    }
+                }
+            });
+
+            if (warnings.length === 0) {
+                warnings.push(<span>{'Are you sure to proceed with service configuration modification?'}</span>);
+            } else {
+                warnings.push(<span>{' proceed?'}</span>);
+            }
+
+            setModifyWarning(warnings);
+        }
+    };
+
+    const confirm: PopconfirmProps['onConfirm'] = () => {
+        onFinish();
+    };
+
+    const cancel: PopconfirmProps['onCancel'] = () => {
+        setModifyWarning([]);
+    };
+
     return (
-        <div className={'modify-select-class'}>
-            <div className={'modify-title-class content-title'}>Modify Parameters:</div>
+        <div className={serviceModifyStyles.modifySelectClass}>
+            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>
+                Modify Parameters:
+            </div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
                     isSubmitFailed={modifyServiceRequest.isError}
@@ -105,12 +190,12 @@ export const Modify = ({
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={'modify-container'}
+                className={serviceModifyStyles.modifyContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={modifyServiceRequest.isPending || modifyServiceRequest.isSuccess}
             >
-                <div className={'order-param-item-left'} />
+                <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form.Item
                     name={'Name'}
                     label={'Name: Service Name'}
@@ -125,7 +210,7 @@ export const Modify = ({
                         onChange={(e) => {
                             cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                         }}
-                        className={'order-param-item-content'}
+                        className={serviceOrderStyles.orderParamItemContent}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
                                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -152,20 +237,35 @@ export const Modify = ({
                         ) : undefined
                     )}
                 </div>
-                <div className={'order-param-item-left'} />
-                <div className={'service-modify-submit-reset-container'}>
-                    <div className={'service-modify-submit-class'}>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            disabled={
-                                !hasVariableChanged() ||
-                                (modifyStatus &&
-                                    modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                <div className={serviceOrderStyles.orderParamItemLeft} />
+                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
+                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
+                        <Popconfirm
+                            placement='top'
+                            title='Modify parameters'
+                            description={
+                                <div className={serviceModifyStyles.serviceModifyWarningsContent}>
+                                    <Paragraph>{modifyWarning}</Paragraph>
+                                </div>
                             }
+                            icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
+                            onConfirm={cancel}
+                            onCancel={confirm}
+                            okText='No'
+                            cancelText='Yes'
                         >
-                            Modify
-                        </Button>
+                            <Button
+                                type='primary'
+                                onClick={onClickModify}
+                                disabled={
+                                    !hasVariableChanged() ||
+                                    (modifyStatus &&
+                                        modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                }
+                            >
+                                Modify
+                            </Button>
+                        </Popconfirm>
                     </div>
                 </div>
             </Form>

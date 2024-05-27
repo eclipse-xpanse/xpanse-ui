@@ -3,10 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Deployment } from '../../../../xpanse-api/generated';
+import { Button, Popover } from 'antd';
 import React from 'react';
 import YAML from 'yaml';
-import { Button, Popover } from 'antd';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
+import { Deployment } from '../../../../xpanse-api/generated';
 
 export function DeploymentText({ deployment }: { deployment: Deployment }): React.JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
@@ -17,11 +18,11 @@ export function DeploymentText({ deployment }: { deployment: Deployment }): Reac
         yamlDocument.contents = deployment;
         return (
             <Popover
-                content={<pre className={'deployment-script'}>{yamlDocument.toString()}</pre>}
+                content={<pre className={oclDisplayStyles.oclDeploymentScript}>{yamlDocument.toString()}</pre>}
                 title={'Deployment'}
                 trigger='hover'
             >
-                <Button className={'ocl-data-hover'} type={'link'}>
+                <Button className={oclDisplayStyles.oclDataHover} type={'link'}>
                     {deployment.kind}
                 </Button>
             </Popover>

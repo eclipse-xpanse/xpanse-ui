@@ -80,3 +80,7 @@
     text-align: right;
     justify-content: flex-end;
 }
+
+.service-modify-warnings-content {
+    width: 400px;
+}

@@ -3,10 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 import React from 'react';
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { v4 as uuidv4 } from 'uuid';
+import myServicesStyles from '../../../../styles/my-services.module.css';
+import submitResultStyles from '../../../../styles/submit-result.module.css';
 
 export function DeploymentResultMessage(resultMessage: string): React.JSX.Element {
     return (
@@ -15,11 +17,11 @@ export function DeploymentResultMessage(resultMessage: string): React.JSX.Elemen
             <Typography.Paragraph
                 copyable={{
                     icon: [
-                        <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
-                        <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                        <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
+                        <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                     ],
                 }}
-                className={'deployment-details-with-scroll'}
+                className={myServicesStyles.deploymentDetailsWithScroll}
             >
                 {resultMessage}
             </Typography.Paragraph>

@@ -4,9 +4,8 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
-import '../../../../styles/app.css';
-import { Link, ServiceCatalogService } from '../../../../xpanse-api/generated';
 import React from 'react';
+import { Link, ServiceCatalogService } from '../../../../xpanse-api/generated';
 
 export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): React.JSX.Element {
     function onclick() {

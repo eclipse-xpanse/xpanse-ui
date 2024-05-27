@@ -7,10 +7,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-export type TerraformResult = {
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: Record<string, string>;
-    commandSuccessful?: boolean;
+import type { Price } from './Price';
+export type ServicePrice = {
+    recurringPrice?: Price;
+    oneTimePaymentPrice?: Price;
 };

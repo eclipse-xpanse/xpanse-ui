@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Flavor } from '../types/Flavor';
 import { ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Flavor } from '../types/Flavor';
 
 export function getFlavorList(
     selectCsp: UserOrderableServiceVo.csp,

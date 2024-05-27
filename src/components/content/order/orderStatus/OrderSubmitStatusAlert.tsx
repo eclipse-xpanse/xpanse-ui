@@ -3,18 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import React, { useMemo } from 'react';
+import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedServiceDetails,
     Response,
     ServiceProviderContactDetails,
 } from '../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { OperationType } from '../types/OperationType';
 import { OrderSubmitResult } from './OrderSubmitResult';
 import { ProcessingStatus } from './ProcessingStatus';
-import React, { useMemo } from 'react';
-import { OperationType } from '../types/OperationType';
-import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { useStopwatch } from 'react-timer-hook';
 
 function OrderSubmitStatusAlert({
     uuid,

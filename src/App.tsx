@@ -3,8 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import './styles/app.css';
+import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
+import FallbackSkeleton from './components/content/common/lazy/FallBackSkeleton.tsx';
+import { OidcConfig } from './components/oidc/OidcConfig';
 import Protected from './components/protectedRoutes/ProtectedRoute';
 import {
     catalogPageRoute,
@@ -25,12 +30,7 @@ import {
     servicesPageRoute,
     workflowsPageRoute,
 } from './components/utils/constants';
-import { OidcConfig } from './components/oidc/OidcConfig';
-import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
-import React, { lazy, Suspense } from 'react';
-import FallbackSkeleton from './components/content/common/lazy/FallBackSkeleton.tsx';
+import './styles/app.module.css';
 
 const queryClient = new QueryClient();
 

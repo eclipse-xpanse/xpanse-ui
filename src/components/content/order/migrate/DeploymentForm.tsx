@@ -3,18 +3,21 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
-import { ApiDoc } from '../../common/doc/ApiDoc';
-import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
+import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
-import { useOrderFormStore } from '../store/OrderFormStore';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
+import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import { MigrationSteps } from '../types/MigrationSteps';
-import { OrderItem } from '../common/utils/OrderItem';
-import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
+import { OrderItem } from '../common/utils/OrderItem';
+import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { useOrderFormStore } from '../store/OrderFormStore';
+import { MigrationSteps } from '../types/MigrationSteps';
 
 export const DeploymentForm = ({
     userOrderableServiceVoList,
@@ -93,16 +96,16 @@ export const DeploymentForm = ({
 
     return (
         <div>
-            <div className={'migrate-show-deploy-class'}>
-                <div className={'generic-table-container'}>
-                    <div className={'content-title'}>
-                        <div className={'content-title-order'}>
-                            <ApiDoc id={deployParams.id} styleClass={'content-title-api'}></ApiDoc>
+            <div className={serviceOrderStyles.migrateShowDeployClass}>
+                <div className={tableStyles.genericTableContainer}>
+                    <div className={appStyles.contentTitle}>
+                        <div>
+                            <ApiDoc id={deployParams.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
                         </div>
                     </div>
                 </div>
 
-                <div className={'order-param-item-left'} />
+                <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form
                     layout='vertical'
                     autoComplete='off'
@@ -123,7 +126,7 @@ export const DeploymentForm = ({
                             showCount
                             placeholder={'customer defined name for service ordered'}
                             maxLength={256}
-                            className={'order-param-item-content'}
+                            className={serviceOrderStyles.orderParamItemContent}
                             suffix={
                                 <Tooltip title={'Customer defined name for the service instance created'}>
                                     <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -141,9 +144,9 @@ export const DeploymentForm = ({
                             ) : undefined
                         )}
                     </div>
-                    <div className={'order-param-item-row'}>
-                        <div className={'order-param-item-left'} />
-                        <div className={'order-param-item-content'}>
+                    <div className={serviceOrderStyles.orderParamItemRow}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <div className={serviceOrderStyles.orderParamItemContent}>
                             <EulaInfo
                                 eula={currentEula}
                                 isEulaAccepted={isEulaAccepted}
@@ -155,7 +158,6 @@ export const DeploymentForm = ({
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                             <Button
                                 type='primary'
-                                className={'migrate-steps-operation-button-clas'}
                                 onClick={() => {
                                     prev();
                                 }}
@@ -164,7 +166,7 @@ export const DeploymentForm = ({
                             </Button>
                         </Form.Item>
                         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-                            <Button type='primary' htmlType='submit' className={'migrate-steps-operation-button-clas'}>
+                            <Button type='primary' htmlType='submit'>
                                 Next
                             </Button>
                         </Form.Item>

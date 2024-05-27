@@ -3,23 +3,25 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import NavigateOrderSubmission from './NavigateOrderSubmission';
-import '../../../../styles/service_order.css';
-import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
-import React, { useRef, useState } from 'react';
-import { Button, Col, Form, Input, Row, Tooltip, Typography } from 'antd';
-import { DeployedServiceDetails, DeployRequest } from '../../../../xpanse-api/generated';
-import { createServicePageRoute, CUSTOMER_SERVICE_NAME_FIELD, homePageRoute } from '../../../utils/constants';
 import { InfoCircleOutlined } from '@ant-design/icons';
-import { ApiDoc } from '../../common/doc/ApiDoc';
-import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
-import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
-import { useOrderFormStore } from '../store/OrderFormStore';
-import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { Button, Col, Form, Input, Row, Tooltip, Typography } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
-import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
-import { OrderItem } from '../common/utils/OrderItem';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
+import { DeployRequest, DeployedService, DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { CUSTOMER_SERVICE_NAME_FIELD, createServicePageRoute, homePageRoute } from '../../../utils/constants';
+import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
+import { OrderItem } from '../common/utils/OrderItem';
+import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
+import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
+import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import { useOrderFormStore } from '../store/OrderFormStore';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
+import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const { Paragraph } = Typography;
@@ -31,7 +33,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         submitDeploymentRequest.data,
         submitDeploymentRequest.isSuccess,
-        state.serviceHostingType,
+        state.serviceHostingType as DeployedService.serviceHostingType,
         [
             DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
             DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
@@ -88,18 +90,18 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         <>
             <div>
                 <NavigateOrderSubmission text={'<< Back'} to={createServicePageUrl as To} props={state} />
-                <div className={'Line'} />
-                <div className={'generic-table-container'}>
+                <div className={serviceOrderStyles.Line} />
+                <div className={tableStyles.genericTableContainer}>
                     <Row>
                         <Col span={4}>
                             <Tooltip placement='topLeft' title={state.name + '@' + state.version}>
-                                <Paragraph ellipsis={true} className={'content-title'}>
+                                <Paragraph ellipsis={true} className={appStyles.contentTitle}>
                                     Service: {state.name + '@' + state.version}
                                 </Paragraph>
                             </Tooltip>
                         </Col>
                         <Col span={4}>
-                            <ApiDoc id={state.id} styleClass={'content-title-api'}></ApiDoc>
+                            <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
                         </Col>
                     </Row>
                 </div>
@@ -114,7 +116,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     serviceProviderContactDetails={state.contactServiceDetails}
                 />
             ) : null}
-            <div className={'order-param-item-left'} />
+            <div className={serviceOrderStyles.orderParamItemLeft} />
             <Form
                 form={form}
                 layout='vertical'
@@ -139,7 +141,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         onChange={(e) => {
                             cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                         }}
-                        className={'order-param-item-content'}
+                        className={serviceOrderStyles.orderParamItemContent}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
                                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -151,7 +153,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     className={
                         getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
                         DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
-                            ? 'deploying order-param-item-row'
+                            ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                             : ''
                     }
                 >
@@ -161,9 +163,9 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         ) : undefined
                     )}
                 </div>
-                <div className={'order-param-item-row'}>
-                    <div className={'order-param-item-left'} />
-                    <div className={'order-param-item-content'}>
+                <div className={serviceOrderStyles.orderParamItemRow}>
+                    <div className={serviceOrderStyles.orderParamItemLeft} />
+                    <div className={serviceOrderStyles.orderParamItemContent}>
                         <EulaInfo
                             eula={state.eula}
                             isEulaAccepted={isEulaAccepted}
@@ -171,10 +173,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         />
                     </div>
                 </div>
-                <div className={'Line'} />
-                <div className={'order-param-item-row'}>
-                    <div className={'order-param-item-left'} />
-                    <div className={'order-param-deploy'}>
+                <div className={serviceOrderStyles.Line} />
+                <div className={serviceOrderStyles.orderParamItemRow}>
+                    <div className={serviceOrderStyles.orderParamItemLeft} />
+                    <div className={serviceOrderStyles.orderParamDeploy}>
                         <Button
                             type='primary'
                             loading={

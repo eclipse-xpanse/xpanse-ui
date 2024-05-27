@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployResource } from '../../../../xpanse-api/generated';
-import React from 'react';
-import { ColumnsType } from 'antd/es/table';
-import { DeployResourceDataType } from '../myServices/myServiceProps';
 import { Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import React from 'react';
+import { DeployResource } from '../../../../xpanse-api/generated';
+import { DeployResourceDataType } from '../myServices/myServiceProps';
 import DeployedResourceProperties from './DeployedResourceProperties';
 
 export function DeployedResources(content: DeployResource[], title: string): React.JSX.Element {

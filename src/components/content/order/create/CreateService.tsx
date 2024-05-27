@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Skeleton } from 'antd';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
+import catalogStyles from '../../../../styles/catalog.module.css';
 import { DeployedService } from '../../../../xpanse-api/generated';
-import { Skeleton } from 'antd';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
-import '../../../../styles/service_order.css';
 import { SelectServiceForm } from './SelectServiceForm';
 
 function CreateService(): React.JSX.Element {
@@ -29,7 +29,7 @@ function CreateService(): React.JSX.Element {
     if (orderableServicesQuery.isLoading || orderableServicesQuery.isFetching) {
         return (
             <Skeleton
-                className={'catalog-skeleton'}
+                className={catalogStyles.catalogSkeleton}
                 active={true}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
                 title={{ width: '5%' }}

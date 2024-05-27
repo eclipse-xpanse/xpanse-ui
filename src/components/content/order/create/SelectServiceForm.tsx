@@ -3,42 +3,45 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
+import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
     DeployRequest,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Tab } from 'rc-tabs/lib/interface';
-import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
-import { Flavor } from '../types/Flavor';
-import { getSortedVersionList } from '../formDataHelpers/versionHelper';
-import { getCspListForVersion } from '../formDataHelpers/cspHelper';
-import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/contactServiceDetailsHelper';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
-import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
-import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
-import NavigateOrderSubmission from './NavigateOrderSubmission';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import CspSelect from '../formElements/CspSelect';
-import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { RegionInfo } from '../common/RegionInfo';
-import { FlavorInfo } from '../common/FlavorInfo';
-import { BillingInfo } from '../common/BillingInfo';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { BillingInfo } from '../common/BillingInfo';
+import { BillingModeSelection } from '../common/BillingModeSelection';
+import { FlavorInfo } from '../common/FlavorInfo';
+import { RegionInfo } from '../common/RegionInfo';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
-import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
-import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
+import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/contactServiceDetailsHelper';
+import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
-import { BillingModeSelection } from '../common/BillingModeSelection';
+import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
+import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { getSortedVersionList } from '../formDataHelpers/versionHelper';
+import CspSelect from '../formElements/CspSelect';
+import { Flavor } from '../types/Flavor';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import NavigateOrderSubmission from './NavigateOrderSubmission';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const { Paragraph } = Typography;
@@ -296,13 +299,13 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             >
                 <div>
                     <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
-                    <div className={'Line'} />
+                    <div className={serviceOrderStyles.Line} />
                 </div>
-                <div className={'generic-table-container'}>
+                <div className={tableStyles.genericTableContainer}>
                     <Row justify='start' gutter={10}>
                         <Col span={6}>
                             <Tooltip placement='topLeft' title={serviceName}>
-                                <Paragraph ellipsis={true} className={'content-title'}>
+                                <Paragraph ellipsis={true} className={appStyles.contentTitle}>
                                     Service: {serviceName}
                                 </Paragraph>
                             </Tooltip>
@@ -318,11 +321,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             <></>
                         )}
                     </Row>
-                    <div className={'cloud-provider-tab-class'}>
+                    <div className={serviceOrderStyles.orderFormSelectionStyle}>
                         Version:&nbsp;
                         <Select
                             value={selectVersion}
-                            className={'version-drop-down'}
+                            className={serviceOrderStyles.versionDropDown}
                             onChange={onChangeVersion}
                             options={versionList}
                         />
@@ -345,7 +348,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                     ></ServiceHostingSelection>
                     <br />
                     <br />
-                    <div className={'cloud-provider-tab-class content-title'}>
+                    <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
                         <Tabs
                             type='card'
                             size='middle'
@@ -379,10 +382,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                     <BillingInfo priceValue={priceValue} />
                 </div>
                 <div>
-                    <div className={'Line'} />
-                    <div className={'order-param-item-row'}>
-                        <div className={'order-param-item-left'} />
-                        <div className={'order-param-submit'}>
+                    <div className={serviceOrderStyles.Line} />
+                    <div className={serviceOrderStyles.orderParamItemRow}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <div className={serviceOrderStyles.orderParamSubmit}>
                             <Button
                                 type='primary'
                                 htmlType='submit'

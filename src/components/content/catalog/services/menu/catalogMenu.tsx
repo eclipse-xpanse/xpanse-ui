@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { catalogLabelName, catalogPageRoute, catalogSubPageRoute } from '../../../../utils/constants';
 import { BarsOutlined } from '@ant-design/icons';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
+import { ItemType } from 'antd/es/menu/interface';
+import { catalogLabelName, catalogPageRoute, catalogSubPageRoute } from '../../../../utils/constants';
 
 export const catalogMenu = (data: string[]): ItemType => {
     const subMenuItems = data.map((subMenu: string) => {

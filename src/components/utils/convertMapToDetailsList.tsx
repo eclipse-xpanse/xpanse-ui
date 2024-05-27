@@ -3,10 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
-import { Input, Typography } from 'antd';
 import { CheckOutlined, CopyOutlined, EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
+import { Input, Typography } from 'antd';
+import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import myServicesStyles from '../../styles/my-services.module.css';
+import submitResultStyles from '../../styles/submit-result.module.css';
 
 export function convertMapToDetailsList(content: Map<string, unknown>, title: string): React.JSX.Element {
     if (content.size > 0) {
@@ -14,24 +16,30 @@ export function convertMapToDetailsList(content: Map<string, unknown>, title: st
         const { Paragraph } = Typography;
         content.forEach((v, k) => {
             items.push(
-                <li key={k} className={'details-content'}>
-                    <div className={'service-instance-detail-position'}>
-                        <div className={'service-instance-list-detail '}>{k}:&nbsp;&nbsp;</div>
+                <li key={k} className={myServicesStyles.detailsContent}>
+                    <div className={myServicesStyles.serviceInstanceDetailPosition}>
+                        <div className={myServicesStyles.serviceInstanceListDetail}>{k}:&nbsp;&nbsp;</div>
                         {title.includes('Endpoint Information') ? (
-                            <div className={'show-details'}>
+                            <div className={myServicesStyles.showDetails}>
                                 <Paragraph
                                     copyable={{
                                         text: String(v),
                                         icon: [
-                                            <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
-                                            <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                                            <CopyOutlined
+                                                className={submitResultStyles.showDetailsTypographyCopy}
+                                                key={uuidv4()}
+                                            />,
+                                            <CheckOutlined
+                                                className={submitResultStyles.showDetailsTypographyCopy}
+                                                key={uuidv4()}
+                                            />,
                                         ],
                                     }}
                                 >
                                     <Input.Password
                                         readOnly={true}
                                         variant={'borderless'}
-                                        className={'show-details'}
+                                        className={myServicesStyles.showDetails}
                                         defaultValue={String(v)}
                                         iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}
                                     />

@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import Home from '../Home';
-import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { render, screen } from '@testing-library/react';
+import Home from '../Home';
 
 describe('Test Home Page', () => {
     it('should render Xpanse Website URLs', () => {

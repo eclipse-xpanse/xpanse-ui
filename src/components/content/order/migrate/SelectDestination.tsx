@@ -3,28 +3,29 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import CspSelect from '../formElements/CspSelect';
-import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { Flavor } from '../types/Flavor';
-import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
-import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
-import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { MigrationSteps } from '../types/MigrationSteps';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { BillingInfo } from '../common/BillingInfo';
-import { RegionInfo } from '../common/RegionInfo';
-import { FlavorInfo } from '../common/FlavorInfo';
-import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
-import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
-import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { BillingModeSelection } from '../common/BillingModeSelection';
+import { FlavorInfo } from '../common/FlavorInfo';
+import { RegionInfo } from '../common/RegionInfo';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
+import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
+import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
+import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
+import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import CspSelect from '../formElements/CspSelect';
+import { Flavor } from '../types/Flavor';
+import { MigrationSteps } from '../types/MigrationSteps';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -277,7 +278,7 @@ export const SelectDestination = ({
                 ></ServiceHostingSelection>
                 <br />
                 <br />
-                <div className={'cloud-provider-tab-class content-title'}>
+                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
                     <Tabs
                         type='card'
                         size='middle'
@@ -309,11 +310,10 @@ export const SelectDestination = ({
                     billingModes={billingModes}
                 />
                 <BillingInfo priceValue={priceValue} />
-                <div className={'migrate-step-button-inner-class'}>
+                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button
                             type='primary'
-                            className={'migrate-steps-operation-button-clas'}
                             onClick={() => {
                                 prev();
                             }}
@@ -327,7 +327,6 @@ export const SelectDestination = ({
                                 getAvailabilityZonesForRegionQuery.isError ||
                                 (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
                             }
-                            className={'migrate-steps-operation-button-clas'}
                             htmlType='submit'
                         >
                             Next

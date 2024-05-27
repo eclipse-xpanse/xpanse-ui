@@ -4,8 +4,9 @@
  */
 
 import { Form, InputNumber } from 'antd';
-import React from 'react';
 import { Rule } from 'rc-field-form/lib/interface';
+import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
@@ -44,14 +45,14 @@ export function NumberInput({ item }: { item: DeployParam }): React.JSX.Element 
     }
 
     return (
-        <div className={'order-param-item-row'}>
-            <div className={'order-param-item-left'} />
-            <div className={'order-param-item-content'}>
+        <div className={serviceOrderStyles.orderParamItemRow}>
+            <div className={serviceOrderStyles.orderParamItemLeft} />
+            <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item name={item.name} label={item.name + ' :  ' + item.description} rules={ruleItems}>
                     <InputNumber onChange={numberInputHandler} />
                 </Form.Item>
             </div>
-            <div className={'order-param-item-right'} />
+            <div className={serviceOrderStyles.orderParamItemRight} />
         </div>
     );
 }

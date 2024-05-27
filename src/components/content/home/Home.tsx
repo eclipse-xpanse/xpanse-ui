@@ -3,17 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import WelcomeCard from './WelcomeCard';
 import React from 'react';
-import { EndUserServicesDashboard } from './user/EndUserServicesDashboard';
+import appStyles from '../../../styles/app.module.css';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
+import WelcomeCard from './WelcomeCard';
 import { IsvServicesDashBoard } from './isv/IsvServicesDashBoard';
+import { EndUserServicesDashboard } from './user/EndUserServicesDashboard';
 
 function Home(): React.JSX.Element {
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
 
     return (
-        <div className={'home-data-display'}>
+        <div className={appStyles.homeDataDisplay}>
             <WelcomeCard />
             <br />
             {currentRole && currentRole === 'user' ? <EndUserServicesDashboard /> : <></>}

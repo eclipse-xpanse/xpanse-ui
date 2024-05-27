@@ -4,13 +4,14 @@
  */
 
 import { Layout } from 'antd';
+import React from 'react';
+import appStyles from '../../styles/app.module.css';
+import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
 import LayoutFooter from '../layouts/footer/LayoutFooter';
 import LayoutHeader from '../layouts/header/LayoutHeader';
+import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 import LayoutSider from '../layouts/sider/LayoutSider';
 import NotAuthorized from './NotAuthorized';
-import { updateApiConfig } from '../../xpanse-api/CustomOpenApiConfig';
-import React from 'react';
-import { useCurrentUserRoleStore } from '../layouts/header/useCurrentRoleStore';
 
 interface ProtectedRouteProperties {
     children: React.JSX.Element;
@@ -19,12 +20,12 @@ interface ProtectedRouteProperties {
 
 function getFullLayout(content: React.JSX.Element): React.JSX.Element {
     return (
-        <Layout className={'layout'} hasSider={true}>
+        <Layout className={appStyles.layout} hasSider={true}>
             <LayoutSider />
             <Layout>
                 <LayoutHeader />
-                <Layout.Content className={'site-layout'}>
-                    <div className={'site-layout-background'}>{content}</div>
+                <Layout.Content className={appStyles.siteLayout}>
+                    <div className={appStyles.siteLayoutBackground}>{content}</div>
                 </Layout.Content>
                 <LayoutFooter />
             </Layout>

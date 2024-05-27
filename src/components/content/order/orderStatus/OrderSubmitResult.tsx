@@ -4,13 +4,14 @@
  */
 
 import { Alert } from 'antd';
-import OrderSubmitResultDetails from './OrderSubmitResultDetails';
-import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import DeploymentTimerNew from './DeploymentTimer';
 import { StopwatchResult } from 'react-timer-hook';
+import submitAlertStyles from '../../../../styles/submit-alert.module.css';
+import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import DeploymentTimerNew from './DeploymentTimer';
+import OrderSubmitResultDetails from './OrderSubmitResultDetails';
 
 export const OrderSubmitResult = ({
     msg,
@@ -26,7 +27,7 @@ export const OrderSubmitResult = ({
     contactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element => {
     return (
-        <div className={'submit-alert-tip'}>
+        <div className={submitAlertStyles.submitAlertTip}>
             {' '}
             <Alert
                 message={`Processing Status`}

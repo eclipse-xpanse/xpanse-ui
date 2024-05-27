@@ -4,9 +4,10 @@
  */
 
 import { Table } from 'antd';
-import React from 'react';
-import { CredentialVariable } from '../../../xpanse-api/generated';
 import { ColumnsType } from 'antd/es/table';
+import React from 'react';
+import credentialStyles from '../../../styles/credential.module.css';
+import { CredentialVariable } from '../../../xpanse-api/generated';
 
 function CredentialDetails({ credentialDetails }: { credentialDetails: CredentialVariable[] }): React.JSX.Element {
     const columns: ColumnsType<CredentialVariable> = [
@@ -25,7 +26,7 @@ function CredentialDetails({ credentialDetails }: { credentialDetails: Credentia
     ];
 
     return (
-        <div className={'credential-details'}>
+        <div className={credentialStyles.credentialDetails}>
             <Table columns={columns} dataSource={credentialDetails}></Table>
         </div>
     );

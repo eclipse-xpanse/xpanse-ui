@@ -3,16 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Card, Col, Divider, Row, Statistic } from 'antd';
-import '../../../../styles/dashboard.css';
-import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
-import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
-import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
+import React from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { DeployedService, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 import { catalogPageRoute, reportsRoute } from '../../../utils/constants';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import DashBoardError from '../common/DashBoardError';
+import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
+import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
 
 export function IsvServicesDashBoard(): React.JSX.Element {
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
@@ -92,7 +92,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         <>
             <Card title='Services Dashboard' bordered={true}>
                 <Row gutter={16} justify='start'>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getCatalogRedirectionUrl();
@@ -103,14 +103,14 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                                 value={registeredServicesCount}
                                 loading={listRegisteredServicesByIsvQuery.isLoading}
                                 valueStyle={{ color: '#3f8600', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
                 </Row>
                 <Divider />
                 <Row gutter={16} justify={'start'}>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([
@@ -124,11 +124,11 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                                 loading={listDeployedServicesByIsvQuery.isLoading}
                                 value={successfulDeploymentsCount}
                                 valueStyle={{ color: '#3f8600', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([
@@ -142,11 +142,11 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                                 value={failedDeploymentsCount}
                                 loading={listDeployedServicesByIsvQuery.isLoading}
                                 valueStyle={{ color: '#cf1322', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL]);
@@ -157,11 +157,11 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                                 loading={listDeployedServicesByIsvQuery.isLoading}
                                 value={successfulDestroysCount}
                                 valueStyle={{ color: '#3f8600', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_FAILED]);
@@ -172,7 +172,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                                 value={failedDestroysCount}
                                 loading={listDeployedServicesByIsvQuery.isLoading}
                                 valueStyle={{ color: '#cf1322', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>

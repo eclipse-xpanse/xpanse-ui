@@ -4,9 +4,10 @@
  */
 
 import { Alert, Button } from 'antd';
+import React from 'react';
+import catalogStyles from '../../../../../styles/catalog.module.css';
 import { Ocl } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-import React from 'react';
 
 function UpdateResult({
     ocl,
@@ -30,7 +31,7 @@ function UpdateResult({
                 }
                 closable={true}
                 onClose={onRemove}
-                className={'result'}
+                className={catalogStyles.catalogServiceUpdateResult}
                 description={convertStringArrayToUnorderedList(updateResult)}
             />
         );
@@ -43,7 +44,7 @@ function UpdateResult({
                 message={`Service Update Failed`}
                 description={convertStringArrayToUnorderedList(updateResult)}
                 onClose={onRemove}
-                className={'result'}
+                className={catalogStyles.catalogServiceUpdateResult}
                 action={
                     <Button size='small' type='primary' onClick={onRemove} danger={true}>
                         Try Again

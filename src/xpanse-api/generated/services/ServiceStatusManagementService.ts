@@ -7,10 +7,10 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { ServiceStateManagementTaskDetails } from '../models/ServiceStateManagementTaskDetails';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { ServiceStateManagementTaskDetails } from '../models/ServiceStateManagementTaskDetails';
 export class ServiceStatusManagementService {
     /**
      * Start a task to stop the service instance.<br>Required role:<b> admin</b> or <b>user</b>
@@ -85,7 +85,7 @@ export class ServiceStatusManagementService {
      * List state management tasks of the service.<br>Required role:<b> admin</b> or <b>user</b>
      * @param serviceId id of the service
      * @param taskType type of the management task
-     * @param taskStatus status of the management task
+     * @param taskStatus status of the task
      * @returns ServiceStateManagementTaskDetails OK
      * @throws ApiError
      */

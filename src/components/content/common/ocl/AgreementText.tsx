@@ -3,13 +3,18 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Button, Popover } from 'antd';
+import React from 'react';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 
 export function AgreementText({ eula }: { eula: string }): React.JSX.Element {
     return (
-        <Popover content={<pre className={'agreement-text'}>{eula}</pre>} title={'Eula'} trigger='hover'>
-            <Button className={'ocl-data-hover'} type={'link'}>
+        <Popover
+            content={<pre className={oclDisplayStyles.oclAgreementText}>{eula}</pre>}
+            title={'Eula'}
+            trigger='hover'
+        >
+            <Button className={oclDisplayStyles.oclDataHover} type={'link'}>
                 {'terms and conditions'}
             </Button>
         </Popover>

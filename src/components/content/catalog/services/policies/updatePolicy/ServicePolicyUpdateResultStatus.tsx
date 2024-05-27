@@ -5,8 +5,9 @@
 
 import { Alert } from 'antd';
 import React from 'react';
-import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
+import submitAlertStyles from '../../../../../../styles/submit-alert.module.css';
 import { ApiError, Response, ServicePolicy } from '../../../../../../xpanse-api/generated';
+import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 
 export default function ServicePolicyUpdateResultStatus({
     isError,
@@ -23,7 +24,7 @@ export default function ServicePolicyUpdateResultStatus({
         if (error instanceof ApiError && error.body && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={response.resultType.valueOf()}
@@ -36,7 +37,7 @@ export default function ServicePolicyUpdateResultStatus({
             );
         } else {
             return (
-                <div className={'submit-alert-tip'}>
+                <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
                         message={'Updating Policy Failed'}
@@ -54,7 +55,7 @@ export default function ServicePolicyUpdateResultStatus({
 
     if (isSuccess) {
         return (
-            <div className={'submit-alert-tip'}>
+            <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
                     message={'Policy Process Status'}

@@ -3,20 +3,22 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
+import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Image, Modal, Popconfirm, Popover, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import '../../../styles/policies.css';
-import useListPoliciesManagementServiceQuery from './useListPoliciesManagementServiceQuery';
-import { AbstractCredentialInfo, CloudServiceProvider, UserPolicy } from '../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
-import { CloseCircleOutlined, EditOutlined, PlusCircleOutlined, SyncOutlined } from '@ant-design/icons';
-import { AddOrUpdatePolicy } from './AddOrUpdatePolicy';
-import PolicyDeleteResultStatus from './delete/PolicyDeleteResultStatus';
-import { updateCspFilters, updateEnabledFilters } from './policiesParams';
-import { useDeletePolicyRequest } from './delete/useDeletePolicyRequest';
+import React, { useState } from 'react';
+import policyStyles from '../../../styles/policies.module.css';
+import tableButtonStyles from '../../../styles/table-buttons.module.css';
+import tableStyles from '../../../styles/table.module.css';
+import { AbstractCredentialInfo, CloudServiceProvider, UserPolicy } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
+import { AddOrUpdatePolicy } from './AddOrUpdatePolicy';
+import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
+import PolicyDeleteResultStatus from './delete/PolicyDeleteResultStatus';
+import { useDeletePolicyRequest } from './delete/useDeletePolicyRequest';
+import { updateCspFilters, updateEnabledFilters } from './policiesParams';
+import useListPoliciesManagementServiceQuery from './useListPoliciesManagementServiceQuery';
 
 function Policies(): React.JSX.Element {
     const [id, setId] = useState<string>('');
@@ -90,13 +92,13 @@ function Policies(): React.JSX.Element {
                         content={
                             <pre>
                                 {' '}
-                                <div className={'policy-content-hover'}>{record.policy.toString()}</div>
+                                <div className={policyStyles.policyContentHover}>{record.policy.toString()}</div>
                             </pre>
                         }
                         title={'Policy Content'}
                         trigger='hover'
                     >
-                        <Button className={'policy-data-hover'} type={'link'}>{`policy`}</Button>
+                        <Button className={policyStyles.policyDataHover} type={'link'}>{`policy`}</Button>
                     </Popover>
                 );
             },
@@ -196,7 +198,7 @@ function Policies(): React.JSX.Element {
 
     return (
         <>
-            <div className={'generic-table-container'}>
+            <div className={tableStyles.genericTableContainer}>
                 {deletePoliciesManagementServiceRequest.isSuccess && id.length > 0 ? (
                     <PolicyDeleteResultStatus
                         id={id}
@@ -206,8 +208,8 @@ function Policies(): React.JSX.Element {
                         getDeleteCloseStatus={getDeleteCloseStatus}
                     />
                 ) : null}
-                <div className={'policy-manage-buttons-container'}>
-                    <div className={'update-policy'}>
+                <div className={tableButtonStyles.tableManageButtons}>
+                    <div className={policyStyles.updatePolicy}>
                         <Button
                             type='primary'
                             onClick={refreshPoliciesManagementServiceList}
@@ -223,7 +225,7 @@ function Policies(): React.JSX.Element {
                         </Button>
                     </div>
 
-                    <div className={'add-policy'}>
+                    <div className={policyStyles.addPolicy}>
                         <Button
                             onClick={addPoliciesManagementService}
                             type='primary'

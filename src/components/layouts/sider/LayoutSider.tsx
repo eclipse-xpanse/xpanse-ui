@@ -4,10 +4,11 @@
  */
 
 import { Image, Layout, Menu } from 'antd';
+import { MenuInfo } from 'rc-menu/lib/interface';
 import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import appStyles from '../../../styles/app.module.css';
 import { catalogPageRoute, homePageRoute, servicesPageRoute } from '../../utils/constants';
-import { MenuInfo } from 'rc-menu/lib/interface';
 import { getMenuItems } from './menuItems';
 
 function LayoutSider(): React.JSX.Element {
@@ -54,7 +55,7 @@ function LayoutSider(): React.JSX.Element {
                 setIsBroken(broken);
             }}
         >
-            <div className={'logo'}>
+            <div className={appStyles.logo}>
                 <Link to={homePageRoute}>
                     <Image
                         width={collapsed ? 30 : 150}

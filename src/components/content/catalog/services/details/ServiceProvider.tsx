@@ -3,20 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useMemo } from 'react';
-import { Divider, Empty, Image, Tabs } from 'antd';
-import ServiceDetail from './ServiceDetail';
-import { CloudServiceProvider, DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { EnvironmentOutlined } from '@ant-design/icons';
+import { Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import UpdateService from '../update/UpdateService';
-import UnregisterService from '../unregister/UnregisterService';
-import {
-    groupServicesByCspForSpecificServiceNameAndVersion,
-    groupServicesByVersionForSpecificServiceName,
-} from '../../../common/catalog/catalogProps';
-import { cspMap } from '../../../common/csp/CspLogo';
-import { ServiceHostingOptions } from './ServiceHostingOptions';
+import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -24,9 +17,17 @@ import {
     serviceNameKeyQuery,
     serviceVersionKeyQuery,
 } from '../../../../utils/constants';
+import {
+    groupServicesByCspForSpecificServiceNameAndVersion,
+    groupServicesByVersionForSpecificServiceName,
+} from '../../../common/catalog/catalogProps';
+import { cspMap } from '../../../common/csp/CspLogo';
 import { ServicePolicies } from '../policies/ServicePolicies';
-import { EnvironmentOutlined } from '@ant-design/icons';
 import { UnregisterResult } from '../unregister/UnregisterResult';
+import UnregisterService from '../unregister/UnregisterService';
+import UpdateService from '../update/UpdateService';
+import ServiceDetail from './ServiceDetail';
+import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
 
 function ServiceProvider({
@@ -40,7 +41,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
-    category: DeployedService.category;
+    category: ServiceTemplateDetailVo.category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
@@ -185,9 +186,9 @@ function ServiceProvider({
                                 items={items}
                                 onChange={onChangeCsp}
                                 activeKey={serviceCspInQuery}
-                                className={'ant-tabs-tab-btn'}
+                                className={catalogStyles.antTabsTabBtn}
                             />
-                            <div className={'update-unregister-btn-class'}>
+                            <div className={catalogStyles.updateUnregisterBtnClass}>
                                 <UpdateService
                                     id={activeServiceDetail.id}
                                     category={category}
@@ -199,7 +200,7 @@ function ServiceProvider({
                                     setIsViewDisabled={setIsViewDisabled}
                                 />
                             </div>
-                            <h3 className={'catalog-details-h3'}>
+                            <h3 className={catalogStyles.catalogDetailsH3}>
                                 <EnvironmentOutlined />
                                 &nbsp;Service Hosting Options
                             </h3>
@@ -210,8 +211,6 @@ function ServiceProvider({
                                 updateServiceHostingType={onChangeServiceHostingType}
                             />
                             <ServiceDetail serviceDetails={activeServiceDetail} />
-
-                            <Divider />
                             <ServicePolicies
                                 key={activeServiceDetail.id}
                                 serviceDetails={activeServiceDetail}

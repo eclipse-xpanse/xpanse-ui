@@ -4,12 +4,11 @@
  */
 
 import { HomeOutlined } from '@ant-design/icons';
-import ServiceProvider from '../details/ServiceProvider';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { ServiceTree } from './ServiceTree';
 import { DataNode } from 'antd/es/tree';
-import { DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import catalogStyles from '../../../../../styles/catalog.module.css';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -18,6 +17,8 @@ import {
     serviceVersionKeyQuery,
 } from '../../../../utils/constants';
 import { getAllKeysFromCatalogTree } from '../../../common/catalog/catalogProps';
+import ServiceProvider from '../details/ServiceProvider';
+import { ServiceTree } from './ServiceTree';
 
 export function CatalogFullView({
     treeData,
@@ -26,7 +27,7 @@ export function CatalogFullView({
 }: {
     treeData: DataNode[];
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
-    category: DeployedService.category;
+    category: ServiceTemplateDetailVo.category;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceNameInQuery = useMemo(() => {
@@ -103,8 +104,8 @@ export function CatalogFullView({
 
     return (
         <>
-            <div className={'left-class'}>
-                <div className={'left-title-class'}>
+            <div className={catalogStyles.leftClass}>
+                <div className={catalogStyles.leftTitleClass}>
                     <HomeOutlined />
                     &nbsp;Service Tree
                 </div>
@@ -115,9 +116,9 @@ export function CatalogFullView({
                     isViewDisabled={isViewDisabled}
                 />
             </div>
-            <div className={'middle-class'} />
-            <div className={'right-class'}>
-                <div className={'left-title-class'}>Cloud Provider</div>
+            <div className={catalogStyles.middleClass} />
+            <div className={catalogStyles.rightClass}>
+                <div className={catalogStyles.leftTitleClass}>Cloud Provider</div>
                 <ServiceProvider
                     categoryOclData={categoryOclData}
                     selectedServiceNameInTree={selectKey.toString().split('@')[0]}

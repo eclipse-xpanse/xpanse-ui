@@ -3,8 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Switch as AntdSwitch } from 'antd';
+import { Switch as AntdSwitch, Form } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 
@@ -15,9 +16,9 @@ export function BooleanInput({ item }: { item: DeployParam }): React.JSX.Element
     };
 
     return (
-        <div className={'order-param-item-row'}>
-            <div className={'order-param-item-left'} />
-            <div className={'order-param-item-content'}>
+        <div className={serviceOrderStyles.orderParamItemRow}>
+            <div className={serviceOrderStyles.orderParamItemLeft} />
+            <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item
                     name={item.name}
                     label={item.name + ':  (' + item.description + ')'}
@@ -27,7 +28,7 @@ export function BooleanInput({ item }: { item: DeployParam }): React.JSX.Element
                     <AntdSwitch onChange={booleanHandler} defaultChecked={false} />
                 </Form.Item>
             </div>
-            <div className={'order-param-item-right'} />
+            <div className={serviceOrderStyles.orderParamItemRight} />
         </div>
     );
 }

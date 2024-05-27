@@ -5,11 +5,11 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { Metric, MonitorService } from '../../../xpanse-api/generated';
-import { getMetricRequestParams, getTotalSecondsOfTimePeriod } from './metricProps';
 import {
     fetchMonitorMetricDataTimeInterval,
     fetchOnlyLastKnownMonitorMetricDataTimeInterval,
 } from '../../utils/constants';
+import { getMetricRequestParams, getTotalSecondsOfTimePeriod } from './metricProps';
 
 const onlyLastKnownMetricQueryFn = (serviceId: string, metricType: Metric.monitorResourceType) =>
     MonitorService.getMetrics(serviceId, undefined, metricType, undefined, undefined, undefined, true);

@@ -3,13 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
-import { ColumnsType } from 'antd/es/table';
-import AddCredential from './AddCredential';
-import UpdateCredential from './UpdateCredential';
-import { CredentialTip } from './CredentialTip';
-import CredentialDetails from './CredentialDetails';
-import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import {
     FullscreenOutlined,
     InfoCircleOutlined,
@@ -17,6 +10,13 @@ import {
     PlusCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
+import { v4 } from 'uuid';
+import tableButtonStyles from '../../../styles/table-buttons.module.css';
+import tableStyles from '../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
     ApiError,
@@ -26,11 +26,13 @@ import {
     Response,
     UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
-import { useMutation } from '@tanstack/react-query';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
+import AddCredential from './AddCredential';
+import CredentialDetails from './CredentialDetails';
+import { CredentialTip } from './CredentialTip';
+import UpdateCredential from './UpdateCredential';
 import useCredentialsListQuery from './query/queryCredentialsList';
-import { v4 } from 'uuid';
 
 function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -221,7 +223,7 @@ function Credentials(): React.JSX.Element {
     };
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tableStyles.genericTableContainer}>
             <CredentialTip key={v4().toString()} type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
             <div>
                 {/* this condition will unmount and mount the modal completely. So that the old values are not retained. */}
@@ -272,7 +274,7 @@ function Credentials(): React.JSX.Element {
                 </Modal>
             </div>
             <div>
-                <div className={'policy-manage-buttons-container'}>
+                <div className={tableButtonStyles.tableManageButtons}>
                     <Button
                         type='primary'
                         loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}

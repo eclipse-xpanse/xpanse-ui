@@ -3,12 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactsOutlined, GlobalOutlined, MailOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
 import { Button, Popover, Typography } from 'antd';
 import React from 'react';
-import { ContactsOutlined, GlobalOutlined, MailOutlined, MessageOutlined, PhoneOutlined } from '@ant-design/icons';
-import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { v4 as uuidv4 } from 'uuid';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
+import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
+import { ContactDetailsShowType } from './ContactDetailsShowType';
 
 export function ContactDetailsText({
     serviceProviderContactDetails,
@@ -23,7 +24,7 @@ export function ContactDetailsText({
             title={'Contact Details'}
             trigger='hover'
         >
-            <Button className={'ocl-data-hover'} type={'link'}>
+            <Button className={oclDisplayStyles.oclDataHover} type={'link'}>
                 <ContactsOutlined />
                 {showFor === ContactDetailsShowType.Order ? ' Contact Service Vendor ' : ' support '}
             </Button>
@@ -36,7 +37,7 @@ function convertRecordToList(serviceProviderContactDetails: ServiceProviderConta
     if (serviceProviderContactDetails.email) {
         content.push(
             <React.Fragment key={uuidv4()}>
-                <div className={'ocl-contact-details-class'}>
+                <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <MailOutlined />
                     {getEmailPropertyValue(serviceProviderContactDetails.email)}
                 </div>
@@ -46,7 +47,7 @@ function convertRecordToList(serviceProviderContactDetails: ServiceProviderConta
     if (serviceProviderContactDetails.phone) {
         content.push(
             <React.Fragment key={uuidv4()}>
-                <div className={'ocl-contact-details-class'}>
+                <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <PhoneOutlined />
                     {getPhonePropertyValue(serviceProviderContactDetails.phone)}
                 </div>
@@ -56,7 +57,7 @@ function convertRecordToList(serviceProviderContactDetails: ServiceProviderConta
     if (serviceProviderContactDetails.chat) {
         content.push(
             <React.Fragment key={uuidv4()}>
-                <div className={'ocl-contact-details-class'}>
+                <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <MessageOutlined />
                     {getPropertyValue(serviceProviderContactDetails.chat)}
                 </div>
@@ -66,7 +67,7 @@ function convertRecordToList(serviceProviderContactDetails: ServiceProviderConta
     if (serviceProviderContactDetails.website) {
         content.push(
             <React.Fragment key={uuidv4()}>
-                <div className={'ocl-contact-details-class'}>
+                <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <GlobalOutlined />
                     {getPropertyValue(serviceProviderContactDetails.website)}
                 </div>

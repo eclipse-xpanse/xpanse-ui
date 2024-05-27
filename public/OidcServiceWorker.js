@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 const scriptFilename = "OidcTrustedDomains.js";
 const acceptAnyDomainToken = "*";
 const TOKEN = {
@@ -291,7 +286,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.19.6";
+const version = "7.22.6";
 function strToUint8(str) {
   return new TextEncoder().encode(str);
 }
@@ -447,6 +442,15 @@ const getDpopConfiguration = (trustedDomain) => {
   }
   return trustedDomain.demonstratingProofOfPossessionConfiguration ?? defaultDemonstratingProofOfPossessionConfiguration;
 };
+const getDpopOnlyWhenDpopHeaderPresent = (trustedDomain) => {
+  if (!isDpop(trustedDomain)) {
+    return null;
+  }
+  if (Array.isArray(trustedDomain)) {
+    return null;
+  }
+  return trustedDomain.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent ?? true;
+};
 function textEncodeLite(str) {
   const buf = new ArrayBuffer(str.length);
   const bufView = new Uint8Array(buf);
@@ -517,7 +521,7 @@ const keepAliveAsync = async (event) => {
 };
 async function generateDpopAsync(originalRequest, currentDatabase, url, extrasClaims = {}) {
   const headersExtras = serializeHeaders(originalRequest.headers);
-  if (currentDatabase && currentDatabase.demonstratingProofOfPossessionConfiguration && currentDatabase.demonstratingProofOfPossessionJwkJson) {
+  if (currentDatabase && currentDatabase.demonstratingProofOfPossessionConfiguration && currentDatabase.demonstratingProofOfPossessionJwkJson && (!currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent || currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent && headersExtras["dpop"])) {
     const dpopConfiguration = currentDatabase.demonstratingProofOfPossessionConfiguration;
     const jwk = currentDatabase.demonstratingProofOfPossessionJwkJson;
     headersExtras["dpop"] = await generateJwtDemonstratingProofOfPossessionAsync(self)(dpopConfiguration)(jwk, "POST", url, extrasClaims);
@@ -722,7 +726,8 @@ const handleMessage = async (event) => {
       convertAllRequestsToCorsExceptNavigate: convertAllRequestsToCorsExceptNavigate ?? false,
       demonstratingProofOfPossessionNonce: null,
       demonstratingProofOfPossessionJwkJson: null,
-      demonstratingProofOfPossessionConfiguration: null
+      demonstratingProofOfPossessionConfiguration: null,
+      demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent: false
     };
     currentDatabase = database[configurationName];
     if (!trustedDomains[configurationName]) {
@@ -737,6 +742,7 @@ const handleMessage = async (event) => {
       currentDatabase.demonstratingProofOfPossessionNonce = null;
       currentDatabase.demonstratingProofOfPossessionJwkJson = null;
       currentDatabase.demonstratingProofOfPossessionConfiguration = null;
+      currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent = false;
       currentDatabase.status = data.data.status;
       port.postMessage({ configurationName });
       return;
@@ -764,6 +770,7 @@ const handleMessage = async (event) => {
           }
           currentDatabase.demonstratingProofOfPossessionConfiguration = demonstratingProofOfPossessionConfiguration;
           currentDatabase.demonstratingProofOfPossessionJwkJson = await generateJwkAsync(self)(demonstratingProofOfPossessionConfiguration.generateKeyAlgorithm);
+          currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent = getDpopOnlyWhenDpopHeaderPresent(trustedDomains[configurationName]) ?? false;
         }
       }
       if (!currentDatabase.tokens) {

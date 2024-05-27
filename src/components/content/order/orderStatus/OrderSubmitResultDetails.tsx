@@ -3,27 +3,28 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Typography } from 'antd';
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { Typography } from 'antd';
 import React from 'react';
-import { myServicesRoute } from '../../../utils/constants';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import submitResultStyles from '../../../../styles/submit-result.module.css';
+import { myServicesRoute } from '../../../utils/constants';
 
 function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Element; uuid: string }): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
     return (
         <div>
-            <div className={'service-instance-detail-position'}>
+            <div className={submitResultStyles.resultContainer}>
                 Service ID:&nbsp;
                 <Paragraph
-                    className={'service-instance-Paragraph'}
+                    className={submitResultStyles.resultMainDetails}
                     copyable={{
                         text: String(uuid),
                         icon: [
-                            <CopyOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
-                            <CheckOutlined className={'show-details-typography-copy'} key={uuidv4()} />,
+                            <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
+                            <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                         ],
                     }}
                 >
@@ -36,7 +37,7 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                                 }).toString(),
                             });
                         }}
-                        className={'show-details-typography-copy-info'}
+                        className={submitResultStyles.showDetailsTypographyCopyInfo}
                     >
                         {uuid}
                     </span>

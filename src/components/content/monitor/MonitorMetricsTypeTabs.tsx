@@ -5,8 +5,8 @@
 
 import { Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { MonitorTypeList } from './metricProps';
 import { Metric } from '../../../xpanse-api/generated';
+import { MonitorTypeList } from './metricProps';
 
 export const MonitorMetricsTypeTabs = ({
     setActiveMonitorMetricType,

@@ -3,8 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
+import submitResultStyles from '../../../../styles/submit-result.module.css';
+import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
@@ -27,7 +28,7 @@ export const ProcessingStatus = ({
                 return (
                     <>
                         <span>{'Deployment Successful'}</span>
-                        <div className={'service-instance-detail-position'}>
+                        <div className={submitResultStyles.resultContainer}>
                             {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                         </div>
                     </>
@@ -58,7 +59,7 @@ export const ProcessingStatus = ({
                 return (
                     <>
                         <span>{'Modification Successful'}</span>
-                        <div className={'service-instance-detail-position'}>
+                        <div className={submitResultStyles.resultContainer}>
                             {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                         </div>
                     </>

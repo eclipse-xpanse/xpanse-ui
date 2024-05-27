@@ -3,8 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../../../../xpanse-api/generated';
 import React from 'react';
+import myServicesStyles from '../../../../styles/my-services.module.css';
+import { DeployedServiceDetails, VendorHostedDeployedServiceDetails } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 
 export function MigrationProcessingStatus({
@@ -25,7 +26,7 @@ export function MigrationProcessingStatus({
             return (
                 <>
                     <span>{'Deployment Successful'}</span>
-                    <div className={'service-instance-detail-position'}>
+                    <div className={myServicesStyles.serviceInstanceDetailPosition}>
                         {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                     </div>
                 </>

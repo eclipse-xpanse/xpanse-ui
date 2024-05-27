@@ -3,14 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
-import '../../../../styles/dashboard.css';
 import { Card, Skeleton } from 'antd';
+import React from 'react';
+import dashboardStyles from '../../../../styles/dashboard.module.css';
 
 export function DashBoardSkeleton(): React.JSX.Element {
     return (
         <Card title='Services Dashboard' bordered={true}>
-            <Skeleton avatar={false} active={true} paragraph={{ rows: 1 }} className={'dashboard-pending'} />
+            <Skeleton
+                avatar={false}
+                active={true}
+                paragraph={{ rows: 1 }}
+                className={dashboardStyles.dashboardPending}
+            />
         </Card>
     );
 }

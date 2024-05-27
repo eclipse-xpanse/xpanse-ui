@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Button, Result } from 'antd';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { homePageRoute } from '../utils/constants';
 

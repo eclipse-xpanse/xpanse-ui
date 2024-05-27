@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Flex, Form, Radio } from 'antd';
-import '../../../../styles/service_order.css';
+import React from 'react';
+import '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 
 export const MigrateServiceSubmitAvailabilityZoneInfo = ({

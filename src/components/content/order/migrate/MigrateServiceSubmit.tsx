@@ -4,36 +4,38 @@
  */
 
 import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
+import React, { useState } from 'react';
+import appStyles from '../../../../styles/app.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     CloudServiceProvider,
-    DeployedService,
     DeployRequest,
+    DeployedService,
     MigrateRequest,
     Region,
     ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { Tab } from 'rc-tabs/lib/interface';
-import React, { useState } from 'react';
-import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import { cspMap } from '../../common/csp/CspLogo';
-import { Flavor } from '../types/Flavor';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
-import { MigrationSteps } from '../types/MigrationSteps';
-import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { BillingInfo } from '../common/BillingInfo';
-import { RegionInfo } from '../common/RegionInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
+import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
+import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
+import { RegionInfo } from '../common/RegionInfo';
+import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import { Flavor } from '../types/Flavor';
+import { MigrationSteps } from '../types/MigrationSteps';
+import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import {
     useMigrateServiceDetailsPollingQuery,
     useMigrateServiceQuery,
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
-import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import migrationStatus = ServiceMigrationDetails.migrationStatus;
-import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -142,9 +144,9 @@ export const MigrateServiceSubmit = ({
                 />
             ) : null}
             <Form layout='vertical' initialValues={{ region, selectFlavor }}>
-                <div className={'cloud-provider-tab-class'}>Cloud Service Provider:</div>
-                <div className={'services-content-body'}>
-                    <div className={'cloud-provider-select-hover'}>
+                <div className={serviceOrderStyles.orderFormSelectionStyle}>Cloud Service Provider:</div>
+                <div className={serviceOrderStyles.servicesContentBody}>
+                    <div className={serviceOrderStyles.cloudProviderSelectHover}>
                         <Image
                             width={200}
                             height={56}
@@ -157,7 +159,7 @@ export const MigrateServiceSubmit = ({
                                 '-gray'
                             }
                         />
-                        <div className='service-type-option-info' />
+                        <div className={serviceOrderStyles.serviceTypeOptionInfo} />
                     </div>
                 </div>
                 <br />
@@ -168,7 +170,7 @@ export const MigrateServiceSubmit = ({
                 ></ServiceHostingSelection>
                 <br />
                 <br />
-                <div className={'cloud-provider-tab-class content-title'}>
+                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
                     <Tabs type='card' size='middle' activeKey={region.area} tabPosition={'top'} items={areaList} />
                 </div>
                 <RegionInfo selectRegion={region.name} disabled={true} />
@@ -184,11 +186,10 @@ export const MigrateServiceSubmit = ({
                 <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
                 <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
                 <BillingInfo priceValue={priceValue} />
-                <div className={'migrate-step-button-inner-class'}>
+                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button
                             type='primary'
-                            className={'migrate-steps-operation-button-clas'}
                             onClick={() => {
                                 prev();
                             }}
@@ -205,7 +206,6 @@ export const MigrateServiceSubmit = ({
                         >
                             <Button
                                 type='primary'
-                                className={'migrate-steps-operation-button-clas'}
                                 loading={stepItem.status === 'process'}
                                 disabled={stepItem.status === 'finish' || stepItem.status === 'process'}
                             >

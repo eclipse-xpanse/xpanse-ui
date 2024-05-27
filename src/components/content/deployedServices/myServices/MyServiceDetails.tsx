@@ -3,16 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import '../../../../styles/app.css';
+import React from 'react';
+import '../../../../styles/app.module.css';
 import {
     DeployedService,
     DeployedServiceDetails,
     DeployResource,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import React from 'react';
-import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
+import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 
 export const MyServiceDetails = ({
     deployedService,

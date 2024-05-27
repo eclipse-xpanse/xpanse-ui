@@ -7,12 +7,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { Ocl } from '../models/Ocl';
-import type { Response } from '../models/Response';
-import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { Ocl } from '../models/Ocl';
+import type { Response } from '../models/Response';
+import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
 export class ServiceVendorService {
     /**
      * Get service template using id.<br>Required role:<b> admin</b> or <b>isv</b>

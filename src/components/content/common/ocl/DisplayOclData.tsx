@@ -3,16 +3,17 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
-import { Ocl } from '../../../../xpanse-api/generated';
 import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
-import { DeploymentText } from './DeploymentText';
-import { BillingText } from './BillingText';
+import React from 'react';
+import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
+import { Ocl } from '../../../../xpanse-api/generated';
 import { cspMap } from '../csp/CspLogo';
-import { ContactDetailsText } from './ContactDetailsText';
-import { ContactDetailsShowType } from './ContactDetailsShowType';
-import { FlavorsText } from './FlavorsText';
 import { AgreementText } from './AgreementText';
+import { BillingText } from './BillingText';
+import { ContactDetailsShowType } from './ContactDetailsShowType';
+import { ContactDetailsText } from './ContactDetailsText';
+import { DeploymentText } from './DeploymentText';
+import { FlavorsText } from './FlavorsText';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -20,8 +21,8 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     try {
         return (
             <>
-                <div className={'ocl-data-display'}>
-                    <div className={'ocl-data-main-info'}>
+                <div className={oclDisplayStyles.oclDataDisplay}>
+                    <div className={oclDisplayStyles.oclDataMainInfo}>
                         <div>
                             {
                                 <Image
@@ -41,17 +42,18 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <b>Service Name</b>
                                 <br />
                                 <Tooltip placement='topLeft' title={ocl.name}>
-                                    <Paragraph ellipsis={true} className={'ocl-data-display-service-register-name'}>
+                                    <Paragraph
+                                        ellipsis={true}
+                                        className={oclDisplayStyles.oclDataDisplayServiceRegisterName}
+                                    >
                                         {ocl.name}
                                     </Paragraph>
                                 </Tooltip>
-                                <br />
-                                <br />
                             </div>
                             <div>
                                 <b>Cloud Service Provider</b>
                                 <br />
-                                <div className={'ocl-display-tag'}>
+                                <div className={oclDisplayStyles.oclDisplayTag}>
                                     <Image
                                         width={120}
                                         preview={false}
@@ -64,7 +66,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <b>Available Regions</b>
                                 <br />
                                 {ocl.cloudServiceProvider.regions.map((region) => (
-                                    <Tag className={'ocl-display-tag'} color='orange' key={region.name}>
+                                    <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
                                         {region.area ? `${region.area}: ${region.name}` : region.name}
                                     </Tag>
                                 ))}
@@ -74,7 +76,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <div>
                                 <b>Service Hosted By</b>
                                 <br />
-                                <Tag className={'ocl-display-tag'} color='red'>
+                                <Tag className={oclDisplayStyles.oclDisplayTag} color='red'>
                                     {ocl.serviceHostingType.toString()}
                                 </Tag>
                                 <br />
@@ -83,7 +85,12 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                         </div>
                     </div>
                     <div>
-                        <Descriptions title={'Basic Information'} column={2} bordered className={'ocl-data-info-table'}>
+                        <Descriptions
+                            title={'Basic Information'}
+                            column={2}
+                            bordered
+                            className={oclDisplayStyles.oclDataInfoTable}
+                        >
                             <Descriptions.Item label='Category'>
                                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                                 {ocl.category ? ocl.category : PLACE_HOLDER_UNKNOWN_VALUE}

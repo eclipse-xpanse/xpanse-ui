@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceLockConfig, ServiceService } from '../../../../xpanse-api/generated';
 import { useMutation, useMutationState } from '@tanstack/react-query';
+import { ServiceLockConfig, ServiceService } from '../../../../xpanse-api/generated';
 
 const lockKey: string = 'lock';
 

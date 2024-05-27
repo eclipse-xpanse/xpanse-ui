@@ -3,8 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AutoFill, CloudResourcesService, DeployRequest } from '../../../../xpanse-api/generated';
 import { useQuery } from '@tanstack/react-query';
+import { AutoFill, CloudResourcesService, DeployRequest } from '../../../../xpanse-api/generated';
 
 export default function useAutoFillDeployVariableQuery(
     csp: DeployRequest.csp,

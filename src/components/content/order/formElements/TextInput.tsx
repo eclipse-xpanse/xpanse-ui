@@ -3,15 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone, InfoCircleOutlined } from '@ant-design/icons';
-import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
-import React, { ChangeEvent, useState } from 'react';
+import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
+import React, { ChangeEvent, useState } from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
+import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
-import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 
 export function TextInput({
     item,
@@ -71,9 +72,9 @@ export function TextInput({
     }
 
     return (
-        <div className={'order-param-item-row'}>
-            <div className={'order-param-item-left'} />
-            <div className={'order-param-item-content'}>
+        <div className={serviceOrderStyles.orderParamItemRow}>
+            <div className={serviceOrderStyles.orderParamItemLeft} />
+            <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item name={item.name} label={item.name + ' :  ' + item.description} rules={ruleItems}>
                     {item.sensitiveScope === DeployVariable.sensitiveScope.ALWAYS ||
                     item.sensitiveScope === DeployVariable.sensitiveScope.ONCE ? (
@@ -86,7 +87,11 @@ export function TextInput({
                     ) : isEnum ? (
                         <Select onChange={getEventEventHandler} size='large'>
                             {valueList.map((value) => (
-                                <Select.Option key={value} value={value} className={'order-deploy-select-option'}>
+                                <Select.Option
+                                    key={value}
+                                    value={value}
+                                    className={serviceOrderStyles.orderDeploySelectOption}
+                                >
                                     {value}
                                 </Select.Option>
                             ))}
@@ -117,7 +122,7 @@ export function TextInput({
                                             <Select.Option
                                                 key={variableName}
                                                 value={variableName}
-                                                className={'order-deploy-select-option'}
+                                                className={serviceOrderStyles.orderDeploySelectOption}
                                             >
                                                 {variableName}
                                             </Select.Option>
@@ -160,7 +165,7 @@ export function TextInput({
                                 <Select.Option
                                     key={variableName}
                                     value={variableName}
-                                    className={'order-deploy-select-option'}
+                                    className={serviceOrderStyles.orderDeploySelectOption}
                                 >
                                     {variableName}
                                 </Select.Option>
@@ -169,7 +174,7 @@ export function TextInput({
                     )}
                 </Form.Item>
             </div>
-            <div className={'order-param-item-right'} />
+            <div className={serviceOrderStyles.orderParamItemRight} />
         </div>
     );
 }

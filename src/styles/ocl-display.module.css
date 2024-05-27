@@ -1,0 +1,75 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.ocl-data-display {
+    margin-right: 10em;
+    margin-left: 10em;
+}
+
+.ocl-data-main-info {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.ocl-data-info-table {
+    width: auto;
+    margin-top: 10px;
+    overflow-x: auto;
+}
+.ocl-data-display-service-review-name {
+    width: 400px;
+    margin-top: 15px;
+}
+
+.ocl-data-display-service-register-name {
+    width: 800px;
+    margin-top: 15px;
+}
+.ocl-data-display-default-billing-mode {
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 10px;
+    margin-top: -12px;
+    transform: translateX(-20%);
+}
+.ocl-data-display-default-billing-mode-tag {
+    margin-top: 8px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ocl-display-tag {
+    margin-top: 10px;
+}
+
+.ocl-data-hover {
+    padding: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.ocl-contact-details-class {
+    display: flex;
+    align-items: center;
+}
+
+.ocl-agreement-text {
+    max-height: 40vh;
+    position: relative;
+    overflow: auto;
+    max-width: 60vh;
+}
+
+.ocl-deployment-script {
+    max-height: 30vh;
+    position: relative;
+    overflow: auto;
+    max-width: 50vh;
+}

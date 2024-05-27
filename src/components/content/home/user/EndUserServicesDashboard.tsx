@@ -3,12 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React from 'react';
 import { Card, Col, Row, Statistic } from 'antd';
-import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
-import { myServicesRoute } from '../../../utils/constants';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
+import dashboardStyles from '../../../../styles/dashboard.module.css';
+import { DeployedService } from '../../../../xpanse-api/generated';
+import { myServicesRoute } from '../../../utils/constants';
+import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 import serviceDeploymentState = DeployedService.serviceDeploymentState;
@@ -65,7 +66,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
         <>
             <Card title='Services Dashboard' bordered={true}>
                 <Row gutter={16} justify={'start'}>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([
@@ -79,11 +80,11 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                                 loading={listDeployedServicesQuery.isLoading}
                                 value={successfulDeploymentsCount}
                                 valueStyle={{ color: '#3f8600', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([
@@ -97,11 +98,11 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                                 value={failedDeploymentsCount}
                                 loading={listDeployedServicesQuery.isLoading}
                                 valueStyle={{ color: '#cf1322', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_SUCCESSFUL]);
@@ -112,11 +113,11 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                                 loading={listDeployedServicesQuery.isLoading}
                                 value={successfulDestroysCount}
                                 valueStyle={{ color: '#3f8600', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>
-                    <Col span={12} className={'dashboard-container-class'}>
+                    <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_FAILED]);
@@ -127,7 +128,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                                 value={failedDestroysCount}
                                 loading={listDeployedServicesQuery.isLoading}
                                 valueStyle={{ color: '#cf1322', textAlign: 'center' }}
-                                className={'clickable-dashboard-links'}
+                                className={dashboardStyles.clickableDashboardLinks}
                             />
                         </div>
                     </Col>

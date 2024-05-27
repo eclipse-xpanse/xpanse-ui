@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { Dispatch, SetStateAction } from 'react';
 import { Checkbox, Form, Space } from 'antd';
-import '../../../../styles/service_order.css';
-import { AgreementText } from '../../common/ocl/AgreementText';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import React, { Dispatch, SetStateAction } from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import { AgreementText } from '../../common/ocl/AgreementText';
 
 export const EulaInfo = ({
     eula,
@@ -25,10 +25,11 @@ export const EulaInfo = ({
     return (
         <>
             {eula && eula.length > 0 ? (
-                <div className={'cloud-provider-tab-class region-flavor-content'}>
+                <div className={serviceOrderStyles.orderFormSelectionStyle}>
                     <Form.Item
                         name='Terms and Conditions'
                         label='Terms and Conditions'
+                        required={true}
                         rules={[{ required: true, message: 'Eula needs to be accepted' }]}
                     >
                         <Space wrap>

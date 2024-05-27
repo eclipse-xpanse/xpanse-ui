@@ -4,20 +4,22 @@
  */
 
 import { Button, Form, Radio, RadioChangeEvent, Space, StepProps } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction } from 'react';
-import { MigrationSteps } from '../types/MigrationSteps';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployedServiceDetails,
     MigrateRequest,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { Tab } from 'rc-tabs/lib/interface';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
-import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
-import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
+import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
+import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { MigrationSteps } from '../types/MigrationSteps';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+
 export const SelectMigrationTarget = ({
     target,
     setTarget,
@@ -154,9 +156,9 @@ export const SelectMigrationTarget = ({
         <>
             <>
                 <Form form={form} layout='vertical' autoComplete='off' onFinish={next} validateTrigger={['next']}>
-                    <div className={'order-select-migrate-target'}>
-                        <div className={'order-param-item-left'} />
-                        <div className={'order-param-item-content'}>
+                    <div className={serviceOrderStyles.orderSelectMigrateTarget}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <div className={serviceOrderStyles.orderParamItemContent}>
                             <Form.Item
                                 name='Choose the migration Destination'
                                 label='Choose the migration Destination'
@@ -181,18 +183,17 @@ export const SelectMigrationTarget = ({
                             </Form.Item>
                         </div>
                     </div>
-                    <div className={'migrate-step-button-inner-class'}>
+                    <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                         <Space size={'large'}>
                             <Button
                                 type='primary'
-                                className={'migrate-steps-operation-button-clas'}
                                 onClick={() => {
                                     prev();
                                 }}
                             >
                                 Previous
                             </Button>
-                            <Button type='primary' className={'migrate-steps-operation-button-clas'} htmlType='submit'>
+                            <Button type='primary' htmlType='submit'>
                                 Next
                             </Button>
                         </Space>

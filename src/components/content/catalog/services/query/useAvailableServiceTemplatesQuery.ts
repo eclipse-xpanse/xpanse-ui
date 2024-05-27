@@ -4,9 +4,9 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceVendorService, DeployedService } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, ServiceVendorService } from '../../../../../xpanse-api/generated';
 
-export function useAvailableServiceTemplatesQuery(category: DeployedService.category) {
+export function useAvailableServiceTemplatesQuery(category: ServiceTemplateDetailVo.category) {
     return useQuery({
         queryKey: getQueryKey(category),
         queryFn: () => ServiceVendorService.listServiceTemplates(category),
@@ -14,6 +14,6 @@ export function useAvailableServiceTemplatesQuery(category: DeployedService.cate
     });
 }
 
-export function getQueryKey(category: DeployedService.category): string[] {
+export function getQueryKey(category: ServiceTemplateDetailVo.category): string[] {
     return ['catalog', category];
 }

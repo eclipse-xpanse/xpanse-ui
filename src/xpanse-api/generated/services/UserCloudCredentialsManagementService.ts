@@ -7,11 +7,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
-import type { CreateCredential } from '../models/CreateCredential';
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
+import type { AbstractCredentialInfo } from '../models/AbstractCredentialInfo';
+import type { CreateCredential } from '../models/CreateCredential';
 export class UserCloudCredentialsManagementService {
     /**
      * List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>

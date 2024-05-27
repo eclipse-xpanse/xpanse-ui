@@ -3,15 +3,17 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
+import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import React, { useState } from 'react';
+import tableButtonStyles from '../../../styles/table-buttons.module.css';
+import tableStyles from '../../../styles/table.module.css';
 import { ApiError, Response, WorkFlowTask } from '../../../xpanse-api/generated';
-import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
-import { useMutation } from '@tanstack/react-query';
-import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
 
 function Workflows(): React.JSX.Element {
     const [tipMessage, setTipMessage] = useState<string>('');
@@ -166,9 +168,9 @@ function Workflows(): React.JSX.Element {
     ];
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tableStyles.genericTableContainer}>
             <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>
-            <div className={'policy-manage-buttons-container'}>
+            <div className={tableButtonStyles.tableManageButtons}>
                 <Button
                     type='primary'
                     loading={isRefresh && (tasksQuery.isLoading || tasksQuery.isRefetching)}

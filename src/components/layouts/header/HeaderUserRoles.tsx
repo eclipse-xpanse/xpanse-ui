@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UserOutlined } from '@ant-design/icons';
+import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
 import React from 'react';
-import { UserOutlined } from '@ant-design/icons';
-import { homePageRoute } from '../../utils/constants';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Logout from '../../content/login/Logout';
 import { allowRoleList, getRolesOfUser, getUserName } from '../../oidc/OidcConfig';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
+import { homePageRoute } from '../../utils/constants';
 import { useCurrentUserRoleStore } from './useCurrentRoleStore';
 
 type MenuItem = Required<MenuProps>['items'][number];

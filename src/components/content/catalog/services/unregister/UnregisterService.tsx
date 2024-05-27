@@ -3,9 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import catalogStyles from '../../../../../styles/catalog.module.css';
 import { useUnregisterRequest } from './UnregisterMutation';
 
 function UnregisterService({
@@ -23,7 +24,7 @@ function UnregisterService({
     };
 
     return (
-        <div className={'update-unregister-btn-class'}>
+        <div className={catalogStyles.updateUnregisterBtnClass}>
             <Popconfirm
                 title='Unregister the service'
                 description='Are you sure to unregister this service?'
@@ -36,7 +37,7 @@ function UnregisterService({
                 <Button
                     icon={<CloseCircleOutlined />}
                     type='primary'
-                    className={'catalog-update-btn-class'}
+                    className={catalogStyles.catalogManageBtnClass}
                     disabled={unregisterRequest.isSuccess}
                 >
                     Unregister

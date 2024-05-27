@@ -3,22 +3,23 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import React, { useState } from 'react';
+import { InfoCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Image, Modal, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { InfoCircleOutlined, SyncOutlined } from '@ant-design/icons';
-import '../../../../styles/my_services.css';
-import { sortVersionNum } from '../../../utils/Sort';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useOrderFormStore } from '../../order/store/OrderFormStore';
+import myServicesStyle from '../../../../styles/my-services.module.css';
+import tablesStyle from '../../../../styles/table.module.css';
+import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
+import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
-import useListDeployedServicesByIsvQuery from '../myServices/query/useListDeployedServiceByIsvQuery';
+import { useOrderFormStore } from '../../order/store/OrderFormStore';
 import DeployedServicesError from '../common/DeployedServicesError';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
+import useListDeployedServicesByIsvQuery from '../myServices/query/useListDeployedServiceByIsvQuery';
 import { ReportsServiceDetails } from './ReportsServiceDetails';
 
 function Reports(): React.JSX.Element {
@@ -371,7 +372,7 @@ function Reports(): React.JSX.Element {
     }
 
     return (
-        <div className={'generic-table-container'}>
+        <div className={tablesStyle.genericTableContainer}>
             <Modal
                 title={'Service Details'}
                 width={1000}
@@ -399,7 +400,7 @@ function Reports(): React.JSX.Element {
                 <></>
             )}
             <Row>
-                <div className={'service-instance-list'}>
+                <div className={myServicesStyle.serviceInstanceList}>
                     <Table
                         columns={columns}
                         dataSource={deployedServiceList}

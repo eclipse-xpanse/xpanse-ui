@@ -3,7 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { ItemType } from 'antd/es/menu/interface';
+import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
+import registerPanelMenu from '../../content/register/registerPanelMenu';
+import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 import {
     credentialMenu,
     healthCheckMenu,
@@ -15,10 +19,6 @@ import {
     servicesMenu,
     workflowsMenu,
 } from './servicesMenu';
-import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
-import { ItemType } from 'antd/es/menu/hooks/useItems';
-import registerPanelMenu from '../../content/register/registerPanelMenu';
-import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 
 export function getMenuItems(): ItemType[] {
     const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));

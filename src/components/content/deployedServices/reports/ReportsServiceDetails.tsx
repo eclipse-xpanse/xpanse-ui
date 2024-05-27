@@ -5,12 +5,12 @@
 
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
-import '../../../../styles/app.css';
-import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
+import myServicesStyle from '../../../../styles/my-services.module.css';
 import { ApiError, DeployResource, Response } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
+import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
+import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
 
 export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useGetServiceDetailsByIdForIsvQuery(serviceId);
@@ -54,7 +54,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
     if (getServiceDetailsByIdQuery.isLoading) {
         return (
             <Skeleton
-                className={'my-service-details-skeleton'}
+                className={myServicesStyle.myServiceDetailsSkeleton}
                 active={true}
                 loading={getServiceDetailsByIdQuery.isLoading}
                 paragraph={{ rows: 2, width: ['20%', '20%'] }}
@@ -76,7 +76,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}
-                    className={'my-service-details-skeleton'}
+                    className={myServicesStyle.myServiceDetailsSkeleton}
                 />
             );
         } else if (getServiceDetailsByIdQuery.error instanceof Error) {
@@ -86,7 +86,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
                     description={getServiceDetailsByIdQuery.error.message}
                     type={'error'}
                     closable={true}
-                    className={'my-service-details-skeleton'}
+                    className={myServicesStyle.myServiceDetailsSkeleton}
                 />
             );
         }

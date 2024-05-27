@@ -3,26 +3,29 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useMutation, useQuery } from '@tanstack/react-query';
+import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import credentialStyles from '../../../styles/credential.module.css';
+import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
+
 import {
     AdminService,
     ApiError,
     CloudServiceProvider,
     CreateCredential,
-    CredentialsConfigurationService,
     CredentialVariable,
     CredentialVariables,
+    CredentialsConfigurationService,
     IsvCloudCredentialsManagementService,
     Response,
     UserCloudCredentialsManagementService,
 } from '../../../xpanse-api/generated';
-import { CredentialTip } from './CredentialTip';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { CredentialApiDoc } from './CredentialApiDoc';
 import { cspMap } from '../common/csp/CspLogo';
+import { CredentialApiDoc } from './CredentialApiDoc';
+import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
@@ -218,7 +221,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             render: (value: string, record) =>
                 record.isMandatory ? (
                     <Tooltip placement='topLeft' title={value}>
-                        <span className={'add-credential-from-variables-value'}>*</span>
+                        <span className={credentialStyles.addCredentialFormVariablesValue}>*</span>
                         {value}
                     </Tooltip>
                 ) : (
@@ -342,7 +345,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             <CredentialApiDoc
                 csp={currentCsp ?? CredentialVariables.csp.HUAWEI}
                 credentialType={currentType ?? CredentialVariables.type.VARIABLES}
-                styleClass={'add-credential-api-doc'}
+                styleClass={credentialStyles.addCredentialApiDoc}
             />
 
             <Form
@@ -354,14 +357,14 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 onFinish={submit}
             >
                 <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
-                <div className={'credential-from-input'}>
+                <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
                             {activeCspList.current.map((csp: CredentialVariables.csp) => {
                                 return (
-                                    <Select.Option key={csp} value={csp} className={'credential-select-option-csp'}>
+                                    <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                         <Image
-                                            className={'custom-select'}
+                                            className={credentialStyles.customSelect}
                                             width={100}
                                             preview={false}
                                             src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
@@ -434,7 +437,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                         <></>
                     )}
                 </div>
-                <Form.Item className={'credential-from-button'}>
+                <Form.Item className={credentialStyles.credentialFormButton}>
                     <Button
                         type='primary'
                         loading={addCredentialRequest.isPending}
@@ -443,7 +446,11 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     >
                         Add
                     </Button>
-                    <Button htmlType='button' className={'add-credential-from-button-reset'} onClick={onReset}>
+                    <Button
+                        htmlType='button'
+                        className={credentialStyles.addCredentialFormButtonReset}
+                        onClick={onReset}
+                    >
                         Reset
                     </Button>
                 </Form.Item>

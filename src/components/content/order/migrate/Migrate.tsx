@@ -3,26 +3,27 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { useQuery } from '@tanstack/react-query';
+import { StepProps, Steps } from 'antd';
+import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo, useState } from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    DeployedServiceDetails,
     DeployRequest,
+    DeployedServiceDetails,
     MigrateRequest,
     ServiceCatalogService,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { SelectDestination } from './SelectDestination';
+import { MigrationSteps } from '../types/MigrationSteps';
+import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { DeploymentForm } from './DeploymentForm';
-import { StepProps, Steps } from 'antd';
-import { MigrateServiceSubmit } from './MigrateServiceSubmit';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
+import { MigrateServiceSubmit } from './MigrateServiceSubmit';
+import { SelectDestination } from './SelectDestination';
 import { SelectMigrationTarget } from './SelectMigrationTarget';
-import { useQuery } from '@tanstack/react-query';
-import { MigrationSteps } from '../types/MigrationSteps';
-import { Tab } from 'rc-tabs/lib/interface';
-import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
 export const Migrate = ({
     currentSelectedService,
@@ -236,7 +237,7 @@ export const Migrate = ({
     }
 
     return (
-        <div className={'migrate-select-destination-class'}>
+        <div className={serviceOrderStyles.migrateSelectDestinationClass}>
             <Steps current={currentMigrationStep} items={items} />
             {renderStepContent(currentMigrationStep)}
         </div>

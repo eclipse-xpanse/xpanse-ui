@@ -3,28 +3,34 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { useMutation } from '@tanstack/react-query';
+import { Badge, Button, Card, Col, Form, Input, Popconfirm, PopconfirmProps, Row, Tag, Tooltip } from 'antd';
 import React, { useState } from 'react';
-import { Badge, Button, Card, Col, Form, Input, Row, Tag, Tooltip } from 'antd';
-import '../../../../styles/service_modify.css';
-import '../../../../styles/service_order.css';
+import appStyles from '../../../../styles/app.module.css';
+import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     Billing,
     DeployedService,
     DeployedServiceDetails,
     ModifyRequest,
     ServiceFlavor,
-    ServiceService,
+    ServiceModificationService,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { InfoCircleOutlined } from '@ant-design/icons';
-import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import { OrderItem } from '../common/utils/OrderItem';
-import { useOrderFormStore } from '../store/OrderFormStore';
-import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
-import { ModifySubmitRequest } from '../common/modifySubmitRequest';
+import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
-import { useMutation } from '@tanstack/react-query';
+import { ModifySubmitRequest } from '../common/modifySubmitRequest';
+import { OrderItem } from '../common/utils/OrderItem';
+import {
+    ChangeFlavorServiceDataWillBeLost,
+    ChangeFlavorServiceWillBeRestarted,
+    ChangeFlavorServiceWillBeRestartedAndDataWillBeLost,
+} from '../common/utils/ScaleOrModifyWarnings';
+import { getModifyParams } from '../formDataHelpers/modifyParamsHelper';
+import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 
 export const Scale = ({
@@ -40,14 +46,18 @@ export const Scale = ({
     const [selectFlavor, setSelectFlavor] = useState<string>(
         currentSelectedService.flavor ? currentSelectedService.flavor : ''
     );
-    const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
+    const [scaleWarning, setScaleWarning] = useState<string>('Are you sure to scale the service?');
 
+    const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
     const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            return ServiceService.modify(modifyServiceRequestParams.id, modifyServiceRequestParams.modifyRequest);
+            return ServiceModificationService.modify(
+                modifyServiceRequestParams.id,
+                modifyServiceRequestParams.modifyRequest
+            );
         },
     });
 
@@ -85,9 +95,36 @@ export const Scale = ({
         setModifyStatus(status);
     };
 
+    const onClickScale = () => {
+        if (
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceWillBeRestartedAndDataWillBeLost);
+        } else if (
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            !serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceDataWillBeLost);
+        } else if (
+            !serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isServiceInterrupted
+        ) {
+            setScaleWarning(ChangeFlavorServiceWillBeRestarted);
+        }
+    };
+
+    const confirm: PopconfirmProps['onConfirm'] = () => {
+        onFinish();
+    };
+
+    const cancel: PopconfirmProps['onCancel'] = () => {
+        setScaleWarning('');
+    };
+
     return (
-        <div className={'modify-select-class'}>
-            <div className={'modify-title-class content-title'}>Change Flavor:</div>
+        <div className={serviceModifyStyles.modifySelectClass}>
+            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>Change Flavor:</div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
                     isSubmitFailed={modifyServiceRequest.isError}
@@ -102,14 +139,14 @@ export const Scale = ({
                     getModifyDetailsStatus={getModifyDetailsStatus}
                 />
             ) : null}
-            <div className={'order-param-item-left'} />
+            <div className={serviceOrderStyles.orderParamItemLeft} />
             <Form
                 form={form}
                 layout='vertical'
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={'modify-container'}
+                className={serviceModifyStyles.modifyContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={
@@ -122,13 +159,17 @@ export const Scale = ({
                     <Row gutter={16}>
                         {flavorList.map((flavor) => {
                             return (
-                                <Col span={4} key={flavor.name} className={'modify-select-flavor-billing'}>
+                                <Col
+                                    span={4}
+                                    key={flavor.name}
+                                    className={serviceModifyStyles.modifySelectFlavorBilling}
+                                >
                                     <div
-                                        className={`flavor-card-container ${
+                                        className={`${serviceModifyStyles.flavorCardContainer} ${
                                             currentSelectedService.flavor === flavor.name
-                                                ? 'flavor-select-hover-disabled'
+                                                ? serviceModifyStyles.flavorSelectHoverDisabled
                                                 : selectFlavor === flavor.name
-                                                  ? 'flavor-select-hover'
+                                                  ? serviceModifyStyles.flavorSelectHover
                                                   : ''
                                         }`}
                                         onClick={() => {
@@ -154,14 +195,14 @@ export const Scale = ({
                                         }}
                                     >
                                         {currentSelectedService.flavor === flavor.name ? (
-                                            <div className={'flavor-old-badge'}>
+                                            <div className={serviceModifyStyles.flavorOldBadge}>
                                                 <Badge.Ribbon
                                                     text='current'
-                                                    className={'flavor-card-custom-ribbon'}
+                                                    className={serviceModifyStyles.flavorCardCustomRibbon}
                                                     color={'#b5b5b5'}
                                                 >
                                                     <Card title={flavor.name}>
-                                                        <p className={'flavor-card-content'}>
+                                                        <p className={serviceModifyStyles.flavorCardContent}>
                                                             {currentBilling ? (
                                                                 <>
                                                                     <Tag color={'blue'}>
@@ -182,7 +223,7 @@ export const Scale = ({
                                             </div>
                                         ) : (
                                             <Card title={flavor.name}>
-                                                <p className={'flavor-card-content'}>
+                                                <p className={serviceModifyStyles.flavorCardContent}>
                                                     {currentBilling ? (
                                                         <>
                                                             <Tag color={'blue'}>
@@ -203,7 +244,7 @@ export const Scale = ({
                         })}
                     </Row>
                 </Form.Item>
-                <div className={'order-param-item-left'} />
+                <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form.Item
                     name={'Name'}
                     label={'Name: Service Name'}
@@ -218,7 +259,7 @@ export const Scale = ({
                         onChange={(e) => {
                             cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                         }}
-                        className={'order-param-item-content'}
+                        className={serviceOrderStyles.orderParamItemContent}
                         suffix={
                             <Tooltip title={'Customer defined name for the service instance created'}>
                                 <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
@@ -230,7 +271,7 @@ export const Scale = ({
                     className={
                         currentSelectedService.serviceDeploymentState.toString() ===
                         DeployedServiceDetails.serviceDeploymentState.MODIFYING.toString()
-                            ? 'deploying order-param-item-row'
+                            ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                             : ''
                     }
                 >
@@ -245,20 +286,33 @@ export const Scale = ({
                         ) : undefined
                     )}
                 </div>
-                <div className={'order-param-item-left'} />
-                <div className={'service-modify-submit-reset-container'}>
-                    <div className={'service-modify-submit-class'}>
-                        <Button
-                            type='primary'
-                            htmlType='submit'
-                            disabled={
-                                currentSelectedService.flavor === selectFlavor ||
-                                (modifyStatus &&
-                                    modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
-                            }
+                <div className={serviceOrderStyles.orderParamItemLeft} />
+                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
+                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
+                        <Popconfirm
+                            placement='top'
+                            title='Scale'
+                            description={scaleWarning}
+                            icon={<ExclamationCircleOutlined style={{ color: 'red' }} />}
+                            onConfirm={cancel}
+                            onCancel={confirm}
+                            okText='No'
+                            cancelText='Yes'
                         >
-                            Scale
-                        </Button>
+                            <Button
+                                type='primary'
+                                disabled={
+                                    currentSelectedService.flavor === selectFlavor ||
+                                    (modifyStatus &&
+                                        modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                }
+                                onClick={() => {
+                                    onClickScale();
+                                }}
+                            >
+                                Scale
+                            </Button>
+                        </Popconfirm>
                     </div>
                 </div>
             </Form>
