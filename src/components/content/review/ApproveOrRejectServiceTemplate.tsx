@@ -69,8 +69,8 @@ export const ApproveOrRejectServiceTemplate = ({
         return (
             <div className={serviceReviewStyles.approveRejectAlertClass}>
                 <Alert
-                    message={errorMessage}
-                    description={'Register service review failed.'}
+                    message={'Service review request failed'}
+                    description={errorMessage}
                     showIcon
                     closable={true}
                     onClose={onClose}
@@ -84,8 +84,7 @@ export const ApproveOrRejectServiceTemplate = ({
         return (
             <div className={serviceReviewStyles.approveRejectAlertClass}>
                 <Alert
-                    message={'Processing Status'}
-                    description={'Service template reviewed successfully.'}
+                    message={'Service template review result submitted'}
                     showIcon
                     closable={true}
                     onClose={onClose}

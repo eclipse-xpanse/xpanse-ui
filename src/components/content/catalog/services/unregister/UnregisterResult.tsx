@@ -35,8 +35,8 @@ export function UnregisterResult({
         if (useUnregisterRequestState[0].status === 'success') {
             return (
                 <Alert
-                    message='Unregister:'
-                    description={'Service Unregistered Successfully'}
+                    message='Service Unregistered Successfully'
+                    description={'Service removed from the catalog.'}
                     showIcon
                     type={'success'}
                     closable={true}
@@ -53,7 +53,7 @@ export function UnregisterResult({
                         useUnregisterRequestState[0].error.body &&
                         'details' in useUnregisterRequestState[0].error.body ? (
                             <Alert
-                                message='Unregister:'
+                                message='Unregister Request Failed'
                                 description={(useUnregisterRequestState[0].error.body as Response).details}
                                 showIcon
                                 type={'error'}
@@ -62,7 +62,7 @@ export function UnregisterResult({
                             />
                         ) : (
                             <Alert
-                                message='Unregister:'
+                                message='Unregister Request Failed'
                                 description={useUnregisterRequestState[0].error.message}
                                 showIcon
                                 type={'error'}

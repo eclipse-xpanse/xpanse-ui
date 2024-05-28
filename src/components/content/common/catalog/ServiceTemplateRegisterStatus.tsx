@@ -6,12 +6,14 @@
 import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { Tag } from 'antd';
 import React from 'react';
-import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import serviceReviewStyles from '../../../../styles/service-review.module.css';
+import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
-export function ServiceTemplateRegisterStatus(
-    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState
-): React.JSX.Element {
+export function ServiceTemplateRegisterStatus({
+    serviceRegistrationState,
+}: {
+    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+}): React.JSX.Element {
     switch (serviceRegistrationState) {
         case ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING:
             return (
