@@ -44,7 +44,12 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
         record.serviceState === DeployedService.serviceState.RESTARTING
     ) {
         return (
-            <Tag icon={<SyncOutlined />} color='processing'>
+            <Tag
+                bordered={false}
+                icon={<SyncOutlined spin />}
+                color='processing'
+                className={myServicesStyle.myServiceStatusSize}
+            >
                 {record.serviceState}
             </Tag>
         );
