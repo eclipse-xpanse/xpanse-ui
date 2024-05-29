@@ -162,7 +162,7 @@ export const Scale = ({
                         label='Flavor'
                         rules={[{ required: true, message: 'Flavor is required' }]}
                     >
-                        {flavorList && flavorList.length > 0 ? (
+                        {flavorList.length > 0 ? (
                             <Flex vertical gap='middle'>
                                 <Radio.Group
                                     optionType={'button'}
