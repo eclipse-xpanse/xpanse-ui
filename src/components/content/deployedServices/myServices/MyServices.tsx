@@ -10,6 +10,7 @@ import {
     DeleteOutlined,
     EditOutlined,
     FundOutlined,
+    HistoryOutlined,
     InfoCircleOutlined,
     LockOutlined,
     PlayCircleOutlined,
@@ -62,6 +63,7 @@ import { DeployedServicesHostingType } from '../common/DeployedServicesHostingTy
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import { MyServiceDetails } from './MyServiceDetails';
+import { MyServiceHistory } from './MyServiceHistory';
 import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
 import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
 
@@ -90,6 +92,7 @@ function MyServices(): React.JSX.Element {
     const [isDestroyRequestSubmitted, setIsDestroyRequestSubmitted] = useState<boolean>(false);
     const [isPurgeRequestSubmitted, setIsPurgeRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
+    const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
     const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
@@ -566,6 +569,23 @@ function MyServices(): React.JSX.Element {
                     >
                         restart
                     </Button>
+                ),
+            },
+            {
+                key: 'history',
+                label: record.latestModificationAudit ? (
+                    <Button
+                        onClick={() => {
+                            handleMyServiceHistoryOpenModal(record);
+                        }}
+                        className={myServicesStyles.buttonAsLink}
+                        icon={<HistoryOutlined />}
+                        type={'link'}
+                    >
+                        history
+                    </Button>
+                ) : (
+                    <></>
                 ),
             },
         ];
@@ -1153,6 +1173,20 @@ function MyServices(): React.JSX.Element {
         setIsMyServiceDetailsModalOpen(false);
     };
 
+    const handleMyServiceHistoryOpenModal = (record: DeployedService) => {
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        setIsMyServiceHistoryModalOpen(true);
+    };
+
+    const handleMyServiceHistoryModalClose = () => {
+        setActiveRecord(undefined);
+        setIsMyServiceHistoryModalOpen(false);
+    };
+
     const handleCancelMigrateModel = () => {
         setActiveRecord(undefined);
         clearFormVariables();
@@ -1280,6 +1314,17 @@ function MyServices(): React.JSX.Element {
                     onCancel={handleMyServiceDetailsModalClose}
                 >
                     <MyServiceDetails deployedService={activeRecord} />
+                </Modal>
+            ) : null}
+            {activeRecord ? (
+                <Modal
+                    title={'Service Modified History'}
+                    width={1600}
+                    footer={null}
+                    open={isMyServiceHistoryModalOpen}
+                    onCancel={handleMyServiceHistoryModalClose}
+                >
+                    <MyServiceHistory deployedService={activeRecord} />
                 </Modal>
             ) : null}
             {activeRecord ? (

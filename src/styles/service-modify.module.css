@@ -52,7 +52,25 @@
 
 .modify-container {
     margin-left: 5px;
-    max-width: 1300px;
+    max-width: 1600px;
+}
+
+.modify-history-value {
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+}
+.modify-history-error-msg-value {
+    display: inline-block;
+    max-width: 145px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.modify-history-value-li {
+    text-align: left;
 }
 
 .flavor-old-badge {
