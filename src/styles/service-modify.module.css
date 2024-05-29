@@ -8,12 +8,22 @@
 }
 
 .modify-select-flavor-billing {
+    width: 100%;
     margin-bottom: 20px;
 }
 
 .modify-title-class {
     margin-left: 24px;
     margin-bottom: 8px;
+}
+
+.flavor-features-item-icon {
+    color: green;
+}
+
+.flavor-price-content {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .flavor-select-hover {
@@ -41,6 +51,10 @@
 
 .flavor-card-content {
     text-align: center;
+}
+
+.flavor-feature-content {
+    margin-left: 15%;
 }
 
 .flavor-card-content-btn {

@@ -14,20 +14,19 @@ import {
     DeployedService,
     MigrateRequest,
     Region,
+    ServiceFlavor,
     ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
-import { BillingInfo } from '../common/BillingInfo';
 import { FlavorInfo } from '../common/FlavorInfo';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
 import { RegionInfo } from '../common/RegionInfo';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { Flavor } from '../types/Flavor';
 import { MigrationSteps } from '../types/MigrationSteps';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import {
@@ -65,13 +64,11 @@ export const MigrateServiceSubmit = ({
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
     const areaList: Tab[] = [{ key: region.area, label: region.area, disabled: true }];
-    const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
-    let priceValue: string = '';
-    currentFlavorList.forEach((flavorItem) => {
-        if (flavorItem.value === selectFlavor) {
-            priceValue = flavorItem.price;
-        }
-    });
+    const currentFlavorList: ServiceFlavor[] = getServiceFlavorList(
+        selectCsp,
+        selectServiceHostingType,
+        userOrderableServiceVoList
+    );
     const migrateServiceRequest = useMigrateServiceQuery();
     const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
         migrateServiceRequest.data,
@@ -183,9 +180,8 @@ export const MigrateServiceSubmit = ({
                         availabilityZones={availabilityZones}
                     />
                 ) : undefined}
-                <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
                 <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
-                <BillingInfo priceValue={priceValue} />
+                <FlavorInfo selectFlavor={selectFlavor} flavorList={currentFlavorList} />
                 <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button
