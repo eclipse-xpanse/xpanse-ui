@@ -13,13 +13,13 @@ import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
     DeployRequest,
+    ServiceFlavor,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { BillingInfo } from '../common/BillingInfo';
 import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorInfo } from '../common/FlavorInfo';
 import { RegionInfo } from '../common/RegionInfo';
@@ -33,13 +33,12 @@ import { getContactServiceDetailsOfServiceByCsp } from '../formDataHelpers/conta
 import { getCspListForVersion } from '../formDataHelpers/cspHelper';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getServiceFlavorList } from '../formDataHelpers/flavorHelper.ts';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import CspSelect from '../formElements/CspSelect';
-import { Flavor } from '../types/Flavor';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 
@@ -104,8 +103,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         serviceInfo?.availabilityZones ?? {}
     );
 
-    let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
-    const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].value);
+    let flavorList: ServiceFlavor[] = getServiceFlavorList(
+        selectCsp,
+        selectServiceHostType,
+        versionToServicesMap.get(selectVersion)
+    );
+    const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].name);
 
     let billingModes: DeployRequest.billingMode[] | undefined = getBillingModes(
         selectCsp,
@@ -126,8 +129,6 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 ? billingModes[0]
                 : DeployRequest.billingMode.FIXED
     );
-
-    let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
 
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
@@ -169,11 +170,6 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectBillMode(
             defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
         );
-        flavorList.forEach((flavor) => {
-            if (newFlavor === flavor.value) {
-                priceValue = flavor.price;
-            }
-        });
     };
 
     const onChangeRegion = (value: string) => {
@@ -202,14 +198,14 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             areaList[0]?.key ?? '',
             versionToServicesMap.get(currentVersion)
         );
-        flavorList = getFlavorList(cspList[0], selectServiceHostType, versionToServicesMap.get(currentVersion));
+        flavorList = getServiceFlavorList(cspList[0], selectServiceHostType, versionToServicesMap.get(currentVersion));
         billingModes = getBillingModes(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             cspList[0],
             versionToServicesMap.get(currentVersion)
         );
         setSelectArea(areaList[0].key);
-        setSelectFlavor(flavorList[0].value);
+        setSelectFlavor(flavorList[0].name);
         setSelectRegion(regionList[0].value);
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
@@ -228,18 +224,17 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             areaList[0]?.key ?? '',
             versionToServicesMap.get(selectVersion)
         );
-        flavorList = getFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        flavorList = getServiceFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         billingModes = getBillingModes(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             csp,
             versionToServicesMap.get(selectVersion)
         );
-        priceValue = flavorList[0].value;
         serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
         setSelectCsp(csp);
         setSelectArea(areaList[0]?.key ?? '');
         setSelectRegion(regionList[0]?.value ?? '');
-        setSelectFlavor(flavorList[0]?.value ?? '');
+        setSelectFlavor(flavorList[0]?.name ?? '');
         setSelectServiceHostType(serviceHostTypes[0]);
         setSelectBillMode(
             defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
@@ -373,13 +368,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             />
                         );
                     })}
-                    <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                     <BillingModeSelection
                         selectBillingMode={selectBillingMode}
                         setSelectBillingMode={setSelectBillMode}
                         billingModes={billingModes}
                     />
-                    <BillingInfo priceValue={priceValue} />
+                    <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
                 </div>
                 <div>
                     <div className={serviceOrderStyles.Line} />
