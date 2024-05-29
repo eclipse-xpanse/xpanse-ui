@@ -26,7 +26,7 @@ function UpdateResult({
                 type={'success'}
                 message={
                     <>
-                        Service <b>{ocl.name}</b> Updated Successfully
+                        Service <b>{ocl.name}</b> update request submitted successfully.
                     </>
                 }
                 closable={true}
