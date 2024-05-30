@@ -4,7 +4,7 @@
  */
 
 import { TagOutlined } from '@ant-design/icons';
-import { Alert, Empty, Skeleton, Tooltip, Typography } from 'antd';
+import { Alert, Empty, Skeleton } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
@@ -20,7 +20,6 @@ import { CatalogFullView } from './CatalogFullView';
 
 function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.category }): React.JSX.Element {
     const treeData: DataNode[] = [];
-    const { Paragraph } = Typography;
     let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
@@ -30,13 +29,7 @@ function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.categ
         categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
         categoryOclData.forEach((_value: ServiceTemplateDetailVo[], serviceName: string) => {
             const dataNode: DataNode = {
-                title: (
-                    <Tooltip placement='topLeft' title={serviceName}>
-                        <Paragraph ellipsis={true} className={catalogStyles.catalogTreeNode}>
-                            {serviceName}
-                        </Paragraph>
-                    </Tooltip>
-                ),
+                title: <div className={catalogStyles.catalogTreeNode}>{serviceName}</div>,
                 key: serviceName || '',
                 children: [],
             };

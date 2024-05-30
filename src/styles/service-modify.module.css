@@ -8,12 +8,22 @@
 }
 
 .modify-select-flavor-billing {
+    width: 100%;
     margin-bottom: 20px;
 }
 
 .modify-title-class {
     margin-left: 24px;
     margin-bottom: 8px;
+}
+
+.flavor-features-item-icon {
+    color: green;
+}
+
+.flavor-price-content {
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .flavor-select-hover {
@@ -43,6 +53,10 @@
     text-align: center;
 }
 
+.flavor-feature-content {
+    margin-left: 15%;
+}
+
 .flavor-card-content-btn {
     display: flex;
     flex-direction: column;
@@ -52,7 +66,25 @@
 
 .modify-container {
     margin-left: 5px;
-    max-width: 1300px;
+    max-width: 1600px;
+}
+
+.modify-history-value {
+    white-space: normal;
+    word-break: break-word;
+    vertical-align: top;
+}
+.modify-history-error-msg-value {
+    display: inline-block;
+    max-width: 145px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
+.modify-history-value-li {
+    text-align: left;
 }
 
 .flavor-old-badge {

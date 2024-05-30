@@ -4,13 +4,12 @@
  */
 
 import { ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { Flavor } from '../types/Flavor';
 
-export function getFlavorList(
+export function getServiceFlavorList(
     selectCsp: UserOrderableServiceVo.csp,
     selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
-): Flavor[] {
+): ServiceFlavor[] {
     const flavorMapper: Map<string, ServiceFlavor[]> = new Map<string, ServiceFlavor[]>();
     if (userOrderableServices) {
         userOrderableServices.forEach((userOrderableServiceVo) => {
@@ -23,15 +22,5 @@ export function getFlavorList(
         });
     }
 
-    const flavorList = flavorMapper.get(selectCsp) ?? [];
-    const flavors: Flavor[] = [];
-    if (flavorList.length > 0) {
-        for (const flavor of flavorList) {
-            // TODO will be fixed after #1597 is fixed
-            const flavorItem = { value: flavor.name, label: flavor.name, price: (20).toString() };
-            flavors.push(flavorItem);
-        }
-    }
-
-    return flavors;
+    return flavorMapper.get(selectCsp) ?? [];
 }

@@ -1,0 +1,108 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.flavor-card-title {
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+.flavor-card-border {
+    width: 300px;
+}
+
+.flavor-card-content {
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.flavor-features-item-icon {
+    color: green;
+}
+
+.flavor-container {
+    border-radius: 8px;
+}
+
+.flavor-card-container {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 260px;
+    height: 213px;
+}
+
+.flavor-selected {
+    border: 3px solid #1677ff;
+    pointer-events: none;
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.flavor-price-content {
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.flavor-features-content {
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.flavor-btn {
+    width: 300px;
+    height: 100%;
+    border: none;
+    padding: 0;
+}
+
+.region-flavor-content .ant-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 20px 0;
+    font-size: 14px;
+}
+
+.custom-radio-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 250px;
+    margin-bottom: 10px;
+    text-align: center;
+    border-radius: 6px;
+}
+
+.custom-radio-button-content {
+    height: 100%;
+    padding-bottom: 15px;
+}
+
+.flavor-features {
+    margin-left: 10%;
+}
+
+.ribbon-container {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-disabled {
+    background-color: transparent !important;
+}
+
+.flavor-feature-item-name {
+    font-weight: lighter;
+}

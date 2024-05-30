@@ -5,13 +5,13 @@
 
 import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { Badge, Button, Card, Col, Form, Input, Popconfirm, PopconfirmProps, Row, Tag, Tooltip } from 'antd';
+import { Badge, Button, Flex, Form, Input, Popconfirm, PopconfirmProps, Radio, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
+import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    Billing,
     DeployedService,
     DeployedServiceDetails,
     ModifyRequest,
@@ -21,6 +21,9 @@ import {
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
+import { FlavorFeatures } from '../common/FlavorFeatures';
+import { FlavorPrice } from '../common/FlavorPrice';
+import { FlavorTitle } from '../common/FlavorTitle';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
 import { OrderItem } from '../common/utils/OrderItem';
@@ -41,7 +44,6 @@ export const Scale = ({
     const [form] = Form.useForm();
     let flavorList: ServiceFlavor[] = [];
     let getParams: DeployParam[] = [];
-    let currentBilling: Billing | undefined = undefined;
     const [modifyStatus, setModifyStatus] = useState<DeployedService.serviceDeploymentState | undefined>(undefined);
     const [selectFlavor, setSelectFlavor] = useState<string>(
         currentSelectedService.flavor ? currentSelectedService.flavor : ''
@@ -62,7 +64,6 @@ export const Scale = ({
     });
 
     if (serviceTemplateDetailsQuery.isSuccess) {
-        currentBilling = serviceTemplateDetailsQuery.data.billing;
         if (serviceTemplateDetailsQuery.data.flavors.serviceFlavors.length > 0) {
             flavorList = serviceTemplateDetailsQuery.data.flavors.serviceFlavors;
         }
@@ -155,95 +156,64 @@ export const Scale = ({
                     modifyServiceRequest.isSuccess
                 }
             >
-                <Form.Item name='flavor'>
-                    <Row gutter={16}>
-                        {flavorList.map((flavor) => {
-                            return (
-                                <Col
-                                    span={4}
-                                    key={flavor.name}
-                                    className={serviceModifyStyles.modifySelectFlavorBilling}
+                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${flavorStyles.regionFlavorContent}`}>
+                    <Form.Item
+                        name='selectFlavor'
+                        label='Flavor'
+                        rules={[{ required: true, message: 'Flavor is required' }]}
+                    >
+                        {flavorList.length > 0 ? (
+                            <Flex vertical gap='middle'>
+                                <Radio.Group
+                                    optionType={'button'}
+                                    onChange={(e) => {
+                                        if (currentSelectedService.flavor === (e.target.value as string)) {
+                                            return;
+                                        }
+                                        setSelectFlavor(e.target.value as string);
+                                        form.setFieldsValue({ selectFlavor: e.target.value as string });
+                                    }}
+                                    value={selectFlavor}
+                                    className={flavorStyles.antRadioGroup}
                                 >
-                                    <div
-                                        className={`${serviceModifyStyles.flavorCardContainer} ${
-                                            currentSelectedService.flavor === flavor.name
-                                                ? serviceModifyStyles.flavorSelectHoverDisabled
-                                                : selectFlavor === flavor.name
-                                                  ? serviceModifyStyles.flavorSelectHover
-                                                  : ''
-                                        }`}
-                                        onClick={() => {
-                                            if (currentSelectedService.flavor === flavor.name) {
-                                                return;
-                                            }
-                                            setSelectFlavor(flavor.name);
-                                            form.setFieldsValue({ selectFlavor: flavor.name });
-                                        }}
-                                        style={{
-                                            pointerEvents:
-                                                currentSelectedService.flavor === flavor.name ||
-                                                modifyServiceRequest.isPending ||
-                                                modifyServiceRequest.isSuccess
-                                                    ? 'none'
-                                                    : 'auto',
-                                            cursor:
-                                                currentSelectedService.flavor === flavor.name ||
-                                                modifyServiceRequest.isPending ||
-                                                modifyServiceRequest.isSuccess
-                                                    ? 'not-allowed'
-                                                    : 'auto',
-                                        }}
-                                    >
-                                        {currentSelectedService.flavor === flavor.name ? (
-                                            <div className={serviceModifyStyles.flavorOldBadge}>
-                                                <Badge.Ribbon
-                                                    text='current'
-                                                    className={serviceModifyStyles.flavorCardCustomRibbon}
-                                                    color={'#b5b5b5'}
-                                                >
-                                                    <Card title={flavor.name}>
-                                                        <p className={serviceModifyStyles.flavorCardContent}>
-                                                            {currentBilling ? (
-                                                                <>
-                                                                    <Tag color={'blue'}>
-                                                                        {/* TODO Will be fixed after #1597 is fixed */}
-                                                                        {(20).toString()}
-                                                                        {
-                                                                            currentSelectedService.deployRequest
-                                                                                .billingMode
-                                                                        }
-                                                                    </Tag>
-                                                                </>
-                                                            ) : (
-                                                                <></>
-                                                            )}
-                                                        </p>
-                                                    </Card>
-                                                </Badge.Ribbon>
+                                    {flavorList.map((flavor: ServiceFlavor) => {
+                                        const isCurrentFlavor = currentSelectedService.flavor === flavor.name;
+                                        const radioButton = (
+                                            <Radio.Button
+                                                key={flavor.name}
+                                                value={flavor.name}
+                                                disabled={isCurrentFlavor}
+                                                // className={flavorStyles.customRadioButtonContent}
+                                                className={`${flavorStyles.customRadioButtonContent} ${flavorStyles.antRadioButtonWrapperChecked}`}
+                                            >
+                                                {FlavorTitle(flavor.name)}
+                                                <div className={flavorStyles.flavorPriceContent}>{FlavorPrice()}</div>
+                                                {FlavorFeatures(flavor)}
+                                            </Radio.Button>
+                                        );
+                                        return (
+                                            <div key={flavor.name} className={flavorStyles.customRadioButton}>
+                                                {isCurrentFlavor ? (
+                                                    <div className={flavorStyles.ribbonContainer}>
+                                                        <Badge.Ribbon
+                                                            text='current'
+                                                            className={serviceModifyStyles.flavorCardCustomRibbon}
+                                                            color={'#b5b5b5'}
+                                                        >
+                                                            {radioButton}
+                                                        </Badge.Ribbon>
+                                                    </div>
+                                                ) : (
+                                                    <div className={flavorStyles.ribbonContainer}>{radioButton}</div>
+                                                )}
                                             </div>
-                                        ) : (
-                                            <Card title={flavor.name}>
-                                                <p className={serviceModifyStyles.flavorCardContent}>
-                                                    {currentBilling ? (
-                                                        <>
-                                                            <Tag color={'blue'}>
-                                                                {/* TODO Will be fixed after #1597 is fixed */}
-                                                                {(20).toString()}
-                                                                {currentSelectedService.deployRequest.billingMode}
-                                                            </Tag>
-                                                        </>
-                                                    ) : (
-                                                        <></>
-                                                    )}
-                                                </p>
-                                            </Card>
-                                        )}
-                                    </div>
-                                </Col>
-                            );
-                        })}
-                    </Row>
-                </Form.Item>
+                                        );
+                                    })}
+                                </Radio.Group>
+                            </Flex>
+                        ) : null}
+                    </Form.Item>
+                </div>
                 <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form.Item
                     name={'Name'}

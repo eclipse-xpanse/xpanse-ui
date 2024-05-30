@@ -6,6 +6,7 @@
 import { Flex, Form, Radio } from 'antd';
 import React from 'react';
 import '../../../../styles/service-order.module.css';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 
 export const MigrateServiceSubmitAvailabilityZoneInfo = ({
@@ -22,8 +23,8 @@ export const MigrateServiceSubmitAvailabilityZoneInfo = ({
                       <Form.Item
                           key={availabilityZone.varName}
                           name={availabilityZone.displayName}
-                          label={availabilityZone.displayName}
-                          style={{ width: 450 }}
+                          label={<p className={serviceOrderStyles.orderFormItemName}>{availabilityZone.displayName}</p>}
+                          className={serviceOrderStyles.selectCloudProviderClass}
                       >
                           <Flex vertical gap='middle'>
                               <Radio.Group buttonStyle='solid' disabled={true}>

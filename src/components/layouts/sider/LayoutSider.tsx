@@ -59,7 +59,7 @@ function LayoutSider(): React.JSX.Element {
                 <Link to={homePageRoute}>
                     <Image
                         width={collapsed ? 30 : 150}
-                        src={collapsed ? 'xpanse-black-logo-only.png' : 'xpanse-black.png'}
+                        src={collapsed ? '/xpanse-black-logo-only.png' : '/xpanse-black.png'}
                         preview={false}
                     />
                 </Link>

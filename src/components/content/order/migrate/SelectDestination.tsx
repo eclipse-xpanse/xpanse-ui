@@ -5,25 +5,29 @@
 
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { AvailabilityZoneConfig, MigrateRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { BillingInfo } from '../common/BillingInfo';
+import tableStyles from '../../../../styles/table.module.css';
+import {
+    AvailabilityZoneConfig,
+    MigrateRequest,
+    ServiceFlavor,
+    UserOrderableServiceVo,
+} from '../../../../xpanse-api/generated';
 import { BillingModeSelection } from '../common/BillingModeSelection';
-import { FlavorInfo } from '../common/FlavorInfo';
-import { RegionInfo } from '../common/RegionInfo';
+import { FlavorSelection } from '../common/FlavorSelection.tsx';
+import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import CspSelect from '../formElements/CspSelect';
-import { Flavor } from '../types/Flavor';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
@@ -103,10 +107,13 @@ export const SelectDestination = ({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getAvailabilityZonesForRegionQuery.isSuccess, getAvailabilityZonesForRegionQuery.data]);
 
-    let flavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostType, userOrderableServiceVoList);
+    let flavorList: ServiceFlavor[] = getServiceFlavorList(
+        selectCsp,
+        selectServiceHostType,
+        userOrderableServiceVoList
+    );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentFlavor);
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
-    let priceValue: string = flavorList.find((flavor) => flavor.value === selectFlavor)?.price ?? '';
 
     const prev = () => {
         stepItem.status = 'wait';
@@ -152,11 +159,6 @@ export const SelectDestination = ({
         setSelectBillingMode(
             defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
         );
-        flavorList.forEach((flavor) => {
-            if (newFlavor === flavor.value) {
-                priceValue = flavor.price;
-            }
-        });
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -208,14 +210,13 @@ export const SelectDestination = ({
             areaList[0]?.key ?? '',
             userOrderableServiceVoList
         );
-        flavorList = getFlavorList(csp, serviceHostTypes[0], userOrderableServiceVoList);
+        flavorList = getServiceFlavorList(csp, serviceHostTypes[0], userOrderableServiceVoList);
         billingModes = getBillingModes(csp, serviceHostTypes[0], userOrderableServiceVoList);
-        priceValue = flavorList[0].value;
         serviceHostTypes = getAvailableServiceHostingTypes(csp, userOrderableServiceVoList);
         setSelectCsp(csp);
         setSelectArea(areaList[0]?.key ?? '');
         setSelectRegion(regionList[0]?.value ?? '');
-        setSelectFlavor(flavorList[0]?.value ?? '');
+        setSelectFlavor(flavorList[0]?.name ?? '');
         setSelectServiceHostingType(serviceHostTypes[0]);
         const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
             selectCsp,
@@ -230,7 +231,7 @@ export const SelectDestination = ({
             areaList[0]?.key ?? '',
             regionList[0]?.value ?? '',
             selectAvailabilityZones,
-            flavorList[0]?.value ?? '',
+            flavorList[0]?.name ?? '',
             serviceHostTypes[0]
         );
     };
@@ -255,84 +256,98 @@ export const SelectDestination = ({
     return (
         <Form
             form={form}
-            layout='vertical'
+            layout='inline'
             autoComplete='off'
             initialValues={{ selectRegion, selectFlavor }}
             onFinish={next}
             validateTrigger={['next']}
+            className={serviceOrderStyles.orderFormInlineDisplay}
         >
-            <div>
-                <CspSelect
-                    selectCsp={selectCsp}
-                    cspList={cspList}
-                    onChangeHandler={(csp) => {
-                        onChangeCloudProvider(csp);
-                    }}
-                />
-                <br />
-                <ServiceHostingSelection
-                    serviceHostingTypes={serviceHostTypes}
-                    updateServiceHostingType={onChangeServiceHostingType}
-                    disabledAlways={false}
-                    previousSelection={selectServiceHostType}
-                ></ServiceHostingSelection>
-                <br />
-                <br />
-                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
-                    <Tabs
-                        type='card'
-                        size='middle'
-                        activeKey={selectArea}
-                        tabPosition={'top'}
-                        items={areaList}
-                        onChange={(area) => {
-                            onChangeAreaValue(area);
+            <div className={tableStyles.genericTableContainer}>
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <CspSelect
+                        selectCsp={selectCsp}
+                        cspList={cspList}
+                        onChangeHandler={(csp) => {
+                            onChangeCloudProvider(csp);
                         }}
                     />
+                    <ServiceHostingSelection
+                        serviceHostingTypes={serviceHostTypes}
+                        updateServiceHostingType={onChangeServiceHostingType}
+                        disabledAlways={false}
+                        previousSelection={selectServiceHostType}
+                    ></ServiceHostingSelection>
                 </div>
-                <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
-                {availabilityZoneConfigs.map((availabilityZoneConfig) => {
-                    return (
-                        <AvailabilityZoneFormItem
-                            availabilityZoneConfig={availabilityZoneConfig}
-                            selectRegion={selectRegion}
-                            onAvailabilityZoneChange={onAvailabilityZoneChange}
-                            selectAvailabilityZones={selectAvailabilityZones}
-                            selectCsp={selectCsp}
-                            key={availabilityZoneConfig.varName}
-                        />
-                    );
-                })}
-                <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
-                <BillingModeSelection
-                    selectBillingMode={selectBillingMode}
-                    setSelectBillingMode={setSelectBillingMode}
-                    billingModes={billingModes}
-                />
-                <BillingInfo priceValue={priceValue} />
-                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
-                    <Space size={'large'}>
-                        <Button
-                            type='primary'
-                            onClick={() => {
-                                prev();
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <div
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle} ${serviceOrderStyles.orderFormSelectionFirstInGroup}`}
+                    >
+                        <Tabs
+                            type='card'
+                            size='middle'
+                            activeKey={selectArea}
+                            tabPosition={'top'}
+                            items={areaList}
+                            onChange={(area) => {
+                                onChangeAreaValue(area);
                             }}
-                            disabled={isPreviousDisabled}
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            type='primary'
-                            disabled={
-                                getAvailabilityZonesForRegionQuery.isError ||
-                                (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
-                            }
-                            htmlType='submit'
-                        >
-                            Next
-                        </Button>
-                    </Space>
+                        />
+                    </div>
+                    <RegionSelection
+                        selectRegion={selectRegion}
+                        onChangeRegion={onChangeRegion}
+                        regionList={regionList}
+                    />
+                    {availabilityZoneConfigs.map((availabilityZoneConfig) => {
+                        return (
+                            <AvailabilityZoneFormItem
+                                availabilityZoneConfig={availabilityZoneConfig}
+                                selectRegion={selectRegion}
+                                onAvailabilityZoneChange={onAvailabilityZoneChange}
+                                selectAvailabilityZones={selectAvailabilityZones}
+                                selectCsp={selectCsp}
+                                key={availabilityZoneConfig.varName}
+                            />
+                        );
+                    })}
                 </div>
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <BillingModeSelection
+                        selectBillingMode={selectBillingMode}
+                        setSelectBillingMode={setSelectBillingMode}
+                        billingModes={billingModes}
+                    />
+                    <FlavorSelection
+                        selectFlavor={selectFlavor}
+                        flavorList={flavorList}
+                        onChangeFlavor={onChangeFlavor}
+                    />
+                </div>
+            </div>
+            <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+                <Space size={'large'}>
+                    <Button
+                        type='primary'
+                        className={'migrate-steps-operation-button-clas'}
+                        onClick={() => {
+                            prev();
+                        }}
+                        disabled={isPreviousDisabled}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        type='primary'
+                        disabled={
+                            getAvailabilityZonesForRegionQuery.isError ||
+                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
+                        }
+                        htmlType='submit'
+                    >
+                        Next
+                    </Button>
+                </Space>
             </div>
         </Form>
     );

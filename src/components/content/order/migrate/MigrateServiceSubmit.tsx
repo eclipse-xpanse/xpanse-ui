@@ -8,26 +8,26 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import {
     CloudServiceProvider,
     DeployRequest,
     DeployedService,
     MigrateRequest,
     Region,
+    ServiceFlavor,
     ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
-import { BillingInfo } from '../common/BillingInfo';
-import { FlavorInfo } from '../common/FlavorInfo';
+import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
-import { RegionInfo } from '../common/RegionInfo';
+import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { getFlavorList } from '../formDataHelpers/flavorHelper';
+import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { Flavor } from '../types/Flavor';
 import { MigrationSteps } from '../types/MigrationSteps';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import {
@@ -65,13 +65,11 @@ export const MigrateServiceSubmit = ({
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
     const areaList: Tab[] = [{ key: region.area, label: region.area, disabled: true }];
-    const currentFlavorList: Flavor[] = getFlavorList(selectCsp, selectServiceHostingType, userOrderableServiceVoList);
-    let priceValue: string = '';
-    currentFlavorList.forEach((flavorItem) => {
-        if (flavorItem.value === selectFlavor) {
-            priceValue = flavorItem.price;
-        }
-    });
+    const currentFlavorList: ServiceFlavor[] = getServiceFlavorList(
+        selectCsp,
+        selectServiceHostingType,
+        userOrderableServiceVoList
+    );
     const migrateServiceRequest = useMigrateServiceQuery();
     const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
         migrateServiceRequest.data,
@@ -143,49 +141,72 @@ export const MigrateServiceSubmit = ({
                     migrationDetails={migrateServiceDetailsQuery.data}
                 />
             ) : null}
-            <Form layout='vertical' initialValues={{ region, selectFlavor }}>
-                <div className={serviceOrderStyles.orderFormSelectionStyle}>Cloud Service Provider:</div>
-                <div className={serviceOrderStyles.servicesContentBody}>
-                    <div className={serviceOrderStyles.cloudProviderSelectHover}>
-                        <Image
-                            width={200}
-                            height={56}
-                            src={cspMap.get(selectCsp as unknown as CloudServiceProvider.name)?.logo}
-                            alt={selectCsp}
-                            preview={false}
-                            fallback={
-                                'https://img.shields.io/badge/-' +
-                                (selectCsp.length === 0 ? '' : selectCsp.toString()) +
-                                '-gray'
-                            }
-                        />
-                        <div className={serviceOrderStyles.serviceTypeOptionInfo} />
+            <Form
+                layout='inline'
+                initialValues={{ region, selectFlavor }}
+                className={serviceOrderStyles.orderFormInlineDisplay}
+            >
+                <div className={tableStyles.genericTableContainer}>
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <div className={serviceOrderStyles.orderFormFlexElements}>
+                            <div
+                                className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                            >
+                                Cloud Service Provider:
+                            </div>
+                            <div className={serviceOrderStyles.servicesContentBody}>
+                                <div className={serviceOrderStyles.cloudProviderSelectHover}>
+                                    <Image
+                                        width={200}
+                                        height={56}
+                                        src={cspMap.get(selectCsp as unknown as CloudServiceProvider.name)?.logo}
+                                        alt={selectCsp}
+                                        preview={false}
+                                        fallback={
+                                            'https://img.shields.io/badge/-' +
+                                            (selectCsp.length === 0 ? '' : selectCsp.toString()) +
+                                            '-gray'
+                                        }
+                                    />
+                                    <div className={serviceOrderStyles.serviceTypeOptionInfo} />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <ServiceHostingSelection
+                            serviceHostingTypes={[selectServiceHostingType]}
+                            disabledAlways={true}
+                            previousSelection={undefined}
+                        ></ServiceHostingSelection>
+                    </div>
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <div
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}  ${serviceOrderStyles.orderFormSelectionFirstInGroup}`}
+                        >
+                            <Tabs
+                                type='card'
+                                size='middle'
+                                activeKey={region.area}
+                                tabPosition={'top'}
+                                items={areaList}
+                            />
+                        </div>
+                        <RegionSelection selectRegion={region.name} disabled={true} />
+                        {Object.keys(availabilityZones).length > 0 ? (
+                            <MigrateServiceSubmitAvailabilityZoneInfo
+                                availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
+                                    selectCsp,
+                                    userOrderableServiceVoList
+                                )}
+                                availabilityZones={availabilityZones}
+                            />
+                        ) : undefined}
+                    </div>
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
+                        <FlavorSelection selectFlavor={selectFlavor} flavorList={currentFlavorList} />
                     </div>
                 </div>
-                <br />
-                <ServiceHostingSelection
-                    serviceHostingTypes={[selectServiceHostingType]}
-                    disabledAlways={true}
-                    previousSelection={undefined}
-                ></ServiceHostingSelection>
-                <br />
-                <br />
-                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
-                    <Tabs type='card' size='middle' activeKey={region.area} tabPosition={'top'} items={areaList} />
-                </div>
-                <RegionInfo selectRegion={region.name} disabled={true} />
-                {Object.keys(availabilityZones).length > 0 ? (
-                    <MigrateServiceSubmitAvailabilityZoneInfo
-                        availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
-                            selectCsp,
-                            userOrderableServiceVoList
-                        )}
-                        availabilityZones={availabilityZones}
-                    />
-                ) : undefined}
-                <FlavorInfo selectFlavor={selectFlavor} disabled={true} />
-                <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
-                <BillingInfo priceValue={priceValue} />
                 <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button

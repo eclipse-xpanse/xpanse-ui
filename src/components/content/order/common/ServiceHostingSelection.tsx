@@ -33,15 +33,22 @@ export function ServiceHostingSelection({
 
     return (
         <>
-            <div className={serviceOrderStyles.orderFormSelectionStyle}>Service Hosted By:</div>
-            <Radio.Group
-                onChange={onChange}
-                disabled={disabledAlways || serviceHostingTypes.length === 1}
-                value={value}
-            >
-                <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
-                <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
-            </Radio.Group>
+            <div className={serviceOrderStyles.orderFormFlexElements}>
+                <div
+                    className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                >
+                    Service Hosted By:
+                </div>
+                <Radio.Group
+                    onChange={onChange}
+                    disabled={disabledAlways || serviceHostingTypes.length === 1}
+                    value={value}
+                    className={serviceOrderStyles.orderFormSelectionStyle}
+                >
+                    <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
+                    <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                </Radio.Group>
+            </div>
         </>
     );
 }
