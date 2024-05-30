@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Button } from 'antd';
 import React from 'react';
 import { To, useNavigate } from 'react-router-dom';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
@@ -21,6 +22,7 @@ function NavigateOrderSubmission({
 }): React.JSX.Element {
     const navigate = useNavigate();
     const [resetFormCache] = useOrderFormStore((state) => [state.clearFormVariables]);
+
     function goBack(props: OrderSubmitProps | undefined) {
         const toUrl: string = to as string;
         if (toUrl.includes(servicesSubPageRoute)) {
@@ -30,16 +32,15 @@ function NavigateOrderSubmission({
     }
 
     return (
-        <div>
-            <div
-                onClick={() => {
-                    goBack(props);
-                }}
-                className={serviceOrderStyles.orderNavigate}
-            >
-                {text}
-            </div>
-        </div>
+        <Button
+            type='primary'
+            onClick={() => {
+                goBack(props);
+            }}
+            className={serviceOrderStyles.orderNavigate}
+        >
+            {text}
+        </Button>
     );
 }
 

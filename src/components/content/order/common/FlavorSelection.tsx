@@ -12,7 +12,7 @@ import { FlavorFeatures } from './FlavorFeatures';
 import { FlavorPrice } from './FlavorPrice';
 import { FlavorTitle } from './FlavorTitle';
 
-export const FlavorInfo = ({
+export const FlavorSelection = ({
     selectFlavor,
     flavorList,
     onChangeFlavor,
@@ -23,7 +23,9 @@ export const FlavorInfo = ({
 }): React.JSX.Element => {
     return (
         <>
-            <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${flavorStyles.regionFlavorContent}`}>
+            <div
+                className={`${serviceOrderStyles.orderFormSelectionStyle} ${flavorStyles.regionFlavorContent} ${serviceOrderStyles.orderFormItemName}`}
+            >
                 <Form.Item
                     name='selectFlavor'
                     label='Flavor'

@@ -104,7 +104,6 @@ export const DeploymentForm = ({
                         </div>
                     </div>
                 </div>
-
                 <div className={serviceOrderStyles.orderParamItemLeft} />
                 <Form
                     layout='vertical'
@@ -115,35 +114,40 @@ export const DeploymentForm = ({
                     validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                     key='deploy'
                 >
-                    <Form.Item
-                        name={'Name'}
-                        label={'Name: Service Name'}
-                        rules={[{ required: true }, { type: 'string', min: 5 }]}
-                        colon={true}
-                    >
-                        <Input
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <Form.Item
                             name={'Name'}
-                            showCount
-                            placeholder={'customer defined name for service ordered'}
-                            maxLength={256}
-                            className={serviceOrderStyles.orderParamItemContent}
-                            suffix={
-                                <Tooltip title={'Customer defined name for the service instance created'}>
-                                    <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                                </Tooltip>
-                            }
-                            onChange={(e) => {
-                                cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, String(e.target.value));
-                            }}
-                        />
-                    </Form.Item>
-                    <div>
-                        {deployParams.params.map((item) =>
-                            item.kind === 'variable' || item.kind === 'env' ? (
-                                <OrderItem key={item.name} item={item} csp={selectCsp} region={region.name} />
-                            ) : undefined
-                        )}
+                            label={'Name: Service Name'}
+                            rules={[{ required: true }, { type: 'string', min: 5 }]}
+                            colon={true}
+                            className={serviceOrderStyles.orderParamsFirstParam}
+                        >
+                            <Input
+                                name={'Name'}
+                                showCount
+                                placeholder={'customer defined name for service ordered'}
+                                maxLength={256}
+                                className={serviceOrderStyles.orderParamItemContent}
+                                suffix={
+                                    <Tooltip title={'Customer defined name for the service instance created'}>
+                                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                                    </Tooltip>
+                                }
+                                onChange={(e) => {
+                                    cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, String(e.target.value));
+                                }}
+                            />
+                        </Form.Item>
+                        <div>
+                            {deployParams.params.map((item) =>
+                                item.kind === 'variable' || item.kind === 'env' ? (
+                                    <OrderItem key={item.name} item={item} csp={selectCsp} region={region.name} />
+                                ) : undefined
+                            )}
+                        </div>
                     </div>
+                    <div className={serviceOrderStyles.orderParamsFirstParam} />
                     <div className={serviceOrderStyles.orderParamItemRow}>
                         <div className={serviceOrderStyles.orderParamItemLeft} />
                         <div className={serviceOrderStyles.orderParamItemContent}>

@@ -21,8 +21,8 @@ import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { BillingModeSelection } from '../common/BillingModeSelection';
-import { FlavorInfo } from '../common/FlavorInfo';
-import { RegionInfo } from '../common/RegionInfo';
+import { FlavorSelection } from '../common/FlavorSelection.tsx';
+import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
@@ -286,18 +286,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         <>
             <Form
                 form={form}
-                layout='vertical'
+                layout='inline'
                 autoComplete='off'
                 initialValues={{ selectRegion, selectFlavor }}
                 onFinish={gotoOrderSubmit}
                 validateTrigger={['gotoOrderSubmit']}
+                className={serviceOrderStyles.orderFormInlineDisplay}
             >
-                <div>
-                    <NavigateOrderSubmission text={'<< Back'} to={servicePageUrl as To} props={undefined} />
-                    <div className={serviceOrderStyles.Line} />
-                </div>
                 <div className={tableStyles.genericTableContainer}>
-                    <Row justify='start' gutter={10}>
+                    <Row justify='space-between'>
                         <Col span={6}>
                             <Tooltip placement='topLeft' title={serviceName}>
                                 <Paragraph ellipsis={true} className={appStyles.contentTitle}>
@@ -316,69 +313,89 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             <></>
                         )}
                     </Row>
-                    <div className={serviceOrderStyles.orderFormSelectionStyle}>
-                        Version:&nbsp;
-                        <Select
-                            value={selectVersion}
-                            className={serviceOrderStyles.versionDropDown}
-                            onChange={onChangeVersion}
-                            options={versionList}
-                        />
-                    </div>
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <div className={serviceOrderStyles.orderFormFlexElements}>
+                            <div
+                                className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormSelectionFirstInGroup} ${serviceOrderStyles.orderFormItemName}`}
+                            >
+                                Version:&nbsp;
+                            </div>
+                            <Select
+                                value={selectVersion}
+                                className={serviceOrderStyles.versionDropDown}
+                                onChange={onChangeVersion}
+                                options={versionList}
+                            />
+                        </div>
 
-                    <br />
-                    <CspSelect
-                        selectCsp={selectCsp}
-                        cspList={cspList}
-                        onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
-                            onChangeCloudProvider(csp);
-                        }}
-                    />
-                    <br />
-                    <ServiceHostingSelection
-                        serviceHostingTypes={serviceHostTypes}
-                        updateServiceHostingType={onChangeServiceHostingType}
-                        disabledAlways={false}
-                        previousSelection={selectServiceHostType}
-                    ></ServiceHostingSelection>
-                    <br />
-                    <br />
-                    <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
-                        <Tabs
-                            type='card'
-                            size='middle'
-                            activeKey={selectArea}
-                            tabPosition={'top'}
-                            items={areaList}
-                            onChange={(area) => {
-                                onChangeAreaValue(area);
+                        <br />
+                        <CspSelect
+                            selectCsp={selectCsp}
+                            cspList={cspList}
+                            onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
+                                onChangeCloudProvider(csp);
                             }}
                         />
+                        <br />
+                        <ServiceHostingSelection
+                            serviceHostingTypes={serviceHostTypes}
+                            updateServiceHostingType={onChangeServiceHostingType}
+                            disabledAlways={false}
+                            previousSelection={selectServiceHostType}
+                        ></ServiceHostingSelection>
                     </div>
-                    <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
-                    {availabilityZoneConfigs.map((availabilityZoneConfig) => {
-                        return (
-                            <AvailabilityZoneFormItem
-                                availabilityZoneConfig={availabilityZoneConfig}
-                                selectRegion={selectRegion}
-                                onAvailabilityZoneChange={onAvailabilityZoneChange}
-                                selectAvailabilityZones={selectAvailabilityZones}
-                                selectCsp={selectCsp}
-                                key={availabilityZoneConfig.varName}
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <br />
+                        <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
+                            <Tabs
+                                type='card'
+                                size='middle'
+                                activeKey={selectArea}
+                                tabPosition={'top'}
+                                items={areaList}
+                                onChange={(area) => {
+                                    onChangeAreaValue(area);
+                                }}
                             />
-                        );
-                    })}
-                    <BillingModeSelection
-                        selectBillingMode={selectBillingMode}
-                        setSelectBillingMode={setSelectBillMode}
-                        billingModes={billingModes}
-                    />
-                    <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
+                        </div>
+                        <RegionSelection
+                            selectRegion={selectRegion}
+                            onChangeRegion={onChangeRegion}
+                            regionList={regionList}
+                        />
+                        {availabilityZoneConfigs.map((availabilityZoneConfig) => {
+                            return (
+                                <AvailabilityZoneFormItem
+                                    availabilityZoneConfig={availabilityZoneConfig}
+                                    selectRegion={selectRegion}
+                                    onAvailabilityZoneChange={onAvailabilityZoneChange}
+                                    selectAvailabilityZones={selectAvailabilityZones}
+                                    selectCsp={selectCsp}
+                                    key={availabilityZoneConfig.varName}
+                                />
+                            );
+                        })}
+                    </div>
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <BillingModeSelection
+                            selectBillingMode={selectBillingMode}
+                            setSelectBillingMode={setSelectBillMode}
+                            billingModes={billingModes}
+                        />
+                        <FlavorSelection
+                            selectFlavor={selectFlavor}
+                            flavorList={flavorList}
+                            onChangeFlavor={onChangeFlavor}
+                        />
+                    </div>
                 </div>
-                <div>
-                    <div className={serviceOrderStyles.Line} />
-                    <div className={serviceOrderStyles.orderParamItemRow}>
-                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                <Row justify='space-around'>
+                    <Col span={6}>
+                        <div>
+                            <NavigateOrderSubmission text={'Back'} to={servicePageUrl as To} props={undefined} />
+                        </div>
+                    </Col>
+                    <Col span={4}>
                         <div className={serviceOrderStyles.orderParamSubmit}>
                             <Button
                                 type='primary'
@@ -392,8 +409,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                                 &nbsp;&nbsp;Next&nbsp;&nbsp;
                             </Button>
                         </div>
-                    </div>
-                </div>
+                    </Col>
+                </Row>
             </Form>
         </>
     );

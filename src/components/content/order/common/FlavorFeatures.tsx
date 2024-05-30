@@ -20,7 +20,7 @@ export const FlavorFeatures = (flavor: ServiceFlavor): React.JSX.Element => {
                 itemLayout={'horizontal'}
                 dataSource={flavor.features}
                 renderItem={(item, _) => (
-                    <List.Item>
+                    <List.Item className={flavorStyles.flavorFeatureItemName}>
                         <div>
                             <CheckOutlined className={serviceModifyStyles.flavorFeaturesItemIcon} />
                             &nbsp;{item}

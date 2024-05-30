@@ -8,7 +8,7 @@ import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 
-export const RegionInfo = ({
+export const RegionSelection = ({
     selectRegion,
     onChangeRegion,
     regionList,
@@ -21,7 +21,7 @@ export const RegionInfo = ({
 }): React.JSX.Element => {
     return (
         <>
-            <div className={serviceOrderStyles.orderFormSelectionStyle}>
+            <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}>
                 <Form.Item
                     name='selectRegion'
                     label='Region'
@@ -32,7 +32,6 @@ export const RegionInfo = ({
                             className={serviceOrderStyles.selectBoxClass}
                             defaultValue={selectRegion}
                             value={selectRegion}
-                            style={{ width: 450 }}
                             onChange={(newRegion) => {
                                 if (onChangeRegion) {
                                     onChangeRegion(newRegion);
