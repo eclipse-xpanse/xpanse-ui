@@ -8,6 +8,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
+import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
     MigrateRequest,
@@ -15,8 +16,8 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { BillingModeSelection } from '../common/BillingModeSelection';
-import { FlavorInfo } from '../common/FlavorInfo';
-import { RegionInfo } from '../common/RegionInfo';
+import { FlavorSelection } from '../common/FlavorSelection.tsx';
+import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
@@ -255,84 +256,98 @@ export const SelectDestination = ({
     return (
         <Form
             form={form}
-            layout='vertical'
+            layout='inline'
             autoComplete='off'
             initialValues={{ selectRegion, selectFlavor }}
             onFinish={next}
             validateTrigger={['next']}
+            className={serviceOrderStyles.orderFormInlineDisplay}
         >
-            <div>
-                <CspSelect
-                    selectCsp={selectCsp}
-                    cspList={cspList}
-                    onChangeHandler={(csp) => {
-                        onChangeCloudProvider(csp);
-                    }}
-                />
-                <br />
-                <ServiceHostingSelection
-                    serviceHostingTypes={serviceHostTypes}
-                    updateServiceHostingType={onChangeServiceHostingType}
-                    disabledAlways={false}
-                    previousSelection={selectServiceHostType}
-                ></ServiceHostingSelection>
-                <br />
-                <br />
-                <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle}`}>
-                    <Tabs
-                        type='card'
-                        size='middle'
-                        activeKey={selectArea}
-                        tabPosition={'top'}
-                        items={areaList}
-                        onChange={(area) => {
-                            onChangeAreaValue(area);
+            <div className={tableStyles.genericTableContainer}>
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <CspSelect
+                        selectCsp={selectCsp}
+                        cspList={cspList}
+                        onChangeHandler={(csp) => {
+                            onChangeCloudProvider(csp);
                         }}
                     />
+                    <ServiceHostingSelection
+                        serviceHostingTypes={serviceHostTypes}
+                        updateServiceHostingType={onChangeServiceHostingType}
+                        disabledAlways={false}
+                        previousSelection={selectServiceHostType}
+                    ></ServiceHostingSelection>
                 </div>
-                <RegionInfo selectRegion={selectRegion} onChangeRegion={onChangeRegion} regionList={regionList} />
-                {availabilityZoneConfigs.map((availabilityZoneConfig) => {
-                    return (
-                        <AvailabilityZoneFormItem
-                            availabilityZoneConfig={availabilityZoneConfig}
-                            selectRegion={selectRegion}
-                            onAvailabilityZoneChange={onAvailabilityZoneChange}
-                            selectAvailabilityZones={selectAvailabilityZones}
-                            selectCsp={selectCsp}
-                            key={availabilityZoneConfig.varName}
-                        />
-                    );
-                })}
-                <BillingModeSelection
-                    selectBillingMode={selectBillingMode}
-                    setSelectBillingMode={setSelectBillingMode}
-                    billingModes={billingModes}
-                />
-                <FlavorInfo selectFlavor={selectFlavor} flavorList={flavorList} onChangeFlavor={onChangeFlavor} />
-                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
-                    <Space size={'large'}>
-                        <Button
-                            type='primary'
-                            className={'migrate-steps-operation-button-clas'}
-                            onClick={() => {
-                                prev();
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <div
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${appStyles.contentTitle} ${serviceOrderStyles.orderFormSelectionFirstInGroup}`}
+                    >
+                        <Tabs
+                            type='card'
+                            size='middle'
+                            activeKey={selectArea}
+                            tabPosition={'top'}
+                            items={areaList}
+                            onChange={(area) => {
+                                onChangeAreaValue(area);
                             }}
-                            disabled={isPreviousDisabled}
-                        >
-                            Previous
-                        </Button>
-                        <Button
-                            type='primary'
-                            disabled={
-                                getAvailabilityZonesForRegionQuery.isError ||
-                                (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
-                            }
-                            htmlType='submit'
-                        >
-                            Next
-                        </Button>
-                    </Space>
+                        />
+                    </div>
+                    <RegionSelection
+                        selectRegion={selectRegion}
+                        onChangeRegion={onChangeRegion}
+                        regionList={regionList}
+                    />
+                    {availabilityZoneConfigs.map((availabilityZoneConfig) => {
+                        return (
+                            <AvailabilityZoneFormItem
+                                availabilityZoneConfig={availabilityZoneConfig}
+                                selectRegion={selectRegion}
+                                onAvailabilityZoneChange={onAvailabilityZoneChange}
+                                selectAvailabilityZones={selectAvailabilityZones}
+                                selectCsp={selectCsp}
+                                key={availabilityZoneConfig.varName}
+                            />
+                        );
+                    })}
                 </div>
+                <div className={serviceOrderStyles.orderFormGroupItems}>
+                    <BillingModeSelection
+                        selectBillingMode={selectBillingMode}
+                        setSelectBillingMode={setSelectBillingMode}
+                        billingModes={billingModes}
+                    />
+                    <FlavorSelection
+                        selectFlavor={selectFlavor}
+                        flavorList={flavorList}
+                        onChangeFlavor={onChangeFlavor}
+                    />
+                </div>
+            </div>
+            <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+                <Space size={'large'}>
+                    <Button
+                        type='primary'
+                        className={'migrate-steps-operation-button-clas'}
+                        onClick={() => {
+                            prev();
+                        }}
+                        disabled={isPreviousDisabled}
+                    >
+                        Previous
+                    </Button>
+                    <Button
+                        type='primary'
+                        disabled={
+                            getAvailabilityZonesForRegionQuery.isError ||
+                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
+                        }
+                        htmlType='submit'
+                    >
+                        Next
+                    </Button>
+                </Space>
             </div>
         </Form>
     );

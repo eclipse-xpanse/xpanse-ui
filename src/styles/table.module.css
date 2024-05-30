@@ -5,6 +5,7 @@
 
 .generic-table-container {
     padding: 24px;
+    display: grid;
 }
 
 .table-load-failure-alert {

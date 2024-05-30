@@ -5,6 +5,7 @@
 
 import { Form } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../../xpanse-api/generated';
 import useGetAvailabilityZonesForRegionQuery from '../utils/useGetAvailabilityZonesForRegionQuery';
 import { AvailabilityZoneButton } from './AvailabilityZoneButton';
@@ -35,13 +36,7 @@ export function AvailabilityZoneFormItem({
             return <AvailabilityZoneLoading key={availabilityZoneConfig.varName} />;
         }
         if (availabilityZonesVariableRequest.isError) {
-            return (
-                <AvailabilityZoneError
-                    retryRequest={retryRequest}
-                    error={availabilityZonesVariableRequest.error}
-                    key={availabilityZoneConfig.varName}
-                />
-            );
+            return <AvailabilityZoneError retryRequest={retryRequest} error={availabilityZonesVariableRequest.error} />;
         }
         if (availabilityZonesVariableRequest.data) {
             return (
@@ -59,7 +54,7 @@ export function AvailabilityZoneFormItem({
     return (
         <Form.Item
             key={availabilityZoneConfig.varName}
-            label={<p style={{ fontWeight: 'bold' }}>{availabilityZoneConfig.displayName}</p>}
+            label={<p className={serviceOrderStyles.orderFormItemName}>{availabilityZoneConfig.displayName}</p>}
             required={availabilityZoneConfig.mandatory}
             rules={[
                 {

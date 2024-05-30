@@ -20,33 +20,39 @@ export default function CspSelect({
 }): React.JSX.Element {
     return (
         <>
-            <div className={serviceOrderStyles.orderFormSelectionStyle}>Cloud Service Provider:</div>
-            <div className={serviceOrderStyles.servicesContentBody}>
-                {cspList.map((item, index) => {
-                    return (
-                        <div
-                            onClick={() => {
-                                onChangeHandler(item);
-                            }}
-                            key={index}
-                            className={
-                                selectCsp.valueOf() === item.valueOf()
-                                    ? serviceOrderStyles.cloudProviderSelectHover
-                                    : serviceOrderStyles.cloudProviderSelect
-                            }
-                        >
-                            <Image
-                                width={200}
-                                height={56}
-                                src={cspMap.get(item as unknown as CloudServiceProvider.name)?.logo}
-                                alt={item}
-                                preview={false}
-                                fallback={'https://img.shields.io/badge/-' + item + '-gray'}
-                            />
-                            <div className={serviceOrderStyles.serviceTypeOptionInfo} />
-                        </div>
-                    );
-                })}
+            <div className={serviceOrderStyles.orderFormFlexElements}>
+                <div
+                    className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                >
+                    Cloud Service Provider:
+                </div>
+                <div className={serviceOrderStyles.servicesContentBody}>
+                    {cspList.map((item, index) => {
+                        return (
+                            <div
+                                onClick={() => {
+                                    onChangeHandler(item);
+                                }}
+                                key={index}
+                                className={
+                                    selectCsp.valueOf() === item.valueOf()
+                                        ? serviceOrderStyles.cloudProviderSelectHover
+                                        : serviceOrderStyles.cloudProviderSelect
+                                }
+                            >
+                                <Image
+                                    width={200}
+                                    height={56}
+                                    src={cspMap.get(item as unknown as CloudServiceProvider.name)?.logo}
+                                    alt={item}
+                                    preview={false}
+                                    fallback={'https://img.shields.io/badge/-' + item + '-gray'}
+                                />
+                                <div className={serviceOrderStyles.serviceTypeOptionInfo} />
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
         </>
     );

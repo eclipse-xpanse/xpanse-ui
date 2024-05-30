@@ -3,28 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-.order-navigate {
-    display: flex;
-    border: 1px solid transparent;
-    color: rgb(24, 120, 255);
-    font-weight: bold;
-    padding: 10px;
-    width: 80px;
-}
-
-.order-navigate:hover {
-    cursor: pointer;
-    font-weight: bold;
-    text-shadow: 0 0 1px rgb(24, 120, 255);
-    width: 80px;
-}
-
 .Line {
     height: 1px;
     border: 0 solid transparent;
     color: black;
     padding: 0;
     background: #f2f2f2;
+    width: 100%;
 }
 
 .order-select-migrate-target {
@@ -72,16 +57,18 @@
 }
 
 .order-param-submit {
-    float: left;
-    width: 450px;
+    text-align: right;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.order-navigate {
     text-align: right;
     margin-top: 15px;
     margin-bottom: 15px;
 }
 
 .order-param-deploy {
-    float: left;
-    width: 600px;
     text-align: right;
     margin-top: 15px;
     margin-bottom: 15px;
@@ -220,12 +207,22 @@
 
 .order-form-selection-style {
     margin: 0 0 20px 0;
-    font-weight: bold;
     font-size: 14px;
+    padding-right: 20px;
+    place-content: center;
+}
+
+.order-form-item-name {
+    font-weight: bold;
+}
+
+.order-form-selection-first-in-group {
+    padding-top: 20px;
 }
 
 .select-box-class {
     box-sizing: border-box;
+    width: 450px;
 }
 
 .select-cloud-provider-class {
@@ -238,6 +235,7 @@
 
 .version-drop-down {
     width: fit-content;
+    margin-top: 15px;
 }
 
 .content-title-api {
@@ -248,8 +246,8 @@
     cursor: pointer;
     display: inline;
     padding: 0;
-    margin-left: 155px;
     margin-top: 10px;
+    float: right;
 }
 
 .services-loading-error {
@@ -347,4 +345,25 @@
 .order-billing-model-value-class {
     font-size: 14px;
     font-weight: normal;
+}
+
+.order-form-flex-elements {
+    display: flex;
+}
+
+.order-form-group-items {
+    box-shadow:
+        0 1px 1px 0 rgba(0, 0, 0, 0),
+        0 6px 20px 0 rgba(0, 0, 0, 0.1);
+    padding-left: 50px;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.order-params-first-param {
+    padding-top: 20px;
+}
+
+.order-form-inline-display {
+    display: block;
 }
