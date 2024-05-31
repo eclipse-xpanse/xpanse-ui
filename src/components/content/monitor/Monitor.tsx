@@ -14,7 +14,6 @@ import { ApiError, DeployedService, Response } from '../../../xpanse-api/generat
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
-import { MonitorTip } from './MonitorTip';
 import { chartsPerRowWithTwo, lastMinuteRadioButtonKeyId } from './metricProps';
 import { useDeployedServicesByUserQuery } from './useDeployedServicesByUserQuery';
 
@@ -177,15 +176,6 @@ function Monitor(): React.JSX.Element {
         setServiceId('');
     };
 
-    const onRemove = () => {
-        setServiceId('');
-        form.resetFields();
-        tipType.current = undefined;
-        tipMessage.current = '';
-        tipDescription.current = '';
-        void deployedServiceQuery.refetch();
-    };
-
     return (
         <div className={tablesStyle.genericTableContainer}>
             <div className={monitorStyles.monitorServiceSelectTitle}>
@@ -194,12 +184,6 @@ function Monitor(): React.JSX.Element {
                     &nbsp; Operating System Monitor
                 </h3>
             </div>
-            <MonitorTip
-                type={tipType.current}
-                msg={tipMessage.current}
-                description={tipDescription.current}
-                onRemove={onRemove}
-            />
             <Form
                 name='basic'
                 form={form}
@@ -287,6 +271,7 @@ function Monitor(): React.JSX.Element {
                             isAutoRefresh={isAutoRefresh}
                             chartsPerRow={chartsPerRow}
                             setNumberOfChartsAvailable={setNumberOfChartsAvailable}
+                            onReset={onReset}
                         />
                     </Suspense>
                 </div>

@@ -3,8 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert } from 'antd';
+import { Alert, Button } from 'antd';
 import React from 'react';
+import errorAlertStyles from '../../../styles/error-alert.module.css';
 import monitorStyles from '../../../styles/monitor.module.css';
 
 export const MonitorTip = ({
@@ -12,11 +13,13 @@ export const MonitorTip = ({
     msg,
     description,
     onRemove,
+    retryRequest,
 }: {
     type: 'error' | 'success' | undefined;
     msg: string;
     description: string;
     onRemove: () => void;
+    retryRequest: () => void;
 }): React.JSX.Element => {
     if (!type) {
         return <></>;
@@ -32,6 +35,17 @@ export const MonitorTip = ({
                 type={type}
                 onClose={onRemove}
                 closable={true}
+                action={
+                    <Button
+                        className={errorAlertStyles.tryAgainBtnInAlertClass}
+                        size='small'
+                        type='primary'
+                        onClick={retryRequest}
+                        danger={true}
+                    >
+                        Retry Request
+                    </Button>
+                }
             />{' '}
         </div>
     );
