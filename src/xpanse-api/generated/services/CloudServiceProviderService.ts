@@ -64,7 +64,7 @@ export class CloudServiceProviderService {
         serviceName?: string,
         serviceVersion?: string,
         serviceHostingType?: 'self' | 'service-vendor',
-        serviceRegistrationState?: 'approval pending' | 'approved' | 'rejected'
+        serviceRegistrationState?: 'unregistered' | 'approval pending' | 'approved' | 'rejected'
     ): CancelablePromise<Array<ServiceTemplateDetailVo>> {
         return __request(OpenAPI, {
             method: 'GET',

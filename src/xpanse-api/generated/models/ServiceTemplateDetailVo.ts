@@ -125,6 +125,7 @@ export namespace ServiceTemplateDetailVo {
      * State of registered service template.
      */
     export enum serviceRegistrationState {
+        UNREGISTERED = 'unregistered',
         APPROVAL_PENDING = 'approval pending',
         APPROVED = 'approved',
         REJECTED = 'rejected',
