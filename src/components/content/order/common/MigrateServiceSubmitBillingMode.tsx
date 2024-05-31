@@ -19,7 +19,7 @@ export const MigrateServiceSubmitBillingMode = ({ selectBillMode }: { selectBill
                     required={true}
                 >
                     <Flex vertical gap='middle'>
-                        <Radio.Group disabled={true} buttonStyle='solid' value={selectBillMode}>
+                        <Radio.Group disabled={true} buttonStyle='solid'>
                             <Radio.Button key={selectBillMode} value={selectBillMode}>
                                 {selectBillMode}
                             </Radio.Button>
