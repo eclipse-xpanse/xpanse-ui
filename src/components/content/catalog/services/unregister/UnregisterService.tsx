@@ -7,14 +7,17 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { useUnregisterRequest } from './UnregisterMutation';
 
 function UnregisterService({
     id,
     setIsViewDisabled,
+    serviceRegistrationState,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
+    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
 }): React.JSX.Element {
     const unregisterRequest = useUnregisterRequest(id);
 
@@ -38,7 +41,10 @@ function UnregisterService({
                     icon={<CloseCircleOutlined />}
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
-                    disabled={unregisterRequest.isSuccess}
+                    disabled={
+                        unregisterRequest.isSuccess ||
+                        serviceRegistrationState === ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                    }
                 >
                     Unregister
                 </Button>
