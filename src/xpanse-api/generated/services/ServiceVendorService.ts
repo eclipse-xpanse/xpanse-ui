@@ -11,7 +11,6 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 import type { Ocl } from '../models/Ocl';
-import type { Response } from '../models/Response';
 import type { ServiceTemplateDetailVo } from '../models/ServiceTemplateDetailVo';
 export class ServiceVendorService {
     /**
@@ -64,15 +63,61 @@ export class ServiceVendorService {
         });
     }
     /**
-     * Delete service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+     * Delete unregistered service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
      * @param id id of service template
-     * @returns Response OK
+     * @returns void
      * @throws ApiError
      */
-    public static unregister(id: string): CancelablePromise<Response> {
+    public static deleteServiceTemplate(id: string): CancelablePromise<void> {
         return __request(OpenAPI, {
             method: 'DELETE',
             url: '/xpanse/service_templates/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+    /**
+     * Unregister service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
+     * @returns ServiceTemplateDetailVo OK
+     * @throws ApiError
+     */
+    public static unregister(id: string): CancelablePromise<ServiceTemplateDetailVo> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/xpanse/service_templates/unregister/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+    /**
+     * Re-register the unregistered service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+     * @param id id of service template
+     * @returns ServiceTemplateDetailVo OK
+     * @throws ApiError
+     */
+    public static reRegisterServiceTemplate(id: string): CancelablePromise<ServiceTemplateDetailVo> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/xpanse/service_templates/re-register/{id}',
             path: {
                 id: id,
             },
@@ -140,7 +185,7 @@ export class ServiceVendorService {
         serviceName?: string,
         serviceVersion?: string,
         serviceHostingType?: 'self' | 'service-vendor',
-        serviceRegistrationState?: 'approval pending' | 'approved' | 'rejected'
+        serviceRegistrationState?: 'unregistered' | 'approval pending' | 'approved' | 'rejected'
     ): CancelablePromise<Array<ServiceTemplateDetailVo>> {
         return __request(OpenAPI, {
             method: 'GET',
