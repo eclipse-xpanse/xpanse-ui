@@ -32,12 +32,14 @@ export default function MonitorChart({
     isAutoRefresh,
     chartsPerRow,
     setNumberOfChartsAvailable,
+    onReset,
 }: {
     serviceId: string;
     timePeriod: number;
     isAutoRefresh: boolean;
     chartsPerRow: string;
     setNumberOfChartsAvailable: (chartCount: number) => void;
+    onReset: () => void;
 }): React.JSX.Element {
     let tipType: 'error' | 'success' | undefined = undefined;
     let tipMessage: string = '';
@@ -235,6 +237,10 @@ export default function MonitorChart({
         tipType = undefined;
         tipMessage = '';
         tipDescription = '';
+        onReset();
+    };
+
+    const retryRequest = () => {
         if (timePeriod === lastMinuteRadioButtonKeyId) {
             void useGetLastKnownMetric.refetch();
         } else {
@@ -244,7 +250,13 @@ export default function MonitorChart({
 
     return (
         <>
-            <MonitorTip type={tipType} msg={tipMessage} description={tipDescription} onRemove={onRemove} />
+            <MonitorTip
+                type={tipType}
+                msg={tipMessage}
+                description={tipDescription}
+                onRemove={onRemove}
+                retryRequest={retryRequest}
+            />
             {useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading ? (
                 <div className={monitorStyles.monitorSearchLoadingClass}>
                     <Spin
