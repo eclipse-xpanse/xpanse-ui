@@ -12,7 +12,7 @@ export const FlavorPrice = (): React.JSX.Element => {
         <>
             <Tag color={'blue'} className={serviceModifyStyles.flavorPriceContent}>
                 {/* TODO Will be fixed after #1597 is fixed */}
-                {(20).toString().concat(' ').concat('EUR/').concat('hourly')}
+                {(20).toString().concat(' ').concat('EUR/').concat('hour')}
             </Tag>
         </>
     );
