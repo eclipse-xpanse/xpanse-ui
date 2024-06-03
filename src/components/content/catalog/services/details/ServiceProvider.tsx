@@ -198,6 +198,7 @@ function ServiceProvider({
                                     key={activeServiceDetail.id}
                                     id={activeServiceDetail.id}
                                     setIsViewDisabled={setIsViewDisabled}
+                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
                                 />
                             </div>
                             <h3 className={catalogStyles.catalogDetailsH3}>

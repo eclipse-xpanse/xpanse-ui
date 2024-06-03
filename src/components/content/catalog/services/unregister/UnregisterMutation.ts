@@ -14,6 +14,10 @@ export function useUnregisterRequest(id: string) {
         mutationFn: () => {
             return ServiceVendorService.unregister(id);
         },
+        // necessary to clear the mutationCache immediately.
+        // Otherwise, the mutation state is cached and with retries, it is not possible to get state of the
+        // latest request using useMutationState method.
+        gcTime: 0,
     });
 }
 
