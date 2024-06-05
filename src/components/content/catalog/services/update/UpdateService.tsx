@@ -5,7 +5,7 @@
 
 import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Modal, Upload, UploadFile } from 'antd';
+import { Button, Col, Modal, Row, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import appStyles from '../../../../../styles/app.module.css';
@@ -113,7 +113,8 @@ function UpdateService({
         }
     }
 
-    const sendRequestRequest = () => {
+    const sendRequestRequest = ({ event }: { event: React.MouseEvent }) => {
+        event.stopPropagation();
         if (ocl.current) {
             updateServiceRequest.mutate(ocl.current);
         }
@@ -175,38 +176,56 @@ function UpdateService({
                                 removeIcon: updateServiceRequest.isPending,
                             }}
                         >
-                            <Button
-                                size={'large'}
-                                disabled={yamlSyntaxValidationStatus === 'completed'}
-                                loading={yamlSyntaxValidationStatus === 'inProgress'}
-                                type={'primary'}
-                                icon={<UploadOutlined />}
-                            >
-                                Upload File
-                            </Button>
+                            <Row>
+                                <Col>
+                                    <div className={registerStyles.registerButtonsUpload}>
+                                        <Button
+                                            size={'large'}
+                                            disabled={yamlSyntaxValidationStatus === 'completed'}
+                                            loading={yamlSyntaxValidationStatus === 'inProgress'}
+                                            type={'primary'}
+                                            icon={<UploadOutlined />}
+                                        >
+                                            Upload File
+                                        </Button>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className={registerStyles.registerButtonsRegister}>
+                                        <Button
+                                            size={'large'}
+                                            disabled={
+                                                yamlSyntaxValidationStatus === 'notStarted' ||
+                                                (updateServiceRequest.isIdle &&
+                                                    yamlSyntaxValidationStatus === 'error') ||
+                                                updateServiceRequest.isError ||
+                                                updateServiceRequest.isSuccess ||
+                                                oclValidationStatus === 'error'
+                                            }
+                                            type={'primary'}
+                                            icon={<CloudUploadOutlined />}
+                                            onClick={(event: React.MouseEvent) => {
+                                                sendRequestRequest({ event: event });
+                                            }}
+                                            loading={updateServiceRequest.isPending}
+                                        >
+                                            Update
+                                        </Button>
+                                    </div>
+                                </Col>
+                                <Col>
+                                    <div className={registerStyles.registerButtonsValidate}>
+                                        {yamlSyntaxValidationStatus === 'completed' ||
+                                        yamlSyntaxValidationStatus === 'error' ? (
+                                            <YamlSyntaxValidationResult
+                                                validationResult={yamlValidationResult.current}
+                                                yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
+                                            />
+                                        ) : null}
+                                    </div>
+                                </Col>
+                            </Row>
                         </Upload>
-                        <Button
-                            size={'large'}
-                            disabled={
-                                yamlSyntaxValidationStatus === 'notStarted' ||
-                                (updateServiceRequest.isIdle && yamlSyntaxValidationStatus === 'error') ||
-                                updateServiceRequest.isError ||
-                                updateServiceRequest.isSuccess ||
-                                oclValidationStatus === 'error'
-                            }
-                            type={'primary'}
-                            icon={<CloudUploadOutlined />}
-                            onClick={sendRequestRequest}
-                            loading={updateServiceRequest.isPending}
-                        >
-                            Update
-                        </Button>
-                        {yamlSyntaxValidationStatus === 'completed' || yamlSyntaxValidationStatus === 'error' ? (
-                            <YamlSyntaxValidationResult
-                                validationResult={yamlValidationResult.current}
-                                yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
-                            />
-                        ) : null}
                     </div>
                     <div>{oclDisplayData.current}</div>
                 </div>
