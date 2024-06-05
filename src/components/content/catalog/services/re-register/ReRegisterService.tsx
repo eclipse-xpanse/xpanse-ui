@@ -3,54 +3,60 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { MinusCircleOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
-import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { useUnregisterRequest } from './UnregisterMutation';
+import { useReRegisterRequest } from './ReRegisterMutation';
 
-function UnregisterService({
+function ReRegisterService({
     id,
     setIsViewDisabled,
+    isReRegisterDisabled,
+    setIsDeleteDisabled,
     serviceRegistrationState,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
+    isReRegisterDisabled: boolean;
+    setIsDeleteDisabled: (isDelete: boolean) => void;
     serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
 }): React.JSX.Element {
-    const unregisterRequest = useUnregisterRequest(id);
-
-    const unregister = () => {
+    const reRegisterRequest = useReRegisterRequest(id);
+    if (reRegisterRequest.isSuccess) {
+        setIsDeleteDisabled(true);
+    }
+    const reRegister = () => {
         setIsViewDisabled(true);
-        unregisterRequest.mutate();
+        reRegisterRequest.mutate();
     };
 
     return (
         <div className={catalogStyles.updateUnregisterBtnClass}>
             <Popconfirm
-                title='Unregister the service'
-                description='Are you sure to unregister this service?'
+                title='re-register the service'
+                description='Are you sure to re-register this service?'
                 cancelText='Yes'
                 okText='No'
                 onCancel={() => {
-                    unregister();
+                    reRegister();
                 }}
             >
                 <Button
-                    icon={<MinusCircleOutlined />}
+                    icon={<PlusCircleOutlined />}
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
-                        unregisterRequest.isSuccess ||
-                        serviceRegistrationState === ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                        reRegisterRequest.isSuccess ||
+                        isReRegisterDisabled ||
+                        serviceRegistrationState !== ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
                     }
                 >
-                    Unregister
+                    Re-register
                 </Button>
             </Popconfirm>
         </div>
     );
 }
 
-export default UnregisterService;
+export default ReRegisterService;

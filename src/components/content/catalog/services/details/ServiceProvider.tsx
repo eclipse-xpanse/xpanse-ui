@@ -6,7 +6,7 @@
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
@@ -22,7 +22,11 @@ import {
     groupServicesByVersionForSpecificServiceName,
 } from '../../../common/catalog/catalogProps';
 import { cspMap } from '../../../common/csp/CspLogo';
+import { DeleteResult } from '../delete/DeleteResult';
+import DeleteService from '../delete/DeleteService';
 import { ServicePolicies } from '../policies/ServicePolicies';
+import { ReRegisterResult } from '../re-register/ReRegisterResult';
+import ReRegisterService from '../re-register/ReRegisterService';
 import { UnregisterResult } from '../unregister/UnregisterResult';
 import UnregisterService from '../unregister/UnregisterService';
 import UpdateService from '../update/UpdateService';
@@ -47,7 +51,8 @@ function ServiceProvider({
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
-
+    const [isReRegisterDisabled, setIsReRegisterDisabled] = useState<boolean>(false);
+    const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(false);
     const serviceCspInQuery = useMemo(() => {
         const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
         if (queryInUri.length > 0) {
@@ -182,6 +187,8 @@ function ServiceProvider({
                     {activeServiceDetail ? (
                         <>
                             <UnregisterResult id={activeServiceDetail.id} category={category} />
+                            <ReRegisterResult id={activeServiceDetail.id} category={category} />
+                            <DeleteResult id={activeServiceDetail.id} category={category} />
                             <Tabs
                                 items={items}
                                 onChange={onChangeCsp}
@@ -195,9 +202,22 @@ function ServiceProvider({
                                     isViewDisabled={isViewDisabled}
                                 />
                                 <UnregisterService
-                                    key={activeServiceDetail.id}
                                     id={activeServiceDetail.id}
                                     setIsViewDisabled={setIsViewDisabled}
+                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
+                                />
+                                <ReRegisterService
+                                    id={activeServiceDetail.id}
+                                    setIsViewDisabled={setIsViewDisabled}
+                                    isReRegisterDisabled={isReRegisterDisabled}
+                                    setIsDeleteDisabled={setIsDeleteDisabled}
+                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
+                                />
+                                <DeleteService
+                                    id={activeServiceDetail.id}
+                                    setIsViewDisabled={setIsViewDisabled}
+                                    isDeleteDisabled={isDeleteDisabled}
+                                    setIsReRegisterDisabled={setIsReRegisterDisabled}
                                     serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
                                 />
                             </div>
