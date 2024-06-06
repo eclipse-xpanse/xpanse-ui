@@ -16,7 +16,7 @@ export type DeployedServiceDetails = {
     /**
      * The ID of the service
      */
-    id: string;
+    serviceId: string;
     /**
      * The catalog of the service
      */

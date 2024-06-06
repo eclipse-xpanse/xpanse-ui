@@ -53,7 +53,7 @@ export type MigrateRequest = {
     /**
      * The id of the service to migrate
      */
-    id: string;
+    originalServiceId: string;
     eulaAccepted?: boolean;
 };
 export namespace MigrateRequest {

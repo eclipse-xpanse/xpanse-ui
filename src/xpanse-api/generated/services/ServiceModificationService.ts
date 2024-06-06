@@ -40,7 +40,7 @@ export class ServiceModificationService {
         });
     }
     /**
-     * List modification audits of the service instance.<br>Required role:<b> admin</b> or <b>user</b>
+     * List modification audits of the service instance<br>Required role:<b> admin</b> or <b>user</b>
      * @param serviceId id of the service
      * @param taskStatus status of the modification
      * @returns ServiceModificationAuditDetails OK

@@ -40,7 +40,7 @@ function Policies(): React.JSX.Element {
     const columns: ColumnsType<UserPolicy> = [
         {
             title: 'Policy ID',
-            dataIndex: 'id',
+            dataIndex: 'userPolicyId',
         },
         {
             title: 'CSP',
@@ -138,7 +138,7 @@ function Policies(): React.JSX.Element {
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
                                     loading={
-                                        record.id === id &&
+                                        record.userPolicyId === id &&
                                         !deletePoliciesManagementServiceRequest.isSuccess &&
                                         deletePoliciesManagementServiceRequest.isError
                                     }
@@ -160,8 +160,8 @@ function Policies(): React.JSX.Element {
     ];
 
     const deleteCurrentPolicy = (record: UserPolicy) => {
-        setId(record.id);
-        deletePoliciesManagementServiceRequest.mutate(record.id);
+        setId(record.userPolicyId);
+        deletePoliciesManagementServiceRequest.mutate(record.userPolicyId);
     };
 
     const getDeleteCloseStatus = (isClose: boolean) => {

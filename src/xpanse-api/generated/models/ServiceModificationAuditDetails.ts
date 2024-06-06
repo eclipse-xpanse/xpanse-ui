@@ -16,7 +16,7 @@ export type ServiceModificationAuditDetails = {
     /**
      * The id of the service modification request.
      */
-    id: string;
+    serviceModificationRequestId: string;
     /**
      * The id of the deployed service.
      */

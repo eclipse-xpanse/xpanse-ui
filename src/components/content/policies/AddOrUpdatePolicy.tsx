@@ -52,7 +52,7 @@ export const AddOrUpdatePolicy = ({
             policyCreateRequest.policy = policyRequest.policy;
             setCreatePolicyRequest(policyCreateRequest);
             createPoliciesManagementServiceRequest.mutate(policyCreateRequest);
-        } else if (currentPolicyService.id.length > 0) {
+        } else if (currentPolicyService.userPolicyId.length > 0) {
             if (comparePolicyUpdateRequestResult(policyRequest)) {
                 setIsUpdated(comparePolicyUpdateRequestResult(policyRequest));
                 return;
@@ -63,7 +63,7 @@ export const AddOrUpdatePolicy = ({
             policyUpdateRequest.policy = policyRequest.policy;
             setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
-                id: currentPolicyService.id,
+                id: currentPolicyService.userPolicyId,
                 requestBody: policyUpdateRequest,
             });
         }
@@ -209,11 +209,11 @@ export const AddOrUpdatePolicy = ({
                 initialValues={{
                     remember: true,
                     csp:
-                        currentPolicyService !== undefined && currentPolicyService.id.length > 0
+                        currentPolicyService !== undefined && currentPolicyService.userPolicyId.length > 0
                             ? currentPolicyService.csp
                             : undefined,
                     enabled:
-                        currentPolicyService !== undefined && currentPolicyService.id.length > 0
+                        currentPolicyService !== undefined && currentPolicyService.userPolicyId.length > 0
                             ? currentPolicyService.enabled
                             : false,
                     policy: policyContent.current,

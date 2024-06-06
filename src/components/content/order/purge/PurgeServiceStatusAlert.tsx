@@ -43,7 +43,9 @@ export function PurgeServiceStatusAlert({
                 {' '}
                 <Alert
                     message={errorMessage}
-                    description={<OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.id} />}
+                    description={
+                        <OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.serviceId} />
+                    }
                     showIcon
                     closable={true}
                     onClose={onClose}
@@ -67,7 +69,7 @@ export function PurgeServiceStatusAlert({
         );
     }
 
-    if (deployedService.id && statusPollingError) {
+    if (deployedService.serviceId && statusPollingError) {
         if (statusPollingError instanceof ApiError && statusPollingError.body && 'details' in statusPollingError.body) {
             const response: Response = statusPollingError.body as Response;
             if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
@@ -78,7 +80,10 @@ export function PurgeServiceStatusAlert({
                         <Alert
                             message={response.details}
                             description={
-                                <OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.id} />
+                                <OrderSubmitResultDetails
+                                    msg={'Purge request failed'}
+                                    uuid={deployedService.serviceId}
+                                />
                             }
                             showIcon
                             closable={true}
@@ -111,7 +116,7 @@ export function PurgeServiceStatusAlert({
                             description={
                                 <OrderSubmitResultDetails
                                     msg={`Service purged successfully`}
-                                    uuid={deployedService.id}
+                                    uuid={deployedService.serviceId}
                                 />
                             }
                             showIcon

@@ -18,7 +18,7 @@ export type UserOrderableServiceVo = {
     /**
      * The id of the orderable service.
      */
-    id: string;
+    serviceTemplateId: string;
     /**
      * The category of the orderable service.
      */
