@@ -24,11 +24,11 @@ export const ApproveOrRejectServiceTemplate = ({
 }): React.JSX.Element => {
     const { TextArea } = Input;
     const [comments, setComments] = useState<string>('');
-    const approveOrRejectRequest = useApproveOrRejectRequest(currentServiceTemplateVo.id);
+    const approveOrRejectRequest = useApproveOrRejectRequest(currentServiceTemplateVo.serviceTemplateId);
     const handleOk = () => {
         if (isApproved !== undefined) {
             const request: ApproveOrRejectRequestParams = {
-                id: currentServiceTemplateVo.id,
+                id: currentServiceTemplateVo.serviceTemplateId,
                 reviewRegistrationRequest: {
                     reviewResult: isApproved
                         ? ReviewRegistrationRequest.reviewResult.APPROVED

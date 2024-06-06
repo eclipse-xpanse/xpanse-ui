@@ -51,7 +51,7 @@ function Reports(): React.JSX.Element {
                 );
             } else if (serviceIdInQuery) {
                 deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
-                    (service) => service.id === serviceIdInQuery
+                    (service) => service.serviceId === serviceIdInQuery
                 );
             } else {
                 deployedServiceList = listDeployedServicesByIsvQuery.data;
@@ -72,11 +72,11 @@ function Reports(): React.JSX.Element {
     const columns: ColumnsType<DeployedService> = [
         {
             title: 'Id',
-            dataIndex: 'id',
+            dataIndex: 'serviceId',
             filters: serviceIdInQuery ? undefined : serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.id.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.serviceId.startsWith(value.toString()),
             filtered: !!serviceIdInQuery,
             align: 'center',
         },
@@ -220,7 +220,7 @@ function Reports(): React.JSX.Element {
         const filters: ColumnFilterItem[] = [];
         const serviceIdSet = new Set<string>('');
         resp.forEach((v) => {
-            serviceIdSet.add(v.id);
+            serviceIdSet.add(v.serviceId);
         });
         serviceIdSet.forEach((id) => {
             const filter = {
@@ -336,7 +336,7 @@ function Reports(): React.JSX.Element {
     }
 
     const handleMyServiceDetailsOpenModal = (deployedService: DeployedService) => {
-        setServiceIdInModal(deployedService.id);
+        setServiceIdInModal(deployedService.serviceId);
         setIsMyServiceDetailsModalOpen(true);
     };
 

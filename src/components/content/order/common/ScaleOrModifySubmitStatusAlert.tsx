@@ -38,7 +38,7 @@ function ScaleOrModifySubmitStatusAlert({
         autoStart: true,
     });
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        currentSelectedService.id,
+        currentSelectedService.serviceId,
         !isSubmitFailed && !isSubmitInProgress,
         currentSelectedService.serviceHostingType,
         [
@@ -147,7 +147,7 @@ function ScaleOrModifySubmitStatusAlert({
     return (
         <OrderSubmitResult
             msg={msg}
-            uuid={currentSelectedService.id}
+            uuid={currentSelectedService.serviceId}
             type={alertType}
             stopWatch={stopWatch}
             contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}

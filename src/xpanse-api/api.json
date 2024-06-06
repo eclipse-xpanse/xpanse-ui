@@ -3,7 +3,7 @@
     "info": {
         "title": "XpanseAPI",
         "description": "RESTful Services to interact with Xpanse runtime.",
-        "version": "1.0.16-SNAPSHOT"
+        "version": "1.0.17-SNAPSHOT"
     },
     "servers": [{ "url": "http://localhost:8080", "description": "Generated server url" }],
     "security": [{ "OAuth2Flow": [] }],
@@ -37,7 +37,6 @@
             "name": "UserCloudCredentialsManagement",
             "description": "APIs for managing user's cloud provider credentials"
         },
-        { "name": "ServiceModification", "description": "APIs to manage modifications of the service instances." },
         { "name": "Monitor", "description": "APIs for getting metrics of deployed services." }
     ],
     "paths": {
@@ -63,16 +62,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -81,6 +76,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -114,16 +113,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -132,6 +127,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -179,16 +178,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -197,6 +192,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -227,16 +226,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -245,6 +240,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -265,16 +264,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -283,6 +278,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -335,16 +334,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -353,6 +348,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -370,16 +369,12 @@
                 "operationId": "stopService",
                 "parameters": [{ "name": "serviceId", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -388,6 +383,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -408,16 +407,12 @@
                 "operationId": "startService",
                 "parameters": [{ "name": "serviceId", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -426,6 +421,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -446,16 +445,12 @@
                 "operationId": "restartService",
                 "parameters": [{ "name": "serviceId", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -464,6 +459,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -496,16 +495,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -514,6 +509,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -548,16 +547,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -566,6 +561,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -591,16 +590,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -609,6 +604,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -641,16 +640,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -659,6 +654,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -687,16 +686,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -705,6 +700,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -730,16 +729,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -748,6 +743,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -784,16 +783,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -802,6 +797,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -827,16 +826,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -845,6 +840,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -882,16 +881,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -900,6 +895,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -922,16 +921,12 @@
                 "operationId": "getServicePolicyDetails",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -940,6 +935,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -974,16 +973,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -992,6 +987,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1012,16 +1011,12 @@
                 "operationId": "deleteServicePolicy",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1030,6 +1025,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1047,16 +1046,12 @@
                 "operationId": "getPolicyDetails",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1065,6 +1060,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1097,16 +1096,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1115,6 +1110,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1133,16 +1132,12 @@
                 "operationId": "deleteUserPolicy",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1151,6 +1146,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1198,16 +1197,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1216,6 +1211,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1246,16 +1245,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1264,6 +1259,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1284,16 +1283,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1302,6 +1297,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1354,16 +1353,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1372,6 +1367,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1466,16 +1465,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1484,6 +1479,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1512,16 +1511,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1530,6 +1525,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1553,16 +1552,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1571,6 +1566,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1667,16 +1666,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1685,6 +1680,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1713,16 +1712,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1731,6 +1726,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1761,16 +1760,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1779,6 +1774,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1809,16 +1808,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1827,6 +1822,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1854,16 +1853,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1872,6 +1867,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1921,16 +1920,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1939,6 +1934,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -1966,16 +1965,12 @@
                     "required": true
                 },
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -1984,6 +1979,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2012,16 +2011,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2030,6 +2025,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2076,16 +2075,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2094,6 +2089,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2127,16 +2126,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2145,6 +2140,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2158,7 +2157,7 @@
         "/xpanse/services/{serviceId}/modifications": {
             "get": {
                 "tags": ["ServiceModification"],
-                "description": "List modification audits of the service instance.<br>Required role:<b> admin</b> or <b>user</b>",
+                "description": "List modification audits of the service instance<br>Required role:<b> admin</b> or <b>user</b>",
                 "operationId": "listServiceModificationAudits",
                 "parameters": [
                     {
@@ -2177,16 +2176,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2195,6 +2190,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2228,16 +2227,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2246,6 +2241,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2271,16 +2270,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2289,6 +2284,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2319,16 +2318,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2337,6 +2332,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2362,16 +2361,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2380,6 +2375,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2410,16 +2409,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2428,6 +2423,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2493,16 +2492,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2511,6 +2506,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2546,16 +2545,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2564,6 +2559,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2663,16 +2662,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2681,6 +2676,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2716,16 +2715,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2734,6 +2729,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2833,16 +2832,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2851,6 +2846,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2886,16 +2885,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2904,6 +2899,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -2936,16 +2935,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -2954,6 +2949,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3005,16 +3004,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3023,6 +3018,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3067,16 +3066,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3085,6 +3080,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3165,16 +3164,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3183,6 +3178,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3206,16 +3205,12 @@
                 "description": "Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>",
                 "operationId": "healthCheck",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3224,6 +3219,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3243,16 +3242,12 @@
                 "description": "List cloud service providers with active plugin.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>",
                 "operationId": "getActiveCsps",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3261,6 +3256,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3357,16 +3356,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3375,6 +3370,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3410,16 +3409,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3428,6 +3423,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3498,16 +3497,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3516,6 +3511,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3565,16 +3564,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3583,6 +3578,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3635,16 +3634,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3653,6 +3648,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3710,16 +3709,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3728,6 +3723,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3775,16 +3774,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3793,6 +3788,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3889,16 +3888,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3907,6 +3902,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3948,16 +3947,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -3966,6 +3961,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -3988,16 +3987,12 @@
                 "operationId": "openApi",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -4006,6 +4001,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -4041,16 +4040,12 @@
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -4059,6 +4054,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -4080,16 +4079,12 @@
                 "description": "Get and redirect authorization url for user to authenticate.",
                 "operationId": "authorize",
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -4098,6 +4093,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -4115,16 +4114,12 @@
                 "operationId": "destroy",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -4133,6 +4128,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -4153,16 +4152,12 @@
                 "operationId": "purge",
                 "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }],
                 "responses": {
-                    "400": {
-                        "description": "Bad Request",
-                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
-                    "401": {
-                        "description": "Unauthorized",
+                    "400": {
+                        "description": "Bad Request",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "422": {
@@ -4171,6 +4166,10 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
                     },
                     "502": {
@@ -4756,7 +4755,6 @@
                     "description",
                     "flavors",
                     "icon",
-                    "id",
                     "lastModifiedTime",
                     "name",
                     "namespace",
@@ -4764,12 +4762,17 @@
                     "serviceHostingType",
                     "serviceProviderContactDetails",
                     "serviceRegistrationState",
+                    "serviceTemplateId",
                     "variables",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "ID of the registered service.", "format": "uuid" },
+                    "serviceTemplateId": {
+                        "type": "string",
+                        "description": "ID of the registered service.",
+                        "format": "uuid"
+                    },
                     "name": { "type": "string", "description": "Name of the registered service." },
                     "version": { "type": "string", "description": "Version of the registered service." },
                     "csp": {
@@ -4869,10 +4872,17 @@
                 }
             },
             "ServicePolicy": {
-                "required": ["createTime", "enabled", "id", "lastModifiedTime", "policy", "serviceTemplateId"],
+                "required": [
+                    "createTime",
+                    "enabled",
+                    "lastModifiedTime",
+                    "policy",
+                    "servicePolicyId",
+                    "serviceTemplateId"
+                ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The id of the policy.", "format": "uuid" },
+                    "servicePolicyId": { "type": "string", "description": "The id of the policy.", "format": "uuid" },
                     "policy": { "type": "string", "description": "The valid policy belongs to the service." },
                     "serviceTemplateId": {
                         "type": "string",
@@ -4916,10 +4926,10 @@
                 }
             },
             "UserPolicy": {
-                "required": ["createTime", "csp", "enabled", "id", "lastModifiedTime", "policy"],
+                "required": ["createTime", "csp", "enabled", "lastModifiedTime", "policy", "userPolicyId"],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The id of the policy.", "format": "uuid" },
+                    "userPolicyId": { "type": "string", "description": "The id of the policy.", "format": "uuid" },
                     "policy": { "type": "string", "description": "The valid policy created by the user." },
                     "csp": {
                         "type": "string",
@@ -5013,7 +5023,7 @@
                     "category",
                     "csp",
                     "flavor",
-                    "id",
+                    "originalServiceId",
                     "region",
                     "serviceHostingType",
                     "serviceName",
@@ -5073,7 +5083,11 @@
                         "description": "The billing mode of the managed service.",
                         "enum": ["Fixed", "Pay per Use"]
                     },
-                    "id": { "type": "string", "description": "The id of the service to migrate", "format": "uuid" },
+                    "originalServiceId": {
+                        "type": "string",
+                        "description": "The id of the service to migrate",
+                        "format": "uuid"
+                    },
                     "eulaAccepted": { "type": "boolean" }
                 }
             },
@@ -5255,17 +5269,17 @@
                     "category",
                     "createTime",
                     "csp",
-                    "id",
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
                     "serviceHostingType",
+                    "serviceId",
                     "serviceState",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
+                    "serviceId": { "type": "string", "description": "The ID of the service", "format": "uuid" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -5353,10 +5367,16 @@
                 }
             },
             "ServiceModificationAuditDetails": {
-                "required": ["id", "newDeployRequest", "previousDeployRequest", "serviceId", "taskStatus"],
+                "required": [
+                    "newDeployRequest",
+                    "previousDeployRequest",
+                    "serviceId",
+                    "serviceModificationRequestId",
+                    "taskStatus"
+                ],
                 "type": "object",
                 "properties": {
-                    "id": {
+                    "serviceModificationRequestId": {
                         "type": "string",
                         "description": "The id of the service modification request.",
                         "format": "uuid"
@@ -5503,17 +5523,17 @@
                     "createTime",
                     "csp",
                     "deployRequest",
-                    "id",
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
                     "serviceHostingType",
+                    "serviceId",
                     "serviceState",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
+                    "serviceId": { "type": "string", "description": "The ID of the service", "format": "uuid" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -5621,17 +5641,17 @@
                     "createTime",
                     "csp",
                     "deployRequest",
-                    "id",
                     "lastModifiedTime",
                     "name",
                     "serviceDeploymentState",
                     "serviceHostingType",
+                    "serviceId",
                     "serviceState",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The ID of the service", "format": "uuid" },
+                    "serviceId": { "type": "string", "description": "The ID of the service", "format": "uuid" },
                     "category": {
                         "type": "string",
                         "description": "The catalog of the service",
@@ -5807,11 +5827,11 @@
                         "type": "string",
                         "description": "The type of backend system.",
                         "enum": [
-                            "IdentityProvider",
+                            "Identity Provider",
                             "Database",
                             "Terraform Boot",
                             "Tofu Maker",
-                            "PolicyMan",
+                            "Policy Man",
                             "OpenTelemetry Collector"
                         ]
                     },
@@ -5883,17 +5903,21 @@
                     "description",
                     "flavors",
                     "icon",
-                    "id",
                     "name",
                     "regions",
                     "serviceHostingType",
                     "serviceProviderContactDetails",
+                    "serviceTemplateId",
                     "variables",
                     "version"
                 ],
                 "type": "object",
                 "properties": {
-                    "id": { "type": "string", "description": "The id of the orderable service.", "format": "uuid" },
+                    "serviceTemplateId": {
+                        "type": "string",
+                        "description": "The id of the orderable service.",
+                        "format": "uuid"
+                    },
                     "category": {
                         "type": "string",
                         "description": "The category of the orderable service.",

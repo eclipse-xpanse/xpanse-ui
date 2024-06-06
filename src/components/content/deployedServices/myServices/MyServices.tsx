@@ -107,7 +107,7 @@ function MyServices(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceTemplateId);
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        activeRecord?.id,
+        activeRecord?.serviceId,
         serviceDestroyQuery.isSuccess,
         activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
         [
@@ -117,21 +117,21 @@ function MyServices(): React.JSX.Element {
     );
 
     const getStartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.id,
+        activeRecord?.serviceId,
         serviceStateStartQuery.isSuccess,
         activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
         [DeployedServiceDetails.serviceState.RUNNING, DeployedServiceDetails.serviceState.STOPPED]
     );
 
     const getStopServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.id,
+        activeRecord?.serviceId,
         serviceStateStopQuery.isSuccess,
         activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
         [DeployedServiceDetails.serviceState.STOPPED, DeployedServiceDetails.serviceState.RUNNING]
     );
 
     const getRestartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.id,
+        activeRecord?.serviceId,
         serviceStateRestartQuery.isSuccess,
         activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
         [DeployedServiceDetails.serviceState.RUNNING]
@@ -147,7 +147,7 @@ function MyServices(): React.JSX.Element {
     ]);
 
     const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
-        activeRecord?.id,
+        activeRecord?.serviceId,
         activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
         servicePurgeQuery.isSuccess
     );
@@ -162,7 +162,9 @@ function MyServices(): React.JSX.Element {
                 serviceStateInQuery.includes(serviceVo.serviceState)
             );
         } else if (serviceIdInQuery) {
-            serviceVoList = listDeployedServicesQuery.data.filter((serviceVo) => serviceVo.id === serviceIdInQuery);
+            serviceVoList = listDeployedServicesQuery.data.filter(
+                (serviceVo) => serviceVo.serviceId === serviceIdInQuery
+            );
         } else {
             serviceVoList = listDeployedServicesQuery.data;
         }
@@ -645,7 +647,7 @@ function MyServices(): React.JSX.Element {
         }
 
         if (
-            activeRecord?.id === record.id &&
+            activeRecord?.serviceId === record.serviceId &&
             (serviceStateStartQuery.isPending || serviceStateStopQuery.isPending || serviceStateRestartQuery.isPending)
         ) {
             return true;
@@ -673,7 +675,7 @@ function MyServices(): React.JSX.Element {
         }
 
         if (
-            activeRecord?.id === record.id &&
+            activeRecord?.serviceId === record.serviceId &&
             (serviceStateStartQuery.isPending || serviceStateStopQuery.isPending || serviceStateRestartQuery.isPending)
         ) {
             return true;
@@ -730,11 +732,11 @@ function MyServices(): React.JSX.Element {
     const columns: ColumnsType<DeployedService> = [
         {
             title: 'Id',
-            dataIndex: 'id',
+            dataIndex: 'serviceId',
             filters: serviceIdInQuery ? undefined : serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.id.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.serviceId.startsWith(value.toString()),
             filtered: !!serviceIdInQuery,
             align: 'center',
         },
@@ -911,7 +913,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
-        servicePurgeQuery.mutate(record.id);
+        servicePurgeQuery.mutate(record.serviceId);
         record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
     };
 
@@ -936,7 +938,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
-        serviceDestroyQuery.mutate(record.id);
+        serviceDestroyQuery.mutate(record.serviceId);
         record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
     }
 
@@ -1031,7 +1033,7 @@ function MyServices(): React.JSX.Element {
         const filters: ColumnFilterItem[] = [];
         const serviceIdSet = new Set<string>('');
         resp.forEach((v) => {
-            serviceIdSet.add(v.id);
+            serviceIdSet.add(v.serviceId);
         });
         serviceIdSet.forEach((id) => {
             const filter = {
@@ -1261,7 +1263,7 @@ function MyServices(): React.JSX.Element {
         <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
                 <DestroyServiceStatusAlert
-                    key={activeRecord.id}
+                    key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     destroySubmitError={serviceDestroyQuery.error}
                     statusPollingError={getServiceDetailsByIdQuery.error}
@@ -1271,7 +1273,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {isStartRequestSubmitted && activeRecord ? (
                 <StartServiceStatusAlert
-                    key={activeRecord.id}
+                    key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     serviceStateStartQuery={serviceStateStartQuery}
                     closeStartResultAlert={closeStartResultAlert}
@@ -1280,7 +1282,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {isStopRequestSubmitted && activeRecord ? (
                 <StopServiceStatusAlert
-                    key={activeRecord.id}
+                    key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     serviceStateStopQuery={serviceStateStopQuery}
                     closeStopResultAlert={closeStopResultAlert}
@@ -1289,7 +1291,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {isRestartRequestSubmitted && activeRecord ? (
                 <RestartServiceStatusAlert
-                    key={activeRecord.id}
+                    key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     serviceStateRestartQuery={serviceStateRestartQuery}
                     closeRestartResultAlert={closeRestartResultAlert}
@@ -1298,7 +1300,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {isPurgeRequestSubmitted && activeRecord ? (
                 <PurgeServiceStatusAlert
-                    key={activeRecord.id}
+                    key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     purgeSubmitError={servicePurgeQuery.error}
                     statusPollingError={getPurgeServiceDetailsQuery.error}

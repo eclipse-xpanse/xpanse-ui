@@ -55,7 +55,10 @@ function StopServiceStatusAlert({
                 <Alert
                     message={errorMessage}
                     description={
-                        <OrderSubmitResultDetails msg={'Service stop request failed'} uuid={deployedService.id} />
+                        <OrderSubmitResultDetails
+                            msg={'Service stop request failed'}
+                            uuid={deployedService.serviceId}
+                        />
                     }
                     showIcon
                     closable={true}
@@ -94,7 +97,7 @@ function StopServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service Stop Status Failed'}
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -140,7 +143,10 @@ function StopServiceStatusAlert({
                             getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
                         }
                         description={
-                            <OrderSubmitResultDetails msg={'Service stopped successfully'} uuid={deployedService.id} />
+                            <OrderSubmitResultDetails
+                                msg={'Service stopped successfully'}
+                                uuid={deployedService.serviceId}
+                            />
                         }
                         showIcon
                         closable={true}
@@ -169,7 +175,7 @@ function StopServiceStatusAlert({
                                         ? getStopServiceDetailsQuery.data.latestRunningManagementTask.errorMsg.toString()
                                         : 'Stop failed'
                                 }
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon

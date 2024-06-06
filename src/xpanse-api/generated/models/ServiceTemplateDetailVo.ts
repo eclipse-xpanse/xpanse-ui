@@ -18,7 +18,7 @@ export type ServiceTemplateDetailVo = {
     /**
      * ID of the registered service.
      */
-    id: string;
+    serviceTemplateId: string;
     /**
      * Name of the registered service.
      */

@@ -84,7 +84,7 @@ export const Scale = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         const modifyServiceRequestParams: ModifySubmitRequest = {
-            id: currentSelectedService.id,
+            id: currentSelectedService.serviceId,
             modifyRequest: createRequest,
         };
 

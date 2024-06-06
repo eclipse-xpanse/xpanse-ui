@@ -55,7 +55,9 @@ function DestroyServiceStatusAlert({
                 {' '}
                 <Alert
                     message={errorMessage}
-                    description={<OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.id} />}
+                    description={
+                        <OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.serviceId} />
+                    }
                     showIcon
                     closable={true}
                     onClose={onClose}
@@ -91,7 +93,7 @@ function DestroyServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service Destroy Status Failed'}
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -131,7 +133,7 @@ function DestroyServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service destroyed successfully'}
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -150,7 +152,9 @@ function DestroyServiceStatusAlert({
                     {' '}
                     <Alert
                         message={'Processing Status'}
-                        description={<OrderSubmitResultDetails msg={'Destroy failed'} uuid={deployedService.id} />}
+                        description={
+                            <OrderSubmitResultDetails msg={'Destroy failed'} uuid={deployedService.serviceId} />
+                        }
                         showIcon
                         closable={true}
                         onClose={onClose}

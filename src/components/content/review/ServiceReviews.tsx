@@ -132,7 +132,7 @@ export default function ServiceReviews(): React.JSX.Element {
     const columns: ColumnsType<ServiceTemplateDetailVo> = [
         {
             title: 'Service Template Id',
-            dataIndex: 'id',
+            dataIndex: 'serviceTemplateId',
             filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
                 <div className={serviceReviewStyles.searchContainerClass}>
                     <Input
@@ -170,8 +170,8 @@ export default function ServiceReviews(): React.JSX.Element {
             ),
             filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
             onFilter: (value: React.Key | boolean, record) => {
-                if (record.id) {
-                    return record.id.toString().toLowerCase().includes(value.toString().toLowerCase());
+                if (record.serviceTemplateId) {
+                    return record.serviceTemplateId.toString().toLowerCase().includes(value.toString().toLowerCase());
                 }
                 return false;
             },

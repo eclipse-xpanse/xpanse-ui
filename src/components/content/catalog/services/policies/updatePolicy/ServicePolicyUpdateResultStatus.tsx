@@ -62,7 +62,7 @@ export default function ServicePolicyUpdateResultStatus({
                     description={
                         <ServicePolicySubmitResult
                             msg={'Policy updated successfully'}
-                            uuid={currentServicePolicy === undefined ? '' : currentServicePolicy.id}
+                            uuid={currentServicePolicy === undefined ? '' : currentServicePolicy.servicePolicyId}
                         />
                     }
                     showIcon

@@ -56,11 +56,11 @@ function Monitor(): React.JSX.Element {
             const serviceVo: DeployedService = location.state as DeployedService;
             form.setFieldsValue({ serviceName: serviceVo.name });
             form.setFieldsValue({ customerServiceName: serviceVo.customerServiceName ?? undefined });
-            form.setFieldsValue({ serviceId: serviceVo.id });
+            form.setFieldsValue({ serviceId: serviceVo.serviceId });
             onFinish({
                 serviceName: serviceVo.name,
                 customerServiceName: serviceVo.customerServiceName ?? '',
-                serviceId: serviceVo.id,
+                serviceId: serviceVo.serviceId,
             });
         }
     }, [form, location.state, onFinish]);
@@ -88,7 +88,7 @@ function Monitor(): React.JSX.Element {
                         value: serviceVo.customerServiceName ?? '',
                         label: serviceVo.customerServiceName ?? '',
                         serviceName: serviceVo.name,
-                        id: serviceVo.id,
+                        id: serviceVo.serviceId,
                     };
                     newCustomerServiceNameList.push(customerServiceName);
                 }
@@ -132,7 +132,7 @@ function Monitor(): React.JSX.Element {
                         value: serviceVo.customerServiceName ?? '',
                         label: serviceVo.customerServiceName ?? '',
                         serviceName: serviceVo.name,
-                        id: serviceVo.id,
+                        id: serviceVo.serviceId,
                     };
                     newCustomerServiceNameList.push(cusServiceName);
                 }
@@ -164,7 +164,7 @@ function Monitor(): React.JSX.Element {
                     value: serviceVo.customerServiceName ?? '',
                     label: serviceVo.customerServiceName ?? '',
                     serviceName: serviceVo.name,
-                    id: serviceVo.id,
+                    id: serviceVo.serviceId,
                 };
                 newCustomerServiceNameList.push(cusServiceName);
             }
