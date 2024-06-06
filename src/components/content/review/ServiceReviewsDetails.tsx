@@ -29,8 +29,8 @@ export const ServiceReviewsDetails = ({
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     const [isReviewCommentsModalOpen, setIsReviewCommentsModalOpen] = useState<boolean>(false);
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
-    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo.id);
-    const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.id);
+    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo.serviceTemplateId);
+    const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.serviceTemplateId);
     const { Paragraph } = Typography;
 
     const onClickApprove = () => {
@@ -75,7 +75,7 @@ export const ServiceReviewsDetails = ({
                 Reject
             </Button>
             <ApproveOrRejectServiceTemplate
-                key={currentServiceTemplateVo.id}
+                key={currentServiceTemplateVo.serviceTemplateId}
                 currentServiceTemplateVo={currentServiceTemplateVo}
                 isApproved={isApproved}
                 isModalOpen={isReviewCommentsModalOpen}
@@ -156,7 +156,9 @@ export const ServiceReviewsDetails = ({
                         bordered
                         className={oclDisplayStyles.oclDataInfoTable}
                     >
-                        <Descriptions.Item label='Service Template Id'>{currentServiceTemplateVo.id}</Descriptions.Item>
+                        <Descriptions.Item label='Service Template Id'>
+                            {currentServiceTemplateVo.serviceTemplateId}
+                        </Descriptions.Item>
                         <Descriptions.Item label='Category'>
                             {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                             {currentServiceTemplateVo.category

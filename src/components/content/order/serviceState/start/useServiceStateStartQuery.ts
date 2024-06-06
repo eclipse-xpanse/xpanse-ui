@@ -9,7 +9,7 @@ import { DeployedService, ServiceStatusManagementService } from '../../../../../
 export function useServiceStateStartQuery(refreshData: () => void) {
     return useMutation({
         mutationFn: (deployedService: DeployedService) => {
-            return ServiceStatusManagementService.startService(deployedService.id);
+            return ServiceStatusManagementService.startService(deployedService.serviceId);
         },
         onSuccess: refreshData,
     });

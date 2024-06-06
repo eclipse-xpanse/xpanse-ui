@@ -45,6 +45,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
                     <ShowIcon serviceDetails={serviceDetails} />
                 </Descriptions.Item>
+                <Descriptions.Item label='ServiceTemplateId' labelStyle={{ width: '230px' }}>
+                    {serviceDetails.id}
+                </Descriptions.Item>
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
@@ -69,7 +72,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
-                    <ApiDoc id={serviceDetails.id} styleClass={appStyles.serviceApiDocLink} />
+                    <ApiDoc id={serviceDetails.serviceTemplateId} styleClass={appStyles.serviceApiDocLink} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Contact Details'>
                     <ContactDetailsText

@@ -21,11 +21,11 @@ export const Locks = ({
 }): React.JSX.Element => {
     const [form] = Form.useForm();
 
-    const lockRequest = useLockRequest(currentSelectedService.id);
+    const lockRequest = useLockRequest(currentSelectedService.serviceId);
 
     const onFinish = (values: { destroyChecked: boolean; modifyChecked: boolean }) => {
         const serviceLockConfig: { id: string; lockConfig: ServiceLockConfig } = {
-            id: currentSelectedService.id,
+            id: currentSelectedService.serviceId,
             lockConfig: {
                 destroyLocked: values.destroyChecked,
                 modifyLocked: values.modifyChecked,

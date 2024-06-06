@@ -20,7 +20,7 @@ function LocksResult({
 }: {
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element {
-    const lockRequestState = useLockRequestState(currentSelectedService.id);
+    const lockRequestState = useLockRequestState(currentSelectedService.serviceId);
     if (lockRequestState[0]?.status === 'success') {
         return (
             <Alert

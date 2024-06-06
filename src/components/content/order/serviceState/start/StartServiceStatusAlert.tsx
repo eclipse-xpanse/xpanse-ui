@@ -54,7 +54,9 @@ function StartServiceStatusAlert({
                 {' '}
                 <Alert
                     message={errorMessage}
-                    description={<OrderSubmitResultDetails msg={'Start request failed'} uuid={deployedService.id} />}
+                    description={
+                        <OrderSubmitResultDetails msg={'Start request failed'} uuid={deployedService.serviceId} />
+                    }
                     showIcon
                     closable={true}
                     onClose={onClose}
@@ -92,7 +94,7 @@ function StartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service start Status Failed'}
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -138,7 +140,10 @@ function StartServiceStatusAlert({
                             getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
                         }
                         description={
-                            <OrderSubmitResultDetails msg={'Service started successfully'} uuid={deployedService.id} />
+                            <OrderSubmitResultDetails
+                                msg={'Service started successfully'}
+                                uuid={deployedService.serviceId}
+                            />
                         }
                         showIcon
                         closable={true}
@@ -167,7 +172,7 @@ function StartServiceStatusAlert({
                                         ? getStartServiceDetailsQuery.data.latestRunningManagementTask.errorMsg.toString()
                                         : 'Start failed'
                                 }
-                                uuid={deployedService.id}
+                                uuid={deployedService.serviceId}
                             />
                         }
                         showIcon

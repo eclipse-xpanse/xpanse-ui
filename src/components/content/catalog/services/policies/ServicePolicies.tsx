@@ -28,7 +28,7 @@ export const ServicePolicies = ({
     const [currentServicePolicy, setCurrentServicePolicy] = useState<ServicePolicy | undefined>(undefined);
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
-    const servicePolicyListQuery = useGetServicePolicyList(serviceDetails.id);
+    const servicePolicyListQuery = useGetServicePolicyList(serviceDetails.serviceTemplateId);
     const deleteServicePolicyRequest = useDeleteServicePolicy();
 
     const refreshServicePoliciesList = () => {
@@ -52,7 +52,7 @@ export const ServicePolicies = ({
     const columns: ColumnsType<ServicePolicy> = [
         {
             title: 'Policy ID',
-            dataIndex: 'id',
+            dataIndex: 'servicePolicyId',
         },
         {
             title: 'Content',
@@ -134,7 +134,7 @@ export const ServicePolicies = ({
                                     type='primary'
                                     icon={<CloseCircleOutlined />}
                                     loading={
-                                        record.id === currentPolicyId &&
+                                        record.servicePolicyId === currentPolicyId &&
                                         !deleteServicePolicyRequest.isSuccess &&
                                         deleteServicePolicyRequest.isError
                                     }
@@ -156,8 +156,8 @@ export const ServicePolicies = ({
     ];
 
     const deleteCurrentServicePolicy = (record: ServicePolicy) => {
-        setCurrentPolicyId(record.id);
-        deleteServicePolicyRequest.mutate(record.id);
+        setCurrentPolicyId(record.servicePolicyId);
+        deleteServicePolicyRequest.mutate(record.servicePolicyId);
     };
 
     const addServicePolicies = () => {
@@ -250,7 +250,7 @@ export const ServicePolicies = ({
                 onCancel={closeAddOrUpdateServicePolicyModal}
             >
                 <AddOrUpdateServicePolicy
-                    serviceTemplateId={serviceDetails.id}
+                    serviceTemplateId={serviceDetails.serviceTemplateId}
                     currentServicePolicy={currentServicePolicy}
                     getCancelUpdateStatus={getCancelUpdateStatus}
                     serviceDetails={serviceDetails}

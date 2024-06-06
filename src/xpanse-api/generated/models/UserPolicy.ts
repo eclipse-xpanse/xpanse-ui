@@ -11,7 +11,7 @@ export type UserPolicy = {
     /**
      * The id of the policy.
      */
-    id: string;
+    userPolicyId: string;
     /**
      * The valid policy created by the user.
      */

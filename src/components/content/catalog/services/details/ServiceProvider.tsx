@@ -186,9 +186,9 @@ function ServiceProvider({
                 <>
                     {activeServiceDetail ? (
                         <>
-                            <UnregisterResult id={activeServiceDetail.id} category={category} />
-                            <ReRegisterResult id={activeServiceDetail.id} category={category} />
-                            <DeleteResult id={activeServiceDetail.id} category={category} />
+                            <UnregisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <ReRegisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <Tabs
                                 items={items}
                                 onChange={onChangeCsp}
@@ -197,24 +197,24 @@ function ServiceProvider({
                             />
                             <div className={catalogStyles.updateUnregisterBtnClass}>
                                 <UpdateService
-                                    id={activeServiceDetail.id}
+                                    id={activeServiceDetail.serviceTemplateId}
                                     category={category}
                                     isViewDisabled={isViewDisabled}
                                 />
                                 <UnregisterService
-                                    id={activeServiceDetail.id}
+                                    id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
                                 />
                                 <ReRegisterService
-                                    id={activeServiceDetail.id}
+                                    id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isReRegisterDisabled={isReRegisterDisabled}
                                     setIsDeleteDisabled={setIsDeleteDisabled}
                                     serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
                                 />
                                 <DeleteService
-                                    id={activeServiceDetail.id}
+                                    id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isDeleteDisabled={isDeleteDisabled}
                                     setIsReRegisterDisabled={setIsReRegisterDisabled}
@@ -233,7 +233,7 @@ function ServiceProvider({
                             />
                             <ServiceDetail serviceDetails={activeServiceDetail} />
                             <ServicePolicies
-                                key={activeServiceDetail.id}
+                                key={activeServiceDetail.serviceTemplateId}
                                 serviceDetails={activeServiceDetail}
                                 isViewDisabled={isViewDisabled}
                             />

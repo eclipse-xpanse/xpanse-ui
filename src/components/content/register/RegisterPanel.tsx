@@ -43,9 +43,9 @@ function RegisterPanel(): React.JSX.Element {
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
-            registerResult.current = [`ID - ${serviceTemplateVo.id}`];
+            registerResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
             void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category) });
-            navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.id}`));
+            navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';

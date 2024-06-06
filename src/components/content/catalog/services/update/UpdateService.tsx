@@ -49,7 +49,7 @@ function UpdateService({
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
-            updateResult.current = [`ID - ${serviceTemplateVo.id}`];
+            updateResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';

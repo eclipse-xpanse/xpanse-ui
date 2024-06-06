@@ -15,7 +15,7 @@ export type VendorHostedDeployedServiceDetails = {
     /**
      * The ID of the service
      */
-    id: string;
+    serviceId: string;
     /**
      * The catalog of the service
      */

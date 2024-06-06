@@ -89,7 +89,7 @@ export const MigrateServiceSubmit = ({
         migrateServiceDetailsQuery.data?.migrationStatus
     );
     const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
-        currentSelectedService.id,
+        currentSelectedService.serviceId,
         currentSelectedService.serviceHostingType,
         migrateServiceDetailsQuery.data?.migrationStatus
     );
@@ -100,7 +100,7 @@ export const MigrateServiceSubmit = ({
         if (deployParams !== undefined) {
             const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
             migrateRequest.region = region;
-            migrateRequest.id = currentSelectedService.id;
+            migrateRequest.originalServiceId = currentSelectedService.serviceId;
             migrateRequest.billingMode = selectBillingMode;
             migrateServiceRequest.mutate(migrateRequest);
             stepItem.status = 'process';

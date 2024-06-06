@@ -37,11 +37,11 @@ export namespace BackendSystemStatus {
      * The type of backend system.
      */
     export enum backendSystemType {
-        IDENTITY_PROVIDER = 'IdentityProvider',
+        IDENTITY_PROVIDER = 'Identity Provider',
         DATABASE = 'Database',
         TERRAFORM_BOOT = 'Terraform Boot',
         TOFU_MAKER = 'Tofu Maker',
-        POLICY_MAN = 'PolicyMan',
+        POLICY_MAN = 'Policy Man',
         OPEN_TELEMETRY_COLLECTOR = 'OpenTelemetry Collector',
     }
     /**

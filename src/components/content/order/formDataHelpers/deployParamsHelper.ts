@@ -29,7 +29,7 @@ export const getDeployParams = (
 
     userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
         if (userOrderableServiceVo.csp === selectCsp) {
-            registeredServiceId = userOrderableServiceVo.id;
+            registeredServiceId = userOrderableServiceVo.serviceTemplateId;
             service = userOrderableServiceVo;
         }
     });

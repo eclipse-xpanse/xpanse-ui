@@ -24,7 +24,7 @@ export const MyServiceHistory = ({
     deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     let serviceModificationAuditHistoryList: ServiceModificationAuditDetails[] = [];
-    const listServiceModifyHistoryQuery = useListServiceModifyHistoryQuery(deployedService.id);
+    const listServiceModifyHistoryQuery = useListServiceModifyHistoryQuery(deployedService.serviceId);
 
     if (listServiceModifyHistoryQuery.isSuccess && listServiceModifyHistoryQuery.data.length > 0) {
         serviceModificationAuditHistoryList = listServiceModifyHistoryQuery.data;
@@ -33,7 +33,7 @@ export const MyServiceHistory = ({
     const columns: ColumnsType<ServiceModificationAuditDetails> = [
         {
             title: 'ModifyId',
-            dataIndex: 'id',
+            dataIndex: 'serviceModificationRequestId',
             align: 'center',
             width: 100,
             className: serviceModifyStyles.modifyHistoryValue,

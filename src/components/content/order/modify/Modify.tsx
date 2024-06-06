@@ -80,7 +80,7 @@ export const Modify = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         const modifyServiceRequestParams: ModifySubmitRequest = {
-            id: currentSelectedService.id,
+            id: currentSelectedService.serviceId,
             modifyRequest: createRequest,
         };
 

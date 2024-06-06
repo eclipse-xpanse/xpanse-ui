@@ -11,7 +11,7 @@ export type ServicePolicy = {
     /**
      * The id of the policy.
      */
-    id: string;
+    servicePolicyId: string;
     /**
      * The valid policy belongs to the service.
      */
