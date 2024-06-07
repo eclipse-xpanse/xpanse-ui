@@ -31,7 +31,11 @@ export const MigrateServiceSubmitAvailabilityZoneInfo = ({
                                   <Radio.Button
                                       name={availabilityZone.displayName}
                                       key={availabilityZone.varName}
-                                      value={availabilityZones[availabilityZone.varName]}
+                                      value={
+                                          Object.keys(availabilityZones).length > 0
+                                              ? availabilityZones[availabilityZone.varName]
+                                              : {}
+                                      }
                                   >
                                       {availabilityZones[availabilityZone.varName]
                                           ? availabilityZones[availabilityZone.varName]

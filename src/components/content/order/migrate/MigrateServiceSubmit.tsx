@@ -192,15 +192,13 @@ export const MigrateServiceSubmit = ({
                             />
                         </div>
                         <RegionSelection selectRegion={region.name} disabled={true} />
-                        {Object.keys(availabilityZones).length > 0 ? (
-                            <MigrateServiceSubmitAvailabilityZoneInfo
-                                availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
-                                    selectCsp,
-                                    userOrderableServiceVoList
-                                )}
-                                availabilityZones={availabilityZones}
-                            />
-                        ) : undefined}
+                        <MigrateServiceSubmitAvailabilityZoneInfo
+                            availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
+                                selectCsp,
+                                userOrderableServiceVoList
+                            )}
+                            availabilityZones={availabilityZones}
+                        />
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
