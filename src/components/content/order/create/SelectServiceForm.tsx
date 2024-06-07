@@ -162,14 +162,14 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
         location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
-    };
-
-    const onChangeFlavor = (newFlavor: string) => {
-        setSelectFlavor(newFlavor);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
         setSelectBillMode(
             defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
         );
+    };
+
+    const onChangeFlavor = (newFlavor: string) => {
+        setSelectFlavor(newFlavor);
     };
 
     const onChangeRegion = (value: string) => {
@@ -386,6 +386,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             selectFlavor={selectFlavor}
                             flavorList={flavorList}
                             onChangeFlavor={onChangeFlavor}
+                            selectVersion={selectVersion}
+                            selectCsp={selectCsp}
+                            services={services}
+                            selectRegion={selectRegion}
+                            selectBillingMode={selectBillingMode}
                         />
                     </div>
                 </div>

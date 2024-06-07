@@ -191,6 +191,7 @@ export const Migrate = ({
                         setSelectBillingMode={setSelectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.SelectADestination]}
+                        currentSelectedService={currentSelectedService}
                     />
                 );
             case MigrationSteps.ImportServiceData:
