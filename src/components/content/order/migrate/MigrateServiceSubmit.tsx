@@ -204,7 +204,14 @@ export const MigrateServiceSubmit = ({
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
-                        <FlavorSelection selectFlavor={selectFlavor} flavorList={currentFlavorList} />
+                        <FlavorSelection
+                            selectFlavor={selectFlavor}
+                            flavorList={currentFlavorList}
+                            selectVersion={currentSelectedService.version}
+                            selectCsp={selectCsp}
+                            selectRegion={region.name}
+                            selectBillingMode={selectBillingMode}
+                        />
                     </div>
                 </div>
                 <div className={serviceOrderStyles.migrateStepButtonInnerClass}>

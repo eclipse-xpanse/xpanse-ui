@@ -23,7 +23,6 @@
 
 .flavor-price-content {
     text-align: center;
-    margin-bottom: 15px;
 }
 
 .flavor-select-hover {
@@ -74,6 +73,7 @@
     word-break: break-word;
     vertical-align: top;
 }
+
 .modify-history-error-msg-value {
     display: inline-block;
     max-width: 145px;

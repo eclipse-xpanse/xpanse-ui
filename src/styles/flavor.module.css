@@ -106,3 +106,37 @@
 .flavor-feature-item-name {
     font-weight: lighter;
 }
+
+.flavor-one-time-price-content .ant-typography {
+    font-size: 12px !important;
+    margin-top: 0;
+}
+
+.flavor-skeleton {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.flavor-skeleton-content {
+    width: 100%;
+    height: 100%;
+}
+
+.flavor-price-error-info {
+    color: red;
+}
+
+.flavor-price-reload {
+    margin-left: 1px;
+}
+
+.flavor-price-loading {
+    font-size: 24px;
+}
+
+.flavor-retry-popover .ant-popover-inner-content {
+    padding: 0;
+}

@@ -10,7 +10,7 @@ import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import { ServiceFlavor } from '../../../../xpanse-api/generated';
 
-export const FlavorFeatures = (flavor: ServiceFlavor): React.JSX.Element => {
+export const FlavorFeatures = ({ flavor }: { flavor: ServiceFlavor }): React.JSX.Element => {
     return (
         <>
             <List
