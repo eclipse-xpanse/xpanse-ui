@@ -24,6 +24,12 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     let registeredServicesCount: number = 0;
     const navigate = useNavigate();
 
+    const retryRequest = () => {
+        if (listDeployedServicesByIsvQuery.isError) {
+            void listDeployedServicesByIsvQuery.refetch();
+        }
+    };
+
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
             if (
@@ -56,7 +62,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
             ? listDeployedServicesByIsvQuery.error
             : listRegisteredServicesByIsvQuery.error;
 
-        return <DashBoardError error={errorToDisplay} />;
+        return <DashBoardError error={errorToDisplay} retryRequest={retryRequest} />;
     }
 
     if (
