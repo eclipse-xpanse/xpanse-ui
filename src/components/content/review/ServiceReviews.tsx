@@ -312,7 +312,7 @@ export default function ServiceReviews(): React.JSX.Element {
             {currentServiceTemplateVo ? (
                 <Modal
                     title={'Service Details'}
-                    width={1000}
+                    width={1400}
                     footer={null}
                     destroyOnClose={true}
                     open={isServiceTemplateDetailsModalOpen}

@@ -13,18 +13,29 @@ export function FlavorsText({ flavors }: { flavors: ServiceFlavor[] }): React.JS
     // These warnings must be suppressed because the Ocl object here is created from the import file and the data not necessarily contains all the mandatory fields.
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (flavors) {
-        const yamlDocument = new YAML.Document();
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-expect-error
-        yamlDocument.contents = flavors;
-        return (
-            <Popover content={<pre>{yamlDocument.toString()}</pre>} title={'Flavors'} trigger='hover'>
-                <Button
-                    className={oclDisplayStyles.oclDataHover}
-                    type={'link'}
-                >{`Available in ${flavors.length.toString()} flavor(s)`}</Button>
-            </Popover>
-        );
+        const flavorPops: React.JSX.Element[] = flavors.map((flavor, index) => {
+            const yamlDocument = new YAML.Document();
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-expect-error
+            yamlDocument.contents = flavor;
+            return (
+                <li key={index}>
+                    <Popover
+                        content={
+                            <pre className={oclDisplayStyles.oclFlavorsItemContent}>{yamlDocument.toString()}</pre>
+                        }
+                        title='Flavor Details'
+                        trigger='hover'
+                    >
+                        <Button className={oclDisplayStyles.oclDataHover} type='link'>
+                            {flavor.name}
+                        </Button>
+                    </Popover>
+                </li>
+            );
+        });
+
+        return <ul>{flavorPops}</ul>;
     }
     return <></>;
 }
