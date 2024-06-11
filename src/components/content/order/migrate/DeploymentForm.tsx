@@ -5,7 +5,7 @@
 
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Space, StepProps, Tooltip } from 'antd';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
@@ -26,8 +26,6 @@ export const DeploymentForm = ({
     region,
     availabilityZones,
     selectFlavor,
-    isEulaAccepted,
-    setIsEulaAccepted,
     selectBillingMode,
     setCurrentMigrationStep,
     setDeployParameters,
@@ -39,14 +37,13 @@ export const DeploymentForm = ({
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    isEulaAccepted: boolean;
-    setIsEulaAccepted: Dispatch<SetStateAction<boolean>>;
     selectBillingMode: MigrateRequest.billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
+    const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const currentEula: string | undefined = getEulaByCsp(selectCsp, userOrderableServiceVoList);
     const deployParams = getDeployParams(
         userOrderableServiceVoList,

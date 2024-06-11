@@ -58,7 +58,6 @@ export const Migrate = ({
         currentSelectedService.deployRequest.billingMode.toString() as MigrateRequest.billingMode
     );
 
-    const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
     const listOrderableServices = useQuery({
@@ -210,8 +209,6 @@ export const Migrate = ({
                         region={{ name: selectRegion, area: selectArea }}
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
-                        isEulaAccepted={isEulaAccepted}
-                        setIsEulaAccepted={setIsEulaAccepted}
                         selectBillingMode={selectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         setDeployParameters={setDeployParams}
