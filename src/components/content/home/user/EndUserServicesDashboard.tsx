@@ -22,8 +22,14 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     let successfulDestroysCount: number = 0;
     let failedDestroysCount: number = 0;
 
+    const retryRequest = () => {
+        if (listDeployedServicesQuery.isError) {
+            void listDeployedServicesQuery.refetch();
+        }
+    };
+
     if (listDeployedServicesQuery.isError) {
-        return <DashBoardError error={listDeployedServicesQuery.error} />;
+        return <DashBoardError error={listDeployedServicesQuery.error} retryRequest={retryRequest} />;
     }
 
     if (listDeployedServicesQuery.isPending || listDeployedServicesQuery.isFetching) {
