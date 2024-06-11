@@ -169,28 +169,28 @@ export const ServiceReviewsDetails = ({
                         <Descriptions.Item label='Namespace'>
                             <Tag color='cyan'>{currentServiceTemplateVo.namespace}</Tag>
                         </Descriptions.Item>
-                        <Descriptions.Item label='Flavors'>
-                            <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Billing Modes'>
-                            <BillingText billing={currentServiceTemplateVo.billing} />
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Deployment'>
-                            <DeploymentText deployment={currentServiceTemplateVo.deployment} />
+                        <Descriptions.Item label='Description'>
+                            {currentServiceTemplateVo.description}
                         </Descriptions.Item>
                         <Descriptions.Item label='CredentialType'>
                             {currentServiceTemplateVo.deployment.credentialType
                                 ? currentServiceTemplateVo.deployment.credentialType
                                 : ''}
                         </Descriptions.Item>
+                        <Descriptions.Item label='Billing Modes'>
+                            <BillingText billing={currentServiceTemplateVo.billing} />
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Flavors'>
+                            <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Deployment'>
+                            <DeploymentText deployment={currentServiceTemplateVo.deployment} />
+                        </Descriptions.Item>
                         <Descriptions.Item label='Contact Details'>
                             <ContactDetailsText
                                 serviceProviderContactDetails={currentServiceTemplateVo.serviceProviderContactDetails}
                                 showFor={ContactDetailsShowType.Catalog}
                             />
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Description'>
-                            {currentServiceTemplateVo.description}
                         </Descriptions.Item>
                         <Descriptions.Item label='EULA'>
                             {currentServiceTemplateVo.eula ? (

@@ -48,16 +48,16 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='ServiceTemplateId' labelStyle={{ width: '230px' }}>
                     {serviceDetails.serviceTemplateId}
                 </Descriptions.Item>
-                <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
-                    {serviceDetails.description}
-                </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
-                <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
-                <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Namespace'>
                     <Tag color='cyan'>{serviceDetails.namespace}</Tag>
                 </Descriptions.Item>
+                <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
+                    {serviceDetails.description}
+                </Descriptions.Item>
+                <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
+                <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>
                     <ServiceTemplateRegisterStatus serviceRegistrationState={serviceDetails.serviceRegistrationState} />
                 </Descriptions.Item>
