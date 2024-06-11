@@ -3,7 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    ApiError,
+    FlavorPriceResult,
+    Response,
+    ServiceFlavor,
+    UserOrderableServiceVo,
+} from '../../../../xpanse-api/generated';
+import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice.ts';
 
 export function getServiceFlavorList(
     selectCsp: UserOrderableServiceVo.csp,
@@ -24,3 +31,58 @@ export function getServiceFlavorList(
 
     return flavorMapper.get(selectCsp) ?? [];
 }
+
+export const getServicePriceErrorDetails = (error: Error) => {
+    if (error instanceof ApiError && error.body && 'details' in error.body) {
+        const response: Response = error.body as Response;
+        return response.details;
+    } else {
+        return [error.message];
+    }
+};
+
+const periodMapping: Record<string, string> = {
+    yearly: 'year',
+    monthly: 'month',
+    daily: 'day',
+    hourly: 'hour',
+    oneTime: 'one time',
+};
+
+export const getMappedPeriod = (period: string): string => {
+    return periodMapping[period] || 'unknown';
+};
+
+export const convertToFlavorMap = (
+    serviceFlavorWithPriceList?: ServiceFlavorWithPriceResult[]
+): Record<string, ServiceFlavorWithPriceResult> => {
+    if (!serviceFlavorWithPriceList || serviceFlavorWithPriceList.length === 0) {
+        return {};
+    }
+    return serviceFlavorWithPriceList.reduce<Record<string, ServiceFlavorWithPriceResult>>((map, flavor) => {
+        map[flavor.name] = flavor;
+        return map;
+    }, {});
+};
+
+export const getFlavorWithPricesList = (
+    priceResults: FlavorPriceResult[],
+    flavorList?: ServiceFlavor[]
+): ServiceFlavorWithPriceResult[] => {
+    if (!flavorList || flavorList.length === 0) {
+        return [];
+    }
+
+    return flavorList
+        .map((flavor) => {
+            const priceResult = priceResults.find((price) => flavor.name === price.flavorName);
+            if (priceResult) {
+                return {
+                    ...flavor,
+                    price: priceResult,
+                };
+            }
+            return null;
+        })
+        .filter(Boolean) as ServiceFlavorWithPriceResult[];
+};

@@ -3,9 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ExclamationCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, InfoCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useMutation } from '@tanstack/react-query';
-import { Badge, Button, Flex, Form, Input, Popconfirm, PopconfirmProps, Radio, Tooltip } from 'antd';
+import { Badge, Button, Flex, Form, Input, Popconfirm, PopconfirmProps, Radio, Spin, Tooltip } from 'antd';
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import flavorStyles from '../../../../styles/flavor.module.css';
@@ -22,10 +22,11 @@ import {
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
 import { FlavorFeatures } from '../common/FlavorFeatures';
-import { FlavorPrice } from '../common/FlavorPrice';
+import { FlavorPrice } from '../common/FlavorPrice.tsx';
 import { FlavorTitle } from '../common/FlavorTitle';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
+import useGetServicePricesQuery from '../common/useGetServicePricesQuery.ts';
 import { OrderItem } from '../common/utils/OrderItem';
 import {
     ChangeFlavorServiceDataWillBeLost,
@@ -123,6 +124,19 @@ export const Scale = ({
         setScaleWarning('');
     };
 
+    const getServicePriceQuery = useGetServicePricesQuery(
+        currentSelectedService.serviceTemplateId ?? '',
+        currentSelectedService.deployRequest.region.name,
+        currentSelectedService.deployRequest.billingMode,
+        flavorList
+    );
+
+    const retryRequest = () => {
+        if (currentSelectedService.serviceTemplateId && currentSelectedService.serviceTemplateId.length > 0) {
+            void getServicePriceQuery.refetch();
+        }
+    };
+
     return (
         <div className={serviceModifyStyles.modifySelectClass}>
             <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>Change Flavor:</div>
@@ -183,12 +197,31 @@ export const Scale = ({
                                                 key={flavor.name}
                                                 value={flavor.name}
                                                 disabled={isCurrentFlavor}
-                                                // className={flavorStyles.customRadioButtonContent}
-                                                className={`${flavorStyles.customRadioButtonContent} ${flavorStyles.antRadioButtonWrapperChecked}`}
+                                                className={`${flavorStyles.customRadioButtonContent} ${flavorStyles.antRadioButtonWrapperDisabled}`}
                                             >
-                                                {FlavorTitle(flavor.name)}
-                                                <div className={flavorStyles.flavorPriceContent}>{FlavorPrice()}</div>
-                                                {FlavorFeatures(flavor)}
+                                                <FlavorTitle title={flavor.name} />
+                                                {getServicePriceQuery.isLoading ? (
+                                                    <div className={flavorStyles.flavorSkeleton}>
+                                                        <Spin
+                                                            indicator={
+                                                                <LoadingOutlined
+                                                                    className={flavorStyles.flavorPriceLoading}
+                                                                    spin
+                                                                />
+                                                            }
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <FlavorPrice
+                                                        flavor={flavor}
+                                                        isSuccess={getServicePriceQuery.isSuccess}
+                                                        priceData={getServicePriceQuery.data}
+                                                        isError={getServicePriceQuery.isError}
+                                                        error={getServicePriceQuery.error}
+                                                        retryRequest={retryRequest}
+                                                    />
+                                                )}
+                                                <FlavorFeatures flavor={flavor} />
                                             </Radio.Button>
                                         );
                                         return (

@@ -3,24 +3,57 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Flex, Form, Radio } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Flex, Form, Radio, Spin } from 'antd';
 import React from 'react';
 import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { ServiceFlavor } from '../../../../xpanse-api/generated';
-import { FlavorFeatures } from './FlavorFeatures';
+import { DeployRequest, ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { FlavorFeatures } from './FlavorFeatures.tsx';
 import { FlavorPrice } from './FlavorPrice';
 import { FlavorTitle } from './FlavorTitle';
+import useGetServicePricesQuery from './useGetServicePricesQuery.ts';
 
 export const FlavorSelection = ({
     selectFlavor,
     flavorList,
     onChangeFlavor,
+    selectVersion,
+    selectCsp,
+    services,
+    selectRegion,
+    selectBillingMode,
 }: {
     selectFlavor: string;
     flavorList?: ServiceFlavor[];
     onChangeFlavor?: (newFlavor: string) => void;
+    selectVersion: string;
+    selectCsp: UserOrderableServiceVo.csp;
+    services?: UserOrderableServiceVo[];
+    selectRegion: string;
+    selectBillingMode: DeployRequest.billingMode;
 }): React.JSX.Element => {
+    const getServiceTemplateId = (): string => {
+        if (services) {
+            const service = services.find((service) => service.version === selectVersion && service.csp === selectCsp);
+            return service ? service.serviceTemplateId : '';
+        }
+        return '';
+    };
+
+    const getServicePriceQuery = useGetServicePricesQuery(
+        getServiceTemplateId(),
+        selectRegion,
+        selectBillingMode,
+        flavorList
+    );
+
+    const retryRequest = () => {
+        if (selectRegion.length > 0 && getServiceTemplateId().length > 0) {
+            void getServicePriceQuery.refetch();
+        }
+    };
+
     return (
         <>
             <div
@@ -50,9 +83,29 @@ export const FlavorSelection = ({
                                             value={flavor.name}
                                             className={flavorStyles.customRadioButtonContent}
                                         >
-                                            {FlavorTitle(flavor.name)}
-                                            <div className={flavorStyles.flavorPriceContent}>{FlavorPrice()}</div>
-                                            {FlavorFeatures(flavor)}
+                                            <FlavorTitle title={flavor.name} />
+                                            {getServicePriceQuery.isLoading || getServicePriceQuery.isFetching ? (
+                                                <div className={flavorStyles.flavorSkeleton}>
+                                                    <Spin
+                                                        indicator={
+                                                            <LoadingOutlined
+                                                                className={flavorStyles.flavorPriceLoading}
+                                                                spin
+                                                            />
+                                                        }
+                                                    />
+                                                </div>
+                                            ) : (
+                                                <FlavorPrice
+                                                    flavor={flavor}
+                                                    isSuccess={getServicePriceQuery.isSuccess}
+                                                    priceData={getServicePriceQuery.data}
+                                                    isError={getServicePriceQuery.isError}
+                                                    error={getServicePriceQuery.error}
+                                                    retryRequest={retryRequest}
+                                                />
+                                            )}
+                                            <FlavorFeatures flavor={flavor} />
                                         </Radio.Button>
                                     </div>
                                 ))}

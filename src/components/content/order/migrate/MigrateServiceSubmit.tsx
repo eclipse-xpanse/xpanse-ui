@@ -192,19 +192,24 @@ export const MigrateServiceSubmit = ({
                             />
                         </div>
                         <RegionSelection selectRegion={region.name} disabled={true} />
-                        {Object.keys(availabilityZones).length > 0 ? (
-                            <MigrateServiceSubmitAvailabilityZoneInfo
-                                availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
-                                    selectCsp,
-                                    userOrderableServiceVoList
-                                )}
-                                availabilityZones={availabilityZones}
-                            />
-                        ) : undefined}
+                        <MigrateServiceSubmitAvailabilityZoneInfo
+                            availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
+                                selectCsp,
+                                userOrderableServiceVoList
+                            )}
+                            availabilityZones={availabilityZones}
+                        />
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
-                        <FlavorSelection selectFlavor={selectFlavor} flavorList={currentFlavorList} />
+                        <FlavorSelection
+                            selectFlavor={selectFlavor}
+                            flavorList={currentFlavorList}
+                            selectVersion={currentSelectedService.version}
+                            selectCsp={selectCsp}
+                            selectRegion={region.name}
+                            selectBillingMode={selectBillingMode}
+                        />
                     </div>
                 </div>
                 <div className={serviceOrderStyles.migrateStepButtonInnerClass}>

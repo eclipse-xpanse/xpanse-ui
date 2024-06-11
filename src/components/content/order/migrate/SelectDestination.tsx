@@ -11,6 +11,7 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
+    DeployedService,
     MigrateRequest,
     ServiceFlavor,
     UserOrderableServiceVo,
@@ -54,6 +55,7 @@ export const SelectDestination = ({
     setSelectBillingMode,
     setCurrentMigrationStep,
     stepItem,
+    currentSelectedService,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     updateSelectedParameters: (
@@ -84,6 +86,7 @@ export const SelectDestination = ({
     setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
+    currentSelectedService: DeployedService;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
@@ -150,15 +153,7 @@ export const SelectDestination = ({
 
     const onChangeFlavor = (newFlavor: string) => {
         setSelectFlavor(newFlavor);
-        billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
-        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
-            selectCsp,
-            selectServiceHostType,
-            userOrderableServiceVoList
-        );
-        setSelectBillingMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
-        );
+
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -322,6 +317,11 @@ export const SelectDestination = ({
                         selectFlavor={selectFlavor}
                         flavorList={flavorList}
                         onChangeFlavor={onChangeFlavor}
+                        selectVersion={currentSelectedService.version}
+                        selectCsp={selectCsp}
+                        services={userOrderableServiceVoList}
+                        selectRegion={selectRegion}
+                        selectBillingMode={selectBillingMode}
                     />
                 </div>
             </div>
