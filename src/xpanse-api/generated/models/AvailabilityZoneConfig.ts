@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * The list of availability zones of the service.
+ * The list of availability zone configuration of the service.The list elements must be unique.
  */
 export type AvailabilityZoneConfig = {
     /**

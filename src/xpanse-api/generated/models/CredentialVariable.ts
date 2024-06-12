@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * The variables list of the credential
+ * The variables list of the credential. The list elements must be unique.
  */
 export type CredentialVariable = {
     /**
