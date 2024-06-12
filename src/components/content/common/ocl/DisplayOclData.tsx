@@ -99,17 +99,18 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <Descriptions.Item label='Namespace'>
                                 <Tag color='cyan'>{ocl.namespace}</Tag>
                             </Descriptions.Item>
-                            <Descriptions.Item label='Flavors'>
-                                <FlavorsText flavors={ocl.flavors.serviceFlavors} />
-                            </Descriptions.Item>
+                            <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                             <Descriptions.Item label='Billing Modes'>
                                 <BillingText billing={ocl.billing} />
+                            </Descriptions.Item>
+                            <Descriptions.Item label='CredentialType'>
+                                {ocl.deployment.credentialType ? ocl.deployment.credentialType.valueOf() : ''}
                             </Descriptions.Item>
                             <Descriptions.Item label='Deployment'>
                                 <DeploymentText deployment={ocl.deployment} />
                             </Descriptions.Item>
-                            <Descriptions.Item label='CredentialType'>
-                                {ocl.deployment.credentialType ? ocl.deployment.credentialType : ''}
+                            <Descriptions.Item label='Flavors'>
+                                <FlavorsText flavors={ocl.flavors.serviceFlavors} />
                             </Descriptions.Item>
                             <Descriptions.Item label='Contact Details'>
                                 <ContactDetailsText
@@ -117,7 +118,6 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                     showFor={ContactDetailsShowType.Catalog}
                                 />
                             </Descriptions.Item>
-                            <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                             <Descriptions.Item label='EULA'>
                                 {ocl.eula ? <AgreementText eula={ocl.eula} /> : <span>Not Provided</span>}
                             </Descriptions.Item>

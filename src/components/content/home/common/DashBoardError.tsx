@@ -3,13 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert, Card } from 'antd';
+import { Alert, Button, Card } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../../styles/error-alert.module.css';
 import { ApiError, Response } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 
-export default function DashBoardError({ error }: { error: unknown }): React.JSX.Element {
+export default function DashBoardError({
+    error,
+    retryRequest,
+}: {
+    error: unknown;
+    retryRequest: () => void;
+}): React.JSX.Element {
     if (error instanceof ApiError && error.body && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
@@ -20,6 +26,17 @@ export default function DashBoardError({ error }: { error: unknown }): React.JSX
                     type={'error'}
                     closable={false}
                     className={errorAlertStyles.errorFailureAlert}
+                    action={
+                        <Button
+                            className={errorAlertStyles.tryAgainBtnInAlertClass}
+                            size='small'
+                            type='primary'
+                            onClick={retryRequest}
+                            danger={true}
+                        >
+                            Retry Request
+                        </Button>
+                    }
                 />
             </Card>
         );
@@ -32,6 +49,17 @@ export default function DashBoardError({ error }: { error: unknown }): React.JSX
                     type={'error'}
                     closable={false}
                     className={errorAlertStyles.errorFailureAlert}
+                    action={
+                        <Button
+                            className={errorAlertStyles.tryAgainBtnInAlertClass}
+                            size='small'
+                            type='primary'
+                            onClick={retryRequest}
+                            danger={true}
+                        >
+                            Retry Request
+                        </Button>
+                    }
                 />
             </Card>
         );
