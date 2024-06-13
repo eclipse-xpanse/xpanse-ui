@@ -11,7 +11,7 @@ import type { AutoFill } from './AutoFill';
 import type { DeployVariableKind } from './DeployVariableKind';
 import type { ModificationImpact } from './ModificationImpact';
 /**
- * The variables for the deployment, which will be passed to the deployer
+ * The variables for the deployment, which will be passed to the deployer.The list elements must be unique.
  */
 export type DeployVariable = {
     /**

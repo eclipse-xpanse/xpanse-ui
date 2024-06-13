@@ -34,42 +34,42 @@ export function ContactDetailsText({
 
 function convertRecordToList(serviceProviderContactDetails: ServiceProviderContactDetails): React.JSX.Element {
     const content: React.JSX.Element[] = [];
-    if (serviceProviderContactDetails.email) {
+    if (serviceProviderContactDetails.emails) {
         content.push(
             <React.Fragment key={uuidv4()}>
                 <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <MailOutlined />
-                    {getEmailPropertyValue(serviceProviderContactDetails.email)}
+                    {getEmailPropertyValue(serviceProviderContactDetails.emails)}
                 </div>
             </React.Fragment>
         );
     }
-    if (serviceProviderContactDetails.phone) {
+    if (serviceProviderContactDetails.phones) {
         content.push(
             <React.Fragment key={uuidv4()}>
                 <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <PhoneOutlined />
-                    {getPhonePropertyValue(serviceProviderContactDetails.phone)}
+                    {getPhonePropertyValue(serviceProviderContactDetails.phones)}
                 </div>
             </React.Fragment>
         );
     }
-    if (serviceProviderContactDetails.chat) {
+    if (serviceProviderContactDetails.chats) {
         content.push(
             <React.Fragment key={uuidv4()}>
                 <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <MessageOutlined />
-                    {getPropertyValue(serviceProviderContactDetails.chat)}
+                    {getPropertyValue(serviceProviderContactDetails.chats)}
                 </div>
             </React.Fragment>
         );
     }
-    if (serviceProviderContactDetails.website) {
+    if (serviceProviderContactDetails.websites) {
         content.push(
             <React.Fragment key={uuidv4()}>
                 <div className={oclDisplayStyles.oclContactDetailsClass}>
                     <GlobalOutlined />
-                    {getPropertyValue(serviceProviderContactDetails.website)}
+                    {getPropertyValue(serviceProviderContactDetails.websites)}
                 </div>
             </React.Fragment>
         );

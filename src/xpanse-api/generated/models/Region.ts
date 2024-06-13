@@ -8,7 +8,7 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * The regions of the Cloud Service Provider
+ * The regions of the Cloud Service Provider. The list elements must be unique.
  */
 export type Region = {
     /**

@@ -19,7 +19,7 @@ export type Deployment = {
      */
     kind: Deployment.kind;
     /**
-     * The variables for the deployment, which will be passed to the deployer
+     * The variables for the deployment, which will be passed to the deployer.The list elements must be unique.
      */
     variables: Array<DeployVariable>;
     /**
@@ -27,9 +27,9 @@ export type Deployment = {
      */
     credentialType?: Deployment.credentialType;
     /**
-     * The list of availability zones of the service.
+     * The list of availability zone configuration of the service.The list elements must be unique.
      */
-    serviceAvailability?: Array<AvailabilityZoneConfig>;
+    serviceAvailabilityConfigs?: Array<AvailabilityZoneConfig>;
     /**
      * The real deployer, something like terraform scripts. Either deployer or deployFromGitRepo must be provided.
      */
