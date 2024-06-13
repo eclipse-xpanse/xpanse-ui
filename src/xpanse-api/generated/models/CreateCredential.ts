@@ -26,7 +26,7 @@ export type CreateCredential = {
      */
     type: CreateCredential.type;
     /**
-     * The variables list of the credential
+     * The variables list of the credential. The list elements must be unique.
      */
     variables: Array<CredentialVariable>;
     /**

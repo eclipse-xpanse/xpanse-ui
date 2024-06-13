@@ -12,7 +12,7 @@
  */
 export type Billing = {
     /**
-     * Supported billing modes by the managed service
+     * Supported billing modes by the managed service. The list elements must be unique.
      */
     billingModes: Array<'Fixed' | 'Pay per Use'>;
     /**

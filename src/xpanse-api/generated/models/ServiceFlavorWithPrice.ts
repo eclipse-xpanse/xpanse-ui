@@ -9,7 +9,7 @@
 /* eslint-disable */
 import type { RatingMode } from './RatingMode';
 /**
- * The flavors of the managed service.
+ * The flavors of the managed service. The list elements must be unique.
  */
 export type ServiceFlavorWithPrice = {
     /**

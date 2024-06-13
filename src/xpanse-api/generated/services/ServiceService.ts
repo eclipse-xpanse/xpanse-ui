@@ -18,6 +18,29 @@ import type { ServiceLockConfig } from '../models/ServiceLockConfig';
 import type { VendorHostedDeployedServiceDetails } from '../models/VendorHostedDeployedServiceDetails';
 export class ServiceService {
     /**
+     * Start a task to redeploy the failed deployment using id.<br>Required role:<b> admin</b> or <b>user</b>
+     * @param id
+     * @returns Response Accepted
+     * @throws ApiError
+     */
+    public static redeployFailedDeployment(id: string): CancelablePromise<Response> {
+        return __request(OpenAPI, {
+            method: 'PUT',
+            url: '/xpanse/services/deploy/retry/{id}',
+            path: {
+                id: id,
+            },
+            errors: {
+                400: `Bad Request`,
+                401: `Unauthorized`,
+                403: `Forbidden`,
+                422: `Unprocessable Entity`,
+                500: `Internal Server Error`,
+                502: `Bad Gateway`,
+            },
+        });
+    }
+    /**
      * Change the lock config of the service.<br>Required role:<b> admin</b> or <b>user</b>
      * @param id The id of the service
      * @param requestBody
@@ -312,12 +335,14 @@ export class ServiceService {
      * Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
      * @param cspName name of the cloud service provider
      * @param regionName name of the region
+     * @param serviceId id of the deployed service
      * @returns string OK
      * @throws ApiError
      */
     public static getAvailabilityZones(
         cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
-        regionName: string
+        regionName: string,
+        serviceId?: string
     ): CancelablePromise<Array<string>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -325,6 +350,7 @@ export class ServiceService {
             query: {
                 cspName: cspName,
                 regionName: regionName,
+                serviceId: serviceId,
             },
             errors: {
                 400: `Bad Request`,

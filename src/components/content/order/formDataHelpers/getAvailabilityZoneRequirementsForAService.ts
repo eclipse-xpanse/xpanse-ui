@@ -13,7 +13,7 @@ export function getAvailabilityZoneRequirementsForAService(
     if (services) {
         services.forEach((userOrderableServiceVo) => {
             if (userOrderableServiceVo.csp === selectCsp) {
-                availabilityZoneConfigs = userOrderableServiceVo.serviceAvailability ?? [];
+                availabilityZoneConfigs = userOrderableServiceVo.serviceAvailabilityConfigs ?? [];
             }
         });
     }

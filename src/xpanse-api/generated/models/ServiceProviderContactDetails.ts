@@ -12,19 +12,19 @@
  */
 export type ServiceProviderContactDetails = {
     /**
-     * The email details of the service provider.
+     * List of the email details of the service provider. The list elements must be unique.
      */
-    email?: Array<string>;
+    emails?: Array<string>;
     /**
-     * The phone details of the service provider.
+     * List of the phone details of the service provider. The list elements must be unique.
      */
-    phone?: Array<string>;
+    phones?: Array<string>;
     /**
-     * The chat details of the service provider.
+     * List of the chat details of the service provider. The list elements must be unique.
      */
-    chat?: Array<string>;
+    chats?: Array<string>;
     /**
-     * The website details of the service provider.
+     * List of the website details of the service provider. The list elements must be unique.
      */
-    website?: Array<string>;
+    websites?: Array<string>;
 };

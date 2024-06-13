@@ -62,9 +62,9 @@ export type UserOrderableServiceVo = {
     serviceHostingType: UserOrderableServiceVo.serviceHostingType;
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
-     * The list of availability zones of the service.
+     * The list of availability zone configuration of the service.
      */
-    serviceAvailability?: Array<AvailabilityZoneConfig>;
+    serviceAvailabilityConfigs?: Array<AvailabilityZoneConfig>;
     /**
      * End user license agreement content of the service.
      */

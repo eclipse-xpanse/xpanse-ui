@@ -14,7 +14,7 @@ import type { ServiceFlavorWithPrice } from './ServiceFlavorWithPrice';
  */
 export type FlavorsWithPrice = {
     /**
-     * The flavors of the managed service.
+     * The flavors of the managed service. The list elements must be unique.
      */
     serviceFlavors: Array<ServiceFlavorWithPrice>;
     modificationImpact: ModificationImpact;
