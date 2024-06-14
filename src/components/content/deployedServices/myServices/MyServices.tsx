@@ -413,8 +413,6 @@ function MyServices(): React.JSX.Element {
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
                     record.serviceDeploymentState.toString() ===
-                        DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
-                    record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString()
                         ? 'purge'
                         : 'destroy',
@@ -423,8 +421,6 @@ function MyServices(): React.JSX.Element {
                         DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                    record.serviceDeploymentState.toString() ===
-                        DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                     record.serviceDeploymentState.toString() ===
                         DeployedService.serviceDeploymentState.ROLLBACK_FAILED.toString() ? (
                         <>
@@ -505,7 +501,7 @@ function MyServices(): React.JSX.Element {
                                                 record.serviceDeploymentState.toString() !==
                                                     DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
                                                 record.serviceDeploymentState.toString() !==
-                                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
+                                                    DeployedService.serviceDeploymentState.MODIFICATION_FAILED.toString()) ||
                                             activeRecord !== undefined
                                         }
                                         className={myServicesStyles.buttonAsLink}
