@@ -25,6 +25,7 @@ import {
     registerInvalidRoute,
     registerPageRoute,
     registerSuccessfulRoute,
+    registeredServicesPageRoute,
     reportsRoute,
     serviceReviewsPageRoute,
     servicesPageRoute,
@@ -44,6 +45,7 @@ const Policies = lazy(() => import('.//components/content/policies/Policies.tsx'
 const Reports = lazy(() => import('./components/content/deployedServices/reports/Reports.tsx'));
 const Workflows = lazy(() => import('./components/content/workflows/Workflows.tsx'));
 const ServiceReviews = lazy(() => import('./components/content/review/ServiceReviews.tsx'));
+const AvailableServices = lazy(() => import('./components/content/registeredServices/RegisteredServices.tsx'));
 const CreateService = lazy(() => import('./components/content/order/create/CreateService.tsx'));
 const OrderSubmitPage = lazy(() => import('./components/content/order/create/OrderSubmit.tsx'));
 const NotFoundPage = lazy(() => import('./components/notFound/NotFoundPage.tsx'));
@@ -249,6 +251,19 @@ function App(): React.JSX.Element {
                                 <Protected allowedRole={['csp']}>
                                     <Suspense fallback={<FallbackSkeleton />}>
                                         <ServiceReviews />
+                                    </Suspense>
+                                </Protected>
+                            </OidcSecure>
+                        }
+                    />
+                    <Route
+                        key={registeredServicesPageRoute}
+                        path={registeredServicesPageRoute}
+                        element={
+                            <OidcSecure>
+                                <Protected allowedRole={['csp']}>
+                                    <Suspense fallback={<FallbackSkeleton />}>
+                                        <AvailableServices />
                                     </Suspense>
                                 </Protected>
                             </OidcSecure>

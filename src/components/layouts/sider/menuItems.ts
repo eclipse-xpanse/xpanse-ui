@@ -14,6 +14,7 @@ import {
     monitorMenu,
     myServicesMenu,
     policiesMenu,
+    registeredServicesMenu,
     reportsMenu,
     serviceReviewsMenu,
     servicesMenu,
@@ -27,7 +28,7 @@ export function getMenuItems(): ItemType[] {
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
         return [healthCheckMenu()];
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'csp') {
-        return [serviceReviewsMenu()];
+        return [serviceReviewsMenu(), registeredServicesMenu()];
     } else {
         return [
             servicesMenu(serviceCategories),
