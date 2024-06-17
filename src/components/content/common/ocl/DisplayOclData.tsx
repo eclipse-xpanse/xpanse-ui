@@ -7,6 +7,7 @@ import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl } from '../../../../xpanse-api/generated';
+import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
 import { BillingText } from './BillingText';
@@ -76,9 +77,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <div>
                                 <b>Service Hosted By</b>
                                 <br />
-                                <Tag className={oclDisplayStyles.oclDisplayTag} color='red'>
-                                    {ocl.serviceHostingType.toString()}
-                                </Tag>
+                                {DeployedServicesHostingType(ocl.serviceHostingType)}
                                 <br />
                                 <br />
                             </div>
