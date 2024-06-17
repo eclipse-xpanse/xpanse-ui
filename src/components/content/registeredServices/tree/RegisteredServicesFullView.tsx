@@ -1,0 +1,150 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+import { HomeOutlined } from '@ant-design/icons';
+import { DataNode } from 'antd/es/tree';
+import React, { useEffect, useMemo, useState } from 'react';
+import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
+import catalogStyles from '../../../../styles/catalog.module.css';
+import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+import {
+    registeredServicesPageRoute,
+    serviceCategoryQuery,
+    serviceNameKeyQuery,
+    serviceNamespaceQuery,
+    serviceVersionKeyQuery,
+} from '../../../utils/constants.tsx';
+import { getFourthLevelKeysFromAvailableServicesTree } from '../../common/registeredServices/registeredServiceProps.ts';
+import { RegisteredServicesTree } from './RegisteredServicesTree.tsx';
+import ServiceContent from './ServiceContent.tsx';
+
+export function RegisteredServicesFullView({
+    treeData,
+    availableServiceList,
+}: {
+    treeData: DataNode[];
+    availableServiceList: ServiceTemplateDetailVo[];
+}): React.JSX.Element {
+    const [urlParams] = useSearchParams();
+
+    const serviceNamespaceInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceNamespaceQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceCategoryInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceCategoryQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceNameInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const serviceVersionInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
+        if (queryInUri.length > 0) {
+            return queryInUri;
+        }
+        return '';
+    }, [urlParams]);
+
+    const navigate = useNavigate();
+    const allKeysInTree: React.Key[] = getFourthLevelKeysFromAvailableServicesTree(treeData);
+
+    const [selectedKeyInTree, setSelectedKeyInTree] = useState<React.Key>(getDefaultSelectedKey());
+
+    function getDefaultSelectedKey() {
+        //if user directly opens an url.
+        if (serviceNamespaceInQuery && serviceCategoryInQuery && serviceNameInQuery && serviceVersionInQuery) {
+            const fullKey = `${serviceNamespaceInQuery}@${serviceCategoryInQuery}@${serviceNameInQuery}@${serviceVersionInQuery}`;
+
+            if (allKeysInTree.includes(fullKey)) {
+                return fullKey;
+            }
+        }
+        return allKeysInTree[0];
+    }
+
+    // useEffect necessary since we are updating URL outside the React context.
+    useEffect(() => {
+        let namespace: string = '';
+        let category: string = '';
+        let name: string = '';
+        let version: string = '';
+        if (selectedKeyInTree && typeof selectedKeyInTree === 'string') {
+            const parts = selectedKeyInTree.split('@');
+            if (parts.length === 4) {
+                namespace = parts[0];
+                category = parts[1];
+                name = parts[2];
+                version = parts[3];
+            }
+        }
+
+        if (availableServiceList.length > 0) {
+            for (const value of availableServiceList) {
+                if (
+                    value.namespace === namespace &&
+                    value.category.toString() === category &&
+                    value.name === name &&
+                    value.version === version
+                ) {
+                    if (selectedKeyInTree.toString().length > 0) {
+                        navigate({
+                            pathname: registeredServicesPageRoute,
+                            search: createSearchParams({
+                                namespace: namespace,
+                                category: category,
+                                serviceName: name,
+                                version: version,
+                                hostingType: value.serviceHostingType,
+                            }).toString(),
+                        });
+                    }
+                    break;
+                }
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedKeyInTree]);
+
+    return (
+        <>
+            <div className={catalogStyles.leftClass}>
+                <div className={catalogStyles.leftTitleClass}>
+                    <HomeOutlined />
+                    &nbsp;Services
+                </div>
+                <RegisteredServicesTree
+                    treeData={treeData}
+                    selectedKeyInTree={selectedKeyInTree}
+                    setSelectedKeyInTree={setSelectedKeyInTree}
+                />
+            </div>
+            <div className={catalogStyles.middleClass} />
+            <div className={catalogStyles.rightClass}>
+                <div className={catalogStyles.leftTitleClass}>Service Details</div>
+                <ServiceContent
+                    availableServiceList={availableServiceList}
+                    selectedServiceNamespaceInTree={selectedKeyInTree.toString().split('@')[0]}
+                    selectedServiceCategoryInTree={selectedKeyInTree.toString().split('@')[1]}
+                    selectedServiceNameInTree={selectedKeyInTree.toString().split('@')[2]}
+                    selectedServiceVersionInTree={selectedKeyInTree.toString().split('@')[3]}
+                />
+            </div>
+        </>
+    );
+}

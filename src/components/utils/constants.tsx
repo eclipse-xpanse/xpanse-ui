@@ -43,8 +43,12 @@ export const serviceNameKeyQuery: string = 'serviceName';
 export const serviceCspQuery: string = 'csp';
 export const serviceVersionKeyQuery: string = 'version';
 export const serviceHostingTypeQuery: string = 'hostingType';
+export const serviceNamespaceQuery: string = 'namespace';
+export const serviceCategoryQuery: string = 'category';
 
 export const workflowsPageRoute: string = '/workflows';
 export const workflowsLabelName: string = 'Workflows';
 export const serviceReviewsPageRoute: string = '/reviewService';
 export const serviceReviewsLabelName: string = 'Review Service';
+export const registeredServicesPageRoute: string = '/registeredServices';
+export const registeredServicesLabelName: string = 'Registered Services';
