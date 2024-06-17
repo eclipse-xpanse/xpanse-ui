@@ -12,6 +12,7 @@ import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
+import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
 import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
@@ -21,6 +22,7 @@ export default function ServiceReviews(): React.JSX.Element {
     let versionFilters: ColumnFilterItem[] = [];
     let cspFilters: ColumnFilterItem[] = [];
     let categoryFilters: ColumnFilterItem[] = [];
+    let serviceHostingTypeFilters: ColumnFilterItem[] = [];
     let registrationStatusFilters: ColumnFilterItem[] = [];
     let deployerTypeFilters: ColumnFilterItem[] = [];
     let serviceTemplateList: ServiceTemplateDetailVo[] = [];
@@ -30,6 +32,18 @@ export default function ServiceReviews(): React.JSX.Element {
     const [isServiceTemplateDetailsModalOpen, setIsServiceTemplateDetailsModalOpen] = useState(false);
 
     const allServiceTemplatesListQuery = useListAllServiceTemplatesQuery();
+
+    const getServiceHostingTypeFilters = (): void => {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(ServiceTemplateDetailVo.serviceHostingType).forEach((serviceHostingType) => {
+            const filter = {
+                text: serviceHostingType,
+                value: serviceHostingType,
+            };
+            filters.push(filter);
+        });
+        serviceHostingTypeFilters = filters;
+    };
 
     const getCspFilters = (): void => {
         const filters: ColumnFilterItem[] = [];
@@ -114,6 +128,7 @@ export default function ServiceReviews(): React.JSX.Element {
         serviceTemplateList = allServiceTemplatesListQuery.data;
         getServiceNameFilters(allServiceTemplatesListQuery.data);
         getVersionFilters(allServiceTemplatesListQuery.data);
+        getServiceHostingTypeFilters();
         getCspFilters();
         getCategoryFilters();
         getRegistrationStatusFilters();
@@ -178,6 +193,15 @@ export default function ServiceReviews(): React.JSX.Element {
             align: 'left',
         },
         {
+            title: 'Category',
+            dataIndex: 'category',
+            filters: categoryFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
+            align: 'left',
+        },
+        {
             title: 'Service Name',
             dataIndex: 'name',
             filters: serviceNameFilters,
@@ -217,26 +241,14 @@ export default function ServiceReviews(): React.JSX.Element {
             align: 'left',
         },
         {
-            title: 'Category',
-            dataIndex: 'category',
-            filters: categoryFilters,
+            title: 'Service Hosting Type',
+            dataIndex: 'serviceHostingType',
+            filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'left',
-        },
-        {
-            title: 'Registration Status',
-            dataIndex: 'serviceRegistrationState',
-            filters: registrationStatusFilters,
-            filterMode: 'tree',
-            filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) =>
-                record.serviceRegistrationState.startsWith(value.toString()),
-            align: 'left',
-            render: (serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState) => (
-                <ServiceTemplateRegisterStatus serviceRegistrationState={serviceRegistrationState} />
-            ),
+            render: (value: ServiceTemplateDetailVo.serviceHostingType) => DeployedServicesHostingType(value),
         },
         {
             title: 'Deployer Type',
@@ -256,6 +268,19 @@ export default function ServiceReviews(): React.JSX.Element {
                         {'Opentofu'}
                     </Tag>
                 ),
+        },
+        {
+            title: 'Registration Status',
+            dataIndex: 'serviceRegistrationState',
+            filters: registrationStatusFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) =>
+                record.serviceRegistrationState.startsWith(value.toString()),
+            align: 'left',
+            render: (serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState) => (
+                <ServiceTemplateRegisterStatus serviceRegistrationState={serviceRegistrationState} />
+            ),
         },
         {
             title: 'Operation',
