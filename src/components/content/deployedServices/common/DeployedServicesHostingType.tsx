@@ -18,7 +18,7 @@ export function DeployedServicesHostingType(serviceHostingType: DeployedService.
             );
         case DeployedService.serviceHostingType.SELF:
             return (
-                <Tag bordered={false} color='geekblue' className={myServicesStyle.myServiceStatusSize}>
+                <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
                     {serviceHostingType.valueOf()}
                 </Tag>
             );

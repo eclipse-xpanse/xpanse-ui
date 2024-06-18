@@ -6,6 +6,7 @@
 import {
     AreaChartOutlined,
     AuditOutlined,
+    BarsOutlined,
     BranchesOutlined,
     CloudServerOutlined,
     DashboardOutlined,
@@ -26,6 +27,8 @@ import {
     myServicesRoute,
     policiesLabelName,
     policiesRoute,
+    registeredServicesLabelName,
+    registeredServicesPageRoute,
     reportsLabelName,
     reportsRoute,
     serviceReviewsLabelName,
@@ -124,5 +127,14 @@ export const serviceReviewsMenu = (): ItemType => {
         label: <Link to={serviceReviewsPageRoute}>{serviceReviewsLabelName}</Link>,
         icon: <AuditOutlined />,
         title: 'ReviewService',
+    };
+};
+
+export const registeredServicesMenu = (): ItemType => {
+    return {
+        key: registeredServicesPageRoute,
+        label: <Link to={registeredServicesPageRoute}>{registeredServicesLabelName}</Link>,
+        icon: <BarsOutlined />,
+        title: 'RegisteredServices',
     };
 };
