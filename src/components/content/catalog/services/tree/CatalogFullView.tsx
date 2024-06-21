@@ -27,7 +27,7 @@ export function CatalogFullView({
 }: {
     treeData: DataNode[];
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
-    category: ServiceTemplateDetailVo.category;
+    category: ServiceTemplateDetailVo['category'];
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceNameInQuery = useMemo(() => {

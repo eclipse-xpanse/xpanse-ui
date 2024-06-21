@@ -20,7 +20,7 @@ function DeleteService({
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     isDeleteDisabled: boolean;
     setIsReRegisterDisabled: (isReRegisterDisabled: boolean) => void;
-    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    serviceRegistrationState: ServiceTemplateDetailVo['serviceRegistrationState'];
 }): React.JSX.Element {
     const deleteRequest = useDeleteRequest(id);
     if (deleteRequest.isSuccess) {
@@ -48,9 +48,7 @@ function DeleteService({
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
-                        deleteRequest.isSuccess ||
-                        isDeleteDisabled ||
-                        serviceRegistrationState !== ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                        deleteRequest.isSuccess || isDeleteDisabled || serviceRegistrationState !== 'unregistered'
                     }
                 >
                     Delete

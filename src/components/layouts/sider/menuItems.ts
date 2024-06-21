@@ -4,9 +4,9 @@
  */
 
 import { ItemType } from 'antd/es/menu/interface';
-import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
+import { categories } from '../../utils/props.ts';
 import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 import {
     credentialMenu,
@@ -22,7 +22,7 @@ import {
 } from './servicesMenu';
 
 export function getMenuItems(): ItemType[] {
-    const serviceCategories: string[] = Object.values(ServiceTemplateDetailVo.category).filter((v) => isNaN(Number(v)));
+    const serviceCategories: string[] = Object.values(categories).filter((v) => isNaN(Number(v)));
     if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
         return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu(), reportsMenu()];
     } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {

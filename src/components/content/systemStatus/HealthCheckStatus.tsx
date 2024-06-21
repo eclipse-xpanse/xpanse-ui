@@ -18,9 +18,9 @@ import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
 interface DataType {
     key: React.Key;
-    backendSystemType: BackendSystemStatus.backendSystemType;
+    backendSystemType: BackendSystemStatus['backendSystemType'];
     name: string;
-    healthStatus: BackendSystemStatus.healthStatus;
+    healthStatus: BackendSystemStatus['healthStatus'];
     endpoint: string | undefined;
     details: string | undefined;
 }
@@ -110,6 +110,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
         if (
             healthCheckQuery.error instanceof ApiError &&
             healthCheckQuery.error.body &&
+            typeof healthCheckQuery.error.body === 'object' &&
             'details' in healthCheckQuery.error.body
         ) {
             const response: Response = healthCheckQuery.error.body as Response;
@@ -176,7 +177,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         className={appStyles.headerMenuButton}
                         icon={
                             <SystemStatusIcon
-                                isSystemUp={record.healthStatus.valueOf() === SystemStatus.healthStatus.OK.valueOf()}
+                                isSystemUp={record.healthStatus.valueOf() === 'OK'}
                                 isStatusLoading={healthCheckQuery.isLoading}
                             />
                         }

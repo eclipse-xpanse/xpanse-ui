@@ -16,7 +16,7 @@ export function OrderItem({
     region,
 }: {
     item: DeployParam;
-    csp: DeployRequest.csp;
+    csp: DeployRequest['csp'];
     region: string;
 }): React.JSX.Element {
     if (item.type === 'string') {

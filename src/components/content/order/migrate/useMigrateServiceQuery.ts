@@ -6,17 +6,26 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
     DeployedService,
+    GetMigrationOrderDetailsByIdData,
+    GetSelfHostedServiceDetailsByIdData,
+    GetVendorHostedServiceDetailsByIdData,
+    MigrateData,
     MigrateRequest,
-    MigrationService,
     ServiceMigrationDetails,
-    ServiceService,
+    getMigrationOrderDetailsById,
+    getSelfHostedServiceDetailsById,
+    getVendorHostedServiceDetailsById,
+    migrate,
 } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useMigrateServiceQuery() {
     return useMutation({
         mutationFn: (migrateRequest: MigrateRequest) => {
-            return MigrationService.migrate(migrateRequest);
+            const data: MigrateData = {
+                requestBody: migrateRequest,
+            };
+            return migrate(data);
         },
     });
 }
@@ -24,13 +33,16 @@ export function useMigrateServiceQuery() {
 export function useMigrateServiceDetailsPollingQuery(
     migrationId: string | undefined,
     isStartPolling: boolean,
-    refetchUntilStates: ServiceMigrationDetails.migrationStatus[]
+    refetchUntilStates: ServiceMigrationDetails['migrationStatus'][]
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', migrationId],
         queryFn: () => {
+            const data: GetMigrationOrderDetailsByIdData = {
+                migrationId: migrationId ?? '',
+            };
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return MigrationService.getMigrationOrderDetailsById(migrationId!);
+            return getMigrationOrderDetailsById(data);
         },
         refetchInterval: (query) =>
             query.state.data && refetchUntilStates.includes(query.state.data.migrationStatus)
@@ -44,25 +56,31 @@ export function useMigrateServiceDetailsPollingQuery(
 
 export function useServiceDetailsPollingQuery(
     serviceId: string | undefined,
-    serviceHostingType: DeployedService.serviceHostingType,
-    migrationStatus: ServiceMigrationDetails.migrationStatus | undefined
+    serviceHostingType: DeployedService['serviceHostingType'],
+    migrationStatus: ServiceMigrationDetails['migrationStatus'] | undefined
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', serviceId, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
+            if (serviceHostingType.toString() === 'self') {
+                const data: GetSelfHostedServiceDetailsByIdData = {
+                    id: serviceId ?? '',
+                };
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getSelfHostedServiceDetailsById(serviceId!);
+                return getSelfHostedServiceDetailsById(data);
             } else {
+                const data: GetVendorHostedServiceDetailsByIdData = {
+                    id: serviceId ?? '',
+                };
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getVendorHostedServiceDetailsById(serviceId!);
+                return getVendorHostedServiceDetailsById(data);
             }
         },
         enabled:
             serviceId !== undefined &&
-            (migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED ||
-                migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-                migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED),
+            (migrationStatus?.toString() === 'MigrationCompleted' ||
+                migrationStatus?.toString() === 'DeployFailed' ||
+                migrationStatus?.toString() === 'DestroyFailed'),
         staleTime: Infinity,
         gcTime: Infinity,
     });

@@ -44,9 +44,7 @@ export default function MonitorChart({
     let tipType: 'error' | 'success' | undefined = undefined;
     let tipMessage: string = '';
     let tipDescription: string = '';
-    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<Metric.monitorResourceType>(
-        Metric.monitorResourceType.CPU
-    );
+    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<Metric['monitorResourceType']>('cpu');
     const useGetLastKnownMetric = useGetLastKnownMetricForASpecificTypeQuery(
         serviceId,
         isAutoRefresh,
@@ -87,7 +85,7 @@ export default function MonitorChart({
                     .split('_')[0]
                     .concat(
                         ' usage (' +
-                            (metricProps[0].unit === Metric.unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                            (metricProps[0].unit.toString() === 'percentage' ? '%' : metricProps[0].unit.valueOf()) +
                             ') - '
                     ),
                 metricSubTitle: metricProps[0].vmName,
@@ -134,7 +132,7 @@ export default function MonitorChart({
                             .split('_')[0]
                             .concat(
                                 ' usage (' +
-                                    (metricProps[0].unit === Metric.unit.PERCENTAGE
+                                    (metricProps[0].unit.toString() === 'percentage'
                                         ? '%'
                                         : metricProps[0].unit.valueOf()) +
                                     ') - '
@@ -156,7 +154,7 @@ export default function MonitorChart({
 
     const setErrorAlertData = (error: Error) => {
         tipType = 'error';
-        if (error instanceof ApiError && 'details' in error.body) {
+        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
             const response: Response = error.body as Response;
             tipMessage = response.resultType.valueOf();
             tipDescription = response.details.join();
@@ -180,7 +178,7 @@ export default function MonitorChart({
             tipDescription = '';
             let newQueue: Metric[];
             if (onlyLastKnownMetricsQueue.current.length > 0) {
-                newQueue = [...onlyLastKnownMetricsQueue.current, ...data];
+                newQueue = [...onlyLastKnownMetricsQueue.current, ...data] as Metric[];
                 if (newQueue.length > monitorMetricQueueSize) {
                     newQueue.shift();
                 }
@@ -208,7 +206,7 @@ export default function MonitorChart({
                 const currentItem: Metric | undefined = metricsForSpecificTimePeriodQueue.current[0];
                 newQueue = [...metricsForSpecificTimePeriodQueue.current, currentItem];
             } else {
-                newQueue = [...metricsForSpecificTimePeriodQueue.current, ...rsp];
+                newQueue = [...metricsForSpecificTimePeriodQueue.current, ...rsp] as Metric[];
             }
 
             if (newQueue.length > monitorMetricQueueSize) {

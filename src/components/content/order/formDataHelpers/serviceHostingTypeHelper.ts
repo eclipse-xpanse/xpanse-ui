@@ -6,10 +6,10 @@
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getAvailableServiceHostingTypes(
-    selectCsp: UserOrderableServiceVo.csp,
+    selectCsp: UserOrderableServiceVo['csp'] | undefined,
     services: UserOrderableServiceVo[] | undefined
-): UserOrderableServiceVo.serviceHostingType[] {
-    const availableServiceHostingTypes: UserOrderableServiceVo.serviceHostingType[] = [];
+): UserOrderableServiceVo['serviceHostingType'][] {
+    const availableServiceHostingTypes: UserOrderableServiceVo['serviceHostingType'][] = [];
     if (services) {
         services.forEach((userOrderableServiceVo) => {
             if (userOrderableServiceVo.csp === selectCsp) {

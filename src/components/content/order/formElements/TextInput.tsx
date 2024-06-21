@@ -8,7 +8,7 @@ import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
 import React, { ChangeEvent, useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
+import { DeployRequest } from '../../../../xpanse-api/generated';
 import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
@@ -20,7 +20,7 @@ export function TextInput({
     region,
 }: {
     item: DeployParam;
-    csp: DeployRequest.csp;
+    csp: DeployRequest['csp'];
     region: string;
 }): React.JSX.Element {
     const [isExistingResourceDropDownDisabled, setIsExistingResourceDropDownDisabled] = useState<boolean>(false);
@@ -60,13 +60,13 @@ export function TextInput({
     for (const key in item.valueSchema) {
         if (key === DeployVariableSchema.ENUM.valueOf()) {
             isEnum = true;
-            valueList = item.valueSchema[key] as unknown as string[];
+            valueList = item.valueSchema[key] as string[];
         } else if (key === DeployVariableSchema.MINLENGTH.valueOf()) {
-            ruleItems.push({ min: item.valueSchema[key] as unknown as number });
+            ruleItems.push({ min: item.valueSchema[key] as number });
         } else if (key === DeployVariableSchema.MAXLENGTH.valueOf()) {
-            ruleItems.push({ max: item.valueSchema[key] as unknown as number });
+            ruleItems.push({ max: item.valueSchema[key] as number });
         } else if (key === DeployVariableSchema.PATTERN.valueOf()) {
-            regExp = new RegExp(item.valueSchema[key] as unknown as string);
+            regExp = new RegExp(item.valueSchema[key] as string);
             ruleItems.push({ pattern: regExp });
         }
     }
@@ -76,8 +76,7 @@ export function TextInput({
             <div className={serviceOrderStyles.orderParamItemLeft} />
             <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item name={item.name} label={item.name + ' :  ' + item.description} rules={ruleItems}>
-                    {item.sensitiveScope === DeployVariable.sensitiveScope.ALWAYS ||
-                    item.sensitiveScope === DeployVariable.sensitiveScope.ONCE ? (
+                    {item.sensitiveScope?.toString() === 'always' || item.sensitiveScope?.toString() === 'once' ? (
                         <Input.Password
                             name={item.name}
                             placeholder={item.example}

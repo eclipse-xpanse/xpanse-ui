@@ -12,7 +12,6 @@ import { myServicesRoute } from '../../../utils/constants';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
-import serviceDeploymentState = DeployedService.serviceDeploymentState;
 
 export function EndUserServicesDashboard(): React.JSX.Element {
     const listDeployedServicesQuery = useListDeployedServicesQuery();
@@ -39,27 +38,27 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     if (listDeployedServicesQuery.data.length > 0) {
         listDeployedServicesQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+                serviceItem.serviceDeploymentState.toString() === 'deployment successful' ||
+                serviceItem.serviceDeploymentState.toString() === 'modification successful'
             ) {
                 successfulDeploymentsCount++;
             }
             if (
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_FAILED
+                serviceItem.serviceDeploymentState.toString() === 'deployment failed' ||
+                serviceItem.serviceDeploymentState.toString() === 'modification failed'
             ) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState.toString() === 'destroy successful') {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState.toString() === 'destroy failed') {
                 failedDestroysCount++;
             }
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState[]) => {
+    const getMyServicesRedirectionUrl = (serviceState: DeployedService['serviceDeploymentState'][]) => {
         navigate({
             pathname: myServicesRoute,
             search: createSearchParams({
@@ -75,10 +74,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                                    serviceDeploymentState.MODIFICATION_SUCCESSFUL,
-                                ]);
+                                getMyServicesRedirectionUrl(['deployment successful', 'modification successful']);
                             }}
                         >
                             <Statistic
@@ -93,10 +89,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_FAILED,
-                                    serviceDeploymentState.MODIFICATION_FAILED,
-                                ]);
+                                getMyServicesRedirectionUrl(['deployment failed', 'modification failed']);
                             }}
                         >
                             <Statistic
@@ -111,7 +104,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_SUCCESSFUL]);
+                                getMyServicesRedirectionUrl(['destroy successful']);
                             }}
                         >
                             <Statistic
@@ -126,7 +119,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_FAILED]);
+                                getMyServicesRedirectionUrl(['destroy failed']);
                             }}
                         >
                             <Statistic

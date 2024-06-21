@@ -11,6 +11,13 @@ import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import { Deployment, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import {
+    categories,
+    cspValues,
+    deploymentKind,
+    serviceDeploymentStates,
+    serviceHostingType,
+} from '../../utils/props.ts';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
@@ -35,7 +42,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     const getServiceHostingTypeFilters = (): void => {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceTemplateDetailVo.serviceHostingType).forEach((serviceHostingType) => {
+        Object.values(serviceHostingType).forEach((serviceHostingType) => {
             const filter = {
                 text: serviceHostingType,
                 value: serviceHostingType,
@@ -47,7 +54,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     const getCspFilters = (): void => {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceTemplateDetailVo.csp).forEach((csp) => {
+        Object.values(cspValues).forEach((csp) => {
             const filter = {
                 text: csp,
                 value: csp,
@@ -90,7 +97,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getCategoryFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceTemplateDetailVo.category).forEach((category) => {
+        Object.values(categories).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -102,7 +109,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getRegistrationStatusFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(ServiceTemplateDetailVo.serviceRegistrationState).forEach((status) => {
+        Object.values(serviceDeploymentStates).forEach((status) => {
             const filter = {
                 text: status,
                 value: status,
@@ -114,7 +121,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getDeployerTypeFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(Deployment.kind).forEach((kind) => {
+        Object.values(deploymentKind).forEach((kind) => {
             const filter = {
                 text: kind,
                 value: kind,
@@ -248,7 +255,7 @@ export default function ServiceReviews(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'left',
-            render: (value: ServiceTemplateDetailVo.serviceHostingType) => DeployedServicesHostingType(value),
+            render: (value: ServiceTemplateDetailVo['serviceHostingType']) => DeployedServicesHostingType(value),
         },
         {
             title: 'Deployer Type',
@@ -259,7 +266,7 @@ export default function ServiceReviews(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) => record.deployment.kind.startsWith(value.toString()),
             align: 'left',
             render: (deployment: Deployment) =>
-                deployment.kind === Deployment.kind.TERRAFORM ? (
+                deployment.kind.toString() === 'terraform' ? (
                     <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
                         {'Terraform'}
                     </Tag>
@@ -278,7 +285,7 @@ export default function ServiceReviews(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceRegistrationState.startsWith(value.toString()),
             align: 'left',
-            render: (serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState) => (
+            render: (serviceRegistrationState: ServiceTemplateDetailVo['serviceRegistrationState']) => (
                 <ServiceTemplateRegisterStatus serviceRegistrationState={serviceRegistrationState} />
             ),
         },
@@ -296,8 +303,7 @@ export default function ServiceReviews(): React.JSX.Element {
                                     handleServiceTemplateDetailsOpenModal(record);
                                 }}
                             >
-                                {record.serviceRegistrationState ===
-                                ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                                {record.serviceRegistrationState.toString() === 'approval pending'
                                     ? 'review'
                                     : 'details'}
                             </Button>

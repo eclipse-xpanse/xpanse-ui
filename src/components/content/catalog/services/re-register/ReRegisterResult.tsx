@@ -17,7 +17,7 @@ export function ReRegisterResult({
     category,
 }: {
     id: string;
-    category: ServiceTemplateDetailVo.category;
+    category: ServiceTemplateDetailVo['category'];
 }): React.JSX.Element | undefined {
     const useReRegisterRequestState = useGetReRegisterMutationState(id);
     const queryClient = useQueryClient();
@@ -51,6 +51,7 @@ export function ReRegisterResult({
                     <div>
                         {useReRegisterRequestState[0].error instanceof ApiError &&
                         useReRegisterRequestState[0].error.body &&
+                        typeof useReRegisterRequestState[0].error.body === 'object' &&
                         'details' in useReRegisterRequestState[0].error.body ? (
                             <Alert
                                 message='Re-Register Request Failed'

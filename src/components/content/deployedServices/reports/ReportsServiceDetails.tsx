@@ -67,6 +67,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             getServiceDetailsByIdQuery.error.body &&
+            typeof getServiceDetailsByIdQuery.error.body === 'object' &&
             'details' in getServiceDetailsByIdQuery.error.body
         ) {
             const response: Response = getServiceDetailsByIdQuery.error.body as Response;

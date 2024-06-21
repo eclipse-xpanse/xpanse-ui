@@ -17,6 +17,7 @@ import {
     UserPolicyCreateRequest,
     UserPolicyUpdateRequest,
 } from '../../../xpanse-api/generated';
+import { cspValues } from '../../utils/props.ts';
 import { cspMap } from '../common/csp/CspLogo';
 import PolicySubmitResultDetails from './PolicySubmitResultDetails';
 import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
@@ -44,7 +45,7 @@ export const AddOrUpdatePolicy = ({
     const createPoliciesManagementServiceRequest = useCreatePolicyRequest();
     const updatePoliciesManagementServiceRequest = useUpdatePolicyRequest();
 
-    const onFinish = (policyRequest: { csp: UserPolicy.csp; enabled: boolean; policy: string }) => {
+    const onFinish = (policyRequest: { csp: UserPolicy['csp']; enabled: boolean; policy: string }) => {
         if (currentPolicyService === undefined) {
             const policyCreateRequest: UserPolicyCreateRequest = policyRequest as UserPolicyCreateRequest;
             policyCreateRequest.csp = policyRequest.csp;
@@ -70,7 +71,7 @@ export const AddOrUpdatePolicy = ({
     };
 
     const comparePolicyUpdateRequestResult = (policyRequest: {
-        csp: UserPolicy.csp;
+        csp: UserPolicy['csp'];
         enabled: boolean;
         policy: string;
     }): boolean => {
@@ -98,7 +99,7 @@ export const AddOrUpdatePolicy = ({
         getCancelUpdateStatus(true);
     };
 
-    const handleCspSelect = (cspName: CredentialVariables.csp) => {
+    const handleCspSelect = (cspName: CredentialVariables['csp']) => {
         setIsUpdated(false);
         form.setFieldsValue({ csp: cspName });
     };
@@ -223,13 +224,13 @@ export const AddOrUpdatePolicy = ({
             >
                 <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select csp!' }]}>
                     <Select onSelect={handleCspSelect} size={'large'} className={policyStyles.policyFormSelect}>
-                        {Object.values(CredentialVariables.csp).map((csp: CredentialVariables.csp) => (
+                        {Object.values(cspValues).map((csp) => (
                             <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                 <Image
                                     className={policyStyles.customSelectImage}
                                     width={100}
                                     preview={false}
-                                    src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
+                                    src={cspMap.get(csp.valueOf() as CloudServiceProvider['name'])?.logo}
                                 />
                             </Select.Option>
                         ))}

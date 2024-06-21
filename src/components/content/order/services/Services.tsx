@@ -41,7 +41,7 @@ function Services(): React.JSX.Element {
     };
 
     const orderableServicesQuery = userOrderableServicesQuery(
-        location.hash.split('#')[1] as DeployedService.category,
+        location.hash.split('#')[1] as DeployedService['category'],
         undefined
     );
 

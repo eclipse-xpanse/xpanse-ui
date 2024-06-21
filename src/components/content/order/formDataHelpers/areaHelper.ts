@@ -8,8 +8,8 @@ import { Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated
 import { Area } from '../types/Area';
 
 export function getAreasForSelectedVersionHostingTypeAndCsp(
-    selectCsp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    selectCsp: UserOrderableServiceVo['csp'] | undefined,
+    selectServiceHostingType: UserOrderableServiceVo['serviceHostingType'] | undefined,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Area[] {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
@@ -42,12 +42,12 @@ export function getAreasForSelectedVersionHostingTypeAndCsp(
             }
         });
     }
-    return areaMapper.get(selectCsp) ?? [];
+    return areaMapper.get(selectCsp ?? '') ?? [];
 }
 
 export function convertAreasToTabs(
-    selectCsp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    selectCsp: UserOrderableServiceVo['csp'] | undefined,
+    selectServiceHostingType: UserOrderableServiceVo['serviceHostingType'] | undefined,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Tab[] {
     const areaList: Area[] = getAreasForSelectedVersionHostingTypeAndCsp(

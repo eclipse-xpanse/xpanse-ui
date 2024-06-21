@@ -13,7 +13,7 @@ export interface DeployParam {
     description: string;
     value: string;
     mandatory: boolean;
-    sensitiveScope: DeployVariable.sensitiveScope;
-    valueSchema: Record<string, Record<string, unknown>> | undefined;
+    sensitiveScope: DeployVariable['sensitiveScope'];
+    valueSchema: Record<string, unknown>;
     autoFill: AutoFill | undefined;
 }

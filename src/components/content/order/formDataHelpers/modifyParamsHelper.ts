@@ -19,8 +19,8 @@ export const getModifyParams = (variables: DeployVariable[]): DeployParam[] => {
                 description: param.description,
                 value: param.value ?? '',
                 mandatory: param.mandatory,
-                sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
-                valueSchema: param.valueSchema ?? undefined,
+                sensitiveScope: param.sensitiveScope ?? 'none',
+                valueSchema: param.valueSchema as Record<string, unknown>,
                 autoFill: param.autoFill ?? undefined,
             });
         }

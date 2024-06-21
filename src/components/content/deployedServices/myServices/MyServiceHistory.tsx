@@ -104,13 +104,13 @@ export const MyServiceHistory = ({
             align: 'center',
             width: 50,
             render: (value) => {
-                if (value === ServiceModificationAuditDetails.taskStatus.FAILED) {
+                if (value === 'failed') {
                     return (
                         <Tag icon={<QuestionCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === ServiceModificationAuditDetails.taskStatus.SUCCESSFUL) {
+                } else if (value === 'successful') {
                     return (
                         <Tag icon={<CheckCircleOutlined />} color={'success'}>
                             {value}

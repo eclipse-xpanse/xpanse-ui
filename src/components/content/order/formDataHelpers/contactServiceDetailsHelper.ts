@@ -6,16 +6,16 @@
 import { ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getContactServiceDetailsOfServiceByCsp(
-    selectCsp: UserOrderableServiceVo.csp,
+    selectCsp: UserOrderableServiceVo['csp'] | undefined,
     services: UserOrderableServiceVo[] | undefined
 ): ServiceProviderContactDetails | undefined {
-    let contactServiceDetails: ServiceProviderContactDetails | undefined = undefined;
-    if (services) {
-        services.forEach((userOrderableServiceVo) => {
-            if (userOrderableServiceVo.csp === selectCsp) {
-                contactServiceDetails = userOrderableServiceVo.serviceProviderContactDetails;
-            }
-        });
+    if (!selectCsp || !services) {
+        return undefined;
     }
-    return contactServiceDetails;
+
+    const service = services.find((service) => service.csp === selectCsp);
+
+    if (service) {
+        return service.serviceProviderContactDetails;
+    }
 }

@@ -7,7 +7,7 @@ import { Card, Col, Divider, Row, Statistic } from 'antd';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
-import { DeployedService, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+import { DeployedService } from '../../../../xpanse-api/generated';
 import { catalogPageRoute, reportsRoute } from '../../../utils/constants';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import DashBoardError from '../common/DashBoardError';
@@ -33,21 +33,21 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL
+                serviceItem.serviceDeploymentState.toString() === 'deployment successful' ||
+                serviceItem.serviceDeploymentState.toString() === 'modification successful'
             ) {
                 successfulDeploymentsCount++;
             }
             if (
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_FAILED
+                serviceItem.serviceDeploymentState.toString() === 'deployment failed' ||
+                serviceItem.serviceDeploymentState.toString() === 'modification failed'
             ) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState.toString() === 'destroy successful') {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState.toString() === 'destroy failed') {
                 failedDestroysCount++;
             }
         });
@@ -77,15 +77,11 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     const getCatalogRedirectionUrl = () => {
         navigate({
             pathname: catalogPageRoute,
-            hash:
-                '#' +
-                (registeredServicesCount > 0
-                    ? listRegisteredServicesByIsvQuery.data[0].category
-                    : ServiceTemplateDetailVo.category.AI),
+            hash: '#' + (registeredServicesCount > 0 ? listRegisteredServicesByIsvQuery.data[0].category : 'ai'),
         });
     };
 
-    const getReportsRedirectionUrl = (serviceState: DeployedService.serviceDeploymentState[]) => {
+    const getReportsRedirectionUrl = (serviceState: DeployedService['serviceDeploymentState'][]) => {
         navigate({
             pathname: reportsRoute,
             search: createSearchParams({
@@ -119,10 +115,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([
-                                    DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                                    DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL,
-                                ]);
+                                getReportsRedirectionUrl(['deployment successful', 'modification successful']);
                             }}
                         >
                             <Statistic
@@ -137,10 +130,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([
-                                    DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED,
-                                    DeployedService.serviceDeploymentState.MODIFICATION_FAILED,
-                                ]);
+                                getReportsRedirectionUrl(['deployment failed', 'modification failed']);
                             }}
                         >
                             <Statistic
@@ -155,7 +145,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL]);
+                                getReportsRedirectionUrl(['destroy successful']);
                             }}
                         >
                             <Statistic
@@ -170,7 +160,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([DeployedService.serviceDeploymentState.DESTROY_FAILED]);
+                                getReportsRedirectionUrl(['destroy failed']);
                             }}
                         >
                             <Statistic

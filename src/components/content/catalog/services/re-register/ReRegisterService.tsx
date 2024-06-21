@@ -20,7 +20,7 @@ function ReRegisterService({
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     isReRegisterDisabled: boolean;
     setIsDeleteDisabled: (isDelete: boolean) => void;
-    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    serviceRegistrationState: ServiceTemplateDetailVo['serviceRegistrationState'];
 }): React.JSX.Element {
     const reRegisterRequest = useReRegisterRequest(id);
     if (reRegisterRequest.isSuccess) {
@@ -49,7 +49,7 @@ function ReRegisterService({
                     disabled={
                         reRegisterRequest.isSuccess ||
                         isReRegisterDisabled ||
-                        serviceRegistrationState !== ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                        serviceRegistrationState !== 'unregistered'
                     }
                 >
                     Re-register

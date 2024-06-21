@@ -28,10 +28,7 @@ function DestroyServiceStatusAlert({
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
     if (
         deployedServiceDetails &&
-        [
-            DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
-            DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
-        ].includes(deployedServiceDetails.serviceDeploymentState)
+        ['destroy failed', 'destroy successful'].includes(deployedServiceDetails.serviceDeploymentState)
     ) {
         deployedService.serviceDeploymentState = deployedServiceDetails.serviceDeploymentState;
         deployedService.serviceState = deployedServiceDetails.serviceState;
@@ -43,13 +40,18 @@ function DestroyServiceStatusAlert({
 
     if (destroySubmitError) {
         let errorMessage;
-        if (destroySubmitError instanceof ApiError && destroySubmitError.body && 'details' in destroySubmitError.body) {
+        if (
+            destroySubmitError instanceof ApiError &&
+            destroySubmitError.body &&
+            typeof destroySubmitError.body === 'object' &&
+            'details' in destroySubmitError.body
+        ) {
             const response: Response = destroySubmitError.body as Response;
             errorMessage = response.details;
         } else {
             errorMessage = destroySubmitError.message;
         }
-        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+        deployedService.serviceDeploymentState = 'destroy failed';
         return (
             <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
@@ -82,8 +84,13 @@ function DestroyServiceStatusAlert({
     }
 
     if (statusPollingError) {
-        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
-        if (statusPollingError instanceof ApiError && 'details' in statusPollingError.body) {
+        deployedService.serviceDeploymentState = 'destroy failed';
+        if (
+            statusPollingError instanceof ApiError &&
+            statusPollingError.body &&
+            typeof statusPollingError.body === 'object' &&
+            'details' in statusPollingError.body
+        ) {
             const response: Response = statusPollingError.body as Response;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
@@ -121,10 +128,7 @@ function DestroyServiceStatusAlert({
     }
 
     if (deployedServiceDetails !== undefined) {
-        if (
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-            DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
-        ) {
+        if (deployedServiceDetails.serviceDeploymentState.toString() === 'destroy successful') {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -143,10 +147,7 @@ function DestroyServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-            DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED.toString()
-        ) {
+        } else if (deployedServiceDetails.serviceDeploymentState.toString() === 'destroy failed') {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}

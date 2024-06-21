@@ -16,7 +16,7 @@ function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
     const categoryName = decodeURI(urlParams.get('catalog') ?? '');
-    const orderableServicesQuery = userOrderableServicesQuery(categoryName as DeployedService.category, serviceName);
+    const orderableServicesQuery = userOrderableServicesQuery(categoryName as DeployedService['category'], serviceName);
 
     if (orderableServicesQuery.isSuccess) {
         return <SelectServiceForm services={orderableServicesQuery.data} />;

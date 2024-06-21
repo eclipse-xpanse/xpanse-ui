@@ -6,7 +6,7 @@
 import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getAvailabilityZoneRequirementsForAService(
-    selectCsp: UserOrderableServiceVo.csp,
+    selectCsp: UserOrderableServiceVo['csp'] | undefined,
     services: UserOrderableServiceVo[] | undefined
 ): AvailabilityZoneConfig[] {
     let availabilityZoneConfigs: AvailabilityZoneConfig[] = [];

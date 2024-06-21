@@ -11,7 +11,6 @@ import {
     ApiError,
     DeployedService,
     Response,
-    ServiceStateManagementTaskDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
@@ -41,6 +40,7 @@ function RestartServiceStatusAlert({
         if (
             serviceStateRestartQuery.error instanceof ApiError &&
             serviceStateRestartQuery.error.body &&
+            typeof serviceStateRestartQuery.error.body === 'object' &&
             'details' in serviceStateRestartQuery.error.body
         ) {
             const response: Response = serviceStateRestartQuery.error.body as Response;
@@ -82,6 +82,8 @@ function RestartServiceStatusAlert({
     if (getRestartServiceDetailsQuery.isError) {
         if (
             getRestartServiceDetailsQuery.error instanceof ApiError &&
+            getRestartServiceDetailsQuery.error.body &&
+            typeof getRestartServiceDetailsQuery.error.body === 'object' &&
             'details' in getRestartServiceDetailsQuery.error.body
         ) {
             const response: Response = getRestartServiceDetailsQuery.error.body as Response;
@@ -125,10 +127,7 @@ function RestartServiceStatusAlert({
         getRestartServiceDetailsQuery.data.latestRunningManagementTask &&
         getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskId === serviceStateRestartQuery.data
     ) {
-        if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.SUCCESSFUL.toString()
-        ) {
+        if (getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() === 'successful') {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -151,10 +150,7 @@ function RestartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.FAILED.toString()
-        ) {
+        } else if (getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() === 'failed') {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -196,10 +192,9 @@ function RestartServiceStatusAlert({
                 </div>
             );
         } else if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.IN_PROGRESS.toString()
+            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() === 'in progress'
         ) {
-            deployedService.serviceState = DeployedService.serviceState.RESTARTING;
+            deployedService.serviceState = 'restarting';
         }
     }
     return <></>;

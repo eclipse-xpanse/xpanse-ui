@@ -11,7 +11,7 @@ import { v4 } from 'uuid';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, DeployedService, DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { DeployRequest } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD, createServicePageRoute, homePageRoute } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
@@ -33,11 +33,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         submitDeploymentRequest.data,
         submitDeploymentRequest.isSuccess,
-        state.serviceHostingType as DeployedService.serviceHostingType,
-        [
-            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
-        ]
+        state.serviceHostingType,
+        ['deployment successful', 'deployment failed']
     );
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
@@ -150,8 +147,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             </Form.Item>
                             <div
                                 className={
-                                    getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                    DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
+                                    getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() === 'deploying'
                                         ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                                         : ''
                                 }
@@ -191,13 +187,13 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                         loading={
                                             submitDeploymentRequest.isPending ||
                                             getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
+                                                'deploying'
                                         }
                                         htmlType='submit'
                                         disabled={
                                             submitDeploymentRequest.isPending ||
                                             getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                                                'deployment successful'
                                         }
                                     >
                                         Deploy

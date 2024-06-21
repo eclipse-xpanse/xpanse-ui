@@ -4,12 +4,22 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceVendorService } from '../../../../xpanse-api/generated';
+import { listServiceTemplates, ListServiceTemplatesData } from '../../../../xpanse-api/generated';
 
 export default function useListRegisteredServicesQuery() {
     return useQuery({
         queryKey: ['listRegisteredServicesByIsv'],
-        queryFn: () => ServiceVendorService.listServiceTemplates(undefined, undefined, undefined, undefined, undefined),
+        queryFn: () => {
+            const data: ListServiceTemplatesData = {
+                categoryName: undefined,
+                cspName: undefined,
+                serviceName: undefined,
+                serviceVersion: undefined,
+                serviceHostingType: undefined,
+                serviceRegistrationState: undefined,
+            };
+            return listServiceTemplates(data);
+        },
         refetchOnWindowFocus: false,
     });
 }

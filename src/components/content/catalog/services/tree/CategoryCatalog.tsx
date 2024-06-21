@@ -18,7 +18,7 @@ import {
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
-function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.category }): React.JSX.Element {
+function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo['category'] }): React.JSX.Element {
     const treeData: DataNode[] = [];
     let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
 
@@ -52,6 +52,7 @@ function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.categ
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
+            typeof availableServiceTemplatesQuery.error.body === 'object' &&
             'details' in availableServiceTemplatesQuery.error.body
         ) {
             const response: Response = availableServiceTemplatesQuery.error.body as Response;

@@ -28,10 +28,10 @@ export const FlavorSelection = ({
     flavorList?: ServiceFlavor[];
     onChangeFlavor?: (newFlavor: string) => void;
     selectVersion: string;
-    selectCsp: UserOrderableServiceVo.csp;
+    selectCsp: UserOrderableServiceVo['csp'];
     services?: UserOrderableServiceVo[];
     selectRegion: string;
-    selectBillingMode: DeployRequest.billingMode;
+    selectBillingMode: DeployRequest['billingMode'];
 }): React.JSX.Element => {
     const getServiceTemplateId = (): string => {
         if (services) {

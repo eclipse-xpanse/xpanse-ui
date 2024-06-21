@@ -13,11 +13,11 @@ export const BillingModeSelection = ({
     setSelectBillingMode,
     billingModes,
 }: {
-    selectBillingMode: DeployRequest.billingMode;
-    setSelectBillingMode: Dispatch<SetStateAction<DeployRequest.billingMode>>;
-    billingModes: DeployRequest.billingMode[] | undefined;
+    selectBillingMode: DeployRequest['billingMode'];
+    setSelectBillingMode: Dispatch<SetStateAction<DeployRequest['billingMode']>>;
+    billingModes: DeployRequest['billingMode'][] | undefined;
 }): React.JSX.Element => {
-    function onChange(value: DeployRequest.billingMode) {
+    function onChange(value: DeployRequest['billingMode']) {
         setSelectBillingMode(value);
     }
 
@@ -43,11 +43,11 @@ export const BillingModeSelection = ({
                             <Radio.Group
                                 buttonStyle='solid'
                                 onChange={(e) => {
-                                    onChange(e.target.value as DeployRequest.billingMode);
+                                    onChange(e.target.value as DeployRequest['billingMode']);
                                 }}
                                 value={selectBillingMode}
                             >
-                                {billingModes.map((mode: DeployRequest.billingMode) => (
+                                {billingModes.map((mode: DeployRequest['billingMode']) => (
                                     <Radio.Button key={mode} value={mode}>
                                         {mode}
                                     </Radio.Button>

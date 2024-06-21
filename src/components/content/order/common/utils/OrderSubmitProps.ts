@@ -8,17 +8,17 @@ import { DeployParam } from '../../types/DeployParam';
 
 export interface OrderSubmitProps {
     id: string;
-    category: DeployRequest.category;
+    category: DeployRequest['category'];
     name: string;
     version: string;
     region: string;
     area: string;
-    csp: DeployRequest.csp;
+    csp: DeployRequest['csp'];
     flavor: string;
     params: DeployParam[];
-    serviceHostingType: DeployRequest.serviceHostingType;
+    serviceHostingType: DeployRequest['serviceHostingType'];
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     availabilityZones?: Record<string, string>;
     eula: string | undefined;
-    billingMode: DeployRequest.billingMode;
+    billingMode: DeployRequest['billingMode'];
 }

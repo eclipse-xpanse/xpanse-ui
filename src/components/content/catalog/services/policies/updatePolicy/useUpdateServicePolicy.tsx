@@ -4,12 +4,20 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { ServicePoliciesManagementService, ServicePolicyUpdateRequest } from '../../../../../../xpanse-api/generated';
+import {
+    ServicePolicyUpdateRequest,
+    updateServicePolicy,
+    UpdateServicePolicyData,
+} from '../../../../../../xpanse-api/generated';
 
 export const useUpdateServicePolicy = () => {
     return useMutation({
         mutationFn: ({ id, policyUpdateRequest }: { id: string; policyUpdateRequest: ServicePolicyUpdateRequest }) => {
-            return ServicePoliciesManagementService.updateServicePolicy(id, policyUpdateRequest);
+            const data: UpdateServicePolicyData = {
+                id: id,
+                requestBody: policyUpdateRequest,
+            };
+            return updateServicePolicy(data);
         },
     });
 };

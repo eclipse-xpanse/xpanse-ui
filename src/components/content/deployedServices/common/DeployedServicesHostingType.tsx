@@ -6,17 +6,17 @@
 import { Tag } from 'antd';
 import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import { serviceHostingType } from '../../../../xpanse-api/generated';
 
-export function DeployedServicesHostingType(serviceHostingType: DeployedService.serviceHostingType): React.JSX.Element {
+export function DeployedServicesHostingType(serviceHostingType: serviceHostingType): React.JSX.Element {
     switch (serviceHostingType) {
-        case DeployedService.serviceHostingType.SERVICE_VENDOR:
+        case 'service-vendor':
             return (
                 <Tag bordered={false} color='magenta' className={myServicesStyle.myServiceStatusSize}>
                     {serviceHostingType.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceHostingType.SELF:
+        case 'self':
             return (
                 <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
                     {serviceHostingType.valueOf()}

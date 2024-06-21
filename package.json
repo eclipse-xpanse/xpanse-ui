@@ -101,6 +101,7 @@
     "devDependencies": {
         "@axa-fr/oidc-client": "^7.22.5",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@hey-api/openapi-ts": "^0.47.0",
         "@tanstack/eslint-plugin-query": "^5.43.1",
         "@testing-library/jest-dom": "^6.4.6",
         "@testing-library/react": "^16.0.0",
@@ -125,7 +126,6 @@
         "jest": "^29.7.0",
         "jest-environment-jsdom": "^29.7.0",
         "knip": "^5.22.0",
-        "openapi-typescript-codegen": "^0.29.0",
         "prettier": "3.3.2",
         "prettier-plugin-organize-imports": "^3.2.4",
         "release-it": "^17.3.0",
@@ -149,11 +149,12 @@
             "public/inject.js",
             "src/config/index.d.ts",
             "src/react-app-env.d.ts",
-            "public/OidcTrustedDomains.js"
+            "public/OidcTrustedDomains.js",
+            "openapi-ts.config.ts"
         ],
         "ignoreDependencies": [
             "@babel/plugin-proposal-private-property-in-object",
-            "openapi-typescript-codegen",
+            "@hey-api/openapi-ts",
             "@types/jest"
         ],
         "ignoreBinaries": [

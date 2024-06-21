@@ -32,12 +32,12 @@ export const DeploymentForm = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: UserOrderableServiceVo.csp;
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
+    selectCsp: UserOrderableServiceVo['csp'];
+    selectServiceHostingType: UserOrderableServiceVo['serviceHostingType'];
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectBillingMode: MigrateRequest.billingMode;
+    selectBillingMode: MigrateRequest['billingMode'];
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;

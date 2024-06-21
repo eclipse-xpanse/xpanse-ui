@@ -55,8 +55,7 @@ export const ServiceReviewsDetails = ({
                 disabled={
                     useReviewRequestState[0]?.status === 'success' ||
                     (getRegistrationDetailsQuery.isSuccess &&
-                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
+                        getRegistrationDetailsQuery.data.serviceRegistrationState !== 'approval pending')
                 }
             >
                 Approve
@@ -68,8 +67,7 @@ export const ServiceReviewsDetails = ({
                 disabled={
                     useReviewRequestState[0]?.status === 'success' ||
                     (getRegistrationDetailsQuery.isSuccess &&
-                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
+                        getRegistrationDetailsQuery.data.serviceRegistrationState !== 'approval pending')
                 }
             >
                 Reject
@@ -116,8 +114,9 @@ export const ServiceReviewsDetails = ({
                                     width={120}
                                     preview={false}
                                     src={
-                                        cspMap.get(currentServiceTemplateVo.csp.valueOf() as CloudServiceProvider.name)
-                                            ?.logo
+                                        cspMap.get(
+                                            currentServiceTemplateVo.csp.valueOf() as CloudServiceProvider['name']
+                                        )?.logo
                                     }
                                 />
                             </div>
@@ -201,8 +200,7 @@ export const ServiceReviewsDetails = ({
                         </Descriptions.Item>
                     </Descriptions>
                     {getRegistrationDetailsQuery.isSuccess &&
-                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING ? (
+                    getRegistrationDetailsQuery.data.serviceRegistrationState !== 'approval pending' ? (
                         <>
                             <Descriptions
                                 title={'Service Review Details'}

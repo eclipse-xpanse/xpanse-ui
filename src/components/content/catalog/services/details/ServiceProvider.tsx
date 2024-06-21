@@ -45,7 +45,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
-    category: ServiceTemplateDetailVo.category;
+    category: ServiceTemplateDetailVo['category'];
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
@@ -115,7 +115,7 @@ function ServiceProvider({
                                         <Image
                                             width={120}
                                             preview={false}
-                                            src={cspMap.get(cspName as CloudServiceProvider.name)?.logo}
+                                            src={cspMap.get(cspName as CloudServiceProvider['name'])?.logo}
                                         />
                                     </div>
                                 ),

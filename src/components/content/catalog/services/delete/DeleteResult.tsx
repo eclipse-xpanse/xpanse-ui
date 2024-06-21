@@ -17,7 +17,7 @@ export function DeleteResult({
     category,
 }: {
     id: string;
-    category: ServiceTemplateDetailVo.category;
+    category: ServiceTemplateDetailVo['category'];
 }): React.JSX.Element | undefined {
     const deleteRequestState = useGetDeleteMutationState(id);
     const queryClient = useQueryClient();
@@ -51,6 +51,7 @@ export function DeleteResult({
                     <div>
                         {deleteRequestState[0].error instanceof ApiError &&
                         deleteRequestState[0].error.body &&
+                        typeof deleteRequestState[0].error.body === 'object' &&
                         'details' in deleteRequestState[0].error.body ? (
                             <Alert
                                 message='Delete Request Failed'

@@ -16,7 +16,7 @@ export function AvailabilityZoneError({
     retryRequest: () => void;
     error: Error;
 }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && 'details' in error.body) {
+    if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
         const response: Response = error.body as Response;
         return (
             <Alert

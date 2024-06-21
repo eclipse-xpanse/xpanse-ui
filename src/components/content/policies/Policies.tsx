@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import policyStyles from '../../../styles/policies.module.css';
 import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { AbstractCredentialInfo, CloudServiceProvider, UserPolicy } from '../../../xpanse-api/generated';
+import { AbstractCredentialInfo, UserPolicy } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AddOrUpdatePolicy } from './AddOrUpdatePolicy';
 import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
@@ -49,14 +49,10 @@ function Policies(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
-            render: (csp: AbstractCredentialInfo.csp, _) => {
+            render: (csp: AbstractCredentialInfo['csp'], _) => {
                 return (
                     <Space size='middle'>
-                        <Image
-                            width={100}
-                            preview={false}
-                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
-                        />
+                        <Image width={100} preview={false} src={cspMap.get(csp)?.logo} />
                     </Space>
                 );
             },

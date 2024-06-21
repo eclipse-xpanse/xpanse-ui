@@ -34,24 +34,22 @@ function OrderSubmitStatusAlert({
     });
     const msg = useMemo(() => {
         if (deployedServiceDetails) {
-            if (
-                uuid &&
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
-            ) {
+            if (uuid && deployedServiceDetails.serviceDeploymentState.toString() === 'deploying') {
                 return 'Deploying, Please wait...';
             } else if (
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() ||
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                deployedServiceDetails.serviceDeploymentState.toString() === 'deployment successful' ||
+                deployedServiceDetails.serviceDeploymentState.toString() === 'deployment failed' ||
+                deployedServiceDetails.serviceDeploymentState.toString() === 'rollback failed'
             ) {
                 return <ProcessingStatus response={deployedServiceDetails} operationType={OperationType.Deploy} />;
             }
         } else if (isSubmitFailed) {
-            if (isSubmitFailed instanceof ApiError && isSubmitFailed.body && 'details' in isSubmitFailed.body) {
+            if (
+                isSubmitFailed instanceof ApiError &&
+                isSubmitFailed.body &&
+                typeof isSubmitFailed.body === 'object' &&
+                'details' in isSubmitFailed.body
+            ) {
                 const response: Response = isSubmitFailed.body as Response;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
@@ -73,10 +71,8 @@ function OrderSubmitStatusAlert({
         }
         if (deployedServiceDetails) {
             if (
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                deployedServiceDetails.serviceDeploymentState.toString() === 'deployment failed' ||
+                deployedServiceDetails.serviceDeploymentState.toString() === 'rollback failed'
             ) {
                 return 'error';
             }
@@ -92,12 +88,9 @@ function OrderSubmitStatusAlert({
 
     if (deployedServiceDetails) {
         if (
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString() ||
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+            deployedServiceDetails.serviceDeploymentState.toString() === 'deployment failed' ||
+            deployedServiceDetails.serviceDeploymentState.toString() === 'rollback failed' ||
+            deployedServiceDetails.serviceDeploymentState.toString() === 'deployment successful'
         ) {
             if (stopWatch.isRunning) {
                 stopWatch.pause();

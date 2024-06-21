@@ -12,8 +12,8 @@ export const MonitorMetricsTypeTabs = ({
     setActiveMonitorMetricType,
     activeMonitorMetricType,
 }: {
-    setActiveMonitorMetricType: (activeMonitorMetricType: Metric.monitorResourceType) => void;
-    activeMonitorMetricType: Metric.monitorResourceType;
+    setActiveMonitorMetricType: (activeMonitorMetricType: Metric['monitorResourceType']) => void;
+    activeMonitorMetricType: Metric['monitorResourceType'];
 }) => {
     const chartItems: Tab[] = [];
     MonitorTypeList.forEach((monitorType: string) => {
@@ -26,7 +26,7 @@ export const MonitorMetricsTypeTabs = ({
     });
 
     const onChangeMonitorMetricType = (value: string) => {
-        setActiveMonitorMetricType(value as Metric.monitorResourceType);
+        setActiveMonitorMetricType(value as Metric['monitorResourceType']);
     };
 
     return (

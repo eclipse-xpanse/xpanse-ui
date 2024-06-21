@@ -11,10 +11,11 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployRequest,
     DeployedServiceDetails,
+    ListOrderableServicesData,
     MigrateRequest,
-    ServiceCatalogService,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
+    listOrderableServices,
 } from '../../../../xpanse-api/generated';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
@@ -34,13 +35,13 @@ export const Migrate = ({
 
     const [target, setTarget] = useState<string | undefined>(undefined);
 
-    const [cspList, setCspList] = useState<UserOrderableServiceVo.csp[]>([]);
-    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(currentSelectedService.csp);
+    const [cspList, setCspList] = useState<UserOrderableServiceVo['csp'][]>([]);
+    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo['csp']>(currentSelectedService.csp);
 
-    const [serviceHostTypes, setServiceHostTypes] = useState<UserOrderableServiceVo.serviceHostingType[]>([]);
-    const [selectServiceHostingType, setSelectServiceHostingType] = useState<UserOrderableServiceVo.serviceHostingType>(
-        currentSelectedService.serviceHostingType
-    );
+    const [serviceHostTypes, setServiceHostTypes] = useState<UserOrderableServiceVo['serviceHostingType'][]>([]);
+    const [selectServiceHostingType, setSelectServiceHostingType] = useState<
+        UserOrderableServiceVo['serviceHostingType']
+    >(currentSelectedService.serviceHostingType);
 
     const [areaList, setAreaList] = useState<Tab[]>([]);
     const [selectArea, setSelectArea] = useState<string>(currentSelectedService.deployRequest.region.area);
@@ -53,37 +54,40 @@ export const Migrate = ({
     );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
 
-    const [billingModes, setBillingModes] = useState<MigrateRequest.billingMode[] | undefined>(undefined);
-    const [selectBillingMode, setSelectBillingMode] = useState<MigrateRequest.billingMode>(
-        currentSelectedService.deployRequest.billingMode.toString() as MigrateRequest.billingMode
+    const [billingModes, setBillingModes] = useState<MigrateRequest['billingMode'][] | undefined>(undefined);
+    const [selectBillingMode, setSelectBillingMode] = useState<MigrateRequest['billingMode']>(
+        currentSelectedService.deployRequest.billingMode.toString() as MigrateRequest['billingMode']
     );
 
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
-    const listOrderableServices = useQuery({
+    const listOrderableServicesQuery = useQuery({
         queryKey: [
             'listOrderableServices',
             currentSelectedService.category,
             currentSelectedService.name,
             currentSelectedService.version,
         ],
-        queryFn: () =>
-            ServiceCatalogService.listOrderableServices(
-                currentSelectedService.category,
-                undefined,
-                currentSelectedService.name,
-                currentSelectedService.version
-            ),
+        queryFn: () => {
+            const data: ListOrderableServicesData = {
+                categoryName: currentSelectedService.category,
+                cspName: undefined,
+                serviceName: currentSelectedService.name,
+                serviceVersion: currentSelectedService.version,
+                serviceHostingType: undefined,
+            };
+            return listOrderableServices(data);
+        },
         refetchOnWindowFocus: false,
     });
 
     const updateSelectedParameters = (
-        selectedCsp: UserOrderableServiceVo.csp,
+        selectedCsp: UserOrderableServiceVo['csp'],
         selectAreaName: string,
         selectRegionName: string,
         selectAvailabilityZonesName: Record<string, string>,
         selectedFlavor: string,
-        selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
+        selectedServiceHostingType: UserOrderableServiceVo['serviceHostingType']
     ) => {
         setSelectCsp(selectedCsp);
         setSelectRegion(selectRegionName);
@@ -139,7 +143,7 @@ export const Migrate = ({
             case MigrationSteps.ExportServiceData:
                 return (
                     <ExportServiceData
-                        isQueryLoading={listOrderableServices.isLoading}
+                        isQueryLoading={listOrderableServicesQuery.isLoading}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.ExportServiceData]}
                     />
@@ -150,7 +154,7 @@ export const Migrate = ({
                         target={target}
                         setTarget={setTarget}
                         currentSelectedService={currentSelectedService}
-                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         setCspList={setCspList}
                         setSelectCsp={setSelectCsp}
                         setServiceHostTypes={setServiceHostTypes}
@@ -168,7 +172,7 @@ export const Migrate = ({
             case MigrationSteps.SelectADestination:
                 return (
                     <SelectDestination
-                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         updateSelectedParameters={updateSelectedParameters}
                         cspList={cspList}
                         selectCsp={selectCsp}
@@ -203,7 +207,7 @@ export const Migrate = ({
             case MigrationSteps.PrepareDeploymentParameters:
                 return (
                     <DeploymentForm
-                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         selectServiceHostingType={selectServiceHostingType}
                         region={{ name: selectRegion, area: selectArea }}
@@ -218,7 +222,7 @@ export const Migrate = ({
             case MigrationSteps.MigrateService:
                 return (
                     <MigrateServiceSubmit
-                        userOrderableServiceVoList={listOrderableServices.data ?? []}
+                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         region={{ name: selectRegion, area: selectArea }}
                         availabilityZones={selectAvailabilityZones}

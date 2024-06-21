@@ -11,7 +11,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import appStyles from '../../../styles/app.module.css';
 import registerStyles from '../../../styles/register.module.css';
-import { ApiError, Ocl, Response, ServiceTemplateDetailVo, ServiceVendorService } from '../../../xpanse-api/generated';
+import {
+    ApiError,
+    Ocl,
+    RegisterData,
+    Response,
+    ServiceTemplateDetailVo,
+    register,
+} from '../../../xpanse-api/generated';
 import {
     registerFailedRoute,
     registerInvalidRoute,
@@ -39,7 +46,10 @@ function RegisterPanel(): React.JSX.Element {
 
     const registerRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
-            return ServiceVendorService.register(ocl);
+            const data: RegisterData = {
+                requestBody: ocl,
+            };
+            return register(data);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
@@ -49,7 +59,7 @@ function RegisterPanel(): React.JSX.Element {
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 registerResult.current = response.details;
             } else {

@@ -18,7 +18,7 @@ export function ServiceHostingOptions({
     serviceHostingTypeInQuery: string;
     updateServiceHostingType?: (serviceTemplateDetailVo: ServiceTemplateDetailVo) => void;
 }): React.JSX.Element {
-    const serviceHostingTypes: ServiceTemplateDetailVo.serviceHostingType[] = [];
+    const serviceHostingTypes: ServiceTemplateDetailVo['serviceHostingType'][] = [];
     serviceTemplateDetailVos.forEach((serviceTemplateDetailVo) => {
         if (!serviceHostingTypes.includes(serviceTemplateDetailVo.serviceHostingType)) {
             serviceHostingTypes.push(serviceTemplateDetailVo.serviceHostingType);
@@ -28,10 +28,7 @@ export function ServiceHostingOptions({
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
             serviceTemplateDetailVos.forEach((serviceTemplateDetailVo) => {
-                if (
-                    serviceTemplateDetailVo.serviceHostingType ===
-                    (e.target.value as ServiceTemplateDetailVo.serviceHostingType)
-                ) {
+                if (serviceTemplateDetailVo.serviceHostingType === e.target.value) {
                     updateServiceHostingType(serviceTemplateDetailVo);
                 }
             });
@@ -49,8 +46,8 @@ export function ServiceHostingOptions({
                 }
                 onChange={onChange}
             >
-                <Radio value={ServiceTemplateDetailVo.serviceHostingType.SELF}>self</Radio>
-                <Radio value={ServiceTemplateDetailVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                <Radio value={'self'}>self</Radio>
+                <Radio value={'service-vendor'}>service-vendor</Radio>
             </Radio.Group>
         </>
     );

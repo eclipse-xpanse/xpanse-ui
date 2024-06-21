@@ -31,13 +31,18 @@ export function PurgeServiceStatusAlert({
 
     if (purgeSubmitError) {
         let errorMessage;
-        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && 'details' in purgeSubmitError.body) {
+        if (
+            purgeSubmitError instanceof ApiError &&
+            purgeSubmitError.body &&
+            typeof purgeSubmitError.body === 'object' &&
+            'details' in purgeSubmitError.body
+        ) {
             const response: Response = purgeSubmitError.body as Response;
             errorMessage = response.details;
         } else {
             errorMessage = purgeSubmitError.message;
         }
-        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+        deployedService.serviceDeploymentState = 'destroy failed';
         return (
             <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
@@ -70,10 +75,15 @@ export function PurgeServiceStatusAlert({
     }
 
     if (deployedService.serviceId && statusPollingError) {
-        if (statusPollingError instanceof ApiError && statusPollingError.body && 'details' in statusPollingError.body) {
+        if (
+            statusPollingError instanceof ApiError &&
+            statusPollingError.body &&
+            typeof statusPollingError.body === 'object' &&
+            'details' in statusPollingError.body
+        ) {
             const response: Response = statusPollingError.body as Response;
-            if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+            if (response.resultType.toString() !== 'Service Deployment Not Found') {
+                deployedService.serviceDeploymentState = 'destroy failed';
                 return (
                     <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
@@ -107,7 +117,7 @@ export function PurgeServiceStatusAlert({
                     </div>
                 );
             } else {
-                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
+                deployedService.serviceDeploymentState = 'destroy successful';
                 return (
                     <div className={submitAlertStyles.submitAlertTip}>
                         {' '}

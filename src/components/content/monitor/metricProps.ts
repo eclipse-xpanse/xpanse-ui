@@ -14,7 +14,7 @@ export interface MetricProps {
 
     vmName: string;
 
-    unit: Metric.unit;
+    unit: Metric['unit'];
     timeStamp: number;
 }
 
@@ -113,12 +113,7 @@ export const getOptionData = (metricProps: MetricProps[], currentTime: Date | un
     }
 };
 
-export const MonitorTypeList: string[] = [
-    Metric.monitorResourceType.CPU.valueOf(),
-    Metric.monitorResourceType.MEM.valueOf(),
-    Metric.monitorResourceType.VM_NETWORK_INCOMING.valueOf(),
-    Metric.monitorResourceType.VM_NETWORK_OUTGOING.valueOf(),
-];
+export const MonitorTypeList: string[] = ['cpu', 'mem', 'vm_network_incoming', 'vm_network_outgoing'];
 
 export const getMetricRequestParams = (totalSeconds: number): MetricRequestParams => {
     const newCurrentTime = new Date();

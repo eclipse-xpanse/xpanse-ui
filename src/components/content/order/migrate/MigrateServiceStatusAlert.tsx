@@ -39,8 +39,8 @@ function MigrateServiceStatusAlert({
         if (migrationDetails) {
             if (
                 deployedServiceDetails &&
-                (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED ||
-                    migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED)
+                (migrationDetails.migrationStatus.toString() === 'MigrationCompleted' ||
+                    migrationDetails.migrationStatus.toString() === 'DeployFailed')
             ) {
                 return (
                     <MigrationProcessingStatus
@@ -48,10 +48,7 @@ function MigrateServiceStatusAlert({
                         serviceHostingType={deployedServiceDetails.serviceHostingType}
                     />
                 );
-            } else if (
-                oldDeployedServiceDetails &&
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED
-            ) {
+            } else if (oldDeployedServiceDetails && migrationDetails.migrationStatus.toString() === 'DestroyFailed') {
                 return (
                     <MigrationProcessingStatus
                         response={oldDeployedServiceDetails}
@@ -59,13 +56,13 @@ function MigrateServiceStatusAlert({
                     />
                 );
             } else if (
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED
+                migrationDetails.migrationStatus.toString() === 'DataImportFailed' ||
+                migrationDetails.migrationStatus.toString() === 'DataExportFailed'
             ) {
                 return 'Data Migration Failed';
-            } else if (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_STARTED) {
+            } else if (migrationDetails.migrationStatus.toString() === 'DeployStarted') {
                 return 'New Service Deployment In-progress';
-            } else if (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_STARTED) {
+            } else if (migrationDetails.migrationStatus.toString() === 'DestroyStarted') {
                 return 'Old Service Destroy In-progress';
             } else {
                 return 'Migrating... Please wait...';
@@ -74,6 +71,7 @@ function MigrateServiceStatusAlert({
             if (
                 migrateRequestError instanceof ApiError &&
                 migrateRequestError.body &&
+                typeof migrateRequestError.body === 'object' &&
                 'details' in migrateRequestError.body
             ) {
                 const response: Response = migrateRequestError.body as Response;
@@ -93,11 +91,11 @@ function MigrateServiceStatusAlert({
         }
         if (migrationDetails) {
             if (
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED
+                migrationDetails.migrationStatus.toString() === 'MigrationFailed' ||
+                migrationDetails.migrationStatus.toString() === 'DataExportFailed' ||
+                migrationDetails.migrationStatus.toString() === 'DataImportFailed' ||
+                migrationDetails.migrationStatus.toString() === 'DeployFailed' ||
+                migrationDetails.migrationStatus.toString() === 'DestroyFailed'
             ) {
                 return 'error';
             }
@@ -122,12 +120,12 @@ function MigrateServiceStatusAlert({
 
     if (migrationDetails) {
         if (
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED
+            migrationDetails.migrationStatus.toString() === 'MigrationFailed' ||
+            migrationDetails.migrationStatus.toString() === 'DataExportFailed' ||
+            migrationDetails.migrationStatus.toString() === 'DataImportFailed' ||
+            migrationDetails.migrationStatus.toString() === 'DeployFailed' ||
+            migrationDetails.migrationStatus.toString() === 'DestroyFailed' ||
+            migrationDetails.migrationStatus.toString() === 'MigrationCompleted'
         ) {
             if (stopWatch.isRunning) {
                 stopWatch.pause();

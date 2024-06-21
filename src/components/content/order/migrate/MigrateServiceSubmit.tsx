@@ -16,7 +16,6 @@ import {
     MigrateRequest,
     Region,
     ServiceFlavor,
-    ServiceMigrationDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
@@ -35,7 +34,6 @@ import {
     useMigrateServiceQuery,
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
-import migrationStatus = ServiceMigrationDetails.migrationStatus;
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -51,12 +49,12 @@ export const MigrateServiceSubmit = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: UserOrderableServiceVo.csp;
+    selectCsp: UserOrderableServiceVo['csp'];
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
-    selectBillingMode: MigrateRequest.billingMode;
+    selectServiceHostingType: UserOrderableServiceVo['serviceHostingType'];
+    selectBillingMode: MigrateRequest['billingMode'];
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
@@ -74,18 +72,11 @@ export const MigrateServiceSubmit = ({
     const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
         migrateServiceRequest.data,
         migrateServiceRequest.isSuccess,
-        [
-            ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED,
-            ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED,
-            ServiceMigrationDetails.migrationStatus.DESTROY_FAILED,
-            ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED,
-            ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED,
-            ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED,
-        ]
+        ['MigrationStarted', 'MigrationFailed', 'DestroyFailed', 'DataImportFailed', 'DeployFailed', 'DataExportFailed']
     );
     const deployServiceDetailsQuery = useServiceDetailsPollingQuery(
         migrateServiceDetailsQuery.data?.newServiceId,
-        selectServiceHostingType as DeployedService.serviceHostingType,
+        selectServiceHostingType,
         migrateServiceDetailsQuery.data?.migrationStatus
     );
     const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
@@ -112,17 +103,14 @@ export const MigrateServiceSubmit = ({
     };
 
     if (migrateServiceDetailsQuery.data) {
-        if (migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_COMPLETED) {
+        if (migrateServiceDetailsQuery.data.migrationStatus.toString() === 'MigrationCompleted') {
             stepItem.status = 'finish';
         } else if (
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DESTROY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED
+            migrateServiceDetailsQuery.data.migrationStatus.toString() === 'DataExportFailed' ||
+            migrateServiceDetailsQuery.data.migrationStatus.toString() === 'DeployFailed' ||
+            migrateServiceDetailsQuery.data.migrationStatus.toString() === 'DataImportFailed' ||
+            migrateServiceDetailsQuery.data.migrationStatus.toString() === 'DestroyFailed' ||
+            migrateServiceDetailsQuery.data.migrationStatus.toString() === 'MigrationFailed'
         ) {
             stepItem.status = 'error';
         } else {
@@ -159,7 +147,7 @@ export const MigrateServiceSubmit = ({
                                     <Image
                                         width={200}
                                         height={56}
-                                        src={cspMap.get(selectCsp as unknown as CloudServiceProvider.name)?.logo}
+                                        src={cspMap.get(selectCsp as unknown as CloudServiceProvider['name'])?.logo}
                                         alt={selectCsp}
                                         preview={false}
                                         fallback={

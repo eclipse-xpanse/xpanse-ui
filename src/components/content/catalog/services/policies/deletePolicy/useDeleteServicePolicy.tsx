@@ -4,12 +4,15 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { ServicePoliciesManagementService } from '../../../../../../xpanse-api/generated';
+import { deleteServicePolicy, DeleteServicePolicyData } from '../../../../../../xpanse-api/generated';
 
 export const useDeleteServicePolicy = () => {
     return useMutation({
         mutationFn: (id: string) => {
-            return ServicePoliciesManagementService.deleteServicePolicy(id);
+            const deleteData: DeleteServicePolicyData = {
+                id: id,
+            };
+            return deleteServicePolicy(deleteData);
         },
     });
 };

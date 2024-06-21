@@ -8,8 +8,8 @@ import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 export function getCspListForVersion(
     selectVersion: string,
     versionMapper: Map<string, UserOrderableServiceVo[]>
-): UserOrderableServiceVo.csp[] {
-    const cspList: UserOrderableServiceVo.csp[] = [];
+): UserOrderableServiceVo['csp'][] {
+    const cspList: UserOrderableServiceVo['csp'][] = [];
 
     versionMapper.forEach((v, k) => {
         if (k === selectVersion) {

@@ -10,7 +10,7 @@ import myServicesStyle from '../../../../styles/my-services.module.css';
 import { DeployedService } from '../../../../xpanse-api/generated';
 
 export function DeployedServicesRunningStatus(record: DeployedService): React.JSX.Element {
-    if (record.serviceState === DeployedService.serviceState.RUNNING) {
+    if (record.serviceState === 'running') {
         return (
             <Tooltip
                 title={
@@ -24,7 +24,7 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
                 </Tag>
             </Tooltip>
         );
-    } else if (record.serviceState === DeployedService.serviceState.STOPPED) {
+    } else if (record.serviceState === 'stopped') {
         return (
             <Tooltip
                 title={
@@ -39,9 +39,9 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
             </Tooltip>
         );
     } else if (
-        record.serviceState === DeployedService.serviceState.STOPPING ||
-        record.serviceState === DeployedService.serviceState.STARTING ||
-        record.serviceState === DeployedService.serviceState.RESTARTING
+        record.serviceState === 'stopping' ||
+        record.serviceState === 'starting' ||
+        record.serviceState === 'restarting'
     ) {
         return (
             <Tag

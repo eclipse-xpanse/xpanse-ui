@@ -42,26 +42,26 @@ export const SelectMigrationTarget = ({
     setTarget: Dispatch<SetStateAction<string | undefined>>;
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    setCspList: Dispatch<SetStateAction<UserOrderableServiceVo.csp[]>>;
-    setSelectCsp: Dispatch<SetStateAction<UserOrderableServiceVo.csp>>;
-    setServiceHostTypes: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType[]>>;
-    setSelectServiceHostingType: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType>>;
+    setCspList: Dispatch<SetStateAction<UserOrderableServiceVo['csp'][]>>;
+    setSelectCsp: Dispatch<SetStateAction<UserOrderableServiceVo['csp']>>;
+    setServiceHostTypes: Dispatch<SetStateAction<UserOrderableServiceVo['serviceHostingType'][]>>;
+    setSelectServiceHostingType: Dispatch<SetStateAction<UserOrderableServiceVo['serviceHostingType']>>;
     setAreaList: Dispatch<SetStateAction<Tab[]>>;
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<string>>;
-    setBillingModes: Dispatch<SetStateAction<MigrateRequest.billingMode[] | undefined>>;
-    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
+    setBillingModes: Dispatch<SetStateAction<MigrateRequest['billingMode'][] | undefined>>;
+    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest['billingMode']>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const onChange = (e: RadioChangeEvent) => {
         setTarget(e.target.value as string);
-        const cspList: UserOrderableServiceVo.csp[] = getCspList(e);
+        const cspList: UserOrderableServiceVo['csp'][] = getCspList(e);
         setCspList(cspList);
         setSelectCsp(cspList[0]);
-        const serviceHostTypes: UserOrderableServiceVo.serviceHostingType[] = getAvailableServiceHostingTypes(
+        const serviceHostTypes: UserOrderableServiceVo['serviceHostingType'][] = getAvailableServiceHostingTypes(
             cspList[0],
             userOrderableServiceVoList
         );
@@ -79,13 +79,13 @@ export const SelectMigrationTarget = ({
         );
         setRegionList(regionList);
         setSelectRegion(regionList.length > 0 ? regionList[0].value : currentSelectedService.deployRequest.region.name);
-        const billingModes: MigrateRequest.billingMode[] | undefined = getBillingModes(
+        const billingModes: MigrateRequest['billingMode'][] | undefined = getBillingModes(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: MigrateRequest['billingMode'] | undefined = getDefaultBillingMode(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
@@ -95,14 +95,14 @@ export const SelectMigrationTarget = ({
                 ? defaultBillingMode
                 : billingModes
                   ? billingModes[0]
-                  : (currentSelectedService.deployRequest.billingMode as MigrateRequest.billingMode)
+                  : currentSelectedService.deployRequest.billingMode
         );
     };
 
     const getRegionList = (
         e: RadioChangeEvent,
-        selectCsp: UserOrderableServiceVo.csp,
-        selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+        selectCsp: UserOrderableServiceVo['csp'],
+        selectServiceHostingType: UserOrderableServiceVo['serviceHostingType'],
         selectArea: string,
         userOrderableServices: UserOrderableServiceVo[] | undefined
     ) => {
@@ -126,7 +126,7 @@ export const SelectMigrationTarget = ({
     };
 
     const getCspList = (e: RadioChangeEvent) => {
-        const currentCspList: UserOrderableServiceVo.csp[] = [];
+        const currentCspList: UserOrderableServiceVo['csp'][] = [];
         if (e.target.value === 'csp') {
             userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
                 if (

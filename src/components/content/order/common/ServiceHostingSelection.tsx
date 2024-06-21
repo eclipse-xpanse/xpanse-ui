@@ -14,18 +14,18 @@ export function ServiceHostingSelection({
     disabledAlways,
     previousSelection,
 }: {
-    serviceHostingTypes: UserOrderableServiceVo.serviceHostingType[];
-    updateServiceHostingType?: (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => void;
+    serviceHostingTypes: UserOrderableServiceVo['serviceHostingType'][];
+    updateServiceHostingType?: (serviceHostingType: UserOrderableServiceVo['serviceHostingType']) => void;
     disabledAlways: boolean;
-    previousSelection: UserOrderableServiceVo.serviceHostingType | undefined;
+    previousSelection: UserOrderableServiceVo['serviceHostingType'] | undefined;
 }): React.JSX.Element {
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
-            updateServiceHostingType(e.target.value as UserOrderableServiceVo.serviceHostingType);
+            updateServiceHostingType(e.target.value as UserOrderableServiceVo['serviceHostingType']);
         }
     };
 
-    const value: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
+    const value: UserOrderableServiceVo['serviceHostingType'] | undefined = previousSelection
         ? previousSelection
         : serviceHostingTypes.length > 0
           ? serviceHostingTypes[0]
@@ -45,8 +45,8 @@ export function ServiceHostingSelection({
                     value={value}
                     className={serviceOrderStyles.orderFormSelectionStyle}
                 >
-                    <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
-                    <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                    <Radio value={'self'}>self</Radio>
+                    <Radio value={'service-vendor'}>service-vendor</Radio>
                 </Radio.Group>
             </div>
         </>

@@ -19,13 +19,13 @@ interface CSP {
     logo?: string;
 }
 
-export const cspMap = new Map<CloudServiceProvider.name, CSP>([
-    [CloudServiceProvider.name.HUAWEI, { name: 'Huawei', logo: HuaWeiLogo }],
-    [CloudServiceProvider.name.AZURE, { name: 'Azure', logo: AzureLogo }],
-    [CloudServiceProvider.name.ALICLOUD, { name: 'Alibaba', logo: AlibabaLogo }],
-    [CloudServiceProvider.name.OPENSTACK, { name: 'Openstack', logo: OpenStackLogo }],
-    [CloudServiceProvider.name.FLEXIBLE_ENGINE, { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
-    [CloudServiceProvider.name.AWS, { name: 'aws', logo: AWSLogo }],
-    [CloudServiceProvider.name.GOOGLE, { name: 'Google', logo: GoogleLogo }],
-    [CloudServiceProvider.name.SCS, { name: 'SCS', logo: ScsLogo }],
+export const cspMap = new Map<CloudServiceProvider['name'], CSP>([
+    ['huawei', { name: 'Huawei', logo: HuaWeiLogo }],
+    ['azure', { name: 'Azure', logo: AzureLogo }],
+    ['alicloud', { name: 'Alibaba', logo: AlibabaLogo }],
+    ['openstack', { name: 'Openstack', logo: OpenStackLogo }],
+    ['flexibleEngine', { name: 'FlexibleEngine', logo: FlexibleEngineLogo }],
+    ['aws', { name: 'aws', logo: AWSLogo }],
+    ['google', { name: 'Google', logo: GoogleLogo }],
+    ['scs', { name: 'SCS', logo: ScsLogo }],
 ]);

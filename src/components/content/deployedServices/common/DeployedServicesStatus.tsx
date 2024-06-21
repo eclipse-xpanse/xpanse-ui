@@ -13,15 +13,13 @@ import {
 import { Tag } from 'antd';
 import React from 'react';
 import myServiceStyles from '../../../../styles/my-services.module.css';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import { serviceDeploymentState } from '../../../../xpanse-api/generated';
 
-export function DeployedServicesStatus(
-    serviceDeploymentState: DeployedService.serviceDeploymentState
-): React.JSX.Element {
+export function DeployedServicesStatus(serviceDeploymentState: serviceDeploymentState): React.JSX.Element {
     switch (serviceDeploymentState) {
-        case DeployedService.serviceDeploymentState.DEPLOYING:
-        case DeployedService.serviceDeploymentState.MODIFYING:
-        case DeployedService.serviceDeploymentState.DESTROYING:
+        case 'deploying':
+        case 'modifying':
+        case 'destroying':
             return (
                 <Tag
                     bordered={false}
@@ -32,7 +30,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED:
+        case 'deployment failed':
             return (
                 <Tag
                     bordered={false}
@@ -43,7 +41,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.MODIFICATION_FAILED:
+        case 'modification failed':
             return (
                 <Tag
                     bordered={false}
@@ -54,7 +52,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DESTROY_FAILED:
+        case 'destroy failed':
             return (
                 <Tag
                     bordered={false}
@@ -65,7 +63,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL:
+        case 'destroy successful':
             return (
                 <Tag
                     bordered={false}
@@ -76,7 +74,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
+        case 'deployment successful':
             return (
                 <Tag
                     bordered={false}
@@ -87,7 +85,7 @@ export function DeployedServicesStatus(
                     {serviceDeploymentState.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL:
+        case 'modification successful':
             return (
                 <Tag
                     bordered={false}

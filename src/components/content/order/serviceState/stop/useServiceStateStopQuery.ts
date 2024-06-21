@@ -4,12 +4,15 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { DeployedService, ServiceStatusManagementService } from '../../../../../xpanse-api/generated';
+import { DeployedService, stopService, StopServiceData } from '../../../../../xpanse-api/generated';
 
 export function useServiceStateStopQuery(refreshData: () => void) {
     return useMutation({
         mutationFn: (deployedService: DeployedService) => {
-            return ServiceStatusManagementService.stopService(deployedService.serviceId);
+            const data: StopServiceData = {
+                serviceId: deployedService.serviceId,
+            };
+            return stopService(data);
         },
         onSuccess: refreshData,
     });

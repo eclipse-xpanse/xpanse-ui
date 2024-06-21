@@ -17,7 +17,7 @@ export function UnregisterResult({
     category,
 }: {
     id: string;
-    category: ServiceTemplateDetailVo.category;
+    category: ServiceTemplateDetailVo['category'];
 }): React.JSX.Element | undefined {
     const useUnregisterRequestState = useGetUnregisterMutationState(id);
     const queryClient = useQueryClient();
@@ -51,6 +51,7 @@ export function UnregisterResult({
                     <div>
                         {useUnregisterRequestState[0].error instanceof ApiError &&
                         useUnregisterRequestState[0].error.body &&
+                        typeof useUnregisterRequestState[0].error.body === 'object' &&
                         'details' in useUnregisterRequestState[0].error.body ? (
                             <Alert
                                 message='Unregister Request Failed'
