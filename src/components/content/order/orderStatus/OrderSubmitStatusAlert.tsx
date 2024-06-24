@@ -19,20 +19,31 @@ import { ProcessingStatus } from './ProcessingStatus';
 function OrderSubmitStatusAlert({
     uuid,
     isSubmitFailed,
+    isRetrySubmitIsPending,
+    isRetrySubmitFailed,
     deployedServiceDetails,
     serviceProviderContactDetails,
     isPollingError,
+    retryRequest,
+    onClose,
 }: {
     uuid: string | undefined;
     isSubmitFailed: Error | null;
+    isRetrySubmitIsPending: boolean;
+    isRetrySubmitFailed: Error | null;
     deployedServiceDetails: DeployedServiceDetails | undefined;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
     isPollingError: boolean;
+    retryRequest: () => void;
+    onClose: () => void;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
         autoStart: true,
     });
     const msg = useMemo(() => {
+        if (isRetrySubmitIsPending) {
+            return 'Retry request submission in-progress';
+        }
         if (deployedServiceDetails) {
             if (
                 uuid &&
@@ -57,6 +68,17 @@ function OrderSubmitStatusAlert({
             } else {
                 return getOrderSubmissionFailedDisplay([isSubmitFailed.message]);
             }
+        } else if (isRetrySubmitFailed) {
+            if (
+                isRetrySubmitFailed instanceof ApiError &&
+                isRetrySubmitFailed.body &&
+                'details' in isRetrySubmitFailed.body
+            ) {
+                const response: Response = isRetrySubmitFailed.body as Response;
+                return getOrderSubmissionFailedDisplay(response.details);
+            } else {
+                return getOrderSubmissionFailedDisplay([isRetrySubmitFailed.message]);
+            }
         } else if (uuid && isPollingError) {
             return 'Deployment status polling failed. Please visit MyServices page to check the status of the request.';
         } else if (uuid) {
@@ -65,12 +87,20 @@ function OrderSubmitStatusAlert({
             return 'Request submission in-progress';
         }
         return '';
-    }, [deployedServiceDetails, uuid, isPollingError, isSubmitFailed]);
+    }, [deployedServiceDetails, uuid, isPollingError, isSubmitFailed, isRetrySubmitFailed, isRetrySubmitIsPending]);
 
     const alertType = useMemo(() => {
         if (isPollingError || isSubmitFailed) {
             return 'error';
         }
+        if (isRetrySubmitFailed) {
+            return 'error';
+        }
+
+        if (isRetrySubmitIsPending) {
+            return 'success';
+        }
+
         if (deployedServiceDetails) {
             if (
                 deployedServiceDetails.serviceDeploymentState.toString() ===
@@ -82,12 +112,16 @@ function OrderSubmitStatusAlert({
             }
         }
         return 'success';
-    }, [deployedServiceDetails, isPollingError, isSubmitFailed]);
+    }, [deployedServiceDetails, isPollingError, isSubmitFailed, isRetrySubmitFailed, isRetrySubmitIsPending]);
 
     if (isPollingError || isSubmitFailed) {
         if (stopWatch.isRunning) {
             stopWatch.pause();
         }
+    }
+
+    if (isRetrySubmitFailed && stopWatch.isRunning) {
+        stopWatch.pause();
     }
 
     if (deployedServiceDetails) {
@@ -121,6 +155,8 @@ function OrderSubmitStatusAlert({
             type={alertType}
             stopWatch={stopWatch}
             contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
+            retryRequest={retryRequest}
+            onClose={onClose}
         />
     );
 }

@@ -12,13 +12,19 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { DeployRequest, DeployedService, DeployedServiceDetails } from '../../../../xpanse-api/generated';
-import { CUSTOMER_SERVICE_NAME_FIELD, createServicePageRoute, homePageRoute } from '../../../utils/constants';
+import {
+    CUSTOMER_SERVICE_NAME_FIELD,
+    createServicePageRoute,
+    homePageRoute,
+    servicesSubPageRoute,
+} from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
@@ -30,6 +36,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const uniqueRequestId = useRef(v4());
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
+    const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         submitDeploymentRequest.data,
         submitDeploymentRequest.isSuccess,
@@ -86,6 +93,20 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         .concat('&latestVersion=', state.version)
         .concat('&billingMode=', state.billingMode);
 
+    const retryRequest = () => {
+        if (submitDeploymentRequest.isSuccess && submitDeploymentRequest.data.length > 0) {
+            redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.data);
+        }
+    };
+
+    if (redeployFailedDeploymentQuery.isSuccess) {
+        void getServiceDetailsByIdQuery.refetch();
+    }
+
+    const onClose = () => {
+        navigate(servicesSubPageRoute.concat(state.category));
+    };
+
     return (
         <>
             <div>
@@ -108,9 +129,13 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             key={uniqueRequestId.current}
                             uuid={submitDeploymentRequest.data}
                             isSubmitFailed={submitDeploymentRequest.error}
+                            isRetrySubmitIsPending={redeployFailedDeploymentQuery.isPending}
+                            isRetrySubmitFailed={redeployFailedDeploymentQuery.error}
                             deployedServiceDetails={getServiceDetailsByIdQuery.data}
                             isPollingError={getServiceDetailsByIdQuery.isError}
                             serviceProviderContactDetails={state.contactServiceDetails}
+                            retryRequest={retryRequest}
+                            onClose={onClose}
                         />
                     ) : null}
                     <Form
@@ -197,7 +222,9 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                         disabled={
                                             submitDeploymentRequest.isPending ||
                                             getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                                                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() ||
+                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                                                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString()
                                         }
                                     >
                                         Deploy

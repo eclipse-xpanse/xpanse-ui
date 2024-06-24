@@ -45,10 +45,12 @@ import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequ
 import { Locks } from '../../order/locks/Locks';
 import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
+import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAlert';
 import { useServiceDetailsPollingQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
+import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
 import { useServiceStateRestartQuery } from '../../order/serviceState/restart/useServiceStateRestartQuery';
@@ -90,6 +92,7 @@ function MyServices(): React.JSX.Element {
     const [isStopRequestSubmitted, setIsStopRequestSubmitted] = useState<boolean>(false);
     const [isRestartRequestSubmitted, setIsRestartRequestSubmitted] = useState<boolean>(false);
     const [isDestroyRequestSubmitted, setIsDestroyRequestSubmitted] = useState<boolean>(false);
+    const [isRetryDeployRequestSubmitted, setIsRetryDeployRequestSubmitted] = useState<boolean>(false);
     const [isPurgeRequestSubmitted, setIsPurgeRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
@@ -99,6 +102,7 @@ function MyServices(): React.JSX.Element {
     const [isLocksModalOpen, setIsLocksModalOpen] = useState<boolean>(false);
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
+    const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
     const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
     const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
@@ -113,6 +117,16 @@ function MyServices(): React.JSX.Element {
         [
             DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED,
             DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL,
+        ]
+    );
+
+    const getRetryDeployServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
+        activeRecord?.serviceId,
+        redeployFailedDeploymentQuery.isSuccess,
+        activeRecord?.serviceHostingType ?? DeployedService.serviceHostingType.SELF,
+        [
+            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+            DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED,
         ]
     );
 
@@ -144,6 +158,9 @@ function MyServices(): React.JSX.Element {
         getStartServiceDetailsQuery.data?.serviceState,
         getStopServiceDetailsQuery.data?.serviceState,
         getRestartServiceDetailsQuery.data?.serviceState,
+        getRetryDeployServiceDetailsByIdQuery.isError,
+        redeployFailedDeploymentQuery.error,
+        getRetryDeployServiceDetailsByIdQuery.data?.serviceDeploymentState,
     ]);
 
     const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
@@ -519,6 +536,33 @@ function MyServices(): React.JSX.Element {
                     ),
             },
             {
+                key: 'retryDeployment',
+                label:
+                    record.serviceDeploymentState.toString() ===
+                    DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ? (
+                        <Popconfirm
+                            title='Retry Deployment the service'
+                            description='Are you sure to retry deployment the service?'
+                            cancelText='Yes'
+                            okText='No'
+                            onCancel={() => {
+                                retryDeployment(record);
+                            }}
+                        >
+                            <Button
+                                className={myServicesStyles.buttonAsLink}
+                                icon={<PlayCircleOutlined />}
+                                disabled={isDisableRetryDeploymentBtn(record)}
+                                type={'link'}
+                            >
+                                retry deployment
+                            </Button>
+                        </Popconfirm>
+                    ) : (
+                        <></>
+                    ),
+            },
+            {
                 key: 'start',
                 label: (
                     <Button
@@ -636,6 +680,13 @@ function MyServices(): React.JSX.Element {
         return true;
     };
 
+    const isDisableRetryDeploymentBtn = (record: DeployedService) => {
+        if (record.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYING) {
+            return true;
+        }
+        return false;
+    };
+
     const isDisableStartBtn = (record: DeployedService) => {
         if (
             record.serviceDeploymentState !== DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
@@ -698,6 +749,12 @@ function MyServices(): React.JSX.Element {
             refreshData();
             setIsDestroyRequestSubmitted(false);
         }
+    };
+
+    const closeRetryDeployResultAlert = () => {
+        setActiveRecord(undefined);
+        refreshData();
+        setIsRetryDeployRequestSubmitted(false);
     };
 
     const closeStartResultAlert = (isClose: boolean) => {
@@ -940,6 +997,17 @@ function MyServices(): React.JSX.Element {
         );
         serviceDestroyQuery.mutate(record.serviceId);
         record.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROYING;
+    }
+
+    function retryDeployment(record: DeployedService): void {
+        setIsRetryDeployRequestSubmitted(true);
+        setActiveRecord(
+            record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        redeployFailedDeploymentQuery.mutate(record.serviceId);
+        record.serviceDeploymentState = DeployedService.serviceDeploymentState.DEPLOYING;
     }
 
     function start(record: DeployedService): void {
@@ -1259,6 +1327,16 @@ function MyServices(): React.JSX.Element {
         return undefined;
     }
 
+    const retryRequest = () => {
+        if (activeRecord && activeRecord.serviceId.length > 0) {
+            redeployFailedDeploymentQuery.mutate(activeRecord.serviceId);
+        }
+    };
+
+    if (redeployFailedDeploymentQuery.isSuccess) {
+        void getServiceDetailsByIdQuery.refetch();
+    }
+
     return (
         <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
@@ -1269,6 +1347,20 @@ function MyServices(): React.JSX.Element {
                     statusPollingError={getServiceDetailsByIdQuery.error}
                     deployedServiceDetails={getServiceDetailsByIdQuery.data}
                     closeDestroyResultAlert={closeDestroyResultAlert}
+                />
+            ) : null}
+            {isRetryDeployRequestSubmitted && activeRecord ? (
+                <OrderSubmitStatusAlert
+                    key={activeRecord.serviceId}
+                    uuid={activeRecord.serviceId}
+                    isSubmitFailed={redeployFailedDeploymentQuery.error}
+                    isRetrySubmitIsPending={redeployFailedDeploymentQuery.isPending}
+                    isRetrySubmitFailed={redeployFailedDeploymentQuery.error}
+                    deployedServiceDetails={getRetryDeployServiceDetailsByIdQuery.data}
+                    isPollingError={getRetryDeployServiceDetailsByIdQuery.isError}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
+                    retryRequest={retryRequest}
+                    onClose={closeRetryDeployResultAlert}
                 />
             ) : null}
             {isStartRequestSubmitted && activeRecord ? (
