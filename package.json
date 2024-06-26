@@ -18,7 +18,7 @@
         "react-router-dom": "^6.24.0",
         "react-timer-hook": "^3.0.7",
         "yaml": "^2.4.5",
-        "zustand": "^4.5.2"
+        "zustand": "^4.5.4"
     },
     "scripts": {
         "start": "vite --port 3000",
