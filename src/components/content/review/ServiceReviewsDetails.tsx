@@ -17,7 +17,6 @@ import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
-import useGetRegistrationDetails from './query/useGetRegistrationDetails';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
@@ -29,7 +28,6 @@ export const ServiceReviewsDetails = ({
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     const [isReviewCommentsModalOpen, setIsReviewCommentsModalOpen] = useState<boolean>(false);
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
-    const getRegistrationDetailsQuery = useGetRegistrationDetails(currentServiceTemplateVo.serviceTemplateId);
     const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.serviceTemplateId);
     const { Paragraph } = Typography;
 
@@ -53,10 +51,9 @@ export const ServiceReviewsDetails = ({
                 type='primary'
                 onClick={onClickApprove}
                 disabled={
-                    useReviewRequestState[0]?.status === 'success' ||
-                    (getRegistrationDetailsQuery.isSuccess &&
-                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
+                    useReviewRequestState[0]?.status === 'success' &&
+                    currentServiceTemplateVo.serviceRegistrationState !==
+                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
                 }
             >
                 Approve
@@ -66,10 +63,9 @@ export const ServiceReviewsDetails = ({
                 onClick={onClickReject}
                 className={serviceReviewStyles.rejectBtnClass}
                 disabled={
-                    useReviewRequestState[0]?.status === 'success' ||
-                    (getRegistrationDetailsQuery.isSuccess &&
-                        getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                            ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING)
+                    useReviewRequestState[0]?.status === 'success' &&
+                    currentServiceTemplateVo.serviceRegistrationState !==
+                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
                 }
             >
                 Reject
@@ -200,9 +196,8 @@ export const ServiceReviewsDetails = ({
                             )}
                         </Descriptions.Item>
                     </Descriptions>
-                    {getRegistrationDetailsQuery.isSuccess &&
-                    getRegistrationDetailsQuery.data.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING ? (
+                    {currentServiceTemplateVo.serviceRegistrationState !==
+                    ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING ? (
                         <>
                             <Descriptions
                                 title={'Service Review Details'}
