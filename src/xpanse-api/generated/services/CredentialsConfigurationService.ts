@@ -21,7 +21,16 @@ export class CredentialsConfigurationService {
      * @throws ApiError
      */
     public static getCredentialOpenApi(
-        csp: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        csp:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
     ): CancelablePromise<Link> {
         return __request(OpenAPI, {
@@ -50,7 +59,16 @@ export class CredentialsConfigurationService {
      * @throws ApiError
      */
     public static getCredentialCapabilities(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
         name?: string
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
@@ -79,7 +97,16 @@ export class CredentialsConfigurationService {
      * @throws ApiError
      */
     public static getCredentialTypes(
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform'
     ): CancelablePromise<Array<'variables' | 'http_authentication' | 'api_key' | 'oauth2'>> {
         return __request(OpenAPI, {
             method: 'GET',

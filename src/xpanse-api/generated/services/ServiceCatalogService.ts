@@ -35,7 +35,16 @@ export class ServiceCatalogService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         serviceName?: string,
         serviceVersion?: string,
         serviceHostingType?: 'self' | 'service-vendor'
