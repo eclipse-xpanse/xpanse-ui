@@ -8,6 +8,6 @@
 /* tslint:disable */
 /* eslint-disable */
 export type ServiceLockConfig = {
-    destroyLocked?: boolean;
     modifyLocked?: boolean;
+    destroyLocked?: boolean;
 };

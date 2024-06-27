@@ -37,7 +37,17 @@ export class AdminService {
      * @throws ApiError
      */
     public static getActiveCsps(): CancelablePromise<
-        Array<'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google'>
+        Array<
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform'
+        >
     > {
         return __request(OpenAPI, {
             method: 'GET',

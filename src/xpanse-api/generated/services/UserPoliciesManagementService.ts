@@ -94,7 +94,16 @@ export class UserPoliciesManagementService {
      * @throws ApiError
      */
     public static listUserPolicies(
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         enabled?: boolean
     ): CancelablePromise<Array<UserPolicy>> {
         return __request(OpenAPI, {
