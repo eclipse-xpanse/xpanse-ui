@@ -73,7 +73,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
         queryFn: () =>
             CredentialsConfigurationService.getCredentialCapabilities(
-                currentCsp ?? CredentialVariables.csp.HUAWEI,
+                currentCsp ?? CredentialVariables.csp.HUAWEI_CLOUD,
                 currentType
             ),
         staleTime: 60000,
@@ -343,7 +343,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     return (
         <div>
             <CredentialApiDoc
-                csp={currentCsp ?? CredentialVariables.csp.HUAWEI}
+                csp={currentCsp ?? CredentialVariables.csp.HUAWEI_CLOUD}
                 credentialType={currentType ?? CredentialVariables.type.VARIABLES}
                 styleClass={credentialStyles.addCredentialApiDoc}
             />

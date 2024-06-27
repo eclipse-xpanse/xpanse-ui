@@ -88,7 +88,16 @@ export class ServiceService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:
@@ -168,7 +177,16 @@ export class ServiceService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:
@@ -249,7 +267,16 @@ export class ServiceService {
             | 'security'
             | 'middleware'
             | 'others',
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         serviceName?: string,
         serviceVersion?: string,
         serviceState?:
@@ -340,7 +367,16 @@ export class ServiceService {
      * @throws ApiError
      */
     public static getAvailabilityZones(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         regionName: string,
         serviceId?: string
     ): CancelablePromise<Array<string>> {

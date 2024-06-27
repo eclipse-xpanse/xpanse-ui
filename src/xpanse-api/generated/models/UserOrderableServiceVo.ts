@@ -91,14 +91,15 @@ export namespace UserOrderableServiceVo {
      * The Cloud Service Provider of the orderable service.
      */
     export enum csp {
-        HUAWEI = 'huawei',
-        FLEXIBLE_ENGINE = 'flexibleEngine',
-        OPENSTACK = 'openstack',
-        SCS = 'scs',
-        ALICLOUD = 'alicloud',
+        HUAWEI_CLOUD = 'HuaweiCloud',
+        FLEXIBLE_ENGINE = 'FlexibleEngine',
+        OPENSTACK_TESTLAB = 'OpenstackTestlab',
+        PLUS_SERVER = 'PlusServer',
+        REGIO_CLOUD = 'RegioCloud',
+        ALIBABA_CLOUD = 'AlibabaCloud',
         AWS = 'aws',
         AZURE = 'azure',
-        GOOGLE = 'google',
+        GOOGLE_CLOUD_PLATFORM = 'GoogleCloudPlatform',
     }
     /**
      * Defines which cloud service account is used for deploying cloud resources.

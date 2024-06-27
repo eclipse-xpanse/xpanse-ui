@@ -21,7 +21,16 @@ export class UserCloudCredentialsManagementService {
      * @throws ApiError
      */
     public static getUserCloudCredentials(
-        cspName?: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName?:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2'
     ): CancelablePromise<Array<AbstractCredentialInfo>> {
         return __request(OpenAPI, {
@@ -94,7 +103,16 @@ export class UserCloudCredentialsManagementService {
      * @throws ApiError
      */
     public static deleteUserCloudCredential(
-        cspName: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        cspName:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2',
         name: string
     ): CancelablePromise<void> {

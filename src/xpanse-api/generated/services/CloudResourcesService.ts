@@ -16,11 +16,21 @@ export class CloudResourcesService {
      * @param csp name of the cloud service provider
      * @param region name of he region
      * @param deployResourceKind kind of the CloudResource
+     * @param serviceId id of the deployed service
      * @returns string OK
      * @throws ApiError
      */
     public static getExistingResourceNamesWithKind(
-        csp: 'huawei' | 'flexibleEngine' | 'openstack' | 'scs' | 'alicloud' | 'aws' | 'azure' | 'google',
+        csp:
+            | 'HuaweiCloud'
+            | 'FlexibleEngine'
+            | 'OpenstackTestlab'
+            | 'PlusServer'
+            | 'RegioCloud'
+            | 'AlibabaCloud'
+            | 'aws'
+            | 'azure'
+            | 'GoogleCloudPlatform',
         region: string,
         deployResourceKind:
             | 'vm'
@@ -32,7 +42,8 @@ export class CloudResourcesService {
             | 'security_group'
             | 'security_group_rule'
             | 'keypair'
-            | 'subnet'
+            | 'subnet',
+        serviceId?: string
     ): CancelablePromise<Array<string>> {
         return __request(OpenAPI, {
             method: 'GET',
@@ -43,6 +54,7 @@ export class CloudResourcesService {
             query: {
                 csp: csp,
                 region: region,
+                serviceId: serviceId,
             },
             errors: {
                 400: `Bad Request`,

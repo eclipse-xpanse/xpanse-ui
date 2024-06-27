@@ -155,14 +155,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -304,14 +305,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -1212,14 +1214,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -1361,14 +1364,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -1454,14 +1458,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -1656,14 +1661,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -1938,14 +1944,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -2651,14 +2658,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -2821,14 +2829,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -3001,6 +3010,76 @@
                         "description": "OK",
                         "content": {
                             "application/json": { "schema": { "$ref": "#/components/schemas/DeployedServiceDetails" } }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/service/deployment/status": {
+            "get": {
+                "tags": ["Status Updates"],
+                "description": "Long-polling method to get the latest service deployment or service update status.",
+                "operationId": "getLatestServiceDeploymentStatus",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "ID of the service",
+                        "required": true,
+                        "schema": { "type": "string" }
+                    },
+                    {
+                        "name": "lastKnownServiceDeploymentState",
+                        "in": "query",
+                        "description": "Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "deploying",
+                                "deployment successful",
+                                "deployment failed",
+                                "destroying",
+                                "destroy successful",
+                                "destroy failed",
+                                "manual cleanup required",
+                                "rollback failed",
+                                "modifying",
+                                "modification failed",
+                                "modification successful"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Response" } } }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": { "schema": { "$ref": "#/components/schemas/DeploymentStatusUpdate" } }
                         }
                     }
                 }
@@ -3313,14 +3392,15 @@
                                     "items": {
                                         "type": "string",
                                         "enum": [
-                                            "huawei",
-                                            "flexibleEngine",
-                                            "openstack",
-                                            "scs",
-                                            "alicloud",
+                                            "HuaweiCloud",
+                                            "FlexibleEngine",
+                                            "OpenstackTestlab",
+                                            "PlusServer",
+                                            "RegioCloud",
+                                            "AlibabaCloud",
                                             "aws",
                                             "azure",
-                                            "google"
+                                            "GoogleCloudPlatform"
                                         ]
                                     }
                                 }
@@ -3494,14 +3574,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -3532,6 +3613,13 @@
                                 "subnet"
                             ]
                         }
+                    },
+                    {
+                        "name": "serviceId",
+                        "in": "query",
+                        "description": "id of the deployed service",
+                        "required": false,
+                        "schema": { "type": "string" }
                     }
                 ],
                 "responses": {
@@ -3582,14 +3670,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -3656,14 +3745,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -3724,14 +3814,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -3806,14 +3897,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     }
@@ -3895,14 +3987,15 @@
                         "schema": {
                             "type": "string",
                             "enum": [
-                                "huawei",
-                                "flexibleEngine",
-                                "openstack",
-                                "scs",
-                                "alicloud",
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
                                 "aws",
                                 "azure",
-                                "google"
+                                "GoogleCloudPlatform"
                             ]
                         }
                     },
@@ -4313,7 +4406,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "description": { "type": "string", "description": "The description of the credential" },
                     "type": {
@@ -4379,7 +4482,7 @@
             },
             "ServiceLockConfig": {
                 "type": "object",
-                "properties": { "destroyLocked": { "type": "boolean" }, "modifyLocked": { "type": "boolean" } }
+                "properties": { "modifyLocked": { "type": "boolean" }, "destroyLocked": { "type": "boolean" } }
             },
             "AutoFill": {
                 "required": ["deployResourceKind", "isAllowCreate"],
@@ -4447,7 +4550,17 @@
                     "name": {
                         "type": "string",
                         "description": "The Cloud Service Provider.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "regions": {
                         "type": "array",
@@ -4837,7 +4950,17 @@
                     "csp": {
                         "type": "string",
                         "description": "Csp of the registered service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "category": {
                         "type": "string",
@@ -4977,7 +5100,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp which the policy belongs to.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "policy": { "type": "string", "description": "The policy." },
                     "enabled": {
@@ -4995,7 +5128,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp which the policy belongs to.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "enabled": { "type": "boolean", "description": "Is the policy enabled." },
                     "createTime": {
@@ -5049,7 +5192,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceHostingType": {
@@ -5118,7 +5271,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp of the Service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the Service." },
                     "serviceHostingType": {
@@ -5185,7 +5348,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The csp which the policy belongs to.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "policy": { "type": "string", "description": "The policy." },
                     "enabled": {
@@ -5236,14 +5409,15 @@
                                 "type": "string",
                                 "description": "The cloud service provider of the credential.",
                                 "enum": [
-                                    "huawei",
-                                    "flexibleEngine",
-                                    "openstack",
-                                    "scs",
-                                    "alicloud",
+                                    "HuaweiCloud",
+                                    "FlexibleEngine",
+                                    "OpenstackTestlab",
+                                    "PlusServer",
+                                    "RegioCloud",
+                                    "AlibabaCloud",
                                     "aws",
                                     "azure",
-                                    "google"
+                                    "GoogleCloudPlatform"
                                 ]
                             },
                             "type": {
@@ -5271,7 +5445,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The cloud service provider of the credential.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "type": {
                         "type": "string",
@@ -5370,7 +5554,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceTemplateId": {
@@ -5624,7 +5818,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceTemplateId": {
@@ -5742,7 +5946,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The provider of the service",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "flavor": { "type": "string", "description": "The flavor of the service" },
                     "serviceTemplateId": {
@@ -5809,6 +6023,33 @@
                             "description": "The properties of the deployed service."
                         },
                         "description": "The properties of the deployed service."
+                    }
+                }
+            },
+            "DeploymentStatusUpdate": {
+                "required": ["isOrderCompleted", "serviceDeploymentState"],
+                "type": "object",
+                "properties": {
+                    "serviceDeploymentState": {
+                        "type": "string",
+                        "description": "Current state of the deployment request.",
+                        "enum": [
+                            "deploying",
+                            "deployment successful",
+                            "deployment failed",
+                            "destroying",
+                            "destroy successful",
+                            "destroy failed",
+                            "manual cleanup required",
+                            "rollback failed",
+                            "modifying",
+                            "modification failed",
+                            "modification successful"
+                        ]
+                    },
+                    "isOrderCompleted": {
+                        "type": "boolean",
+                        "description": "Describes if the deployment request is now completed"
                     }
                 }
             },
@@ -6004,7 +6245,17 @@
                     "csp": {
                         "type": "string",
                         "description": "The Cloud Service Provider of the orderable service.",
-                        "enum": ["huawei", "flexibleEngine", "openstack", "scs", "alicloud", "aws", "azure", "google"]
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
                     },
                     "regions": {
                         "type": "array",
