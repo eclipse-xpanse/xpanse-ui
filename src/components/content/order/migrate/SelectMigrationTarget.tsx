@@ -9,9 +9,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployedServiceDetails,
-    MigrateRequest,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
+    billingMode,
+    csp,
 } from '../../../../xpanse-api/generated';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
@@ -42,29 +43,26 @@ export const SelectMigrationTarget = ({
     setTarget: Dispatch<SetStateAction<string | undefined>>;
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    setCspList: Dispatch<SetStateAction<UserOrderableServiceVo.csp[]>>;
-    setSelectCsp: Dispatch<SetStateAction<UserOrderableServiceVo.csp>>;
-    setServiceHostTypes: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType[]>>;
-    setSelectServiceHostingType: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType>>;
+    setCspList: Dispatch<SetStateAction<csp[]>>;
+    setSelectCsp: Dispatch<SetStateAction<string>>;
+    setServiceHostTypes: Dispatch<SetStateAction<string[]>>;
+    setSelectServiceHostingType: Dispatch<SetStateAction<string>>;
     setAreaList: Dispatch<SetStateAction<Tab[]>>;
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<string>>;
-    setBillingModes: Dispatch<SetStateAction<MigrateRequest.billingMode[] | undefined>>;
-    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
+    setBillingModes: Dispatch<SetStateAction<billingMode[] | undefined>>;
+    setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const onChange = (e: RadioChangeEvent) => {
         setTarget(e.target.value as string);
-        const cspList: UserOrderableServiceVo.csp[] = getCspList(e);
+        const cspList: csp[] = getCspList(e);
         setCspList(cspList);
         setSelectCsp(cspList[0]);
-        const serviceHostTypes: UserOrderableServiceVo.serviceHostingType[] = getAvailableServiceHostingTypes(
-            cspList[0],
-            userOrderableServiceVoList
-        );
+        const serviceHostTypes: string[] = getAvailableServiceHostingTypes(cspList[0], userOrderableServiceVoList);
         setServiceHostTypes(serviceHostTypes);
         setSelectServiceHostingType(serviceHostTypes[0]);
         const areaList: Tab[] = convertAreasToTabs(cspList[0], serviceHostTypes[0], userOrderableServiceVoList);
@@ -79,13 +77,13 @@ export const SelectMigrationTarget = ({
         );
         setRegionList(regionList);
         setSelectRegion(regionList.length > 0 ? regionList[0].value : currentSelectedService.deployRequest.region.name);
-        const billingModes: MigrateRequest.billingMode[] | undefined = getBillingModes(
+        const billingModes: billingMode[] | undefined = getBillingModes(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
@@ -95,14 +93,14 @@ export const SelectMigrationTarget = ({
                 ? defaultBillingMode
                 : billingModes
                   ? billingModes[0]
-                  : (currentSelectedService.deployRequest.billingMode as MigrateRequest.billingMode)
+                  : (currentSelectedService.deployRequest.billingMode as billingMode)
         );
     };
 
     const getRegionList = (
         e: RadioChangeEvent,
-        selectCsp: UserOrderableServiceVo.csp,
-        selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+        selectCsp: csp,
+        selectServiceHostingType: string,
         selectArea: string,
         userOrderableServices: UserOrderableServiceVo[] | undefined
     ) => {
@@ -126,18 +124,18 @@ export const SelectMigrationTarget = ({
     };
 
     const getCspList = (e: RadioChangeEvent) => {
-        const currentCspList: UserOrderableServiceVo.csp[] = [];
+        const currentCspList: csp[] = [];
         if (e.target.value === 'csp') {
             userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
                 if (
-                    !currentCspList.includes(userOrderableServiceVo.csp) &&
+                    !currentCspList.includes(userOrderableServiceVo.csp as csp) &&
                     userOrderableServiceVo.csp !== currentSelectedService.csp
                 ) {
-                    currentCspList.push(userOrderableServiceVo.csp);
+                    currentCspList.push(userOrderableServiceVo.csp as csp);
                 }
             });
         } else {
-            currentCspList.push(currentSelectedService.csp);
+            currentCspList.push(currentSelectedService.csp as csp);
         }
         return currentCspList;
     };

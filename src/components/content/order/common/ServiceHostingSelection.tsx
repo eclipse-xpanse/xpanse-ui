@@ -6,7 +6,7 @@
 import { Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { serviceHostingType } from '../../../../xpanse-api/generated';
 
 export function ServiceHostingSelection({
     serviceHostingTypes,
@@ -14,18 +14,18 @@ export function ServiceHostingSelection({
     disabledAlways,
     previousSelection,
 }: {
-    serviceHostingTypes: UserOrderableServiceVo.serviceHostingType[];
-    updateServiceHostingType?: (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => void;
+    serviceHostingTypes: string[];
+    updateServiceHostingType?: (serviceHostingType: serviceHostingType) => void;
     disabledAlways: boolean;
-    previousSelection: UserOrderableServiceVo.serviceHostingType | undefined;
+    previousSelection: string;
 }): React.JSX.Element {
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
-            updateServiceHostingType(e.target.value as UserOrderableServiceVo.serviceHostingType);
+            updateServiceHostingType(e.target.value as serviceHostingType);
         }
     };
 
-    const value: UserOrderableServiceVo.serviceHostingType | undefined = previousSelection
+    const value: string | undefined = previousSelection
         ? previousSelection
         : serviceHostingTypes.length > 0
           ? serviceHostingTypes[0]
@@ -45,8 +45,8 @@ export function ServiceHostingSelection({
                     value={value}
                     className={serviceOrderStyles.orderFormSelectionStyle}
                 >
-                    <Radio value={UserOrderableServiceVo.serviceHostingType.SELF}>self</Radio>
-                    <Radio value={UserOrderableServiceVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                    <Radio value={serviceHostingType.SELF}>self</Radio>
+                    <Radio value={serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
                 </Radio.Group>
             </div>
         </>

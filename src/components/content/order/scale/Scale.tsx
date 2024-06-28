@@ -12,12 +12,13 @@ import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    DeployedService,
     DeployedServiceDetails,
     ModifyRequest,
     ServiceFlavor,
-    ServiceModificationService,
     VendorHostedDeployedServiceDetails,
+    modify,
+    serviceDeploymentState,
+    type ModifyData,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
@@ -45,7 +46,7 @@ export const Scale = ({
     const [form] = Form.useForm();
     let flavorList: ServiceFlavor[] = [];
     let getParams: DeployParam[] = [];
-    const [modifyStatus, setModifyStatus] = useState<DeployedService.serviceDeploymentState | undefined>(undefined);
+    const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
     const [selectFlavor, setSelectFlavor] = useState<string>(
         currentSelectedService.flavor ? currentSelectedService.flavor : ''
     );
@@ -57,10 +58,11 @@ export const Scale = ({
     const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            return ServiceModificationService.modify(
-                modifyServiceRequestParams.id,
-                modifyServiceRequestParams.modifyRequest
-            );
+            const data: ModifyData = {
+                serviceId: modifyServiceRequestParams.id,
+                requestBody: modifyServiceRequestParams.modifyRequest,
+            };
+            return modify(data);
         },
     });
 
@@ -93,7 +95,7 @@ export const Scale = ({
         setIsShowModifyingResult(true);
     };
 
-    const getModifyDetailsStatus = (status: DeployedService.serviceDeploymentState | undefined) => {
+    const getModifyDetailsStatus = (status: serviceDeploymentState | undefined) => {
         setModifyStatus(status);
     };
 
@@ -273,7 +275,7 @@ export const Scale = ({
                 <div
                     className={
                         currentSelectedService.serviceDeploymentState.toString() ===
-                        DeployedServiceDetails.serviceDeploymentState.MODIFYING.toString()
+                        serviceDeploymentState.MODIFYING.toString()
                             ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                             : ''
                     }
@@ -306,8 +308,7 @@ export const Scale = ({
                                 type='primary'
                                 disabled={
                                     currentSelectedService.flavor === selectFlavor ||
-                                    (modifyStatus &&
-                                        modifyStatus === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                    (modifyStatus && modifyStatus === serviceDeploymentState.MODIFICATION_SUCCESSFUL)
                                 }
                                 onClick={() => {
                                     onClickScale();

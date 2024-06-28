@@ -4,7 +4,6 @@
  */
 
 import React from 'react';
-import { DeployRequest } from '../../../../../xpanse-api/generated';
 import { BooleanInput } from '../../formElements/BooleanInput';
 import { NumberInput } from '../../formElements/NumberInput';
 import { TextInput } from '../../formElements/TextInput';
@@ -16,7 +15,7 @@ export function OrderItem({
     region,
 }: {
     item: DeployParam;
-    csp: DeployRequest.csp;
+    csp: string;
     region: string;
 }): React.JSX.Element {
     if (item.type === 'string') {

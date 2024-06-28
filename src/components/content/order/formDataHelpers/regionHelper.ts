@@ -9,8 +9,8 @@ import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { getAreasForSelectedVersionHostingTypeAndCsp } from './areaHelper';
 
 export function getRegionDropDownValues(
-    selectCsp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    selectCsp: string,
+    selectServiceHostingType: string,
     selectArea: string,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): RegionDropDownInfo[] {

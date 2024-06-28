@@ -5,7 +5,7 @@
 
 import { Radio, RadioChangeEvent } from 'antd';
 import React from 'react';
-import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, serviceHostingType } from '../../../../../xpanse-api/generated';
 
 export function ServiceHostingOptions({
     serviceTemplateDetailVos,
@@ -18,20 +18,17 @@ export function ServiceHostingOptions({
     serviceHostingTypeInQuery: string;
     updateServiceHostingType?: (serviceTemplateDetailVo: ServiceTemplateDetailVo) => void;
 }): React.JSX.Element {
-    const serviceHostingTypes: ServiceTemplateDetailVo.serviceHostingType[] = [];
+    const serviceHostingTypes: serviceHostingType[] = [];
     serviceTemplateDetailVos.forEach((serviceTemplateDetailVo) => {
-        if (!serviceHostingTypes.includes(serviceTemplateDetailVo.serviceHostingType)) {
-            serviceHostingTypes.push(serviceTemplateDetailVo.serviceHostingType);
+        if (!serviceHostingTypes.includes(serviceTemplateDetailVo.serviceHostingType as serviceHostingType)) {
+            serviceHostingTypes.push(serviceTemplateDetailVo.serviceHostingType as serviceHostingType);
         }
     });
 
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
             serviceTemplateDetailVos.forEach((serviceTemplateDetailVo) => {
-                if (
-                    serviceTemplateDetailVo.serviceHostingType ===
-                    (e.target.value as ServiceTemplateDetailVo.serviceHostingType)
-                ) {
+                if (serviceHostingType === e.target.value) {
                     updateServiceHostingType(serviceTemplateDetailVo);
                 }
             });
@@ -49,8 +46,8 @@ export function ServiceHostingOptions({
                 }
                 onChange={onChange}
             >
-                <Radio value={ServiceTemplateDetailVo.serviceHostingType.SELF}>self</Radio>
-                <Radio value={ServiceTemplateDetailVo.serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                <Radio value={serviceHostingType.SELF}>self</Radio>
+                <Radio value={serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
             </Radio.Group>
         </>
     );

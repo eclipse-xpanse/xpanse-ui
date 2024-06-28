@@ -6,7 +6,7 @@
 import { Image } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { CloudServiceProvider, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, name } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 
 export default function CspSelect({
@@ -14,9 +14,9 @@ export default function CspSelect({
     cspList,
     onChangeHandler,
 }: {
-    selectCsp: UserOrderableServiceVo.csp;
-    cspList: UserOrderableServiceVo.csp[];
-    onChangeHandler: (csp: UserOrderableServiceVo.csp) => void;
+    selectCsp: string;
+    cspList: csp[];
+    onChangeHandler: (csp: csp) => void;
 }): React.JSX.Element {
     return (
         <>
@@ -43,7 +43,7 @@ export default function CspSelect({
                                 <Image
                                     width={200}
                                     height={56}
-                                    src={cspMap.get(item as unknown as CloudServiceProvider.name)?.logo}
+                                    src={cspMap.get(item as unknown as name)?.logo}
                                     alt={item}
                                     preview={false}
                                     fallback={'https://img.shields.io/badge/-' + item + '-gray'}

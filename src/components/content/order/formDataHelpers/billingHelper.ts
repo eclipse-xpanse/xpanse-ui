@@ -3,21 +3,21 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { DeployRequest, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { billingMode, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getBillingModes(
-    csp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    csp: string,
+    selectServiceHostingType: string,
     versionMapper: UserOrderableServiceVo[] | undefined
-): DeployRequest.billingMode[] | undefined {
-    let billingMode: DeployRequest.billingMode[] = [];
+): billingMode[] | undefined {
+    let billingMode: billingMode[] = [];
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
                 csp === userOrderableServiceVo.csp &&
                 selectServiceHostingType === userOrderableServiceVo.serviceHostingType
             ) {
-                billingMode = userOrderableServiceVo.billing.billingModes as DeployRequest.billingMode[];
+                billingMode = userOrderableServiceVo.billing.billingModes as billingMode[];
             }
         });
     }
@@ -25,11 +25,11 @@ export function getBillingModes(
 }
 
 export function getDefaultBillingMode(
-    csp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    csp: string,
+    selectServiceHostingType: string,
     versionMapper: UserOrderableServiceVo[] | undefined
-): DeployRequest.billingMode | undefined {
-    let defaultBillingMode: DeployRequest.billingMode | undefined = undefined;
+): billingMode | undefined {
+    let defaultBillingMode: billingMode | undefined = undefined;
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
@@ -37,8 +37,7 @@ export function getDefaultBillingMode(
                 selectServiceHostingType === userOrderableServiceVo.serviceHostingType &&
                 userOrderableServiceVo.billing.defaultBillingMode
             ) {
-                defaultBillingMode =
-                    userOrderableServiceVo.billing.defaultBillingMode.toString() as DeployRequest.billingMode;
+                defaultBillingMode = userOrderableServiceVo.billing.defaultBillingMode.toString() as billingMode;
             }
         });
     }

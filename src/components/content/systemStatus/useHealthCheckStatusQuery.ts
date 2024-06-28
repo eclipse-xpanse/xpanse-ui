@@ -4,12 +4,12 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { AdminService } from '../../../xpanse-api/generated';
+import { healthCheck } from '../../../xpanse-api/generated';
 
 export function useHealthCheckStatusQuery() {
     return useQuery({
         queryKey: ['healthCheckQuery'],
-        queryFn: () => AdminService.healthCheck(),
+        queryFn: () => healthCheck(),
         staleTime: 60000,
     });
 }

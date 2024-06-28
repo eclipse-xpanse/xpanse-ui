@@ -10,14 +10,15 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
-    CloudServiceProvider,
     DeployRequest,
     DeployedService,
     MigrateRequest,
     Region,
     ServiceFlavor,
-    ServiceMigrationDetails,
     UserOrderableServiceVo,
+    billingMode,
+    migrationStatus,
+    name,
 } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -35,7 +36,6 @@ import {
     useMigrateServiceQuery,
     useServiceDetailsPollingQuery,
 } from './useMigrateServiceQuery';
-import migrationStatus = ServiceMigrationDetails.migrationStatus;
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -51,12 +51,12 @@ export const MigrateServiceSubmit = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: UserOrderableServiceVo.csp;
+    selectCsp: string;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
-    selectBillingMode: MigrateRequest.billingMode;
+    selectServiceHostingType: string;
+    selectBillingMode: billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
@@ -75,17 +75,17 @@ export const MigrateServiceSubmit = ({
         migrateServiceRequest.data,
         migrateServiceRequest.isSuccess,
         [
-            ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED,
-            ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED,
-            ServiceMigrationDetails.migrationStatus.DESTROY_FAILED,
-            ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED,
-            ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED,
-            ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED,
+            migrationStatus.MIGRATION_COMPLETED,
+            migrationStatus.MIGRATION_FAILED,
+            migrationStatus.DESTROY_FAILED,
+            migrationStatus.DATA_IMPORT_FAILED,
+            migrationStatus.DEPLOY_FAILED,
+            migrationStatus.DATA_EXPORT_FAILED,
         ]
     );
     const deployServiceDetailsQuery = useServiceDetailsPollingQuery(
         migrateServiceDetailsQuery.data?.newServiceId,
-        selectServiceHostingType as DeployedService.serviceHostingType,
+        selectServiceHostingType,
         migrateServiceDetailsQuery.data?.migrationStatus
     );
     const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
@@ -115,14 +115,11 @@ export const MigrateServiceSubmit = ({
         if (migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_COMPLETED) {
             stepItem.status = 'finish';
         } else if (
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus ===
-                ServiceMigrationDetails.migrationStatus.DESTROY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED
+            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DATA_EXPORT_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DEPLOY_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DATA_IMPORT_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DESTROY_FAILED ||
+            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_FAILED
         ) {
             stepItem.status = 'error';
         } else {
@@ -159,7 +156,7 @@ export const MigrateServiceSubmit = ({
                                     <Image
                                         width={200}
                                         height={56}
-                                        src={cspMap.get(selectCsp as unknown as CloudServiceProvider.name)?.logo}
+                                        src={cspMap.get(selectCsp as unknown as name)?.logo}
                                         alt={selectCsp}
                                         preview={false}
                                         fallback={
@@ -176,7 +173,7 @@ export const MigrateServiceSubmit = ({
                         <ServiceHostingSelection
                             serviceHostingTypes={[selectServiceHostingType]}
                             disabledAlways={true}
-                            previousSelection={undefined}
+                            previousSelection={''}
                         ></ServiceHostingSelection>
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>

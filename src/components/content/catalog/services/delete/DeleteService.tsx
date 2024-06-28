@@ -6,7 +6,7 @@
 import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { serviceRegistrationState } from '../../../../../xpanse-api/generated';
 import { useDeleteRequest } from './DeleteServiceMutation';
 
 function DeleteService({
@@ -14,13 +14,13 @@ function DeleteService({
     setIsViewDisabled,
     isDeleteDisabled,
     setIsReRegisterDisabled,
-    serviceRegistrationState,
+    serviceRegistrationStatus,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     isDeleteDisabled: boolean;
     setIsReRegisterDisabled: (isReRegisterDisabled: boolean) => void;
-    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    serviceRegistrationStatus: string;
 }): React.JSX.Element {
     const deleteRequest = useDeleteRequest(id);
     if (deleteRequest.isSuccess) {
@@ -50,7 +50,7 @@ function DeleteService({
                     disabled={
                         deleteRequest.isSuccess ||
                         isDeleteDisabled ||
-                        serviceRegistrationState !== ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                        serviceRegistrationStatus !== serviceRegistrationState.UNREGISTERED.toString()
                     }
                 >
                     Delete

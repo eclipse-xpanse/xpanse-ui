@@ -4,13 +4,21 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceService } from '../../../../../xpanse-api/generated';
+import { listDeployedServicesDetails, ListDeployedServicesDetailsData } from '../../../../../xpanse-api/generated';
 
 export default function useListDeployedServicesDetailsQuery() {
     return useQuery({
         queryKey: ['listDeployedServicesDetails'],
-        queryFn: () =>
-            ServiceService.listDeployedServicesDetails(undefined, undefined, undefined, undefined, undefined),
+        queryFn: () => {
+            const data: ListDeployedServicesDetailsData = {
+                categoryName: undefined,
+                cspName: undefined,
+                serviceName: undefined,
+                serviceVersion: undefined,
+                serviceState: undefined,
+            };
+            return listDeployedServicesDetails(data);
+        },
         refetchOnWindowFocus: false,
     });
 }

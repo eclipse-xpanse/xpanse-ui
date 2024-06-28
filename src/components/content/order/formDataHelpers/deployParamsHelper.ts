@@ -4,9 +4,11 @@
  */
 
 import {
-    DeployRequest,
-    DeployVariable,
+    billingMode,
+    category,
+    csp,
     Region,
+    sensitiveScope,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -15,14 +17,14 @@ import { DeployParam } from '../types/DeployParam';
 
 export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],
-    selectCsp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    selectCsp: string,
+    selectServiceHostingType: string,
     region: Region,
     selectFlavor: string,
     currentContactServiceDetails: ServiceProviderContactDetails | undefined,
     availabilityZones: Record<string, string> | undefined,
     eula: string | undefined,
-    selectBillingMode: DeployRequest.billingMode
+    selectBillingMode: billingMode
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
@@ -36,15 +38,15 @@ export const getDeployParams = (
 
     const props: OrderSubmitProps = {
         id: registeredServiceId,
-        category: service?.category as DeployRequest.category,
+        category: service?.category as category,
         name: service?.name ?? '',
         version: service?.version ?? '',
         region: region.name,
         area: region.area,
-        csp: service?.csp as DeployRequest.csp,
+        csp: service?.csp as csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
-        serviceHostingType: selectServiceHostingType as DeployRequest.serviceHostingType,
+        serviceHostingType: selectServiceHostingType,
         contactServiceDetails: currentContactServiceDetails ?? undefined,
         availabilityZones: availabilityZones,
         eula: eula,
@@ -61,7 +63,7 @@ export const getDeployParams = (
                 description: param.description,
                 value: param.value ?? '',
                 mandatory: param.mandatory,
-                sensitiveScope: param.sensitiveScope ?? DeployVariable.sensitiveScope.NONE,
+                sensitiveScope: param.sensitiveScope ?? sensitiveScope.NONE,
                 valueSchema: param.valueSchema ?? undefined,
                 autoFill: param.autoFill ?? undefined,
             });

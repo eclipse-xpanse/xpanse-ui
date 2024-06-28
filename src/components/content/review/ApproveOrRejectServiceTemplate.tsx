@@ -6,7 +6,7 @@
 import { Alert, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ApiError, Response, ReviewRegistrationRequest, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ApiError, Response, ServiceTemplateDetailVo, reviewResult } from '../../../xpanse-api/generated';
 import useApproveOrRejectRequest, { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
 export const ApproveOrRejectServiceTemplate = ({
@@ -30,9 +30,7 @@ export const ApproveOrRejectServiceTemplate = ({
             const request: ApproveOrRejectRequestParams = {
                 id: currentServiceTemplateVo.serviceTemplateId,
                 reviewRegistrationRequest: {
-                    reviewResult: isApproved
-                        ? ReviewRegistrationRequest.reviewResult.APPROVED
-                        : ReviewRegistrationRequest.reviewResult.REJECTED,
+                    reviewResult: isApproved ? reviewResult.APPROVED : reviewResult.REJECTED,
                     reviewComment: comments,
                 },
             };
@@ -59,6 +57,7 @@ export const ApproveOrRejectServiceTemplate = ({
         if (
             approveOrRejectRequest.error instanceof ApiError &&
             approveOrRejectRequest.error.body &&
+            typeof approveOrRejectRequest.error.body === 'object' &&
             'details' in approveOrRejectRequest.error.body
         ) {
             const response: Response = approveOrRejectRequest.error.body as Response;

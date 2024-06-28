@@ -12,16 +12,23 @@ import credentialStyles from '../../../styles/credential.module.css';
 import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 
 import {
-    AdminService,
+    AddIsvCloudCredentialData,
+    AddUserCloudCredentialData,
     ApiError,
-    CloudServiceProvider,
     CreateCredential,
     CredentialVariable,
     CredentialVariables,
-    CredentialsConfigurationService,
-    IsvCloudCredentialsManagementService,
     Response,
-    UserCloudCredentialsManagementService,
+    addIsvCloudCredential,
+    addUserCloudCredential,
+    csp,
+    getActiveCsps,
+    getCredentialCapabilities,
+    getCredentialTypes,
+    name,
+    type,
+    type GetCredentialCapabilitiesData,
+    type GetCredentialTypesData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { CredentialApiDoc } from './CredentialApiDoc';
@@ -30,13 +37,13 @@ import useCredentialsListQuery from './query/queryCredentialsList';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const [form] = Form.useForm();
-    const [currentCsp, setCurrentCsp] = useState<CredentialVariables.csp | undefined>(undefined);
+    const [currentCsp, setCurrentCsp] = useState<string>('');
     const [typeDisabled, setTypeDisabled] = useState<boolean>(true);
     const [nameDisable, setNameDisable] = useState<boolean>(true);
-    const [currentType, setCurrentType] = useState<CredentialVariables.type | undefined>(undefined);
+    const [currentType, setCurrentType] = useState<type | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
-    const activeCspList = useRef<CredentialVariables.csp[]>([]);
-    const credentialTypeList = useRef<CredentialVariables.type[]>([]);
+    const activeCspList = useRef<csp[]>([]);
+    const credentialTypeList = useRef<type[]>([]);
     const nameList = useRef<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const [tipMessage, setTipMessage] = useState<string>('');
@@ -45,7 +52,9 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const getActiveCspsQuery = useQuery({
         queryKey: ['getActiveCspsQuery'],
-        queryFn: () => AdminService.getActiveCsps(),
+        queryFn: () => {
+            return getActiveCsps();
+        },
         staleTime: 60000,
     });
 
@@ -56,28 +65,35 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        queryFn: () => CredentialsConfigurationService.getCredentialTypes(currentCsp),
+        queryFn: () => {
+            const data: GetCredentialTypesData = {
+                cspName: currentCsp as csp,
+            };
+            return getCredentialTypes(data);
+        },
         staleTime: 60000,
-        enabled: currentCsp !== undefined,
+        enabled: currentCsp.length > 0,
     });
 
     if (credentialTypesQuery.isSuccess) {
-        credentialTypeList.current = credentialTypesQuery.data as CredentialVariables.type[];
+        credentialTypeList.current = credentialTypesQuery.data as type[];
     }
 
     if (getActiveCspsQuery.isSuccess) {
-        activeCspList.current = getActiveCspsQuery.data as CredentialVariables.csp[];
+        activeCspList.current = getActiveCspsQuery.data as csp[];
     }
 
     const credentialCapabilitiesQuery = useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        queryFn: () =>
-            CredentialsConfigurationService.getCredentialCapabilities(
-                currentCsp ?? CredentialVariables.csp.HUAWEI_CLOUD,
-                currentType
-            ),
+        queryFn: () => {
+            const data: GetCredentialCapabilitiesData = {
+                cspName: currentCsp as csp,
+                type: currentType,
+            };
+            return getCredentialCapabilities(data);
+        },
         staleTime: 60000,
-        enabled: currentCsp !== undefined && currentType !== undefined,
+        enabled: currentCsp.length > 0 && currentType !== undefined,
     });
 
     if (credentialCapabilitiesQuery.isSuccess) {
@@ -92,10 +108,11 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     }
 
     if (credentialCapabilitiesQuery.error) {
-        if (currentCsp !== undefined && currentType !== undefined) {
+        if (currentCsp.length > 0 && currentType !== undefined) {
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
                 credentialCapabilitiesQuery.error.body &&
+                typeof credentialCapabilitiesQuery.error.body === 'object' &&
                 'details' in credentialCapabilitiesQuery.error.body
             ) {
                 const response: Response = credentialCapabilitiesQuery.error.body as Response;
@@ -107,13 +124,15 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     }
 
     const addCredentialRequest = useMutation({
-        mutationFn: (createCredential: CreateCredential) => addCredentialByRole(createCredential),
+        mutationFn: (createCredential: CreateCredential) => {
+            return addCredentialByRole(createCredential);
+        },
         onSuccess: () => {
             void credentialsQuery.refetch();
             getTipInfo('success', 'Adding Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
@@ -125,9 +144,15 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const addCredentialByRole = useCallback(
         (createCredential: CreateCredential) => {
             if (role === 'user') {
-                return UserCloudCredentialsManagementService.addUserCloudCredential(createCredential);
+                const data: AddUserCloudCredentialData = {
+                    requestBody: createCredential,
+                };
+                return addUserCloudCredential(data);
             } else {
-                return IsvCloudCredentialsManagementService.addIsvCloudCredential(createCredential);
+                const data: AddIsvCloudCredentialData = {
+                    requestBody: createCredential,
+                };
+                return addIsvCloudCredential(data);
             }
         },
         [role]
@@ -159,7 +184,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     }, [currentCsp, currentName, currentType, form, credentialCapabilitiesQuery.data]);
 
     const handleCspSelect = useCallback(
-        (cspName: CredentialVariables.csp) => {
+        (cspName: csp) => {
             setCurrentCsp(cspName);
 
             setTypeDisabled(false);
@@ -180,7 +205,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     );
 
     const handleCredentialTypeSelect = useCallback(
-        (type: CredentialVariables.type) => {
+        (type: type) => {
             setCurrentType(type);
 
             setNameDisable(false);
@@ -316,7 +341,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     };
 
     const clear = () => {
-        setCurrentCsp(undefined);
+        setCurrentCsp('');
         setCurrentType(undefined);
         setCurrentName(undefined);
         nameList.current = [];
@@ -343,8 +368,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     return (
         <div>
             <CredentialApiDoc
-                csp={currentCsp ?? CredentialVariables.csp.HUAWEI_CLOUD}
-                credentialType={currentType ?? CredentialVariables.type.VARIABLES}
+                csp={currentCsp}
+                credentialType={currentType ?? type.VARIABLES}
                 styleClass={credentialStyles.addCredentialApiDoc}
             />
 
@@ -360,14 +385,14 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
-                            {activeCspList.current.map((csp: CredentialVariables.csp) => {
+                            {activeCspList.current.map((csp: csp) => {
                                 return (
                                     <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                         <Image
                                             className={credentialStyles.customSelect}
                                             width={100}
                                             preview={false}
-                                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
+                                            src={cspMap.get(csp.valueOf() as name)?.logo}
                                         />
                                     </Select.Option>
                                 );
@@ -387,7 +412,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
                         >
-                            {credentialTypeList.current.map((type: CredentialVariables.type) => {
+                            {credentialTypeList.current.map((type: type) => {
                                 return (
                                     <Select.Option key={type} value={type}>
                                         {type}

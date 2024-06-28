@@ -4,28 +4,41 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployedService, DeployedServiceDetails, ServiceService } from '../../../../xpanse-api/generated';
+import {
+    getSelfHostedServiceDetailsById,
+    GetSelfHostedServiceDetailsByIdData,
+    getVendorHostedServiceDetailsById,
+    GetVendorHostedServiceDetailsByIdData,
+    serviceDeploymentState,
+    serviceHostingType,
+} from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsPollingQuery(
     uuid: string | undefined,
     isStartPolling: boolean,
-    serviceHostingType: DeployedService.serviceHostingType,
-    refetchUntilStates: DeployedServiceDetails.serviceDeploymentState[]
+    currentHostingType: string,
+    refetchUntilStates: serviceDeploymentState[]
 ) {
     return useQuery({
-        queryKey: ['getServiceDetailsById', uuid, serviceHostingType],
+        queryKey: ['getServiceDetailsById', uuid, currentHostingType],
         queryFn: () => {
-            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getSelfHostedServiceDetailsById(uuid!);
+            if (currentHostingType === serviceHostingType.SELF.toString()) {
+                const data: GetSelfHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
+                return getSelfHostedServiceDetailsById(data);
             } else {
+                const data: GetVendorHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getVendorHostedServiceDetailsById(uuid!);
+                return getVendorHostedServiceDetailsById(data);
             }
         },
         refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.serviceDeploymentState)
+            query.state.data &&
+            refetchUntilStates.includes(query.state.data.serviceDeploymentState as serviceDeploymentState)
                 ? false
                 : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,

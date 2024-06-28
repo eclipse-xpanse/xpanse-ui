@@ -4,28 +4,39 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployedService, DeployedServiceDetails, ServiceService } from '../../../../xpanse-api/generated';
+import {
+    getSelfHostedServiceDetailsById,
+    GetSelfHostedServiceDetailsByIdData,
+    getVendorHostedServiceDetailsById,
+    GetVendorHostedServiceDetailsByIdData,
+    serviceHostingType,
+    serviceState,
+} from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsByServiceStatePollingQuery(
     uuid: string | undefined,
     isStartPolling: boolean,
-    serviceHostingType: DeployedService.serviceHostingType,
-    refetchUntilStates: DeployedServiceDetails.serviceState[]
+    currentServiceHostingType: string,
+    refetchUntilStates: serviceState[]
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', uuid, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getSelfHostedServiceDetailsById(uuid!);
+            if (currentServiceHostingType.toString() === serviceHostingType.SELF) {
+                const data: GetSelfHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
+                return getSelfHostedServiceDetailsById(data);
             } else {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getVendorHostedServiceDetailsById(uuid!);
+                const data: GetVendorHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
+                return getVendorHostedServiceDetailsById(data);
             }
         },
         refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.serviceState)
+            query.state.data && refetchUntilStates.includes(query.state.data.serviceState as serviceState)
                 ? false
                 : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,

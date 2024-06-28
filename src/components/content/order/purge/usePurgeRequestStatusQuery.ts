@@ -4,23 +4,33 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployedService, ServiceService } from '../../../../xpanse-api/generated';
+import {
+    getSelfHostedServiceDetailsById,
+    GetSelfHostedServiceDetailsByIdData,
+    getVendorHostedServiceDetailsById,
+    GetVendorHostedServiceDetailsByIdData,
+    serviceHostingType,
+} from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function usePurgeRequestStatusQuery(
     uuid: string | undefined,
-    serviceHostingType: DeployedService.serviceHostingType,
+    currentServiceHostingType: string,
     isStartPolling: boolean
 ) {
     return useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
         queryFn: () => {
-            if (serviceHostingType === DeployedService.serviceHostingType.SELF) {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getSelfHostedServiceDetailsById(uuid!);
+            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
+                const data: GetSelfHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
+                return getSelfHostedServiceDetailsById(data);
             } else {
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                return ServiceService.getVendorHostedServiceDetailsById(uuid!);
+                const data: GetVendorHostedServiceDetailsByIdData = {
+                    id: uuid ?? '',
+                };
+                return getVendorHostedServiceDetailsById(data);
             }
         },
         refetchOnWindowFocus: false,

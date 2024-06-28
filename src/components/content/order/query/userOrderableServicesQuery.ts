@@ -4,15 +4,19 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { DeployedService, ServiceCatalogService } from '../../../../xpanse-api/generated';
+import { category, listOrderableServices, type ListOrderableServicesData } from '../../../../xpanse-api/generated';
 
-export default function UserOrderableServicesQuery(
-    category: DeployedService.category,
-    serviceName: string | undefined
-) {
+export default function UserOrderableServicesQuery(category: category, serviceName: string | undefined) {
     return useQuery({
         queryKey: ['orderableServices', category, serviceName],
-        queryFn: () => ServiceCatalogService.listOrderableServices(category, undefined, serviceName),
+        queryFn: () => {
+            const data: ListOrderableServicesData = {
+                categoryName: category,
+                cspName: undefined,
+                serviceName: serviceName,
+            };
+            return listOrderableServices(data);
+        },
         refetchOnWindowFocus: false,
     });
 }

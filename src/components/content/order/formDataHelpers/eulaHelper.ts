@@ -5,10 +5,7 @@
 
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export function getEulaByCsp(
-    selectCsp: UserOrderableServiceVo.csp,
-    services: UserOrderableServiceVo[] | undefined
-): string | undefined {
+export function getEulaByCsp(selectCsp: string, services: UserOrderableServiceVo[] | undefined): string | undefined {
     let eula: string | undefined = undefined;
     if (services) {
         services.forEach((userOrderableServiceVo) => {

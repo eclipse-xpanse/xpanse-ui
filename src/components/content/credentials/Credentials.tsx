@@ -20,11 +20,14 @@ import tableStyles from '../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
     ApiError,
-    CloudServiceProvider,
     CredentialVariables,
-    IsvCloudCredentialsManagementService,
+    DeleteIsvCloudCredentialData,
+    DeleteUserCloudCredentialData,
     Response,
-    UserCloudCredentialsManagementService,
+    csp,
+    deleteIsvCloudCredential,
+    deleteUserCloudCredential,
+    name,
 } from '../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
@@ -59,6 +62,7 @@ function Credentials(): React.JSX.Element {
         if (
             credentialsQuery.error instanceof ApiError &&
             credentialsQuery.error.body &&
+            typeof credentialsQuery.error.body === 'object' &&
             'details' in credentialsQuery.error.body
         ) {
             const response: Response = credentialsQuery.error.body as Response;
@@ -78,7 +82,7 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 tipType = 'error';
                 tipMessage = response.details.join();
@@ -91,17 +95,19 @@ function Credentials(): React.JSX.Element {
 
     const deleteCredentialByRole = (credentialVariables: CredentialVariables) => {
         if (currentRole === 'user') {
-            return UserCloudCredentialsManagementService.deleteUserCloudCredential(
-                credentialVariables.csp,
-                credentialVariables.type,
-                credentialVariables.name
-            );
+            const data: DeleteUserCloudCredentialData = {
+                cspName: credentialVariables.csp,
+                type: credentialVariables.type,
+                name: credentialVariables.name,
+            };
+            return deleteUserCloudCredential(data);
         } else {
-            return IsvCloudCredentialsManagementService.deleteIsvCloudCredential(
-                credentialVariables.csp,
-                credentialVariables.type,
-                credentialVariables.name
-            );
+            const data: DeleteIsvCloudCredentialData = {
+                cspName: credentialVariables.csp,
+                type: credentialVariables.type,
+                name: credentialVariables.name,
+            };
+            return deleteIsvCloudCredential(data);
         }
     };
 
@@ -109,14 +115,10 @@ function Credentials(): React.JSX.Element {
         {
             title: 'Csp',
             dataIndex: 'csp',
-            render: (csp: AbstractCredentialInfo.csp, _) => {
+            render: (csp: csp, _) => {
                 return (
                     <Space size='middle'>
-                        <Image
-                            width={100}
-                            preview={false}
-                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
-                        />
+                        <Image width={100} preview={false} src={cspMap.get(csp.valueOf() as name)?.logo} />
                     </Space>
                 );
             },

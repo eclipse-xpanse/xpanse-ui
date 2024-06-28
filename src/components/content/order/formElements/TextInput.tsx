@@ -8,7 +8,7 @@ import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
 import React, { ChangeEvent, useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { DeployRequest, DeployVariable } from '../../../../xpanse-api/generated';
+import { sensitiveScope } from '../../../../xpanse-api/generated';
 import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
@@ -20,7 +20,7 @@ export function TextInput({
     region,
 }: {
     item: DeployParam;
-    csp: DeployRequest.csp;
+    csp: string;
     region: string;
 }): React.JSX.Element {
     const [isExistingResourceDropDownDisabled, setIsExistingResourceDropDownDisabled] = useState<boolean>(false);
@@ -34,7 +34,7 @@ export function TextInput({
     const autoFillDeployVariableRequest = useAutoFillDeployVariableQuery(
         csp,
         region,
-        item.autoFill?.deployResourceKind
+        item.autoFill?.deployResourceKind ?? ''
     );
 
     if (autoFillDeployVariableRequest.isSuccess) {
@@ -76,8 +76,8 @@ export function TextInput({
             <div className={serviceOrderStyles.orderParamItemLeft} />
             <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item name={item.name} label={item.name + ' :  ' + item.description} rules={ruleItems}>
-                    {item.sensitiveScope === DeployVariable.sensitiveScope.ALWAYS ||
-                    item.sensitiveScope === DeployVariable.sensitiveScope.ONCE ? (
+                    {item.sensitiveScope === sensitiveScope.ALWAYS.toString() ||
+                    item.sensitiveScope === sensitiveScope.ONCE.toString() ? (
                         <Input.Password
                             name={item.name}
                             placeholder={item.example}

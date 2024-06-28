@@ -16,7 +16,7 @@ $(
 cd ${API_DIR}
 
 # Generate API files
-npx openapi-typescript-codegen --input api.json --output ./generated --exportSchemas false
+npx @hey-api/openapi-ts -i api.json -o ./generated
 
 FILE_NEED_ADD_LICENSE=$(grep -L "SPDX-License-Identifier" ./ --exclude *.json -R)
 

@@ -4,19 +4,21 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { CloudServiceProviderService } from '../../../../xpanse-api/generated';
+import { listManagedServiceTemplates, ListManagedServiceTemplatesData } from '../../../../xpanse-api/generated';
 
 export default function useListAllServiceTemplatesQuery() {
     return useQuery({
         queryKey: ['listManagedServiceTemplatesForCspUser'],
-        queryFn: () =>
-            CloudServiceProviderService.listManagedServiceTemplates(
-                undefined,
-                undefined,
-                undefined,
-                undefined,
-                undefined
-            ),
+        queryFn: () => {
+            const data: ListManagedServiceTemplatesData = {
+                categoryName: undefined,
+                serviceName: undefined,
+                serviceVersion: undefined,
+                serviceHostingType: undefined,
+                serviceRegistrationState: undefined,
+            };
+            return listManagedServiceTemplates(data);
+        },
         refetchOnWindowFocus: false,
     });
 }

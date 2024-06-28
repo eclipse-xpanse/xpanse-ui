@@ -10,7 +10,13 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
-import { DeployedService, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import {
+    DeployedService,
+    ServiceTemplateDetailVo,
+    category,
+    csp,
+    serviceDeploymentState,
+} from '../../../../../xpanse-api/generated';
 import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
@@ -36,10 +42,10 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.DESTROY_FAILED ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === DeployedService.serviceDeploymentState.MODIFICATION_FAILED
+                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
+                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED
             ) {
                 numberOfActiveServiceDeployments++;
             }
@@ -48,25 +54,25 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
 
     const onClick = () => {
         getReportsRedirectionUrl(
-            serviceDetails.category,
-            serviceDetails.csp,
+            serviceDetails.category as category,
+            serviceDetails.csp as csp,
             serviceDetails.name,
             serviceDetails.version,
             [
-                DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                DeployedService.serviceDeploymentState.DESTROY_FAILED,
-                DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL,
-                DeployedService.serviceDeploymentState.MODIFICATION_FAILED,
+                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+                serviceDeploymentState.DESTROY_FAILED,
+                serviceDeploymentState.MODIFICATION_SUCCESSFUL,
+                serviceDeploymentState.MODIFICATION_FAILED,
             ]
         );
     };
 
     const getReportsRedirectionUrl = (
-        categoryName: DeployedService.category,
-        csp: DeployedService.csp,
+        categoryName: category,
+        csp: csp,
         serviceName: string,
         version: string,
-        serviceState: DeployedService.serviceDeploymentState[]
+        serviceState: serviceDeploymentState[]
     ) => {
         navigate({
             pathname: reportsRoute,
@@ -118,7 +124,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>
-                    <ServiceTemplateRegisterStatus serviceRegistrationState={serviceDetails.serviceRegistrationState} />
+                    <ServiceTemplateRegisterStatus
+                        serviceRegistrationStatus={serviceDetails.serviceRegistrationState}
+                    />
                 </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
                 <Descriptions.Item label='Deployment'>

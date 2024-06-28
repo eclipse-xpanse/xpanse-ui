@@ -12,13 +12,15 @@ import { v4 } from 'uuid';
 import styles from '../../../styles/credential.module.css';
 import {
     ApiError,
-    CloudServiceProvider,
     CreateCredential,
     CredentialVariable,
     CredentialVariables,
-    IsvCloudCredentialsManagementService,
     Response,
-    UserCloudCredentialsManagementService,
+    name,
+    updateIsvCloudCredential,
+    updateUserCloudCredential,
+    type UpdateIsvCloudCredentialData,
+    type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { CredentialApiDoc } from './CredentialApiDoc';
@@ -65,7 +67,7 @@ function UpdateCredential({
             setTipMessage('Updating Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 setTipType('error');
                 setTipMessage(response.details.join());
@@ -79,9 +81,15 @@ function UpdateCredential({
     const updateCredentialByRole = useCallback(
         (createCredential: CreateCredential) => {
             if (role === 'user') {
-                return UserCloudCredentialsManagementService.updateUserCloudCredential(createCredential);
+                const data: UpdateUserCloudCredentialData = {
+                    requestBody: createCredential,
+                };
+                return updateUserCloudCredential(data);
             } else {
-                return IsvCloudCredentialsManagementService.updateIsvCloudCredential(createCredential);
+                const data: UpdateIsvCloudCredentialData = {
+                    requestBody: createCredential,
+                };
+                return updateIsvCloudCredential(data);
             }
         },
         [role]
@@ -240,7 +248,7 @@ function UpdateCredential({
                         <Image
                             width={100}
                             preview={false}
-                            src={cspMap.get(credentialVariables.csp.valueOf() as CloudServiceProvider.name)?.logo}
+                            src={cspMap.get(credentialVariables.csp.valueOf() as name)?.logo}
                         />
                     </Form.Item>
                     <Form.Item label='Type' name='type'>

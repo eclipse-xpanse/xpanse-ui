@@ -18,10 +18,10 @@ export default function ServicePolicyUpdateResultStatus({
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
-    currentServicePolicy: ServicePolicy | undefined;
+    currentServicePolicy: ServicePolicy;
 }): React.JSX.Element {
     if (isError) {
-        if (error instanceof ApiError && error.body && 'details' in error.body) {
+        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
             const response: Response = error.body as Response;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>

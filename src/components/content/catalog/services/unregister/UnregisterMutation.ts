@@ -4,7 +4,7 @@
  */
 
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { ServiceVendorService } from '../../../../../xpanse-api/generated';
+import { unregister, type UnregisterData } from '../../../../../xpanse-api/generated';
 
 const unregisterKey: string = 'unregister';
 
@@ -12,7 +12,10 @@ export function useUnregisterRequest(id: string) {
     return useMutation({
         mutationKey: [id, unregisterKey],
         mutationFn: () => {
-            return ServiceVendorService.unregister(id);
+            const data: UnregisterData = {
+                id: id,
+            };
+            return unregister(data);
         },
         // necessary to clear the mutationCache immediately.
         // Otherwise, the mutation state is cached and with retries, it is not possible to get state of the

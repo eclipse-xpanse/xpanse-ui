@@ -11,7 +11,14 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import myServicesStyle from '../../../../styles/my-services.module.css';
 import tablesStyle from '../../../../styles/table.module.css';
-import { AbstractCredentialInfo, CloudServiceProvider, DeployedService } from '../../../../xpanse-api/generated';
+import {
+    DeployedService,
+    category,
+    csp,
+    name,
+    serviceDeploymentState,
+    serviceHostingType,
+} from '../../../../xpanse-api/generated';
 import { sortVersionNum } from '../../../utils/Sort';
 import {
     serviceCategoryQuery,
@@ -57,25 +64,23 @@ function Reports(): React.JSX.Element {
         const serviceList: DeployedService[] = [];
         if (listDeployedServicesByIsvQuery.data.length > 0) {
             if (serviceStateInQuery) {
-                deployedServiceList = listDeployedServicesByIsvQuery.data.filter((service) =>
-                    serviceStateInQuery.includes(service.serviceDeploymentState)
+                deployedServiceList = listDeployedServicesByIsvQuery.data.filter((service: DeployedService) =>
+                    serviceStateInQuery.includes(service.serviceDeploymentState as serviceDeploymentState)
                 );
             } else if (serviceIdInQuery) {
                 deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
-                    (service) => service.serviceId === serviceIdInQuery
+                    (service: { serviceId: string }) => service.serviceId === serviceIdInQuery
                 );
             } else {
                 deployedServiceList = listDeployedServicesByIsvQuery.data;
             }
             if (categoryNameInQuery) {
                 deployedServiceList = deployedServiceList.filter(
-                    (service) => service.category === (categoryNameInQuery as DeployedService.category)
+                    (service) => service.category === (categoryNameInQuery as category)
                 );
             }
             if (cspNameInQuery) {
-                deployedServiceList = deployedServiceList.filter(
-                    (service) => service.csp === (cspNameInQuery as DeployedService.csp)
-                );
+                deployedServiceList = deployedServiceList.filter((service) => service.csp === (cspNameInQuery as csp));
             }
             if (serviceNameInQuery) {
                 deployedServiceList = deployedServiceList.filter((service) => service.name === serviceNameInQuery);
@@ -164,8 +169,7 @@ function Reports(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            render: (serviceHostingType: DeployedService.serviceHostingType) =>
-                DeployedServicesHostingType(serviceHostingType),
+            render: (serviceHostingType: serviceHostingType) => DeployedServicesHostingType(serviceHostingType),
         },
         {
             title: 'Csp',
@@ -175,14 +179,10 @@ function Reports(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
-            render: (csp: AbstractCredentialInfo.csp, _) => {
+            render: (csp: csp, _) => {
                 return (
                     <Space size='middle'>
-                        <Image
-                            width={100}
-                            preview={false}
-                            src={cspMap.get(csp.valueOf() as CloudServiceProvider.name)?.logo}
-                        />
+                        <Image width={100} preview={false} src={cspMap.get(csp.valueOf() as name)?.logo} />
                     </Space>
                 );
             },
@@ -212,7 +212,7 @@ function Reports(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
-            render: (serviceState: DeployedService.serviceDeploymentState) => DeployedServicesStatus(serviceState),
+            render: (serviceState: serviceDeploymentState) => DeployedServicesStatus(serviceState),
             filtered: !!serviceStateInQuery,
             align: 'center',
         },
@@ -225,13 +225,13 @@ function Reports(): React.JSX.Element {
                         <Space size='middle'>
                             <Tooltip
                                 title={
-                                    record.serviceHostingType === DeployedService.serviceHostingType.SELF
+                                    record.serviceHostingType === serviceHostingType.SELF
                                         ? 'details of self hosted services cannot be viewed.'
                                         : ''
                                 }
                             >
                                 <Button
-                                    disabled={record.serviceHostingType === DeployedService.serviceHostingType.SELF}
+                                    disabled={record.serviceHostingType === serviceHostingType.SELF}
                                     type='primary'
                                     icon={<InfoCircleOutlined />}
                                     onClick={() => {
@@ -267,7 +267,7 @@ function Reports(): React.JSX.Element {
 
     function updateCspFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(DeployedService.csp).forEach((csp) => {
+        Object.values(csp).forEach((csp) => {
             const filter = {
                 text: csp,
                 value: csp,
@@ -279,7 +279,7 @@ function Reports(): React.JSX.Element {
 
     function updateServiceStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(DeployedService.serviceDeploymentState).forEach((serviceStateItem) => {
+        Object.values(serviceDeploymentState).forEach((serviceStateItem) => {
             const filter = {
                 text: serviceStateItem,
                 value: serviceStateItem,
@@ -291,7 +291,7 @@ function Reports(): React.JSX.Element {
 
     function updateCategoryFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(DeployedService.category).forEach((category) => {
+        Object.values(category).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -353,7 +353,7 @@ function Reports(): React.JSX.Element {
 
     function updateServiceHostingFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(DeployedService.serviceHostingType).forEach((serviceHostingType) => {
+        Object.values(serviceHostingType).forEach((serviceHostingType) => {
             const filter = {
                 text: serviceHostingType,
                 value: serviceHostingType,
@@ -378,17 +378,15 @@ function Reports(): React.JSX.Element {
         setIsMyServiceDetailsModalOpen(false);
     };
 
-    function getServiceStateFromQuery(): DeployedService.serviceDeploymentState[] | undefined {
-        const serviceStateList: DeployedService.serviceDeploymentState[] = [];
+    function getServiceStateFromQuery(): serviceDeploymentState[] | undefined {
+        const serviceStateList: serviceDeploymentState[] = [];
         if (urlParams.size > 0) {
             urlParams.forEach((value, key) => {
                 if (
                     key === serviceStateQuery &&
-                    Object.values(DeployedService.serviceDeploymentState).includes(
-                        value as DeployedService.serviceDeploymentState
-                    )
+                    Object.values(serviceDeploymentState).includes(value as serviceDeploymentState)
                 ) {
-                    serviceStateList.push(value as DeployedService.serviceDeploymentState);
+                    serviceStateList.push(value as serviceDeploymentState);
                 }
             });
             return serviceStateList;

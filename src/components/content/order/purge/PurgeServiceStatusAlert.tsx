@@ -6,7 +6,13 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
-import { ApiError, DeployedService, Response } from '../../../../xpanse-api/generated';
+import {
+    ApiError,
+    DeployedService,
+    Response,
+    resultType,
+    serviceDeploymentState,
+} from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -31,13 +37,18 @@ export function PurgeServiceStatusAlert({
 
     if (purgeSubmitError) {
         let errorMessage;
-        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && 'details' in purgeSubmitError.body) {
+        if (
+            purgeSubmitError instanceof ApiError &&
+            purgeSubmitError.body &&
+            typeof purgeSubmitError.body === 'object' &&
+            'details' in purgeSubmitError.body
+        ) {
             const response: Response = purgeSubmitError.body as Response;
             errorMessage = response.details;
         } else {
             errorMessage = purgeSubmitError.message;
         }
-        deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+        deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
         return (
             <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
@@ -70,10 +81,15 @@ export function PurgeServiceStatusAlert({
     }
 
     if (deployedService.serviceId && statusPollingError) {
-        if (statusPollingError instanceof ApiError && statusPollingError.body && 'details' in statusPollingError.body) {
+        if (
+            statusPollingError instanceof ApiError &&
+            statusPollingError.body &&
+            typeof statusPollingError.body === 'object' &&
+            'details' in statusPollingError.body
+        ) {
             const response: Response = statusPollingError.body as Response;
-            if (response.resultType !== Response.resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_FAILED;
+            if (response.resultType !== resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
@@ -107,7 +123,7 @@ export function PurgeServiceStatusAlert({
                     </div>
                 );
             } else {
-                deployedService.serviceDeploymentState = DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL;
+                deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_SUCCESSFUL;
                 return (
                     <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
