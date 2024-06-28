@@ -45,6 +45,13 @@ export const ProcessingStatus = ({
                     <div>{response.resultMessage}</div>
                 </div>
             );
+        } else if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED) {
+            return (
+                <div>
+                    <span>{'Rollback Failed.'}</span>
+                    <div>{response.resultMessage}</div>
+                </div>
+            );
         }
     }
 
