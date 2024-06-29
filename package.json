@@ -149,11 +149,12 @@
             "public/inject.js",
             "src/config/index.d.ts",
             "src/react-app-env.d.ts",
-            "public/OidcTrustedDomains.js"
+            "public/OidcTrustedDomains.js",
+            "openapi-ts.config.ts"
         ],
         "ignoreDependencies": [
             "@babel/plugin-proposal-private-property-in-object",
-            "openapi-typescript-codegen",
+            "@hey-api/openapi-ts",
             "@types/jest"
         ],
         "ignoreBinaries": [
