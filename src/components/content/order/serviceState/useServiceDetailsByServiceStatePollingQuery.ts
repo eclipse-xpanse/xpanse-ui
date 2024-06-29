@@ -21,9 +21,9 @@ export function useServiceDetailsByServiceStatePollingQuery(
     refetchUntilStates: serviceState[]
 ) {
     return useQuery({
-        queryKey: ['getServiceDetailsById', uuid, serviceHostingType],
+        queryKey: ['getServiceDetailsById', uuid, currentServiceHostingType],
         queryFn: () => {
-            if (currentServiceHostingType.toString() === serviceHostingType.SELF) {
+            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
                     id: uuid ?? '',
                 };

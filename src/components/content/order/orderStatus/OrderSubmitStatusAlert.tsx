@@ -24,7 +24,7 @@ function OrderSubmitStatusAlert({
     serviceProviderContactDetails,
     isPollingError,
 }: {
-    uuid: unknown;
+    uuid: string | undefined;
     isSubmitFailed: Error | null;
     deployedServiceDetails: DeployedServiceDetails | undefined;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
@@ -122,7 +122,7 @@ function OrderSubmitStatusAlert({
     return (
         <OrderSubmitResult
             msg={msg}
-            uuid={(uuid as string) ?? '' ?? '-'}
+            uuid={uuid ?? '-'}
             type={alertType}
             stopWatch={stopWatch}
             contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}

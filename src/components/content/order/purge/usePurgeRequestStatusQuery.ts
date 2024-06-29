@@ -19,7 +19,7 @@ export function usePurgeRequestStatusQuery(
     isStartPolling: boolean
 ) {
     return useQuery({
-        queryKey: ['getPurgeServiceDetailsById', uuid, serviceHostingType],
+        queryKey: ['getPurgeServiceDetailsById', uuid, currentServiceHostingType],
         queryFn: () => {
             if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
                 const data: GetSelfHostedServiceDetailsByIdData = {

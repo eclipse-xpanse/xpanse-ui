@@ -59,20 +59,18 @@ export function useServiceDetailsPollingQuery(
     currentMigrationStatus: string | undefined
 ) {
     return useQuery({
-        queryKey: ['getServiceDetailsById', serviceId, serviceHostingType],
+        queryKey: ['getServiceDetailsById', serviceId, currentServiceHostingType],
         queryFn: () => {
             if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
-                if (serviceHostingType.toString() === serviceHostingType.SELF.toString()) {
-                    const data: GetSelfHostedServiceDetailsByIdData = {
-                        id: serviceId ?? '',
-                    };
-                    return getSelfHostedServiceDetailsById(data);
-                } else {
-                    const data: GetVendorHostedServiceDetailsByIdData = {
-                        id: serviceId ?? '',
-                    };
-                    return getVendorHostedServiceDetailsById(data);
-                }
+                const data: GetSelfHostedServiceDetailsByIdData = {
+                    id: serviceId ?? '',
+                };
+                return getSelfHostedServiceDetailsById(data);
+            } else {
+                const data: GetVendorHostedServiceDetailsByIdData = {
+                    id: serviceId ?? '',
+                };
+                return getVendorHostedServiceDetailsById(data);
             }
         },
         enabled:

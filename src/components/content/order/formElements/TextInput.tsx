@@ -60,13 +60,13 @@ export function TextInput({
     for (const key in item.valueSchema) {
         if (key === DeployVariableSchema.ENUM.valueOf()) {
             isEnum = true;
-            valueList = item.valueSchema[key] as unknown as string[];
+            valueList = item.valueSchema[key] as string[];
         } else if (key === DeployVariableSchema.MINLENGTH.valueOf()) {
-            ruleItems.push({ min: item.valueSchema[key] as unknown as number });
+            ruleItems.push({ min: item.valueSchema[key] as number });
         } else if (key === DeployVariableSchema.MAXLENGTH.valueOf()) {
-            ruleItems.push({ max: item.valueSchema[key] as unknown as number });
+            ruleItems.push({ max: item.valueSchema[key] as number });
         } else if (key === DeployVariableSchema.PATTERN.valueOf()) {
-            regExp = new RegExp(item.valueSchema[key] as unknown as string);
+            regExp = new RegExp(item.valueSchema[key] as string);
             ruleItems.push({ pattern: regExp });
         }
     }

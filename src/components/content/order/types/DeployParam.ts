@@ -14,6 +14,6 @@ export interface DeployParam {
     value: string;
     mandatory: boolean;
     sensitiveScope: string;
-    valueSchema: [key: string] | unknown;
+    valueSchema: Record<string, unknown> | undefined;
     autoFill: AutoFill | undefined;
 }

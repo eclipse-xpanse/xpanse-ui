@@ -18,7 +18,7 @@ export default function ServicePolicyUpdateResultStatus({
     isError: boolean;
     isSuccess: boolean;
     error: Error | null;
-    currentServicePolicy: ServicePolicy;
+    currentServicePolicy: ServicePolicy | undefined;
 }): React.JSX.Element {
     if (isError) {
         if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
@@ -62,7 +62,7 @@ export default function ServicePolicyUpdateResultStatus({
                     description={
                         <ServicePolicySubmitResult
                             msg={'Policy updated successfully'}
-                            uuid={currentServicePolicy === undefined ? '' : currentServicePolicy.servicePolicyId}
+                            uuid={currentServicePolicy ? currentServicePolicy.servicePolicyId : ''}
                         />
                     }
                     showIcon
