@@ -4,7 +4,11 @@
  */
 
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { CloudServiceProviderService, ReviewRegistrationRequest } from '../../../../xpanse-api/generated';
+import {
+    ReviewRegistrationData,
+    ReviewRegistrationRequest,
+    reviewRegistration,
+} from '../../../../xpanse-api/generated';
 
 const reviewKey: string = 'review';
 
@@ -17,10 +21,11 @@ export default function useApproveOrRejectRequest(id: string) {
     return useMutation({
         mutationKey: [id, reviewKey],
         mutationFn: (requestParams: ApproveOrRejectRequestParams) => {
-            return CloudServiceProviderService.reviewRegistration(
-                requestParams.id,
-                requestParams.reviewRegistrationRequest
-            );
+            const data: ReviewRegistrationData = {
+                id: requestParams.id,
+                requestBody: requestParams.reviewRegistrationRequest,
+            };
+            return reviewRegistration(data);
         },
     });
 }

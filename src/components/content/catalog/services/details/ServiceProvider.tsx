@@ -9,7 +9,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, category, name, serviceRegistrationState } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -45,7 +45,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
-    category: ServiceTemplateDetailVo.category;
+    category: category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
 }): React.JSX.Element {
@@ -112,11 +112,7 @@ function ServiceProvider({
                             const item: Tab = {
                                 label: (
                                     <div>
-                                        <Image
-                                            width={120}
-                                            preview={false}
-                                            src={cspMap.get(cspName as CloudServiceProvider.name)?.logo}
-                                        />
+                                        <Image width={120} preview={false} src={cspMap.get(cspName as name)?.logo} />
                                     </div>
                                 ),
                                 key: cspName.toString(),
@@ -204,21 +200,27 @@ function ServiceProvider({
                                 <UnregisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                                 <ReRegisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isReRegisterDisabled={isReRegisterDisabled}
                                     setIsDeleteDisabled={setIsDeleteDisabled}
-                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isDeleteDisabled={isDeleteDisabled}
                                     setIsReRegisterDisabled={setIsReRegisterDisabled}
-                                    serviceRegistrationState={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                             </div>
                             <h3 className={catalogStyles.catalogDetailsH3}>

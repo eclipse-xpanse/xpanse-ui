@@ -12,11 +12,11 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Get the root directory of xpanse-api
 API_DIR=${SCRIPT_DIR}/../src/xpanse-api/
 
+# Generate API files
+npx @hey-api/openapi-ts
+
 $(
 cd ${API_DIR}
-
-# Generate API files
-npx openapi-typescript-codegen --input api.json --output ./generated --exportSchemas false
 
 FILE_NEED_ADD_LICENSE=$(grep -L "SPDX-License-Identifier" ./ --exclude *.json -R)
 

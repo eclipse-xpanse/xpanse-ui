@@ -7,9 +7,10 @@ import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
-    DeployedService,
     DeployedServiceDetails,
     Response,
+    serviceDeploymentState,
+    serviceHostingType,
     ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -32,7 +33,7 @@ function ScaleOrModifySubmitStatusAlert({
     isSubmitInProgress: boolean;
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
-    getModifyDetailsStatus: (arg: DeployedServiceDetails.serviceDeploymentState | undefined) => void;
+    getModifyDetailsStatus: (arg: serviceDeploymentState | undefined) => void;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
         autoStart: true,
@@ -40,11 +41,8 @@ function ScaleOrModifySubmitStatusAlert({
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         currentSelectedService.serviceId,
         !isSubmitFailed && !isSubmitInProgress,
-        currentSelectedService.serviceHostingType,
-        [
-            DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED,
-            DeployedServiceDetails.serviceDeploymentState.MODIFICATION_SUCCESSFUL,
-        ]
+        currentSelectedService.serviceHostingType as serviceHostingType,
+        [serviceDeploymentState.MODIFICATION_FAILED, serviceDeploymentState.MODIFICATION_SUCCESSFUL]
     );
     const msg = useMemo(() => {
         if (isSubmitInProgress) {
@@ -53,16 +51,16 @@ function ScaleOrModifySubmitStatusAlert({
         if (getServiceDetailsByIdQuery.data) {
             if (
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.MODIFYING.toString()
+                serviceDeploymentState.MODIFYING.toString()
             ) {
                 return 'Modifying, Please wait...';
             } else if (
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString() ||
+                    serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString() ||
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+                    serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                    serviceDeploymentState.ROLLBACK_FAILED.toString()
             ) {
                 return (
                     <ProcessingStatus response={getServiceDetailsByIdQuery.data} operationType={OperationType.Modify} />
@@ -72,6 +70,7 @@ function ScaleOrModifySubmitStatusAlert({
             if (
                 submitFailedResult instanceof ApiError &&
                 submitFailedResult.body &&
+                typeof submitFailedResult.body === 'object' &&
                 'details' in submitFailedResult.body
             ) {
                 const response: Response = submitFailedResult.body as Response;
@@ -95,21 +94,21 @@ function ScaleOrModifySubmitStatusAlert({
 
     const alertType = useMemo(() => {
         if (getServiceDetailsByIdQuery.isError || isSubmitFailed) {
-            getModifyDetailsStatus(DeployedService.serviceDeploymentState.MODIFICATION_FAILED);
+            getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_FAILED);
             return 'error';
         }
         if (getServiceDetailsByIdQuery.data) {
             if (
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+                    serviceDeploymentState.MODIFICATION_FAILED.toString() ||
                 getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                    serviceDeploymentState.ROLLBACK_FAILED.toString()
             ) {
-                getModifyDetailsStatus(DeployedService.serviceDeploymentState.MODIFICATION_FAILED);
+                getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_FAILED);
                 return 'error';
             }
         }
-        getModifyDetailsStatus(DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL);
+        getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_SUCCESSFUL);
         return 'success';
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getServiceDetailsByIdQuery.data, getServiceDetailsByIdQuery.isError, isSubmitFailed]);
@@ -123,11 +122,11 @@ function ScaleOrModifySubmitStatusAlert({
     if (getServiceDetailsByIdQuery.data) {
         if (
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+                serviceDeploymentState.MODIFICATION_FAILED.toString() ||
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString() ||
+                serviceDeploymentState.ROLLBACK_FAILED.toString() ||
             getServiceDetailsByIdQuery.data.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()
+                serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()
         ) {
             if (stopWatch.isRunning) {
                 stopWatch.pause();

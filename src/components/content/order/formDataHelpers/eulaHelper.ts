@@ -3,12 +3,9 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export function getEulaByCsp(
-    selectCsp: UserOrderableServiceVo.csp,
-    services: UserOrderableServiceVo[] | undefined
-): string | undefined {
+export function getEulaByCsp(selectCsp: csp, services: UserOrderableServiceVo[] | undefined): string | undefined {
     let eula: string | undefined = undefined;
     if (services) {
         services.forEach((userOrderableServiceVo) => {

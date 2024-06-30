@@ -87,6 +87,7 @@ export default function RegisteredServices(): React.JSX.Element {
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
+            typeof availableServiceTemplatesQuery.error.body === 'object' &&
             'details' in availableServiceTemplatesQuery.error.body
         ) {
             const response: Response = availableServiceTemplatesQuery.error.body as Response;

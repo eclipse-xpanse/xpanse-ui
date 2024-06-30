@@ -11,8 +11,9 @@ import {
     ApiError,
     DeployedService,
     Response,
-    ServiceStateManagementTaskDetails,
     VendorHostedDeployedServiceDetails,
+    serviceState,
+    taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
@@ -42,6 +43,7 @@ function StartServiceStatusAlert({
         if (
             serviceStateStartQuery.error instanceof ApiError &&
             serviceStateStartQuery.error.body &&
+            typeof serviceStateStartQuery.error.body === 'object' &&
             'details' in serviceStateStartQuery.error.body
         ) {
             const response: Response = serviceStateStartQuery.error.body as Response;
@@ -83,6 +85,8 @@ function StartServiceStatusAlert({
     if (getStartServiceDetailsQuery.isError) {
         if (
             getStartServiceDetailsQuery.error instanceof ApiError &&
+            getStartServiceDetailsQuery.error.body &&
+            typeof getStartServiceDetailsQuery.error.body === 'object' &&
             'details' in getStartServiceDetailsQuery.error.body
         ) {
             const response: Response = getStartServiceDetailsQuery.error.body as Response;
@@ -128,7 +132,7 @@ function StartServiceStatusAlert({
     ) {
         if (
             getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.SUCCESSFUL.toString()
+            taskStatus.SUCCESSFUL.toString()
         ) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
@@ -154,7 +158,7 @@ function StartServiceStatusAlert({
             );
         } else if (
             getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.FAILED.toString()
+            taskStatus.FAILED.toString()
         ) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
@@ -198,9 +202,9 @@ function StartServiceStatusAlert({
             );
         } else if (
             getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.IN_PROGRESS.toString()
+            taskStatus.IN_PROGRESS.toString()
         ) {
-            deployedService.serviceState = DeployedService.serviceState.STARTING;
+            deployedService.serviceState = serviceState.STARTING;
         }
     }
     return <></>;

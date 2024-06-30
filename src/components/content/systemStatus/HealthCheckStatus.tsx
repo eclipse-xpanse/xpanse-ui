@@ -11,16 +11,23 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { ApiError, BackendSystemStatus, Response, SystemStatus } from '../../../xpanse-api/generated';
+import {
+    ApiError,
+    BackendSystemStatus,
+    Response,
+    SystemStatus,
+    backendSystemType,
+    healthStatus,
+} from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
 interface DataType {
     key: React.Key;
-    backendSystemType: BackendSystemStatus.backendSystemType;
+    backendSystemType: backendSystemType;
     name: string;
-    healthStatus: BackendSystemStatus.healthStatus;
+    healthStatus: healthStatus;
     endpoint: string | undefined;
     details: string | undefined;
 }
@@ -37,9 +44,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         backendSystemStatusList.forEach(function (item, index) {
             const currentBackendSystemStatus = {
                 key: String(index),
-                backendSystemType: item.backendSystemType,
+                backendSystemType: item.backendSystemType as backendSystemType,
                 name: item.name,
-                healthStatus: item.healthStatus,
+                healthStatus: item.healthStatus as healthStatus,
                 endpoint: item.endpoint,
                 details: item.details,
             };
@@ -110,6 +117,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
         if (
             healthCheckQuery.error instanceof ApiError &&
             healthCheckQuery.error.body &&
+            typeof healthCheckQuery.error.body === 'object' &&
             'details' in healthCheckQuery.error.body
         ) {
             const response: Response = healthCheckQuery.error.body as Response;
@@ -176,7 +184,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         className={appStyles.headerMenuButton}
                         icon={
                             <SystemStatusIcon
-                                isSystemUp={record.healthStatus.valueOf() === SystemStatus.healthStatus.OK.valueOf()}
+                                isSystemUp={record.healthStatus.valueOf() === healthStatus.OK.valueOf()}
                                 isStatusLoading={healthCheckQuery.isLoading}
                             />
                         }

@@ -6,9 +6,9 @@
 import React from 'react';
 import '../../../../styles/app.module.css';
 import {
-    DeployedService,
     DeployedServiceDetails,
     DeployResource,
+    serviceHostingType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
@@ -24,7 +24,7 @@ export const MyServiceDetails = ({
     let resultMessage = undefined;
     let deployResourceMap: DeployResource[] = [];
 
-    if (deployedService.serviceHostingType.toString() === DeployedService.serviceHostingType.SELF.toString()) {
+    if (deployedService.serviceHostingType.toString() === serviceHostingType.SELF.toString()) {
         const serviceDetailVo = deployedService as DeployedServiceDetails;
         if (serviceDetailVo.deployedServiceProperties) {
             for (const key in serviceDetailVo.deployedServiceProperties) {

@@ -16,7 +16,9 @@ import {
     Ocl,
     Response,
     ServiceTemplateDetailVo,
-    ServiceVendorService,
+    category,
+    update,
+    type UpdateData,
 } from '../../../../../xpanse-api/generated';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
 import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
@@ -31,7 +33,7 @@ function UpdateService({
     isViewDisabled,
 }: {
     id: string;
-    category: ServiceTemplateDetailVo.category;
+    category: category;
     isViewDisabled: boolean;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
@@ -45,7 +47,11 @@ function UpdateService({
     const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
-            return ServiceVendorService.update(id, ocl);
+            const data: UpdateData = {
+                id: id,
+                requestBody: ocl,
+            };
+            return update(data);
         },
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
@@ -53,7 +59,7 @@ function UpdateService({
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 updateResult.current = response.details;
             } else {

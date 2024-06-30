@@ -4,7 +4,11 @@
  */
 
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { ServiceLockConfig, ServiceService } from '../../../../xpanse-api/generated';
+import {
+    ChangeServiceLockConfigData,
+    ServiceLockConfig,
+    changeServiceLockConfig,
+} from '../../../../xpanse-api/generated';
 
 const lockKey: string = 'lock';
 
@@ -12,7 +16,11 @@ export function useLockRequest(id: string) {
     return useMutation({
         mutationKey: [id, lockKey],
         mutationFn: (requestBody: { id: string; lockConfig: ServiceLockConfig }) => {
-            return ServiceService.changeServiceLockConfig(requestBody.id, requestBody.lockConfig);
+            const data: ChangeServiceLockConfigData = {
+                id: requestBody.id,
+                requestBody: requestBody.lockConfig,
+            };
+            return changeServiceLockConfig(data);
         },
     });
 }

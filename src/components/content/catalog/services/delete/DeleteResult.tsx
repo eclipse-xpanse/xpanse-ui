@@ -7,18 +7,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, category, Response } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetDeleteMutationState } from './DeleteServiceMutation';
 
-export function DeleteResult({
-    id,
-    category,
-}: {
-    id: string;
-    category: ServiceTemplateDetailVo.category;
-}): React.JSX.Element | undefined {
+export function DeleteResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
     const deleteRequestState = useGetDeleteMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -51,6 +45,7 @@ export function DeleteResult({
                     <div>
                         {deleteRequestState[0].error instanceof ApiError &&
                         deleteRequestState[0].error.body &&
+                        typeof deleteRequestState[0].error.body === 'object' &&
                         'details' in deleteRequestState[0].error.body ? (
                             <Alert
                                 message='Delete Request Failed'

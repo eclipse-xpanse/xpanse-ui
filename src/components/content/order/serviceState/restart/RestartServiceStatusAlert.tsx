@@ -11,8 +11,9 @@ import {
     ApiError,
     DeployedService,
     Response,
-    ServiceStateManagementTaskDetails,
     VendorHostedDeployedServiceDetails,
+    serviceState,
+    taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
@@ -41,6 +42,7 @@ function RestartServiceStatusAlert({
         if (
             serviceStateRestartQuery.error instanceof ApiError &&
             serviceStateRestartQuery.error.body &&
+            typeof serviceStateRestartQuery.error.body === 'object' &&
             'details' in serviceStateRestartQuery.error.body
         ) {
             const response: Response = serviceStateRestartQuery.error.body as Response;
@@ -82,6 +84,8 @@ function RestartServiceStatusAlert({
     if (getRestartServiceDetailsQuery.isError) {
         if (
             getRestartServiceDetailsQuery.error instanceof ApiError &&
+            getRestartServiceDetailsQuery.error.body &&
+            typeof getRestartServiceDetailsQuery.error.body === 'object' &&
             'details' in getRestartServiceDetailsQuery.error.body
         ) {
             const response: Response = getRestartServiceDetailsQuery.error.body as Response;
@@ -127,7 +131,7 @@ function RestartServiceStatusAlert({
     ) {
         if (
             getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.SUCCESSFUL.toString()
+            taskStatus.SUCCESSFUL.toString()
         ) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
@@ -153,7 +157,7 @@ function RestartServiceStatusAlert({
             );
         } else if (
             getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.FAILED.toString()
+            taskStatus.FAILED.toString()
         ) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
@@ -197,9 +201,9 @@ function RestartServiceStatusAlert({
             );
         } else if (
             getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            ServiceStateManagementTaskDetails.taskStatus.IN_PROGRESS.toString()
+            taskStatus.IN_PROGRESS.toString()
         ) {
-            deployedService.serviceState = DeployedService.serviceState.RESTARTING;
+            deployedService.serviceState = serviceState.RESTARTING;
         }
     }
     return <></>;

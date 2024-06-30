@@ -5,15 +5,15 @@
 
 import { Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import { Metric } from '../../../xpanse-api/generated';
+import { monitorResourceType } from '../../../xpanse-api/generated';
 import { MonitorTypeList } from './metricProps';
 
 export const MonitorMetricsTypeTabs = ({
     setActiveMonitorMetricType,
     activeMonitorMetricType,
 }: {
-    setActiveMonitorMetricType: (activeMonitorMetricType: Metric.monitorResourceType) => void;
-    activeMonitorMetricType: Metric.monitorResourceType;
+    setActiveMonitorMetricType: (activeMonitorMetricType: monitorResourceType) => void;
+    activeMonitorMetricType: monitorResourceType;
 }) => {
     const chartItems: Tab[] = [];
     MonitorTypeList.forEach((monitorType: string) => {
@@ -26,7 +26,7 @@ export const MonitorMetricsTypeTabs = ({
     });
 
     const onChangeMonitorMetricType = (value: string) => {
-        setActiveMonitorMetricType(value as Metric.monitorResourceType);
+        setActiveMonitorMetricType(value as monitorResourceType);
     };
 
     return (

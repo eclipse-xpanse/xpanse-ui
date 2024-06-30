@@ -3,19 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getCspListForVersion(
     selectVersion: string,
     versionMapper: Map<string, UserOrderableServiceVo[]>
-): UserOrderableServiceVo.csp[] {
-    const cspList: UserOrderableServiceVo.csp[] = [];
+): csp[] {
+    const cspList: csp[] = [];
 
     versionMapper.forEach((v, k) => {
         if (k === selectVersion) {
             for (const userOrderableServiceVo of v) {
-                if (!cspList.includes(userOrderableServiceVo.csp)) {
-                    cspList.push(userOrderableServiceVo.csp);
+                if (!cspList.includes(userOrderableServiceVo.csp as csp)) {
+                    cspList.push(userOrderableServiceVo.csp as csp);
                 }
             }
         }

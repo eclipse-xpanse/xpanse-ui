@@ -9,7 +9,14 @@ import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, MigrateRequest, Region, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import {
+    DeployRequest,
+    Region,
+    UserOrderableServiceVo,
+    billingMode,
+    csp,
+    serviceHostingType,
+} from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
@@ -32,12 +39,12 @@ export const DeploymentForm = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: UserOrderableServiceVo.csp;
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType;
+    selectCsp: csp;
+    selectServiceHostingType: serviceHostingType;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectBillingMode: MigrateRequest.billingMode;
+    selectBillingMode: billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;

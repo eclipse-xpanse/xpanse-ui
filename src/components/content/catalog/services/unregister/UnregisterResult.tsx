@@ -7,18 +7,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, category, Response } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetUnregisterMutationState } from './UnregisterMutation';
 
-export function UnregisterResult({
-    id,
-    category,
-}: {
-    id: string;
-    category: ServiceTemplateDetailVo.category;
-}): React.JSX.Element | undefined {
+export function UnregisterResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
     const useUnregisterRequestState = useGetUnregisterMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -51,6 +45,7 @@ export function UnregisterResult({
                     <div>
                         {useUnregisterRequestState[0].error instanceof ApiError &&
                         useUnregisterRequestState[0].error.body &&
+                        typeof useUnregisterRequestState[0].error.body === 'object' &&
                         'details' in useUnregisterRequestState[0].error.body ? (
                             <Alert
                                 message='Unregister Request Failed'

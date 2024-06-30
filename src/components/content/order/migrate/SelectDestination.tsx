@@ -12,9 +12,11 @@ import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
     DeployedService,
-    MigrateRequest,
     ServiceFlavor,
     UserOrderableServiceVo,
+    billingMode,
+    csp,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
@@ -59,19 +61,19 @@ export const SelectDestination = ({
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     updateSelectedParameters: (
-        selectedCsp: UserOrderableServiceVo.csp,
+        selectedCsp: csp,
         selectedArea: string,
         selectedRegion: string,
         selectAvailabilityZones: Record<string, string>,
         selectedFlavor: string,
-        selectedServiceHostingType: UserOrderableServiceVo.serviceHostingType
+        selectedServiceHostingType: serviceHostingType
     ) => void;
-    cspList: UserOrderableServiceVo.csp[];
-    selectCsp: UserOrderableServiceVo.csp;
-    setSelectCsp: Dispatch<SetStateAction<UserOrderableServiceVo.csp>>;
-    serviceHostTypes: UserOrderableServiceVo.serviceHostingType[];
-    selectServiceHostType: UserOrderableServiceVo.serviceHostingType;
-    setSelectServiceHostingType: Dispatch<SetStateAction<UserOrderableServiceVo.serviceHostingType>>;
+    cspList: csp[];
+    selectCsp: csp;
+    setSelectCsp: Dispatch<SetStateAction<csp>>;
+    serviceHostTypes: serviceHostingType[];
+    selectServiceHostType: serviceHostingType;
+    setSelectServiceHostingType: Dispatch<SetStateAction<serviceHostingType>>;
     areaList: Tab[];
     selectArea: string;
     setSelectArea: Dispatch<SetStateAction<string>>;
@@ -81,9 +83,9 @@ export const SelectDestination = ({
     selectAvailabilityZones: Record<string, string>;
     setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
-    billingModes: MigrateRequest.billingMode[] | undefined;
-    selectBillingMode: MigrateRequest.billingMode;
-    setSelectBillingMode: Dispatch<SetStateAction<MigrateRequest.billingMode>>;
+    billingModes: billingMode[] | undefined;
+    selectBillingMode: billingMode;
+    setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
     currentSelectedService: DeployedService;
@@ -129,17 +131,17 @@ export const SelectDestination = ({
         setCurrentMigrationStep(MigrationSteps.PrepareDeploymentParameters);
     };
 
-    const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
+    const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
         setSelectServiceHostingType(selectServiceHostType);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, userOrderableServiceVoList);
 
-        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
             selectCsp,
             selectServiceHostType,
             userOrderableServiceVoList
         );
         setSelectBillingMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED
         );
         updateSelectedParameters(
             selectCsp,
@@ -196,7 +198,7 @@ export const SelectDestination = ({
         );
     };
 
-    const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
+    const onChangeCloudProvider = (csp: csp) => {
         serviceHostTypes = getAvailableServiceHostingTypes(csp, userOrderableServiceVoList);
         areaList = convertAreasToTabs(csp, serviceHostTypes[0], userOrderableServiceVoList);
         regionList = getRegionDropDownValues(
@@ -213,13 +215,13 @@ export const SelectDestination = ({
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.name ?? '');
         setSelectServiceHostingType(serviceHostTypes[0]);
-        const defaultBillingMode: MigrateRequest.billingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
             selectCsp,
             selectServiceHostType,
             userOrderableServiceVoList
         );
         setSelectBillingMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : MigrateRequest.billingMode.FIXED
+            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED
         );
         updateSelectedParameters(
             csp,

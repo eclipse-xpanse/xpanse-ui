@@ -5,16 +5,20 @@
 
 import { LinkOutlined } from '@ant-design/icons';
 import React from 'react';
-import { Link, ServiceCatalogService } from '../../../../xpanse-api/generated';
+import { Link, openApi, OpenApiData } from '../../../../xpanse-api/generated';
 
 export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): React.JSX.Element {
     function onclick() {
-        void ServiceCatalogService.openApi(id).then((link: Link) => {
+        const data: OpenApiData = {
+            id: id,
+        };
+        void openApi(data).then((link: Link) => {
             if (link.href !== undefined) {
                 window.open(link.href);
             }
         });
     }
+
     return (
         <button className={styleClass} onClick={onclick}>
             <LinkOutlined /> API Documentation

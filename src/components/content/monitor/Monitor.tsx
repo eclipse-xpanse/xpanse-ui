@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import monitorStyles from '../../../styles/monitor.module.css';
 import emptyServicesStyle from '../../../styles/services-empty.module.css';
 import tablesStyle from '../../../styles/table.module.css';
-import { ApiError, DeployedService, Response } from '../../../xpanse-api/generated';
+import { ApiError, DeployedService, Response, serviceDeploymentState } from '../../../xpanse-api/generated';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
@@ -72,7 +72,7 @@ function Monitor(): React.JSX.Element {
         if (serviceList.length > 0) {
             const serviceVoMap: Map<string, DeployedService[]> = new Map<string, DeployedService[]>();
             serviceList.forEach((serviceVo: DeployedService) => {
-                if (serviceVo.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+                if (serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                     if (!serviceVoMap.has(serviceVo.name)) {
                         serviceVoMap.set(
                             serviceVo.name,
@@ -108,7 +108,12 @@ function Monitor(): React.JSX.Element {
 
     if (deployedServiceQuery.isError) {
         tipType.current = 'error';
-        if (deployedServiceQuery.error instanceof ApiError && 'details' in deployedServiceQuery.error.body) {
+        if (
+            deployedServiceQuery.error instanceof ApiError &&
+            deployedServiceQuery.error.body &&
+            typeof deployedServiceQuery.error.body === 'object' &&
+            'details' in deployedServiceQuery.error.body
+        ) {
             const response: Response = deployedServiceQuery.error.body as Response;
             tipMessage.current = response.resultType.valueOf();
             tipDescription.current = response.details.join();
@@ -126,7 +131,7 @@ function Monitor(): React.JSX.Element {
             deployedServiceList.forEach((serviceVo: DeployedService) => {
                 if (
                     serviceVo.name === selectServiceName &&
-                    serviceVo.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                    serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
                 ) {
                     const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                         value: serviceVo.customerServiceName ?? '',
@@ -159,7 +164,7 @@ function Monitor(): React.JSX.Element {
         form.resetFields();
         const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: DeployedService) => {
-            if (serviceVo.serviceDeploymentState === DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                     value: serviceVo.customerServiceName ?? '',
                     label: serviceVo.customerServiceName ?? '',
@@ -283,4 +288,5 @@ function Monitor(): React.JSX.Element {
         </div>
     );
 }
+
 export default Monitor;
