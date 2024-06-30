@@ -15,13 +15,13 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function usePurgeRequestStatusQuery(
     uuid: string | undefined,
-    currentServiceHostingType: string,
+    currentServiceHostingType: serviceHostingType,
     isStartPolling: boolean
 ) {
     return useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, currentServiceHostingType],
         queryFn: () => {
-            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
+            if (currentServiceHostingType === serviceHostingType.SELF) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
                     id: uuid ?? '',
                 };

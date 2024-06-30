@@ -9,7 +9,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo, category, name } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, category, name, serviceRegistrationState } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -200,21 +200,27 @@ function ServiceProvider({
                                 <UnregisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                                 <ReRegisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isReRegisterDisabled={isReRegisterDisabled}
                                     setIsDeleteDisabled={setIsDeleteDisabled}
-                                    serviceRegistrationStatus={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     isDeleteDisabled={isDeleteDisabled}
                                     setIsReRegisterDisabled={setIsReRegisterDisabled}
-                                    serviceRegistrationStatus={activeServiceDetail.serviceRegistrationState}
+                                    serviceRegistrationStatus={
+                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                    }
                                 />
                             </div>
                             <h3 className={catalogStyles.catalogDetailsH3}>

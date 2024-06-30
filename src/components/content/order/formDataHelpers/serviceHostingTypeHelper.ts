@@ -3,18 +3,22 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { csp, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, serviceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getAvailableServiceHostingTypes(
     selectCsp: csp,
     services: UserOrderableServiceVo[] | undefined
-): string[] {
-    const availableServiceHostingTypes: string[] = [];
+): serviceHostingType[] {
+    const availableServiceHostingTypes: serviceHostingType[] = [];
     if (services) {
         services.forEach((userOrderableServiceVo) => {
             if (userOrderableServiceVo.csp === selectCsp) {
-                if (!availableServiceHostingTypes.includes(userOrderableServiceVo.serviceHostingType)) {
-                    availableServiceHostingTypes.push(userOrderableServiceVo.serviceHostingType);
+                if (
+                    !availableServiceHostingTypes.includes(
+                        userOrderableServiceVo.serviceHostingType as serviceHostingType
+                    )
+                ) {
+                    availableServiceHostingTypes.push(userOrderableServiceVo.serviceHostingType as serviceHostingType);
                 }
             }
         });

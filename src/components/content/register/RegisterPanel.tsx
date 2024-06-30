@@ -16,6 +16,7 @@ import {
     Ocl,
     Response,
     ServiceTemplateDetailVo,
+    category,
     register,
     type RegisterData,
 } from '../../../xpanse-api/generated';
@@ -54,7 +55,7 @@ function RegisterPanel(): React.JSX.Element {
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
-            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category) });
+            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category as category) });
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
         },
         onError: (error: Error) => {

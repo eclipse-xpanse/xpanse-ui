@@ -113,28 +113,28 @@ function MyServices(): React.JSX.Element {
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         activeRecord?.serviceId,
         serviceDestroyQuery.isSuccess,
-        activeRecord?.serviceHostingType ?? serviceHostingType.SELF,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         [serviceDeploymentState.DESTROY_FAILED, serviceDeploymentState.DESTROY_SUCCESSFUL]
     );
 
     const getStartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
         activeRecord?.serviceId,
         serviceStateStartQuery.isSuccess,
-        activeRecord?.serviceHostingType ?? serviceHostingType.SELF,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         [serviceState.RUNNING, serviceState.STOPPED]
     );
 
     const getStopServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
         activeRecord?.serviceId,
         serviceStateStopQuery.isSuccess,
-        activeRecord?.serviceHostingType ?? serviceHostingType.SELF,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         [serviceState.STOPPED, serviceState.RUNNING]
     );
 
     const getRestartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
         activeRecord?.serviceId,
         serviceStateRestartQuery.isSuccess,
-        activeRecord?.serviceHostingType ?? serviceHostingType.SELF,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         [serviceState.RUNNING]
     );
 
@@ -149,7 +149,7 @@ function MyServices(): React.JSX.Element {
 
     const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
         activeRecord?.serviceId,
-        activeRecord?.serviceHostingType ?? serviceHostingType.SELF,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         servicePurgeQuery.isSuccess
     );
 
@@ -779,7 +779,9 @@ function MyServices(): React.JSX.Element {
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
-            render: (serviceHostingType: serviceHostingType) => DeployedServicesHostingType(serviceHostingType),
+            render: (serviceHostingType: serviceHostingType) => (
+                <DeployedServicesHostingType currentServiceHostingType={serviceHostingType} />
+            ),
         },
         {
             title: 'Csp',

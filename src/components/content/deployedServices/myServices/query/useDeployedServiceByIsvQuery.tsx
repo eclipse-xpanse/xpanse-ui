@@ -12,8 +12,8 @@ import {
 } from '../../../../../xpanse-api/generated';
 
 export default function useDeployedServicesByIsvQuery(
-    categoryName: string,
-    cspName: string,
+    categoryName: category,
+    cspName: csp,
     serviceName: string,
     serviceVersion: string
 ) {
@@ -21,8 +21,8 @@ export default function useDeployedServicesByIsvQuery(
         queryKey: ['listDeployedServicesByIsv', categoryName, cspName, serviceName, serviceVersion],
         queryFn: () => {
             const data: ListDeployedServicesOfIsvData = {
-                categoryName: categoryName as category,
-                cspName: cspName as csp,
+                categoryName: categoryName,
+                cspName: cspName,
                 serviceName: serviceName,
                 serviceVersion: serviceVersion,
                 serviceState: undefined,

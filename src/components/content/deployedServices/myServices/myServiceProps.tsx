@@ -4,10 +4,11 @@
  */
 
 import React from 'react';
+import { deployResourceKind } from '../../../../xpanse-api/generated';
 
 export interface DeployResourceDataType {
     key: React.Key;
-    resourceType: string;
+    resourceType: deployResourceKind;
     resourceId: string;
     name: React.JSX.Element;
 }

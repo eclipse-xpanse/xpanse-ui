@@ -5,6 +5,7 @@
 
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
+import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { serviceRegistrationState } from '../../../../../xpanse-api/generated';
 import { useReRegisterRequest } from './ReRegisterMutation';
@@ -20,7 +21,7 @@ function ReRegisterService({
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     isReRegisterDisabled: boolean;
     setIsDeleteDisabled: (isDelete: boolean) => void;
-    serviceRegistrationStatus: string;
+    serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
     const reRegisterRequest = useReRegisterRequest(id);
     if (reRegisterRequest.isSuccess) {
@@ -49,7 +50,7 @@ function ReRegisterService({
                     disabled={
                         reRegisterRequest.isSuccess ||
                         isReRegisterDisabled ||
-                        serviceRegistrationStatus !== serviceRegistrationState.UNREGISTERED.toString()
+                        serviceRegistrationStatus !== serviceRegistrationState.UNREGISTERED
                     }
                 >
                     Re-register

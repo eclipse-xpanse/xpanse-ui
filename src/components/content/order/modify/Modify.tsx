@@ -15,6 +15,7 @@ import {
     DeployedServiceDetails,
     ModifyRequest,
     VendorHostedDeployedServiceDetails,
+    csp,
     modify,
     serviceDeploymentState,
     type ModifyData,
@@ -233,7 +234,7 @@ export const Modify = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.deployRequest.csp}
+                                csp={currentSelectedService.deployRequest.csp as csp}
                                 region={currentSelectedService.deployRequest.region.name}
                             />
                         ) : undefined

@@ -17,13 +17,13 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants';
 export function useServiceDetailsByServiceStatePollingQuery(
     uuid: string | undefined,
     isStartPolling: boolean,
-    currentServiceHostingType: string,
+    currentServiceHostingType: serviceHostingType,
     refetchUntilStates: serviceState[]
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', uuid, currentServiceHostingType],
         queryFn: () => {
-            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
+            if (currentServiceHostingType === serviceHostingType.SELF) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
                     id: uuid ?? '',
                 };

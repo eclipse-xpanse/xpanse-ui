@@ -11,14 +11,14 @@ import {
     GetExistingResourceNamesWithKindData,
 } from '../../../../xpanse-api/generated';
 
-export default function useAutoFillDeployVariableQuery(csp: string, region: string, kind: string) {
+export default function useAutoFillDeployVariableQuery(csp: csp, region: string, kind: deployResourceKind) {
     return useQuery({
-        queryKey: ['getExistingResourceNamesWithKind', csp, region, kind],
+        queryKey: ['getExistingResourceNamesWithKind', csp, kind, region],
         queryFn: () => {
             const data: GetExistingResourceNamesWithKindData = {
-                csp: csp as csp,
+                csp: csp,
                 region: region,
-                deployResourceKind: kind as deployResourceKind,
+                deployResourceKind: kind,
             };
             return getExistingResourceNamesWithKind(data);
         },

@@ -169,7 +169,9 @@ function Reports(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-            render: (serviceHostingType: serviceHostingType) => DeployedServicesHostingType(serviceHostingType),
+            render: (serviceHostingType: serviceHostingType) => (
+                <DeployedServicesHostingType currentServiceHostingType={serviceHostingType} />
+            ),
         },
         {
             title: 'Csp',

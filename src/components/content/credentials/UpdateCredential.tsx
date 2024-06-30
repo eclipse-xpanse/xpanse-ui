@@ -16,6 +16,8 @@ import {
     CredentialVariable,
     CredentialVariables,
     Response,
+    credentialType,
+    csp,
     name,
     updateIsvCloudCredential,
     updateUserCloudCredential,
@@ -225,8 +227,8 @@ function UpdateCredential({
     return (
         <div>
             <CredentialApiDoc
-                csp={credentialVariables.csp}
-                credentialType={credentialVariables.type}
+                csp={credentialVariables.csp as csp}
+                credentialType={credentialVariables.type as credentialType}
                 styleClass={styles.updateCredentialApiDoc}
             />
             <Form

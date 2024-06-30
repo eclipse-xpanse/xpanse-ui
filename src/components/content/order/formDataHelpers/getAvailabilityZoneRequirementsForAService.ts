@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AvailabilityZoneConfig, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, csp, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getAvailabilityZoneRequirementsForAService(
-    selectCsp: string,
+    selectCsp: csp,
     services: UserOrderableServiceVo[] | undefined
 ): AvailabilityZoneConfig[] {
     let availabilityZoneConfigs: AvailabilityZoneConfig[] = [];

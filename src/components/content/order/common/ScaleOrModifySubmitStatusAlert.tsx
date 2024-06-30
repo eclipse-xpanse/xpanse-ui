@@ -10,6 +10,7 @@ import {
     DeployedServiceDetails,
     Response,
     serviceDeploymentState,
+    serviceHostingType,
     ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -40,7 +41,7 @@ function ScaleOrModifySubmitStatusAlert({
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
         currentSelectedService.serviceId,
         !isSubmitFailed && !isSubmitInProgress,
-        currentSelectedService.serviceHostingType,
+        currentSelectedService.serviceHostingType as serviceHostingType,
         [serviceDeploymentState.MODIFICATION_FAILED, serviceDeploymentState.MODIFICATION_SUCCESSFUL]
     );
     const msg = useMemo(() => {

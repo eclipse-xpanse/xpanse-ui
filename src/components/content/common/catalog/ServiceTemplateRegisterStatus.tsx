@@ -56,7 +56,7 @@ export function ServiceTemplateRegisterStatus({
                     color='warning'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
-                    {serviceRegistrationState as unknown as string}
+                    {serviceRegistrationStatus as unknown as string}
                 </Tag>
             );
     }

@@ -14,6 +14,7 @@ import {
     Region,
     UserOrderableServiceVo,
     billingMode,
+    csp,
     serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
@@ -38,8 +39,8 @@ export const DeploymentForm = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: string;
-    selectServiceHostingType: string;
+    selectCsp: csp;
+    selectServiceHostingType: serviceHostingType;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
@@ -77,7 +78,7 @@ export const DeploymentForm = ({
             serviceName: deployParams.name,
             version: deployParams.version,
             customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
-            serviceHostingType: deployParams.serviceHostingType as serviceHostingType,
+            serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
             eulaAccepted: isEulaAccepted,
             billingMode: selectBillingMode,

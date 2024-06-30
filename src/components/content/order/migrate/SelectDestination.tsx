@@ -61,19 +61,19 @@ export const SelectDestination = ({
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     updateSelectedParameters: (
-        selectedCsp: string,
+        selectedCsp: csp,
         selectedArea: string,
         selectedRegion: string,
         selectAvailabilityZones: Record<string, string>,
         selectedFlavor: string,
-        selectedServiceHostingType: string
+        selectedServiceHostingType: serviceHostingType
     ) => void;
     cspList: csp[];
-    selectCsp: string;
-    setSelectCsp: Dispatch<SetStateAction<string>>;
-    serviceHostTypes: string[];
-    selectServiceHostType: string;
-    setSelectServiceHostingType: Dispatch<SetStateAction<string>>;
+    selectCsp: csp;
+    setSelectCsp: Dispatch<SetStateAction<csp>>;
+    serviceHostTypes: serviceHostingType[];
+    selectServiceHostType: serviceHostingType;
+    setSelectServiceHostingType: Dispatch<SetStateAction<serviceHostingType>>;
     areaList: Tab[];
     selectArea: string;
     setSelectArea: Dispatch<SetStateAction<string>>;

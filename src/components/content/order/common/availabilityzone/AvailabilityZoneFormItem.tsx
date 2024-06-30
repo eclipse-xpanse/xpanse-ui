@@ -6,7 +6,7 @@
 import { Form } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
-import { AvailabilityZoneConfig } from '../../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, csp } from '../../../../../xpanse-api/generated';
 import useGetAvailabilityZonesForRegionQuery from '../utils/useGetAvailabilityZonesForRegionQuery';
 import { AvailabilityZoneButton } from './AvailabilityZoneButton';
 import { AvailabilityZoneError } from './AvailabilityZoneError';
@@ -23,7 +23,7 @@ export function AvailabilityZoneFormItem({
     selectRegion: string;
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
-    selectCsp: string;
+    selectCsp: csp;
 }): React.JSX.Element {
     const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const retryRequest = () => {

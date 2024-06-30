@@ -11,7 +11,7 @@ import { v4 } from 'uuid';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, serviceDeploymentState, serviceHostingType } from '../../../../xpanse-api/generated';
+import { DeployRequest, serviceDeploymentState } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD, createServicePageRoute, homePageRoute } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
@@ -59,7 +59,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             serviceName: state.name,
             version: state.version,
             customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
-            serviceHostingType: state.serviceHostingType as serviceHostingType,
+            serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
             eulaAccepted: isEulaAccepted,
             billingMode: state.billingMode,

@@ -21,6 +21,7 @@ import {
     Response,
     addIsvCloudCredential,
     addUserCloudCredential,
+    credentialType,
     csp,
     getActiveCsps,
     getCredentialCapabilities,
@@ -37,10 +38,10 @@ import useCredentialsListQuery from './query/queryCredentialsList';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const [form] = Form.useForm();
-    const [currentCsp, setCurrentCsp] = useState<string>('');
+    const [currentCsp, setCurrentCsp] = useState<csp | undefined>(undefined);
     const [typeDisabled, setTypeDisabled] = useState<boolean>(true);
     const [nameDisable, setNameDisable] = useState<boolean>(true);
-    const [currentType, setCurrentType] = useState<type | undefined>(undefined);
+    const [currentType, setCurrentType] = useState<credentialType | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
     const activeCspList = useRef<csp[]>([]);
     const credentialTypeList = useRef<type[]>([]);
@@ -67,12 +68,12 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         queryKey: ['credentialTypesQuery', currentCsp],
         queryFn: () => {
             const data: GetCredentialTypesData = {
-                cspName: currentCsp as csp,
+                cspName: currentCsp,
             };
             return getCredentialTypes(data);
         },
         staleTime: 60000,
-        enabled: currentCsp.length > 0,
+        enabled: currentCsp !== undefined,
     });
 
     if (credentialTypesQuery.isSuccess) {
@@ -87,13 +88,13 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
         queryFn: () => {
             const data: GetCredentialCapabilitiesData = {
-                cspName: currentCsp as csp,
+                cspName: currentCsp ?? csp.OPENSTACK_TESTLAB,
                 type: currentType,
             };
             return getCredentialCapabilities(data);
         },
         staleTime: 60000,
-        enabled: currentCsp.length > 0 && currentType !== undefined,
+        enabled: currentType !== undefined,
     });
 
     if (credentialCapabilitiesQuery.isSuccess) {
@@ -108,7 +109,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     }
 
     if (credentialCapabilitiesQuery.error) {
-        if (currentCsp.length > 0 && currentType !== undefined) {
+        if (currentCsp && currentType !== undefined) {
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
                 credentialCapabilitiesQuery.error.body &&
@@ -160,7 +161,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     // useEffect to update Form DOM after the rendering for first 3 drop downs are completed.
     useEffect(() => {
-        if (currentCsp && currentType && currentName) {
+        if (currentType && currentName) {
             const credentials = credentialCapabilitiesQuery.data;
             if (credentials !== undefined && credentials.length > 0) {
                 credentials.forEach((credential: CredentialVariables) => {
@@ -205,7 +206,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     );
 
     const handleCredentialTypeSelect = useCallback(
-        (type: type) => {
+        (type: credentialType) => {
             setCurrentType(type);
 
             setNameDisable(false);
@@ -341,7 +342,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     };
 
     const clear = () => {
-        setCurrentCsp('');
+        setCurrentCsp(undefined);
         setCurrentType(undefined);
         setCurrentName(undefined);
         nameList.current = [];
@@ -367,11 +368,13 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     return (
         <div>
-            <CredentialApiDoc
-                csp={currentCsp}
-                credentialType={currentType ?? type.VARIABLES}
-                styleClass={credentialStyles.addCredentialApiDoc}
-            />
+            {currentCsp ? (
+                <CredentialApiDoc
+                    csp={currentCsp}
+                    credentialType={currentType ?? credentialType.VARIABLES}
+                    styleClass={credentialStyles.addCredentialApiDoc}
+                />
+            ) : undefined}
 
             <Form
                 form={form}

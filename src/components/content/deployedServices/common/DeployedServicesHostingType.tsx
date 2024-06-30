@@ -8,25 +8,37 @@ import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
 import { serviceHostingType } from '../../../../xpanse-api/generated';
 
-export function DeployedServicesHostingType(currentServiceHostingType: string): React.JSX.Element {
+export function DeployedServicesHostingType({
+    currentServiceHostingType,
+    className,
+}: {
+    currentServiceHostingType: serviceHostingType;
+    className?: string | undefined;
+}): React.JSX.Element {
     switch (currentServiceHostingType) {
-        case serviceHostingType.SERVICE_VENDOR.toString():
+        case serviceHostingType.SERVICE_VENDOR:
             return (
-                <Tag bordered={false} color='magenta' className={myServicesStyle.myServiceStatusSize}>
-                    {currentServiceHostingType.valueOf()}
-                </Tag>
+                <div className={className}>
+                    <Tag bordered={false} color='magenta' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType.valueOf()}
+                    </Tag>
+                </div>
             );
-        case serviceHostingType.SELF.toString():
+        case serviceHostingType.SELF:
             return (
-                <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
-                    {currentServiceHostingType.valueOf()}
-                </Tag>
+                <div className={className}>
+                    <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType.valueOf()}
+                    </Tag>
+                </div>
             );
         default:
             return (
-                <Tag color='warning' className={myServicesStyle.myServiceStatusSize}>
-                    {currentServiceHostingType}
-                </Tag>
+                <div className={className}>
+                    <Tag color='warning' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType}
+                    </Tag>
+                </div>
             );
     }
 }

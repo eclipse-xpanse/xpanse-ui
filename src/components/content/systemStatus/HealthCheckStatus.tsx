@@ -11,16 +11,23 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { ApiError, BackendSystemStatus, Response, SystemStatus, healthStatus } from '../../../xpanse-api/generated';
+import {
+    ApiError,
+    BackendSystemStatus,
+    Response,
+    SystemStatus,
+    backendSystemType,
+    healthStatus,
+} from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
 interface DataType {
     key: React.Key;
-    backendSystemType: string;
+    backendSystemType: backendSystemType;
     name: string;
-    healthStatus: string;
+    healthStatus: healthStatus;
     endpoint: string | undefined;
     details: string | undefined;
 }
@@ -37,9 +44,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         backendSystemStatusList.forEach(function (item, index) {
             const currentBackendSystemStatus = {
                 key: String(index),
-                backendSystemType: item.backendSystemType as string,
+                backendSystemType: item.backendSystemType as backendSystemType,
                 name: item.name,
-                healthStatus: item.healthStatus,
+                healthStatus: item.healthStatus as healthStatus,
                 endpoint: item.endpoint,
                 details: item.details,
             };

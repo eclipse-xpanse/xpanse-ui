@@ -28,7 +28,7 @@ export function ServiceHostingOptions({
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
             serviceTemplateDetailVos.forEach((serviceTemplateDetailVo) => {
-                if (serviceHostingType === e.target.value) {
+                if (serviceTemplateDetailVo.serviceHostingType === e.target.value) {
                     updateServiceHostingType(serviceTemplateDetailVo);
                 }
             });

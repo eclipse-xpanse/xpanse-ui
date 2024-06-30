@@ -6,12 +6,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { category, listServiceTemplates, ListServiceTemplatesData } from '../../../../../xpanse-api/generated';
 
-export function useAvailableServiceTemplatesQuery(currentCategory: string) {
+export function useAvailableServiceTemplatesQuery(currentCategory: category) {
     return useQuery({
         queryKey: getQueryKey(currentCategory),
         queryFn: () => {
             const data: ListServiceTemplatesData = {
-                categoryName: currentCategory as category,
+                categoryName: currentCategory,
             };
             return listServiceTemplates(data);
         },
@@ -19,6 +19,6 @@ export function useAvailableServiceTemplatesQuery(currentCategory: string) {
     });
 }
 
-export function getQueryKey(category: string): string[] {
-    return ['catalog', category];
+export function getQueryKey(category: category): string[] {
+    return ['catalog', category.toString()];
 }

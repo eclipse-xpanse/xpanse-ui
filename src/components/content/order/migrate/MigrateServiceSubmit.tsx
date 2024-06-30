@@ -17,8 +17,10 @@ import {
     ServiceFlavor,
     UserOrderableServiceVo,
     billingMode,
+    csp,
     migrationStatus,
     name,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { cspMap } from '../../common/csp/CspLogo';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -51,11 +53,11 @@ export const MigrateServiceSubmit = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: string;
+    selectCsp: csp;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectServiceHostingType: string;
+    selectServiceHostingType: serviceHostingType;
     selectBillingMode: billingMode;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     deployParams: DeployRequest | undefined;
@@ -173,7 +175,7 @@ export const MigrateServiceSubmit = ({
                         <ServiceHostingSelection
                             serviceHostingTypes={[selectServiceHostingType]}
                             disabledAlways={true}
-                            previousSelection={''}
+                            previousSelection={undefined}
                         ></ServiceHostingSelection>
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>

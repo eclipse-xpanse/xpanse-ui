@@ -255,8 +255,8 @@ export default function ServiceReviews(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
-            align: 'left',
-            render: (value: serviceHostingType) => DeployedServicesHostingType(value),
+            align: 'center',
+            render: (value: serviceHostingType) => <DeployedServicesHostingType currentServiceHostingType={value} />,
         },
         {
             title: 'Deployer Type',

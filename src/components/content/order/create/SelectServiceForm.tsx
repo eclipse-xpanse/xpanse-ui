@@ -81,11 +81,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     let cspList: csp[] = getCspListForVersion(selectVersion, versionToServicesMap);
     const [selectCsp, setSelectCsp] = useState<csp>(serviceInfo ? serviceInfo.csp : cspList[0]);
 
-    let serviceHostTypes: string[] = getAvailableServiceHostingTypes(
+    let serviceHostTypes: serviceHostingType[] = getAvailableServiceHostingTypes(
         selectCsp,
         versionToServicesMap.get(selectVersion)
     );
-    const [selectServiceHostType, setSelectServiceHostType] = useState<string>(
+    const [selectServiceHostType, setSelectServiceHostType] = useState<serviceHostingType>(
         serviceInfo ? serviceInfo.serviceHostingType : serviceHostTypes[0]
     );
     let areaList: Tab[] = convertAreasToTabs(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));

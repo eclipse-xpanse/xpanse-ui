@@ -14,10 +14,10 @@ export function ServiceHostingSelection({
     disabledAlways,
     previousSelection,
 }: {
-    serviceHostingTypes: string[];
+    serviceHostingTypes: serviceHostingType[];
     updateServiceHostingType?: (serviceHostingType: serviceHostingType) => void;
     disabledAlways: boolean;
-    previousSelection: string;
+    previousSelection: serviceHostingType | undefined;
 }): React.JSX.Element {
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {

@@ -17,7 +17,7 @@ function UnregisterService({
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    serviceRegistrationStatus: string;
+    serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
     const unregisterRequest = useUnregisterRequest(id);
 
@@ -43,7 +43,7 @@ function UnregisterService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         unregisterRequest.isSuccess ||
-                        serviceRegistrationStatus === serviceRegistrationState.UNREGISTERED.toString()
+                        serviceRegistrationStatus === serviceRegistrationState.UNREGISTERED
                     }
                 >
                     Unregister

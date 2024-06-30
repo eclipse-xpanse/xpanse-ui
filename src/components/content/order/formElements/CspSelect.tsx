@@ -14,7 +14,7 @@ export default function CspSelect({
     cspList,
     onChangeHandler,
 }: {
-    selectCsp: string;
+    selectCsp: csp;
     cspList: csp[];
     onChangeHandler: (csp: csp) => void;
 }): React.JSX.Element {

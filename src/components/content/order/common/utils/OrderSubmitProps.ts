@@ -3,7 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { billingMode, category, csp, ServiceProviderContactDetails } from '../../../../../xpanse-api/generated';
+import {
+    billingMode,
+    category,
+    csp,
+    serviceHostingType,
+    ServiceProviderContactDetails,
+} from '../../../../../xpanse-api/generated';
 import { DeployParam } from '../../types/DeployParam';
 
 export interface OrderSubmitProps {
@@ -16,7 +22,7 @@ export interface OrderSubmitProps {
     csp: csp;
     flavor: string;
     params: DeployParam[];
-    serviceHostingType: string;
+    serviceHostingType: serviceHostingType;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     availabilityZones?: Record<string, string>;
     eula: string | undefined;

@@ -33,8 +33,8 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
     const listDeployedServicesByIsvQuery = useDeployedServicesByIsvQuery(
-        serviceDetails.category,
-        serviceDetails.csp,
+        serviceDetails.category as category,
+        serviceDetails.csp as csp,
         serviceDetails.name,
         serviceDetails.version
     );

@@ -9,6 +9,7 @@ import {
     csp,
     Region,
     sensitiveScope,
+    serviceHostingType,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -17,8 +18,8 @@ import { DeployParam } from '../types/DeployParam';
 
 export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],
-    selectCsp: string,
-    selectServiceHostingType: string,
+    selectCsp: csp,
+    selectServiceHostingType: serviceHostingType,
     region: Region,
     selectFlavor: string,
     currentContactServiceDetails: ServiceProviderContactDetails | undefined,

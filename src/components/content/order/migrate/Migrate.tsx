@@ -16,6 +16,7 @@ import {
     billingMode,
     csp,
     listOrderableServices,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
@@ -36,11 +37,11 @@ export const Migrate = ({
     const [target, setTarget] = useState<string | undefined>(undefined);
 
     const [cspList, setCspList] = useState<csp[]>([]);
-    const [selectCsp, setSelectCsp] = useState<string>(currentSelectedService.csp);
+    const [selectCsp, setSelectCsp] = useState<csp>(currentSelectedService.csp as csp);
 
-    const [serviceHostTypes, setServiceHostTypes] = useState<string[]>([]);
-    const [selectServiceHostingType, setSelectServiceHostingType] = useState<string>(
-        currentSelectedService.serviceHostingType
+    const [serviceHostTypes, setServiceHostTypes] = useState<serviceHostingType[]>([]);
+    const [selectServiceHostingType, setSelectServiceHostingType] = useState<serviceHostingType>(
+        currentSelectedService.serviceHostingType as serviceHostingType
     );
 
     const [areaList, setAreaList] = useState<Tab[]>([]);
@@ -82,12 +83,12 @@ export const Migrate = ({
     });
 
     const updateSelectedParameters = (
-        selectedCsp: string,
+        selectedCsp: csp,
         selectAreaName: string,
         selectRegionName: string,
         selectAvailabilityZonesName: Record<string, string>,
         selectedFlavor: string,
-        selectedServiceHostingType: string
+        selectedServiceHostingType: serviceHostingType
     ) => {
         setSelectCsp(selectedCsp);
         setSelectRegion(selectRegionName);

@@ -13,6 +13,7 @@ import {
     VendorHostedDeployedServiceDetails,
     billingMode,
     csp,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
@@ -44,9 +45,9 @@ export const SelectMigrationTarget = ({
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     userOrderableServiceVoList: UserOrderableServiceVo[];
     setCspList: Dispatch<SetStateAction<csp[]>>;
-    setSelectCsp: Dispatch<SetStateAction<string>>;
-    setServiceHostTypes: Dispatch<SetStateAction<string[]>>;
-    setSelectServiceHostingType: Dispatch<SetStateAction<string>>;
+    setSelectCsp: Dispatch<SetStateAction<csp>>;
+    setServiceHostTypes: Dispatch<SetStateAction<serviceHostingType[]>>;
+    setSelectServiceHostingType: Dispatch<SetStateAction<serviceHostingType>>;
     setAreaList: Dispatch<SetStateAction<Tab[]>>;
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
@@ -62,7 +63,10 @@ export const SelectMigrationTarget = ({
         const cspList: csp[] = getCspList(e);
         setCspList(cspList);
         setSelectCsp(cspList[0]);
-        const serviceHostTypes: string[] = getAvailableServiceHostingTypes(cspList[0], userOrderableServiceVoList);
+        const serviceHostTypes: serviceHostingType[] = getAvailableServiceHostingTypes(
+            cspList[0],
+            userOrderableServiceVoList
+        );
         setServiceHostTypes(serviceHostTypes);
         setSelectServiceHostingType(serviceHostTypes[0]);
         const areaList: Tab[] = convertAreasToTabs(cspList[0], serviceHostTypes[0], userOrderableServiceVoList);
@@ -100,7 +104,7 @@ export const SelectMigrationTarget = ({
     const getRegionList = (
         e: RadioChangeEvent,
         selectCsp: csp,
-        selectServiceHostingType: string,
+        selectServiceHostingType: serviceHostingType,
         selectArea: string,
         userOrderableServices: UserOrderableServiceVo[] | undefined
     ) => {

@@ -19,14 +19,14 @@ export function CredentialApiDoc({
     credentialType,
     styleClass,
 }: {
-    csp: string;
-    credentialType: string;
+    csp: csp;
+    credentialType: credentialType;
     styleClass: string;
 }): React.JSX.Element {
     function onclick() {
         const data: GetCredentialOpenApiData = {
-            csp: csp as csp,
-            type: credentialType as credentialType,
+            csp: csp,
+            type: credentialType,
         };
         void getCredentialOpenApi(data).then((link: Link) => {
             if (link.href !== undefined) {
