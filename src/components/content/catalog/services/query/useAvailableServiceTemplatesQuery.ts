@@ -20,5 +20,5 @@ export function useAvailableServiceTemplatesQuery(currentCategory: category) {
 }
 
 export function getQueryKey(category: category): string[] {
-    return ['catalog', category.toString()];
+    return ['catalog', category];
 }

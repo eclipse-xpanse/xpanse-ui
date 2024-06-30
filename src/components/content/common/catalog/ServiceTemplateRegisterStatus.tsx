@@ -12,10 +12,10 @@ import { serviceRegistrationState } from '../../../../xpanse-api/generated';
 export function ServiceTemplateRegisterStatus({
     serviceRegistrationStatus,
 }: {
-    serviceRegistrationStatus: string;
+    serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
     switch (serviceRegistrationStatus) {
-        case serviceRegistrationState.APPROVAL_PENDING.toString():
+        case serviceRegistrationState.APPROVAL_PENDING:
             return (
                 <Tag
                     bordered={false}
@@ -26,7 +26,7 @@ export function ServiceTemplateRegisterStatus({
                     {serviceRegistrationStatus.valueOf()}
                 </Tag>
             );
-        case serviceRegistrationState.REJECTED.toString():
+        case serviceRegistrationState.REJECTED:
             return (
                 <Tag
                     bordered={false}
@@ -37,7 +37,7 @@ export function ServiceTemplateRegisterStatus({
                     {serviceRegistrationStatus.valueOf()}
                 </Tag>
             );
-        case serviceRegistrationState.APPROVED.toString():
+        case serviceRegistrationState.APPROVED:
             return (
                 <Tag
                     bordered={false}

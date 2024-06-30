@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Metric, monitorResourceType } from '../../../xpanse-api/generated';
+import { Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
 
 export interface MetricProps {
     id: string;
@@ -14,7 +14,7 @@ export interface MetricProps {
 
     vmName: string;
 
-    unit: string;
+    unit: unit;
     timeStamp: number;
 }
 
@@ -150,7 +150,7 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                 name: metric.name,
                 vmName: labelsMap.get('name') ?? '',
                 value: 0,
-                unit: metric.unit,
+                unit: metric.unit as unit,
                 timeStamp: new Date().getTime(),
             };
             metricProps.push(metricProp);
@@ -161,7 +161,7 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                     name: metric.name,
                     vmName: labelsMap.get('name') ?? '',
                     value: item.value,
-                    unit: metric.unit,
+                    unit: metric.unit as unit,
                     timeStamp: item.timeStamp,
                 };
                 metricProps.push(metricProp);

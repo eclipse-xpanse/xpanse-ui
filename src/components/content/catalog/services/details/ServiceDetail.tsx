@@ -16,6 +16,7 @@ import {
     category,
     csp,
     serviceDeploymentState,
+    serviceRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
@@ -125,7 +126,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>
                     <ServiceTemplateRegisterStatus
-                        serviceRegistrationStatus={serviceDetails.serviceRegistrationState}
+                        serviceRegistrationStatus={serviceDetails.serviceRegistrationState as serviceRegistrationState}
                     />
                 </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>

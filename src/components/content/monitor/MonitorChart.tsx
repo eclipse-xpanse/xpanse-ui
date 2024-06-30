@@ -87,9 +87,7 @@ export default function MonitorChart({
                     .split('_')[0]
                     .concat(
                         ' usage (' +
-                            (metricProps[0].unit.toString() === unit.PERCENTAGE.toString()
-                                ? '%'
-                                : metricProps[0].unit.valueOf()) +
+                            (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
                             ') - '
                     ),
                 metricSubTitle: metricProps[0].vmName,
@@ -136,9 +134,7 @@ export default function MonitorChart({
                             .split('_')[0]
                             .concat(
                                 ' usage (' +
-                                    (metricProps[0].unit.toString() === unit.PERCENTAGE.toString()
-                                        ? '%'
-                                        : metricProps[0].unit.valueOf()) +
+                                    (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
                                     ') - '
                             ),
                         type: 'line',
