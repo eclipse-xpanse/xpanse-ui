@@ -27,6 +27,7 @@ import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
+import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
@@ -250,6 +251,18 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         return availabilityZoneConfigs.filter((availabilityZoneConfig) => availabilityZoneConfig.mandatory).length > 0;
     }
 
+    const getServiceTemplateId = (): string => {
+        const service = services.find((service) => service.version === selectVersion && service.csp === selectCsp);
+        return service ? service.serviceTemplateId : '';
+    };
+
+    const getServicePriceQuery = useGetServicePricesQuery(
+        getServiceTemplateId(),
+        selectRegion,
+        selectBillingMode,
+        flavorList
+    );
+
     const gotoOrderSubmit = function () {
         const orderSubmitParams: OrderSubmitProps = getDeployParams(
             versionToServicesMap.get(selectVersion) ?? [],
@@ -378,11 +391,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             selectFlavor={selectFlavor}
                             flavorList={flavorList}
                             onChangeFlavor={onChangeFlavor}
-                            selectVersion={selectVersion}
-                            selectCsp={selectCsp}
-                            services={services}
-                            selectRegion={selectRegion}
-                            selectBillingMode={selectBillingMode}
+                            getServicePriceQuery={getServicePriceQuery}
                         />
                     </div>
                 </div>
@@ -398,9 +407,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                                 type='primary'
                                 htmlType='submit'
                                 disabled={
-                                    getAvailabilityZonesForRegionQuery.isError ||
-                                    (isAvailabilityZoneRequired() &&
-                                        getAvailabilityZonesForRegionQuery.data?.length === 0)
+                                    getAvailabilityZonesForRegionQuery.isPending ||
+                                    getServicePriceQuery.isPending ||
+                                    getServicePriceQuery.isError ||
+                                    (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.isError)
                                 }
                             >
                                 &nbsp;&nbsp;Next&nbsp;&nbsp;

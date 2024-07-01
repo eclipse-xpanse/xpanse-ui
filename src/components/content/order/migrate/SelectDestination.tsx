@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UseQueryResult } from '@tanstack/react-query';
 import { Button, Form, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
@@ -11,7 +12,6 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    DeployedService,
     ServiceFlavor,
     UserOrderableServiceVo,
     billingMode,
@@ -33,6 +33,7 @@ import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHosti
 import CspSelect from '../formElements/CspSelect';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -57,7 +58,8 @@ export const SelectDestination = ({
     setSelectBillingMode,
     setCurrentMigrationStep,
     stepItem,
-    currentSelectedService,
+    onChangeFlavor,
+    getServicePriceQuery,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     updateSelectedParameters: (
@@ -88,7 +90,8 @@ export const SelectDestination = ({
     setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
     stepItem: StepProps;
-    currentSelectedService: DeployedService;
+    onChangeFlavor: (newFlavor: string) => void;
+    getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
@@ -150,19 +153,6 @@ export const SelectDestination = ({
             selectAvailabilityZones,
             selectFlavor,
             serviceHostingType
-        );
-    };
-
-    const onChangeFlavor = (newFlavor: string) => {
-        setSelectFlavor(newFlavor);
-
-        updateSelectedParameters(
-            selectCsp,
-            selectArea,
-            selectRegion,
-            selectAvailabilityZones,
-            newFlavor,
-            selectServiceHostType
         );
     };
 
@@ -319,11 +309,7 @@ export const SelectDestination = ({
                         selectFlavor={selectFlavor}
                         flavorList={flavorList}
                         onChangeFlavor={onChangeFlavor}
-                        selectVersion={currentSelectedService.version}
-                        selectCsp={selectCsp}
-                        services={userOrderableServiceVoList}
-                        selectRegion={selectRegion}
-                        selectBillingMode={selectBillingMode}
+                        getServicePriceQuery={getServicePriceQuery}
                     />
                 </div>
             </div>
@@ -342,8 +328,10 @@ export const SelectDestination = ({
                     <Button
                         type='primary'
                         disabled={
-                            getAvailabilityZonesForRegionQuery.isError ||
-                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.data?.length === 0)
+                            getAvailabilityZonesForRegionQuery.isPending ||
+                            getServicePriceQuery.isPending ||
+                            getServicePriceQuery.isError ||
+                            (isAvailabilityZoneRequired() && getAvailabilityZonesForRegionQuery.isError)
                         }
                         htmlType='submit'
                     >
