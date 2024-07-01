@@ -6,27 +6,39 @@
 import { Tag } from 'antd';
 import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import { serviceHostingType } from '../../../../xpanse-api/generated';
 
-export function DeployedServicesHostingType(serviceHostingType: DeployedService.serviceHostingType): React.JSX.Element {
-    switch (serviceHostingType) {
-        case DeployedService.serviceHostingType.SERVICE_VENDOR:
+export function DeployedServicesHostingType({
+    currentServiceHostingType,
+    className,
+}: {
+    currentServiceHostingType: serviceHostingType;
+    className?: string | undefined;
+}): React.JSX.Element {
+    switch (currentServiceHostingType) {
+        case serviceHostingType.SERVICE_VENDOR:
             return (
-                <Tag bordered={false} color='magenta' className={myServicesStyle.myServiceStatusSize}>
-                    {serviceHostingType.valueOf()}
-                </Tag>
+                <div className={className}>
+                    <Tag bordered={false} color='magenta' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType.valueOf()}
+                    </Tag>
+                </div>
             );
-        case DeployedService.serviceHostingType.SELF:
+        case serviceHostingType.SELF:
             return (
-                <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
-                    {serviceHostingType.valueOf()}
-                </Tag>
+                <div className={className}>
+                    <Tag bordered={false} color='cyan' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType.valueOf()}
+                    </Tag>
+                </div>
             );
         default:
             return (
-                <Tag color='warning' className={myServicesStyle.myServiceStatusSize}>
-                    {serviceHostingType as string}
-                </Tag>
+                <div className={className}>
+                    <Tag color='warning' className={myServicesStyle.myServiceStatusSize}>
+                        {currentServiceHostingType}
+                    </Tag>
+                </div>
             );
     }
 }

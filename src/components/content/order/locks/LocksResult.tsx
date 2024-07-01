@@ -39,6 +39,7 @@ function LocksResult({
             lockRequestState[0] &&
             lockRequestState[0].error instanceof ApiError &&
             lockRequestState[0]?.error.body &&
+            typeof lockRequestState[0]?.error.body === 'object' &&
             'details' in lockRequestState[0].error.body
         ) {
             const response: Response = lockRequestState[0].error.body as Response;

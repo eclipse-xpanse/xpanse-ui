@@ -4,21 +4,13 @@
  */
 
 import React from 'react';
-import { DeployRequest } from '../../../../../xpanse-api/generated';
+import { csp } from '../../../../../xpanse-api/generated';
 import { BooleanInput } from '../../formElements/BooleanInput';
 import { NumberInput } from '../../formElements/NumberInput';
 import { TextInput } from '../../formElements/TextInput';
 import { DeployParam } from '../../types/DeployParam';
 
-export function OrderItem({
-    item,
-    csp,
-    region,
-}: {
-    item: DeployParam;
-    csp: DeployRequest.csp;
-    region: string;
-}): React.JSX.Element {
+export function OrderItem({ item, csp, region }: { item: DeployParam; csp: csp; region: string }): React.JSX.Element {
     if (item.type === 'string') {
         return <TextInput item={item} csp={csp} region={region} />;
     }

@@ -12,10 +12,12 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    DeployRequest,
     ServiceFlavor,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
+    billingMode,
+    csp,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -76,19 +78,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     }
     const versionList: { value: string; label: string }[] = getSortedVersionList(versionToServicesMap);
     const [selectVersion, setSelectVersion] = useState<string>(serviceInfo ? serviceInfo.version : latestVersion);
-    let cspList: UserOrderableServiceVo.csp[] = getCspListForVersion(selectVersion, versionToServicesMap);
-    const [selectCsp, setSelectCsp] = useState<UserOrderableServiceVo.csp>(
-        serviceInfo ? (serviceInfo.csp as UserOrderableServiceVo.csp) : cspList[0]
-    );
+    let cspList: csp[] = getCspListForVersion(selectVersion, versionToServicesMap);
+    const [selectCsp, setSelectCsp] = useState<csp>(serviceInfo ? serviceInfo.csp : cspList[0]);
 
-    let serviceHostTypes: UserOrderableServiceVo.serviceHostingType[] = getAvailableServiceHostingTypes(
+    let serviceHostTypes: serviceHostingType[] = getAvailableServiceHostingTypes(
         selectCsp,
         versionToServicesMap.get(selectVersion)
     );
-    const [selectServiceHostType, setSelectServiceHostType] = useState<UserOrderableServiceVo.serviceHostingType>(
-        serviceInfo
-            ? (serviceInfo.serviceHostingType as UserOrderableServiceVo.serviceHostingType)
-            : serviceHostTypes[0]
+    const [selectServiceHostType, setSelectServiceHostType] = useState<serviceHostingType>(
+        serviceInfo ? serviceInfo.serviceHostingType : serviceHostTypes[0]
     );
     let areaList: Tab[] = convertAreasToTabs(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
     const [selectArea, setSelectArea] = useState<string>(serviceInfo ? serviceInfo.area : areaList[0].key);
@@ -110,24 +108,24 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     );
     const [selectFlavor, setSelectFlavor] = useState<string>(serviceInfo ? serviceInfo.flavor : flavorList[0].name);
 
-    let billingModes: DeployRequest.billingMode[] | undefined = getBillingModes(
+    let billingModes: billingMode[] | undefined = getBillingModes(
         selectCsp,
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
     );
-    const defaultBillingMode: DeployRequest.billingMode | undefined = getDefaultBillingMode(
+    const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
         selectCsp,
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
     );
-    const [selectBillingMode, setSelectBillMode] = useState<DeployRequest.billingMode>(
+    const [selectBillingMode, setSelectBillMode] = useState<billingMode>(
         serviceInfo
             ? serviceInfo.billingMode
             : defaultBillingMode
               ? defaultBillingMode
               : billingModes
                 ? billingModes[0]
-                : DeployRequest.billingMode.FIXED
+                : billingMode.FIXED
     );
 
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
@@ -159,13 +157,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [getAvailabilityZonesForRegionQuery.isSuccess, getAvailabilityZonesForRegionQuery.data]);
 
-    const onChangeServiceHostingType = (serviceHostingType: UserOrderableServiceVo.serviceHostingType) => {
+    const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
         location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
-        setSelectBillMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
-        );
+        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
     const onChangeFlavor = (newFlavor: string) => {
@@ -210,12 +206,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);
-        setSelectBillMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
-        );
+        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
-    const onChangeCloudProvider = (csp: UserOrderableServiceVo.csp) => {
+    const onChangeCloudProvider = (csp: csp) => {
         serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
         areaList = convertAreasToTabs(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         regionList = getRegionDropDownValues(
@@ -236,9 +230,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectRegion(regionList[0]?.value ?? '');
         setSelectFlavor(flavorList[0]?.name ?? '');
         setSelectServiceHostType(serviceHostTypes[0]);
-        setSelectBillMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : DeployRequest.billingMode.FIXED
-        );
+        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
     function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {
@@ -332,7 +324,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         <CspSelect
                             selectCsp={selectCsp}
                             cspList={cspList}
-                            onChangeHandler={(csp: UserOrderableServiceVo.csp) => {
+                            onChangeHandler={(csp: csp) => {
                                 onChangeCloudProvider(csp);
                             }}
                         />

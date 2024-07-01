@@ -7,7 +7,7 @@ import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { CloudServiceProvider, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, name, serviceRegistrationState } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -52,8 +52,7 @@ export const ServiceReviewsDetails = ({
                 onClick={onClickApprove}
                 disabled={
                     useReviewRequestState[0]?.status === 'success' &&
-                    currentServiceTemplateVo.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                    currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
                 }
             >
                 Approve
@@ -64,8 +63,7 @@ export const ServiceReviewsDetails = ({
                 className={serviceReviewStyles.rejectBtnClass}
                 disabled={
                     useReviewRequestState[0]?.status === 'success' &&
-                    currentServiceTemplateVo.serviceRegistrationState !==
-                        ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING
+                    currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
                 }
             >
                 Reject
@@ -111,10 +109,7 @@ export const ServiceReviewsDetails = ({
                                 <Image
                                     width={120}
                                     preview={false}
-                                    src={
-                                        cspMap.get(currentServiceTemplateVo.csp.valueOf() as CloudServiceProvider.name)
-                                            ?.logo
-                                    }
+                                    src={cspMap.get(currentServiceTemplateVo.csp.valueOf() as name)?.logo}
                                 />
                             </div>
                             <br />
@@ -196,8 +191,7 @@ export const ServiceReviewsDetails = ({
                             )}
                         </Descriptions.Item>
                     </Descriptions>
-                    {currentServiceTemplateVo.serviceRegistrationState !==
-                    ServiceTemplateDetailVo.serviceRegistrationState.APPROVAL_PENDING ? (
+                    {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (
                         <>
                             <Descriptions
                                 title={'Service Review Details'}

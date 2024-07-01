@@ -8,7 +8,7 @@ import { Flex, Form, Radio, Spin } from 'antd';
 import React from 'react';
 import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { DeployRequest, ServiceFlavor, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { ServiceFlavor, UserOrderableServiceVo, billingMode, csp } from '../../../../xpanse-api/generated';
 import { FlavorFeatures } from './FlavorFeatures.tsx';
 import { FlavorPrice } from './FlavorPrice';
 import { FlavorTitle } from './FlavorTitle';
@@ -28,10 +28,10 @@ export const FlavorSelection = ({
     flavorList?: ServiceFlavor[];
     onChangeFlavor?: (newFlavor: string) => void;
     selectVersion: string;
-    selectCsp: UserOrderableServiceVo.csp;
+    selectCsp: csp;
     services?: UserOrderableServiceVo[];
     selectRegion: string;
-    selectBillingMode: DeployRequest.billingMode;
+    selectBillingMode: billingMode;
 }): React.JSX.Element => {
     const getServiceTemplateId = (): string => {
         if (services) {

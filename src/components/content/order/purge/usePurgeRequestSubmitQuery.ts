@@ -4,12 +4,15 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { ServiceService } from '../../../../xpanse-api/generated';
+import { purge, type PurgeData } from '../../../../xpanse-api/generated';
 
 export function usePurgeRequestSubmitQuery() {
     return useMutation({
         mutationFn: (id: string) => {
-            return ServiceService.purge(id);
+            const data: PurgeData = {
+                id: id,
+            };
+            return purge(data);
         },
     });
 }

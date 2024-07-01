@@ -10,8 +10,14 @@ import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
 import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { ApiError, Response, WorkFlowTask } from '../../../xpanse-api/generated';
-import { WorkflowService } from '../../../xpanse-api/generated/services/WorkFlowService';
+import {
+    ApiError,
+    Response,
+    WorkFlowTask,
+    manageFailedOrder,
+    status,
+    type ManageFailedOrderData,
+} from '../../../xpanse-api/generated';
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
 
@@ -33,7 +39,12 @@ function Workflows(): React.JSX.Element {
     };
 
     if (tasksQuery.error) {
-        if (tasksQuery.error instanceof ApiError && tasksQuery.error.body && 'details' in tasksQuery.error.body) {
+        if (
+            tasksQuery.error instanceof ApiError &&
+            tasksQuery.error.body &&
+            typeof tasksQuery.error.body === 'object' &&
+            'details' in tasksQuery.error.body
+        ) {
             const response: Response = tasksQuery.error.body as Response;
             getTipInfo('error', response.details.join());
         } else if (tasksQuery.error instanceof Error) {
@@ -43,7 +54,13 @@ function Workflows(): React.JSX.Element {
     }
 
     const completeFailedTasksQuery = useMutation({
-        mutationFn: (taskId: string) => WorkflowService.manageFailedOrder(taskId, true),
+        mutationFn: (taskId: string) => {
+            const data: ManageFailedOrderData = {
+                id: taskId,
+                retryOrder: true,
+            };
+            return manageFailedOrder(data);
+        },
         onSuccess: () => {
             getTipInfo(
                 'success',
@@ -54,7 +71,7 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
@@ -64,7 +81,13 @@ function Workflows(): React.JSX.Element {
     });
 
     const closeFailedTasksQuery = useMutation({
-        mutationFn: (taskId: string) => WorkflowService.manageFailedOrder(taskId, false),
+        mutationFn: (taskId: string) => {
+            const data: ManageFailedOrderData = {
+                id: taskId,
+                retryOrder: false,
+            };
+            return manageFailedOrder(data);
+        },
         onSuccess: () => {
             getTipInfo('success', 'Failed workflow is closed successfully. Please create a new request if necessary.');
             setIsRefresh(false);
@@ -72,7 +95,7 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && 'details' in error.body) {
+            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
                 const response: Response = error.body as Response;
                 getTipInfo('error', response.details.join());
             } else {
@@ -114,17 +137,17 @@ function Workflows(): React.JSX.Element {
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status: WorkFlowTask.status) => {
-                if (status === WorkFlowTask.status.FAILED) {
+            render: (taskStatus: status) => {
+                if (taskStatus === status.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
-                            {status.valueOf()}
+                            {taskStatus.valueOf()}
                         </Tag>
                     );
                 } else {
                     return (
                         <Tag bordered={false} icon={<CheckCircleOutlined />} color='success'>
-                            {status.valueOf()}
+                            {taskStatus.valueOf()}
                         </Tag>
                     );
                 }
@@ -138,7 +161,7 @@ function Workflows(): React.JSX.Element {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: WorkFlowTask) => {
-                if (record.status === WorkFlowTask.status.FAILED) {
+                if (record.status === status.FAILED) {
                     return (
                         <>
                             <Space size='middle'>
@@ -192,4 +215,5 @@ function Workflows(): React.JSX.Element {
         </div>
     );
 }
+
 export default Workflows;

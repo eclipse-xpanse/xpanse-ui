@@ -13,6 +13,7 @@ import {
     DeployedServiceDetails,
     ServiceModificationAuditDetails,
     VendorHostedDeployedServiceDetails,
+    taskStatus,
 } from '../../../../xpanse-api/generated';
 import useListServiceModifyHistoryQuery from './query/useListServiceModifyHistoryQuery';
 
@@ -104,13 +105,13 @@ export const MyServiceHistory = ({
             align: 'center',
             width: 50,
             render: (value) => {
-                if (value === ServiceModificationAuditDetails.taskStatus.FAILED) {
+                if (value === taskStatus.FAILED) {
                     return (
                         <Tag icon={<QuestionCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === ServiceModificationAuditDetails.taskStatus.SUCCESSFUL) {
+                } else if (value === taskStatus.SUCCESSFUL) {
                     return (
                         <Tag icon={<CheckCircleOutlined />} color={'success'}>
                             {value}

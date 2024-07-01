@@ -4,21 +4,31 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { Metric, MonitorService } from '../../../xpanse-api/generated';
+import { getMetrics, GetMetricsData, monitorResourceType } from '../../../xpanse-api/generated';
 import {
     fetchMonitorMetricDataTimeInterval,
     fetchOnlyLastKnownMonitorMetricDataTimeInterval,
 } from '../../utils/constants';
 import { getMetricRequestParams, getTotalSecondsOfTimePeriod } from './metricProps';
 
-const onlyLastKnownMetricQueryFn = (serviceId: string, metricType: Metric.monitorResourceType) =>
-    MonitorService.getMetrics(serviceId, undefined, metricType, undefined, undefined, undefined, true);
+const onlyLastKnownMetricQueryFn = (serviceId: string, metricType: monitorResourceType) => {
+    const data: GetMetricsData = {
+        serviceId: serviceId,
+        resourceId: undefined,
+        monitorResourceType: metricType,
+        from: undefined,
+        to: undefined,
+        granularity: undefined,
+        onlyLastKnownMetric: true,
+    };
+    return getMetrics(data);
+};
 
 export function useGetLastKnownMetricForASpecificTypeQuery(
     serviceId: string,
     isAutoRefresh: boolean,
     isQueryEnabled: boolean,
-    metricType: Metric.monitorResourceType
+    metricType: monitorResourceType
 ) {
     return useQuery({
         queryKey: ['onlyLastKnownMetric', serviceId, metricType],
@@ -33,22 +43,24 @@ export function useGetLastKnownMetricForASpecificTypeQuery(
     });
 }
 
-const monitorMetricQueryFn = (serviceId: string, metricType: Metric.monitorResourceType, timePeriod: number) =>
-    MonitorService.getMetrics(
-        serviceId,
-        undefined,
-        metricType,
-        getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).from,
-        getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).to,
-        undefined,
-        false
-    );
+const monitorMetricQueryFn = (serviceId: string, metricType: monitorResourceType, timePeriod: number) => {
+    const data: GetMetricsData = {
+        serviceId: serviceId,
+        resourceId: undefined,
+        monitorResourceType: metricType,
+        from: getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).from,
+        to: getMetricRequestParams(getTotalSecondsOfTimePeriod(timePeriod)).to,
+        granularity: undefined,
+        onlyLastKnownMetric: false,
+    };
+    return getMetrics(data);
+};
 
 export function useGetMetricsForSpecificTimePeriodAndSpecificType(
     serviceId: string,
     timePeriod: number,
     isQueryEnabled: boolean,
-    metricType: Metric.monitorResourceType,
+    metricType: monitorResourceType,
     isAutoRefresh: boolean
 ) {
     return useQuery({

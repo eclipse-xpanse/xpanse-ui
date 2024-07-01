@@ -7,7 +7,7 @@ import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import React, { useRef, useState } from 'react';
 import monitorStyles from '../../../styles/monitor.module.css';
-import { ApiError, Metric, Response } from '../../../xpanse-api/generated';
+import { ApiError, Metric, Response, monitorResourceType, unit } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
 import {
@@ -44,8 +44,8 @@ export default function MonitorChart({
     let tipType: 'error' | 'success' | undefined = undefined;
     let tipMessage: string = '';
     let tipDescription: string = '';
-    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<Metric.monitorResourceType>(
-        Metric.monitorResourceType.CPU
+    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<monitorResourceType>(
+        monitorResourceType.CPU
     );
     const useGetLastKnownMetric = useGetLastKnownMetricForASpecificTypeQuery(
         serviceId,
@@ -87,7 +87,7 @@ export default function MonitorChart({
                     .split('_')[0]
                     .concat(
                         ' usage (' +
-                            (metricProps[0].unit === Metric.unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                            (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
                             ') - '
                     ),
                 metricSubTitle: metricProps[0].vmName,
@@ -134,9 +134,7 @@ export default function MonitorChart({
                             .split('_')[0]
                             .concat(
                                 ' usage (' +
-                                    (metricProps[0].unit === Metric.unit.PERCENTAGE
-                                        ? '%'
-                                        : metricProps[0].unit.valueOf()) +
+                                    (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
                                     ') - '
                             ),
                         type: 'line',
@@ -156,7 +154,7 @@ export default function MonitorChart({
 
     const setErrorAlertData = (error: Error) => {
         tipType = 'error';
-        if (error instanceof ApiError && 'details' in error.body) {
+        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
             const response: Response = error.body as Response;
             tipMessage = response.resultType.valueOf();
             tipDescription = response.details.join();

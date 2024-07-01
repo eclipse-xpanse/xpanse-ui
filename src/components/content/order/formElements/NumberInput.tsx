@@ -34,11 +34,11 @@ export function NumberInput({ item }: { item: DeployParam }): React.JSX.Element 
 
     for (const key in item.valueSchema) {
         if (key === DeployVariableSchema.MINIMUM.valueOf()) {
-            minimum = item.valueSchema[key] as unknown as number;
+            minimum = item.valueSchema[key] as number;
             ruleItems.push({ validator: setValidator });
             break;
         } else if (key === DeployVariableSchema.MAXIMUM.valueOf()) {
-            maximum = item.valueSchema[key] as unknown as number;
+            maximum = item.valueSchema[key] as number;
             ruleItems.push({ validator: setValidator });
             break;
         }

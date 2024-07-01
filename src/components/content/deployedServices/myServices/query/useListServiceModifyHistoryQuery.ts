@@ -4,12 +4,18 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceModificationService } from '../../../../../xpanse-api/generated';
+import { listServiceModificationAudits, ListServiceModificationAuditsData } from '../../../../../xpanse-api/generated';
 
 export default function useListServiceModifyHistoryQuery(serviceId: string) {
     return useQuery({
         queryKey: ['listDeployedServicesByIsv', serviceId],
-        queryFn: () => ServiceModificationService.listServiceModificationAudits(serviceId, undefined),
+        queryFn: () => {
+            const data: ListServiceModificationAuditsData = {
+                serviceId: serviceId,
+                taskStatus: undefined,
+            };
+            return listServiceModificationAudits(data);
+        },
         refetchOnWindowFocus: false,
     });
 }

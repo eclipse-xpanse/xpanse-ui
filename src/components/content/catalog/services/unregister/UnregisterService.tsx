@@ -7,17 +7,17 @@ import { MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { serviceRegistrationState } from '../../../../../xpanse-api/generated';
 import { useUnregisterRequest } from './UnregisterMutation';
 
 function UnregisterService({
     id,
     setIsViewDisabled,
-    serviceRegistrationState,
+    serviceRegistrationStatus,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    serviceRegistrationState: ServiceTemplateDetailVo.serviceRegistrationState;
+    serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
     const unregisterRequest = useUnregisterRequest(id);
 
@@ -43,7 +43,7 @@ function UnregisterService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         unregisterRequest.isSuccess ||
-                        serviceRegistrationState === ServiceTemplateDetailVo.serviceRegistrationState.UNREGISTERED
+                        serviceRegistrationStatus === serviceRegistrationState.UNREGISTERED
                     }
                 >
                     Unregister

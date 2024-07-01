@@ -4,17 +4,24 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { AutoFill, CloudResourcesService, DeployRequest } from '../../../../xpanse-api/generated';
+import {
+    csp,
+    deployResourceKind,
+    getExistingResourceNamesWithKind,
+    GetExistingResourceNamesWithKindData,
+} from '../../../../xpanse-api/generated';
 
-export default function useAutoFillDeployVariableQuery(
-    csp: DeployRequest.csp,
-    region: string,
-    kind: AutoFill.deployResourceKind | undefined
-) {
+export default function useAutoFillDeployVariableQuery(csp: csp, region: string, kind: deployResourceKind) {
     return useQuery({
-        queryKey: ['getExistingResourceNamesWithKind', csp, region, kind],
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        queryFn: () => CloudResourcesService.getExistingResourceNamesWithKind(csp, region, kind!),
-        enabled: kind !== undefined,
+        queryKey: ['getExistingResourceNamesWithKind', csp, kind, region],
+        queryFn: () => {
+            const data: GetExistingResourceNamesWithKindData = {
+                csp: csp,
+                region: region,
+                deployResourceKind: kind,
+            };
+            return getExistingResourceNamesWithKind(data);
+        },
+        enabled: kind.length > 0,
     });
 }

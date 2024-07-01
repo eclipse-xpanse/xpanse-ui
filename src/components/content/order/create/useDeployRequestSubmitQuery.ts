@@ -4,12 +4,13 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { DeployRequest, ServiceService } from '../../../../xpanse-api/generated';
+import { DeployRequest, deploy, type DeployData } from '../../../../xpanse-api/generated';
 
 export function useDeployRequestSubmitQuery() {
     return useMutation({
         mutationFn: (createRequest: DeployRequest) => {
-            return ServiceService.deploy(createRequest);
+            const data: DeployData = { requestBody: createRequest };
+            return deploy(data);
         },
     });
 }

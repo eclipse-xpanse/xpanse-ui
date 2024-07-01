@@ -9,6 +9,7 @@ import {
     ApiError,
     DeployedServiceDetails,
     Response,
+    serviceDeploymentState,
     ServiceProviderContactDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
@@ -36,22 +37,26 @@ function OrderSubmitStatusAlert({
         if (deployedServiceDetails) {
             if (
                 uuid &&
-                deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYING.toString()
+                deployedServiceDetails.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYING.toString()
             ) {
                 return 'Deploying, Please wait...';
             } else if (
                 deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() ||
+                    serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() ||
                 deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                    serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
                 deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                    serviceDeploymentState.ROLLBACK_FAILED.toString()
             ) {
                 return <ProcessingStatus response={deployedServiceDetails} operationType={OperationType.Deploy} />;
             }
         } else if (isSubmitFailed) {
-            if (isSubmitFailed instanceof ApiError && isSubmitFailed.body && 'details' in isSubmitFailed.body) {
+            if (
+                isSubmitFailed instanceof ApiError &&
+                isSubmitFailed.body &&
+                typeof isSubmitFailed.body === 'object' &&
+                'details' in isSubmitFailed.body
+            ) {
                 const response: Response = isSubmitFailed.body as Response;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
@@ -74,9 +79,9 @@ function OrderSubmitStatusAlert({
         if (deployedServiceDetails) {
             if (
                 deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                    serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
                 deployedServiceDetails.serviceDeploymentState.toString() ===
-                    DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString()
+                    serviceDeploymentState.ROLLBACK_FAILED.toString()
             ) {
                 return 'error';
             }
@@ -93,11 +98,11 @@ function OrderSubmitStatusAlert({
     if (deployedServiceDetails) {
         if (
             deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
+                serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
             deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.ROLLBACK_FAILED.toString() ||
+                serviceDeploymentState.ROLLBACK_FAILED.toString() ||
             deployedServiceDetails.serviceDeploymentState.toString() ===
-                DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
         ) {
             if (stopWatch.isRunning) {
                 stopWatch.pause();

@@ -4,12 +4,21 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { ServiceService } from '../../../xpanse-api/generated';
+import { listDeployedServices, ListDeployedServicesData } from '../../../xpanse-api/generated';
 
 export function useDeployedServicesByUserQuery() {
     return useQuery({
         queryKey: ['monitor'],
-        queryFn: () => ServiceService.listDeployedServices(undefined, undefined, undefined, undefined, undefined),
+        queryFn: () => {
+            const data: ListDeployedServicesData = {
+                categoryName: undefined,
+                cspName: undefined,
+                serviceName: undefined,
+                serviceVersion: undefined,
+                serviceState: undefined,
+            };
+            return listDeployedServices(data);
+        },
         refetchIntervalInBackground: false,
         refetchOnWindowFocus: false,
     });

@@ -4,13 +4,17 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { UserPoliciesManagementService } from '../../../xpanse-api/generated';
+import { listUserPolicies, ListUserPoliciesData } from '../../../xpanse-api/generated';
 
 export default function useListPoliciesManagementServiceQuery() {
     return useQuery({
         queryKey: ['listPoliciesManagementService'],
         queryFn: () => {
-            return UserPoliciesManagementService.listUserPolicies();
+            const data: ListUserPoliciesData = {
+                cspName: undefined,
+                enabled: undefined,
+            };
+            return listUserPolicies(data);
         },
         refetchOnWindowFocus: false,
     });

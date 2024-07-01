@@ -5,7 +5,7 @@
 
 import React from 'react';
 import submitResultStyles from '../../../../styles/submit-result.module.css';
-import { DeployedServiceDetails } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, serviceDeploymentState } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
@@ -18,7 +18,7 @@ export const ProcessingStatus = ({
 }): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
-        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -36,9 +36,7 @@ export const ProcessingStatus = ({
             } else {
                 return <span>{'Deployment Successful'}</span>;
             }
-        } else if (
-            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DEPLOYMENT_FAILED
-        ) {
+        } else if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED) {
             return (
                 <div>
                     <span>{'Deployment Failed.'}</span>
@@ -49,7 +47,7 @@ export const ProcessingStatus = ({
     }
 
     if (operationType === (OperationType.Modify as OperationType)) {
-        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.MODIFICATION_SUCCESSFUL) {
+        if (response.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -67,9 +65,7 @@ export const ProcessingStatus = ({
             } else {
                 return <span>{'Modification Successful'}</span>;
             }
-        } else if (
-            response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.MODIFICATION_FAILED
-        ) {
+        } else if (response.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED) {
             return (
                 <div>
                     <span>{'Modification Failed.'}</span>
@@ -80,13 +76,13 @@ export const ProcessingStatus = ({
     }
 
     if (operationType === (OperationType.Destroy as OperationType)) {
-        if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_SUCCESSFUL) {
+        if (response.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Destroyed Successfully'}</span>
                 </div>
             );
-        } else if (response.serviceDeploymentState === DeployedServiceDetails.serviceDeploymentState.DESTROY_FAILED) {
+        } else if (response.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED) {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>

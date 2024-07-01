@@ -7,10 +7,10 @@ import { PlayCircleOutlined, PoweroffOutlined, StopOutlined, SyncOutlined } from
 import { Row, Tag, Tooltip } from 'antd';
 import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import { DeployedService, serviceState } from '../../../../xpanse-api/generated';
 
 export function DeployedServicesRunningStatus(record: DeployedService): React.JSX.Element {
-    if (record.serviceState === DeployedService.serviceState.RUNNING) {
+    if (record.serviceState === serviceState.RUNNING) {
         return (
             <Tooltip
                 title={
@@ -24,7 +24,7 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
                 </Tag>
             </Tooltip>
         );
-    } else if (record.serviceState === DeployedService.serviceState.STOPPED) {
+    } else if (record.serviceState === serviceState.STOPPED) {
         return (
             <Tooltip
                 title={
@@ -39,9 +39,9 @@ export function DeployedServicesRunningStatus(record: DeployedService): React.JS
             </Tooltip>
         );
     } else if (
-        record.serviceState === DeployedService.serviceState.STOPPING ||
-        record.serviceState === DeployedService.serviceState.STARTING ||
-        record.serviceState === DeployedService.serviceState.RESTARTING
+        record.serviceState === serviceState.STOPPING ||
+        record.serviceState === serviceState.STARTING ||
+        record.serviceState === serviceState.RESTARTING
     ) {
         return (
             <Tag

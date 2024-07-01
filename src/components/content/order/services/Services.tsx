@@ -11,7 +11,7 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployedService, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { UserOrderableServiceVo, category } from '../../../../xpanse-api/generated';
 import { sortVersion } from '../../../utils/Sort';
 import { createServicePageRoute } from '../../../utils/constants';
 import ServicesLoadingError from '../query/ServicesLoadingError';
@@ -40,10 +40,7 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const orderableServicesQuery = userOrderableServicesQuery(
-        location.hash.split('#')[1] as DeployedService.category,
-        undefined
-    );
+    const orderableServicesQuery = userOrderableServicesQuery(location.hash.split('#')[1] as category, undefined);
 
     if (orderableServicesQuery.isError) {
         return <ServicesLoadingError error={orderableServicesQuery.error} />;

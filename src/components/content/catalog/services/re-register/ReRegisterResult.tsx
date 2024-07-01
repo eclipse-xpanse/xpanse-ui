@@ -7,18 +7,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, category, Response } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetReRegisterMutationState } from './ReRegisterMutation';
 
-export function ReRegisterResult({
-    id,
-    category,
-}: {
-    id: string;
-    category: ServiceTemplateDetailVo.category;
-}): React.JSX.Element | undefined {
+export function ReRegisterResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
     const useReRegisterRequestState = useGetReRegisterMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -51,6 +45,7 @@ export function ReRegisterResult({
                     <div>
                         {useReRegisterRequestState[0].error instanceof ApiError &&
                         useReRegisterRequestState[0].error.body &&
+                        typeof useReRegisterRequestState[0].error.body === 'object' &&
                         'details' in useReRegisterRequestState[0].error.body ? (
                             <Alert
                                 message='Re-Register Request Failed'

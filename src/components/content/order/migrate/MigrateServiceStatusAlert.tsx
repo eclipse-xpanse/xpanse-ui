@@ -8,6 +8,7 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedServiceDetails,
+    migrationStatus,
     Response,
     ServiceMigrationDetails,
     ServiceProviderContactDetails,
@@ -39,33 +40,33 @@ function MigrateServiceStatusAlert({
         if (migrationDetails) {
             if (
                 deployedServiceDetails &&
-                (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED ||
-                    migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED)
+                (migrationDetails.migrationStatus === migrationStatus.MIGRATION_COMPLETED ||
+                    migrationDetails.migrationStatus === migrationStatus.DEPLOY_FAILED)
             ) {
                 return (
                     <MigrationProcessingStatus
                         response={deployedServiceDetails}
-                        serviceHostingType={deployedServiceDetails.serviceHostingType}
+                        currentServiceHostingType={deployedServiceDetails.serviceHostingType}
                     />
                 );
             } else if (
                 oldDeployedServiceDetails &&
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED
+                migrationDetails.migrationStatus === migrationStatus.DESTROY_FAILED
             ) {
                 return (
                     <MigrationProcessingStatus
                         response={oldDeployedServiceDetails}
-                        serviceHostingType={oldDeployedServiceDetails.serviceHostingType}
+                        currentServiceHostingType={oldDeployedServiceDetails.serviceHostingType}
                     />
                 );
             } else if (
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED
+                migrationDetails.migrationStatus === migrationStatus.DATA_IMPORT_FAILED ||
+                migrationDetails.migrationStatus === migrationStatus.DATA_EXPORT_FAILED
             ) {
                 return 'Data Migration Failed';
-            } else if (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_STARTED) {
+            } else if (migrationDetails.migrationStatus === migrationStatus.DEPLOY_STARTED) {
                 return 'New Service Deployment In-progress';
-            } else if (migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_STARTED) {
+            } else if (migrationDetails.migrationStatus === migrationStatus.DESTROY_STARTED) {
                 return 'Old Service Destroy In-progress';
             } else {
                 return 'Migrating... Please wait...';
@@ -74,6 +75,7 @@ function MigrateServiceStatusAlert({
             if (
                 migrateRequestError instanceof ApiError &&
                 migrateRequestError.body &&
+                typeof migrateRequestError.body === 'object' &&
                 'details' in migrateRequestError.body
             ) {
                 const response: Response = migrateRequestError.body as Response;
@@ -93,11 +95,11 @@ function MigrateServiceStatusAlert({
         }
         if (migrationDetails) {
             if (
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-                migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED
+                migrationDetails.migrationStatus === migrationStatus.MIGRATION_FAILED ||
+                migrationDetails.migrationStatus === migrationStatus.DATA_EXPORT_FAILED ||
+                migrationDetails.migrationStatus === migrationStatus.DATA_IMPORT_FAILED ||
+                migrationDetails.migrationStatus === migrationStatus.DEPLOY_FAILED ||
+                migrationDetails.migrationStatus === migrationStatus.DESTROY_FAILED
             ) {
                 return 'error';
             }
@@ -122,12 +124,12 @@ function MigrateServiceStatusAlert({
 
     if (migrationDetails) {
         if (
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_EXPORT_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DATA_IMPORT_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DEPLOY_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.DESTROY_FAILED ||
-            migrationDetails.migrationStatus === ServiceMigrationDetails.migrationStatus.MIGRATION_COMPLETED
+            migrationDetails.migrationStatus === migrationStatus.MIGRATION_FAILED ||
+            migrationDetails.migrationStatus === migrationStatus.DATA_EXPORT_FAILED ||
+            migrationDetails.migrationStatus === migrationStatus.DATA_IMPORT_FAILED ||
+            migrationDetails.migrationStatus === migrationStatus.DEPLOY_FAILED ||
+            migrationDetails.migrationStatus === migrationStatus.DESTROY_FAILED ||
+            migrationDetails.migrationStatus === migrationStatus.MIGRATION_COMPLETED
         ) {
             if (stopWatch.isRunning) {
                 stopWatch.pause();

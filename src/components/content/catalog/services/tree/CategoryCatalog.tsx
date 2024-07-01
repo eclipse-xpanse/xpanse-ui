@@ -9,7 +9,7 @@ import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
-import { ApiError, Response, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ApiError, Response, ServiceTemplateDetailVo, category } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import {
     groupServiceTemplatesByName,
@@ -18,14 +18,14 @@ import {
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
-function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.category }): React.JSX.Element {
+function CategoryCatalog({ category }: { category: category }): React.JSX.Element {
     const treeData: DataNode[] = [];
     let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
 
     if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
-        const userAvailableServiceList: ServiceTemplateDetailVo[] | undefined = availableServiceTemplatesQuery.data;
+        const userAvailableServiceList: ServiceTemplateDetailVo[] = availableServiceTemplatesQuery.data;
         categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
         categoryOclData.forEach((_value: ServiceTemplateDetailVo[], serviceName: string) => {
             const dataNode: DataNode = {
@@ -52,6 +52,7 @@ function CategoryCatalog({ category }: { category: ServiceTemplateDetailVo.categ
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
+            typeof availableServiceTemplatesQuery.error.body === 'object' &&
             'details' in availableServiceTemplatesQuery.error.body
         ) {
             const response: Response = availableServiceTemplatesQuery.error.body as Response;

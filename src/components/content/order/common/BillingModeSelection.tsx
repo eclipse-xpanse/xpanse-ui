@@ -6,18 +6,18 @@
 import { Alert, Flex, Form, Radio } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { DeployRequest } from '../../../../xpanse-api/generated';
+import { billingMode } from '../../../../xpanse-api/generated';
 
 export const BillingModeSelection = ({
     selectBillingMode,
     setSelectBillingMode,
     billingModes,
 }: {
-    selectBillingMode: DeployRequest.billingMode;
-    setSelectBillingMode: Dispatch<SetStateAction<DeployRequest.billingMode>>;
-    billingModes: DeployRequest.billingMode[] | undefined;
+    selectBillingMode: billingMode;
+    setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
+    billingModes: billingMode[] | undefined;
 }): React.JSX.Element => {
-    function onChange(value: DeployRequest.billingMode) {
+    function onChange(value: billingMode) {
         setSelectBillingMode(value);
     }
 
@@ -43,11 +43,11 @@ export const BillingModeSelection = ({
                             <Radio.Group
                                 buttonStyle='solid'
                                 onChange={(e) => {
-                                    onChange(e.target.value as DeployRequest.billingMode);
+                                    onChange(e.target.value as billingMode);
                                 }}
                                 value={selectBillingMode}
                             >
-                                {billingModes.map((mode: DeployRequest.billingMode) => (
+                                {billingModes.map((mode: billingMode) => (
                                     <Radio.Button key={mode} value={mode}>
                                         {mode}
                                     </Radio.Button>

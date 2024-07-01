@@ -3,10 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, ServiceProviderContactDetails, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getContactServiceDetailsOfServiceByCsp(
-    selectCsp: UserOrderableServiceVo.csp,
+    selectCsp: csp,
     services: UserOrderableServiceVo[] | undefined
 ): ServiceProviderContactDetails | undefined {
     let contactServiceDetails: ServiceProviderContactDetails | undefined = undefined;

@@ -13,15 +13,13 @@ import {
 import { Tag } from 'antd';
 import React from 'react';
 import myServiceStyles from '../../../../styles/my-services.module.css';
-import { DeployedService } from '../../../../xpanse-api/generated';
+import { serviceDeploymentState } from '../../../../xpanse-api/generated';
 
-export function DeployedServicesStatus(
-    serviceDeploymentState: DeployedService.serviceDeploymentState
-): React.JSX.Element {
-    switch (serviceDeploymentState) {
-        case DeployedService.serviceDeploymentState.DEPLOYING:
-        case DeployedService.serviceDeploymentState.MODIFYING:
-        case DeployedService.serviceDeploymentState.DESTROYING:
+export function DeployedServicesStatus(serviceDeploymentStatus: serviceDeploymentState): React.JSX.Element {
+    switch (serviceDeploymentStatus) {
+        case serviceDeploymentState.DEPLOYING:
+        case serviceDeploymentState.MODIFYING:
+        case serviceDeploymentState.DESTROYING:
             return (
                 <Tag
                     bordered={false}
@@ -29,10 +27,10 @@ export function DeployedServicesStatus(
                     color='processing'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DEPLOYMENT_FAILED:
+        case serviceDeploymentState.DEPLOYMENT_FAILED:
             return (
                 <Tag
                     bordered={false}
@@ -40,10 +38,10 @@ export function DeployedServicesStatus(
                     color='error'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.MODIFICATION_FAILED:
+        case serviceDeploymentState.MODIFICATION_FAILED:
             return (
                 <Tag
                     bordered={false}
@@ -51,10 +49,10 @@ export function DeployedServicesStatus(
                     color='error'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DESTROY_FAILED:
+        case serviceDeploymentState.DESTROY_FAILED:
             return (
                 <Tag
                     bordered={false}
@@ -62,10 +60,10 @@ export function DeployedServicesStatus(
                     color='magenta'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DESTROY_SUCCESSFUL:
+        case serviceDeploymentState.DESTROY_SUCCESSFUL:
             return (
                 <Tag
                     bordered={false}
@@ -73,10 +71,10 @@ export function DeployedServicesStatus(
                     color='lime'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
+        case serviceDeploymentState.DEPLOYMENT_SUCCESSFUL:
             return (
                 <Tag
                     bordered={false}
@@ -84,10 +82,10 @@ export function DeployedServicesStatus(
                     color='success'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
-        case DeployedService.serviceDeploymentState.MODIFICATION_SUCCESSFUL:
+        case serviceDeploymentState.MODIFICATION_SUCCESSFUL:
             return (
                 <Tag
                     bordered={false}
@@ -95,7 +93,7 @@ export function DeployedServicesStatus(
                     color='success'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState.valueOf()}
+                    {serviceDeploymentStatus.valueOf()}
                 </Tag>
             );
         default:
@@ -106,7 +104,7 @@ export function DeployedServicesStatus(
                     color='warning'
                     className={myServiceStyles.myServiceStatusSize}
                 >
-                    {serviceDeploymentState as string}
+                    {serviceDeploymentStatus as string}
                 </Tag>
             );
     }

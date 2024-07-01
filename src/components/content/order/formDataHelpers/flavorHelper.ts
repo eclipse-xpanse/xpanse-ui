@@ -13,8 +13,8 @@ import {
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice.ts';
 
 export function getServiceFlavorList(
-    selectCsp: UserOrderableServiceVo.csp,
-    selectServiceHostingType: UserOrderableServiceVo.serviceHostingType,
+    selectCsp: string,
+    selectServiceHostingType: string,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): ServiceFlavor[] {
     const flavorMapper: Map<string, ServiceFlavor[]> = new Map<string, ServiceFlavor[]>();
@@ -33,7 +33,7 @@ export function getServiceFlavorList(
 }
 
 export const getServicePriceErrorDetails = (error: Error) => {
-    if (error instanceof ApiError && error.body && 'details' in error.body) {
+    if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
         const response: Response = error.body as Response;
         return response.details;
     } else {
