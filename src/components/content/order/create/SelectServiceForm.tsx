@@ -398,7 +398,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 <Row justify='space-around'>
                     <Col span={6}>
                         <div>
-                            <NavigateOrderSubmission text={'Back'} to={servicePageUrl as To} props={undefined} />
+                            <NavigateOrderSubmission
+                                text={'Back'}
+                                to={servicePageUrl as To}
+                                props={undefined}
+                                disabled={false}
+                            />
                         </div>
                     </Col>
                     <Col span={4}>
