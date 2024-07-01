@@ -15,10 +15,12 @@ function NavigateOrderSubmission({
     text,
     to,
     props,
+    disabled,
 }: {
     text: string;
     to: To;
     props?: OrderSubmitProps;
+    disabled:boolean;
 }): React.JSX.Element {
     const navigate = useNavigate();
     const [resetFormCache] = useOrderFormStore((state) => [state.clearFormVariables]);
@@ -38,6 +40,7 @@ function NavigateOrderSubmission({
                 goBack(props);
             }}
             className={serviceOrderStyles.orderNavigate}
+            disabled={disabled}
         >
             {text}
         </Button>
