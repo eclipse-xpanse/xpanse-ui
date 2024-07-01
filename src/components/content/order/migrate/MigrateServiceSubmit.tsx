@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UseQueryResult } from '@tanstack/react-query';
 import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
@@ -32,6 +33,7 @@ import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { MigrationSteps } from '../types/MigrationSteps';
+import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
 import {
     useMigrateServiceDetailsPollingQuery,
@@ -51,6 +53,8 @@ export const MigrateServiceSubmit = ({
     deployParams,
     currentSelectedService,
     stepItem,
+    onChangeFlavor,
+    getServicePriceQuery,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: csp;
@@ -63,6 +67,8 @@ export const MigrateServiceSubmit = ({
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
     stepItem: StepProps;
+    onChangeFlavor: (newFlavor: string) => void;
+    getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
@@ -204,10 +210,8 @@ export const MigrateServiceSubmit = ({
                         <FlavorSelection
                             selectFlavor={selectFlavor}
                             flavorList={currentFlavorList}
-                            selectVersion={currentSelectedService.version}
-                            selectCsp={selectCsp}
-                            selectRegion={region.name}
-                            selectBillingMode={selectBillingMode}
+                            onChangeFlavor={onChangeFlavor}
+                            getServicePriceQuery={getServicePriceQuery}
                         />
                     </div>
                 </div>

@@ -18,6 +18,8 @@ import {
     listOrderableServices,
     serviceHostingType,
 } from '../../../../xpanse-api/generated';
+import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
+import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { DeploymentForm } from './DeploymentForm';
@@ -82,6 +84,19 @@ export const Migrate = ({
         refetchOnWindowFocus: false,
     });
 
+    const onChangeFlavor = (newFlavor: string) => {
+        setSelectFlavor(newFlavor);
+
+        updateSelectedParameters(
+            selectCsp,
+            selectArea,
+            selectRegion,
+            selectAvailabilityZones,
+            newFlavor,
+            selectServiceHostingType
+        );
+    };
+
     const updateSelectedParameters = (
         selectedCsp: csp,
         selectAreaName: string,
@@ -97,6 +112,13 @@ export const Migrate = ({
         setSelectServiceHostingType(selectedServiceHostingType);
         setSelectArea(selectAreaName);
     };
+
+    const getServicePriceQuery = useGetServicePricesQuery(
+        currentSelectedService.serviceTemplateId ?? '',
+        selectRegion,
+        selectBillingMode,
+        getServiceFlavorList(selectCsp, selectServiceHostingType, listOrderableServicesQuery.data ?? [])
+    );
 
     const steps = useMemo(() => {
         return [
@@ -195,7 +217,8 @@ export const Migrate = ({
                         setSelectBillingMode={setSelectBillingMode}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.SelectADestination]}
-                        currentSelectedService={currentSelectedService}
+                        onChangeFlavor={onChangeFlavor}
+                        getServicePriceQuery={getServicePriceQuery}
                     />
                 );
             case MigrationSteps.ImportServiceData:
@@ -234,6 +257,8 @@ export const Migrate = ({
                         deployParams={deployParams}
                         currentSelectedService={currentSelectedService}
                         stepItem={items[MigrationSteps.MigrateService]}
+                        onChangeFlavor={onChangeFlavor}
+                        getServicePriceQuery={getServicePriceQuery}
                     />
                 );
         }

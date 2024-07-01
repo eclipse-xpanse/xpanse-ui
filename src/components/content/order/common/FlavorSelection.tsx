@@ -4,54 +4,30 @@
  */
 
 import { LoadingOutlined } from '@ant-design/icons';
+import { UseQueryResult } from '@tanstack/react-query';
 import { Flex, Form, Radio, Spin } from 'antd';
 import React from 'react';
 import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { ServiceFlavor, UserOrderableServiceVo, billingMode, csp } from '../../../../xpanse-api/generated';
+import { ServiceFlavor } from '../../../../xpanse-api/generated';
+import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 import { FlavorFeatures } from './FlavorFeatures.tsx';
 import { FlavorPrice } from './FlavorPrice';
 import { FlavorTitle } from './FlavorTitle';
-import useGetServicePricesQuery from './useGetServicePricesQuery.ts';
 
 export const FlavorSelection = ({
     selectFlavor,
     flavorList,
     onChangeFlavor,
-    selectVersion,
-    selectCsp,
-    services,
-    selectRegion,
-    selectBillingMode,
+    getServicePriceQuery,
 }: {
     selectFlavor: string;
     flavorList?: ServiceFlavor[];
     onChangeFlavor?: (newFlavor: string) => void;
-    selectVersion: string;
-    selectCsp: csp;
-    services?: UserOrderableServiceVo[];
-    selectRegion: string;
-    selectBillingMode: billingMode;
+    getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
-    const getServiceTemplateId = (): string => {
-        if (services) {
-            const service = services.find((service) => service.version === selectVersion && service.csp === selectCsp);
-            return service ? service.serviceTemplateId : '';
-        }
-        return '';
-    };
-
-    const getServicePriceQuery = useGetServicePricesQuery(
-        getServiceTemplateId(),
-        selectRegion,
-        selectBillingMode,
-        flavorList
-    );
-
     const retryRequest = () => {
-        if (selectRegion.length > 0 && getServiceTemplateId().length > 0) {
-            void getServicePriceQuery.refetch();
-        }
+        void getServicePriceQuery.refetch();
     };
 
     return (
