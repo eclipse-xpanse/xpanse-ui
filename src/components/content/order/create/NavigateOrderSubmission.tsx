@@ -20,7 +20,7 @@ function NavigateOrderSubmission({
     text: string;
     to: To;
     props?: OrderSubmitProps;
-    disabled:boolean;
+    disabled: boolean;
 }): React.JSX.Element {
     const navigate = useNavigate();
     const [resetFormCache] = useOrderFormStore((state) => [state.clearFormVariables]);
