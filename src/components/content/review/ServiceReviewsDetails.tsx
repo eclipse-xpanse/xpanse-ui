@@ -16,7 +16,7 @@ import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
-import { useApproveOrRejectMutationState } from './query/useApproveOrRejectRequest';
+import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
 export const ServiceReviewsDetails = ({
     currentServiceTemplateVo,
@@ -28,9 +28,8 @@ export const ServiceReviewsDetails = ({
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
     const [isReviewCommentsModalOpen, setIsReviewCommentsModalOpen] = useState<boolean>(false);
     const [isApproved, setIsApproved] = useState<boolean | undefined>(undefined);
-    const useReviewRequestState = useApproveOrRejectMutationState(currentServiceTemplateVo.serviceTemplateId);
     const { Paragraph } = Typography;
-
+    const approveOrRejectRequest = useApproveOrRejectRequest(currentServiceTemplateVo.serviceTemplateId);
     const onClickApprove = () => {
         setIsApproved(true);
         setIsReviewCommentsModalOpen(true);
@@ -51,7 +50,7 @@ export const ServiceReviewsDetails = ({
                 type='primary'
                 onClick={onClickApprove}
                 disabled={
-                    useReviewRequestState[0]?.status === 'success' &&
+                    approveOrRejectRequest.isSuccess ||
                     currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
                 }
             >
@@ -62,7 +61,7 @@ export const ServiceReviewsDetails = ({
                 onClick={onClickReject}
                 className={serviceReviewStyles.rejectBtnClass}
                 disabled={
-                    useReviewRequestState[0]?.status === 'success' &&
+                    approveOrRejectRequest.isSuccess ||
                     currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
                 }
             >
@@ -75,6 +74,7 @@ export const ServiceReviewsDetails = ({
                 isModalOpen={isReviewCommentsModalOpen}
                 handleModalClose={handleReviewCommentsModalClose}
                 setAlertTipCloseStatus={setAlertTipCloseStatus}
+                approveOrRejectRequest={approveOrRejectRequest}
             />
             <div className={oclDisplayStyles.oclDataDisplay}>
                 <div className={oclDisplayStyles.oclDataMainInfo}>

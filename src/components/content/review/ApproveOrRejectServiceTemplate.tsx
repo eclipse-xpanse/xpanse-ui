@@ -3,11 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UseMutationResult } from '@tanstack/react-query';
 import { Alert, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
 import { ApiError, Response, ServiceTemplateDetailVo, reviewResult } from '../../../xpanse-api/generated';
-import useApproveOrRejectRequest, { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
+import { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
 export const ApproveOrRejectServiceTemplate = ({
     currentServiceTemplateVo,
@@ -15,16 +16,17 @@ export const ApproveOrRejectServiceTemplate = ({
     isModalOpen,
     handleModalClose,
     setAlertTipCloseStatus,
+    approveOrRejectRequest,
 }: {
     currentServiceTemplateVo: ServiceTemplateDetailVo;
     isApproved: boolean | undefined;
     isModalOpen: boolean;
     handleModalClose: (arg: boolean) => void;
     setAlertTipCloseStatus: (arg: boolean) => void;
+    approveOrRejectRequest: UseMutationResult<void, Error, ApproveOrRejectRequestParams>;
 }): React.JSX.Element => {
     const { TextArea } = Input;
     const [comments, setComments] = useState<string>('');
-    const approveOrRejectRequest = useApproveOrRejectRequest(currentServiceTemplateVo.serviceTemplateId);
     const handleOk = () => {
         if (isApproved !== undefined) {
             const request: ApproveOrRejectRequestParams = {
