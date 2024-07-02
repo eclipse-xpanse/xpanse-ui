@@ -4,13 +4,21 @@
  */
 
 import { UploadOutlined } from '@ant-design/icons';
+import { useQuery } from '@tanstack/react-query';
 import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 import policyStyles from '../../../styles/policies.module.css';
 import submitAlertStyles from '../../../styles/submit-alert.module.css';
-import { UserPolicy, UserPolicyCreateRequest, UserPolicyUpdateRequest, csp, name } from '../../../xpanse-api/generated';
+import {
+    UserPolicy,
+    UserPolicyCreateRequest,
+    UserPolicyUpdateRequest,
+    csp,
+    getActiveCsps,
+    name,
+} from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import PolicySubmitResultDetails from './PolicySubmitResultDetails';
 import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
@@ -35,8 +43,21 @@ export const AddOrUpdatePolicy = ({
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
     const files = useRef<UploadFile[]>([]);
     const [regoFileUploadStatus, setRegoFileUploadStatus] = useState<PolicyUploadFileStatus>('notStarted');
+    const activeCspList = useRef<csp[]>([]);
     const createPoliciesManagementServiceRequest = useCreatePolicyRequest();
     const updatePoliciesManagementServiceRequest = useUpdatePolicyRequest();
+
+    const getActiveCspsQuery = useQuery({
+        queryKey: ['getActiveCspsQuery'],
+        queryFn: () => {
+            return getActiveCsps();
+        },
+        staleTime: 60000,
+    });
+
+    if (getActiveCspsQuery.isSuccess) {
+        activeCspList.current = getActiveCspsQuery.data as csp[];
+    }
 
     const onFinish = (policyRequest: { csp: csp; enabled: boolean; policy: string }) => {
         if (currentPolicyService === undefined) {
@@ -216,8 +237,13 @@ export const AddOrUpdatePolicy = ({
                 autoComplete='off'
             >
                 <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select csp!' }]}>
-                    <Select onSelect={handleCspSelect} size={'large'} className={policyStyles.policyFormSelect}>
-                        {Object.values(csp).map((csp: csp) => (
+                    <Select
+                        loading={getActiveCspsQuery.isLoading}
+                        onSelect={handleCspSelect}
+                        size={'large'}
+                        className={policyStyles.policyFormSelect}
+                    >
+                        {activeCspList.current.map((csp: csp) => (
                             <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                 <Image
                                     className={policyStyles.customSelectImage}
