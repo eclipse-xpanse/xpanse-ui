@@ -89,6 +89,17 @@ function UpdateService({
         updateServiceRequest.reset();
     };
 
+    const tryNewFile = () => {
+        files.current.pop();
+        ocl.current = undefined;
+        yamlValidationResult.current = '';
+        updateResult.current = [];
+        setYamlSyntaxValidationStatus('notStarted');
+        setOclValidationStatus('notStarted');
+        oclDisplayData.current = <></>;
+        updateServiceRequest.reset();
+    };
+
     function validateAndLoadYamlFile(uploadedFiles: UploadFile[]) {
         if (uploadedFiles.length > 0) {
             const reader = new FileReader();
@@ -121,6 +132,12 @@ function UpdateService({
 
     const sendRequestRequest = ({ event }: { event: React.MouseEvent }) => {
         event.stopPropagation();
+        if (ocl.current) {
+            updateServiceRequest.mutate(ocl.current);
+        }
+    };
+
+    const retryRequest = () => {
         if (ocl.current) {
             updateServiceRequest.mutate(ocl.current);
         }
@@ -166,6 +183,8 @@ function UpdateService({
                             updateRequestStatus={updateServiceRequest.status}
                             updateResult={updateResult.current}
                             onRemove={handleCancel}
+                            tryNewFile={tryNewFile}
+                            retryRequest={retryRequest}
                         />
                     ) : null}
                     <div className={registerStyles.registerButtons}>
@@ -175,7 +194,7 @@ function UpdateService({
                             beforeUpload={setFileData}
                             maxCount={1}
                             fileList={files.current}
-                            onRemove={handleCancel}
+                            onRemove={tryNewFile}
                             accept={'.yaml, .yml'}
                             showUploadList={{
                                 showRemoveIcon: true,
