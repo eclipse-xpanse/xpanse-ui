@@ -178,6 +178,12 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                         text={'Back'}
                                         to={createServicePageUrl as To}
                                         props={state}
+                                        disabled={
+                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                                                serviceDeploymentState.DEPLOYING.toString() ||
+                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
+                                                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
+                                        }
                                     />
                                 </div>
                             </Col>

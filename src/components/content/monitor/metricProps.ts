@@ -144,17 +144,7 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                 labelsMap.set(key, metric.labels[key]);
             }
         }
-        if (metric.metrics === undefined) {
-            const metricProp: MetricProps = {
-                id: labelsMap.get('id') ?? '',
-                name: metric.name,
-                vmName: labelsMap.get('name') ?? '',
-                value: 0,
-                unit: metric.unit as unit,
-                timeStamp: new Date().getTime(),
-            };
-            metricProps.push(metricProp);
-        } else {
+        if (metric.metrics) {
             metric.metrics.forEach((item) => {
                 const metricProp: MetricProps = {
                     id: labelsMap.get('id') ?? '',
@@ -166,6 +156,16 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                 };
                 metricProps.push(metricProp);
             });
+        } else {
+            const metricProp: MetricProps = {
+                id: labelsMap.get('id') ?? '',
+                name: metric.name,
+                vmName: labelsMap.get('name') ?? '',
+                value: 0,
+                unit: metric.unit as unit,
+                timeStamp: new Date().getTime(),
+            };
+            metricProps.push(metricProp);
         }
     });
     return metricProps;
