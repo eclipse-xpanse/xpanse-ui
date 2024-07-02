@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useMutation, useMutationState } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
     ReviewRegistrationData,
     ReviewRegistrationRequest,
@@ -27,12 +27,5 @@ export default function useApproveOrRejectRequest(id: string) {
             };
             return reviewRegistration(data);
         },
-    });
-}
-
-export function useApproveOrRejectMutationState(id: string) {
-    return useMutationState({
-        filters: { mutationKey: [id, reviewKey], exact: true },
-        select: (mutation) => mutation.state,
     });
 }
