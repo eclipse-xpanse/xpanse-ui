@@ -102,7 +102,7 @@
     "devDependencies": {
         "@axa-fr/oidc-client": "^7.22.5",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-        "@tanstack/eslint-plugin-query": "^5.47.0",
+        "@tanstack/eslint-plugin-query": "^5.49.1",
         "@testing-library/jest-dom": "^6.4.6",
         "@testing-library/react": "^16.0.0",
         "@types/jest": "^29.5.12",
