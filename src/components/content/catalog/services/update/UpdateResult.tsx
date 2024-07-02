@@ -6,6 +6,7 @@
 import { Alert, Button } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
+import errorAlertStyles from '../../../../../styles/error-alert.module.css';
 import { Ocl } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
@@ -14,11 +15,15 @@ function UpdateResult({
     updateRequestStatus,
     updateResult,
     onRemove,
+    retryRequest,
+    tryNewFile,
 }: {
     ocl: Ocl;
     updateRequestStatus: string;
     updateResult: string[];
     onRemove: () => void;
+    retryRequest: () => void;
+    tryNewFile: () => void;
 }): React.JSX.Element {
     if (updateRequestStatus === 'success') {
         return (
@@ -46,9 +51,20 @@ function UpdateResult({
                 onClose={onRemove}
                 className={catalogStyles.catalogServiceUpdateResult}
                 action={
-                    <Button size='small' type='primary' onClick={onRemove} danger={true}>
-                        Try Again
-                    </Button>
+                    <>
+                        <Button
+                            className={errorAlertStyles.tryAgainBtnInAlertClass}
+                            size='small'
+                            type='primary'
+                            onClick={retryRequest}
+                            danger={true}
+                        >
+                            Try Again
+                        </Button>
+                        <Button size='small' type='primary' onClick={tryNewFile} danger={true}>
+                            Try New File
+                        </Button>
+                    </>
                 }
             />
         );
