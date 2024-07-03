@@ -127,7 +127,7 @@
         "jest-environment-jsdom": "^29.7.0",
         "knip": "^5.23.3",
         "prettier": "3.3.2",
-        "prettier-plugin-organize-imports": "^3.2.4",
+        "prettier-plugin-organize-imports": "^4.0.0",
         "release-it": "^17.4.1",
         "ts-jest": "^29.1.5",
         "typescript": "5.5.2",
