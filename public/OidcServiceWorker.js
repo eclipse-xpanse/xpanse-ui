@@ -286,7 +286,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.22.6";
+const version = "7.22.9";
 function strToUint8(str) {
   return new TextEncoder().encode(str);
 }
