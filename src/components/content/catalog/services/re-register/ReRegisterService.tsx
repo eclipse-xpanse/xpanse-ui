@@ -8,25 +8,20 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { serviceRegistrationState } from '../../../../../xpanse-api/generated';
+import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
 import { useReRegisterRequest } from './ReRegisterMutation';
 
 function ReRegisterService({
     id,
     setIsViewDisabled,
-    isReRegisterDisabled,
-    setIsDeleteDisabled,
     serviceRegistrationStatus,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    isReRegisterDisabled: boolean;
-    setIsDeleteDisabled: (isDelete: boolean) => void;
     serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
     const reRegisterRequest = useReRegisterRequest(id);
-    if (reRegisterRequest.isSuccess) {
-        setIsDeleteDisabled(true);
-    }
+    const deleteState = useGetDeleteMutationState(id);
     const reRegister = () => {
         setIsViewDisabled(true);
         reRegisterRequest.mutate();
@@ -49,7 +44,7 @@ function ReRegisterService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         reRegisterRequest.isSuccess ||
-                        isReRegisterDisabled ||
+                        (deleteState.length > 0 && deleteState[0].status === 'success') ||
                         serviceRegistrationStatus !== serviceRegistrationState.UNREGISTERED
                     }
                 >
