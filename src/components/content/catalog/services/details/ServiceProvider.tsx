@@ -6,7 +6,7 @@
 import { EnvironmentOutlined } from '@ant-design/icons';
 import { Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { ServiceTemplateDetailVo, category, name, serviceRegistrationState } from '../../../../../xpanse-api/generated';
@@ -51,8 +51,6 @@ function ServiceProvider({
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
-    const [isReRegisterDisabled, setIsReRegisterDisabled] = useState<boolean>(false);
-    const [isDeleteDisabled, setIsDeleteDisabled] = useState<boolean>(false);
     const serviceCspInQuery = useMemo(() => {
         const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
         if (queryInUri.length > 0) {
@@ -207,8 +205,6 @@ function ServiceProvider({
                                 <ReRegisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    isReRegisterDisabled={isReRegisterDisabled}
-                                    setIsDeleteDisabled={setIsDeleteDisabled}
                                     serviceRegistrationStatus={
                                         activeServiceDetail.serviceRegistrationState as serviceRegistrationState
                                     }
@@ -216,8 +212,6 @@ function ServiceProvider({
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    isDeleteDisabled={isDeleteDisabled}
-                                    setIsReRegisterDisabled={setIsReRegisterDisabled}
                                     serviceRegistrationStatus={
                                         activeServiceDetail.serviceRegistrationState as serviceRegistrationState
                                     }
