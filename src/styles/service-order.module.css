@@ -215,6 +215,9 @@
 .order-form-item-name {
     font-weight: bold;
 }
+.order-form-alert {
+    margin-left: 10px;
+}
 
 .order-form-selection-first-in-group {
     padding-top: 20px;

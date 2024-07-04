@@ -37,7 +37,13 @@ export function AvailabilityZoneFormItem({
             return <AvailabilityZoneLoading key={availabilityZoneConfig.varName} />;
         }
         if (availabilityZonesVariableRequest.isError) {
-            return <AvailabilityZoneError retryRequest={retryRequest} error={availabilityZonesVariableRequest.error} />;
+            return (
+                <AvailabilityZoneError
+                    isAvailabilityZoneMandatory={availabilityZoneConfig.mandatory}
+                    retryRequest={retryRequest}
+                    error={availabilityZonesVariableRequest.error}
+                />
+            );
         }
         if (availabilityZonesVariableRequest.data) {
             return (
