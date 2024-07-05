@@ -493,7 +493,9 @@ function MyServices(): React.JSX.Element {
                                                 record.serviceDeploymentState.toString() !==
                                                     serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
                                                 record.serviceDeploymentState.toString() !==
-                                                    serviceDeploymentState.MODIFICATION_FAILED.toString()) ||
+                                                    serviceDeploymentState.MODIFICATION_FAILED.toString() &&
+                                                record.serviceDeploymentState.toString() !==
+                                                    serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
                                             activeRecord !== undefined
                                         }
                                         className={myServicesStyles.buttonAsLink}
