@@ -23,12 +23,12 @@ export function usePurgeRequestStatusQuery(
         queryFn: () => {
             if (currentServiceHostingType === serviceHostingType.SELF) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
-                    id: uuid ?? '',
+                    serviceId: uuid ?? '',
                 };
                 return getSelfHostedServiceDetailsById(data);
             } else {
                 const data: GetVendorHostedServiceDetailsByIdData = {
-                    id: uuid ?? '',
+                    serviceId: uuid ?? '',
                 };
                 return getVendorHostedServiceDetailsById(data);
             }

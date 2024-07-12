@@ -24,8 +24,8 @@ export const Locks = ({
     const lockRequest = useLockRequest(currentSelectedService.serviceId);
 
     const onFinish = (values: { destroyChecked: boolean; modifyChecked: boolean }) => {
-        const serviceLockConfig: { id: string; lockConfig: ServiceLockConfig } = {
-            id: currentSelectedService.serviceId,
+        const serviceLockConfig: { serviceId: string; lockConfig: ServiceLockConfig } = {
+            serviceId: currentSelectedService.serviceId,
             lockConfig: {
                 destroyLocked: values.destroyChecked,
                 modifyLocked: values.modifyChecked,

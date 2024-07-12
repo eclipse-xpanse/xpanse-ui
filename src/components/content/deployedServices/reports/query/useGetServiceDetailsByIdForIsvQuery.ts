@@ -6,12 +6,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { getServiceDetailsByIdForIsv, GetServiceDetailsByIdForIsvData } from '../../../../../xpanse-api/generated';
 
-export default function useGetServiceDetailsByIdForIsvQuery(id: string) {
+export default function useGetServiceDetailsByIdForIsvQuery(serviceId: string) {
     return useQuery({
-        queryKey: ['getServiceDetailsByIdForIsv', id],
+        queryKey: ['getServiceDetailsByIdForIsv', serviceId],
         queryFn: () => {
             const data: GetServiceDetailsByIdForIsvData = {
-                id: id,
+                serviceId: serviceId,
             };
             return getServiceDetailsByIdForIsv(data);
         },

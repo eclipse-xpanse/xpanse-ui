@@ -63,12 +63,12 @@ export function useServiceDetailsPollingQuery(
         queryFn: () => {
             if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
-                    id: serviceId ?? '',
+                    serviceId: serviceId ?? '',
                 };
                 return getSelfHostedServiceDetailsById(data);
             } else {
                 const data: GetVendorHostedServiceDetailsByIdData = {
-                    id: serviceId ?? '',
+                    serviceId: serviceId ?? '',
                 };
                 return getVendorHostedServiceDetailsById(data);
             }

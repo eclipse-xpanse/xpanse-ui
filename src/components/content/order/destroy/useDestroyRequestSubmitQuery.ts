@@ -10,7 +10,7 @@ export function useDestroyRequestSubmitQuery() {
     return useMutation({
         mutationFn: (id: string) => {
             const data: DestroyData = {
-                id: id,
+                serviceId: id,
             };
             return destroy(data);
         },

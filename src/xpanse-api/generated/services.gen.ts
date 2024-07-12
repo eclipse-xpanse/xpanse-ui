@@ -22,16 +22,16 @@ import type {
     ChangeServiceLockConfigResponse,
     CompleteTaskData,
     CompleteTaskResponse,
-    DeleteAuditByModificationIdData,
-    DeleteAuditByModificationIdResponse,
-    DeleteAuditsByServiceIdData,
-    DeleteAuditsByServiceIdResponse,
     DeleteIsvCloudCredentialData,
     DeleteIsvCloudCredentialResponse,
     DeleteManagementTaskByTaskIdData,
     DeleteManagementTaskByTaskIdResponse,
     DeleteManagementTasksByServiceIdData,
     DeleteManagementTasksByServiceIdResponse,
+    DeleteOrderByOrderIdData,
+    DeleteOrderByOrderIdResponse,
+    DeleteOrdersByServiceIdData,
+    DeleteOrdersByServiceIdResponse,
     DeleteServicePolicyData,
     DeleteServicePolicyResponse,
     DeleteServiceTemplateData,
@@ -61,8 +61,6 @@ import type {
     GetAccessTokenData,
     GetAccessTokenResponse,
     GetActiveCspsResponse,
-    GetAuditDetailsByModificationIdData,
-    GetAuditDetailsByModificationIdResponse,
     GetAvailabilityZonesData,
     GetAvailabilityZonesResponse,
     GetCredentialCapabilitiesData,
@@ -77,6 +75,8 @@ import type {
     GetIsvCloudCredentialsResponse,
     GetLatestServiceDeploymentStatusData,
     GetLatestServiceDeploymentStatusResponse,
+    GetLatestServiceOrderStatusData,
+    GetLatestServiceOrderStatusResponse,
     GetManagementTaskDetailsByTaskIdData,
     GetManagementTaskDetailsByTaskIdResponse,
     GetMetricsData,
@@ -85,6 +85,8 @@ import type {
     GetMigrationOrderDetailsByIdResponse,
     GetOrderableServiceDetailsData,
     GetOrderableServiceDetailsResponse,
+    GetOrderDetailsByOrderIdData,
+    GetOrderDetailsByOrderIdResponse,
     GetPolicyDetailsData,
     GetPolicyDetailsResponse,
     GetPricesByServiceData,
@@ -116,8 +118,8 @@ import type {
     ListOrderableServicesResponse,
     ListServiceMigrationsData,
     ListServiceMigrationsResponse,
-    ListServiceModificationAuditsData,
-    ListServiceModificationAuditsResponse,
+    ListServiceOrdersData,
+    ListServiceOrdersResponse,
     ListServicePoliciesData,
     ListServicePoliciesResponse,
     ListServiceStateManagementTasksData,
@@ -146,12 +148,12 @@ import type {
     PurgeResponse,
     QueryTasksData,
     QueryTasksResponse,
-    ReRegisterServiceTemplateData,
-    ReRegisterServiceTemplateResponse,
     RedeployFailedDeploymentData,
     RedeployFailedDeploymentResponse,
     RegisterData,
     RegisterResponse,
+    ReRegisterServiceTemplateData,
+    ReRegisterServiceTemplateResponse,
     RestartServiceData,
     RestartServiceResponse,
     ReviewRegistrationData,
@@ -432,11 +434,11 @@ export const restartService = (data: RestartServiceData): CancelablePromise<Rest
 };
 
 /**
- * Start a modification to modify the deployed service instance.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to modify the deployed service.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.serviceId id of deployed service
+ * @param data.serviceId Id of the service
  * @param data.requestBody
- * @returns string Accepted
+ * @returns ServiceOrder Id of the order task to modify the deployed service.
  * @throws ApiError
  */
 export const modify = (data: ModifyData): CancelablePromise<ModifyResponse> => {
@@ -461,10 +463,10 @@ export const modify = (data: ModifyData): CancelablePromise<ModifyResponse> => {
 };
 
 /**
- * Start a task to redeploy the failed deployment using id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order to redeploy the failed service using service id.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id
- * @returns Response Accepted
+ * @param data.serviceId
+ * @returns ServiceOrder Id of the order task to redeploy the filed service.
  * @throws ApiError
  */
 export const redeployFailedDeployment = (
@@ -472,9 +474,9 @@ export const redeployFailedDeployment = (
 ): CancelablePromise<RedeployFailedDeploymentResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/services/deploy/retry/{id}',
+        url: '/xpanse/services/deploy/retry/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -491,7 +493,7 @@ export const redeployFailedDeployment = (
 /**
  * Change the lock config of the service.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id The id of the service
+ * @param data.serviceId Id of the service
  * @param data.requestBody
  * @returns void No Content
  * @throws ApiError
@@ -501,9 +503,9 @@ export const changeServiceLockConfig = (
 ): CancelablePromise<ChangeServiceLockConfigResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/services/changelock/{id}',
+        url: '/xpanse/services/changelock/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         body: data.requestBody,
         mediaType: 'application/json',
@@ -996,7 +998,7 @@ export const deleteIsvCloudCredential = (
 };
 
 /**
- * List all deployed services by a user.<br>Required role:<b> admin</b> or <b>user</b>
+ * List all deployed services belongs to the user.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -1032,10 +1034,10 @@ export const listDeployedServices = (
 };
 
 /**
- * Start a task to deploy service using registered service template.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to deploy new service using approved service template.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
  * @param data.requestBody
- * @returns string Accepted
+ * @returns ServiceOrder Id of the order task to deploy the new service.
  * @throws ApiError
  */
 export const deploy = (data: DeployData): CancelablePromise<DeployResponse> => {
@@ -1653,23 +1655,23 @@ export const deleteManagementTasksByServiceId = (
 };
 
 /**
- * List modification audits of the service instance<br>Required role:<b> admin</b> or <b>user</b>
+ * List service orders of the service<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.serviceId id of the service
- * @param data.taskStatus status of the modification
- * @returns ServiceModificationAuditDetails OK
+ * @param data.serviceId Id of the service
+ * @param data.taskType Task type of the service order.
+ * @param data.taskStatus Task status of the service order
+ * @returns ServiceOrderDetails OK
  * @throws ApiError
  */
-export const listServiceModificationAudits = (
-    data: ListServiceModificationAuditsData
-): CancelablePromise<ListServiceModificationAuditsResponse> => {
+export const listServiceOrders = (data: ListServiceOrdersData): CancelablePromise<ListServiceOrdersResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/{serviceId}/modifications',
+        url: '/xpanse/services/{serviceId}/orders',
         path: {
             serviceId: data.serviceId,
         },
         query: {
+            taskType: data.taskType,
             taskStatus: data.taskStatus,
         },
         errors: {
@@ -1685,20 +1687,52 @@ export const listServiceModificationAudits = (
 };
 
 /**
- * Delete all state management modifications of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete all service orders of the service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.serviceId id of the service
+ * @param data.serviceId Id of the service
  * @returns void No Content
  * @throws ApiError
  */
-export const deleteAuditsByServiceId = (
-    data: DeleteAuditsByServiceIdData
-): CancelablePromise<DeleteAuditsByServiceIdResponse> => {
+export const deleteOrdersByServiceId = (
+    data: DeleteOrdersByServiceIdData
+): CancelablePromise<DeleteOrdersByServiceIdResponse> => {
     return __request(OpenAPI, {
         method: 'DELETE',
-        url: '/xpanse/services/{serviceId}/modifications',
+        url: '/xpanse/services/{serviceId}/orders',
         path: {
             serviceId: data.serviceId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Long-polling method to get the latest service deployment or service update status.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * @param data The data for the request.
+ * @param data.serviceId ID of the service
+ * @param data.lastKnownServiceDeploymentState Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
+ * @returns DeploymentStatusUpdate OK
+ * @throws ApiError
+ */
+export const getLatestServiceDeploymentStatus = (
+    data: GetLatestServiceDeploymentStatusData
+): CancelablePromise<GetLatestServiceDeploymentStatusResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/{serviceId}/deployment/status',
+        path: {
+            serviceId: data.serviceId,
+        },
+        query: {
+            lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
         },
         errors: {
             400: 'Bad Request',
@@ -1769,20 +1803,20 @@ export const deleteManagementTaskByTaskId = (
 };
 
 /**
- * Get modification audit details by the modification id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get details of the service order by the order id.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.modificationId id of the modification audit
- * @returns ServiceModificationAuditDetails OK
+ * @param data.orderId Id of the service order
+ * @returns ServiceOrderDetails OK
  * @throws ApiError
  */
-export const getAuditDetailsByModificationId = (
-    data: GetAuditDetailsByModificationIdData
-): CancelablePromise<GetAuditDetailsByModificationIdResponse> => {
+export const getOrderDetailsByOrderId = (
+    data: GetOrderDetailsByOrderIdData
+): CancelablePromise<GetOrderDetailsByOrderIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/modifications/{modificationId}',
+        url: '/xpanse/services/orders/{orderId}',
         path: {
-            modificationId: data.modificationId,
+            orderId: data.orderId,
         },
         errors: {
             400: 'Bad Request',
@@ -1797,20 +1831,52 @@ export const getAuditDetailsByModificationId = (
 };
 
 /**
- * Delete service modification audit by the modification id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete the service order by the order id.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.modificationId id of the modification audit
+ * @param data.orderId Id of the service order
  * @returns void No Content
  * @throws ApiError
  */
-export const deleteAuditByModificationId = (
-    data: DeleteAuditByModificationIdData
-): CancelablePromise<DeleteAuditByModificationIdResponse> => {
+export const deleteOrderByOrderId = (
+    data: DeleteOrderByOrderIdData
+): CancelablePromise<DeleteOrderByOrderIdResponse> => {
     return __request(OpenAPI, {
         method: 'DELETE',
-        url: '/xpanse/services/modifications/{modificationId}',
+        url: '/xpanse/services/orders/{orderId}',
         path: {
-            modificationId: data.modificationId,
+            orderId: data.orderId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Long-polling method to get the latest or updated task status of the service order.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * @param data The data for the request.
+ * @param data.orderId Id of the service order
+ * @param data.lastKnownServiceDeploymentState Last known service order task status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
+ * @returns ServiceOrderStatusUpdate OK
+ * @throws ApiError
+ */
+export const getLatestServiceOrderStatus = (
+    data: GetLatestServiceOrderStatusData
+): CancelablePromise<GetLatestServiceOrderStatusResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/orders/{orderId}/status',
+        path: {
+            orderId: data.orderId,
+        },
+        query: {
+            lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
         },
         errors: {
             400: 'Bad Request',
@@ -1923,9 +1989,9 @@ export const listDeployedServicesOfIsv = (
 };
 
 /**
- * Get deployed service details by id.<br>Required role:<b> isv</b>
+ * Get the details of the deployed service by service id.<br>Required role:<b> isv</b>
  * @param data The data for the request.
- * @param data.id Task id of deployed service
+ * @param data.serviceId Id of deployed service
  * @returns DeployedServiceDetails OK
  * @throws ApiError
  */
@@ -1934,9 +2000,9 @@ export const getServiceDetailsByIdForIsv = (
 ): CancelablePromise<GetServiceDetailsByIdForIsvResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/isv/details/vendor_hosted/{id}',
+        url: '/xpanse/services/isv/details/vendor_hosted/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -1951,7 +2017,7 @@ export const getServiceDetailsByIdForIsv = (
 };
 
 /**
- * List all deployed services details.<br>Required role:<b> admin</b> or <b>user</b>
+ * List details of deployed services using parameters.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -1987,9 +2053,9 @@ export const listDeployedServicesDetails = (
 };
 
 /**
- * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get deployed service details by serviceId.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id Task id of deployed service
+ * @param data.serviceId Id of the service
  * @returns VendorHostedDeployedServiceDetails OK
  * @throws ApiError
  */
@@ -1998,9 +2064,9 @@ export const getVendorHostedServiceDetailsById = (
 ): CancelablePromise<GetVendorHostedServiceDetailsByIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/details/vendor_hosted/{id}',
+        url: '/xpanse/services/details/vendor_hosted/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -2015,9 +2081,9 @@ export const getVendorHostedServiceDetailsById = (
 };
 
 /**
- * Get deployed service details by id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get details of the deployed service by id.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id Task id of deployed service
+ * @param data.serviceId Id of the service
  * @returns DeployedServiceDetails OK
  * @throws ApiError
  */
@@ -2026,39 +2092,9 @@ export const getSelfHostedServiceDetailsById = (
 ): CancelablePromise<GetSelfHostedServiceDetailsByIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/details/self_hosted/{id}',
+        url: '/xpanse/services/details/self_hosted/{serviceId}',
         path: {
-            id: data.id,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Long-polling method to get the latest service deployment or service update status.
- * @param data The data for the request.
- * @param data.id ID of the service
- * @param data.lastKnownServiceDeploymentState Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
- * @returns DeploymentStatusUpdate OK
- * @throws ApiError
- */
-export const getLatestServiceDeploymentStatus = (
-    data: GetLatestServiceDeploymentStatusData
-): CancelablePromise<GetLatestServiceDeploymentStatusResponse> => {
-    return __request(OpenAPI, {
-        method: 'GET',
-        url: '/xpanse/service/deployment/status',
-        query: {
-            id: data.id,
-            lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -2321,7 +2357,7 @@ export const getExistingResourceNamesWithKind = (
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider
  * @param data.regionName name of the region
- * @param data.serviceId id of the deployed service
+ * @param data.serviceId serviceId of the deployed service
  * @returns string OK
  * @throws ApiError
  */
@@ -2578,18 +2614,18 @@ export const authorize = (): CancelablePromise<AuthorizeResponse> => {
 };
 
 /**
- * Start a task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id
- * @returns Response Accepted
+ * @param data.serviceId Id of the service
+ * @returns ServiceOrder Id of the order task to destroy the deployed service.
  * @throws ApiError
  */
 export const destroy = (data: DestroyData): CancelablePromise<DestroyResponse> => {
     return __request(OpenAPI, {
         method: 'DELETE',
-        url: '/xpanse/services/{id}',
+        url: '/xpanse/services/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -2604,18 +2640,18 @@ export const destroy = (data: DestroyData): CancelablePromise<DestroyResponse> =
 };
 
 /**
- * Start a task to purge the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to purge the deployed service using service id.<br>Required role:<b> admin</b> or <b>user</b>
  * @param data The data for the request.
- * @param data.id
- * @returns Response Accepted
+ * @param data.serviceId Id of the service
+ * @returns ServiceOrder Id of the order task to purge the destroyed service.
  * @throws ApiError
  */
 export const purge = (data: PurgeData): CancelablePromise<PurgeResponse> => {
     return __request(OpenAPI, {
         method: 'DELETE',
-        url: '/xpanse/services/purge/{id}',
+        url: '/xpanse/services/purge/{serviceId}',
         path: {
-            id: data.id,
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',

@@ -38,6 +38,7 @@ export type Response = {
         | 'Service Deployment Not Found'
         | 'Resource Not Found'
         | 'Deployment Variable Invalid'
+        | 'Deployment Failed'
         | 'Service Template Update Not Allowed'
         | 'Service Template Still In Use'
         | 'Unauthorized'
@@ -63,7 +64,7 @@ export type Response = {
         | 'Service Flavor Downgrade Not Allowed'
         | 'Billing Mode Not Supported'
         | 'Service State Management Task Not Found'
-        | 'Service Modification Audit Not Found'
+        | 'Service Order Not Found'
         | 'Service Price Calculation Failed'
         | 'Invalid Git Repo Details'
         | 'File Locked';
@@ -109,6 +110,7 @@ export enum resultType {
     SERVICE_DEPLOYMENT_NOT_FOUND = 'Service Deployment Not Found',
     RESOURCE_NOT_FOUND = 'Resource Not Found',
     DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
+    DEPLOYMENT_FAILED = 'Deployment Failed',
     SERVICE_TEMPLATE_UPDATE_NOT_ALLOWED = 'Service Template Update Not Allowed',
     SERVICE_TEMPLATE_STILL_IN_USE = 'Service Template Still In Use',
     UNAUTHORIZED = 'Unauthorized',
@@ -134,7 +136,7 @@ export enum resultType {
     SERVICE_FLAVOR_DOWNGRADE_NOT_ALLOWED = 'Service Flavor Downgrade Not Allowed',
     BILLING_MODE_NOT_SUPPORTED = 'Billing Mode Not Supported',
     SERVICE_STATE_MANAGEMENT_TASK_NOT_FOUND = 'Service State Management Task Not Found',
-    SERVICE_MODIFICATION_AUDIT_NOT_FOUND = 'Service Modification Audit Not Found',
+    SERVICE_ORDER_NOT_FOUND = 'Service Order Not Found',
     SERVICE_PRICE_CALCULATION_FAILED = 'Service Price Calculation Failed',
     INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     FILE_LOCKED = 'File Locked',
@@ -242,6 +244,17 @@ export type ModifyRequest = {
     serviceRequestProperties?: {
         [key: string]: unknown;
     };
+};
+
+export type ServiceOrder = {
+    /**
+     * The id of the service order.
+     */
+    orderId: string;
+    /**
+     * The id of the deployed service.
+     */
+    serviceId: string;
 };
 
 export type ServiceLockConfig = {
@@ -1440,7 +1453,7 @@ export type CredentialVariables = {
 };
 
 /**
- * The deployed resource list of the service before this modification.
+ * The deployed resources of the service before this service order.
  */
 export type DeployResource = {
     /**
@@ -1586,7 +1599,7 @@ export type DeployedService = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceModificationAuditDetails;
+    latestModificationAudit?: ServiceOrderDetails;
 };
 
 /**
@@ -1621,45 +1634,53 @@ export enum serviceState {
 /**
  * The latest service management audit details.
  */
-export type ServiceModificationAuditDetails = {
+export type ServiceOrderDetails = {
     /**
-     * The id of the service modification request.
+     * The id of the service order.
      */
-    serviceModificationRequestId: string;
+    orderId: string;
     /**
      * The id of the deployed service.
      */
     serviceId: string;
     /**
-     * The status of the service state management task.
+     * The task type of the service order.
+     */
+    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
+    /**
+     * The task status of the service order.
      */
     taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
     /**
-     * The error message of the failed management task.
+     * The error message if the service order task failed.
      */
     errorMsg?: string;
     /**
-     * The started time of the task.
+     * The id of the user who created the service order.
+     */
+    userId?: string;
+    /**
+     * The started time of the service order.
      */
     startedTime?: string;
     /**
-     * The completed time of the task.
+     * The completed time of the service order.
      */
     completedTime?: string;
-    previousDeployRequest: DeployRequest;
-    newDeployRequest: DeployRequest;
+    previousDeployRequest?: DeployRequest;
+    newDeployRequest?: DeployRequest;
     /**
-     * The deployed resource list of the service before this modification.
+     * The deployed resources of the service before this service order.
      */
     previousDeployedResources?: Array<DeployResource>;
     /**
-     * The properties of the deployed service before this modification.
+     * The properties of the deployed service before this service order.
      */
     previousDeployedServiceProperties?: {
         [key: string]: string;
     };
     /**
-     * The properties of the deployed result before this modification.
+     * The properties of the deployed result before this service order.
      */
     previousDeployedResultProperties?: {
         [key: string]: string;
@@ -1667,7 +1688,18 @@ export type ServiceModificationAuditDetails = {
 };
 
 /**
- * The status of the service state management task.
+ * The task type of the service order.
+ */
+export enum taskType {
+    DEPLOY = 'deploy',
+    REDEPLOY = 'redeploy',
+    MODIFY = 'modify',
+    DESTROY = 'destroy',
+    PURGE = 'purge',
+}
+
+/**
+ * The task status of the service order.
  */
 export enum taskStatus {
     CREATED = 'created',
@@ -1713,11 +1745,48 @@ export type ServiceStateManagementTaskDetails = {
 /**
  * The type of the service state management task.
  */
-export enum taskType {
+export enum taskType2 {
     START = 'start',
     STOP = 'stop',
     RESTART = 'restart',
 }
+
+export type DeploymentStatusUpdate = {
+    /**
+     * Current state of the deployment request.
+     */
+    serviceDeploymentState:
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'manual cleanup required'
+        | 'rollback failed'
+        | 'modifying'
+        | 'modification failed'
+        | 'modification successful';
+    /**
+     * Describes if the deployment request is now completed
+     */
+    isOrderCompleted: boolean;
+};
+
+export type ServiceOrderStatusUpdate = {
+    /**
+     * Current task status of the service order.
+     */
+    taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    /**
+     * Describes if the service order is now completed.
+     */
+    isOrderCompleted: boolean;
+    /**
+     * The error message if the service order failed.
+     */
+    errorMsg?: string;
+};
 
 export type ServiceMigrationDetails = {
     /**
@@ -1879,7 +1948,7 @@ export type DeployedServiceDetails = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceModificationAuditDetails;
+    latestModificationAudit?: ServiceOrderDetails;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -1994,7 +2063,7 @@ export type VendorHostedDeployedServiceDetails = {
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
     latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceModificationAuditDetails;
+    latestModificationAudit?: ServiceOrderDetails;
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
@@ -2002,28 +2071,6 @@ export type VendorHostedDeployedServiceDetails = {
     deployedServiceProperties?: {
         [key: string]: string;
     };
-};
-
-export type DeploymentStatusUpdate = {
-    /**
-     * Current state of the deployment request.
-     */
-    serviceDeploymentState:
-        | 'deploying'
-        | 'deployment successful'
-        | 'deployment failed'
-        | 'destroying'
-        | 'destroy successful'
-        | 'destroy failed'
-        | 'manual cleanup required'
-        | 'rollback failed'
-        | 'modifying'
-        | 'modification failed'
-        | 'modification successful';
-    /**
-     * Describes if the deployment request is now completed
-     */
-    isOrderCompleted: boolean;
 };
 
 export type FlavorPriceResult = {
@@ -2436,25 +2483,25 @@ export type RestartServiceResponse = string;
 export type ModifyData = {
     requestBody: ModifyRequest;
     /**
-     * id of deployed service
+     * Id of the service
      */
     serviceId: string;
 };
 
-export type ModifyResponse = string;
+export type ModifyResponse = ServiceOrder;
 
 export type RedeployFailedDeploymentData = {
-    id: string;
+    serviceId: string;
 };
 
-export type RedeployFailedDeploymentResponse = Response;
+export type RedeployFailedDeploymentResponse = ServiceOrder;
 
 export type ChangeServiceLockConfigData = {
-    /**
-     * The id of the service
-     */
-    id: string;
     requestBody: ServiceLockConfig;
+    /**
+     * Id of the service
+     */
+    serviceId: string;
 };
 
 export type ChangeServiceLockConfigResponse = void;
@@ -2691,7 +2738,7 @@ export type DeployData = {
     requestBody: DeployRequest;
 };
 
-export type DeployResponse = string;
+export type DeployResponse = ServiceOrder;
 
 export type MigrateData = {
     requestBody: MigrateRequest;
@@ -2940,27 +2987,55 @@ export type DeleteManagementTasksByServiceIdData = {
 
 export type DeleteManagementTasksByServiceIdResponse = void;
 
-export type ListServiceModificationAuditsData = {
+export type ListServiceOrdersData = {
     /**
-     * id of the service
+     * Id of the service
      */
     serviceId: string;
     /**
-     * status of the modification
+     * Task status of the service order
      */
     taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
+    /**
+     * Task type of the service order.
+     */
+    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
 };
 
-export type ListServiceModificationAuditsResponse = Array<ServiceModificationAuditDetails>;
+export type ListServiceOrdersResponse = Array<ServiceOrderDetails>;
 
-export type DeleteAuditsByServiceIdData = {
+export type DeleteOrdersByServiceIdData = {
     /**
-     * id of the service
+     * Id of the service
      */
     serviceId: string;
 };
 
-export type DeleteAuditsByServiceIdResponse = void;
+export type DeleteOrdersByServiceIdResponse = void;
+
+export type GetLatestServiceDeploymentStatusData = {
+    /**
+     * Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
+     */
+    lastKnownServiceDeploymentState?:
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'manual cleanup required'
+        | 'rollback failed'
+        | 'modifying'
+        | 'modification failed'
+        | 'modification successful';
+    /**
+     * ID of the service
+     */
+    serviceId: string;
+};
+
+export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
 
 export type GetManagementTaskDetailsByTaskIdData = {
     /**
@@ -2980,23 +3055,36 @@ export type DeleteManagementTaskByTaskIdData = {
 
 export type DeleteManagementTaskByTaskIdResponse = void;
 
-export type GetAuditDetailsByModificationIdData = {
+export type GetOrderDetailsByOrderIdData = {
     /**
-     * id of the modification audit
+     * Id of the service order
      */
-    modificationId: string;
+    orderId: string;
 };
 
-export type GetAuditDetailsByModificationIdResponse = ServiceModificationAuditDetails;
+export type GetOrderDetailsByOrderIdResponse = ServiceOrderDetails;
 
-export type DeleteAuditByModificationIdData = {
+export type DeleteOrderByOrderIdData = {
     /**
-     * id of the modification audit
+     * Id of the service order
      */
-    modificationId: string;
+    orderId: string;
 };
 
-export type DeleteAuditByModificationIdResponse = void;
+export type DeleteOrderByOrderIdResponse = void;
+
+export type GetLatestServiceOrderStatusData = {
+    /**
+     * Last known service order task status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
+     */
+    lastKnownServiceDeploymentState?: 'created' | 'in progress' | 'successful' | 'failed';
+    /**
+     * Id of the service order
+     */
+    orderId: string;
+};
+
+export type GetLatestServiceOrderStatusResponse = ServiceOrderStatusUpdate;
 
 export type ListServiceMigrationsData = {
     /**
@@ -3100,9 +3188,9 @@ export type ListDeployedServicesOfIsvResponse = Array<DeployedService>;
 
 export type GetServiceDetailsByIdForIsvData = {
     /**
-     * Task id of deployed service
+     * Id of deployed service
      */
-    id: string;
+    serviceId: string;
 };
 
 export type GetServiceDetailsByIdForIsvResponse = DeployedServiceDetails;
@@ -3164,45 +3252,21 @@ export type ListDeployedServicesDetailsResponse = Array<DeployedService>;
 
 export type GetVendorHostedServiceDetailsByIdData = {
     /**
-     * Task id of deployed service
+     * Id of the service
      */
-    id: string;
+    serviceId: string;
 };
 
 export type GetVendorHostedServiceDetailsByIdResponse = VendorHostedDeployedServiceDetails;
 
 export type GetSelfHostedServiceDetailsByIdData = {
     /**
-     * Task id of deployed service
+     * Id of the service
      */
-    id: string;
+    serviceId: string;
 };
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
-
-export type GetLatestServiceDeploymentStatusData = {
-    /**
-     * ID of the service
-     */
-    id: string;
-    /**
-     * Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
-     */
-    lastKnownServiceDeploymentState?:
-        | 'deploying'
-        | 'deployment successful'
-        | 'deployment failed'
-        | 'destroying'
-        | 'destroy successful'
-        | 'destroy failed'
-        | 'manual cleanup required'
-        | 'rollback failed'
-        | 'modifying'
-        | 'modification failed'
-        | 'modification successful';
-};
-
-export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
 
 export type GetServicePriceByFlavorData = {
     /**
@@ -3392,7 +3456,7 @@ export type GetAvailabilityZonesData = {
      */
     regionName: string;
     /**
-     * id of the deployed service
+     * serviceId of the deployed service
      */
     serviceId?: string;
 };
@@ -3540,16 +3604,22 @@ export type GetAccessTokenResponse = TokenResponse;
 export type AuthorizeResponse = unknown;
 
 export type DestroyData = {
-    id: string;
+    /**
+     * Id of the service
+     */
+    serviceId: string;
 };
 
-export type DestroyResponse = Response;
+export type DestroyResponse = ServiceOrder;
 
 export type PurgeData = {
-    id: string;
+    /**
+     * Id of the service
+     */
+    serviceId: string;
 };
 
-export type PurgeResponse = Response;
+export type PurgeResponse = ServiceOrder;
 
 export type $OpenApiTs = {
     '/xpanse/workflow/task/{id}': {
@@ -3902,10 +3972,6 @@ export type $OpenApiTs = {
             req: ModifyData;
             res: {
                 /**
-                 * Accepted
-                 */
-                202: string;
-                /**
                  * Bad Request
                  */
                 400: Response;
@@ -3933,18 +3999,18 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
+                /**
+                 * Id of the order task to modify the deployed service.
+                 */
+                default: ServiceOrder;
             };
         };
     };
-    '/xpanse/services/deploy/retry/{id}': {
+    '/xpanse/services/deploy/retry/{serviceId}': {
         put: {
             req: RedeployFailedDeploymentData;
             res: {
                 /**
-                 * Accepted
-                 */
-                202: Response;
-                /**
                  * Bad Request
                  */
                 400: Response;
@@ -3972,10 +4038,14 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
+                /**
+                 * Id of the order task to redeploy the filed service.
+                 */
+                default: ServiceOrder;
             };
         };
     };
-    '/xpanse/services/changelock/{id}': {
+    '/xpanse/services/changelock/{serviceId}': {
         put: {
             req: ChangeServiceLockConfigData;
             res: {
@@ -4701,10 +4771,6 @@ export type $OpenApiTs = {
             req: DeployData;
             res: {
                 /**
-                 * Accepted
-                 */
-                202: string;
-                /**
                  * Bad Request
                  */
                 400: Response;
@@ -4732,6 +4798,10 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
+                /**
+                 * Id of the order task to deploy the new service.
+                 */
+                default: ServiceOrder;
             };
         };
     };
@@ -5546,14 +5616,14 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/{serviceId}/modifications': {
+    '/xpanse/services/{serviceId}/orders': {
         get: {
-            req: ListServiceModificationAuditsData;
+            req: ListServiceOrdersData;
             res: {
                 /**
                  * OK
                  */
-                200: Array<ServiceModificationAuditDetails>;
+                200: Array<ServiceOrderDetails>;
                 /**
                  * Bad Request
                  */
@@ -5585,12 +5655,51 @@ export type $OpenApiTs = {
             };
         };
         delete: {
-            req: DeleteAuditsByServiceIdData;
+            req: DeleteOrdersByServiceIdData;
             res: {
                 /**
                  * No Content
                  */
                 204: void;
+                /**
+                 * Bad Request
+                 */
+                400: Response;
+                /**
+                 * Unauthorized
+                 */
+                401: Response;
+                /**
+                 * Forbidden
+                 */
+                403: Response;
+                /**
+                 * Request Timeout
+                 */
+                408: Response;
+                /**
+                 * Unprocessable Entity
+                 */
+                422: Response;
+                /**
+                 * Internal Server Error
+                 */
+                500: Response;
+                /**
+                 * Bad Gateway
+                 */
+                502: Response;
+            };
+        };
+    };
+    '/xpanse/services/{serviceId}/deployment/status': {
+        get: {
+            req: GetLatestServiceDeploymentStatusData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: DeploymentStatusUpdate;
                 /**
                  * Bad Request
                  */
@@ -5698,14 +5807,14 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/modifications/{modificationId}': {
+    '/xpanse/services/orders/{orderId}': {
         get: {
-            req: GetAuditDetailsByModificationIdData;
+            req: GetOrderDetailsByOrderIdData;
             res: {
                 /**
                  * OK
                  */
-                200: ServiceModificationAuditDetails;
+                200: ServiceOrderDetails;
                 /**
                  * Bad Request
                  */
@@ -5737,12 +5846,51 @@ export type $OpenApiTs = {
             };
         };
         delete: {
-            req: DeleteAuditByModificationIdData;
+            req: DeleteOrderByOrderIdData;
             res: {
                 /**
                  * No Content
                  */
                 204: void;
+                /**
+                 * Bad Request
+                 */
+                400: Response;
+                /**
+                 * Unauthorized
+                 */
+                401: Response;
+                /**
+                 * Forbidden
+                 */
+                403: Response;
+                /**
+                 * Request Timeout
+                 */
+                408: Response;
+                /**
+                 * Unprocessable Entity
+                 */
+                422: Response;
+                /**
+                 * Internal Server Error
+                 */
+                500: Response;
+                /**
+                 * Bad Gateway
+                 */
+                502: Response;
+            };
+        };
+    };
+    '/xpanse/services/orders/{orderId}/status': {
+        get: {
+            req: GetLatestServiceOrderStatusData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: ServiceOrderStatusUpdate;
                 /**
                  * Bad Request
                  */
@@ -5891,7 +6039,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/isv/details/vendor_hosted/{id}': {
+    '/xpanse/services/isv/details/vendor_hosted/{serviceId}': {
         get: {
             req: GetServiceDetailsByIdForIsvData;
             res: {
@@ -5969,7 +6117,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/details/vendor_hosted/{id}': {
+    '/xpanse/services/details/vendor_hosted/{serviceId}': {
         get: {
             req: GetVendorHostedServiceDetailsByIdData;
             res: {
@@ -6008,7 +6156,7 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/details/self_hosted/{id}': {
+    '/xpanse/services/details/self_hosted/{serviceId}': {
         get: {
             req: GetSelfHostedServiceDetailsByIdData;
             res: {
@@ -6016,45 +6164,6 @@ export type $OpenApiTs = {
                  * OK
                  */
                 200: DeployedServiceDetails;
-                /**
-                 * Bad Request
-                 */
-                400: Response;
-                /**
-                 * Unauthorized
-                 */
-                401: Response;
-                /**
-                 * Forbidden
-                 */
-                403: Response;
-                /**
-                 * Request Timeout
-                 */
-                408: Response;
-                /**
-                 * Unprocessable Entity
-                 */
-                422: Response;
-                /**
-                 * Internal Server Error
-                 */
-                500: Response;
-                /**
-                 * Bad Gateway
-                 */
-                502: Response;
-            };
-        };
-    };
-    '/xpanse/service/deployment/status': {
-        get: {
-            req: GetLatestServiceDeploymentStatusData;
-            res: {
-                /**
-                 * OK
-                 */
-                200: DeploymentStatusUpdate;
                 /**
                  * Bad Request
                  */
@@ -6756,15 +6865,11 @@ export type $OpenApiTs = {
             };
         };
     };
-    '/xpanse/services/{id}': {
+    '/xpanse/services/{serviceId}': {
         delete: {
             req: DestroyData;
             res: {
                 /**
-                 * Accepted
-                 */
-                202: Response;
-                /**
                  * Bad Request
                  */
                 400: Response;
@@ -6792,18 +6897,18 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
+                /**
+                 * Id of the order task to destroy the deployed service.
+                 */
+                default: ServiceOrder;
             };
         };
     };
-    '/xpanse/services/purge/{id}': {
+    '/xpanse/services/purge/{serviceId}': {
         delete: {
             req: PurgeData;
             res: {
                 /**
-                 * Accepted
-                 */
-                202: Response;
-                /**
                  * Bad Request
                  */
                 400: Response;
@@ -6831,6 +6936,10 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
+                /**
+                 * Id of the order task to purge the destroyed service.
+                 */
+                default: ServiceOrder;
             };
         };
     };

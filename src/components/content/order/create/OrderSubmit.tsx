@@ -31,7 +31,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const uniqueRequestId = useRef(v4());
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
     const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        submitDeploymentRequest.data,
+        submitDeploymentRequest.data?.serviceId ?? '',
         submitDeploymentRequest.isSuccess,
         state.serviceHostingType,
         [serviceDeploymentState.DEPLOYMENT_SUCCESSFUL, serviceDeploymentState.DEPLOYMENT_FAILED]
@@ -103,7 +103,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     {isShowDeploymentResult ? (
                         <OrderSubmitStatusAlert
                             key={uniqueRequestId.current}
-                            uuid={submitDeploymentRequest.data}
+                            uuid={submitDeploymentRequest.data?.serviceId ?? ''}
                             isSubmitFailed={submitDeploymentRequest.error}
                             deployedServiceDetails={getServiceDetailsByIdQuery.data}
                             isPollingError={getServiceDetailsByIdQuery.isError}

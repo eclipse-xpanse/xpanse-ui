@@ -15,22 +15,22 @@ import {
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function useServiceDetailsByServiceStatePollingQuery(
-    uuid: string | undefined,
+    serviceId: string | undefined,
     isStartPolling: boolean,
     currentServiceHostingType: serviceHostingType,
     refetchUntilStates: serviceState[]
 ) {
     return useQuery({
-        queryKey: ['getServiceDetailsById', uuid, currentServiceHostingType],
+        queryKey: ['getServiceDetailsById', serviceId, currentServiceHostingType],
         queryFn: () => {
             if (currentServiceHostingType === serviceHostingType.SELF) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
-                    id: uuid ?? '',
+                    serviceId: serviceId ?? '',
                 };
                 return getSelfHostedServiceDetailsById(data);
             } else {
                 const data: GetVendorHostedServiceDetailsByIdData = {
-                    id: uuid ?? '',
+                    serviceId: serviceId ?? '',
                 };
                 return getVendorHostedServiceDetailsById(data);
             }
@@ -41,7 +41,7 @@ export function useServiceDetailsByServiceStatePollingQuery(
                 : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
-        enabled: uuid !== undefined && isStartPolling,
+        enabled: serviceId !== undefined && isStartPolling,
         gcTime: 0,
     });
 }
