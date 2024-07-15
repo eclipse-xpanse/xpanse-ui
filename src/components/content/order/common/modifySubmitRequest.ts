@@ -6,6 +6,6 @@
 import { ModifyRequest } from '../../../../xpanse-api/generated';
 
 export interface ModifySubmitRequest {
-    id: string;
+    serviceId: string;
     modifyRequest: ModifyRequest;
 }

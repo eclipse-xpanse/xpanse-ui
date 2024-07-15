@@ -12,12 +12,12 @@ import {
 
 const lockKey: string = 'lock';
 
-export function useLockRequest(id: string) {
+export function useLockRequest(serviceId: string) {
     return useMutation({
-        mutationKey: [id, lockKey],
-        mutationFn: (requestBody: { id: string; lockConfig: ServiceLockConfig }) => {
+        mutationKey: [serviceId, lockKey],
+        mutationFn: (requestBody: { serviceId: string; lockConfig: ServiceLockConfig }) => {
             const data: ChangeServiceLockConfigData = {
-                id: requestBody.id,
+                serviceId: requestBody.serviceId,
                 requestBody: requestBody.lockConfig,
             };
             return changeServiceLockConfig(data);
@@ -25,9 +25,9 @@ export function useLockRequest(id: string) {
     });
 }
 
-export function useLockRequestState(id: string) {
+export function useLockRequestState(serviceId: string) {
     return useMutationState({
-        filters: { mutationKey: [id, lockKey], exact: true },
+        filters: { mutationKey: [serviceId, lockKey], exact: true },
         select: (mutation) => mutation.state,
     });
 }

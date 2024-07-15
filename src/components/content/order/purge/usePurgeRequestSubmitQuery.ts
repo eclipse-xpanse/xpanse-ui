@@ -10,7 +10,7 @@ export function usePurgeRequestSubmitQuery() {
     return useMutation({
         mutationFn: (id: string) => {
             const data: PurgeData = {
-                id: id,
+                serviceId: id,
             };
             return purge(data);
         },

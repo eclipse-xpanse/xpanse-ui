@@ -60,7 +60,7 @@ export const Scale = ({
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
             const data: ModifyData = {
-                serviceId: modifyServiceRequestParams.id,
+                serviceId: modifyServiceRequestParams.serviceId,
                 requestBody: modifyServiceRequestParams.modifyRequest,
             };
             return modify(data);
@@ -88,7 +88,7 @@ export const Scale = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         const modifyServiceRequestParams: ModifySubmitRequest = {
-            id: currentSelectedService.serviceId,
+            serviceId: currentSelectedService.serviceId,
             modifyRequest: createRequest,
         };
 
