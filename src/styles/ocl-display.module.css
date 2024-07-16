@@ -81,3 +81,32 @@
     max-height: 200px;
     overflow: auto;
 }
+
+.ocl-flavor-item {
+    margin-bottom: 15px;
+}
+
+.ocl-data-flavor-hover {
+    font-size: 14px;
+    font-weight: normal;
+    background: #e8e6e6ff;
+    padding: 3px 2px;
+    margin: 0 1px 0 1px;
+    color: #141414;
+}
+
+.flavor-badge-content {
+    color: #52c41a;
+    right: -10px;
+    top: -5px;
+}
+
+.flavor-btn {
+    margin: 10px 0;
+}
+
+.ocl-data-display-flavor-btn {
+    font-size: 12px;
+    line-height: 20px;
+    transform: translateY(-20%);
+}
