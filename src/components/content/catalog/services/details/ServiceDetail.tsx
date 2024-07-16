@@ -11,12 +11,12 @@ import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
 import {
-    DeployedService,
-    ServiceTemplateDetailVo,
     category,
     csp,
+    DeployedService,
     serviceDeploymentState,
     serviceRegistrationState,
+    ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
@@ -133,9 +133,6 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Deployment'>
                     <DeploymentText deployment={serviceDetails.deployment} />
                 </Descriptions.Item>
-                <Descriptions.Item label='Flavors'>
-                    <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
-                </Descriptions.Item>
                 <Descriptions.Item label='Billing Modes'>
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
@@ -158,6 +155,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     </button>
                 </Descriptions.Item>
             </Descriptions>
+            <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
         </>
     );
 }
