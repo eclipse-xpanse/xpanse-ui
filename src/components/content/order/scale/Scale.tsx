@@ -46,6 +46,7 @@ export const Scale = ({
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     let flavorList: ServiceFlavor[] = [];
+    let isDowngradeAllowed: boolean = true;
     let getParams: DeployParam[] = [];
     const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
     const [selectFlavor, setSelectFlavor] = useState<string>(
@@ -60,7 +61,7 @@ export const Scale = ({
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
             const data: ModifyData = {
-                serviceId: modifyServiceRequestParams.id,
+                serviceId: modifyServiceRequestParams.serviceId,
                 requestBody: modifyServiceRequestParams.modifyRequest,
             };
             return modify(data);
@@ -69,7 +70,10 @@ export const Scale = ({
 
     if (serviceTemplateDetailsQuery.isSuccess) {
         if (serviceTemplateDetailsQuery.data.flavors.serviceFlavors.length > 0) {
-            flavorList = serviceTemplateDetailsQuery.data.flavors.serviceFlavors;
+            flavorList = [...serviceTemplateDetailsQuery.data.flavors.serviceFlavors].sort(
+                (a, b) => a.priority - b.priority
+            );
+            isDowngradeAllowed = serviceTemplateDetailsQuery.data.flavors.isDowngradeAllowed;
         }
         getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
     }
@@ -88,7 +92,7 @@ export const Scale = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         const modifyServiceRequestParams: ModifySubmitRequest = {
-            id: currentSelectedService.serviceId,
+            serviceId: currentSelectedService.serviceId,
             modifyRequest: createRequest,
         };
 
@@ -195,11 +199,17 @@ export const Scale = ({
                                 >
                                     {flavorList.map((flavor: ServiceFlavor) => {
                                         const isCurrentFlavor = currentSelectedService.flavor === flavor.name;
+                                        const currentFlavorPriority =
+                                            flavorList.find((f) => f.name === currentSelectedService.flavor)
+                                                ?.priority ?? 1;
+                                        const isDisabled =
+                                            isCurrentFlavor ||
+                                            (isDowngradeAllowed ? false : flavor.priority > currentFlavorPriority);
                                         const radioButton = (
                                             <Radio.Button
                                                 key={flavor.name}
                                                 value={flavor.name}
-                                                disabled={isCurrentFlavor}
+                                                disabled={isDisabled}
                                                 className={`${flavorStyles.customRadioButtonContent} ${flavorStyles.antRadioButtonWrapperDisabled}`}
                                             >
                                                 <FlavorTitle title={flavor.name} />

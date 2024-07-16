@@ -24,7 +24,10 @@ export function getServiceFlavorList(
                 userOrderableServiceVo.csp === selectCsp &&
                 userOrderableServiceVo.serviceHostingType === selectServiceHostingType
             ) {
-                flavorMapper.set(userOrderableServiceVo.csp, userOrderableServiceVo.flavors);
+                flavorMapper.set(
+                    userOrderableServiceVo.csp,
+                    [...userOrderableServiceVo.flavors].sort((a, b) => a.priority - b.priority)
+                );
             }
         });
     }

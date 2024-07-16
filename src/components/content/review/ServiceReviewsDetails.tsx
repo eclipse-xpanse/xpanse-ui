@@ -3,11 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { BarsOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
+import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ServiceTemplateDetailVo, name, serviceRegistrationState } from '../../../xpanse-api/generated';
+import { name, serviceRegistrationState, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -141,12 +144,11 @@ export const ServiceReviewsDetails = ({
                     </div>
                 </div>
                 <div>
-                    <Descriptions
-                        title={'Basic Information'}
-                        column={2}
-                        bordered
-                        className={oclDisplayStyles.oclDataInfoTable}
-                    >
+                    <h3 className={catalogStyles.catalogDetailsH3}>
+                        <InfoCircleOutlined />
+                        &nbsp;Basic Information
+                    </h3>
+                    <Descriptions column={2} bordered className={oclDisplayStyles.oclDataInfoTable}>
                         <Descriptions.Item label='Service Template Id'>
                             {currentServiceTemplateVo.serviceTemplateId}
                         </Descriptions.Item>
@@ -171,9 +173,6 @@ export const ServiceReviewsDetails = ({
                         <Descriptions.Item label='Billing Modes'>
                             <BillingText billing={currentServiceTemplateVo.billing} />
                         </Descriptions.Item>
-                        <Descriptions.Item label='Flavors'>
-                            <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
-                        </Descriptions.Item>
                         <Descriptions.Item label='Deployment'>
                             <DeploymentText deployment={currentServiceTemplateVo.deployment} />
                         </Descriptions.Item>
@@ -191,14 +190,14 @@ export const ServiceReviewsDetails = ({
                             )}
                         </Descriptions.Item>
                     </Descriptions>
+                    <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
                     {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (
                         <>
-                            <Descriptions
-                                title={'Service Review Details'}
-                                column={1}
-                                bordered
-                                className={oclDisplayStyles.oclDataInfoTable}
-                            >
+                            <h3 className={catalogStyles.catalogDetailsH3}>
+                                <BarsOutlined />
+                                &nbsp;Service Review Details
+                            </h3>
+                            <Descriptions column={1} bordered className={oclDisplayStyles.oclDataInfoTable}>
                                 <Descriptions.Item label='Registration Status'>
                                     {currentServiceTemplateVo.serviceRegistrationState.valueOf()}
                                 </Descriptions.Item>

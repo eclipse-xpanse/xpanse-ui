@@ -11,7 +11,7 @@ import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import {
     DeployRequest,
     DeployedServiceDetails,
-    ServiceModificationAuditDetails,
+    ServiceOrderDetails,
     VendorHostedDeployedServiceDetails,
     taskStatus,
 } from '../../../../xpanse-api/generated';
@@ -24,14 +24,14 @@ export const MyServiceHistory = ({
 }: {
     deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
-    let serviceModificationAuditHistoryList: ServiceModificationAuditDetails[] = [];
+    let serviceModificationAuditHistoryList: ServiceOrderDetails[] = [];
     const listServiceModifyHistoryQuery = useListServiceModifyHistoryQuery(deployedService.serviceId);
 
     if (listServiceModifyHistoryQuery.isSuccess && listServiceModifyHistoryQuery.data.length > 0) {
         serviceModificationAuditHistoryList = listServiceModifyHistoryQuery.data;
     }
 
-    const columns: ColumnsType<ServiceModificationAuditDetails> = [
+    const columns: ColumnsType<ServiceOrderDetails> = [
         {
             title: 'ModifyId',
             dataIndex: 'serviceModificationRequestId',

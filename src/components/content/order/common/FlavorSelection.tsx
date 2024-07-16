@@ -17,11 +17,13 @@ import { FlavorTitle } from './FlavorTitle';
 
 export const FlavorSelection = ({
     selectFlavor,
+    setSelectFlavor,
     flavorList,
     onChangeFlavor,
     getServicePriceQuery,
 }: {
     selectFlavor: string;
+    setSelectFlavor?: (newFlavor: string) => void;
     flavorList?: ServiceFlavor[];
     onChangeFlavor?: (newFlavor: string) => void;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
@@ -47,6 +49,9 @@ export const FlavorSelection = ({
                                 onChange={(e) => {
                                     if (onChangeFlavor) {
                                         onChangeFlavor(e.target.value as string);
+                                    }
+                                    if (setSelectFlavor) {
+                                        setSelectFlavor(e.target.value as string);
                                     }
                                 }}
                                 value={selectFlavor}

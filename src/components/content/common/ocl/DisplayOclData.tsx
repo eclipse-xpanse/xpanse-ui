@@ -3,8 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
+import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
@@ -14,7 +16,7 @@ import { BillingText } from './BillingText';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { ContactDetailsText } from './ContactDetailsText';
 import { DeploymentText } from './DeploymentText';
-import { FlavorsText } from './FlavorsText';
+import { FlavorsText } from './FlavorsText.tsx';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -87,12 +89,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                         </div>
                     </div>
                     <div>
-                        <Descriptions
-                            title={'Basic Information'}
-                            column={2}
-                            bordered
-                            className={oclDisplayStyles.oclDataInfoTable}
-                        >
+                        <h3 className={catalogStyles.catalogDetailsH3}>
+                            <InfoCircleOutlined />
+                            &nbsp;Basic Information
+                        </h3>
+                        <Descriptions column={2} bordered className={oclDisplayStyles.oclDataInfoTable}>
                             <Descriptions.Item label='Category'>
                                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                                 {ocl.category ? ocl.category : PLACE_HOLDER_UNKNOWN_VALUE}
@@ -111,9 +112,6 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <Descriptions.Item label='Deployment'>
                                 <DeploymentText deployment={ocl.deployment} />
                             </Descriptions.Item>
-                            <Descriptions.Item label='Flavors'>
-                                <FlavorsText flavors={ocl.flavors.serviceFlavors} />
-                            </Descriptions.Item>
                             <Descriptions.Item label='Contact Details'>
                                 <ContactDetailsText
                                     serviceProviderContactDetails={ocl.serviceProviderContactDetails}
@@ -124,6 +122,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 {ocl.eula ? <AgreementText eula={ocl.eula} /> : <span>Not Provided</span>}
                             </Descriptions.Item>
                         </Descriptions>
+                        <FlavorsText flavors={ocl.flavors.serviceFlavors} />
                     </div>
                 </div>
             </>

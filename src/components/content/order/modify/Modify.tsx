@@ -52,7 +52,7 @@ export const Modify = ({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
             const data: ModifyData = {
                 requestBody: modifyServiceRequestParams.modifyRequest,
-                serviceId: modifyServiceRequestParams.id,
+                serviceId: modifyServiceRequestParams.serviceId,
             };
             return modify(data);
         },
@@ -83,7 +83,7 @@ export const Modify = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties as Record<string, never>;
         const modifyServiceRequestParams: ModifySubmitRequest = {
-            id: currentSelectedService.serviceId,
+            serviceId: currentSelectedService.serviceId,
             modifyRequest: createRequest,
         };
 

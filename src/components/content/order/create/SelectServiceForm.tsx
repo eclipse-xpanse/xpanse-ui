@@ -12,12 +12,12 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    ServiceFlavor,
-    ServiceProviderContactDetails,
-    UserOrderableServiceVo,
     billingMode,
     csp,
+    ServiceFlavor,
     serviceHostingType,
+    ServiceProviderContactDetails,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -163,10 +163,6 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectServiceHostType(serviceHostingType);
         billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
-    };
-
-    const onChangeFlavor = (newFlavor: string) => {
-        setSelectFlavor(newFlavor);
     };
 
     const onChangeRegion = (value: string) => {
@@ -389,8 +385,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         />
                         <FlavorSelection
                             selectFlavor={selectFlavor}
+                            setSelectFlavor={setSelectFlavor}
                             flavorList={flavorList}
-                            onChangeFlavor={onChangeFlavor}
                             getServicePriceQuery={getServicePriceQuery}
                         />
                     </div>
