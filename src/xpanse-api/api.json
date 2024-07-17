@@ -98,7 +98,7 @@
         "/xpanse/workflow/task/{id}": {
             "put": {
                 "tags": ["Workflow"],
-                "description": "Manage failed task orders.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Manage failed task orders.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "manageFailedOrder",
                 "parameters": [
                     {
@@ -200,7 +200,7 @@
         "/xpanse/workflow/complete/task/{id}": {
             "put": {
                 "tags": ["Workflow"],
-                "description": "Complete tasks by task ID and set global process variables .\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Complete tasks by task ID and set global process variables .<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "completeTask",
                 "parameters": [
                     {
@@ -306,7 +306,7 @@
         "/xpanse/user/credentials": {
             "get": {
                 "tags": ["UserCloudCredentialsManagement"],
-                "description": "List all cloud provider credentials added by the user for a cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List all cloud provider credentials added by the user for a cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getUserCloudCredentials",
                 "parameters": [
                     {
@@ -428,7 +428,7 @@
             },
             "put": {
                 "tags": ["UserCloudCredentialsManagement"],
-                "description": "Update user's credential for connecting to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Update user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "updateUserCloudCredential",
                 "requestBody": {
                     "content": {
@@ -518,7 +518,7 @@
             },
             "post": {
                 "tags": ["UserCloudCredentialsManagement"],
-                "description": "Add user's credential for connecting to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Add user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "addUserCloudCredential",
                 "requestBody": {
                     "content": {
@@ -608,7 +608,7 @@
             },
             "delete": {
                 "tags": ["UserCloudCredentialsManagement"],
-                "description": "Delete user's credential for connecting to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "deleteUserCloudCredential",
                 "parameters": [
                     {
@@ -731,7 +731,7 @@
         "/xpanse/services/stop/{serviceId}": {
             "put": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Start a task to stop the service instance.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Start a task to stop the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "stopService",
                 "parameters": [
                     {
@@ -831,7 +831,7 @@
         "/xpanse/services/start/{serviceId}": {
             "put": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Start a task to start the service instance.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Start a task to start the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "startService",
                 "parameters": [
                     {
@@ -931,7 +931,7 @@
         "/xpanse/services/restart/{serviceId}": {
             "put": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Start a task to restart the service instance.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Start a task to restart the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "restartService",
                 "parameters": [
                     {
@@ -1031,7 +1031,7 @@
         "/xpanse/services/modify/{serviceId}": {
             "put": {
                 "tags": ["Service"],
-                "description": "Create an order task to modify the deployed service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create an order task to modify the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "modify",
                 "parameters": [
                     {
@@ -1141,7 +1141,7 @@
         "/xpanse/services/deploy/retry/{serviceId}": {
             "put": {
                 "tags": ["Service"],
-                "description": "Create an order to redeploy the failed service using service id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create an order to redeploy the failed service using service id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "redeployFailedDeployment",
                 "parameters": [
                     {
@@ -1240,7 +1240,7 @@
         "/xpanse/services/changelock/{serviceId}": {
             "put": {
                 "tags": ["Service"],
-                "description": "Change the lock config of the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Change the lock config of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "changeServiceLockConfig",
                 "parameters": [
                     {
@@ -1343,7 +1343,7 @@
         "/xpanse/service_templates/{id}": {
             "get": {
                 "tags": ["ServiceVendor"],
-                "description": "Get service template using id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Get service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "details",
                 "parameters": [
                     {
@@ -1441,7 +1441,7 @@
             },
             "put": {
                 "tags": ["ServiceVendor"],
-                "description": "Update service template using id and ocl model.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Update service template using id and ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "update",
                 "parameters": [
                     {
@@ -1549,7 +1549,7 @@
             },
             "delete": {
                 "tags": ["ServiceVendor"],
-                "description": "Delete unregistered service template using id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Delete unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "deleteServiceTemplate",
                 "parameters": [
                     {
@@ -1642,7 +1642,7 @@
         "/xpanse/service_templates/unregister/{id}": {
             "put": {
                 "tags": ["ServiceVendor"],
-                "description": "Unregister service template using id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Unregister service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "unregister",
                 "parameters": [
                     {
@@ -1742,7 +1742,7 @@
         "/xpanse/service_templates/review/{id}": {
             "put": {
                 "tags": ["CloudServiceProvider"],
-                "description": "Review service template registration.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E",
+                "description": "Review service template registration.<br> Required role: <b>admin</b> or <b>csp</b> </br>",
                 "operationId": "reviewRegistration",
                 "parameters": [
                     {
@@ -1845,7 +1845,7 @@
         "/xpanse/service_templates/re-register/{id}": {
             "put": {
                 "tags": ["ServiceVendor"],
-                "description": "Re-register the unregistered service template using id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Re-register the unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "reRegisterServiceTemplate",
                 "parameters": [
                     {
@@ -1945,7 +1945,7 @@
         "/xpanse/service_templates/file/{id}": {
             "put": {
                 "tags": ["ServiceVendor"],
-                "description": "Update service template using id and URL of Ocl file.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Update service template using id and URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "fetchUpdate",
                 "parameters": [
                     {
@@ -2054,7 +2054,7 @@
         "/xpanse/service/policies/{id}": {
             "get": {
                 "tags": ["ServicePoliciesManagement"],
-                "description": "Get details of policy belongs to the registered service template.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Get details of policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "getServicePolicyDetails",
                 "parameters": [
                     {
@@ -2151,7 +2151,7 @@
             },
             "put": {
                 "tags": ["ServicePoliciesManagement"],
-                "description": "Update the policy belongs to the registered service template.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Update the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "updateServicePolicy",
                 "parameters": [
                     {
@@ -2259,7 +2259,7 @@
             },
             "delete": {
                 "tags": ["ServicePoliciesManagement"],
-                "description": "Delete the policy belongs to the registered service template.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Delete the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "deleteServicePolicy",
                 "parameters": [
                     {
@@ -2351,7 +2351,7 @@
         "/xpanse/policies/{id}": {
             "get": {
                 "tags": ["UserPoliciesManagement"],
-                "description": "Get the details of the policy created by the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get the details of the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getPolicyDetails",
                 "parameters": [
                     {
@@ -2448,7 +2448,7 @@
             },
             "put": {
                 "tags": ["UserPoliciesManagement"],
-                "description": "Update the policy created by the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Update the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "updateUserPolicy",
                 "parameters": [
                     {
@@ -2556,7 +2556,7 @@
             },
             "delete": {
                 "tags": ["UserPoliciesManagement"],
-                "description": "Delete the policy created by the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "deleteUserPolicy",
                 "parameters": [
                     {
@@ -2648,7 +2648,7 @@
         "/xpanse/isv/credentials": {
             "get": {
                 "tags": ["ISVCloudCredentialsManagement"],
-                "description": "Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.<br> Required role: <b>isv</b> </br>",
                 "operationId": "getIsvCloudCredentials",
                 "parameters": [
                     {
@@ -2770,7 +2770,7 @@
             },
             "put": {
                 "tags": ["ISVCloudCredentialsManagement"],
-                "description": "Update the user credentials used for ISV to connect to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "Update the user credentials used for ISV to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>",
                 "operationId": "updateIsvCloudCredential",
                 "requestBody": {
                     "content": {
@@ -2860,7 +2860,7 @@
             },
             "post": {
                 "tags": ["ISVCloudCredentialsManagement"],
-                "description": "Add the user credentials for the ISV role used to connect to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "Add the user credentials for the ISV role used to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>",
                 "operationId": "addIsvCloudCredential",
                 "requestBody": {
                     "content": {
@@ -2950,7 +2950,7 @@
             },
             "delete": {
                 "tags": ["ISVCloudCredentialsManagement"],
-                "description": "Delete the credentials of the user in the USER role to connect to the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "Delete the credentials of the user in the USER role to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>",
                 "operationId": "deleteIsvCloudCredential",
                 "parameters": [
                     {
@@ -3073,7 +3073,7 @@
         "/xpanse/services": {
             "get": {
                 "tags": ["Service"],
-                "description": "List all deployed services belongs to the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List all deployed services belongs to the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listDeployedServices",
                 "parameters": [
                     {
@@ -3246,7 +3246,7 @@
             },
             "post": {
                 "tags": ["Service"],
-                "description": "Create an order task to deploy new service using approved service template.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create an order task to deploy new service using approved service template.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "deploy",
                 "requestBody": {
                     "content": {
@@ -3345,7 +3345,7 @@
         "/xpanse/services/migration": {
             "post": {
                 "tags": ["Migration"],
-                "description": "Create a job to migrate the deployed service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create a job to migrate the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "migrate",
                 "requestBody": {
                     "content": {
@@ -3445,7 +3445,7 @@
         "/xpanse/service_templates": {
             "get": {
                 "tags": ["ServiceVendor"],
-                "description": "List service templates with query params.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "List service templates with query params.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "listServiceTemplates",
                 "parameters": [
                     {
@@ -3617,7 +3617,7 @@
             },
             "post": {
                 "tags": ["ServiceVendor"],
-                "description": "Register new service template using ocl model.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Register new service template using ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "register",
                 "requestBody": {
                     "content": {
@@ -3716,7 +3716,7 @@
         "/xpanse/service_templates/file": {
             "post": {
                 "tags": ["ServiceVendor"],
-                "description": "Register new service template using URL of Ocl file.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Register new service template using URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "fetch",
                 "parameters": [
                     {
@@ -3816,7 +3816,7 @@
         "/xpanse/service/policies": {
             "get": {
                 "tags": ["ServicePoliciesManagement"],
-                "description": "List the policies belongs to the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "List the policies belongs to the service.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "listServicePolicies",
                 "parameters": [
                     {
@@ -3917,7 +3917,7 @@
             },
             "post": {
                 "tags": ["ServicePoliciesManagement"],
-                "description": "Add policy for the registered service template.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E",
+                "description": "Add policy for the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "addServicePolicy",
                 "requestBody": {
                     "content": {
@@ -4016,7 +4016,7 @@
         "/xpanse/policies": {
             "get": {
                 "tags": ["UserPoliciesManagement"],
-                "description": "List the policies defined by the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List the policies defined by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listUserPolicies",
                 "parameters": [
                     {
@@ -4137,7 +4137,7 @@
             },
             "post": {
                 "tags": ["UserPoliciesManagement"],
-                "description": "Add policy created by the user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Add policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "addUserPolicy",
                 "requestBody": {
                     "content": {
@@ -5266,7 +5266,7 @@
         "/xpanse/workflow/tasks": {
             "get": {
                 "tags": ["Workflow"],
-                "description": "Query all tasks of the given user\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Query all tasks of the given user<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "queryTasks",
                 "parameters": [
                     {
@@ -5370,7 +5370,7 @@
         "/xpanse/services/{serviceId}/tasks": {
             "get": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "List state management tasks of the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listServiceStateManagementTasks",
                 "parameters": [
                     {
@@ -5491,7 +5491,7 @@
             },
             "delete": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Delete all state management tasks of the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete all state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "deleteManagementTasksByServiceId",
                 "parameters": [
                     {
@@ -5581,10 +5581,113 @@
                 }
             }
         },
+        "/xpanse/services/{serviceId}/resources/compute": {
+            "get": {
+                "tags": ["Service"],
+                "description": "List compute resources of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
+                "operationId": "getComputeResourceInventoryOfService",
+                "parameters": [
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "description": "Id of the deployed service",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/DeployResource"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/xpanse/services/{serviceId}/orders": {
             "get": {
                 "tags": ["ServiceOrders"],
-                "description": "List service orders of the service\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List service orders of the service<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "listServiceOrders",
                 "parameters": [
                     {
@@ -5705,7 +5808,7 @@
             },
             "delete": {
                 "tags": ["ServiceOrders"],
-                "description": "Delete all service orders of the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete all service orders of the service.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "deleteOrdersByServiceId",
                 "parameters": [
                     {
@@ -5798,7 +5901,7 @@
         "/xpanse/services/{serviceId}/deployment/status": {
             "get": {
                 "tags": ["Service"],
-                "description": "Long-polling method to get the latest service deployment or service update status.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Long-polling method to get the latest service deployment or service update status.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getLatestServiceDeploymentStatus",
                 "parameters": [
                     {
@@ -5920,7 +6023,7 @@
         "/xpanse/services/tasks/{taskId}": {
             "get": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Get state management task details by the task id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get state management task details by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getManagementTaskDetailsByTaskId",
                 "parameters": [
                     {
@@ -6018,7 +6121,7 @@
             },
             "delete": {
                 "tags": ["ServiceStatusManagement"],
-                "description": "Delete service state management task by the task id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete service state management task by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "deleteManagementTaskByTaskId",
                 "parameters": [
                     {
@@ -6111,7 +6214,7 @@
         "/xpanse/services/orders/{orderId}": {
             "get": {
                 "tags": ["ServiceOrders"],
-                "description": "Get details of the service order by the order id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get details of the service order by the order id.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getOrderDetailsByOrderId",
                 "parameters": [
                     {
@@ -6209,7 +6312,7 @@
             },
             "delete": {
                 "tags": ["ServiceOrders"],
-                "description": "Delete the service order by the order id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Delete the service order by the order id.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "deleteOrderByOrderId",
                 "parameters": [
                     {
@@ -6302,7 +6405,7 @@
         "/xpanse/services/orders/{orderId}/status": {
             "get": {
                 "tags": ["ServiceOrders"],
-                "description": "Long-polling method to get the latest or updated task status of the service order.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Long-polling method to get the latest or updated task status of the service order.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getLatestServiceOrderStatus",
                 "parameters": [
                     {
@@ -6412,7 +6515,7 @@
         "/xpanse/services/migrations": {
             "get": {
                 "tags": ["Migration"],
-                "description": "List all services migration by a user.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List all services migration by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listServiceMigrations",
                 "parameters": [
                     {
@@ -6562,7 +6665,7 @@
         "/xpanse/services/migration/{migrationId}": {
             "get": {
                 "tags": ["Migration"],
-                "description": "Get migration records based on migration id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get migration records based on migration id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getMigrationOrderDetailsById",
                 "parameters": [
                     {
@@ -6662,7 +6765,7 @@
         "/xpanse/services/isv": {
             "get": {
                 "tags": ["Service"],
-                "description": "List all deployed services by a user.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "List all deployed services by a user.<br> Required role: <b>isv</b> </br>",
                 "operationId": "listDeployedServicesOfIsv",
                 "parameters": [
                     {
@@ -6837,7 +6940,7 @@
         "/xpanse/services/isv/details/vendor_hosted/{serviceId}": {
             "get": {
                 "tags": ["Service"],
-                "description": "Get the details of the deployed service by service id.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E",
+                "description": "Get the details of the deployed service by service id.<br> Required role: <b>isv</b> </br>",
                 "operationId": "getServiceDetailsByIdForIsv",
                 "parameters": [
                     {
@@ -6937,7 +7040,7 @@
         "/xpanse/services/details": {
             "get": {
                 "tags": ["Service"],
-                "description": "List details of deployed services using parameters.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List details of deployed services using parameters.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listDeployedServicesDetails",
                 "parameters": [
                     {
@@ -7112,7 +7215,7 @@
         "/xpanse/services/details/vendor_hosted/{serviceId}": {
             "get": {
                 "tags": ["Service"],
-                "description": "Get deployed service details by serviceId.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get deployed service details by serviceId.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getVendorHostedServiceDetailsById",
                 "parameters": [
                     {
@@ -7212,7 +7315,7 @@
         "/xpanse/services/details/self_hosted/{serviceId}": {
             "get": {
                 "tags": ["Service"],
-                "description": "Get details of the deployed service by id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get details of the deployed service by id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getSelfHostedServiceDetailsById",
                 "parameters": [
                     {
@@ -7312,7 +7415,7 @@
         "/xpanse/pricing/{templateId}/{region}/{billingMode}/{flavorName}": {
             "get": {
                 "tags": ["ServicePrices"],
-                "description": "Get the price of one specific flavor of the service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get the price of one specific flavor of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getServicePriceByFlavor",
                 "parameters": [
                     {
@@ -7440,7 +7543,7 @@
         "/xpanse/pricing/service/{templateId}/{region}/{billingMode}": {
             "get": {
                 "tags": ["ServicePrices"],
-                "description": "Get the prices of all flavors of the service\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get the prices of all flavors of the service<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getPricesByService",
                 "parameters": [
                     {
@@ -7562,7 +7665,7 @@
         "/xpanse/metrics": {
             "get": {
                 "tags": ["Monitor"],
-                "description": "Get metrics of a deployed service or a resource.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get metrics of a deployed service or a resource.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getMetrics",
                 "parameters": [
                     {
@@ -7726,7 +7829,7 @@
         "/xpanse/health": {
             "get": {
                 "tags": ["Admin"],
-                "description": "Check health of API service and backend systems.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Check health of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "healthCheck",
                 "responses": {
                     "500": {
@@ -7815,7 +7918,7 @@
         "/xpanse/csps/active": {
             "get": {
                 "tags": ["Admin"],
-                "description": "List cloud service providers with active plugin.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getActiveCsps",
                 "responses": {
                     "500": {
@@ -7918,7 +8021,7 @@
         "/xpanse/csp/service_templates": {
             "get": {
                 "tags": ["CloudServiceProvider"],
-                "description": "List managed service templates with query params.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E",
+                "description": "List managed service templates with query params.<br> Required role: <b>admin</b> or <b>csp</b> </br>",
                 "operationId": "listManagedServiceTemplates",
                 "parameters": [
                     {
@@ -8072,7 +8175,7 @@
         "/xpanse/csp/service_templates/{id}": {
             "get": {
                 "tags": ["CloudServiceProvider"],
-                "description": "view service template by id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E",
+                "description": "view service template by id.<br> Required role: <b>admin</b> or <b>csp</b> </br>",
                 "operationId": "getRegistrationDetails",
                 "parameters": [
                     {
@@ -8172,7 +8275,7 @@
         "/xpanse/csp/resources/{deployResourceKind}": {
             "get": {
                 "tags": ["CloudResources"],
-                "description": "List existing cloud resource names with kind\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List existing cloud resource names with kind<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getExistingResourceNamesWithKind",
                 "parameters": [
                     {
@@ -8325,7 +8428,7 @@
         "/xpanse/csp/region/azs": {
             "get": {
                 "tags": ["Service"],
-                "description": "Get availability zones with csp and region.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Ecsp\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get availability zones with csp and region.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getAvailabilityZones",
                 "parameters": [
                     {
@@ -8457,7 +8560,7 @@
         "/xpanse/credentials/openapi/{csp}/{type}": {
             "get": {
                 "tags": ["CredentialsConfiguration"],
-                "description": "Returns the OpenAPI document for adding a credential.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E or \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Returns the OpenAPI document for adding a credential.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getCredentialOpenApi",
                 "parameters": [
                     {
@@ -8578,7 +8681,7 @@
         "/xpanse/credentials/capabilities": {
             "get": {
                 "tags": ["CredentialsConfiguration"],
-                "description": "List the credential capabilities defined by the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E or \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List the credential capabilities defined by the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getCredentialCapabilities",
                 "parameters": [
                     {
@@ -8711,7 +8814,7 @@
         "/xpanse/credential_types": {
             "get": {
                 "tags": ["CredentialsConfiguration"],
-                "description": "List the credential types supported by the cloud service provider.\u003Cbr\u003ERequired role:\u003Cb\u003E isv\u003C/b\u003E or \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List the credential types supported by the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getCredentialTypes",
                 "parameters": [
                     {
@@ -8826,7 +8929,7 @@
         "/xpanse/catalog/services": {
             "get": {
                 "tags": ["ServiceCatalog"],
-                "description": "List of all approved services which are available for user to order.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "List of all approved services which are available for user to order.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "listOrderableServices",
                 "parameters": [
                     {
@@ -8998,7 +9101,7 @@
         "/xpanse/catalog/services/{id}": {
             "get": {
                 "tags": ["ServiceCatalog"],
-                "description": "Get deployable service by id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get deployable service by id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "getOrderableServiceDetails",
                 "parameters": [
                     {
@@ -9098,7 +9201,7 @@
         "/xpanse/catalog/services/{id}/openapi": {
             "get": {
                 "tags": ["ServiceCatalog"],
-                "description": "Get the API document of the orderable service.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Get the API document of the orderable service.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "openApi",
                 "parameters": [
                     {
@@ -9388,7 +9491,7 @@
         "/xpanse/services/{serviceId}": {
             "delete": {
                 "tags": ["Service"],
-                "description": "Create an order task to destroy the deployed service using id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create an order task to destroy the deployed service using id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "destroy",
                 "parameters": [
                     {
@@ -9488,7 +9591,7 @@
         "/xpanse/services/purge/{serviceId}": {
             "delete": {
                 "tags": ["Service"],
-                "description": "Create an order task to purge the deployed service using service id.\u003Cbr\u003ERequired role:\u003Cb\u003E admin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E",
+                "description": "Create an order task to purge the deployed service using service id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
                 "operationId": "purge",
                 "parameters": [
                     {
@@ -10248,6 +10351,7 @@
                     "dataType",
                     "description",
                     "initialValue",
+                    "isReadOnly",
                     "kind",
                     "mandatory",
                     "modificationImpact",
@@ -10302,6 +10406,10 @@
                     },
                     "modificationImpact": {
                         "$ref": "#/components/schemas/ModificationImpact"
+                    },
+                    "isReadOnly": {
+                        "type": "boolean",
+                        "description": "Whether the service configuration parameters are read-only"
                     }
                 },
                 "description": "The collection of service configuration parameters."
