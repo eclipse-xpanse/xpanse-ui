@@ -14,7 +14,7 @@ function DeployedResourceProperties(deployResource: DeployResource): React.JSX.E
     if (Object.keys(deployResource).length) {
         return (
             <Popover content={<pre>{convertRecordToList(deployResource.properties)}</pre>} trigger='hover'>
-                <Button type={'link'}>{deployResource.name}</Button>
+                <Button type={'link'}>{deployResource.resourceName}</Button>
             </Popover>
         );
     } else {

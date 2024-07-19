@@ -16,8 +16,8 @@ export function DeployedResources(content: DeployResource[], title: string): Rea
     if (content.length > 0) {
         columns = [
             {
-                title: 'ResourceType',
-                dataIndex: 'resourceType',
+                title: 'ResourceKind',
+                dataIndex: 'resourceKind',
                 align: 'center',
             },
             {
@@ -27,8 +27,8 @@ export function DeployedResources(content: DeployResource[], title: string): Rea
                 align: 'center',
             },
             {
-                title: 'Name',
-                dataIndex: 'name',
+                title: 'ResourceName',
+                dataIndex: 'resourceName',
                 defaultSortOrder: 'descend',
                 align: 'center',
             },
@@ -36,9 +36,9 @@ export function DeployedResources(content: DeployResource[], title: string): Rea
         content.forEach(function (item, index) {
             const currentDeployResource: DeployResourceDataType = {
                 key: String(index),
-                resourceType: item.kind as deployResourceKind,
+                resourceKind: item.resourceKind as deployResourceKind,
                 resourceId: item.resourceId,
-                name: DeployedResourceProperties(item),
+                resourceName: DeployedResourceProperties(item),
             };
             deployResourceList.push(currentDeployResource);
         });
