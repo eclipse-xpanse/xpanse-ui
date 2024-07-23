@@ -63,6 +63,8 @@ import type {
     GetActiveCspsResponse,
     GetAvailabilityZonesData,
     GetAvailabilityZonesResponse,
+    GetComputeResourceInventoryOfServiceData,
+    GetComputeResourceInventoryOfServiceResponse,
     GetCredentialCapabilitiesData,
     GetCredentialCapabilitiesResponse,
     GetCredentialOpenApiData,
@@ -1655,6 +1657,34 @@ export const deleteManagementTasksByServiceId = (
 };
 
 /**
+ * List compute resources of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * @param data The data for the request.
+ * @param data.serviceId Id of the deployed service
+ * @returns DeployResource OK
+ * @throws ApiError
+ */
+export const getComputeResourceInventoryOfService = (
+    data: GetComputeResourceInventoryOfServiceData
+): CancelablePromise<GetComputeResourceInventoryOfServiceResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/{serviceId}/resources/compute',
+        path: {
+            serviceId: data.serviceId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * List service orders of the service<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
@@ -2357,7 +2387,7 @@ export const getExistingResourceNamesWithKind = (
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider
  * @param data.regionName name of the region
- * @param data.serviceId serviceId of the deployed service
+ * @param data.serviceId Id of the deployed service
  * @returns string OK
  * @throws ApiError
  */

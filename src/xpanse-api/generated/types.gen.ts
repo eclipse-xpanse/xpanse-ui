@@ -807,6 +807,10 @@ export type ServiceConfigurationParameter = {
     sensitiveScope?: 'none' | 'once' | 'always';
     autoFill?: AutoFill;
     modificationImpact: ModificationImpact;
+    /**
+     * Whether the service configuration parameters are read-only
+     */
+    isReadOnly: boolean;
 };
 
 /**
@@ -1457,17 +1461,25 @@ export type CredentialVariables = {
  */
 export type DeployResource = {
     /**
+     * The type of the group which configuration the deployed resource.
+     */
+    groupType: string;
+    /**
+     * The name of the group which configuration the deployed resource.
+     */
+    groupName: string;
+    /**
      * The id of the deployed resource.
      */
     resourceId: string;
     /**
      * The name of the deployed resource.
      */
-    name: string;
+    resourceName: string;
     /**
      * The kind of the deployed resource.
      */
-    kind:
+    resourceKind:
         | 'vm'
         | 'container'
         | 'publicIP'
@@ -1489,7 +1501,7 @@ export type DeployResource = {
 /**
  * The kind of the deployed resource.
  */
-export enum kind2 {
+export enum resourceKind {
     VM = 'vm',
     CONTAINER = 'container',
     PUBLIC_IP = 'publicIP',
@@ -2987,6 +2999,15 @@ export type DeleteManagementTasksByServiceIdData = {
 
 export type DeleteManagementTasksByServiceIdResponse = void;
 
+export type GetComputeResourceInventoryOfServiceData = {
+    /**
+     * Id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type GetComputeResourceInventoryOfServiceResponse = Array<DeployResource>;
+
 export type ListServiceOrdersData = {
     /**
      * Id of the service
@@ -3456,7 +3477,7 @@ export type GetAvailabilityZonesData = {
      */
     regionName: string;
     /**
-     * serviceId of the deployed service
+     * Id of the deployed service
      */
     serviceId?: string;
 };
@@ -5585,6 +5606,45 @@ export type $OpenApiTs = {
                  * No Content
                  */
                 204: void;
+                /**
+                 * Bad Request
+                 */
+                400: Response;
+                /**
+                 * Unauthorized
+                 */
+                401: Response;
+                /**
+                 * Forbidden
+                 */
+                403: Response;
+                /**
+                 * Request Timeout
+                 */
+                408: Response;
+                /**
+                 * Unprocessable Entity
+                 */
+                422: Response;
+                /**
+                 * Internal Server Error
+                 */
+                500: Response;
+                /**
+                 * Bad Gateway
+                 */
+                502: Response;
+            };
+        };
+    };
+    '/xpanse/services/{serviceId}/resources/compute': {
+        get: {
+            req: GetComputeResourceInventoryOfServiceData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: Array<DeployResource>;
                 /**
                  * Bad Request
                  */
