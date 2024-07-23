@@ -28,6 +28,9 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         if (listDeployedServicesByIsvQuery.isError) {
             void listDeployedServicesByIsvQuery.refetch();
         }
+        if (listRegisteredServicesByIsvQuery.isError) {
+            void listRegisteredServicesByIsvQuery.refetch();
+        }
     };
 
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
