@@ -103,7 +103,7 @@
         "@axa-fr/oidc-client": "^7.22.18",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@tanstack/eslint-plugin-query": "^5.51.1",
-        "@testing-library/jest-dom": "^6.4.6",
+        "@testing-library/jest-dom": "^6.4.8",
         "@testing-library/react": "^16.0.0",
         "@types/jest": "^29.5.12",
         "@types/node": "^20.14.11",
