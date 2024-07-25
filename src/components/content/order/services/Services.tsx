@@ -12,14 +12,13 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { UserOrderableServiceVo, category } from '../../../../xpanse-api/generated';
-import { sortVersion } from '../../../utils/Sort';
 import { createServicePageRoute } from '../../../utils/constants';
+import { groupServicesByLatestVersion } from '../common/utils/groupServicesByLatestVersion.ts';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import ServicesSkeleton from './ServicesSkeleton';
-import { UserServiceDisplayType } from './UserServiceDisplayType';
-import { groupServicesByName, groupVersionsForService } from './userServiceHelper';
+import { UserServiceLatestVersionDisplayType } from './UserServiceLatestVersionDisplayType.ts';
 
 function Services(): React.JSX.Element {
     const { Paragraph } = Typography;
@@ -51,24 +50,9 @@ function Services(): React.JSX.Element {
     }
 
     const userOrderableServiceList: UserOrderableServiceVo[] | undefined = orderableServicesQuery.data;
-    const serviceList: UserServiceDisplayType[] = [];
+    let serviceList: UserServiceLatestVersionDisplayType[] = [];
     if (userOrderableServiceList !== undefined && userOrderableServiceList.length > 0) {
-        const servicesGroupedByName: Map<string, UserOrderableServiceVo[]> =
-            groupServicesByName(userOrderableServiceList);
-        servicesGroupedByName.forEach((orderableServicesList, _) => {
-            const versionMapper: Map<string, UserOrderableServiceVo[]> = groupVersionsForService(orderableServicesList);
-            const versionList: string[] = Array.from(versionMapper.keys());
-            const latestVersion = sortVersion(versionList)[0];
-            if (versionMapper.has(latestVersion) && versionMapper.get(latestVersion)) {
-                const serviceItem = {
-                    name: versionMapper.get(latestVersion)?.[0].name,
-                    content: versionMapper.get(latestVersion)?.[0].description,
-                    icon: versionMapper.get(latestVersion)?.[0].icon,
-                    latestVersion: latestVersion,
-                };
-                serviceList.push(serviceItem as UserServiceDisplayType);
-            }
-        });
+        serviceList = groupServicesByLatestVersion(userOrderableServiceList, '');
     }
 
     if (serviceList.length === 0) {
