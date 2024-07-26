@@ -8,6 +8,7 @@ import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import headerStyles from '../../../styles/header.module.css';
 import Logout from '../../content/login/Logout';
 import { allowRoleList, getRolesOfUser, getUserName } from '../../oidc/OidcConfig';
 import { homePageRoute } from '../../utils/constants';
@@ -93,7 +94,7 @@ export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): 
     };
 
     return (
-        <Space align='baseline'>
+        <Space align='baseline' className={headerStyles.userInfoSpacing}>
             <Dropdown
                 menu={menuProps}
                 dropdownRender={(menu) => (

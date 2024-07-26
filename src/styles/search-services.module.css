@@ -1,0 +1,44 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.search-results {
+    padding-top: 10px;
+}
+
+.search-loading-icon {
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.search-error-icon {
+    padding-left: 15px;
+    padding-right: 10px;
+    margin-top: 5px;
+}
+
+.search-error-retry-button {
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.search-services-loading {
+    display: flex;
+    margin: 0;
+    padding-left: 15px;
+}
+
+.search-services-no-match-found {
+    margin: 0;
+    padding-left: 15px;
+    padding-top: 8px;
+}
+
+.search-error-block {
+    display: flex;
+}
+
+.search-text-color {
+    color: #1677ff;
+}
