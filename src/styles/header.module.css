@@ -1,0 +1,13 @@
+/*
+ * SPDX-License-Identifier: Apache-2.0
+ * SPDX-FileCopyrightText: Huawei Inc.
+ */
+
+.user-info-spacing {
+    margin-left: 15px;
+}
+
+.layout-header {
+    width: 100%;
+    background: #ffffff;
+}
