@@ -18,6 +18,7 @@ import {
     serviceRegistrationState,
     ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
+import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
@@ -31,6 +32,7 @@ import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
+    const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
     const listDeployedServicesByIsvQuery = useDeployedServicesByIsvQuery(
@@ -148,12 +150,16 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='EULA'>
                     {serviceDetails.eula ? <AgreementText eula={serviceDetails.eula} /> : <span>Not Provided</span>}
                 </Descriptions.Item>
-                <Descriptions.Item label='Active Deployments'>
-                    <span>{numberOfActiveServiceDeployments}</span>&nbsp;
-                    <button onClick={onClick} className={catalogStyles.catalogActiveDeployment}>
-                        view services
-                    </button>
-                </Descriptions.Item>
+                {currentRole && currentRole === 'isv' ? (
+                    <Descriptions.Item label='Active Deployments'>
+                        <span>{numberOfActiveServiceDeployments}</span>&nbsp;
+                        <button onClick={onClick} className={catalogStyles.catalogActiveDeployment}>
+                            view services
+                        </button>
+                    </Descriptions.Item>
+                ) : (
+                    <></>
+                )}
             </Descriptions>
             <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
         </>
