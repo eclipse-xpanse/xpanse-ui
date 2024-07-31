@@ -72,7 +72,7 @@ export function AvailabilityZoneFormItem({
                 { type: 'string' },
             ]}
         >
-            {getFormContent()}
+            <span className={serviceOrderStyles.orderFormAzItems}>{getFormContent()}</span>
         </Form.Item>
     );
 }
