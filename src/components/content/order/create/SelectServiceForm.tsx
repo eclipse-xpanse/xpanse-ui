@@ -366,14 +366,19 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         />
                         {availabilityZoneConfigs.map((availabilityZoneConfig) => {
                             return (
-                                <AvailabilityZoneFormItem
-                                    availabilityZoneConfig={availabilityZoneConfig}
-                                    selectRegion={selectRegion}
-                                    onAvailabilityZoneChange={onAvailabilityZoneChange}
-                                    selectAvailabilityZones={selectAvailabilityZones}
-                                    selectCsp={selectCsp}
+                                <div
                                     key={availabilityZoneConfig.varName}
-                                />
+                                    className={serviceOrderStyles.orderFormAzConfigs}
+                                >
+                                    <AvailabilityZoneFormItem
+                                        availabilityZoneConfig={availabilityZoneConfig}
+                                        selectRegion={selectRegion}
+                                        onAvailabilityZoneChange={onAvailabilityZoneChange}
+                                        selectAvailabilityZones={selectAvailabilityZones}
+                                        selectCsp={selectCsp}
+                                        key={availabilityZoneConfig.varName}
+                                    />
+                                </div>
                             );
                         })}
                     </div>

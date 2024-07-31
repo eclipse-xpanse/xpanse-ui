@@ -7,7 +7,7 @@ import { Alert, Button } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../../../styles/error-alert.module.css';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
-import { ApiError, Response } from '../../../../../xpanse-api/generated';
+import { ApiError } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
 export function AvailabilityZoneError({
@@ -20,12 +20,11 @@ export function AvailabilityZoneError({
     error: Error;
 }): React.JSX.Element {
     if (isAvailabilityZoneMandatory) {
-        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-            const response: Response = error.body as Response;
+        if (error instanceof ApiError && error.body && Array.isArray(error.body)) {
             return (
                 <Alert
-                    message={response.resultType.valueOf()}
-                    description={convertStringArrayToUnorderedList(response.details)}
+                    message='Fetching Availability Regions Failed'
+                    description={convertStringArrayToUnorderedList(error.body as string[])}
                     type={'error'}
                     closable={false}
                     action={

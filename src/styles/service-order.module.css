@@ -370,3 +370,12 @@
 .order-form-inline-display {
     display: block;
 }
+
+.order-form-az-configs {
+    margin-top: 15px;
+}
+
+.order-form-az-items {
+    position: relative;
+    top: -10px;
+}
