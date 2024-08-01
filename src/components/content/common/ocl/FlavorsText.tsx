@@ -26,7 +26,7 @@ export function FlavorsText({ flavors }: { flavors: ServiceFlavor[] }): React.JS
             // @ts-expect-error
             yamlDocument.contents = flavor;
             return (
-                <div key={flavor.name} className={flavorStyles.customRadioButton}>
+                <div key={flavor.name}>
                     <Badge.Ribbon
                         className={oclDisplayStyles.oclDataDisplayFlavorBtn}
                         text={'prio '.concat(String(flavor.priority))}
