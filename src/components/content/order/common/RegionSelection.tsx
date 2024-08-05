@@ -20,29 +20,34 @@ export const RegionSelection = ({
     disabled?: boolean;
 }): React.JSX.Element => {
     return (
-        <>
-            <div className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}>
-                <Form.Item
-                    name='selectRegion'
-                    label='Region'
-                    rules={[{ required: true, message: 'Region is required' }]}
-                >
-                    <Space wrap>
-                        <Select
-                            className={serviceOrderStyles.selectBoxClass}
-                            defaultValue={selectRegion}
-                            value={selectRegion}
-                            onChange={(newRegion) => {
-                                if (onChangeRegion) {
-                                    onChangeRegion(newRegion);
-                                }
-                            }}
-                            options={regionList && regionList.length > 0 ? regionList : []}
-                            disabled={disabled !== undefined}
-                        />
-                    </Space>
-                </Form.Item>
-            </div>
-        </>
+        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Form.Item
+                name='selectRegion'
+                label={
+                    <p
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                    >
+                        {'Region'}
+                    </p>
+                }
+                labelCol={{ span: 2, style: { textAlign: 'left' } }}
+                rules={[{ required: true, message: 'Region is required' }]}
+            >
+                <Space wrap>
+                    <Select
+                        className={serviceOrderStyles.selectBoxClass}
+                        defaultValue={selectRegion}
+                        value={selectRegion}
+                        onChange={(newRegion) => {
+                            if (onChangeRegion) {
+                                onChangeRegion(newRegion);
+                            }
+                        }}
+                        options={regionList && regionList.length > 0 ? regionList : []}
+                        disabled={disabled !== undefined}
+                    />
+                </Space>
+            </Form.Item>
+        </div>
     );
 };

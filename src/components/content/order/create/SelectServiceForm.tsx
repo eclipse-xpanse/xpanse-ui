@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Col, Form, Row, Select, Tabs, Tooltip, Typography } from 'antd';
+import { Button, Col, Form, Row, Tabs, Tooltip, Typography } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -42,6 +42,7 @@ import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import CspSelect from '../formElements/CspSelect';
+import VersionSelect from '../formElements/VersionSelect';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 
@@ -315,20 +316,13 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                         )}
                     </Row>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
-                        <div className={serviceOrderStyles.orderFormFlexElements}>
-                            <div
-                                className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormSelectionFirstInGroup} ${serviceOrderStyles.orderFormItemName}`}
-                            >
-                                Version:&nbsp;
-                            </div>
-                            <Select
-                                value={selectVersion}
-                                className={serviceOrderStyles.versionDropDown}
-                                onChange={onChangeVersion}
-                                options={versionList}
-                            />
-                        </div>
-
+                        <VersionSelect
+                            selectVersion={selectVersion}
+                            versionList={versionList}
+                            onChangeVersion={(version: string) => {
+                                onChangeVersion(version);
+                            }}
+                        />
                         <br />
                         <CspSelect
                             selectCsp={selectCsp}
@@ -343,7 +337,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             updateServiceHostingType={onChangeServiceHostingType}
                             disabledAlways={false}
                             previousSelection={selectServiceHostType}
-                        ></ServiceHostingSelection>
+                        />
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <br />

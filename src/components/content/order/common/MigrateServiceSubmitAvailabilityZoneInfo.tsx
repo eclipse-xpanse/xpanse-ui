@@ -17,14 +17,20 @@ export const MigrateServiceSubmitAvailabilityZoneInfo = ({
     availabilityZones: Record<string, string>;
 }): React.JSX.Element => {
     return (
-        <>
+        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
             {availabilityZoneConfigs
                 ? availabilityZoneConfigs.map((availabilityZone) => (
                       <Form.Item
                           key={availabilityZone.varName}
                           name={availabilityZone.displayName}
-                          label={<p className={serviceOrderStyles.orderFormItemName}>{availabilityZone.displayName}</p>}
-                          className={serviceOrderStyles.selectCloudProviderClass}
+                          label={
+                              <p
+                                  className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                              >
+                                  {availabilityZone.displayName}
+                              </p>
+                          }
+                          labelCol={{ span: 2, style: { textAlign: 'left' } }}
                       >
                           <Flex vertical gap='middle'>
                               <Radio.Group buttonStyle='solid' disabled={true}>
@@ -46,6 +52,6 @@ export const MigrateServiceSubmitAvailabilityZoneInfo = ({
                       </Form.Item>
                   ))
                 : undefined}
-        </>
+        </div>
     );
 };

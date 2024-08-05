@@ -4,26 +4,24 @@
  */
 
 import { UseQueryResult } from '@tanstack/react-query';
-import { Button, Form, Image, Popconfirm, Space, StepProps, Tabs } from 'antd';
+import { Button, Form, Popconfirm, Space, StepProps, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
-    DeployRequest,
-    DeployedService,
-    MigrateRequest,
-    Region,
-    ServiceFlavor,
-    UserOrderableServiceVo,
     billingMode,
     csp,
+    DeployedService,
+    DeployRequest,
+    MigrateRequest,
     migrationStatus,
-    name,
+    Region,
+    ServiceFlavor,
     serviceHostingType,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { cspMap } from '../../common/csp/CspLogo';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
@@ -32,6 +30,7 @@ import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
+import CspSelect from '../formElements/CspSelect';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
@@ -153,36 +152,13 @@ export const MigrateServiceSubmit = ({
             >
                 <div className={tableStyles.genericTableContainer}>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
-                        <div className={serviceOrderStyles.orderFormFlexElements}>
-                            <div
-                                className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                            >
-                                Cloud Service Provider:
-                            </div>
-                            <div className={serviceOrderStyles.servicesContentBody}>
-                                <div className={serviceOrderStyles.cloudProviderSelectHover}>
-                                    <Image
-                                        width={200}
-                                        height={56}
-                                        src={cspMap.get(selectCsp as unknown as name)?.logo}
-                                        alt={selectCsp}
-                                        preview={false}
-                                        fallback={
-                                            'https://img.shields.io/badge/-' +
-                                            (selectCsp.length === 0 ? '' : selectCsp.toString()) +
-                                            '-gray'
-                                        }
-                                    />
-                                    <div className={serviceOrderStyles.serviceTypeOptionInfo} />
-                                </div>
-                            </div>
-                        </div>
+                        <CspSelect selectCsp={selectCsp} cspList={[]} onChangeHandler={undefined} />
                         <br />
                         <ServiceHostingSelection
                             serviceHostingTypes={[selectServiceHostingType]}
                             disabledAlways={true}
                             previousSelection={undefined}
-                        ></ServiceHostingSelection>
+                        />
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <div

@@ -60,19 +60,28 @@ export function AvailabilityZoneFormItem({
     }
 
     return (
-        <Form.Item
-            key={availabilityZoneConfig.varName}
-            label={<p className={serviceOrderStyles.orderFormItemName}>{availabilityZoneConfig.displayName}</p>}
-            required={availabilityZoneConfig.mandatory}
-            rules={[
-                {
-                    required: availabilityZoneConfig.mandatory,
-                    message: availabilityZoneConfig.displayName + 'is required',
-                },
-                { type: 'string' },
-            ]}
-        >
-            <span className={serviceOrderStyles.orderFormAzItems}>{getFormContent()}</span>
-        </Form.Item>
+        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Form.Item
+                key={availabilityZoneConfig.varName}
+                label={
+                    <p
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                    >
+                        {availabilityZoneConfig.displayName}
+                    </p>
+                }
+                labelCol={{ span: 2, style: { textAlign: 'left' } }}
+                required={availabilityZoneConfig.mandatory}
+                rules={[
+                    {
+                        required: availabilityZoneConfig.mandatory,
+                        message: availabilityZoneConfig.displayName + 'is required',
+                    },
+                    { type: 'string' },
+                ]}
+            >
+                {getFormContent()}
+            </Form.Item>
+        </div>
     );
 }

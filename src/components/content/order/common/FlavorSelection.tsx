@@ -33,68 +33,71 @@ export const FlavorSelection = ({
     };
 
     return (
-        <>
-            <div
-                className={`${serviceOrderStyles.orderFormSelectionStyle} ${flavorStyles.regionFlavorContent} ${serviceOrderStyles.orderFormItemName}`}
+        <div className={`${serviceOrderStyles.orderFormSelectionFirstInGroup} ${flavorStyles.regionFlavorContent}`}>
+            <Form.Item
+                name='selectFlavor'
+                label={
+                    <p
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                    >
+                        {'Flavor'}
+                    </p>
+                }
+                labelCol={{ span: 2, style: { textAlign: 'left' } }}
+                rules={[{ required: true, message: 'Flavor is required' }]}
             >
-                <Form.Item
-                    name='selectFlavor'
-                    label='Flavor'
-                    rules={[{ required: true, message: 'Flavor is required' }]}
-                >
-                    {flavorList && flavorList.length > 0 ? (
-                        <Flex vertical gap='middle'>
-                            <Radio.Group
-                                optionType={'button'}
-                                onChange={(e) => {
-                                    if (onChangeFlavor) {
-                                        onChangeFlavor(e.target.value as string);
-                                    }
-                                    if (setSelectFlavor) {
-                                        setSelectFlavor(e.target.value as string);
-                                    }
-                                }}
-                                value={selectFlavor}
-                                className={flavorStyles.antRadioGroup}
-                            >
-                                {flavorList.map((flavor: ServiceFlavor) => (
-                                    <div key={flavor.name} className={flavorStyles.customRadioButton}>
-                                        <Radio.Button
-                                            key={flavor.name}
-                                            value={flavor.name}
-                                            className={flavorStyles.customRadioButtonContent}
-                                        >
-                                            <FlavorTitle title={flavor.name} />
-                                            {getServicePriceQuery.isLoading || getServicePriceQuery.isFetching ? (
-                                                <div className={flavorStyles.flavorSkeleton}>
-                                                    <Spin
-                                                        indicator={
-                                                            <LoadingOutlined
-                                                                className={flavorStyles.flavorPriceLoading}
-                                                                spin
-                                                            />
-                                                        }
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <FlavorPrice
-                                                    flavor={flavor}
-                                                    isSuccess={getServicePriceQuery.isSuccess}
-                                                    priceData={getServicePriceQuery.data}
-                                                    isError={getServicePriceQuery.isError}
-                                                    error={getServicePriceQuery.error}
-                                                    retryRequest={retryRequest}
+                {flavorList && flavorList.length > 0 ? (
+                    <Flex vertical gap='middle'>
+                        <Radio.Group
+                            optionType={'button'}
+                            onChange={(e) => {
+                                if (onChangeFlavor) {
+                                    onChangeFlavor(e.target.value as string);
+                                }
+                                if (setSelectFlavor) {
+                                    setSelectFlavor(e.target.value as string);
+                                }
+                            }}
+                            value={selectFlavor}
+                            className={flavorStyles.antRadioGroup}
+                        >
+                            {flavorList.map((flavor: ServiceFlavor) => (
+                                <div key={flavor.name} className={flavorStyles.customRadioButton}>
+                                    <Radio.Button
+                                        key={flavor.name}
+                                        value={flavor.name}
+                                        className={flavorStyles.customRadioButtonContent}
+                                    >
+                                        <FlavorTitle title={flavor.name} />
+                                        {getServicePriceQuery.isLoading || getServicePriceQuery.isFetching ? (
+                                            <div className={flavorStyles.flavorSkeleton}>
+                                                <Spin
+                                                    indicator={
+                                                        <LoadingOutlined
+                                                            className={flavorStyles.flavorPriceLoading}
+                                                            spin
+                                                        />
+                                                    }
                                                 />
-                                            )}
-                                            <FlavorFeatures flavor={flavor} />
-                                        </Radio.Button>
-                                    </div>
-                                ))}
-                            </Radio.Group>
-                        </Flex>
-                    ) : null}
-                </Form.Item>
-            </div>
-        </>
+                                            </div>
+                                        ) : (
+                                            <FlavorPrice
+                                                flavor={flavor}
+                                                isSuccess={getServicePriceQuery.isSuccess}
+                                                priceData={getServicePriceQuery.data}
+                                                isError={getServicePriceQuery.isError}
+                                                error={getServicePriceQuery.error}
+                                                retryRequest={retryRequest}
+                                            />
+                                        )}
+                                        <FlavorFeatures flavor={flavor} />
+                                    </Radio.Button>
+                                </div>
+                            ))}
+                        </Radio.Group>
+                    </Flex>
+                ) : null}
+            </Form.Item>
+        </div>
     );
 };

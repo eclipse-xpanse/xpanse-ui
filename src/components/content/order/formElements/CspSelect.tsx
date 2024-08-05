@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Image } from 'antd';
+import { Form, Image } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { csp, name } from '../../../../xpanse-api/generated';
@@ -16,18 +16,23 @@ export default function CspSelect({
 }: {
     selectCsp: csp;
     cspList: csp[];
-    onChangeHandler: (csp: csp) => void;
+    onChangeHandler: undefined | ((csp: csp) => void);
 }): React.JSX.Element {
     return (
-        <>
-            <div className={serviceOrderStyles.orderFormFlexElements}>
-                <div
-                    className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                >
-                    Cloud Service Provider:
-                </div>
-                <div className={serviceOrderStyles.servicesContentBody}>
-                    {cspList.map((item, index) => {
+        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Form.Item
+                name='Cloud Service Provider'
+                label={
+                    <p
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                    >
+                        {'Cloud Service Provider'}
+                    </p>
+                }
+                labelCol={{ span: 2, style: { textAlign: 'left' } }}
+            >
+                {onChangeHandler && cspList.length > 0 ? (
+                    cspList.map((item, index) => {
                         return (
                             <div
                                 onClick={() => {
@@ -51,9 +56,27 @@ export default function CspSelect({
                                 <div className={serviceOrderStyles.serviceTypeOptionInfo} />
                             </div>
                         );
-                    })}
-                </div>
-            </div>
-        </>
+                    })
+                ) : (
+                    <div className={serviceOrderStyles.servicesContentBody}>
+                        <div className={serviceOrderStyles.cloudProviderSelectHover}>
+                            <Image
+                                width={200}
+                                height={56}
+                                src={cspMap.get(selectCsp as unknown as name)?.logo}
+                                alt={selectCsp}
+                                preview={false}
+                                fallback={
+                                    'https://img.shields.io/badge/-' +
+                                    (selectCsp.length === 0 ? '' : selectCsp.toString()) +
+                                    '-gray'
+                                }
+                            />
+                            <div className={serviceOrderStyles.serviceTypeOptionInfo} />
+                        </div>
+                    </div>
+                )}
+            </Form.Item>
+        </div>
     );
 }
