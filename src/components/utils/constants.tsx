@@ -52,3 +52,5 @@ export const serviceReviewsPageRoute: string = '/reviewService';
 export const serviceReviewsLabelName: string = 'Review Service';
 export const registeredServicesPageRoute: string = '/registeredServices';
 export const registeredServicesLabelName: string = 'Registered Services';
+
+export const numberOfRetries: number = 2; // this will retry 3 times. Count starts from 0.

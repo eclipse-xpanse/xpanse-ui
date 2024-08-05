@@ -19,6 +19,7 @@ import {
     homePageRoute,
     monitorPageRoute,
     myServicesRoute,
+    numberOfRetries,
     orderPageRoute,
     policiesRoute,
     registerFailedRoute,
@@ -32,8 +33,23 @@ import {
     workflowsPageRoute,
 } from './components/utils/constants';
 import './styles/app.module.css';
+import { ApiError } from './xpanse-api/generated';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            refetchOnWindowFocus: false,
+            retry: (failureCount: number, error: Error) => {
+                if (error instanceof ApiError) {
+                    if (error.status >= 400 && error.status <= 499) {
+                        return false;
+                    }
+                }
+                return failureCount < numberOfRetries;
+            },
+        },
+    },
+});
 
 const Home = lazy(() => import('./components/content/home/Home.tsx'));
 const RegisterPanel = lazy(() => import('./components/content/register/RegisterPanel.tsx'));
