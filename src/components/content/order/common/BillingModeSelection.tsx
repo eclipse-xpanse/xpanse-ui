@@ -22,48 +22,51 @@ export const BillingModeSelection = ({
     }
 
     return (
-        <>
-            <div
-                className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormSelectionFirstInGroup}`}
+        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Form.Item
+                key={'BillingMode'}
+                label={
+                    <p
+                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                    >
+                        {'Billing Mode'}
+                    </p>
+                }
+                labelCol={{ span: 2, style: { textAlign: 'left' } }}
+                required={true}
+                rules={[
+                    {
+                        required: true,
+                        message: 'billingMode is required',
+                    },
+                    { type: 'string' },
+                ]}
             >
-                <Form.Item
-                    key={'BillingMode'}
-                    label={<p className={serviceOrderStyles.orderFormItemName}>{'Billing Mode'}</p>}
-                    required={true}
-                    rules={[
-                        {
-                            required: true,
-                            message: 'billingMode is required',
-                        },
-                        { type: 'string' },
-                    ]}
-                >
-                    {billingModes && billingModes.length > 0 ? (
-                        <Flex vertical gap='middle'>
-                            <Radio.Group
-                                buttonStyle='solid'
-                                onChange={(e) => {
-                                    onChange(e.target.value as billingMode);
-                                }}
-                                value={selectBillingMode}
-                            >
-                                {billingModes.map((mode: billingMode) => (
-                                    <Radio.Button key={mode} value={mode}>
-                                        {mode}
-                                    </Radio.Button>
-                                ))}
-                            </Radio.Group>
-                        </Flex>
-                    ) : (
-                        <Alert
-                            message={'No BillingMode found'}
-                            description={'Optional field. Can proceed.'}
-                            type={'success'}
-                            closable={false}
-                        />
-                    )}
-                </Form.Item>
-            </div>
-        </>
+                {billingModes && billingModes.length > 0 ? (
+                    <Flex vertical gap='middle'>
+                        <Radio.Group
+                            buttonStyle='solid'
+                            onChange={(e) => {
+                                onChange(e.target.value as billingMode);
+                            }}
+                            value={selectBillingMode}
+                        >
+                            {billingModes.map((mode: billingMode) => (
+                                <Radio.Button key={mode} value={mode}>
+                                    {mode}
+                                </Radio.Button>
+                            ))}
+                        </Radio.Group>
+                    </Flex>
+                ) : (
+                    <Alert
+                        message={'No BillingMode found'}
+                        description={'Optional field. Can proceed.'}
+                        type={'success'}
+                        closable={false}
+                    />
+                )}
+            </Form.Item>
+        </div>
     );
 };
