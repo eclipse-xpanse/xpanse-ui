@@ -307,6 +307,7 @@ export const SelectDestination = ({
                     />
                     <FlavorSelection
                         selectFlavor={selectFlavor}
+                        setSelectFlavor={setSelectFlavor}
                         flavorList={flavorList}
                         onChangeFlavor={onChangeFlavor}
                         getServicePriceQuery={getServicePriceQuery}

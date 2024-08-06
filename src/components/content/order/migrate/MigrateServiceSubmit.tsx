@@ -52,7 +52,6 @@ export const MigrateServiceSubmit = ({
     deployParams,
     currentSelectedService,
     stepItem,
-    onChangeFlavor,
     getServicePriceQuery,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
@@ -66,7 +65,6 @@ export const MigrateServiceSubmit = ({
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
     stepItem: StepProps;
-    onChangeFlavor: (newFlavor: string) => void;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
@@ -186,7 +184,6 @@ export const MigrateServiceSubmit = ({
                         <FlavorSelection
                             selectFlavor={selectFlavor}
                             flavorList={currentFlavorList}
-                            onChangeFlavor={onChangeFlavor}
                             getServicePriceQuery={getServicePriceQuery}
                         />
                     </div>
