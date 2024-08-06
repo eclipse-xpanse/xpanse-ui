@@ -9,6 +9,7 @@
     width: 100%;
     margin-top: 15px;
     font-size: 16px;
+    font-weight: bold;
 }
 
 .flavor-card-border {
@@ -74,7 +75,6 @@
 
 .custom-radio-button {
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: 250px;
