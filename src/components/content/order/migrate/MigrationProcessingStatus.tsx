@@ -46,7 +46,8 @@ export function MigrationProcessingStatus({
                 <div>
                     {currentServiceHostingType === serviceHostingType.SELF.toString()
                         ? (response as DeployedServiceDetails).resultMessage
-                        : 'Migrate status polling failed. Please visit MyServices page to check the status of the request.'}
+                        : 'Migrate status polling failed. Please visit MyServices page to check ' +
+                          'the status of the request and contact service vendor for error details.'}
                 </div>
             </div>
         );

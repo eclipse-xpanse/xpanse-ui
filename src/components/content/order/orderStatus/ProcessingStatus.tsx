@@ -5,7 +5,7 @@
 
 import React from 'react';
 import submitResultStyles from '../../../../styles/submit-result.module.css';
-import { DeployedServiceDetails, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import { DeployedServiceDetails, serviceDeploymentState, serviceHostingType } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { OperationType } from '../types/OperationType';
 
@@ -16,6 +16,7 @@ export const ProcessingStatus = ({
     response: DeployedServiceDetails;
     operationType: OperationType;
 }): React.JSX.Element => {
+    const errorMsg: string = 'Please contact service vendor for error details.';
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
         if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
@@ -40,7 +41,9 @@ export const ProcessingStatus = ({
             return (
                 <div>
                     <span>{'Deployment Failed.'}</span>
-                    <div>{response.resultMessage}</div>
+                    <div>
+                        {response.serviceHostingType === serviceHostingType.SELF ? response.resultMessage : errorMsg}
+                    </div>
                 </div>
             );
         }
@@ -69,7 +72,9 @@ export const ProcessingStatus = ({
             return (
                 <div>
                     <span>{'Modification Failed.'}</span>
-                    <div>{response.resultMessage}</div>
+                    <div>
+                        {response.serviceHostingType === serviceHostingType.SELF ? response.resultMessage : errorMsg}
+                    </div>
                 </div>
             );
         }
@@ -86,7 +91,9 @@ export const ProcessingStatus = ({
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
-                    <div>{response.resultMessage}</div>
+                    <div>
+                        {response.serviceHostingType === serviceHostingType.SELF ? response.resultMessage : errorMsg}
+                    </div>
                 </div>
             );
         }

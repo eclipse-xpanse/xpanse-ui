@@ -10,6 +10,7 @@ import {
     DeployedServiceDetails,
     Response,
     serviceDeploymentState,
+    serviceHostingType,
     ServiceProviderContactDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
@@ -20,12 +21,14 @@ import { ProcessingStatus } from './ProcessingStatus';
 function OrderSubmitStatusAlert({
     uuid,
     isSubmitFailed,
+    serviceHostType,
     deployedServiceDetails,
     serviceProviderContactDetails,
     isPollingError,
 }: {
     uuid: string | undefined;
     isSubmitFailed: Error | null;
+    serviceHostType: serviceHostingType;
     deployedServiceDetails: DeployedServiceDetails | undefined;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
     isPollingError: boolean;
@@ -63,14 +66,18 @@ function OrderSubmitStatusAlert({
                 return getOrderSubmissionFailedDisplay([isSubmitFailed.message]);
             }
         } else if (uuid && isPollingError) {
-            return 'Deployment status polling failed. Please visit MyServices page to check the status of the request.';
+            if (serviceHostType === serviceHostingType.SERVICE_VENDOR) {
+                return 'Deployment status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
+            } else {
+                return 'Deployment status polling failed. Please visit MyServices page to check the status of the request';
+            }
         } else if (uuid) {
             return 'Request accepted';
         } else if (uuid === undefined) {
             return 'Request submission in-progress';
         }
         return '';
-    }, [deployedServiceDetails, uuid, isPollingError, isSubmitFailed]);
+    }, [deployedServiceDetails, uuid, isPollingError, isSubmitFailed, serviceHostType]);
 
     const alertType = useMemo(() => {
         if (isPollingError || isSubmitFailed) {
