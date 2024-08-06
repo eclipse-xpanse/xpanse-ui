@@ -105,6 +105,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             key={uniqueRequestId.current}
                             uuid={submitDeploymentRequest.data?.serviceId ?? ''}
                             isSubmitFailed={submitDeploymentRequest.error}
+                            serviceHostType={state.serviceHostingType}
                             deployedServiceDetails={getServiceDetailsByIdQuery.data}
                             isPollingError={getServiceDetailsByIdQuery.isError}
                             serviceProviderContactDetails={state.contactServiceDetails}
