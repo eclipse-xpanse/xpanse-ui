@@ -257,7 +257,6 @@ export const Migrate = ({
                         deployParams={deployParams}
                         currentSelectedService={currentSelectedService}
                         stepItem={items[MigrationSteps.MigrateService]}
-                        onChangeFlavor={onChangeFlavor}
                         getServicePriceQuery={getServicePriceQuery}
                     />
                 );
