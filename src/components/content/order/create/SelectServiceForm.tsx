@@ -162,8 +162,23 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
         location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
-        billingModes = getBillingModes(selectCsp, selectServiceHostType, versionToServicesMap.get(selectVersion));
+
+        areaList = convertAreasToTabs(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
+        setSelectArea(areaList[0].key);
+
+        regionList = getRegionDropDownValues(
+            selectCsp,
+            serviceHostingType,
+            areaList[0].key,
+            versionToServicesMap.get(selectVersion)
+        );
+        setSelectRegion(regionList[0].value);
+
+        billingModes = getBillingModes(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
+
+        flavorList = getServiceFlavorList(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
+        setSelectFlavor(flavorList[0]?.name ?? '');
     };
 
     const onChangeRegion = (value: string) => {
@@ -249,7 +264,12 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     }
 
     const getServiceTemplateId = (): string => {
-        const service = services.find((service) => service.version === selectVersion && service.csp === selectCsp);
+        const service = services.find(
+            (service) =>
+                service.version === selectVersion &&
+                service.csp === selectCsp &&
+                selectServiceHostType === service.serviceHostingType
+        );
         return service ? service.serviceTemplateId : '';
     };
 
