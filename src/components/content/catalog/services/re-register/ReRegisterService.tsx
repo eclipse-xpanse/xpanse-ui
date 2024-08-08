@@ -4,23 +4,24 @@
  */
 
 import { PlusCircleOutlined } from '@ant-design/icons';
+import { UseMutationResult } from '@tanstack/react-query';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { serviceRegistrationState } from '../../../../../xpanse-api/generated';
+import { serviceRegistrationState, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
-import { useReRegisterRequest } from './ReRegisterMutation';
 
 function ReRegisterService({
     id,
     setIsViewDisabled,
+    reRegisterRequest,
     serviceRegistrationStatus,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
+    reRegisterRequest: UseMutationResult<ServiceTemplateDetailVo, Error, void>;
     serviceRegistrationStatus: serviceRegistrationState;
 }): React.JSX.Element {
-    const reRegisterRequest = useReRegisterRequest(id);
     const deleteState = useGetDeleteMutationState(id);
     const reRegister = () => {
         setIsViewDisabled(true);
