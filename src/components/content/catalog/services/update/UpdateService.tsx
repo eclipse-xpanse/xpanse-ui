@@ -17,6 +17,7 @@ import {
     Response,
     ServiceTemplateDetailVo,
     category,
+    serviceRegistrationState,
     update,
     type UpdateData,
 } from '../../../../../xpanse-api/generated';
@@ -41,6 +42,7 @@ function UpdateService({
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const updateResult = useRef<string[]>([]);
+    const serviceRegistrationStatus = useRef<serviceRegistrationState>(serviceRegistrationState.UNREGISTERED);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,6 +58,7 @@ function UpdateService({
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
             updateResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
+            serviceRegistrationStatus.current = serviceTemplateVo.serviceRegistrationState as serviceRegistrationState;
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
@@ -180,6 +183,7 @@ function UpdateService({
                     {ocl.current ? (
                         <UpdateResult
                             ocl={ocl.current}
+                            serviceRegistrationStatus={serviceRegistrationStatus.current}
                             updateRequestStatus={updateServiceRequest.status}
                             updateResult={updateResult.current}
                             onRemove={handleCancel}
