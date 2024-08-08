@@ -18,6 +18,8 @@ import type {
     AddUserPolicyData,
     AddUserPolicyResponse,
     AuthorizeResponse,
+    ChangeServiceConfigurationData,
+    ChangeServiceConfigurationResponse,
     ChangeServiceLockConfigData,
     ChangeServiceLockConfigResponse,
     CompleteTaskData,
@@ -183,7 +185,7 @@ import type {
 } from './types.gen';
 
 /**
- * Manage failed task orders.<br>Required role:<b> admin</b> or <b>user</b>
+ * Manage failed task orders.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id ID of the workflow task that needs to be handled
  * @param data.retryOrder Controls if the order must be retried again or simply closed.
@@ -213,7 +215,7 @@ export const manageFailedOrder = (data: ManageFailedOrderData): CancelablePromis
 };
 
 /**
- * Complete tasks by task ID and set global process variables .<br>Required role:<b> admin</b> or <b>user</b>
+ * Complete tasks by task ID and set global process variables .<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id ID of the workflow task that needs to be handled
  * @param data.requestBody
@@ -242,7 +244,7 @@ export const completeTask = (data: CompleteTaskData): CancelablePromise<Complete
 };
 
 /**
- * List all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+ * List all cloud provider credentials added by the user for a cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
  * @param data.type The type of credential.
@@ -272,7 +274,7 @@ export const getUserCloudCredentials = (
 };
 
 /**
- * Update user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+ * Update user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns void No Content
@@ -299,7 +301,7 @@ export const updateUserCloudCredential = (
 };
 
 /**
- * Add user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+ * Add user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns void No Content
@@ -326,7 +328,7 @@ export const addUserCloudCredential = (
 };
 
 /**
- * Delete user's credential for connecting to the cloud service provider.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
  * @param data.type The type of credential.
@@ -358,7 +360,7 @@ export const deleteUserCloudCredential = (
 };
 
 /**
- * Start a task to stop the service instance.<br>Required role:<b> admin</b> or <b>user</b>
+ * Start a task to stop the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
  * @returns string Accepted
@@ -384,7 +386,7 @@ export const stopService = (data: StopServiceData): CancelablePromise<StopServic
 };
 
 /**
- * Start a task to start the service instance.<br>Required role:<b> admin</b> or <b>user</b>
+ * Start a task to start the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
  * @returns string Accepted
@@ -410,7 +412,7 @@ export const startService = (data: StartServiceData): CancelablePromise<StartSer
 };
 
 /**
- * Start a task to restart the service instance.<br>Required role:<b> admin</b> or <b>user</b>
+ * Start a task to restart the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
  * @returns string Accepted
@@ -436,17 +438,76 @@ export const restartService = (data: RestartServiceData): CancelablePromise<Rest
 };
 
 /**
- * Create an order task to modify the deployed service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to modify the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @param data.requestBody
- * @returns ServiceOrder Id of the order task to modify the deployed service.
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const modify = (data: ModifyData): CancelablePromise<ModifyResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
         url: '/xpanse/services/modify/{serviceId}',
+        path: {
+            serviceId: data.serviceId,
+        },
+        body: data.requestBody,
+        mediaType: 'application/json',
+        errors: {
+            400: '',
+            401: '',
+            403: '',
+            408: '',
+            422: '',
+            500: '',
+            502: '',
+        },
+    });
+};
+
+/**
+ * Create an order to redeploy the failed service using service id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId
+ * @returns ServiceOrder Accepted
+ * @throws ApiError
+ */
+export const redeployFailedDeployment = (
+    data: RedeployFailedDeploymentData
+): CancelablePromise<RedeployFailedDeploymentResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/services/deploy/retry/{serviceId}',
+        path: {
+            serviceId: data.serviceId,
+        },
+        errors: {
+            400: '',
+            401: '',
+            403: '',
+            408: '',
+            422: '',
+            500: '',
+            502: '',
+        },
+    });
+};
+
+/**
+ * Update the service's configuration to the registered service template.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service
+ * @param data.requestBody
+ * @returns ServiceOrder OK
+ * @throws ApiError
+ */
+export const changeServiceConfiguration = (
+    data: ChangeServiceConfigurationData
+): CancelablePromise<ChangeServiceConfigurationResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/services/config/{serviceId}',
         path: {
             serviceId: data.serviceId,
         },
@@ -465,35 +526,7 @@ export const modify = (data: ModifyData): CancelablePromise<ModifyResponse> => {
 };
 
 /**
- * Create an order to redeploy the failed service using service id.<br>Required role:<b> admin</b> or <b>user</b>
- * @param data The data for the request.
- * @param data.serviceId
- * @returns ServiceOrder Id of the order task to redeploy the filed service.
- * @throws ApiError
- */
-export const redeployFailedDeployment = (
-    data: RedeployFailedDeploymentData
-): CancelablePromise<RedeployFailedDeploymentResponse> => {
-    return __request(OpenAPI, {
-        method: 'PUT',
-        url: '/xpanse/services/deploy/retry/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Change the lock config of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Change the lock config of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @param data.requestBody
@@ -524,7 +557,7 @@ export const changeServiceLockConfig = (
 };
 
 /**
- * Get service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Get service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @returns ServiceTemplateDetailVo OK
@@ -550,7 +583,7 @@ export const details = (data: DetailsData): CancelablePromise<DetailsResponse> =
 };
 
 /**
- * Update service template using id and ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Update service template using id and ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @param data.requestBody
@@ -579,7 +612,7 @@ export const update = (data: UpdateData): CancelablePromise<UpdateResponse> => {
 };
 
 /**
- * Delete unregistered service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Delete unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @returns void No Content
@@ -607,7 +640,7 @@ export const deleteServiceTemplate = (
 };
 
 /**
- * Unregister service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Unregister service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @returns ServiceTemplateDetailVo OK
@@ -633,7 +666,7 @@ export const unregister = (data: UnregisterData): CancelablePromise<UnregisterRe
 };
 
 /**
- * Review service template registration.<br>Required role:<b> admin</b> or <b>csp</b>
+ * Review service template registration.<br> Required role: <b>admin</b> or <b>csp</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @param data.requestBody
@@ -662,7 +695,7 @@ export const reviewRegistration = (data: ReviewRegistrationData): CancelableProm
 };
 
 /**
- * Re-register the unregistered service template using id.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Re-register the unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @returns ServiceTemplateDetailVo OK
@@ -690,7 +723,7 @@ export const reRegisterServiceTemplate = (
 };
 
 /**
- * Update service template using id and URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Update service template using id and URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @param data.oclLocation URL of Ocl file
@@ -720,7 +753,7 @@ export const fetchUpdate = (data: FetchUpdateData): CancelablePromise<FetchUpdat
 };
 
 /**
- * Get details of policy belongs to the registered service template.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Get details of policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id
  * @returns ServicePolicy OK
@@ -748,7 +781,7 @@ export const getServicePolicyDetails = (
 };
 
 /**
- * Update the policy belongs to the registered service template.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Update the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id ID of the policy to be updated
  * @param data.requestBody
@@ -777,7 +810,7 @@ export const updateServicePolicy = (data: UpdateServicePolicyData): CancelablePr
 };
 
 /**
- * Delete the policy belongs to the registered service template.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Delete the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id
  * @returns void No Content
@@ -803,7 +836,7 @@ export const deleteServicePolicy = (data: DeleteServicePolicyData): CancelablePr
 };
 
 /**
- * Get the details of the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get the details of the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id
  * @returns UserPolicy OK
@@ -829,7 +862,7 @@ export const getPolicyDetails = (data: GetPolicyDetailsData): CancelablePromise<
 };
 
 /**
- * Update the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * Update the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id ID of the policy to be updated
  * @param data.requestBody
@@ -858,7 +891,7 @@ export const updateUserPolicy = (data: UpdateUserPolicyData): CancelablePromise<
 };
 
 /**
- * Delete the policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id
  * @returns void No Content
@@ -884,7 +917,7 @@ export const deleteUserPolicy = (data: DeleteUserPolicyData): CancelablePromise<
 };
 
 /**
- * Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.<br>Required role:<b> isv</b>
+ * Users in the ISV role get all cloud provider credentials added by the user for a cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
  * @param data.type The type of credential.
@@ -914,7 +947,7 @@ export const getIsvCloudCredentials = (
 };
 
 /**
- * Update the user credentials used for ISV to connect to the cloud service provider.<br>Required role:<b> isv</b>
+ * Update the user credentials used for ISV to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns void No Content
@@ -941,7 +974,7 @@ export const updateIsvCloudCredential = (
 };
 
 /**
- * Add the user credentials for the ISV role used to connect to the cloud service provider.<br>Required role:<b> isv</b>
+ * Add the user credentials for the ISV role used to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns void No Content
@@ -968,7 +1001,7 @@ export const addIsvCloudCredential = (
 };
 
 /**
- * Delete the credentials of the user in the USER role to connect to the cloud service provider.<br>Required role:<b> isv</b>
+ * Delete the credentials of the user in the USER role to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
  * @param data.type The type of credential.
@@ -1000,7 +1033,7 @@ export const deleteIsvCloudCredential = (
 };
 
 /**
- * List all deployed services belongs to the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * List all deployed services belongs to the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -1036,10 +1069,10 @@ export const listDeployedServices = (
 };
 
 /**
- * Create an order task to deploy new service using approved service template.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to deploy new service using approved service template.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
- * @returns ServiceOrder Id of the order task to deploy the new service.
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const deploy = (data: DeployData): CancelablePromise<DeployResponse> => {
@@ -1049,19 +1082,19 @@ export const deploy = (data: DeployData): CancelablePromise<DeployResponse> => {
         body: data.requestBody,
         mediaType: 'application/json',
         errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
+            400: '',
+            401: '',
+            403: '',
+            408: '',
+            422: '',
+            500: '',
+            502: '',
         },
     });
 };
 
 /**
- * Create a job to migrate the deployed service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create a job to migrate the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns string Accepted
@@ -1086,7 +1119,7 @@ export const migrate = (data: MigrateData): CancelablePromise<MigrateResponse> =
 };
 
 /**
- * List service templates with query params.<br>Required role:<b> admin</b> or <b>isv</b>
+ * List service templates with query params.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -1124,7 +1157,7 @@ export const listServiceTemplates = (
 };
 
 /**
- * Register new service template using ocl model.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Register new service template using ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns ServiceTemplateDetailVo OK
@@ -1149,7 +1182,7 @@ export const register = (data: RegisterData): CancelablePromise<RegisterResponse
 };
 
 /**
- * Register new service template using URL of Ocl file.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Register new service template using URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.oclLocation URL of Ocl file
  * @returns ServiceTemplateDetailVo OK
@@ -1175,7 +1208,7 @@ export const fetch = (data: FetchData): CancelablePromise<FetchResponse> => {
 };
 
 /**
- * List the policies belongs to the service.<br>Required role:<b> admin</b> or <b>isv</b>
+ * List the policies belongs to the service.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId The id of registered service template which the policy belongs to.
  * @returns ServicePolicy OK
@@ -1201,7 +1234,7 @@ export const listServicePolicies = (data: ListServicePoliciesData): CancelablePr
 };
 
 /**
- * Add policy for the registered service template.<br>Required role:<b> admin</b> or <b>isv</b>
+ * Add policy for the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns ServicePolicy OK
@@ -1226,7 +1259,7 @@ export const addServicePolicy = (data: AddServicePolicyData): CancelablePromise<
 };
 
 /**
- * List the policies defined by the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * List the policies defined by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName Name of csp which the policy belongs to.
  * @param data.enabled Is the policy enabled.
@@ -1254,7 +1287,7 @@ export const listUserPolicies = (data: ListUserPoliciesData = {}): CancelablePro
 };
 
 /**
- * Add policy created by the user.<br>Required role:<b> admin</b> or <b>user</b>
+ * Add policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns UserPolicy OK
@@ -1569,7 +1602,7 @@ export const deployCallback1 = (data: DeployCallback1Data): CancelablePromise<De
 };
 
 /**
- * Query all tasks of the given user<br>Required role:<b> admin</b> or <b>user</b>
+ * Query all tasks of the given user<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.status the status of task
  * @returns WorkFlowTask OK
@@ -1595,7 +1628,7 @@ export const queryTasks = (data: QueryTasksData = {}): CancelablePromise<QueryTa
 };
 
 /**
- * List state management tasks of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * List state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId id of the service
  * @param data.taskType type of the management task
@@ -1629,7 +1662,7 @@ export const listServiceStateManagementTasks = (
 };
 
 /**
- * Delete all state management tasks of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete all state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId id of the service
  * @returns void No Content
@@ -1657,7 +1690,7 @@ export const deleteManagementTasksByServiceId = (
 };
 
 /**
- * List compute resources of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * List compute resources of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the deployed service
  * @returns DeployResource OK
@@ -1685,7 +1718,7 @@ export const getComputeResourceInventoryOfService = (
 };
 
 /**
- * List service orders of the service<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * List service orders of the service<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @param data.taskType Task type of the service order.
@@ -1717,7 +1750,7 @@ export const listServiceOrders = (data: ListServiceOrdersData): CancelablePromis
 };
 
 /**
- * Delete all service orders of the service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Delete all service orders of the service.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @returns void No Content
@@ -1745,7 +1778,7 @@ export const deleteOrdersByServiceId = (
 };
 
 /**
- * Long-polling method to get the latest service deployment or service update status.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Long-polling method to get the latest service deployment or service update status.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId ID of the service
  * @param data.lastKnownServiceDeploymentState Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
@@ -1777,7 +1810,7 @@ export const getLatestServiceDeploymentStatus = (
 };
 
 /**
- * Get state management task details by the task id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get state management task details by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.taskId id of the task
  * @returns ServiceStateManagementTaskDetails OK
@@ -1805,7 +1838,7 @@ export const getManagementTaskDetailsByTaskId = (
 };
 
 /**
- * Delete service state management task by the task id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Delete service state management task by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.taskId id of the task
  * @returns void No Content
@@ -1833,7 +1866,7 @@ export const deleteManagementTaskByTaskId = (
 };
 
 /**
- * Get details of the service order by the order id.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Get details of the service order by the order id.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.orderId Id of the service order
  * @returns ServiceOrderDetails OK
@@ -1861,7 +1894,7 @@ export const getOrderDetailsByOrderId = (
 };
 
 /**
- * Delete the service order by the order id.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Delete the service order by the order id.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.orderId Id of the service order
  * @returns void No Content
@@ -1889,7 +1922,7 @@ export const deleteOrderByOrderId = (
 };
 
 /**
- * Long-polling method to get the latest or updated task status of the service order.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Long-polling method to get the latest or updated task status of the service order.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.orderId Id of the service order
  * @param data.lastKnownServiceDeploymentState Last known service order task status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
@@ -1921,7 +1954,7 @@ export const getLatestServiceOrderStatus = (
 };
 
 /**
- * List all services migration by a user.<br>Required role:<b> admin</b> or <b>user</b>
+ * List all services migration by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.migrationId Id of the service migrate
  * @param data.newServiceId Id of the new service
@@ -1955,7 +1988,7 @@ export const listServiceMigrations = (
 };
 
 /**
- * Get migration records based on migration id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get migration records based on migration id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.migrationId Migration ID
  * @returns ServiceMigrationDetails OK
@@ -1983,7 +2016,7 @@ export const getMigrationOrderDetailsById = (
 };
 
 /**
- * List all deployed services by a user.<br>Required role:<b> isv</b>
+ * List all deployed services by a user.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -2019,7 +2052,7 @@ export const listDeployedServicesOfIsv = (
 };
 
 /**
- * Get the details of the deployed service by service id.<br>Required role:<b> isv</b>
+ * Get the details of the deployed service by service id.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of deployed service
  * @returns DeployedServiceDetails OK
@@ -2047,7 +2080,7 @@ export const getServiceDetailsByIdForIsv = (
 };
 
 /**
- * List details of deployed services using parameters.<br>Required role:<b> admin</b> or <b>user</b>
+ * List details of deployed services using parameters.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -2083,7 +2116,7 @@ export const listDeployedServicesDetails = (
 };
 
 /**
- * Get deployed service details by serviceId.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get deployed service details by serviceId.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @returns VendorHostedDeployedServiceDetails OK
@@ -2111,7 +2144,7 @@ export const getVendorHostedServiceDetailsById = (
 };
 
 /**
- * Get details of the deployed service by id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get details of the deployed service by id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
  * @returns DeployedServiceDetails OK
@@ -2139,7 +2172,7 @@ export const getSelfHostedServiceDetailsById = (
 };
 
 /**
- * Get the price of one specific flavor of the service.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get the price of one specific flavor of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.templateId id of the service template
  * @param data.region region name of the service
@@ -2173,7 +2206,7 @@ export const getServicePriceByFlavor = (
 };
 
 /**
- * Get the prices of all flavors of the service<br>Required role:<b> admin</b> or <b>user</b>
+ * Get the prices of all flavors of the service<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.templateId id of the service template
  * @param data.region region name of the service
@@ -2203,7 +2236,7 @@ export const getPricesByService = (data: GetPricesByServiceData): CancelableProm
 };
 
 /**
- * Get metrics of a deployed service or a resource.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get metrics of a deployed service or a resource.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the deployed service
  * @param data.resourceId Id of resource in the deployed service
@@ -2241,7 +2274,7 @@ export const getMetrics = (data: GetMetricsData): CancelablePromise<GetMetricsRe
 };
 
 /**
- * Check health of API service and backend systems.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
+ * Check health of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @returns SystemStatus OK
  * @throws ApiError
  */
@@ -2262,7 +2295,7 @@ export const healthCheck = (): CancelablePromise<HealthCheckResponse> => {
 };
 
 /**
- * List cloud service providers with active plugin.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
+ * List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @returns string OK
  * @throws ApiError
  */
@@ -2283,7 +2316,7 @@ export const getActiveCsps = (): CancelablePromise<GetActiveCspsResponse> => {
 };
 
 /**
- * List managed service templates with query params.<br>Required role:<b> admin</b> or <b>csp</b>
+ * List managed service templates with query params.<br> Required role: <b>admin</b> or <b>csp</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.serviceName name of the service
@@ -2319,7 +2352,7 @@ export const listManagedServiceTemplates = (
 };
 
 /**
- * view service template by id.<br>Required role:<b> admin</b> or <b>csp</b>
+ * view service template by id.<br> Required role: <b>admin</b> or <b>csp</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
  * @returns ServiceTemplateDetailVo OK
@@ -2347,7 +2380,7 @@ export const getRegistrationDetails = (
 };
 
 /**
- * List existing cloud resource names with kind<br>Required role:<b> admin</b> or <b>user</b>
+ * List existing cloud resource names with kind<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.csp name of the cloud service provider
  * @param data.region name of he region
@@ -2383,7 +2416,7 @@ export const getExistingResourceNamesWithKind = (
 };
 
 /**
- * Get availability zones with csp and region.<br>Required role:<b> admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b>
+ * Get availability zones with csp and region.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider
  * @param data.regionName name of the region
@@ -2415,7 +2448,7 @@ export const getAvailabilityZones = (
 };
 
 /**
- * Returns the OpenAPI document for adding a credential.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
+ * Returns the OpenAPI document for adding a credential.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.csp The cloud service provider.
  * @param data.type The type of credential.
@@ -2445,7 +2478,7 @@ export const getCredentialOpenApi = (
 };
 
 /**
- * List the credential capabilities defined by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
+ * List the credential capabilities defined by the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider.
  * @param data.type The type of credential.
@@ -2477,7 +2510,7 @@ export const getCredentialCapabilities = (
 };
 
 /**
- * List the credential types supported by the cloud service provider.<br>Required role:<b> isv</b> or <b>admin</b> or <b>user</b>
+ * List the credential types supported by the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
  * @returns string OK
@@ -2505,7 +2538,7 @@ export const getCredentialTypes = (
 };
 
 /**
- * List of all approved services which are available for user to order.<br>Required role:<b> admin</b> or <b>user</b>
+ * List of all approved services which are available for user to order.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -2541,7 +2574,7 @@ export const listOrderableServices = (
 };
 
 /**
- * Get deployable service by id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Get deployable service by id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id The id of orderable service.
  * @returns UserOrderableServiceVo OK
@@ -2569,7 +2602,7 @@ export const getOrderableServiceDetails = (
 };
 
 /**
- * Get the API document of the orderable service.<br>Required role:<b> admin</b> or <b>isv</b> or <b>user</b>
+ * Get the API document of the orderable service.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.id
  * @returns Link OK
@@ -2644,10 +2677,10 @@ export const authorize = (): CancelablePromise<AuthorizeResponse> => {
 };
 
 /**
- * Create an order task to destroy the deployed service using id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to destroy the deployed service using id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
- * @returns ServiceOrder Id of the order task to destroy the deployed service.
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const destroy = (data: DestroyData): CancelablePromise<DestroyResponse> => {
@@ -2658,22 +2691,22 @@ export const destroy = (data: DestroyData): CancelablePromise<DestroyResponse> =
             serviceId: data.serviceId,
         },
         errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
+            400: '',
+            401: '',
+            403: '',
+            408: '',
+            422: '',
+            500: '',
+            502: '',
         },
     });
 };
 
 /**
- * Create an order task to purge the deployed service using service id.<br>Required role:<b> admin</b> or <b>user</b>
+ * Create an order task to purge the deployed service using service id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
- * @returns ServiceOrder Id of the order task to purge the destroyed service.
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const purge = (data: PurgeData): CancelablePromise<PurgeResponse> => {
@@ -2684,13 +2717,13 @@ export const purge = (data: PurgeData): CancelablePromise<PurgeResponse> => {
             serviceId: data.serviceId,
         },
         errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
+            400: '',
+            401: '',
+            403: '',
+            408: '',
+            422: '',
+            500: '',
+            502: '',
         },
     });
 };
