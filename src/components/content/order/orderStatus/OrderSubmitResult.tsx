@@ -3,9 +3,10 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert } from 'antd';
+import { Alert, Button, Row } from 'antd';
 import React from 'react';
 import { StopwatchResult } from 'react-timer-hook';
+import errorAlertStyles from '../../../../styles/error-alert.module.css';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -18,13 +19,19 @@ export const OrderSubmitResult = ({
     uuid,
     type,
     stopWatch,
+    isDeployRequestError,
     contactServiceDetails,
+    retryRequest,
+    onClose,
 }: {
     msg: string | React.JSX.Element;
     uuid: string;
     type: 'success' | 'error';
     stopWatch: StopwatchResult;
+    isDeployRequestError: boolean;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
+    retryRequest: () => void;
+    onClose: () => void;
 }): React.JSX.Element => {
     return (
         <div className={submitAlertStyles.submitAlertTip}>
@@ -34,19 +41,38 @@ export const OrderSubmitResult = ({
                 description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
                 showIcon
                 closable={true}
+                onClose={onClose}
                 type={type}
                 action={
                     <>
-                        {contactServiceDetails !== undefined ? (
-                            <ContactDetailsText
-                                serviceProviderContactDetails={contactServiceDetails}
-                                showFor={ContactDetailsShowType.Order}
-                            />
+                        {type === 'error' && !isDeployRequestError ? (
+                            <Row>
+                                <Button
+                                    className={errorAlertStyles.tryAgainBtnInAlertClass}
+                                    size='small'
+                                    type='primary'
+                                    onClick={retryRequest}
+                                    danger={true}
+                                >
+                                    Retry Request
+                                </Button>
+                            </Row>
                         ) : (
                             <></>
                         )}
-
-                        <DeploymentTimerNew stopWatch={stopWatch} />
+                        {contactServiceDetails !== undefined ? (
+                            <Row>
+                                <ContactDetailsText
+                                    serviceProviderContactDetails={contactServiceDetails}
+                                    showFor={ContactDetailsShowType.Order}
+                                />
+                            </Row>
+                        ) : (
+                            <></>
+                        )}
+                        <Row>
+                            <DeploymentTimerNew stopWatch={stopWatch} />
+                        </Row>
                     </>
                 }
             />{' '}

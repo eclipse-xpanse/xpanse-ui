@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { name, serviceRegistrationState, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ServiceTemplateDetailVo, name, serviceRegistrationState } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
