@@ -25,6 +25,7 @@ import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
 import { ServicePolicies } from '../policies/ServicePolicies';
+import { useReRegisterRequest } from '../re-register/ReRegisterMutation';
 import { ReRegisterResult } from '../re-register/ReRegisterResult';
 import ReRegisterService from '../re-register/ReRegisterService';
 import { UnregisterResult } from '../unregister/UnregisterResult';
@@ -143,6 +144,8 @@ function ServiceProvider({
         }
     }
 
+    const reRegisterRequest = useReRegisterRequest(activeServiceDetail?.serviceTemplateId ?? '');
+
     const onChangeCsp = (key: string) => {
         navigate({
             pathname: catalogPageRoute,
@@ -181,7 +184,13 @@ function ServiceProvider({
                     {activeServiceDetail ? (
                         <>
                             <UnregisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
-                            <ReRegisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <ReRegisterResult
+                                id={activeServiceDetail.serviceTemplateId}
+                                serviceRegistrationStatus={
+                                    reRegisterRequest.data?.serviceRegistrationState as serviceRegistrationState
+                                }
+                                category={category}
+                            />
                             <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <Tabs
                                 items={items}
@@ -205,6 +214,7 @@ function ServiceProvider({
                                 <ReRegisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
+                                    reRegisterRequest={reRegisterRequest}
                                     serviceRegistrationStatus={
                                         activeServiceDetail.serviceRegistrationState as serviceRegistrationState
                                     }

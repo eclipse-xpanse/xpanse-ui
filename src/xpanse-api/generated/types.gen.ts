@@ -38,7 +38,6 @@ export type Response = {
         | 'Service Deployment Not Found'
         | 'Resource Not Found'
         | 'Deployment Variable Invalid'
-        | 'Deployment Failed'
         | 'Service Template Update Not Allowed'
         | 'Service Template Still In Use'
         | 'Unauthorized'
@@ -67,7 +66,8 @@ export type Response = {
         | 'Service Order Not Found'
         | 'Service Price Calculation Failed'
         | 'Invalid Git Repo Details'
-        | 'File Locked';
+        | 'File Locked'
+        | 'Service Configuration Invalid';
     /**
      * Details of the errors occurred
      */
@@ -110,7 +110,6 @@ export enum resultType {
     SERVICE_DEPLOYMENT_NOT_FOUND = 'Service Deployment Not Found',
     RESOURCE_NOT_FOUND = 'Resource Not Found',
     DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
-    DEPLOYMENT_FAILED = 'Deployment Failed',
     SERVICE_TEMPLATE_UPDATE_NOT_ALLOWED = 'Service Template Update Not Allowed',
     SERVICE_TEMPLATE_STILL_IN_USE = 'Service Template Still In Use',
     UNAUTHORIZED = 'Unauthorized',
@@ -140,6 +139,7 @@ export enum resultType {
     SERVICE_PRICE_CALCULATION_FAILED = 'Service Price Calculation Failed',
     INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     FILE_LOCKED = 'File Locked',
+    SERVICE_CONFIGURATION_INVALID = 'Service Configuration Invalid',
 }
 
 export type CreateCredential = {
@@ -246,6 +246,87 @@ export type ModifyRequest = {
     };
 };
 
+export type OrderFailedResponse = {
+    /**
+     * The result code of response.
+     */
+    resultType:
+        | 'Success'
+        | 'Runtime Error'
+        | 'Parameters Invalid'
+        | 'Terraform Script Invalid'
+        | 'Unprocessable Entity'
+        | 'Response Not Valid'
+        | 'Failure while connecting to backend'
+        | 'Credential Capability Not Found'
+        | 'Credentials Not Found'
+        | 'Credential Variables Not Complete'
+        | 'Flavor Invalid'
+        | 'Terraform Execution Failed'
+        | 'Plugin Not Found'
+        | 'Deployer Not Found'
+        | 'No Credential Definition Available'
+        | 'Invalid Service State'
+        | 'Resource Invalid For Monitoring'
+        | 'Unhandled Exception'
+        | 'Service Template Already Registered'
+        | 'Icon Processing Failed'
+        | 'Service Template Not Registered'
+        | 'Service Template Not Approved'
+        | 'Service Template Already Reviewed'
+        | 'Invalid Service Version'
+        | 'Invalid Service Flavors'
+        | 'Service Deployment Not Found'
+        | 'Resource Not Found'
+        | 'Deployment Variable Invalid'
+        | 'Service Template Update Not Allowed'
+        | 'Service Template Still In Use'
+        | 'Unauthorized'
+        | 'Access Denied'
+        | 'Sensitive Field Encryption Or Decryption Failed Exception'
+        | 'Unsupported Enum Value'
+        | 'Terraform Boot Request Failed'
+        | 'Tofu Maker Request Failed'
+        | 'Metrics Data Not Ready'
+        | 'Variable Validation Failed'
+        | 'Variable Schema Definition Invalid'
+        | 'Policy Not Found'
+        | 'Duplicate Policy'
+        | 'Policy Validation Failed'
+        | 'Policy Evaluation Failed'
+        | 'Current Login User No Found'
+        | 'Service Details No Accessible'
+        | 'Migrating activiti Task Not Found'
+        | 'Service Migration Failed Exception'
+        | 'Service Migration Not Found'
+        | 'Service Locked'
+        | 'Eula Not Accepted'
+        | 'Service Flavor Downgrade Not Allowed'
+        | 'Billing Mode Not Supported'
+        | 'Service State Management Task Not Found'
+        | 'Service Order Not Found'
+        | 'Service Price Calculation Failed'
+        | 'Invalid Git Repo Details'
+        | 'File Locked'
+        | 'Service Configuration Invalid';
+    /**
+     * Details of the errors occurred
+     */
+    details: Array<string>;
+    /**
+     * Describes if the request is successful
+     */
+    success: boolean;
+    /**
+     * The service id associated with the request.
+     */
+    serviceId?: string;
+    /**
+     * The order id associated with the request.
+     */
+    orderId?: string;
+};
+
 export type ServiceOrder = {
     /**
      * The id of the service order.
@@ -255,6 +336,15 @@ export type ServiceOrder = {
      * The id of the deployed service.
      */
     serviceId: string;
+};
+
+export type ServiceConfigurationUpdate = {
+    /**
+     * The service configuration to be modified
+     */
+    configuration: {
+        [key: string]: unknown;
+    };
 };
 
 export type ServiceLockConfig = {
@@ -791,10 +881,6 @@ export type ServiceConfigurationParameter = {
      * The init value of the service config parameter
      */
     initialValue: string;
-    /**
-     * Indicates if the service config parameter is mandatory
-     */
-    mandatory: boolean;
     /**
      * valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
      */
@@ -2213,6 +2299,7 @@ export type BackendSystemStatus = {
         | 'Terraform Boot'
         | 'Tofu Maker'
         | 'Policy Man'
+        | 'Cache Provider'
         | 'OpenTelemetry Collector';
     /**
      * The name of backend system.
@@ -2241,6 +2328,7 @@ export enum backendSystemType {
     TERRAFORM_BOOT = 'Terraform Boot',
     TOFU_MAKER = 'Tofu Maker',
     POLICY_MAN = 'Policy Man',
+    CACHE_PROVIDER = 'Cache Provider',
     OPEN_TELEMETRY_COLLECTOR = 'OpenTelemetry Collector',
 }
 
@@ -2507,6 +2595,16 @@ export type RedeployFailedDeploymentData = {
 };
 
 export type RedeployFailedDeploymentResponse = ServiceOrder;
+
+export type ChangeServiceConfigurationData = {
+    requestBody: ServiceConfigurationUpdate;
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type ChangeServiceConfigurationResponse = ServiceOrder;
 
 export type ChangeServiceLockConfigData = {
     requestBody: ServiceLockConfig;
@@ -3993,37 +4091,16 @@ export type $OpenApiTs = {
             req: ModifyData;
             res: {
                 /**
-                 * Bad Request
+                 * Accepted
                  */
-                400: Response;
-                /**
-                 * Unauthorized
-                 */
-                401: Response;
-                /**
-                 * Forbidden
-                 */
-                403: Response;
-                /**
-                 * Request Timeout
-                 */
-                408: Response;
-                /**
-                 * Unprocessable Entity
-                 */
-                422: Response;
-                /**
-                 * Internal Server Error
-                 */
-                500: Response;
-                /**
-                 * Bad Gateway
-                 */
-                502: Response;
-                /**
-                 * Id of the order task to modify the deployed service.
-                 */
-                default: ServiceOrder;
+                202: ServiceOrder;
+                400: OrderFailedResponse;
+                401: OrderFailedResponse;
+                403: OrderFailedResponse;
+                408: OrderFailedResponse;
+                422: OrderFailedResponse;
+                500: OrderFailedResponse;
+                502: OrderFailedResponse;
             };
         };
     };
@@ -4032,6 +4109,28 @@ export type $OpenApiTs = {
             req: RedeployFailedDeploymentData;
             res: {
                 /**
+                 * Accepted
+                 */
+                202: ServiceOrder;
+                400: OrderFailedResponse;
+                401: OrderFailedResponse;
+                403: OrderFailedResponse;
+                408: OrderFailedResponse;
+                422: OrderFailedResponse;
+                500: OrderFailedResponse;
+                502: OrderFailedResponse;
+            };
+        };
+    };
+    '/xpanse/services/config/{serviceId}': {
+        put: {
+            req: ChangeServiceConfigurationData;
+            res: {
+                /**
+                 * OK
+                 */
+                200: ServiceOrder;
+                /**
                  * Bad Request
                  */
                 400: Response;
@@ -4059,10 +4158,6 @@ export type $OpenApiTs = {
                  * Bad Gateway
                  */
                 502: Response;
-                /**
-                 * Id of the order task to redeploy the filed service.
-                 */
-                default: ServiceOrder;
             };
         };
     };
@@ -4792,37 +4887,16 @@ export type $OpenApiTs = {
             req: DeployData;
             res: {
                 /**
-                 * Bad Request
+                 * Accepted
                  */
-                400: Response;
-                /**
-                 * Unauthorized
-                 */
-                401: Response;
-                /**
-                 * Forbidden
-                 */
-                403: Response;
-                /**
-                 * Request Timeout
-                 */
-                408: Response;
-                /**
-                 * Unprocessable Entity
-                 */
-                422: Response;
-                /**
-                 * Internal Server Error
-                 */
-                500: Response;
-                /**
-                 * Bad Gateway
-                 */
-                502: Response;
-                /**
-                 * Id of the order task to deploy the new service.
-                 */
-                default: ServiceOrder;
+                202: ServiceOrder;
+                400: OrderFailedResponse;
+                401: OrderFailedResponse;
+                403: OrderFailedResponse;
+                408: OrderFailedResponse;
+                422: OrderFailedResponse;
+                500: OrderFailedResponse;
+                502: OrderFailedResponse;
             };
         };
     };
@@ -6930,37 +7004,16 @@ export type $OpenApiTs = {
             req: DestroyData;
             res: {
                 /**
-                 * Bad Request
+                 * Accepted
                  */
-                400: Response;
-                /**
-                 * Unauthorized
-                 */
-                401: Response;
-                /**
-                 * Forbidden
-                 */
-                403: Response;
-                /**
-                 * Request Timeout
-                 */
-                408: Response;
-                /**
-                 * Unprocessable Entity
-                 */
-                422: Response;
-                /**
-                 * Internal Server Error
-                 */
-                500: Response;
-                /**
-                 * Bad Gateway
-                 */
-                502: Response;
-                /**
-                 * Id of the order task to destroy the deployed service.
-                 */
-                default: ServiceOrder;
+                202: ServiceOrder;
+                400: OrderFailedResponse;
+                401: OrderFailedResponse;
+                403: OrderFailedResponse;
+                408: OrderFailedResponse;
+                422: OrderFailedResponse;
+                500: OrderFailedResponse;
+                502: OrderFailedResponse;
             };
         };
     };
@@ -6969,37 +7022,16 @@ export type $OpenApiTs = {
             req: PurgeData;
             res: {
                 /**
-                 * Bad Request
+                 * Accepted
                  */
-                400: Response;
-                /**
-                 * Unauthorized
-                 */
-                401: Response;
-                /**
-                 * Forbidden
-                 */
-                403: Response;
-                /**
-                 * Request Timeout
-                 */
-                408: Response;
-                /**
-                 * Unprocessable Entity
-                 */
-                422: Response;
-                /**
-                 * Internal Server Error
-                 */
-                500: Response;
-                /**
-                 * Bad Gateway
-                 */
-                502: Response;
-                /**
-                 * Id of the order task to purge the destroyed service.
-                 */
-                default: ServiceOrder;
+                202: ServiceOrder;
+                400: OrderFailedResponse;
+                401: OrderFailedResponse;
+                403: OrderFailedResponse;
+                408: OrderFailedResponse;
+                422: OrderFailedResponse;
+                500: OrderFailedResponse;
+                502: OrderFailedResponse;
             };
         };
     };
