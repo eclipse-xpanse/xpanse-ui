@@ -12,12 +12,12 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    billingMode,
-    csp,
     ServiceFlavor,
-    serviceHostingType,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
+    billingMode,
+    csp,
+    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';

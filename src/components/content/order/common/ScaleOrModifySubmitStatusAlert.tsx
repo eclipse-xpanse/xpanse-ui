@@ -15,10 +15,10 @@ import {
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { OrderSubmitResult } from '../orderStatus/OrderSubmitResult';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import { OperationType } from '../types/OperationType';
+import { ScaleOrModifyOrderSubmitResult } from './ScaleOrModifyOrderSubmitResult';
 
 function ScaleOrModifySubmitStatusAlert({
     isSubmitFailed,
@@ -144,7 +144,7 @@ function ScaleOrModifySubmitStatusAlert({
     }
 
     return (
-        <OrderSubmitResult
+        <ScaleOrModifyOrderSubmitResult
             msg={msg}
             uuid={currentSelectedService.serviceId}
             type={alertType}
