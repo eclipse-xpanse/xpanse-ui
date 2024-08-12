@@ -115,7 +115,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
     );
-    const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
+    let defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
         selectCsp,
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
@@ -175,6 +175,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectRegion(regionList[0].value);
 
         billingModes = getBillingModes(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
+        defaultBillingMode = getDefaultBillingMode(
+            selectCsp,
+            serviceHostingType,
+            versionToServicesMap.get(selectVersion)
+        );
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
 
         flavorList = getServiceFlavorList(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
@@ -219,31 +224,42 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);
+        defaultBillingMode = getDefaultBillingMode(
+            cspList[0],
+            serviceHostTypes[0],
+            versionToServicesMap.get(currentVersion)
+        );
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
     const onChangeCloudProvider = (csp: csp) => {
+        setSelectCsp(csp);
+
         serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
+        setSelectServiceHostType(serviceHostTypes[0]);
+
         areaList = convertAreasToTabs(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        setSelectArea(areaList[0]?.key ?? '');
+
         regionList = getRegionDropDownValues(
             csp,
             serviceHostTypes[0],
             areaList[0]?.key ?? '',
             versionToServicesMap.get(selectVersion)
         );
-        flavorList = getServiceFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        setSelectRegion(regionList[0]?.value ?? '');
+
         billingModes = getBillingModes(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        defaultBillingMode = getDefaultBillingMode(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
+
+        flavorList = getServiceFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
+        setSelectFlavor(flavorList[0]?.name ?? '');
+
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             csp,
             versionToServicesMap.get(selectVersion)
         );
-        serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
-        setSelectCsp(csp);
-        setSelectArea(areaList[0]?.key ?? '');
-        setSelectRegion(regionList[0]?.value ?? '');
-        setSelectFlavor(flavorList[0]?.name ?? '');
-        setSelectServiceHostType(serviceHostTypes[0]);
-        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
     function onAvailabilityZoneChange(varName: string, availabilityZone: string | undefined) {
