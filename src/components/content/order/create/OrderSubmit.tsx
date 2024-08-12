@@ -11,14 +11,23 @@ import { v4 } from 'uuid';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { CUSTOMER_SERVICE_NAME_FIELD, createServicePageRoute, homePageRoute } from '../../../utils/constants';
+import { ApiError, DeployRequest, taskStatus } from '../../../../xpanse-api/generated';
+import {
+    CUSTOMER_SERVICE_NAME_FIELD,
+    createServicePageRoute,
+    homePageRoute,
+    servicesSubPageRoute,
+} from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
 import { EulaInfo } from '../common/EulaInfo';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
-import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
+import {
+    useLatestServiceOrderStatusQuery,
+    useServiceDetailsByIdQuery,
+} from '../orderStatus/useServiceDetailsPollingQuery';
+import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
@@ -30,12 +39,22 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
     const uniqueRequestId = useRef(v4());
     const submitDeploymentRequest = useDeployRequestSubmitQuery();
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        submitDeploymentRequest.data?.serviceId ?? '',
-        submitDeploymentRequest.isSuccess,
-        state.serviceHostingType,
-        [serviceDeploymentState.DEPLOYMENT_SUCCESSFUL, serviceDeploymentState.DEPLOYMENT_FAILED]
+    const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
+    const getSubmitLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
+        redeployFailedDeploymentQuery.isSuccess
+            ? redeployFailedDeploymentQuery.data.orderId
+            : (submitDeploymentRequest.data?.orderId ?? ''),
+        submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess,
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
+
+    const getServiceDetailsByIdQuery = useServiceDetailsByIdQuery(
+        submitDeploymentRequest.data?.serviceId ?? '',
+        getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.SUCCESSFUL ||
+            getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.FAILED,
+        state.serviceHostingType
+    );
+
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
     const navigate = useNavigate();
@@ -77,11 +96,101 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         submitDeploymentRequest.mutate(createRequest);
     }
 
+    const retryRequest = () => {
+        uniqueRequestId.current = v4();
+        if (submitDeploymentRequest.isSuccess) {
+            redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.data.serviceId);
+        } else {
+            if (
+                submitDeploymentRequest.error instanceof ApiError &&
+                submitDeploymentRequest.error.body &&
+                typeof submitDeploymentRequest.error.body === 'object' &&
+                'serviceId' in submitDeploymentRequest.error.body
+            ) {
+                redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.error.body.serviceId as string);
+            }
+        }
+    };
+
+    const onClose = () => {
+        navigate(servicesSubPageRoute.concat(state.category));
+    };
+
     const createServicePageUrl: string = createServicePageRoute
         .concat('?catalog=', state.category)
         .concat('&serviceName=', state.name)
         .concat('&latestVersion=', state.version)
         .concat('&billingMode=', state.billingMode);
+
+    const isBackDisabled = () => {
+        if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {
+            return true;
+        }
+        if (
+            submitDeploymentRequest.isError ||
+            redeployFailedDeploymentQuery.isError ||
+            getSubmitLatestServiceOrderStatusQuery.isError
+        ) {
+            return true;
+        }
+        if (
+            submitDeploymentRequest.isSuccess &&
+            (getSubmitLatestServiceOrderStatusQuery.isPending ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                    taskStatus.IN_PROGRESS.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString())
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    const isDeployDisabled = () => {
+        if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {
+            return true;
+        }
+        if (
+            submitDeploymentRequest.isError ||
+            redeployFailedDeploymentQuery.isError ||
+            getSubmitLatestServiceOrderStatusQuery.isError
+        ) {
+            return true;
+        }
+
+        if (
+            submitDeploymentRequest.isSuccess &&
+            (getSubmitLatestServiceOrderStatusQuery.isPending ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                    taskStatus.IN_PROGRESS.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                    taskStatus.SUCCESSFUL.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    const isDeployLoading = () => {
+        if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {
+            return true;
+        }
+        if (
+            submitDeploymentRequest.isError ||
+            redeployFailedDeploymentQuery.isError ||
+            getSubmitLatestServiceOrderStatusQuery.isError
+        ) {
+            return false;
+        }
+        if (
+            submitDeploymentRequest.isSuccess &&
+            (getSubmitLatestServiceOrderStatusQuery.isPending ||
+                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString())
+        ) {
+            return true;
+        }
+        return false;
+    };
 
     return (
         <>
@@ -104,11 +213,14 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         <OrderSubmitStatusAlert
                             key={uniqueRequestId.current}
                             uuid={submitDeploymentRequest.data?.serviceId ?? ''}
-                            isSubmitFailed={submitDeploymentRequest.error}
                             serviceHostType={state.serviceHostingType}
+                            submitDeploymentRequest={submitDeploymentRequest}
+                            redeployFailedDeploymentQuery={redeployFailedDeploymentQuery}
+                            getSubmitLatestServiceOrderStatusQuery={getSubmitLatestServiceOrderStatusQuery}
                             deployedServiceDetails={getServiceDetailsByIdQuery.data}
-                            isPollingError={getServiceDetailsByIdQuery.isError}
                             serviceProviderContactDetails={state.contactServiceDetails}
+                            retryRequest={retryRequest}
+                            onClose={onClose}
                         />
                     ) : null}
                     <Form
@@ -148,8 +260,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             </Form.Item>
                             <div
                                 className={
-                                    getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                    serviceDeploymentState.DEPLOYING.toString()
+                                    getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() ===
+                                    taskStatus.IN_PROGRESS.toString()
                                         ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                                         : ''
                                 }
@@ -179,12 +291,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                         text={'Back'}
                                         to={createServicePageUrl as To}
                                         props={state}
-                                        disabled={
-                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                serviceDeploymentState.DEPLOYING.toString() ||
-                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
-                                        }
+                                        disabled={isBackDisabled()}
                                     />
                                 </div>
                             </Col>
@@ -192,17 +299,9 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                 <div className={serviceOrderStyles.orderParamDeploy}>
                                     <Button
                                         type='primary'
-                                        loading={
-                                            submitDeploymentRequest.isPending ||
-                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                serviceDeploymentState.DEPLOYING.toString()
-                                        }
+                                        loading={isDeployLoading()}
                                         htmlType='submit'
-                                        disabled={
-                                            submitDeploymentRequest.isPending ||
-                                            getServiceDetailsByIdQuery.data?.serviceDeploymentState.toString() ===
-                                                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString()
-                                        }
+                                        disabled={isDeployDisabled()}
                                     >
                                         Deploy
                                     </Button>

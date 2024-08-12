@@ -11,12 +11,12 @@ import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
 import {
+    DeployedService,
+    ServiceTemplateDetailVo,
     category,
     csp,
-    DeployedService,
     serviceDeploymentState,
     serviceRegistrationState,
-    ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
