@@ -208,11 +208,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         areaList = convertAreasToTabs(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
         regionList = getRegionDropDownValues(
             cspList[0],
-            selectServiceHostType,
+            serviceHostTypes[0],
             areaList[0]?.key ?? '',
             versionToServicesMap.get(currentVersion)
         );
-        flavorList = getServiceFlavorList(cspList[0], selectServiceHostType, versionToServicesMap.get(currentVersion));
+        flavorList = getServiceFlavorList(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
         billingModes = getBillingModes(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion));
         currentServiceProviderContactDetails = getContactServiceDetailsOfServiceByCsp(
             cspList[0],
