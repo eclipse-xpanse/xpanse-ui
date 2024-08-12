@@ -13,13 +13,13 @@ export const ProcessingStatus = ({
     response,
     operationType,
 }: {
-    response: DeployedServiceDetails;
+    response: DeployedServiceDetails | undefined;
     operationType: OperationType;
 }): React.JSX.Element => {
     const errorMsg: string = 'Please contact service vendor for error details.';
     const endPointMap = new Map<string, string>();
     if (operationType === (OperationType.Deploy as OperationType)) {
-        if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (response?.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -37,7 +37,7 @@ export const ProcessingStatus = ({
             } else {
                 return <span>{'Deployment Successful'}</span>;
             }
-        } else if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED) {
+        } else if (response?.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED) {
             return (
                 <div>
                     <span>{'Deployment Failed.'}</span>
@@ -50,7 +50,7 @@ export const ProcessingStatus = ({
     }
 
     if (operationType === (OperationType.Modify as OperationType)) {
-        if (response.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL) {
+        if (response?.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL) {
             if (response.deployedServiceProperties) {
                 for (const key in response.deployedServiceProperties) {
                     endPointMap.set(key, response.deployedServiceProperties[key]);
@@ -68,7 +68,7 @@ export const ProcessingStatus = ({
             } else {
                 return <span>{'Modification Successful'}</span>;
             }
-        } else if (response.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED) {
+        } else if (response?.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED) {
             return (
                 <div>
                     <span>{'Modification Failed.'}</span>
@@ -81,13 +81,13 @@ export const ProcessingStatus = ({
     }
 
     if (operationType === (OperationType.Destroy as OperationType)) {
-        if (response.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL) {
+        if (response?.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Destroyed Successfully'}</span>
                 </div>
             );
-        } else if (response.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED) {
+        } else if (response?.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED) {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
