@@ -17,6 +17,7 @@ import {
     serviceVersionKeyQuery,
 } from '../../../utils/constants.tsx';
 import { getFourthLevelKeysFromAvailableServicesTree } from '../../common/registeredServices/registeredServiceProps.ts';
+import { filterNodes } from '../../common/tree/filterTreeData';
 import { RegisteredServicesTree } from './RegisteredServicesTree.tsx';
 import ServiceContent from './ServiceContent.tsx';
 
@@ -28,6 +29,7 @@ export function RegisteredServicesFullView({
     availableServiceList: ServiceTemplateDetailVo[];
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
+    const [searchValue, setSearchValue] = useState('');
 
     const serviceNamespaceInQuery = useMemo(() => {
         const queryInUri = decodeURI(urlParams.get(serviceNamespaceQuery) ?? '');
@@ -121,6 +123,23 @@ export function RegisteredServicesFullView({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedKeyInTree]);
 
+    function isParentTreeSelected(selectedKeyInTree: React.Key): boolean {
+        let isParentNode: boolean = false;
+        treeData.forEach((dataNode: DataNode) => {
+            if (dataNode.key === selectedKeyInTree) {
+                isParentNode = true;
+            }
+        });
+        return isParentNode;
+    }
+
+    const onSelect = (selectedKeys: React.Key[]) => {
+        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
+            return;
+        }
+        setSelectedKeyInTree(selectedKeys[0]);
+    };
+
     return (
         <>
             <div className={catalogStyles.leftClass}>
@@ -129,9 +148,10 @@ export function RegisteredServicesFullView({
                     &nbsp;Services
                 </div>
                 <RegisteredServicesTree
-                    treeData={treeData}
+                    treeData={filterNodes(treeData, searchValue)}
                     selectedKeyInTree={selectedKeyInTree}
-                    setSelectedKeyInTree={setSelectedKeyInTree}
+                    onSelect={onSelect}
+                    setSearchValue={setSearchValue}
                 />
             </div>
             <div className={catalogStyles.middleClass} />
