@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form } from 'antd';
+import { Col, Form, Row } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig, csp } from '../../../../../xpanse-api/generated';
@@ -60,28 +60,29 @@ export function AvailabilityZoneFormItem({
     }
 
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-            <Form.Item
-                key={availabilityZoneConfig.varName}
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {availabilityZoneConfig.displayName}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-                required={availabilityZoneConfig.mandatory}
-                rules={[
-                    {
-                        required: availabilityZoneConfig.mandatory,
-                        message: availabilityZoneConfig.displayName + 'is required',
-                    },
-                    { type: 'string' },
-                ]}
-            >
-                {getFormContent()}
-            </Form.Item>
-        </div>
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    key={availabilityZoneConfig.varName}
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {availabilityZoneConfig.displayName}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                    required={availabilityZoneConfig.mandatory}
+                    rules={[
+                        {
+                            required: availabilityZoneConfig.mandatory,
+                            message: availabilityZoneConfig.displayName + 'is required',
+                        },
+                        { type: 'string' },
+                    ]}
+                ></Form.Item>
+            </Col>
+            <Col className={serviceOrderStyles.orderFormAzContent}>{getFormContent()}</Col>
+        </Row>
     );
 }

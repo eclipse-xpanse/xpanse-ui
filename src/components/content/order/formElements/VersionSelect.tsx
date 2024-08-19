@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Select, Space } from 'antd';
+import { Col, Form, Row, Select, Space } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 
@@ -17,18 +17,21 @@ export default function VersionSelect({
     onChangeVersion: (version: string) => void;
 }): React.JSX.Element {
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-            <Form.Item
-                name='Version'
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {'Version'}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-            >
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    name='Version'
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {'Version'}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                ></Form.Item>
+            </Col>
+            <Col>
                 <Space wrap>
                     <Select
                         value={selectVersion}
@@ -37,7 +40,7 @@ export default function VersionSelect({
                         options={versionList}
                     />
                 </Space>
-            </Form.Item>
-        </div>
+            </Col>
+        </Row>
     );
 }

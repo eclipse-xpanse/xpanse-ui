@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Form, Radio, RadioChangeEvent, Space } from 'antd';
+import { Col, Form, Radio, RadioChangeEvent, Row, Space } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { serviceHostingType } from '../../../../xpanse-api/generated';
@@ -32,18 +32,21 @@ export function ServiceHostingSelection({
           : undefined;
 
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-            <Form.Item
-                name='Service Hosted By'
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {'Service Hosted By'}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-            >
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    name='Service Hosted By'
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {'Service Hosted By'}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                ></Form.Item>
+            </Col>
+            <Col className={serviceOrderStyles.orderFormServiceHost}>
                 <Space wrap>
                     <Radio.Group
                         onChange={onChange}
@@ -55,7 +58,7 @@ export function ServiceHostingSelection({
                         <Radio value={serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
                     </Radio.Group>
                 </Space>
-            </Form.Item>
-        </div>
+            </Col>
+        </Row>
     );
 }
