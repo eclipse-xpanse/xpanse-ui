@@ -1420,7 +1420,7 @@ function MyServices(): React.JSX.Element {
                     destroyOnClose={true}
                     footer={null}
                     onCancel={handleCancelMigrateModel}
-                    width={2140}
+                    width={1600}
                     mask={true}
                 >
                     <Migrate currentSelectedService={activeRecord} />

@@ -3,25 +3,28 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Flex, Form, Radio } from 'antd';
+import { Col, Flex, Form, Radio, Row } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 
 export const MigrateServiceSubmitBillingMode = ({ selectBillMode }: { selectBillMode: string }): React.JSX.Element => {
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-            <Form.Item
-                key={'BillingMode'}
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {'Billing Mode'}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-                required={true}
-            >
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    key={'BillingMode'}
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {'Billing Mode'}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                    required={true}
+                ></Form.Item>
+            </Col>
+            <Col>
                 <Flex vertical gap='middle'>
                     <Radio.Group disabled={true} buttonStyle='solid'>
                         <Radio.Button key={selectBillMode} value={selectBillMode}>
@@ -29,7 +32,7 @@ export const MigrateServiceSubmitBillingMode = ({ selectBillMode }: { selectBill
                         </Radio.Button>
                     </Radio.Group>
                 </Flex>
-            </Form.Item>
-        </div>
+            </Col>
+        </Row>
     );
 };
