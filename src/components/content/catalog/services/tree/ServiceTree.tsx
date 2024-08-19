@@ -3,47 +3,47 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Tree } from 'antd';
+import { Input, Tree } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
+
+const { Search } = Input;
 
 export function ServiceTree({
     treeData,
     selectKey,
-    setSelectKey,
+    onSelect,
+    setSearchValue,
     isViewDisabled,
 }: {
     treeData: DataNode[];
     selectKey: React.Key;
-    setSelectKey: (selectedKey: React.Key) => void;
+    onSelect: (selectedKey: React.Key[]) => void;
+    setSearchValue: (searchValue: string) => void;
     isViewDisabled: boolean;
 }): React.JSX.Element {
-    function isParentTreeSelected(selectKey: React.Key): boolean {
-        let isParentNode: boolean = false;
-        treeData.forEach((dataNode: DataNode) => {
-            if (dataNode.key === selectKey) {
-                isParentNode = true;
-            }
-        });
-        return isParentNode;
-    }
-
-    const onSelect = (selectedKeys: React.Key[]) => {
-        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
-            return;
-        }
-        setSelectKey(selectedKeys[0]);
-    };
-
     return (
-        <Tree
-            showIcon={true}
-            defaultExpandAll={true}
-            autoExpandParent={true}
-            onSelect={onSelect}
-            selectedKeys={[selectKey]}
-            treeData={treeData}
-            disabled={isViewDisabled}
-        />
+        <>
+            <Search
+                style={{ marginBottom: 8 }}
+                placeholder={'Search by name or version'}
+                title={'Search by name or version'}
+                onChange={(e) => {
+                    setSearchValue(e.target.value);
+                }}
+                onSearch={(e) => {
+                    setSearchValue(e);
+                }}
+            />
+            <Tree
+                showIcon={true}
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                onSelect={onSelect}
+                selectedKeys={[selectKey]}
+                treeData={treeData}
+                disabled={isViewDisabled}
+            />
+        </>
     );
 }
