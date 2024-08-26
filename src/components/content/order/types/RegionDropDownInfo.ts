@@ -3,16 +3,22 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Region } from '../../../../xpanse-api/generated';
+
 /**
  * The regions inside Area
  */
 export interface RegionDropDownInfo {
     /**
-     * The name of the area
+     * The shown value of the region
      */
     value: string;
     /**
-     * The regions of the area
+     * The shown label of the region
      */
     label: string;
+    /**
+     * The region
+     */
+    region: Region;
 }

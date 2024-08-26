@@ -29,6 +29,7 @@ import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
 import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
+import { formatRegionInfo } from '../../../order/formDataHelpers/regionHelper.ts';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -99,7 +100,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Space size={[0, 8]} wrap>
                     {serviceDetails.regions.map((region) => (
                         <Tag key={region.name} className={oclDisplayStyles.oclDisplayTag} color='orange'>
-                            {region.area ? `${region.area}: ${region.name}` : region.name}
+                            {formatRegionInfo(region, true)}
                         </Tag>
                     ))}
                 </Space>

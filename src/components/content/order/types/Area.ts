@@ -3,6 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { Region } from '../../../../xpanse-api/generated';
+
 /**
  * The area of the regions
  */
@@ -14,5 +16,5 @@ export interface Area {
     /**
      * The regions of the area
      */
-    regions: string[];
+    regions: Region[];
 }

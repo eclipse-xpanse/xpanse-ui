@@ -6,7 +6,7 @@
 import { Col, Form, Row } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
-import { AvailabilityZoneConfig, csp } from '../../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, csp, Region } from '../../../../../xpanse-api/generated';
 import useGetAvailabilityZonesForRegionQuery from '../utils/useGetAvailabilityZonesForRegionQuery';
 import { AvailabilityZoneButton } from './AvailabilityZoneButton';
 import { AvailabilityZoneError } from './AvailabilityZoneError';
@@ -20,12 +20,12 @@ export function AvailabilityZoneFormItem({
     selectCsp,
 }: {
     availabilityZoneConfig: AvailabilityZoneConfig;
-    selectRegion: string;
+    selectRegion: Region;
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
     selectCsp: csp;
 }): React.JSX.Element {
-    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
     const retryRequest = () => {
         if (availabilityZonesVariableRequest.isError) {
             void availabilityZonesVariableRequest.refetch();

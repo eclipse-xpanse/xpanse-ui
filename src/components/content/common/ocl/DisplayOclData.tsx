@@ -10,6 +10,7 @@ import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
+import { formatRegionInfo } from '../../order/formDataHelpers/regionHelper.ts';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
 import { BillingText } from './BillingText';
@@ -70,7 +71,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <br />
                                 {ocl.cloudServiceProvider.regions.map((region) => (
                                     <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
-                                        {region.area ? `${region.area}: ${region.name}` : region.name}
+                                        {formatRegionInfo(region, true)}
                                     </Tag>
                                 ))}
                                 <br />
