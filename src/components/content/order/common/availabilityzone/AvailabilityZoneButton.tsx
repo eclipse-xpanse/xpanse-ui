@@ -5,7 +5,7 @@
 
 import { Alert, Flex, Radio } from 'antd';
 import React from 'react';
-import { AvailabilityZoneConfig } from '../../../../../xpanse-api/generated';
+import { AvailabilityZoneConfig, Region } from '../../../../../xpanse-api/generated';
 
 export function AvailabilityZoneButton({
     availabilityZoneConfig,
@@ -16,11 +16,12 @@ export function AvailabilityZoneButton({
 }: {
     availabilityZoneConfig: AvailabilityZoneConfig;
     availabilityZones: string[] | undefined;
-    selectRegion: string;
+    selectRegion: Region;
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
 }): React.JSX.Element {
     const DEFAULT_OPTIONAL_AZ = 'Not Selected';
+
     function onChange(varName: string, availabilityZone: string) {
         onAvailabilityZoneChange(varName, availabilityZone !== DEFAULT_OPTIONAL_AZ ? availabilityZone : undefined);
     }
@@ -49,7 +50,7 @@ export function AvailabilityZoneButton({
                         </Radio.Group>
                     ) : (
                         <Alert
-                            message={'No availability zones found for region ' + selectRegion}
+                            message={'No availability zones found for region ' + selectRegion.name}
                             description={'Mandatory field. Cannot proceed.'}
                             type={'error'}
                             closable={false}
@@ -81,7 +82,7 @@ export function AvailabilityZoneButton({
                             </>
                         ) : (
                             <Alert
-                                message={'No availability zones found for region ' + selectRegion}
+                                message={'No availability zones found for region ' + selectRegion.name}
                                 description={'Optional field. Can proceed.'}
                                 type={'success'}
                                 closable={false}

@@ -12,6 +12,7 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
+    Region,
     ServiceFlavor,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
@@ -98,7 +99,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         selectArea,
         versionToServicesMap.get(selectVersion)
     );
-    const [selectRegion, setSelectRegion] = useState<string>(serviceInfo ? serviceInfo.region : regionList[0].value);
+    const [selectRegion, setSelectRegion] = useState<Region>(serviceInfo ? serviceInfo.region : regionList[0].region);
     const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
         serviceInfo?.availabilityZones ?? {}
     );
@@ -134,7 +135,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     const currentEula: string | undefined = getEulaByCsp(selectCsp, versionToServicesMap.get(selectVersion));
 
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         services
@@ -172,8 +173,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             areaList[0].key,
             versionToServicesMap.get(selectVersion)
         );
-        setSelectRegion(regionList[0].value);
-
+        setSelectRegion(regionList[0].region);
         billingModes = getBillingModes(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
         defaultBillingMode = getDefaultBillingMode(
             selectCsp,
@@ -186,8 +186,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setSelectFlavor(flavorList[0]?.name ?? '');
     };
 
-    const onChangeRegion = (value: string) => {
-        setSelectRegion(value);
+    const onChangeRegion = (region: Region) => {
+        setSelectRegion(region);
     };
 
     const onChangeAreaValue = (newArea: string) => {
@@ -199,7 +199,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             versionToServicesMap.get(selectVersion)
         );
         regionList = currentRegionList;
-        setSelectRegion(currentRegionList[0]?.value ?? '');
+        setSelectRegion(currentRegionList[0].region);
     };
 
     const onChangeVersion = (currentVersion: string) => {
@@ -220,7 +220,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         );
         setSelectArea(areaList[0].key);
         setSelectFlavor(flavorList[0].name);
-        setSelectRegion(regionList[0].value);
+        setSelectRegion(regionList[0]?.region);
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);
@@ -247,7 +247,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             areaList[0]?.key ?? '',
             versionToServicesMap.get(selectVersion)
         );
-        setSelectRegion(regionList[0]?.value ?? '');
+        setSelectRegion(regionList[0].region);
 
         billingModes = getBillingModes(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         defaultBillingMode = getDefaultBillingMode(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
@@ -291,7 +291,8 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
     const getServicePriceQuery = useGetServicePricesQuery(
         getServiceTemplateId(),
-        selectRegion,
+        selectRegion.name,
+        selectRegion.site,
         selectBillingMode,
         flavorList
     );
@@ -301,7 +302,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             versionToServicesMap.get(selectVersion) ?? [],
             selectCsp,
             selectServiceHostType,
-            { name: selectRegion, area: selectArea },
+            selectRegion,
             selectFlavor,
             currentServiceProviderContactDetails,
             selectAvailabilityZones,
@@ -390,8 +391,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             />
                         </div>
                         <RegionSelection
+                            selectArea={selectArea}
                             selectRegion={selectRegion}
                             onChangeRegion={onChangeRegion}
+                            disabled={false}
                             regionList={regionList}
                         />
                         {availabilityZoneConfigs.map((availabilityZoneConfig) => {

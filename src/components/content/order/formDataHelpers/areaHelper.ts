@@ -30,13 +30,7 @@ export function getAreasForSelectedVersionHostingTypeAndCsp(
                 }
                 const areas: Area[] = [];
                 areaRegions.forEach((areaRegions, area) => {
-                    const regionNames: string[] = [];
-                    areaRegions.forEach((region) => {
-                        if (region.name) {
-                            regionNames.push(region.name);
-                        }
-                    });
-                    areas.push({ name: area, regions: regionNames });
+                    areas.push({ name: area, regions: areaRegions });
                 });
                 areaMapper.set(userOrderableServiceVo.csp, areas);
             }

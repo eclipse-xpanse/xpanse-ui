@@ -3,7 +3,7 @@
     "info": {
         "title": "XpanseAPI",
         "description": "RESTful Services to interact with Xpanse runtime.",
-        "version": "1.0.19-SNAPSHOT"
+        "version": "1.0.20-SNAPSHOT"
     },
     "servers": [
         {
@@ -7526,7 +7526,7 @@
                 }
             }
         },
-        "/xpanse/pricing/{templateId}/{region}/{billingMode}/{flavorName}": {
+        "/xpanse/pricing/{templateId}/{regionName}/{siteName}/{billingMode}/{flavorName}": {
             "get": {
                 "tags": ["ServicePrices"],
                 "description": "Get the price of one specific flavor of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>",
@@ -7542,9 +7542,18 @@
                         }
                     },
                     {
-                        "name": "region",
+                        "name": "regionName",
                         "in": "path",
                         "description": "region name of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "siteName",
+                        "in": "path",
+                        "description": "site name of the region belongs to",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -7654,7 +7663,7 @@
                 }
             }
         },
-        "/xpanse/pricing/service/{templateId}/{region}/{billingMode}": {
+        "/xpanse/pricing/service/{templateId}/{regionName}/{siteName}/{billingMode}": {
             "get": {
                 "tags": ["ServicePrices"],
                 "description": "Get the prices of all flavors of the service<br> Required role: <b>admin</b> or <b>user</b> </br>",
@@ -7670,9 +7679,18 @@
                         }
                     },
                     {
-                        "name": "region",
+                        "name": "regionName",
                         "in": "path",
                         "description": "region name of the service",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "siteName",
+                        "in": "path",
+                        "description": "site name of the region belongs to",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -9838,6 +9856,8 @@
                             "Service Template Already Reviewed",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
+                            "Invalid Billing Config",
+                            "Unavailable Service Regions",
                             "Service Deployment Not Found",
                             "Resource Not Found",
                             "Deployment Variable Invalid",
@@ -10013,6 +10033,8 @@
                             "Service Template Already Reviewed",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
+                            "Invalid Billing Config",
+                            "Unavailable Service Regions",
                             "Service Deployment Not Found",
                             "Resource Not Found",
                             "Deployment Variable Invalid",
@@ -10107,6 +10129,59 @@
                         "type": "boolean"
                     }
                 }
+            },
+            "AnsibleScriptConfig": {
+                "required": [
+                    "branch",
+                    "galaxyFile",
+                    "isPrepareAnsibleEnvironment",
+                    "playbookName",
+                    "pythonVersion",
+                    "repoUrl",
+                    "requirementsFile",
+                    "virtualEnv"
+                ],
+                "type": "object",
+                "properties": {
+                    "playbookName": {
+                        "type": "string",
+                        "description": "name of the ansible playbook. Should be the fully qualified file name (including the directory path) in the repo.Eg.,'playbook-name.yml'"
+                    },
+                    "virtualEnv": {
+                        "type": "string",
+                        "description": "Path where the virtualenv is created."
+                    },
+                    "pythonVersion": {
+                        "type": "number",
+                        "description": "Version of the python. This version of python must be available in node which is acting as the configManager.",
+                        "format": "float"
+                    },
+                    "isPrepareAnsibleEnvironment": {
+                        "type": "boolean",
+                        "description": "The agent will prepare the virtual environment if this true.Otherwise it is assumed that the environment is already prepared as part of the resource creation."
+                    },
+                    "repoUrl": {
+                        "type": "string",
+                        "description": "Url of the script repo."
+                    },
+                    "branch": {
+                        "type": "string",
+                        "description": "Branch of the git repo."
+                    },
+                    "requirementsFile": {
+                        "type": "string",
+                        "description": "the python module requirements file in GIT repo. Should be the fully qualified file name (including the directory path). E.g modules/requirements.txt"
+                    },
+                    "galaxyFile": {
+                        "type": "string",
+                        "description": "Full path of the roles and collections requirements file in GIT repo."
+                    },
+                    "ansibleInventoryRequired": {
+                        "type": "boolean",
+                        "description": "Defines if the complete service inventory is necessary for running the ansible job."
+                    }
+                },
+                "description": "Ansible script configuration details."
             },
             "AutoFill": {
                 "required": ["deployResourceKind", "isAllowCreate"],
@@ -10207,6 +10282,24 @@
                     }
                 },
                 "description": "The cloud service provider of the managed service"
+            },
+            "ConfigManageScript": {
+                "required": ["ansibleScriptConfig", "configManager", "runOnlyOnce"],
+                "type": "object",
+                "properties": {
+                    "configManager": {
+                        "type": "string",
+                        "description": "should be the name of the resource available in the deployer script."
+                    },
+                    "runOnlyOnce": {
+                        "type": "boolean",
+                        "description": "Means should the configuration update run on each node of the specific component or just one."
+                    },
+                    "ansibleScriptConfig": {
+                        "$ref": "#/components/schemas/AnsibleScriptConfig"
+                    }
+                },
+                "description": "The collection of the configuration manage script."
             },
             "DeployVariable": {
                 "required": ["dataType", "description", "kind", "mandatory", "modificationImpact", "name"],
@@ -10424,12 +10517,8 @@
                         "type": "string",
                         "description": "End user license agreement content of the service."
                     },
-                    "configurationParameters": {
-                        "type": "array",
-                        "description": "The collection of service configuration parameters.",
-                        "items": {
-                            "$ref": "#/components/schemas/ServiceConfigurationParameter"
-                        }
+                    "serviceConfigurationManage": {
+                        "$ref": "#/components/schemas/ServiceConfigurationManage"
                     }
                 }
             },
@@ -10452,14 +10541,36 @@
                         "enum": ["yearly", "monthly", "daily", "hourly", "oneTime"]
                     }
                 },
-                "description": "The listed price of the flavor of the manged service."
+                "description": "The price for the defined region and the defined site."
+            },
+            "PriceWithRegion": {
+                "required": ["price", "regionName", "siteName"],
+                "type": "object",
+                "properties": {
+                    "regionName": {
+                        "type": "string",
+                        "description": "The defined region name. If the special name 'any' provided, this price for all unknown regions."
+                    },
+                    "siteName": {
+                        "type": "string",
+                        "description": "The defined site name. If the special name 'default' provided, this price for all sites."
+                    },
+                    "price": {
+                        "$ref": "#/components/schemas/Price"
+                    }
+                },
+                "description": "The listed price list of the flavor of the manged service."
             },
             "RatingMode": {
                 "required": ["isPriceOnlyForManagementLayer"],
                 "type": "object",
                 "properties": {
-                    "fixedPrice": {
-                        "$ref": "#/components/schemas/Price"
+                    "fixedPrices": {
+                        "type": "array",
+                        "description": "The fixed prices of the flavor in the managed service for regions. The fixed price of the region includes all prices and shown to the customer.",
+                        "items": {
+                            "$ref": "#/components/schemas/PriceWithRegion"
+                        }
                     },
                     "resourceUsage": {
                         "$ref": "#/components/schemas/ResourceUsage"
@@ -10472,12 +10583,16 @@
                 "description": "The pricing of the flavor"
             },
             "Region": {
-                "required": ["area", "name"],
+                "required": ["area", "name", "site"],
                 "type": "object",
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the Region"
+                        "description": "The name of the region"
+                    },
+                    "site": {
+                        "type": "string",
+                        "description": "The site with the region belongs to, such as default, Chinese Mainland, International, "
                     },
                     "area": {
                         "type": "string",
@@ -10533,11 +10648,19 @@
                             "$ref": "#/components/schemas/Resource"
                         }
                     },
-                    "licensePrice": {
-                        "$ref": "#/components/schemas/Price"
+                    "licensePrices": {
+                        "type": "array",
+                        "description": "The license prices of the flavor of the manged service.",
+                        "items": {
+                            "$ref": "#/components/schemas/PriceWithRegion"
+                        }
                     },
-                    "markUpPrice": {
-                        "$ref": "#/components/schemas/Price"
+                    "markUpPrices": {
+                        "type": "array",
+                        "description": "The listed price list of the flavor of the manged service.",
+                        "items": {
+                            "$ref": "#/components/schemas/PriceWithRegion"
+                        }
                     }
                 },
                 "description": "The resource usage of the flavor in the managed service."
@@ -10561,6 +10684,36 @@
                 },
                 "description": "Deployment scripts hosted on a GIT repo. Either deployer or deployFromGitRepo must be provided."
             },
+            "ServiceConfigurationManage": {
+                "required": ["type"],
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string",
+                        "description": "the tool used to manage the service configuration.",
+                        "enum": ["ansible"]
+                    },
+                    "configManageScripts": {
+                        "maxItems": 2147483647,
+                        "minItems": 1,
+                        "type": "array",
+                        "description": "The collection of the configuration manage script.",
+                        "items": {
+                            "$ref": "#/components/schemas/ConfigManageScript"
+                        }
+                    },
+                    "configurationParameters": {
+                        "maxItems": 2147483647,
+                        "minItems": 1,
+                        "type": "array",
+                        "description": "The collection of service configuration parameters.",
+                        "items": {
+                            "$ref": "#/components/schemas/ServiceConfigurationParameter"
+                        }
+                    }
+                },
+                "description": "manage service configuration."
+            },
             "ServiceConfigurationParameter": {
                 "required": [
                     "dataType",
@@ -10568,6 +10721,7 @@
                     "initialValue",
                     "isReadOnly",
                     "kind",
+                    "managedBy",
                     "modificationImpact",
                     "name"
                 ],
@@ -10620,6 +10774,10 @@
                     "isReadOnly": {
                         "type": "boolean",
                         "description": "Whether the service configuration parameters are read-only"
+                    },
+                    "managedBy": {
+                        "type": "string",
+                        "description": "Service component which manages this configuration parameter."
                     }
                 },
                 "description": "The collection of service configuration parameters."

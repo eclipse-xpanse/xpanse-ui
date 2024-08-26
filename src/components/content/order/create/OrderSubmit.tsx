@@ -71,10 +71,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             category: state.category,
             csp: state.csp,
             flavor: state.flavor,
-            region: {
-                name: state.region,
-                area: state.area,
-            },
+            region: state.region,
             serviceName: state.name,
             version: state.version,
             customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
@@ -268,7 +265,12 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             >
                                 {state.params.map((item) =>
                                     item.kind === 'variable' || item.kind === 'env' ? (
-                                        <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
+                                        <OrderItem
+                                            key={item.name}
+                                            item={item}
+                                            csp={state.csp}
+                                            region={state.region.name}
+                                        />
                                     ) : undefined
                                 )}
                             </div>

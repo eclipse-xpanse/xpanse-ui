@@ -15,16 +15,18 @@ import { getFlavorWithPricesList } from '../formDataHelpers/flavorHelper.ts';
 
 export default function useGetServicePricesQuery(
     serviceTemplateId: string,
-    region: string,
+    regionName: string,
+    siteName: string,
     billingMode: string,
     flavorList?: ServiceFlavor[]
 ) {
     return useQuery({
-        queryKey: ['getServicePricesQuery', serviceTemplateId, region, billingMode, flavorList],
+        queryKey: ['getServicePricesQuery', serviceTemplateId, regionName, siteName, billingMode, flavorList],
         queryFn: async () => {
             const data: GetPricesByServiceData = {
                 templateId: serviceTemplateId,
-                region: region,
+                regionName: regionName,
+                siteName: siteName,
                 billingMode: billingMode as billingMode,
             };
             const prices: FlavorPriceResult[] = await getPricesByService(data);
