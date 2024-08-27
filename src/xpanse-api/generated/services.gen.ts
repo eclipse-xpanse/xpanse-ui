@@ -2175,7 +2175,8 @@ export const getSelfHostedServiceDetailsById = (
  * Get the price of one specific flavor of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.templateId id of the service template
- * @param data.region region name of the service
+ * @param data.regionName region name of the service
+ * @param data.siteName site name of the region belongs to
  * @param data.billingMode mode of billing
  * @param data.flavorName flavor name of the service
  * @returns FlavorPriceResult OK
@@ -2186,10 +2187,11 @@ export const getServicePriceByFlavor = (
 ): CancelablePromise<GetServicePriceByFlavorResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/pricing/{templateId}/{region}/{billingMode}/{flavorName}',
+        url: '/xpanse/pricing/{templateId}/{regionName}/{siteName}/{billingMode}/{flavorName}',
         path: {
             templateId: data.templateId,
-            region: data.region,
+            regionName: data.regionName,
+            siteName: data.siteName,
             billingMode: data.billingMode,
             flavorName: data.flavorName,
         },
@@ -2209,7 +2211,8 @@ export const getServicePriceByFlavor = (
  * Get the prices of all flavors of the service<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.templateId id of the service template
- * @param data.region region name of the service
+ * @param data.regionName region name of the service
+ * @param data.siteName site name of the region belongs to
  * @param data.billingMode mode of billing
  * @returns FlavorPriceResult OK
  * @throws ApiError
@@ -2217,10 +2220,11 @@ export const getServicePriceByFlavor = (
 export const getPricesByService = (data: GetPricesByServiceData): CancelablePromise<GetPricesByServiceResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/pricing/service/{templateId}/{region}/{billingMode}',
+        url: '/xpanse/pricing/service/{templateId}/{regionName}/{siteName}/{billingMode}',
         path: {
             templateId: data.templateId,
-            region: data.region,
+            regionName: data.regionName,
+            siteName: data.siteName,
             billingMode: data.billingMode,
         },
         errors: {

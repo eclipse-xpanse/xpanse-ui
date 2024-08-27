@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { csp, serviceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { csp, Region, serviceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../types/Area';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { getAreasForSelectedVersionHostingTypeAndCsp } from './areaHelper';
@@ -25,15 +25,62 @@ export function getRegionDropDownValues(
             .filter((v) => v.name === selectArea)
             .flatMap((v) => {
                 return v.regions.map((region) => {
-                    if (!region) {
-                        return { value: '', label: '' };
-                    }
+                    const regionStr = formatRegionInfo(region, false);
                     return {
-                        value: region,
-                        label: region,
+                        value: regionStr,
+                        label: regionStr,
+                        region: region,
                     };
                 });
             });
     }
     return regions;
+}
+
+/**
+ * Format the region info
+ * @param region
+ * @param shownArea
+ */
+export function formatRegionInfo(region: Region, shownArea: boolean): string {
+    if (!region.name) {
+        return '';
+    }
+    const siteName = region.site ? region.site : '';
+    if (!shownArea) {
+        return `${region.name} (site: ${siteName})`;
+    }
+    const areaName = region.area ? region.area : '';
+    return `${region.name} (site: ${siteName}, area: ${areaName})`;
+}
+
+/**
+ * Parse the region info.
+ * @param formatRegionStr
+ */
+export function parseRegionInfo(formatRegionStr: string): Region {
+    if (formatRegionStr) {
+        const namePart = formatRegionStr.split('(')[0].trim();
+        const bracketPart = formatRegionStr.split('(')[1]?.replace(')', '').trim();
+        if (namePart && bracketPart) {
+            const parts = bracketPart.split(', ');
+            let siteName, areaName;
+            for (const part of parts) {
+                if (part.startsWith('site: ')) {
+                    siteName = part.substring(6);
+                } else if (part.startsWith('area: ')) {
+                    areaName = part.substring(6);
+                }
+            }
+            if (!siteName) {
+                siteName = '';
+            }
+            if (!areaName) {
+                areaName = '';
+            }
+            return { name: namePart, site: siteName, area: areaName };
+        }
+        return { area: '', name: '', site: '' };
+    }
+    return { area: '', name: '', site: '' };
 }

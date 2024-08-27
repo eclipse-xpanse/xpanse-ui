@@ -5,7 +5,7 @@
 
 import { LoadingOutlined } from '@ant-design/icons';
 import { UseQueryResult } from '@tanstack/react-query';
-import { Flex, Form, Radio, Spin } from 'antd';
+import { Col, Flex, Form, Radio, Row, Spin } from 'antd';
 import React from 'react';
 import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
@@ -33,19 +33,22 @@ export const FlavorSelection = ({
     };
 
     return (
-        <div className={`${serviceOrderStyles.orderFormSelectionFirstInGroup} ${flavorStyles.regionFlavorContent}`}>
-            <Form.Item
-                name='selectFlavor'
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {'Flavor'}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-                rules={[{ required: true, message: 'Flavor is required' }]}
-            >
+        <Row className={`${serviceOrderStyles.orderFormSelectionFirstInGroup} ${flavorStyles.regionFlavorContent}`}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    name='selectFlavor'
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {'Flavor'}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                    rules={[{ required: true, message: 'Flavor is required' }]}
+                ></Form.Item>
+            </Col>
+            <Col>
                 {flavorList && flavorList.length > 0 ? (
                     <Flex vertical gap='middle'>
                         <Radio.Group
@@ -97,7 +100,7 @@ export const FlavorSelection = ({
                         </Radio.Group>
                     </Flex>
                 ) : null}
-            </Form.Item>
-        </div>
+            </Col>
+        </Row>
     );
 };

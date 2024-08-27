@@ -12,11 +12,12 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    ServiceFlavor,
-    UserOrderableServiceVo,
     billingMode,
     csp,
+    Region,
+    ServiceFlavor,
     serviceHostingType,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
@@ -65,7 +66,7 @@ export const SelectDestination = ({
     updateSelectedParameters: (
         selectedCsp: csp,
         selectedArea: string,
-        selectedRegion: string,
+        selectedRegion: Region,
         selectAvailabilityZones: Record<string, string>,
         selectedFlavor: string,
         selectedServiceHostingType: serviceHostingType
@@ -80,8 +81,8 @@ export const SelectDestination = ({
     selectArea: string;
     setSelectArea: Dispatch<SetStateAction<string>>;
     regionList: RegionDropDownInfo[];
-    selectRegion: string;
-    setSelectRegion: Dispatch<SetStateAction<string>>;
+    selectRegion: Region;
+    setSelectRegion: Dispatch<SetStateAction<Region>>;
     selectAvailabilityZones: Record<string, string>;
     setSelectAvailabilityZones: Dispatch<SetStateAction<Record<string, string>>>;
     currentFlavor: string;
@@ -94,7 +95,7 @@ export const SelectDestination = ({
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         userOrderableServiceVoList
@@ -156,7 +157,7 @@ export const SelectDestination = ({
         );
     };
 
-    const onChangeRegion = (value: string) => {
+    const onChangeRegion = (value: Region) => {
         setSelectRegion(value);
         updateSelectedParameters(
             selectCsp,
@@ -177,11 +178,11 @@ export const SelectDestination = ({
             userOrderableServiceVoList
         );
         regionList = currentRegionList;
-        setSelectRegion(currentRegionList[0]?.value ?? '');
+        setSelectRegion(currentRegionList[0].region);
         updateSelectedParameters(
             selectCsp,
             newArea,
-            currentRegionList[0]?.value ?? '',
+            currentRegionList[0].region,
             selectAvailabilityZones,
             selectFlavor,
             selectServiceHostType
@@ -202,7 +203,7 @@ export const SelectDestination = ({
         serviceHostTypes = getAvailableServiceHostingTypes(csp, userOrderableServiceVoList);
         setSelectCsp(csp);
         setSelectArea(areaList[0]?.key ?? '');
-        setSelectRegion(regionList[0]?.value ?? '');
+        setSelectRegion(regionList[0].region);
         setSelectFlavor(flavorList[0]?.name ?? '');
         setSelectServiceHostingType(serviceHostTypes[0]);
         const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
@@ -216,7 +217,7 @@ export const SelectDestination = ({
         updateSelectedParameters(
             csp,
             areaList[0]?.key ?? '',
-            regionList[0]?.value ?? '',
+            regionList[0].region,
             selectAvailabilityZones,
             flavorList[0]?.name ?? '',
             serviceHostTypes[0]
@@ -282,6 +283,7 @@ export const SelectDestination = ({
                         />
                     </div>
                     <RegionSelection
+                        selectArea={selectArea}
                         selectRegion={selectRegion}
                         onChangeRegion={onChangeRegion}
                         regionList={regionList}

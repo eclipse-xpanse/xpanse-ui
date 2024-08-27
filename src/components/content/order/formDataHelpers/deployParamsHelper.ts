@@ -42,7 +42,7 @@ export const getDeployParams = (
         category: service?.category as category,
         name: service?.name ?? '',
         version: service?.version ?? '',
-        region: region.name,
+        region: region,
         area: region.area,
         csp: service?.csp as csp,
         flavor: selectFlavor,

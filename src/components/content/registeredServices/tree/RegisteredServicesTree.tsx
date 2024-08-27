@@ -3,44 +3,44 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Tree } from 'antd';
+import { Input, Tree } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
+
+const { Search } = Input;
 
 export function RegisteredServicesTree({
     treeData,
     selectedKeyInTree,
-    setSelectedKeyInTree,
+    onSelect,
+    setSearchValue,
 }: {
     treeData: DataNode[];
     selectedKeyInTree: React.Key;
-    setSelectedKeyInTree: (selectedKey: React.Key) => void;
+    onSelect: (selectedKey: React.Key[]) => void;
+    setSearchValue: (searchValue: string) => void;
 }): React.JSX.Element {
-    function isParentTreeSelected(selectedKeyInTree: React.Key): boolean {
-        let isParentNode: boolean = false;
-        treeData.forEach((dataNode: DataNode) => {
-            if (dataNode.key === selectedKeyInTree) {
-                isParentNode = true;
-            }
-        });
-        return isParentNode;
-    }
-
-    const onSelect = (selectedKeys: React.Key[]) => {
-        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
-            return;
-        }
-        setSelectedKeyInTree(selectedKeys[0]);
-    };
-
     return (
-        <Tree
-            showIcon={true}
-            defaultExpandAll={true}
-            autoExpandParent={true}
-            onSelect={onSelect}
-            selectedKeys={[selectedKeyInTree]}
-            treeData={treeData}
-        />
+        <>
+            <Search
+                style={{ marginBottom: 8 }}
+                placeholder={'Search by category,name,version'}
+                title={'Search by category, service name or version'}
+                onChange={(e) => {
+                    setSearchValue(e.target.value);
+                }}
+                onSearch={(e) => {
+                    setSearchValue(e);
+                }}
+            />
+            <Tree
+                showIcon={true}
+                defaultExpandAll={true}
+                autoExpandParent={true}
+                onSelect={onSelect}
+                selectedKeys={[selectedKeyInTree]}
+                treeData={treeData}
+            />
+        </>
     );
 }

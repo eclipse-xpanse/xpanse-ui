@@ -170,7 +170,7 @@ export const MigrateServiceSubmit = ({
                                 items={areaList}
                             />
                         </div>
-                        <RegionSelection selectRegion={region.name} disabled={true} />
+                        <RegionSelection selectArea={region.area} selectRegion={region} disabled={true} />
                         <MigrateServiceSubmitAvailabilityZoneInfo
                             availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
                                 selectCsp,

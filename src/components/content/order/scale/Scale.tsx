@@ -134,6 +134,7 @@ export const Scale = ({
     const getServicePriceQuery = useGetServicePricesQuery(
         currentSelectedService.serviceTemplateId ?? '',
         currentSelectedService.deployRequest.region.name,
+        currentSelectedService.deployRequest.region.site,
         currentSelectedService.deployRequest.billingMode,
         flavorList
     );

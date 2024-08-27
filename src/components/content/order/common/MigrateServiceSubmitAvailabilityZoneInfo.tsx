@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Flex, Form, Radio } from 'antd';
+import { Col, Flex, Form, Radio, Row } from 'antd';
 import React from 'react';
 import '../../../../styles/service-order.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
@@ -17,41 +17,46 @@ export const MigrateServiceSubmitAvailabilityZoneInfo = ({
     availabilityZones: Record<string, string>;
 }): React.JSX.Element => {
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
             {availabilityZoneConfigs
                 ? availabilityZoneConfigs.map((availabilityZone) => (
-                      <Form.Item
-                          key={availabilityZone.varName}
-                          name={availabilityZone.displayName}
-                          label={
-                              <p
-                                  className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                              >
-                                  {availabilityZone.displayName}
-                              </p>
-                          }
-                          labelCol={{ span: 2, style: { textAlign: 'left' } }}
-                      >
-                          <Flex vertical gap='middle'>
-                              <Radio.Group buttonStyle='solid' disabled={true}>
-                                  <Radio.Button
-                                      name={availabilityZone.displayName}
-                                      key={availabilityZone.varName}
-                                      value={
-                                          Object.keys(availabilityZones).length > 0
+                      <>
+                          <Col className={serviceOrderStyles.orderFormLabel}>
+                              <Form.Item
+                                  key={availabilityZone.varName}
+                                  name={availabilityZone.displayName}
+                                  label={
+                                      <p
+                                          className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                                      >
+                                          {availabilityZone.displayName}
+                                      </p>
+                                  }
+                                  labelCol={{ style: { textAlign: 'left' } }}
+                              ></Form.Item>
+                          </Col>
+                          <Col>
+                              <Flex vertical gap='middle'>
+                                  <Radio.Group buttonStyle='solid' disabled={true}>
+                                      <Radio.Button
+                                          name={availabilityZone.displayName}
+                                          key={availabilityZone.varName}
+                                          value={
+                                              Object.keys(availabilityZones).length > 0
+                                                  ? availabilityZones[availabilityZone.varName]
+                                                  : {}
+                                          }
+                                      >
+                                          {availabilityZones[availabilityZone.varName]
                                               ? availabilityZones[availabilityZone.varName]
-                                              : {}
-                                      }
-                                  >
-                                      {availabilityZones[availabilityZone.varName]
-                                          ? availabilityZones[availabilityZone.varName]
-                                          : 'Not Selected'}
-                                  </Radio.Button>
-                              </Radio.Group>
-                          </Flex>
-                      </Form.Item>
+                                              : 'Not Selected'}
+                                      </Radio.Button>
+                                  </Radio.Group>
+                              </Flex>
+                          </Col>
+                      </>
                   ))
                 : undefined}
-        </div>
+        </Row>
     );
 };

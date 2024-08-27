@@ -17,6 +17,7 @@ import {
     serviceVersionKeyQuery,
 } from '../../../../utils/constants';
 import { getAllKeysFromCatalogTree } from '../../../common/catalog/catalogProps';
+import { filterNodes } from '../../../common/tree/filterTreeData';
 import ServiceProvider from '../details/ServiceProvider';
 import { ServiceTree } from './ServiceTree';
 
@@ -30,6 +31,8 @@ export function CatalogFullView({
     category: category;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
+    const [searchValue, setSearchValue] = useState('');
+
     const serviceNameInQuery = useMemo(() => {
         const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
         if (queryInUri.length > 0) {
@@ -102,6 +105,23 @@ export function CatalogFullView({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectKey]);
 
+    function isParentTreeSelected(selectedKeyInTree: React.Key): boolean {
+        let isParentNode: boolean = false;
+        treeData.forEach((dataNode: DataNode) => {
+            if (dataNode.key === selectedKeyInTree) {
+                isParentNode = true;
+            }
+        });
+        return isParentNode;
+    }
+
+    const onSelect = (selectedKeys: React.Key[]) => {
+        if (selectedKeys.length === 0 || isParentTreeSelected(selectedKeys[0])) {
+            return;
+        }
+        setSelectKey(selectedKeys[0]);
+    };
+
     return (
         <>
             <div className={catalogStyles.leftClass}>
@@ -110,9 +130,10 @@ export function CatalogFullView({
                     &nbsp;Service Tree
                 </div>
                 <ServiceTree
-                    treeData={treeData}
+                    treeData={filterNodes(treeData, searchValue)}
                     selectKey={selectKey}
-                    setSelectKey={setSelectKey}
+                    onSelect={onSelect}
+                    setSearchValue={setSearchValue}
                     isViewDisabled={isViewDisabled}
                 />
             </div>

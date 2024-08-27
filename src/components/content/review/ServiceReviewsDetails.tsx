@@ -18,6 +18,7 @@ import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
+import { formatRegionInfo } from '../order/formDataHelpers/regionHelper.ts';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -122,7 +123,7 @@ export const ServiceReviewsDetails = ({
                             <br />
                             {currentServiceTemplateVo.regions.map((region) => (
                                 <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
-                                    {region.area ? `${region.area}: ${region.name}` : region.name}
+                                    {formatRegionInfo(region, true)}
                                 </Tag>
                             ))}
                             <br />

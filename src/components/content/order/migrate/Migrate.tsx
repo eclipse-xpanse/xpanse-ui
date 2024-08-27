@@ -12,6 +12,7 @@ import {
     DeployRequest,
     DeployedServiceDetails,
     ListOrderableServicesData,
+    Region,
     VendorHostedDeployedServiceDetails,
     billingMode,
     csp,
@@ -50,7 +51,7 @@ export const Migrate = ({
     const [selectArea, setSelectArea] = useState<string>(currentSelectedService.deployRequest.region.area);
 
     const [regionList, setRegionList] = useState<RegionDropDownInfo[]>([]);
-    const [selectRegion, setSelectRegion] = useState<string>(currentSelectedService.deployRequest.region.name);
+    const [selectRegion, setSelectRegion] = useState<Region>(currentSelectedService.deployRequest.region);
 
     const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
         currentSelectedService.deployRequest.availabilityZones ?? {}
@@ -100,13 +101,13 @@ export const Migrate = ({
     const updateSelectedParameters = (
         selectedCsp: csp,
         selectAreaName: string,
-        selectRegionName: string,
+        selectRegion: Region,
         selectAvailabilityZonesName: Record<string, string>,
         selectedFlavor: string,
         selectedServiceHostingType: serviceHostingType
     ) => {
         setSelectCsp(selectedCsp);
-        setSelectRegion(selectRegionName);
+        setSelectRegion(selectRegion);
         setSelectAvailabilityZones(selectAvailabilityZonesName);
         setSelectFlavor(selectedFlavor);
         setSelectServiceHostingType(selectedServiceHostingType);
@@ -115,7 +116,8 @@ export const Migrate = ({
 
     const getServicePriceQuery = useGetServicePricesQuery(
         currentSelectedService.serviceTemplateId ?? '',
-        selectRegion,
+        selectRegion.name,
+        selectRegion.site,
         selectBillingMode,
         getServiceFlavorList(selectCsp, selectServiceHostingType, listOrderableServicesQuery.data ?? [])
     );
@@ -234,7 +236,7 @@ export const Migrate = ({
                         userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         selectServiceHostingType={selectServiceHostingType}
-                        region={{ name: selectRegion, area: selectArea }}
+                        region={selectRegion}
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         selectBillingMode={selectBillingMode}
@@ -248,7 +250,7 @@ export const Migrate = ({
                     <MigrateServiceSubmit
                         userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
-                        region={{ name: selectRegion, area: selectArea }}
+                        region={selectRegion}
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         selectServiceHostingType={selectServiceHostingType}

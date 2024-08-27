@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert, Flex, Form, Radio } from 'antd';
+import { Alert, Col, Flex, Form, Radio, Row } from 'antd';
 import React, { Dispatch, SetStateAction } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { billingMode } from '../../../../xpanse-api/generated';
@@ -22,26 +22,29 @@ export const BillingModeSelection = ({
     }
 
     return (
-        <div className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-            <Form.Item
-                key={'BillingMode'}
-                label={
-                    <p
-                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                    >
-                        {'Billing Mode'}
-                    </p>
-                }
-                labelCol={{ span: 2, style: { textAlign: 'left' } }}
-                required={true}
-                rules={[
-                    {
-                        required: true,
-                        message: 'billingMode is required',
-                    },
-                    { type: 'string' },
-                ]}
-            >
+        <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
+            <Col className={serviceOrderStyles.orderFormLabel}>
+                <Form.Item
+                    key={'BillingMode'}
+                    label={
+                        <p
+                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
+                        >
+                            {'Billing Mode'}
+                        </p>
+                    }
+                    labelCol={{ style: { textAlign: 'left' } }}
+                    required={true}
+                    rules={[
+                        {
+                            required: true,
+                            message: 'billingMode is required',
+                        },
+                        { type: 'string' },
+                    ]}
+                ></Form.Item>
+            </Col>
+            <Col>
                 {billingModes && billingModes.length > 0 ? (
                     <Flex vertical gap='middle'>
                         <Radio.Group
@@ -66,7 +69,7 @@ export const BillingModeSelection = ({
                         closable={false}
                     />
                 )}
-            </Form.Item>
-        </div>
+            </Col>
+        </Row>
     );
 };

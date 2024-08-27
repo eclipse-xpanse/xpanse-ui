@@ -9,6 +9,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployedServiceDetails,
+    Region,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
     billingMode,
@@ -51,7 +52,7 @@ export const SelectMigrationTarget = ({
     setAreaList: Dispatch<SetStateAction<Tab[]>>;
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
-    setSelectRegion: Dispatch<SetStateAction<string>>;
+    setSelectRegion: Dispatch<SetStateAction<Region>>;
     setBillingModes: Dispatch<SetStateAction<billingMode[] | undefined>>;
     setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
     setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
@@ -80,7 +81,7 @@ export const SelectMigrationTarget = ({
             userOrderableServiceVoList
         );
         setRegionList(regionList);
-        setSelectRegion(regionList.length > 0 ? regionList[0].value : currentSelectedService.deployRequest.region.name);
+        setSelectRegion(regionList.length > 0 ? regionList[0].region : currentSelectedService.deployRequest.region);
         const billingModes: billingMode[] | undefined = getBillingModes(
             cspList[0],
             serviceHostTypes[0],

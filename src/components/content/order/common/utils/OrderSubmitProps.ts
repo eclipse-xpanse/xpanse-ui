@@ -7,6 +7,7 @@ import {
     billingMode,
     category,
     csp,
+    Region,
     serviceHostingType,
     ServiceProviderContactDetails,
 } from '../../../../../xpanse-api/generated';
@@ -17,7 +18,7 @@ export interface OrderSubmitProps {
     category: category;
     name: string;
     version: string;
-    region: string;
+    region: Region;
     area: string;
     csp: csp;
     flavor: string;
