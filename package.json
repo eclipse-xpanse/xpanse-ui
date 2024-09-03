@@ -100,7 +100,7 @@
         ]
     },
     "devDependencies": {
-        "@axa-fr/oidc-client": "^7.22.22",
+        "@axa-fr/oidc-client": "^7.22.24",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@tanstack/eslint-plugin-query": "^5.53.0",
         "@testing-library/jest-dom": "^6.5.0",
