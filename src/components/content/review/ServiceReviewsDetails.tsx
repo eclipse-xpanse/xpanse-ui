@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BarsOutlined } from '@ant-design/icons';
+import { BarsOutlined, GlobalOutlined } from '@ant-design/icons';
 import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ServiceTemplateDetailVo, name, serviceRegistrationState } from '../../../xpanse-api/generated';
+import { name, serviceRegistrationState, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -18,7 +18,7 @@ import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
-import { formatRegionInfo } from '../order/formDataHelpers/regionHelper.ts';
+import { RegionText } from '../common/ocl/RegionText.tsx';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -119,21 +119,6 @@ export const ServiceReviewsDetails = ({
                             <br />
                         </div>
                         <div>
-                            <b>Available Regions</b>
-                            <br />
-                            {currentServiceTemplateVo.regions.map((region) => (
-                                <Tag
-                                    className={oclDisplayStyles.oclDisplayTag}
-                                    color='orange'
-                                    key={region.name + '-' + region.site}
-                                >
-                                    {formatRegionInfo(region, true)}
-                                </Tag>
-                            ))}
-                            <br />
-                            <br />
-                        </div>
-                        <div>
                             <b>Service Hosted By</b>
                             <br />
                             <Tag
@@ -149,6 +134,11 @@ export const ServiceReviewsDetails = ({
                     </div>
                 </div>
                 <div>
+                    <h3 className={catalogStyles.catalogDetailsH3}>
+                        <GlobalOutlined />
+                        &nbsp;Available Regions
+                    </h3>
+                    <RegionText regions={currentServiceTemplateVo.regions} />
                     <h3 className={catalogStyles.catalogDetailsH3}>
                         <InfoCircleOutlined />
                         &nbsp;Basic Information
