@@ -8,13 +8,13 @@ import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
 import React, { ChangeEvent, useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { csp, deployResourceKind, sensitiveScope } from '../../../../xpanse-api/generated';
+import { csp, deployResourceKind, Region, sensitiveScope } from '../../../../xpanse-api/generated';
 import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
 
-export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; region: string }): React.JSX.Element {
+export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; region: Region }): React.JSX.Element {
     const [isExistingResourceDropDownDisabled, setIsExistingResourceDropDownDisabled] = useState<boolean>(false);
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];
     let regExp: RegExp;
@@ -25,7 +25,8 @@ export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; 
 
     const autoFillDeployVariableRequest = useAutoFillDeployVariableQuery(
         csp,
-        region,
+        region.site,
+        region.name,
         item.autoFill ? (item.autoFill.deployResourceKind as deployResourceKind) : deployResourceKind.VM
     );
 

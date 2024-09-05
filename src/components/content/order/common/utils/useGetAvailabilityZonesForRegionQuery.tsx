@@ -4,15 +4,16 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { csp, getAvailabilityZones, type GetAvailabilityZonesData } from '../../../../../xpanse-api/generated';
+import { csp, getAvailabilityZones, type GetAvailabilityZonesData, Region } from '../../../../../xpanse-api/generated';
 
-export default function useGetAvailabilityZonesForRegionQuery(csp: csp, region: string) {
+export default function useGetAvailabilityZonesForRegionQuery(csp: csp, region: Region) {
     return useQuery({
-        queryKey: ['getExistingResourceNamesWithKind', csp, region],
+        queryKey: ['availabilityZonesForRegionQuery', csp, region],
         queryFn: () => {
             const data: GetAvailabilityZonesData = {
                 cspName: csp,
-                regionName: region,
+                siteName: region.site,
+                regionName: region.name,
             };
             return getAvailabilityZones(data);
         },

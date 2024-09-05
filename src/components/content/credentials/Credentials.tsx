@@ -97,6 +97,7 @@ function Credentials(): React.JSX.Element {
         if (currentRole === 'user') {
             const data: DeleteUserCloudCredentialData = {
                 cspName: credentialVariables.csp,
+                siteName: credentialVariables.site,
                 type: credentialVariables.type,
                 name: credentialVariables.name,
             };
@@ -104,6 +105,7 @@ function Credentials(): React.JSX.Element {
         } else {
             const data: DeleteIsvCloudCredentialData = {
                 cspName: credentialVariables.csp,
+                siteName: credentialVariables.site,
                 type: credentialVariables.type,
                 name: credentialVariables.name,
             };
@@ -122,6 +124,10 @@ function Credentials(): React.JSX.Element {
                     </Space>
                 );
             },
+        },
+        {
+            title: 'Site',
+            dataIndex: 'site',
         },
         {
             title: 'Name',
@@ -301,7 +307,7 @@ function Credentials(): React.JSX.Element {
                     columns={columns}
                     loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}
                     dataSource={abstractCredentialInfoList}
-                    rowKey={'csp'}
+                    rowKey={(record) => `${record.csp}-${record.site}-${record.type}-${record.name}`}
                 />
             </div>
         </div>

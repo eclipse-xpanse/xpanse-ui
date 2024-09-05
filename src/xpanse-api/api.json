@@ -125,16 +125,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -155,6 +145,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -165,8 +165,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -175,8 +175,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -231,16 +231,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -261,6 +251,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -271,8 +271,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -281,8 +281,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -345,16 +345,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -375,6 +365,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -385,8 +385,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -395,8 +395,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -445,16 +445,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -475,6 +465,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -485,8 +485,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -495,8 +495,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -535,16 +535,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -565,6 +555,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -575,8 +575,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -585,8 +585,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -636,6 +636,15 @@
                         }
                     },
                     {
+                        "name": "siteName",
+                        "in": "query",
+                        "description": "The site of the provider.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "type",
                         "in": "query",
                         "description": "The type of credential.",
@@ -656,16 +665,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -686,6 +685,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -696,8 +705,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -706,8 +715,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -748,16 +757,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -778,6 +777,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -788,8 +797,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -798,8 +807,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -848,16 +857,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -878,6 +877,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -888,8 +897,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -898,8 +907,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -948,16 +957,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -978,6 +977,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -988,8 +997,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -998,8 +1007,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1059,16 +1068,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "",
                         "content": {
@@ -1089,6 +1088,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "",
                         "content": {
@@ -1099,7 +1108,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1109,7 +1118,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1158,16 +1167,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "",
                         "content": {
@@ -1188,6 +1187,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "",
                         "content": {
@@ -1198,7 +1207,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1208,7 +1217,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1268,16 +1277,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1298,6 +1297,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1308,8 +1317,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1318,8 +1327,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1378,16 +1387,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1408,6 +1407,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1418,8 +1427,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1428,8 +1437,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1471,16 +1480,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1501,6 +1500,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1511,8 +1520,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1521,8 +1530,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1579,16 +1588,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1609,6 +1608,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1619,8 +1628,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1629,8 +1638,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1677,16 +1686,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1707,6 +1706,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1717,8 +1726,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1727,8 +1736,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1770,16 +1779,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1800,6 +1799,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1810,8 +1819,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1820,8 +1829,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1880,16 +1889,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -1910,6 +1909,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -1920,8 +1929,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1930,8 +1939,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1973,16 +1982,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2003,6 +2002,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2013,8 +2022,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2023,8 +2032,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2082,16 +2091,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2112,6 +2111,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2122,8 +2131,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2132,8 +2141,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2181,16 +2190,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2211,6 +2210,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2221,8 +2230,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2231,8 +2240,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2289,16 +2298,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2319,6 +2318,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2329,8 +2338,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2339,8 +2348,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2386,16 +2395,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2416,6 +2415,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2426,8 +2435,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2436,8 +2445,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2478,16 +2487,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2508,6 +2507,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2518,8 +2527,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2528,8 +2537,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2586,16 +2595,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2616,6 +2615,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2626,8 +2635,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2636,8 +2645,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2683,16 +2692,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2713,6 +2712,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2723,8 +2732,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2733,8 +2742,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2797,16 +2806,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2827,6 +2826,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2837,8 +2846,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2847,8 +2856,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2897,16 +2906,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -2927,6 +2926,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -2937,8 +2946,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2947,8 +2956,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2987,16 +2996,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3017,6 +3016,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3027,8 +3036,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3037,8 +3046,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3088,6 +3097,15 @@
                         }
                     },
                     {
+                        "name": "siteName",
+                        "in": "query",
+                        "description": "The site of the provider.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "type",
                         "in": "query",
                         "description": "The type of credential.",
@@ -3108,16 +3126,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3138,6 +3146,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3148,8 +3166,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3158,8 +3176,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3273,16 +3291,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3303,6 +3311,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3313,8 +3331,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3323,8 +3341,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3373,16 +3391,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "",
                         "content": {
@@ -3403,6 +3411,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "",
                         "content": {
@@ -3413,7 +3431,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3423,7 +3441,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3472,16 +3490,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3502,6 +3510,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3512,8 +3530,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3522,8 +3540,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3644,16 +3662,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3674,6 +3682,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3684,8 +3702,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3694,8 +3712,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3744,16 +3762,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3774,6 +3782,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3784,8 +3802,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3794,8 +3812,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3844,16 +3862,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3874,6 +3882,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3884,8 +3902,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3894,8 +3912,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3944,16 +3962,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -3974,6 +3982,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -3984,8 +4002,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3994,8 +4012,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4044,16 +4062,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4074,6 +4082,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4084,8 +4102,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4094,8 +4112,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4164,16 +4182,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4194,6 +4202,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4204,8 +4222,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4214,8 +4232,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4264,16 +4282,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4294,6 +4302,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4304,8 +4322,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4314,8 +4332,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4374,16 +4392,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4404,6 +4412,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4414,8 +4432,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4424,8 +4442,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4477,16 +4495,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4507,6 +4515,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4517,8 +4535,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4527,8 +4545,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4580,16 +4598,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4610,6 +4618,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4620,8 +4638,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4630,8 +4648,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4683,16 +4701,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4713,6 +4721,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4723,8 +4741,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4733,8 +4751,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4786,16 +4804,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4816,6 +4824,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4826,8 +4844,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4836,8 +4854,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4889,16 +4907,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -4919,6 +4927,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -4929,8 +4947,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4939,8 +4957,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4992,16 +5010,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5022,6 +5030,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5032,8 +5050,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5042,8 +5060,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5095,16 +5113,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5125,6 +5133,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5135,8 +5153,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5145,8 +5163,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5198,16 +5216,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5228,6 +5236,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5238,8 +5256,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5248,8 +5266,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5301,16 +5319,6 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5331,6 +5339,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5341,8 +5359,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5351,8 +5369,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5395,16 +5413,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5425,6 +5433,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5435,8 +5453,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5445,8 +5463,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5518,16 +5536,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5548,6 +5556,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5558,8 +5576,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5568,8 +5586,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5619,16 +5637,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5649,6 +5657,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5659,8 +5677,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5669,8 +5687,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5712,16 +5730,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5742,6 +5750,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5752,8 +5770,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5762,8 +5780,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5835,16 +5853,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5865,6 +5873,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5875,8 +5893,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5885,8 +5903,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5936,16 +5954,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -5966,6 +5974,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -5976,8 +5994,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5986,8 +6004,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6051,16 +6069,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6081,6 +6089,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6091,8 +6109,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6101,8 +6119,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6151,16 +6169,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6181,6 +6189,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6191,8 +6209,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6201,8 +6219,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6249,16 +6267,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6279,6 +6287,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6289,8 +6307,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6299,8 +6317,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6342,16 +6360,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6372,6 +6380,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6382,8 +6400,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6392,8 +6410,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6440,16 +6458,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6470,6 +6478,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6480,8 +6498,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6490,8 +6508,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6543,16 +6561,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6573,6 +6581,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6583,8 +6601,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6593,8 +6611,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6690,16 +6708,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6720,6 +6728,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6730,8 +6748,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6740,8 +6758,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6793,16 +6811,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6823,6 +6831,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -6833,8 +6851,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6843,8 +6861,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6965,16 +6983,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -6995,6 +7003,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7005,8 +7023,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7015,8 +7033,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7068,16 +7086,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7098,6 +7106,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7108,8 +7126,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7118,8 +7136,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7240,16 +7258,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7270,6 +7278,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7280,8 +7298,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7290,8 +7308,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7343,16 +7361,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7373,6 +7381,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7383,8 +7401,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7393,8 +7411,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7443,16 +7461,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7473,6 +7481,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7483,8 +7501,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7493,8 +7511,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7580,16 +7598,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7610,6 +7618,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7620,8 +7638,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7630,8 +7648,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7708,16 +7726,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7738,6 +7746,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7748,8 +7766,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7758,8 +7776,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7872,16 +7890,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7902,6 +7910,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -7912,8 +7930,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7922,8 +7940,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7964,16 +7982,6 @@
                 "description": "Check health of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "healthCheck",
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -7994,6 +8002,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8004,8 +8022,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8014,8 +8032,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8047,22 +8065,34 @@
                 }
             }
         },
-        "/xpanse/csps/active": {
+        "/xpanse/csps/{cspName}/sites": {
             "get": {
-                "tags": ["Admin"],
-                "description": "List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
-                "operationId": "getActiveCsps",
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
+                "tags": ["CredentialsConfiguration"],
+                "description": "List the sites of the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>",
+                "operationId": "getSitesOfCsp",
+                "parameters": [
+                    {
+                        "name": "cspName",
+                        "in": "path",
+                        "description": "The cloud service provider",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "HuaweiCloud",
+                                "FlexibleEngine",
+                                "OpenstackTestlab",
+                                "PlusServer",
+                                "RegioCloud",
+                                "AlibabaCloud",
+                                "aws",
+                                "azure",
+                                "GoogleCloudPlatform"
+                            ]
                         }
-                    },
+                    }
+                ],
+                "responses": {
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8083,8 +8113,28 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8103,8 +8153,90 @@
                             }
                         }
                     },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/csps/active": {
+            "get": {
+                "tags": ["Admin"],
+                "description": "List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
+                "operationId": "getActiveCsps",
+                "responses": {
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "502": {
                         "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8218,16 +8350,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8248,6 +8370,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8258,8 +8390,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8268,8 +8400,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8321,16 +8453,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8351,6 +8473,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8361,8 +8493,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8371,8 +8503,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8431,9 +8563,18 @@
                         }
                     },
                     {
-                        "name": "region",
+                        "name": "siteName",
                         "in": "query",
-                        "description": "name of he region",
+                        "description": "the site of the service belongs to",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "regionName",
+                        "in": "query",
+                        "description": "name of the region",
                         "required": true,
                         "schema": {
                             "type": "string"
@@ -8471,16 +8612,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8501,6 +8632,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8511,8 +8652,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8521,8 +8662,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8584,6 +8725,15 @@
                         }
                     },
                     {
+                        "name": "siteName",
+                        "in": "query",
+                        "description": "site of the region belongs to",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
                         "name": "regionName",
                         "in": "query",
                         "description": "name of the region",
@@ -8603,16 +8753,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8633,6 +8773,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8643,8 +8793,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8653,8 +8803,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8727,16 +8877,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8757,6 +8897,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8767,8 +8917,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8777,8 +8927,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8857,16 +9007,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -8887,6 +9027,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -8897,8 +9047,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8907,8 +9057,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8971,16 +9121,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9001,6 +9141,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9011,8 +9161,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9021,8 +9171,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9136,16 +9286,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9166,6 +9306,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9176,8 +9326,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9186,8 +9336,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9247,16 +9397,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9277,6 +9417,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9287,8 +9437,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9297,8 +9447,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9346,16 +9496,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9376,6 +9516,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9386,8 +9536,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9396,8 +9546,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9455,16 +9605,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9485,6 +9625,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9495,8 +9645,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9505,8 +9655,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9544,16 +9694,6 @@
                 "description": "Get and redirect authorization url for user to authenticate.",
                 "operationId": "authorize",
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "Unprocessable Entity",
                         "content": {
@@ -9574,6 +9714,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "Unauthorized",
                         "content": {
@@ -9584,8 +9734,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9594,8 +9744,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9637,16 +9787,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "",
                         "content": {
@@ -9667,6 +9807,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "",
                         "content": {
@@ -9677,7 +9827,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9687,7 +9837,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9737,16 +9887,6 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "422": {
                         "description": "",
                         "content": {
@@ -9767,6 +9907,16 @@
                             }
                         }
                     },
+                    "500": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
                     "401": {
                         "description": "",
                         "content": {
@@ -9777,7 +9927,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9787,7 +9937,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9908,7 +10058,7 @@
                 }
             },
             "CreateCredential": {
-                "required": ["csp", "name", "timeToLive", "type", "variables"],
+                "required": ["csp", "name", "site", "timeToLive", "type", "variables"],
                 "type": "object",
                 "properties": {
                     "name": {
@@ -9929,6 +10079,10 @@
                             "azure",
                             "GoogleCloudPlatform"
                         ]
+                    },
+                    "site": {
+                        "type": "string",
+                        "description": "The site to which the credentials belong to."
                     },
                     "description": {
                         "type": "string",
@@ -11555,7 +11709,7 @@
                 }
             },
             "AbstractCredentialInfo": {
-                "required": ["csp", "description", "name", "type"],
+                "required": ["csp", "description", "name", "site", "type"],
                 "type": "object",
                 "allOf": [
                     {
@@ -11579,6 +11733,10 @@
                                     "GoogleCloudPlatform"
                                 ]
                             },
+                            "site": {
+                                "type": "string",
+                                "description": "The site which the credentials belong to."
+                            },
                             "type": {
                                 "type": "string",
                                 "description": "The type of the credential, this field is provided by the plugin of cloud service provider.",
@@ -11601,7 +11759,7 @@
                 ]
             },
             "CredentialVariables": {
-                "required": ["csp", "description", "name", "type", "variables"],
+                "required": ["csp", "description", "name", "site", "type", "variables"],
                 "type": "object",
                 "properties": {
                     "csp": {
@@ -11618,6 +11776,10 @@
                             "azure",
                             "GoogleCloudPlatform"
                         ]
+                    },
+                    "site": {
+                        "type": "string",
+                        "description": "The site which the credentials belong to."
                     },
                     "type": {
                         "type": "string",

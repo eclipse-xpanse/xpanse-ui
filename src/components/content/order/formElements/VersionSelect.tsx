@@ -20,7 +20,6 @@ export default function VersionSelect({
         <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
             <Col className={serviceOrderStyles.orderFormLabel}>
                 <Form.Item
-                    name='Version'
                     label={
                         <p
                             className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}

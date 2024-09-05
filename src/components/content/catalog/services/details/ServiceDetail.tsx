@@ -99,7 +99,11 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </h3>
                 <Space size={[0, 8]} wrap>
                     {serviceDetails.regions.map((region) => (
-                        <Tag key={region.name} className={oclDisplayStyles.oclDisplayTag} color='orange'>
+                        <Tag
+                            key={region.name + '-' + region.site}
+                            className={oclDisplayStyles.oclDisplayTag}
+                            color='orange'
+                        >
                             {formatRegionInfo(region, true)}
                         </Tag>
                     ))}
