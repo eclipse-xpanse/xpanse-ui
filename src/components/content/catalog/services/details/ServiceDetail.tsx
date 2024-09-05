@@ -3,20 +3,19 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CloudUploadOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Descriptions, Space, Tag } from 'antd';
+import { GlobalOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { Descriptions, Tag } from 'antd';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import oclDisplayStyles from '../../../../../styles/ocl-display.module.css';
 import {
-    DeployedService,
-    ServiceTemplateDetailVo,
     category,
     csp,
+    DeployedService,
     serviceDeploymentState,
     serviceRegistrationState,
+    ServiceTemplateDetailVo,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
@@ -28,8 +27,8 @@ import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowTy
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
+import { RegionText } from '../../../common/ocl/RegionText.tsx';
 import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
-import { formatRegionInfo } from '../../../order/formDataHelpers/regionHelper.ts';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -94,20 +93,10 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
         <>
             <div className={catalogStyles.catalogDetailClass}>
                 <h3 className={catalogStyles.catalogDetailsH3}>
-                    <CloudUploadOutlined />
+                    <GlobalOutlined />
                     &nbsp;Available Regions
                 </h3>
-                <Space size={[0, 8]} wrap>
-                    {serviceDetails.regions.map((region) => (
-                        <Tag
-                            key={region.name + '-' + region.site}
-                            className={oclDisplayStyles.oclDisplayTag}
-                            color='orange'
-                        >
-                            {formatRegionInfo(region, true)}
-                        </Tag>
-                    ))}
-                </Space>
+                <RegionText regions={serviceDetails.regions} />
             </div>
             <h3 className={catalogStyles.catalogDetailsH3}>
                 <InfoCircleOutlined />
