@@ -298,7 +298,7 @@ export const Scale = ({
                                 key={item.name}
                                 item={item}
                                 csp={currentSelectedService.deployRequest.csp as csp}
-                                region={currentSelectedService.deployRequest.region.name}
+                                region={currentSelectedService.deployRequest.region}
                             />
                         ) : undefined
                     )}

@@ -19,11 +19,11 @@ import {
     serviceHostingType,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
+import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem.tsx';
 import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetAvailabilityZonesForRegionQuery from '../common/utils/useGetAvailabilityZonesForRegionQuery';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
@@ -95,7 +95,7 @@ export const SelectDestination = ({
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         userOrderableServiceVoList

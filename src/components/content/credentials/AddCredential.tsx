@@ -18,6 +18,7 @@ import {
     CreateCredential,
     CredentialVariable,
     CredentialVariables,
+    GetSitesOfCspData,
     Response,
     addIsvCloudCredential,
     addUserCloudCredential,
@@ -26,6 +27,7 @@ import {
     getActiveCsps,
     getCredentialCapabilities,
     getCredentialTypes,
+    getSitesOfCsp,
     name,
     type,
     type GetCredentialCapabilitiesData,
@@ -39,11 +41,14 @@ import useCredentialsListQuery from './query/queryCredentialsList';
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const [form] = Form.useForm();
     const [currentCsp, setCurrentCsp] = useState<csp | undefined>(undefined);
+    const [siteDisabled, setSiteDisabled] = useState<boolean>(true);
     const [typeDisabled, setTypeDisabled] = useState<boolean>(true);
     const [nameDisable, setNameDisable] = useState<boolean>(true);
+    const [currentSite, setCurrentSite] = useState<string | undefined>(undefined);
     const [currentType, setCurrentType] = useState<credentialType | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
     const activeCspList = useRef<csp[]>([]);
+    const siteList = useRef<string[]>([]);
     const credentialTypeList = useRef<type[]>([]);
     const nameList = useRef<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
@@ -64,6 +69,18 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         setTipMessage(tipMessage);
     };
 
+    const sitesQuery = useQuery({
+        queryKey: ['sitesQuery', currentCsp],
+        queryFn: () => {
+            const data: GetSitesOfCspData = {
+                cspName: currentCsp ?? csp.OPENSTACK_TESTLAB,
+            };
+            return getSitesOfCsp(data);
+        },
+        staleTime: 60000,
+        enabled: currentCsp !== undefined,
+    });
+
     const credentialTypesQuery = useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
         queryFn: () => {
@@ -75,6 +92,10 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         staleTime: 60000,
         enabled: currentCsp !== undefined,
     });
+
+    if (sitesQuery.isSuccess) {
+        siteList.current = sitesQuery.data as string[];
+    }
 
     if (credentialTypesQuery.isSuccess) {
         credentialTypeList.current = credentialTypesQuery.data as type[];
@@ -161,7 +182,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     // useEffect to update Form DOM after the rendering for first 3 drop downs are completed.
     useEffect(() => {
-        if (currentType && currentName) {
+        if (currentSite && currentType && currentName) {
             const credentials = credentialCapabilitiesQuery.data;
             if (credentials !== undefined && credentials.length > 0) {
                 credentials.forEach((credential: CredentialVariables) => {
@@ -182,11 +203,15 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 });
             }
         }
-    }, [currentCsp, currentName, currentType, form, credentialCapabilitiesQuery.data]);
+    }, [currentCsp, currentSite, currentName, currentType, form, credentialCapabilitiesQuery.data]);
 
     const handleCspSelect = useCallback(
         (cspName: csp) => {
             setCurrentCsp(cspName);
+
+            setSiteDisabled(false);
+            setCurrentSite(undefined);
+            form.setFieldsValue({ site: undefined });
 
             setTypeDisabled(false);
             setCurrentType(undefined);
@@ -201,6 +226,14 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             form.setFieldsValue({ description: '' });
 
             getTipInfo(undefined, '');
+        },
+        [form]
+    );
+
+    const handleSiteSelect = useCallback(
+        (site: string) => {
+            setCurrentSite(site);
+            form.setFieldsValue({ site: site });
         },
         [form]
     );
@@ -331,6 +364,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             // It must be only in the variables map.
             const createCredentialRequest: CreateCredential = {
                 csp: createCredential.csp,
+                site: createCredential.site,
                 description: createCredential.description,
                 name: createCredential.name,
                 type: createCredential.type,
@@ -345,6 +379,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         setCurrentCsp(undefined);
         setCurrentType(undefined);
         setCurrentName(undefined);
+        siteList.current = [];
         nameList.current = [];
         credentialTypeList.current = [];
         setCredentialVariableList([]);
@@ -356,6 +391,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         clear();
         form.resetFields();
         getTipInfo(undefined, '');
+        setSiteDisabled(true);
         setTypeDisabled(true);
         setNameDisable(true);
     };
@@ -397,6 +433,27 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                                             preview={false}
                                             src={cspMap.get(csp.valueOf() as name)?.logo}
                                         />
+                                    </Select.Option>
+                                );
+                            })}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item
+                        label='Site'
+                        name='site'
+                        rules={[{ required: true, message: 'Please select the site of credential' }]}
+                    >
+                        <Select
+                            loading={
+                                (sitesQuery.isLoading || sitesQuery.isRefetching) && sitesQuery.fetchStatus !== 'idle'
+                            }
+                            disabled={siteDisabled}
+                            onSelect={handleSiteSelect}
+                        >
+                            {siteList.current.map((site: string) => {
+                                return (
+                                    <Select.Option key={site} value={site}>
+                                        {site}
                                     </Select.Option>
                                 );
                             })}

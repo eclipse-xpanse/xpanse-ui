@@ -135,7 +135,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     const currentEula: string | undefined = getEulaByCsp(selectCsp, versionToServicesMap.get(selectVersion));
 
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         services
@@ -220,7 +220,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         );
         setSelectArea(areaList[0].key);
         setSelectFlavor(flavorList[0].name);
-        setSelectRegion(regionList[0]?.region);
+        setSelectRegion(regionList[0].region);
         setSelectVersion(currentVersion);
         setSelectCsp(cspList[0]);
         setSelectServiceHostType(serviceHostTypes[0]);

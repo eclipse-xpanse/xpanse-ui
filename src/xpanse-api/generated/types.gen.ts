@@ -165,6 +165,10 @@ export type CreateCredential = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site to which the credentials belong to.
+     */
+    site: string;
+    /**
      * The description of the credential
      */
     description?: string;
@@ -1580,6 +1584,10 @@ export type AbstractCredentialInfo = CredentialVariables & {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site which the credentials belong to.
+     */
+    site?: string;
+    /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -1610,6 +1618,10 @@ export type AbstractCredentialInfo = CredentialVariables & {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site which the credentials belong to.
+     */
+    site: string;
+    /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -1637,6 +1649,10 @@ export type CredentialVariables = {
         | 'aws'
         | 'azure'
         | 'GoogleCloudPlatform';
+    /**
+     * The site which the credentials belong to.
+     */
+    site: string;
     /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
@@ -2672,6 +2688,10 @@ export type DeleteUserCloudCredentialData = {
      */
     name: string;
     /**
+     * The site of the provider.
+     */
+    siteName: string;
+    /**
      * The type of credential.
      */
     type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -2898,6 +2918,10 @@ export type DeleteIsvCloudCredentialData = {
      * The name of of credential.
      */
     name: string;
+    /**
+     * The site of the provider.
+     */
+    siteName: string;
     /**
      * The type of credential.
      */
@@ -3585,6 +3609,24 @@ export type GetMetricsResponse = Array<Metric>;
 
 export type HealthCheckResponse = SystemStatus;
 
+export type GetSitesOfCspData = {
+    /**
+     * The cloud service provider
+     */
+    cspName:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+};
+
+export type GetSitesOfCspResponse = Array<string>;
+
 export type GetActiveCspsResponse = Array<
     | 'HuaweiCloud'
     | 'FlexibleEngine'
@@ -3670,13 +3712,17 @@ export type GetExistingResourceNamesWithKindData = {
         | 'keypair'
         | 'subnet';
     /**
-     * name of he region
+     * name of the region
      */
-    region: string;
+    regionName: string;
     /**
      * id of the deployed service
      */
     serviceId?: string;
+    /**
+     * the site of the service belongs to
+     */
+    siteName: string;
 };
 
 export type GetExistingResourceNamesWithKindResponse = Array<string>;
@@ -3703,6 +3749,10 @@ export type GetAvailabilityZonesData = {
      * Id of the deployed service
      */
     serviceId?: string;
+    /**
+     * site of the region belongs to
+     */
+    siteName: string;
 };
 
 export type GetAvailabilityZonesResponse = Array<string>;

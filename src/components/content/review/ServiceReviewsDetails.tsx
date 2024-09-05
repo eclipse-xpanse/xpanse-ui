@@ -122,7 +122,11 @@ export const ServiceReviewsDetails = ({
                             <b>Available Regions</b>
                             <br />
                             {currentServiceTemplateVo.regions.map((region) => (
-                                <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
+                                <Tag
+                                    className={oclDisplayStyles.oclDisplayTag}
+                                    color='orange'
+                                    key={region.name + '-' + region.site}
+                                >
                                     {formatRegionInfo(region, true)}
                                 </Tag>
                             ))}

@@ -105,6 +105,8 @@ import type {
     GetServicePolicyDetailsResponse,
     GetServicePriceByFlavorData,
     GetServicePriceByFlavorResponse,
+    GetSitesOfCspData,
+    GetSitesOfCspResponse,
     GetUserCloudCredentialsData,
     GetUserCloudCredentialsResponse,
     GetVendorHostedServiceDetailsByIdData,
@@ -331,6 +333,7 @@ export const addUserCloudCredential = (
  * Delete user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
+ * @param data.siteName The site of the provider.
  * @param data.type The type of credential.
  * @param data.name The name of of credential.
  * @returns void No Content
@@ -344,6 +347,7 @@ export const deleteUserCloudCredential = (
         url: '/xpanse/user/credentials',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             type: data.type,
             name: data.name,
         },
@@ -1004,6 +1008,7 @@ export const addIsvCloudCredential = (
  * Delete the credentials of the user in the USER role to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
+ * @param data.siteName The site of the provider.
  * @param data.type The type of credential.
  * @param data.name The name of of credential.
  * @returns void No Content
@@ -1017,6 +1022,7 @@ export const deleteIsvCloudCredential = (
         url: '/xpanse/isv/credentials',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             type: data.type,
             name: data.name,
         },
@@ -2299,6 +2305,32 @@ export const healthCheck = (): CancelablePromise<HealthCheckResponse> => {
 };
 
 /**
+ * List the sites of the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.cspName The cloud service provider
+ * @returns string OK
+ * @throws ApiError
+ */
+export const getSitesOfCsp = (data: GetSitesOfCspData): CancelablePromise<GetSitesOfCspResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/csps/{cspName}/sites',
+        path: {
+            cspName: data.cspName,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @returns string OK
  * @throws ApiError
@@ -2387,7 +2419,8 @@ export const getRegistrationDetails = (
  * List existing cloud resource names with kind<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.csp name of the cloud service provider
- * @param data.region name of he region
+ * @param data.siteName the site of the service belongs to
+ * @param data.regionName name of the region
  * @param data.deployResourceKind kind of the CloudResource
  * @param data.serviceId id of the deployed service
  * @returns string OK
@@ -2404,7 +2437,8 @@ export const getExistingResourceNamesWithKind = (
         },
         query: {
             csp: data.csp,
-            region: data.region,
+            siteName: data.siteName,
+            regionName: data.regionName,
             serviceId: data.serviceId,
         },
         errors: {
@@ -2423,6 +2457,7 @@ export const getExistingResourceNamesWithKind = (
  * Get availability zones with csp and region.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider
+ * @param data.siteName site of the region belongs to
  * @param data.regionName name of the region
  * @param data.serviceId Id of the deployed service
  * @returns string OK
@@ -2436,6 +2471,7 @@ export const getAvailabilityZones = (
         url: '/xpanse/csp/region/azs',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             regionName: data.regionName,
             serviceId: data.serviceId,
         },
