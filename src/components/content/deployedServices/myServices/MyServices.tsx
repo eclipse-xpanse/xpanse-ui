@@ -28,17 +28,19 @@ import appStyles from '../../../../styles/app.module.css';
 import myServicesStyles from '../../../../styles/my-services.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
-    DeployedService,
-    DeployedServiceDetails,
-    ServiceProviderContactDetails,
-    VendorHostedDeployedServiceDetails,
+    billingMode,
     category,
     csp,
+    DeployedService,
+    DeployedServiceDetails,
     name,
+    Region,
     serviceDeploymentState,
     serviceHostingType,
+    ServiceProviderContactDetails,
     serviceState,
     taskStatus,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
@@ -70,6 +72,8 @@ import StopServiceStatusAlert from '../../order/serviceState/stop/StopServiceSta
 import { useServiceStateStopQuery } from '../../order/serviceState/stop/useServiceStateStopQuery';
 import { useServiceDetailsByServiceStatePollingQuery } from '../../order/serviceState/useServiceDetailsByServiceStatePollingQuery';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
+import { DeployedBillingMode } from '../common/DeployedBillingMode.tsx';
+import { DeployedRegion } from '../common/DeployedRegion.tsx';
 import DeployedServicesError from '../common/DeployedServicesError';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
@@ -87,6 +91,8 @@ function MyServices(): React.JSX.Element {
     let serviceVoList: DeployedService[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
+    let serviceBillingModeFilters: ColumnFilterItem[] = [];
+    let serviceRegionNameFilters: ColumnFilterItem[] = [];
     let nameFilters: ColumnFilterItem[] = [];
     let customerServiceNameFilters: ColumnFilterItem[] = [];
     let categoryFilters: ColumnFilterItem[] = [];
@@ -206,6 +212,8 @@ function MyServices(): React.JSX.Element {
         updateServiceStateFilters();
         updateCustomerServiceNameFilters(listDeployedServicesQuery.data);
         updateServiceHostingFilters();
+        updateBillingModeFilters();
+        updateRegionFilters(listDeployedServicesQuery.data);
     }
 
     const getTooltipWhenDetailsDisabled = (
@@ -854,6 +862,26 @@ function MyServices(): React.JSX.Element {
             ),
         },
         {
+            title: 'BillingMode',
+            dataIndex: 'billingMode',
+            filters: serviceBillingModeFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.billingMode.startsWith(value.toString()),
+            align: 'center',
+            render: (billingMode: billingMode) => <DeployedBillingMode currentBillingMode={billingMode} />,
+        },
+        {
+            title: 'Region',
+            dataIndex: 'region',
+            filters: serviceRegionNameFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.region.name.startsWith(value.toString()),
+            align: 'center',
+            render: (region: Region) => <DeployedRegion currentRegion={region} />,
+        },
+        {
             title: 'Csp',
             dataIndex: 'csp',
             filters: cspFilters,
@@ -1219,6 +1247,36 @@ function MyServices(): React.JSX.Element {
             filters.push(filter);
         });
         serviceHostingTypeFilters = filters;
+    }
+
+    function updateBillingModeFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(billingMode).forEach((billingMode) => {
+            const filter = {
+                text: billingMode,
+                value: billingMode,
+            };
+            filters.push(filter);
+        });
+        serviceBillingModeFilters = filters;
+    }
+
+    function updateRegionFilters(resp: DeployedService[]): void {
+        const filters: ColumnFilterItem[] = [];
+        const regionNameSet = new Set<string>('');
+        resp.forEach((v) => {
+            if (v.region.name) {
+                regionNameSet.add(v.region.name);
+            }
+        });
+        regionNameSet.forEach((name) => {
+            const filter = {
+                text: name,
+                value: name,
+            };
+            filters.push(filter);
+        });
+        serviceRegionNameFilters = filters;
     }
 
     function refreshData(): void {

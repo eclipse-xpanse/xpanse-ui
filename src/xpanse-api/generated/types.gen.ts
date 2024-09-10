@@ -1496,28 +1496,6 @@ export type UserPolicyCreateRequest = {
     enabled: boolean;
 };
 
-export type OpenTofuResult = {
-    requestId?: string;
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: {
-        [key: string]: string;
-    };
-    commandSuccessful?: boolean;
-};
-
-export type TerraformResult = {
-    requestId?: string;
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: {
-        [key: string]: string;
-    };
-    commandSuccessful?: boolean;
-};
-
 export type WorkFlowTask = {
     /**
      * The id of the ProcessInstance
@@ -1752,6 +1730,11 @@ export type DeployedService = {
         | 'security'
         | 'middleware'
         | 'others';
+    region: Region;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -2101,6 +2084,11 @@ export type DeployedServiceDetails = {
         | 'security'
         | 'middleware'
         | 'others';
+    region: Region;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -2216,6 +2204,11 @@ export type VendorHostedDeployedServiceDetails = {
         | 'security'
         | 'middleware'
         | 'others';
+    region: Region;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -3102,106 +3095,6 @@ export type AddUserPolicyData = {
 };
 
 export type AddUserPolicyResponse = UserPolicy;
-
-export type RollbackCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type RollbackCallbackResponse = unknown;
-
-export type PurgeCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type PurgeCallbackResponse = unknown;
-
-export type ModifyCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type ModifyCallbackResponse = unknown;
-
-export type DestroyCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DestroyCallbackResponse = unknown;
-
-export type DeployCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DeployCallbackResponse = unknown;
-
-export type RollbackCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type RollbackCallback1Response = unknown;
-
-export type PurgeCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type PurgeCallback1Response = unknown;
-
-export type ModifyCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type ModifyCallback1Response = unknown;
-
-export type DestroyCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DestroyCallback1Response = unknown;
-
-export type DeployCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DeployCallback1Response = unknown;
 
 export type QueryTasksData = {
     /**
