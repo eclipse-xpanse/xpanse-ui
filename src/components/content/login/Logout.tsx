@@ -12,6 +12,7 @@ import {
     createServicePageRoute,
     homePageRoute,
     orderPageRoute,
+    registeredServicesPageRoute,
     registerPageRoute,
 } from '../../utils/constants';
 
@@ -25,6 +26,9 @@ function Logout(): React.JSX.Element {
         ) {
             // Create service URL contains dynamic url. So, redirect back to the home page.
             return homePageRoute;
+        }
+        if (window.location.pathname.startsWith(registeredServicesPageRoute)) {
+            return registeredServicesPageRoute;
         }
         if (window.location.pathname.startsWith(registerPageRoute)) {
             return registerPageRoute;
