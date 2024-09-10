@@ -102,3 +102,15 @@
 .resource-properties-key {
     padding-top: 7px;
 }
+
+.region-display-inline {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.region-area,
+.region-site {
+    display: flex;
+    align-items: center;
+}
