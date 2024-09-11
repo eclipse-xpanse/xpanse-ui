@@ -34,7 +34,7 @@ export const MyServiceHistory = ({
     const columns: ColumnsType<ServiceOrderDetails> = [
         {
             title: 'ModifyId',
-            dataIndex: 'serviceModificationRequestId',
+            dataIndex: 'orderId',
             align: 'center',
             width: 100,
             className: serviceModifyStyles.modifyHistoryValue,
