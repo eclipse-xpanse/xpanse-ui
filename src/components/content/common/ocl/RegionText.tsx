@@ -51,7 +51,7 @@ const columns: TableProps<GroupedRegionItem>['columns'] = [
 ];
 
 export function RegionText({ regions }: { regions: Region[] }): React.JSX.Element {
-    if (regions.length > 1) {
+    if (regions.length > 0) {
         const groupedByAreaRegions = groupedRegions(regions);
         return (
             <div className={regionStyle.regionList}>
