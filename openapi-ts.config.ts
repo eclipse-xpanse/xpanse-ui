@@ -6,7 +6,7 @@
 import { defineConfig } from '@hey-api/openapi-ts';
 
 export default defineConfig({
-    client: 'fetch',
+    client: 'legacy/fetch',
     input: 'src/xpanse-api/api.json',
     output: {
         format: 'prettier',
