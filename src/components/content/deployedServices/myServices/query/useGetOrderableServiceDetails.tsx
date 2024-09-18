@@ -4,16 +4,16 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { details, DetailsData } from '../../../../../xpanse-api/generated';
+import { DetailsData, getOrderableServiceDetails } from '../../../../../xpanse-api/generated';
 
-export default function useGetServiceTemplateDetails(serviceTemplateId: string | undefined) {
+export default function useGetOrderableServiceDetails(serviceTemplateId: string | undefined) {
     return useQuery({
-        queryKey: ['getServiceTemplateDetails', serviceTemplateId],
+        queryKey: ['getOrderableServiceDetails', serviceTemplateId],
         queryFn: () => {
             const data: DetailsData = {
                 id: serviceTemplateId ?? '',
             };
-            return details(data);
+            return getOrderableServiceDetails(data);
         },
         enabled: serviceTemplateId !== undefined && serviceTemplateId.length > 0,
     });

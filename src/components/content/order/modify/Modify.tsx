@@ -11,17 +11,17 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    DeployVariable,
-    DeployedServiceDetails,
-    ModifyRequest,
-    VendorHostedDeployedServiceDetails,
     csp,
+    DeployedServiceDetails,
+    DeployVariable,
     modify,
-    serviceDeploymentState,
     type ModifyData,
+    ModifyRequest,
+    serviceDeploymentState,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
+import useGetOrderableServiceDetails from '../../deployedServices/myServices/query/useGetOrderableServiceDetails.tsx';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
 import { OrderItem } from '../common/utils/OrderItem';
@@ -47,7 +47,7 @@ export const Modify = ({
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const [storedDeployVariables] = useOrderFormStore((state) => [state.deployParams]);
 
-    const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
+    const orderableServiceDetailsQuery = useGetOrderableServiceDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
             const data: ModifyData = {
@@ -64,9 +64,9 @@ export const Modify = ({
         return prevParamsString !== newParamsString;
     };
 
-    if (serviceTemplateDetailsQuery.isSuccess) {
-        getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
-        getVariables = serviceTemplateDetailsQuery.data.variables;
+    if (orderableServiceDetailsQuery.isSuccess) {
+        getParams = getModifyParams(orderableServiceDetailsQuery.data.variables);
+        getVariables = orderableServiceDetailsQuery.data.variables;
     }
 
     const onFinish = () => {
@@ -180,8 +180,8 @@ export const Modify = ({
                     isSubmitInProgress={modifyServiceRequest.isPending}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
-                        serviceTemplateDetailsQuery.isSuccess
-                            ? serviceTemplateDetailsQuery.data.serviceProviderContactDetails
+                        orderableServiceDetailsQuery.isSuccess
+                            ? orderableServiceDetailsQuery.data.serviceProviderContactDetails
                             : undefined
                     }
                     getModifyDetailsStatus={getModifyDetailsStatus}
