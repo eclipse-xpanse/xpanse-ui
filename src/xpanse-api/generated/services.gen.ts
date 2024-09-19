@@ -114,6 +114,8 @@ import type {
     ListManagedServiceTemplatesResponse,
     ListOrderableServicesData,
     ListOrderableServicesResponse,
+    ListServiceConfigurationUpdateRequestData,
+    ListServiceConfigurationUpdateRequestResponse,
     ListServiceMigrationsData,
     ListServiceMigrationsResponse,
     ListServiceOrdersData,
@@ -1854,6 +1856,42 @@ export const getSelfHostedServiceDetailsById = (
         url: '/xpanse/services/details/self_hosted/{serviceId}',
         path: {
             serviceId: data.serviceId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * List service's configuration.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.orderId id of the service order
+ * @param data.serviceId Id of the deployed service
+ * @param data.resourceName name of the service resource
+ * @param data.configManager Manager of the service configuration parameter.
+ * @param data.status Status of the service configuration
+ * @returns ServiceConfigurationUpdateRequest OK
+ * @throws ApiError
+ */
+export const listServiceConfigurationUpdateRequest = (
+    data: ListServiceConfigurationUpdateRequestData = {}
+): CancelablePromise<ListServiceConfigurationUpdateRequestResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/config/list',
+        query: {
+            orderId: data.orderId,
+            serviceId: data.serviceId,
+            resourceName: data.resourceName,
+            configManager: data.configManager,
+            status: data.status,
         },
         errors: {
             400: 'Bad Request',

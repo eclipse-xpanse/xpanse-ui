@@ -1730,11 +1730,6 @@ export type DeployedService = {
         | 'security'
         | 'middleware'
         | 'others';
-    region: Region;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -1764,6 +1759,11 @@ export type DeployedService = {
      * The flavor of the service
      */
     flavor?: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
     /**
      * The id of the Service Template
      */
@@ -1860,7 +1860,7 @@ export type ServiceOrderDetails = {
     /**
      * The task type of the service order.
      */
-    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
+    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
     /**
      * The task status of the service order.
      */
@@ -1909,6 +1909,7 @@ export enum taskType {
     REDEPLOY = 'redeploy',
     MODIFY = 'modify',
     DESTROY = 'destroy',
+    SERVICE_CONFIGURATION_UPDATE = 'serviceConfigurationUpdate',
     PURGE = 'purge',
 }
 
@@ -2084,11 +2085,6 @@ export type DeployedServiceDetails = {
         | 'security'
         | 'middleware'
         | 'others';
-    region: Region;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -2118,6 +2114,11 @@ export type DeployedServiceDetails = {
      * The flavor of the service
      */
     flavor?: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
     /**
      * The id of the Service Template
      */
@@ -2204,11 +2205,6 @@ export type VendorHostedDeployedServiceDetails = {
         | 'security'
         | 'middleware'
         | 'others';
-    region: Region;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
     /**
      * The name of the service
      */
@@ -2238,6 +2234,11 @@ export type VendorHostedDeployedServiceDetails = {
      * The flavor of the service
      */
     flavor?: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
     /**
      * The id of the Service Template
      */
@@ -2293,6 +2294,141 @@ export type VendorHostedDeployedServiceDetails = {
      * The properties of the deployed service.
      */
     deployedServiceProperties?: {
+        [key: string]: string;
+    };
+};
+
+export type DeployResourceEntity = {
+    createTime?: string;
+    lastModifiedTime?: string;
+    id?: string;
+    groupType?: string;
+    groupName?: string;
+    resourceId?: string;
+    resourceName?: string;
+    resourceKind?:
+        | 'vm'
+        | 'container'
+        | 'publicIP'
+        | 'vpc'
+        | 'volume'
+        | 'unknown'
+        | 'security_group'
+        | 'security_group_rule'
+        | 'keypair'
+        | 'subnet';
+    deployService?: DeployServiceEntity;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type DeployServiceEntity = {
+    createTime?: string;
+    lastModifiedTime?: string;
+    id?: string;
+    userId?: string;
+    category?:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
+    name?: string;
+    customerServiceName?: string;
+    version?: string;
+    namespace?: string;
+    csp?:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+    flavor?: string;
+    serviceDeploymentState?:
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'manual cleanup required'
+        | 'rollback failed'
+        | 'modifying'
+        | 'modification failed'
+        | 'modification successful';
+    resultMessage?: string;
+    serviceState?: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
+    serviceTemplateId?: string;
+    deployRequest?: DeployRequest;
+    deployResourceList?: Array<DeployResourceEntity>;
+    serviceConfigurationEntity?: ServiceConfigurationEntity;
+    properties?: {
+        [key: string]: string;
+    };
+    privateProperties?: {
+        [key: string]: string;
+    };
+    lastStartedAt?: string;
+    lastStoppedAt?: string;
+    lockConfig?: ServiceLockConfig;
+};
+
+export type ServiceConfigurationEntity = {
+    id?: string;
+    deployServiceEntity?: DeployServiceEntity;
+    configuration?: {
+        [key: string]: unknown;
+    };
+    createdTime?: string;
+    updatedTime?: string;
+};
+
+export type ServiceConfigurationUpdateRequest = {
+    id?: string;
+    serviceOrderEntity?: ServiceOrderEntity;
+    deployServiceEntity?: DeployServiceEntity;
+    resourceName?: string;
+    configManager?: string;
+    resultMessage?: string;
+    properties?: {
+        [key: string]: unknown;
+    };
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export enum status2 {
+    PENDING = 'pending',
+    PROCESSING = 'processing',
+    SUCCESSFUL = 'successful',
+    ERROR = 'error',
+}
+
+export type ServiceOrderEntity = {
+    orderId?: string;
+    serviceId?: string;
+    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
+    userId?: string;
+    taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
+    errorMsg?: string;
+    startedTime?: string;
+    completedTime?: string;
+    previousDeployRequest?: DeployRequest;
+    newDeployRequest?: DeployRequest;
+    previousDeployedResources?: Array<DeployResource>;
+    previousDeployedServiceProperties?: {
+        [key: string]: string;
+    };
+    previousDeployedResultProperties?: {
         [key: string]: string;
     };
 };
@@ -2501,6 +2637,40 @@ export type ServiceFlavor = {
     features?: Array<string>;
 };
 
+/**
+ * The flavors of the orderable service.
+ */
+export type UserOrderableServiceFlavor = {
+    /**
+     * The flavor name
+     */
+    name: string;
+    /**
+     * The properties of the flavor
+     */
+    properties: {
+        [key: string]: string;
+    };
+    /**
+     * The priority of the flavor. The larger value means lower priority.
+     */
+    priority: number;
+    /**
+     * Important features and differentiators of the flavor.
+     */
+    features?: Array<string>;
+    /**
+     * The flavors of the orderable service.
+     */
+    serviceFlavors: Array<ServiceFlavor>;
+    modificationImpact: ModificationImpact;
+    /**
+     * Whether the downgrading is allowed, default value: true.
+     */
+    isDowngradeAllowed: boolean;
+    downgradeAllowed?: boolean;
+};
+
 export type UserOrderableServiceVo = {
     /**
      * The id of the orderable service.
@@ -2557,10 +2727,7 @@ export type UserOrderableServiceVo = {
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
-    /**
-     * The flavors of the orderable service.
-     */
-    flavors: Array<ServiceFlavor>;
+    flavors: UserOrderableServiceFlavor;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
@@ -3152,7 +3319,7 @@ export type ListServiceOrdersData = {
     /**
      * Task type of the service order.
      */
-    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
+    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
 };
 
 export type ListServiceOrdersResponse = Array<ServiceOrderDetails>;
@@ -3420,6 +3587,31 @@ export type GetSelfHostedServiceDetailsByIdData = {
 };
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
+
+export type ListServiceConfigurationUpdateRequestData = {
+    /**
+     * Manager of the service configuration parameter.
+     */
+    configManager?: string;
+    /**
+     * id of the service order
+     */
+    orderId?: string;
+    /**
+     * name of the service resource
+     */
+    resourceName?: string;
+    /**
+     * Id of the deployed service
+     */
+    serviceId?: string;
+    /**
+     * Status of the service configuration
+     */
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export type ListServiceConfigurationUpdateRequestResponse = Array<ServiceConfigurationUpdateRequest>;
 
 export type GetServicePriceByFlavorData = {
     /**

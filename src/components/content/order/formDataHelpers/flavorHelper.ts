@@ -26,7 +26,7 @@ export function getServiceFlavorList(
             ) {
                 flavorMapper.set(
                     userOrderableServiceVo.csp,
-                    [...userOrderableServiceVo.flavors].sort((a, b) => a.priority - b.priority)
+                    [...userOrderableServiceVo.flavors.serviceFlavors].sort((a, b) => a.priority - b.priority)
                 );
             }
         });
