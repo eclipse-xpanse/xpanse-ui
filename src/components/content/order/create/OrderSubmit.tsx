@@ -265,12 +265,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             >
                                 {state.params.map((item) =>
                                     item.kind === 'variable' || item.kind === 'env' ? (
-                                        <OrderItem
-                                            key={item.name}
-                                            item={item}
-                                            csp={state.csp}
-                                            region={state.region.name}
-                                        />
+                                        <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
                                     ) : undefined
                                 )}
                             </div>

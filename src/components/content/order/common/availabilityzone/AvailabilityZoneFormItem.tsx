@@ -25,7 +25,7 @@ export function AvailabilityZoneFormItem({
     selectAvailabilityZones: Record<string, string | undefined>;
     selectCsp: csp;
 }): React.JSX.Element {
-    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion.name);
+    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
     const retryRequest = () => {
         if (availabilityZonesVariableRequest.isError) {
             void availabilityZonesVariableRequest.refetch();

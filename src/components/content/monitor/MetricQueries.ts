@@ -40,6 +40,7 @@ export function useGetLastKnownMetricForASpecificTypeQuery(
         enabled: isQueryEnabled,
         staleTime: 0,
         gcTime: 0,
+        notifyOnChangeProps: 'all',
     });
 }
 
@@ -73,5 +74,6 @@ export function useGetMetricsForSpecificTimePeriodAndSpecificType(
         enabled: isQueryEnabled,
         staleTime: 0,
         gcTime: 0,
+        notifyOnChangeProps: 'all',
     });
 }

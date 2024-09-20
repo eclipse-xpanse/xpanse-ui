@@ -55,6 +55,7 @@ function UpdateCredential({
     // Also, necessary to avoid changing state during render
     useEffect(() => {
         form.setFieldsValue({ name: credentialVariablesCopy.name });
+        form.setFieldsValue({ site: credentialVariablesCopy.site });
         form.setFieldsValue({ csp: credentialVariablesCopy.csp });
         form.setFieldsValue({ description: credentialVariablesCopy.description });
         form.setFieldsValue({ type: credentialVariablesCopy.type });
@@ -103,6 +104,7 @@ function UpdateCredential({
             // It must be only in the variables map.
             const createCredentialRequest: CreateCredential = {
                 csp: createCredential.csp,
+                site: createCredential.site,
                 description: createCredential.description,
                 name: createCredential.name,
                 type: createCredential.type,
@@ -252,6 +254,9 @@ function UpdateCredential({
                             preview={false}
                             src={cspMap.get(credentialVariables.csp.valueOf() as name)?.logo}
                         />
+                    </Form.Item>
+                    <Form.Item label='Site' name='site'>
+                        <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label='Type' name='type'>
                         <Input disabled={true} />

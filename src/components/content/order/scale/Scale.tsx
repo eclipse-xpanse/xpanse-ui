@@ -12,17 +12,17 @@ import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
+    csp,
     DeployedServiceDetails,
+    modify,
+    type ModifyData,
     ModifyRequest,
+    serviceDeploymentState,
     ServiceFlavor,
     VendorHostedDeployedServiceDetails,
-    csp,
-    modify,
-    serviceDeploymentState,
-    type ModifyData,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
-import useGetServiceTemplateDetails from '../../deployedServices/myServices/query/useGetServiceTemplateDetails';
+import useGetOrderableServiceDetails from '../../deployedServices/myServices/query/useGetOrderableServiceDetails.tsx';
 import { FlavorFeatures } from '../common/FlavorFeatures';
 import { FlavorPrice } from '../common/FlavorPrice.tsx';
 import { FlavorTitle } from '../common/FlavorTitle';
@@ -57,7 +57,7 @@ export const Scale = ({
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
-    const serviceTemplateDetailsQuery = useGetServiceTemplateDetails(currentSelectedService.serviceTemplateId);
+    const orderableServiceDetailsQuery = useGetOrderableServiceDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
         mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
             const data: ModifyData = {
@@ -68,14 +68,14 @@ export const Scale = ({
         },
     });
 
-    if (serviceTemplateDetailsQuery.isSuccess) {
-        if (serviceTemplateDetailsQuery.data.flavors.serviceFlavors.length > 0) {
-            flavorList = [...serviceTemplateDetailsQuery.data.flavors.serviceFlavors].sort(
+    if (orderableServiceDetailsQuery.isSuccess) {
+        if (orderableServiceDetailsQuery.data.flavors.serviceFlavors.length > 0) {
+            flavorList = [...orderableServiceDetailsQuery.data.flavors.serviceFlavors].sort(
                 (a, b) => a.priority - b.priority
             );
-            isDowngradeAllowed = serviceTemplateDetailsQuery.data.flavors.isDowngradeAllowed;
+            isDowngradeAllowed = orderableServiceDetailsQuery.data.flavors.isDowngradeAllowed;
         }
-        getParams = getModifyParams(serviceTemplateDetailsQuery.data.variables);
+        getParams = getModifyParams(orderableServiceDetailsQuery.data.variables);
     }
 
     const onFinish = () => {
@@ -106,18 +106,18 @@ export const Scale = ({
 
     const onClickScale = () => {
         if (
-            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
-            serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+            orderableServiceDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            orderableServiceDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
         ) {
             setScaleWarning(ChangeFlavorServiceWillBeRestartedAndDataWillBeLost);
         } else if (
-            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
-            !serviceTemplateDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
+            orderableServiceDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            !orderableServiceDetailsQuery.data.flavors.modificationImpact.isServiceInterrupted
         ) {
             setScaleWarning(ChangeFlavorServiceDataWillBeLost);
         } else if (
-            !serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
-            serviceTemplateDetailsQuery.data?.flavors.modificationImpact.isServiceInterrupted
+            !orderableServiceDetailsQuery.data?.flavors.modificationImpact.isDataLost &&
+            orderableServiceDetailsQuery.data?.flavors.modificationImpact.isServiceInterrupted
         ) {
             setScaleWarning(ChangeFlavorServiceWillBeRestarted);
         }
@@ -155,8 +155,8 @@ export const Scale = ({
                     isSubmitInProgress={modifyServiceRequest.isPending}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
-                        serviceTemplateDetailsQuery.isSuccess
-                            ? serviceTemplateDetailsQuery.data.serviceProviderContactDetails
+                        orderableServiceDetailsQuery.isSuccess
+                            ? orderableServiceDetailsQuery.data.serviceProviderContactDetails
                             : undefined
                     }
                     getModifyDetailsStatus={getModifyDetailsStatus}
@@ -298,7 +298,7 @@ export const Scale = ({
                                 key={item.name}
                                 item={item}
                                 csp={currentSelectedService.deployRequest.csp as csp}
-                                region={currentSelectedService.deployRequest.region.name}
+                                region={currentSelectedService.deployRequest.region}
                             />
                         ) : undefined
                     )}

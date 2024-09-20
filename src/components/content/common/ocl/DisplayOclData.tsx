@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { GlobalOutlined } from '@ant-design/icons';
 import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
@@ -10,7 +11,6 @@ import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
-import { formatRegionInfo } from '../../order/formDataHelpers/regionHelper.ts';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
 import { BillingText } from './BillingText';
@@ -18,6 +18,7 @@ import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { ContactDetailsText } from './ContactDetailsText';
 import { DeploymentText } from './DeploymentText';
 import { FlavorsText } from './FlavorsText.tsx';
+import { RegionText } from './RegionText.tsx';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -67,17 +68,6 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <br />
                             </div>
                             <div>
-                                <b>Available Regions</b>
-                                <br />
-                                {ocl.cloudServiceProvider.regions.map((region) => (
-                                    <Tag className={oclDisplayStyles.oclDisplayTag} color='orange' key={region.name}>
-                                        {formatRegionInfo(region, true)}
-                                    </Tag>
-                                ))}
-                                <br />
-                                <br />
-                            </div>
-                            <div>
                                 <b>Service Hosted By</b>
                                 <br />
                                 <DeployedServicesHostingType
@@ -90,6 +80,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                         </div>
                     </div>
                     <div>
+                        <h3 className={catalogStyles.catalogDetailsH3}>
+                            <GlobalOutlined />
+                            &nbsp;Available Regions
+                        </h3>
+                        <RegionText regions={ocl.cloudServiceProvider.regions} />
                         <h3 className={catalogStyles.catalogDetailsH3}>
                             <InfoCircleOutlined />
                             &nbsp;Basic Information

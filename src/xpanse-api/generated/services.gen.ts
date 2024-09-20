@@ -42,16 +42,8 @@ import type {
     DeleteUserCloudCredentialResponse,
     DeleteUserPolicyData,
     DeleteUserPolicyResponse,
-    DeployCallback1Data,
-    DeployCallback1Response,
-    DeployCallbackData,
-    DeployCallbackResponse,
     DeployData,
     DeployResponse,
-    DestroyCallback1Data,
-    DestroyCallback1Response,
-    DestroyCallbackData,
-    DestroyCallbackResponse,
     DestroyData,
     DestroyResponse,
     DetailsData,
@@ -105,6 +97,8 @@ import type {
     GetServicePolicyDetailsResponse,
     GetServicePriceByFlavorData,
     GetServicePriceByFlavorResponse,
+    GetSitesOfCspData,
+    GetSitesOfCspResponse,
     GetUserCloudCredentialsData,
     GetUserCloudCredentialsResponse,
     GetVendorHostedServiceDetailsByIdData,
@@ -120,6 +114,8 @@ import type {
     ListManagedServiceTemplatesResponse,
     ListOrderableServicesData,
     ListOrderableServicesResponse,
+    ListServiceConfigurationUpdateRequestData,
+    ListServiceConfigurationUpdateRequestResponse,
     ListServiceMigrationsData,
     ListServiceMigrationsResponse,
     ListServiceOrdersData,
@@ -136,18 +132,10 @@ import type {
     ManageFailedOrderResponse,
     MigrateData,
     MigrateResponse,
-    ModifyCallback1Data,
-    ModifyCallback1Response,
-    ModifyCallbackData,
-    ModifyCallbackResponse,
     ModifyData,
     ModifyResponse,
     OpenApiData,
     OpenApiResponse,
-    PurgeCallback1Data,
-    PurgeCallback1Response,
-    PurgeCallbackData,
-    PurgeCallbackResponse,
     PurgeData,
     PurgeResponse,
     QueryTasksData,
@@ -162,10 +150,6 @@ import type {
     RestartServiceResponse,
     ReviewRegistrationData,
     ReviewRegistrationResponse,
-    RollbackCallback1Data,
-    RollbackCallback1Response,
-    RollbackCallbackData,
-    RollbackCallbackResponse,
     StartServiceData,
     StartServiceResponse,
     StopServiceData,
@@ -331,6 +315,7 @@ export const addUserCloudCredential = (
  * Delete user's credential for connecting to the cloud service provider.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
+ * @param data.siteName The site of the provider.
  * @param data.type The type of credential.
  * @param data.name The name of of credential.
  * @returns void No Content
@@ -344,6 +329,7 @@ export const deleteUserCloudCredential = (
         url: '/xpanse/user/credentials',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             type: data.type,
             name: data.name,
         },
@@ -1004,6 +990,7 @@ export const addIsvCloudCredential = (
  * Delete the credentials of the user in the USER role to connect to the cloud service provider.<br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.cspName The cloud service provider.
+ * @param data.siteName The site of the provider.
  * @param data.type The type of credential.
  * @param data.name The name of of credential.
  * @returns void No Content
@@ -1017,6 +1004,7 @@ export const deleteIsvCloudCredential = (
         url: '/xpanse/isv/credentials',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             type: data.type,
             name: data.name,
         },
@@ -1297,296 +1285,6 @@ export const addUserPolicy = (data: AddUserPolicyData): CancelablePromise<AddUse
     return __request(OpenAPI, {
         method: 'POST',
         url: '/xpanse/policies',
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after openTofu executes the command line to rollback service deployment.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const rollbackCallback = (data: RollbackCallbackData): CancelablePromise<RollbackCallbackResponse> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/tofu-maker/rollback/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after openTofu executes the command line to purge service.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const purgeCallback = (data: PurgeCallbackData): CancelablePromise<PurgeCallbackResponse> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/tofu-maker/purge/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after openTofu executes the command line.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const modifyCallback = (data: ModifyCallbackData): CancelablePromise<ModifyCallbackResponse> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/tofu-maker/modify/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after openTofu executes the command line.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const destroyCallback = (data: DestroyCallbackData): CancelablePromise<DestroyCallbackResponse> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/tofu-maker/destroy/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after openTofu executes the command line.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const deployCallback = (data: DeployCallbackData): CancelablePromise<DeployCallbackResponse> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/tofu-maker/deploy/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after terraform executes the command line to rollback service deployment.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const rollbackCallback1 = (data: RollbackCallback1Data): CancelablePromise<RollbackCallback1Response> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/terraform-boot/rollback/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after terraform executes the command line to purge service.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const purgeCallback1 = (data: PurgeCallback1Data): CancelablePromise<PurgeCallback1Response> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/terraform-boot/purge/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after terraform executes the command line.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const modifyCallback1 = (data: ModifyCallback1Data): CancelablePromise<ModifyCallback1Response> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/terraform-boot/modify/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after terraform executes the command line to destroy service.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const destroyCallback1 = (data: DestroyCallback1Data): CancelablePromise<DestroyCallback1Response> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/terraform-boot/destroy/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
-        body: data.requestBody,
-        mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Process the execution result after terraform executes the command line.
- * @param data The data for the request.
- * @param data.serviceId id of the service instance
- * @param data.requestBody
- * @returns unknown OK
- * @throws ApiError
- */
-export const deployCallback1 = (data: DeployCallback1Data): CancelablePromise<DeployCallback1Response> => {
-    return __request(OpenAPI, {
-        method: 'POST',
-        url: '/webhook/terraform-boot/deploy/{serviceId}',
-        path: {
-            serviceId: data.serviceId,
-        },
         body: data.requestBody,
         mediaType: 'application/json',
         errors: {
@@ -2172,6 +1870,42 @@ export const getSelfHostedServiceDetailsById = (
 };
 
 /**
+ * List service's configuration.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.orderId id of the service order
+ * @param data.serviceId Id of the deployed service
+ * @param data.resourceName name of the service resource
+ * @param data.configManager Manager of the service configuration parameter.
+ * @param data.status Status of the service configuration
+ * @returns ServiceConfigurationUpdateRequest OK
+ * @throws ApiError
+ */
+export const listServiceConfigurationUpdateRequest = (
+    data: ListServiceConfigurationUpdateRequestData = {}
+): CancelablePromise<ListServiceConfigurationUpdateRequestResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/config/list',
+        query: {
+            orderId: data.orderId,
+            serviceId: data.serviceId,
+            resourceName: data.resourceName,
+            configManager: data.configManager,
+            status: data.status,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * Get the price of one specific flavor of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.templateId id of the service template
@@ -2299,6 +2033,32 @@ export const healthCheck = (): CancelablePromise<HealthCheckResponse> => {
 };
 
 /**
+ * List the sites of the cloud service provider.<br> Required role: <b>isv</b> or <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.cspName The cloud service provider
+ * @returns string OK
+ * @throws ApiError
+ */
+export const getSitesOfCsp = (data: GetSitesOfCspData): CancelablePromise<GetSitesOfCspResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/csps/{cspName}/sites',
+        path: {
+            cspName: data.cspName,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @returns string OK
  * @throws ApiError
@@ -2387,7 +2147,8 @@ export const getRegistrationDetails = (
  * List existing cloud resource names with kind<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.csp name of the cloud service provider
- * @param data.region name of he region
+ * @param data.siteName the site of the service belongs to
+ * @param data.regionName name of the region
  * @param data.deployResourceKind kind of the CloudResource
  * @param data.serviceId id of the deployed service
  * @returns string OK
@@ -2404,7 +2165,8 @@ export const getExistingResourceNamesWithKind = (
         },
         query: {
             csp: data.csp,
-            region: data.region,
+            siteName: data.siteName,
+            regionName: data.regionName,
             serviceId: data.serviceId,
         },
         errors: {
@@ -2423,6 +2185,7 @@ export const getExistingResourceNamesWithKind = (
  * Get availability zones with csp and region.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName name of the cloud service provider
+ * @param data.siteName site of the region belongs to
  * @param data.regionName name of the region
  * @param data.serviceId Id of the deployed service
  * @returns string OK
@@ -2436,6 +2199,7 @@ export const getAvailabilityZones = (
         url: '/xpanse/csp/region/azs',
         query: {
             cspName: data.cspName,
+            siteName: data.siteName,
             regionName: data.regionName,
             serviceId: data.serviceId,
         },

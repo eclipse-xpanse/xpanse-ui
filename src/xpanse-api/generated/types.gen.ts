@@ -165,6 +165,10 @@ export type CreateCredential = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site to which the credentials belong to.
+     */
+    site: string;
+    /**
      * The description of the credential
      */
     description?: string;
@@ -1492,28 +1496,6 @@ export type UserPolicyCreateRequest = {
     enabled: boolean;
 };
 
-export type OpenTofuResult = {
-    requestId?: string;
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: {
-        [key: string]: string;
-    };
-    commandSuccessful?: boolean;
-};
-
-export type TerraformResult = {
-    requestId?: string;
-    commandStdOutput?: string;
-    commandStdError?: string;
-    terraformState?: string;
-    importantFileContentMap?: {
-        [key: string]: string;
-    };
-    commandSuccessful?: boolean;
-};
-
 export type WorkFlowTask = {
     /**
      * The id of the ProcessInstance
@@ -1580,6 +1562,10 @@ export type AbstractCredentialInfo = CredentialVariables & {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site which the credentials belong to.
+     */
+    site?: string;
+    /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type?: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -1610,6 +1596,10 @@ export type AbstractCredentialInfo = CredentialVariables & {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * The site which the credentials belong to.
+     */
+    site: string;
+    /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
     type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -1637,6 +1627,10 @@ export type CredentialVariables = {
         | 'aws'
         | 'azure'
         | 'GoogleCloudPlatform';
+    /**
+     * The site which the credentials belong to.
+     */
+    site: string;
     /**
      * The type of the credential, this field is provided by the plugin of cloud service provider.
      */
@@ -1766,6 +1760,11 @@ export type DeployedService = {
      */
     flavor?: string;
     /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
+    /**
      * The id of the Service Template
      */
     serviceTemplateId?: string;
@@ -1861,7 +1860,7 @@ export type ServiceOrderDetails = {
     /**
      * The task type of the service order.
      */
-    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
+    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
     /**
      * The task status of the service order.
      */
@@ -1910,6 +1909,7 @@ export enum taskType {
     REDEPLOY = 'redeploy',
     MODIFY = 'modify',
     DESTROY = 'destroy',
+    SERVICE_CONFIGURATION_UPDATE = 'serviceConfigurationUpdate',
     PURGE = 'purge',
 }
 
@@ -2115,6 +2115,11 @@ export type DeployedServiceDetails = {
      */
     flavor?: string;
     /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
+    /**
      * The id of the Service Template
      */
     serviceTemplateId?: string;
@@ -2230,6 +2235,11 @@ export type VendorHostedDeployedServiceDetails = {
      */
     flavor?: string;
     /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    region: Region;
+    /**
      * The id of the Service Template
      */
     serviceTemplateId?: string;
@@ -2284,6 +2294,141 @@ export type VendorHostedDeployedServiceDetails = {
      * The properties of the deployed service.
      */
     deployedServiceProperties?: {
+        [key: string]: string;
+    };
+};
+
+export type DeployResourceEntity = {
+    createTime?: string;
+    lastModifiedTime?: string;
+    id?: string;
+    groupType?: string;
+    groupName?: string;
+    resourceId?: string;
+    resourceName?: string;
+    resourceKind?:
+        | 'vm'
+        | 'container'
+        | 'publicIP'
+        | 'vpc'
+        | 'volume'
+        | 'unknown'
+        | 'security_group'
+        | 'security_group_rule'
+        | 'keypair'
+        | 'subnet';
+    deployService?: DeployServiceEntity;
+    properties?: {
+        [key: string]: string;
+    };
+};
+
+export type DeployServiceEntity = {
+    createTime?: string;
+    lastModifiedTime?: string;
+    id?: string;
+    userId?: string;
+    category?:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
+    name?: string;
+    customerServiceName?: string;
+    version?: string;
+    namespace?: string;
+    csp?:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+    flavor?: string;
+    serviceDeploymentState?:
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'manual cleanup required'
+        | 'rollback failed'
+        | 'modifying'
+        | 'modification failed'
+        | 'modification successful';
+    resultMessage?: string;
+    serviceState?: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
+    serviceTemplateId?: string;
+    deployRequest?: DeployRequest;
+    deployResourceList?: Array<DeployResourceEntity>;
+    serviceConfigurationEntity?: ServiceConfigurationEntity;
+    properties?: {
+        [key: string]: string;
+    };
+    privateProperties?: {
+        [key: string]: string;
+    };
+    lastStartedAt?: string;
+    lastStoppedAt?: string;
+    lockConfig?: ServiceLockConfig;
+};
+
+export type ServiceConfigurationEntity = {
+    id?: string;
+    deployServiceEntity?: DeployServiceEntity;
+    configuration?: {
+        [key: string]: unknown;
+    };
+    createdTime?: string;
+    updatedTime?: string;
+};
+
+export type ServiceConfigurationUpdateRequest = {
+    id?: string;
+    serviceOrderEntity?: ServiceOrderEntity;
+    deployServiceEntity?: DeployServiceEntity;
+    resourceName?: string;
+    configManager?: string;
+    resultMessage?: string;
+    properties?: {
+        [key: string]: unknown;
+    };
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export enum status2 {
+    PENDING = 'pending',
+    PROCESSING = 'processing',
+    SUCCESSFUL = 'successful',
+    ERROR = 'error',
+}
+
+export type ServiceOrderEntity = {
+    orderId?: string;
+    serviceId?: string;
+    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
+    userId?: string;
+    taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
+    errorMsg?: string;
+    startedTime?: string;
+    completedTime?: string;
+    previousDeployRequest?: DeployRequest;
+    newDeployRequest?: DeployRequest;
+    previousDeployedResources?: Array<DeployResource>;
+    previousDeployedServiceProperties?: {
+        [key: string]: string;
+    };
+    previousDeployedResultProperties?: {
         [key: string]: string;
     };
 };
@@ -2492,6 +2637,40 @@ export type ServiceFlavor = {
     features?: Array<string>;
 };
 
+/**
+ * The flavors of the orderable service.
+ */
+export type UserOrderableServiceFlavor = {
+    /**
+     * The flavor name
+     */
+    name: string;
+    /**
+     * The properties of the flavor
+     */
+    properties: {
+        [key: string]: string;
+    };
+    /**
+     * The priority of the flavor. The larger value means lower priority.
+     */
+    priority: number;
+    /**
+     * Important features and differentiators of the flavor.
+     */
+    features?: Array<string>;
+    /**
+     * The flavors of the orderable service.
+     */
+    serviceFlavors: Array<ServiceFlavor>;
+    modificationImpact: ModificationImpact;
+    /**
+     * Whether the downgrading is allowed, default value: true.
+     */
+    isDowngradeAllowed: boolean;
+    downgradeAllowed?: boolean;
+};
+
 export type UserOrderableServiceVo = {
     /**
      * The id of the orderable service.
@@ -2548,10 +2727,7 @@ export type UserOrderableServiceVo = {
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
-    /**
-     * The flavors of the orderable service.
-     */
-    flavors: Array<ServiceFlavor>;
+    flavors: UserOrderableServiceFlavor;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
@@ -2671,6 +2847,10 @@ export type DeleteUserCloudCredentialData = {
      * The name of of credential.
      */
     name: string;
+    /**
+     * The site of the provider.
+     */
+    siteName: string;
     /**
      * The type of credential.
      */
@@ -2899,6 +3079,10 @@ export type DeleteIsvCloudCredentialData = {
      */
     name: string;
     /**
+     * The site of the provider.
+     */
+    siteName: string;
+    /**
      * The type of credential.
      */
     type: 'variables' | 'http_authentication' | 'api_key' | 'oauth2';
@@ -3079,106 +3263,6 @@ export type AddUserPolicyData = {
 
 export type AddUserPolicyResponse = UserPolicy;
 
-export type RollbackCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type RollbackCallbackResponse = unknown;
-
-export type PurgeCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type PurgeCallbackResponse = unknown;
-
-export type ModifyCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type ModifyCallbackResponse = unknown;
-
-export type DestroyCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DestroyCallbackResponse = unknown;
-
-export type DeployCallbackData = {
-    requestBody: OpenTofuResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DeployCallbackResponse = unknown;
-
-export type RollbackCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type RollbackCallback1Response = unknown;
-
-export type PurgeCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type PurgeCallback1Response = unknown;
-
-export type ModifyCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type ModifyCallback1Response = unknown;
-
-export type DestroyCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DestroyCallback1Response = unknown;
-
-export type DeployCallback1Data = {
-    requestBody: TerraformResult;
-    /**
-     * id of the service instance
-     */
-    serviceId: string;
-};
-
-export type DeployCallback1Response = unknown;
-
 export type QueryTasksData = {
     /**
      * the status of task
@@ -3235,7 +3319,7 @@ export type ListServiceOrdersData = {
     /**
      * Task type of the service order.
      */
-    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'purge';
+    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
 };
 
 export type ListServiceOrdersResponse = Array<ServiceOrderDetails>;
@@ -3504,6 +3588,31 @@ export type GetSelfHostedServiceDetailsByIdData = {
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
 
+export type ListServiceConfigurationUpdateRequestData = {
+    /**
+     * Manager of the service configuration parameter.
+     */
+    configManager?: string;
+    /**
+     * id of the service order
+     */
+    orderId?: string;
+    /**
+     * name of the service resource
+     */
+    resourceName?: string;
+    /**
+     * Id of the deployed service
+     */
+    serviceId?: string;
+    /**
+     * Status of the service configuration
+     */
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export type ListServiceConfigurationUpdateRequestResponse = Array<ServiceConfigurationUpdateRequest>;
+
 export type GetServicePriceByFlavorData = {
     /**
      * mode of billing
@@ -3584,6 +3693,24 @@ export type GetMetricsData = {
 export type GetMetricsResponse = Array<Metric>;
 
 export type HealthCheckResponse = SystemStatus;
+
+export type GetSitesOfCspData = {
+    /**
+     * The cloud service provider
+     */
+    cspName:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+};
+
+export type GetSitesOfCspResponse = Array<string>;
 
 export type GetActiveCspsResponse = Array<
     | 'HuaweiCloud'
@@ -3670,13 +3797,17 @@ export type GetExistingResourceNamesWithKindData = {
         | 'keypair'
         | 'subnet';
     /**
-     * name of he region
+     * name of the region
      */
-    region: string;
+    regionName: string;
     /**
      * id of the deployed service
      */
     serviceId?: string;
+    /**
+     * the site of the service belongs to
+     */
+    siteName: string;
 };
 
 export type GetExistingResourceNamesWithKindResponse = Array<string>;
@@ -3703,6 +3834,10 @@ export type GetAvailabilityZonesData = {
      * Id of the deployed service
      */
     serviceId?: string;
+    /**
+     * site of the region belongs to
+     */
+    siteName: string;
 };
 
 export type GetAvailabilityZonesResponse = Array<string>;

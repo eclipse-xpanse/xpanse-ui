@@ -63,12 +63,15 @@ export default function MonitorChart({
     );
 
     // useRef necessary to store existing data between re-renders
-    const onlyLastKnownMetricsQueue = useRef<Metric[]>([]);
-    const metricsForSpecificTimePeriodQueue = useRef<Metric[]>([]);
+    const onlyLastKnownMetricsQueue = useRef<Map<monitorResourceType, Metric[]>>(
+        new Map<monitorResourceType.CPU, []>()
+    );
+    const metricsForSpecificTimePeriodQueue = useRef<Map<monitorResourceType, Metric[]>>(
+        new Map<monitorResourceType.CPU, []>()
+    );
 
     let chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
     let options: EChartsCoreOption[] = [];
-
     const convertMetricToEchartOptions = (metricProps: MetricProps[]) => {
         const newCurrentTime = new Date();
         if (timePeriod === lastMinuteRadioButtonKeyId) {
@@ -79,7 +82,6 @@ export default function MonitorChart({
         const currentMetricProps: Map<string, MetricProps[]> = groupMetricsByResourceIds(metricProps);
         const currentChartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
         const currentOptions: EChartsCoreOption[] = [];
-
         currentMetricProps.forEach((metricProps, vmId) => {
             currentChartsTitle.push({
                 Id: vmId,
@@ -169,7 +171,6 @@ export default function MonitorChart({
         tipMessage = '';
         tipDescription = '';
     }
-
     if (useGetLastKnownMetric.isSuccess) {
         const data: Metric[] | undefined = useGetLastKnownMetric.data;
         if (data.length > 0) {
@@ -177,18 +178,19 @@ export default function MonitorChart({
             tipMessage = '';
             tipDescription = '';
             let newQueue: Metric[];
-            if (onlyLastKnownMetricsQueue.current.length > 0) {
-                newQueue = [...onlyLastKnownMetricsQueue.current, ...data];
+            const currentData = onlyLastKnownMetricsQueue.current.get(activeMonitorMetricType);
+            if (currentData) {
+                newQueue = [...currentData, ...data];
                 if (newQueue.length > monitorMetricQueueSize) {
                     newQueue.shift();
                 }
             } else {
                 newQueue = data;
             }
-            onlyLastKnownMetricsQueue.current = newQueue;
-            convertMetricToEchartOptions(convertMetricsToMetricProps(onlyLastKnownMetricsQueue.current));
+            onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, newQueue);
+            convertMetricToEchartOptions(convertMetricsToMetricProps(newQueue));
         } else {
-            onlyLastKnownMetricsQueue.current = [];
+            onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, []);
             tipType = undefined;
             tipMessage = 'No metrics found for the selected service.';
             tipDescription = '';
@@ -201,20 +203,27 @@ export default function MonitorChart({
             tipType = undefined;
             tipMessage = '';
             tipDescription = '';
-            let newQueue: Metric[];
+            let newQueue: Metric[] = [];
+            const currentItem: Metric[] | null | undefined =
+                metricsForSpecificTimePeriodQueue.current.get(activeMonitorMetricType);
             if (isMetricEmpty(rsp)) {
-                const currentItem: Metric | undefined = metricsForSpecificTimePeriodQueue.current[0];
-                newQueue = [...metricsForSpecificTimePeriodQueue.current, currentItem];
+                if (currentItem) {
+                    newQueue = [...currentItem, currentItem[0]];
+                }
             } else {
-                newQueue = [...metricsForSpecificTimePeriodQueue.current, ...rsp];
+                if (currentItem) {
+                    newQueue = [...currentItem, ...rsp];
+                } else {
+                    newQueue = [...rsp];
+                }
             }
 
             if (newQueue.length > monitorMetricQueueSize) {
                 newQueue.shift();
             }
 
-            metricsForSpecificTimePeriodQueue.current = newQueue;
-            convertMetricToEchartOptions(convertMetricsToMetricProps(metricsForSpecificTimePeriodQueue.current));
+            metricsForSpecificTimePeriodQueue.current.set(activeMonitorMetricType, newQueue);
+            convertMetricToEchartOptions(convertMetricsToMetricProps(newQueue));
         } else {
             tipType = undefined;
             tipMessage = 'No metrics found for the selected service.';
@@ -227,7 +236,7 @@ export default function MonitorChart({
     }
 
     if (useGetLastKnownMetric.isError) {
-        onlyLastKnownMetricsQueue.current = [];
+        onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, []);
         setErrorAlertData(useGetLastKnownMetric.error);
     }
 
