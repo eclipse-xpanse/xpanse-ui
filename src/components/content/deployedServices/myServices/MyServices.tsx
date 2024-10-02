@@ -612,17 +612,24 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'restart',
                 label: (
-                    <Button
-                        onClick={() => {
+                    <Popconfirm
+                        title='Restart the service'
+                        description='Are you sure to restart the service?'
+                        cancelText='Yes'
+                        okText='No'
+                        onCancel={() => {
                             restart(record);
                         }}
-                        className={myServicesStyles.buttonAsLink}
-                        icon={<SyncOutlined />}
-                        disabled={isDisabledStopOrRestartBtn(record)}
-                        type={'link'}
                     >
-                        restart
-                    </Button>
+                        <Button
+                            icon={<SyncOutlined />}
+                            className={myServicesStyles.buttonAsLink}
+                            disabled={isDisabledStopOrRestartBtn(record)}
+                            type={'link'}
+                        >
+                            restart
+                        </Button>
+                    </Popconfirm>
                 ),
             },
             {
@@ -1026,6 +1033,9 @@ function MyServices(): React.JSX.Element {
     }
 
     function start(record: DeployedService): void {
+        // force close any old alerts if still open.
+        setIsStopRequestSubmitted(false);
+        setIsRestartRequestSubmitted(false);
         setIsStartRequestSubmitted(true);
         setActiveRecord(
             record.serviceHostingType === serviceHostingType.SELF
@@ -1037,6 +1047,9 @@ function MyServices(): React.JSX.Element {
     }
 
     function stop(record: DeployedService): void {
+        // force close any old alerts if still open.
+        setIsStartRequestSubmitted(false);
+        setIsRestartRequestSubmitted(false);
         setIsStopRequestSubmitted(true);
         setActiveRecord(
             record.serviceHostingType === serviceHostingType.SELF
@@ -1048,6 +1061,9 @@ function MyServices(): React.JSX.Element {
     }
 
     function restart(record: DeployedService): void {
+        // force close any old alerts if still open.
+        setIsStartRequestSubmitted(false);
+        setIsStopRequestSubmitted(false);
         setIsRestartRequestSubmitted(true);
         setActiveRecord(
             record.serviceHostingType === serviceHostingType.SELF
