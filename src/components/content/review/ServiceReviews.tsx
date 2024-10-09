@@ -264,10 +264,11 @@ export default function ServiceReviews(): React.JSX.Element {
             filters: deployerTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.deployment.kind.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) =>
+                record.deployment.deployerTool.kind.toString() === value.toString(),
             align: 'left',
             render: (deployment: Deployment) =>
-                deployment.kind === kind.TERRAFORM ? (
+                deployment.deployerTool.kind.toString() === kind.TERRAFORM.toString() ? (
                     <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
                         {'Terraform'}
                     </Tag>

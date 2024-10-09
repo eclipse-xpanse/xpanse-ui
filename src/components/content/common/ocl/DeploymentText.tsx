@@ -23,7 +23,7 @@ export function DeploymentText({ deployment }: { deployment: Deployment }): Reac
                 trigger='hover'
             >
                 <Button className={oclDisplayStyles.oclDataHover} type={'link'}>
-                    {deployment.kind}
+                    {deployment.deployerTool.kind}
                 </Button>
             </Popover>
         );

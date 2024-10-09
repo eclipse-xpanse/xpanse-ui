@@ -55,6 +55,8 @@ import type {
     GetAccessTokenData,
     GetAccessTokenResponse,
     GetActiveCspsResponse,
+    GetAllServiceConfigurationUpdateRequestsData,
+    GetAllServiceConfigurationUpdateRequestsResponse,
     GetAvailabilityZonesData,
     GetAvailabilityZonesResponse,
     GetComputeResourceInventoryOfServiceData,
@@ -65,6 +67,8 @@ import type {
     GetCredentialOpenApiResponse,
     GetCredentialTypesData,
     GetCredentialTypesResponse,
+    GetCurrentConfigurationOfServiceData,
+    GetCurrentConfigurationOfServiceResponse,
     GetExistingResourceNamesWithKindData,
     GetExistingResourceNamesWithKindResponse,
     GetIsvCloudCredentialsData,
@@ -83,6 +87,8 @@ import type {
     GetOrderableServiceDetailsResponse,
     GetOrderDetailsByOrderIdData,
     GetOrderDetailsByOrderIdResponse,
+    GetPendingConfigurationChangeRequestData,
+    GetPendingConfigurationChangeRequestResponse,
     GetPolicyDetailsData,
     GetPolicyDetailsResponse,
     GetPricesByServiceData,
@@ -114,8 +120,6 @@ import type {
     ListManagedServiceTemplatesResponse,
     ListOrderableServicesData,
     ListOrderableServicesResponse,
-    ListServiceConfigurationUpdateRequestData,
-    ListServiceConfigurationUpdateRequestResponse,
     ListServiceMigrationsData,
     ListServiceMigrationsResponse,
     ListServiceOrdersData,
@@ -156,6 +160,8 @@ import type {
     StopServiceResponse,
     UnregisterData,
     UnregisterResponse,
+    UpdateConfigurationChangeResultData,
+    UpdateConfigurationChangeResultResponse,
     UpdateData,
     UpdateIsvCloudCredentialData,
     UpdateIsvCloudCredentialResponse,
@@ -1021,6 +1027,37 @@ export const deleteIsvCloudCredential = (
 };
 
 /**
+ * Update configuration change result for agents.
+ * @param data The data for the request.
+ * @param data.changeId id of the update request.
+ * @param data.requestBody
+ * @returns unknown OK
+ * @throws ApiError
+ */
+export const updateConfigurationChangeResult = (
+    data: UpdateConfigurationChangeResultData
+): CancelablePromise<UpdateConfigurationChangeResultResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/agent/update/status/{changeId}',
+        path: {
+            changeId: data.changeId,
+        },
+        body: data.requestBody,
+        mediaType: 'application/json',
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * List all deployed services belongs to the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
@@ -1872,26 +1909,54 @@ export const getSelfHostedServiceDetailsById = (
 /**
  * List service's configuration.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
- * @param data.orderId id of the service order
  * @param data.serviceId Id of the deployed service
+ * @param data.orderId id of the service order
  * @param data.resourceName name of the service resource
  * @param data.configManager Manager of the service configuration parameter.
  * @param data.status Status of the service configuration
- * @returns ServiceConfigurationUpdateRequest OK
+ * @returns ServiceConfigurationUpdateRequestOrderDetails OK
  * @throws ApiError
  */
-export const listServiceConfigurationUpdateRequest = (
-    data: ListServiceConfigurationUpdateRequestData = {}
-): CancelablePromise<ListServiceConfigurationUpdateRequestResponse> => {
+export const getAllServiceConfigurationUpdateRequests = (
+    data: GetAllServiceConfigurationUpdateRequestsData
+): CancelablePromise<GetAllServiceConfigurationUpdateRequestsResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/services/config/list',
+        url: '/xpanse/services/config/requests',
         query: {
-            orderId: data.orderId,
             serviceId: data.serviceId,
+            orderId: data.orderId,
             resourceName: data.resourceName,
             configManager: data.configManager,
             status: data.status,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Query the service's current configuration by id of the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service
+ * @returns ServiceConfigurationDetails OK
+ * @throws ApiError
+ */
+export const getCurrentConfigurationOfService = (
+    data: GetCurrentConfigurationOfServiceData
+): CancelablePromise<GetCurrentConfigurationOfServiceResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/service/current/config/{serviceId}',
+        path: {
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
@@ -2382,6 +2447,37 @@ export const openApi = (data: OpenApiData): CancelablePromise<OpenApiResponse> =
         url: '/xpanse/catalog/services/{id}/openapi',
         path: {
             id: data.id,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Get pending configuration change request for agents to poll.
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service
+ * @param data.resourceName The name of the resource of deployed service
+ * @returns ServiceConfigurationChangeRequest pending configuration update request details
+ * @returns void no pending configuration update requests
+ * @throws ApiError
+ */
+export const getPendingConfigurationChangeRequest = (
+    data: GetPendingConfigurationChangeRequestData
+): CancelablePromise<GetPendingConfigurationChangeRequestResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/agent/poll/{serviceId}/{resourceName}',
+        path: {
+            serviceId: data.serviceId,
+            resourceName: data.resourceName,
         },
         errors: {
             400: 'Bad Request',
