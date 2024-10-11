@@ -128,7 +128,7 @@
         "knip": "^5.33.3",
         "prettier": "3.3.3",
         "prettier-plugin-organize-imports": "^4.1.0",
-        "release-it": "^17.7.0",
+        "release-it": "^17.8.2",
         "ts-jest": "^29.2.5",
         "typescript": "5.6.2",
         "uuid": "^10.0.0",
