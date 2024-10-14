@@ -70,6 +70,7 @@
     width: 200px;
     margin-top: 15px;
 }
+
 .catalog-service-status-size {
     font-size: 14px;
 }
@@ -99,4 +100,16 @@
 
 .catalog-service-update-result {
     margin-top: 20px;
+}
+
+.catalog-deployment-info-table {
+    width: auto;
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+.catalog-display-deployment-kind {
+    width: 100px;
+    height: 26px;
+    display: inline-block;
 }

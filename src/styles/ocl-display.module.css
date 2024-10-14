@@ -110,3 +110,9 @@
     line-height: 20px;
     transform: translateY(-20%);
 }
+
+.ocl-data-display-deployment-kind {
+    width: 100px;
+    height: 26px;
+    display: inline-block;
+}

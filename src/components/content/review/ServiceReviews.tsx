@@ -11,13 +11,13 @@ import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
-    Deployment,
-    ServiceTemplateDetailVo,
     category,
     csp,
+    Deployment,
     kind,
     serviceHostingType,
     serviceRegistrationState,
+    ServiceTemplateDetailVo,
 } from '../../../xpanse-api/generated';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
@@ -345,7 +345,7 @@ export default function ServiceReviews(): React.JSX.Element {
             {currentServiceTemplateVo ? (
                 <Modal
                     title={'Service Details'}
-                    width={1400}
+                    width={'100em'}
                     footer={null}
                     destroyOnClose={true}
                     open={isServiceTemplateDetailsModalOpen}

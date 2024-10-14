@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BarsOutlined, GlobalOutlined } from '@ant-design/icons';
+import { BarsOutlined, GlobalOutlined, ProfileOutlined } from '@ant-design/icons';
 import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
@@ -16,9 +16,12 @@ import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
 import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
+import { DeploymentScriptText } from '../common/ocl/DeploymentScript.tsx';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
+import { getDeployerToolIcon } from '../common/ocl/getDeployerToolIcon.ts';
 import { RegionText } from '../common/ocl/RegionText.tsx';
+import DeploymentVariables from '../deploymentVariables/DeploymentVariables.tsx';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -48,29 +51,31 @@ export const ServiceReviewsDetails = ({
         }
     };
     return (
-        <>
+        <div className={serviceReviewStyles.modalContainer}>
             {' '}
-            <Button
-                type='primary'
-                onClick={onClickApprove}
-                disabled={
-                    approveOrRejectRequest.isSuccess ||
-                    currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
-                }
-            >
-                Approve
-            </Button>
-            <Button
-                type='primary'
-                onClick={onClickReject}
-                className={serviceReviewStyles.rejectBtnClass}
-                disabled={
-                    approveOrRejectRequest.isSuccess ||
-                    currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
-                }
-            >
-                Reject
-            </Button>
+            <div className={serviceReviewStyles.modalContainer}>
+                <Button
+                    type='primary'
+                    onClick={onClickApprove}
+                    disabled={
+                        approveOrRejectRequest.isSuccess ||
+                        currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
+                    }
+                >
+                    Approve
+                </Button>
+                <Button
+                    type='primary'
+                    onClick={onClickReject}
+                    className={serviceReviewStyles.rejectBtnClass}
+                    disabled={
+                        approveOrRejectRequest.isSuccess ||
+                        currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
+                    }
+                >
+                    Reject
+                </Button>
+            </div>
             <ApproveOrRejectServiceTemplate
                 key={currentServiceTemplateVo.serviceTemplateId}
                 currentServiceTemplateVo={currentServiceTemplateVo}
@@ -185,6 +190,33 @@ export const ServiceReviewsDetails = ({
                             )}
                         </Descriptions.Item>
                     </Descriptions>
+                    <h3 className={catalogStyles.catalogDetailsH3}>
+                        <ProfileOutlined />
+                        &nbsp;Deployment Information
+                    </h3>
+                    <Descriptions column={2} bordered className={oclDisplayStyles.oclDataInfoTable}>
+                        <Descriptions.Item label='Kind'>
+                            {
+                                <img
+                                    src={getDeployerToolIcon(
+                                        currentServiceTemplateVo.deployment.deployerTool.kind.valueOf()
+                                    )}
+                                    alt={currentServiceTemplateVo.deployment.deployerTool.kind}
+                                    className={oclDisplayStyles.oclDataDisplayDeploymentKind}
+                                />
+                            }
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Version'>
+                            {currentServiceTemplateVo.deployment.deployerTool.version}
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Service Availability Config'>
+                            <DeploymentText deployment={currentServiceTemplateVo.deployment} />
+                        </Descriptions.Item>
+                        <Descriptions.Item label='Deployment Script'>
+                            <DeploymentScriptText deployment={currentServiceTemplateVo.deployment} />
+                        </Descriptions.Item>
+                    </Descriptions>
+                    <DeploymentVariables variables={currentServiceTemplateVo.deployment.variables} />
                     <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
                     {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (
                         <>
@@ -206,6 +238,6 @@ export const ServiceReviewsDetails = ({
                     )}
                 </div>
             </div>
-        </>
+        </div>
     );
 };

@@ -42,3 +42,7 @@
 .service-template-state-size {
     font-size: 14px;
 }
+
+.modal-container {
+    padding: 24px;
+}
