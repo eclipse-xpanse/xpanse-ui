@@ -1041,6 +1041,106 @@
                 }
             }
         },
+        "/xpanse/services/recreate/{serviceId}": {
+            "put": {
+                "tags": ["Service"],
+                "description": "Create a job to recreate the deployed service.\u003Cbr\u003E Required role: \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E \u003C/br\u003E",
+                "operationId": "recreateService",
+                "parameters": [
+                    {
+                        "name": "serviceId",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "202": {
+                        "description": "Accepted",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string",
+                                    "format": "uuid"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/xpanse/services/modify/{serviceId}": {
             "put": {
                 "tags": ["Service"],
@@ -4893,7 +4993,7 @@
             "get": {
                 "tags": ["ServiceOrders"],
                 "description": "List service orders of the service\u003Cbr\u003E Required role: \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Eisv\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E \u003C/br\u003E",
-                "operationId": "listServiceOrders",
+                "operationId": "getAllOrdersByServiceId",
                 "parameters": [
                     {
                         "name": "serviceId",
@@ -5412,6 +5512,238 @@
                     },
                     "204": {
                         "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/xpanse/services/recreate": {
+            "get": {
+                "tags": ["Service"],
+                "description": "List all services recreate by a user.\u003Cbr\u003E Required role: \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E \u003C/br\u003E",
+                "operationId": "listServiceRecreates",
+                "parameters": [
+                    {
+                        "name": "recreateId",
+                        "in": "query",
+                        "description": "Id of the service recreate",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "serviceId",
+                        "in": "query",
+                        "description": "Id of the old service",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "recreateStatus",
+                        "in": "query",
+                        "description": "Status of the service recreate",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "RecreateStarted",
+                                "RecreateCompleted",
+                                "RecreateFailed",
+                                "DestroyStarted",
+                                "DestroyFailed",
+                                "DestroyCompleted",
+                                "DeployStarted",
+                                "DeployFailed",
+                                "DeployCompleted"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ServiceRecreateDetails"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/services/recreate/{recreateId}": {
+            "get": {
+                "tags": ["Service"],
+                "description": "Get recreate records based on recreate id.\u003Cbr\u003E Required role: \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E \u003C/br\u003E",
+                "operationId": "getRecreateOrderDetailsById",
+                "parameters": [
+                    {
+                        "name": "recreateId",
+                        "in": "path",
+                        "description": "Recreate ID",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceRecreateDetails"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -6621,7 +6953,7 @@
             "get": {
                 "tags": ["ServiceConfiguration"],
                 "description": "List service's configuration.\u003Cbr\u003E Required role: \u003Cb\u003Eadmin\u003C/b\u003E or \u003Cb\u003Euser\u003C/b\u003E \u003C/br\u003E",
-                "operationId": "getAllServiceConfigurationUpdateRequests",
+                "operationId": "getAllServiceConfigurationChangeDetails",
                 "parameters": [
                     {
                         "name": "serviceId",
@@ -6748,7 +7080,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "$ref": "#/components/schemas/ServiceConfigurationUpdateRequestOrderDetails"
+                                        "$ref": "#/components/schemas/ServiceConfigurationChangeOrderDetails"
                                     }
                                 }
                             }
@@ -8988,9 +9320,6 @@
                             }
                         }
                     },
-                    "204": {
-                        "description": "no pending configuration update requests"
-                    },
                     "200": {
                         "description": "pending configuration update request details",
                         "content": {
@@ -9000,6 +9329,9 @@
                                 }
                             }
                         }
+                    },
+                    "204": {
+                        "description": "no pending configuration update requests"
                     }
                 }
             }
@@ -9467,7 +9799,8 @@
                             "File Locked",
                             "Service Configuration Invalid",
                             "Service Configuration Update Request Not Found",
-                            "Service Configuration Not Found"
+                            "Service Configuration Not Found",
+                            "Invalid Deployer Tool"
                         ]
                     },
                     "details": {
@@ -9650,7 +9983,8 @@
                             "File Locked",
                             "Service Configuration Invalid",
                             "Service Configuration Update Request Not Found",
-                            "Service Configuration Not Found"
+                            "Service Configuration Not Found",
+                            "Invalid Deployer Tool"
                         ]
                     },
                     "details": {
@@ -9743,7 +10077,7 @@
                     },
                     "isPrepareAnsibleEnvironment": {
                         "type": "boolean",
-                        "description": "The agent will prepare the virtual environment if this true.Otherwise it is assumed that the environment is already prepared as part of the resource creation."
+                        "description": "The agent will prepare the virtual environment if this true.Otherwise it is assumed that the environment is already prepared as part of the resource creation or the VM base image build."
                     },
                     "repoUrl": {
                         "type": "string",
@@ -9952,6 +10286,7 @@
                         "enum": ["terraform", "opentofu"]
                     },
                     "version": {
+                        "pattern": "^(=|\u003E=|\u003C=)\\s*[vV]?\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$",
                         "type": "string",
                         "description": "The version of the deployer which will handle the service deployment."
                     }
@@ -9977,7 +10312,7 @@
                         "description": "The credential type to do the deployment",
                         "enum": ["variables", "http_authentication", "api_key", "oauth2"]
                     },
-                    "serviceAvailabilityConfigs": {
+                    "serviceAvailabilityConfig": {
                         "maxItems": 2147483647,
                         "minItems": 1,
                         "type": "array",
@@ -10284,13 +10619,17 @@
                 "description": "Deployment scripts hosted on a GIT repo. Either deployer or deployFromGitRepo must be provided."
             },
             "ServiceConfigurationManage": {
-                "required": ["type"],
+                "required": ["agentVersion", "type"],
                 "type": "object",
                 "properties": {
                     "type": {
                         "type": "string",
                         "description": "the tool used to manage the service configuration.",
                         "enum": ["ansible"]
+                    },
+                    "agentVersion": {
+                        "type": "string",
+                        "description": "the version of the agent that will be used by service resources."
                     },
                     "configManageScripts": {
                         "maxItems": 2147483647,
@@ -11563,6 +11902,47 @@
                     }
                 }
             },
+            "ServiceRecreateDetails": {
+                "required": ["createTime", "lastModifiedTime", "recreateId", "recreateStatus", "serviceId"],
+                "type": "object",
+                "properties": {
+                    "recreateId": {
+                        "type": "string",
+                        "description": "The ID of the service recreate",
+                        "format": "uuid"
+                    },
+                    "serviceId": {
+                        "type": "string",
+                        "description": "The ID of the old service",
+                        "format": "uuid"
+                    },
+                    "recreateStatus": {
+                        "type": "string",
+                        "description": "The status of the service recreate",
+                        "enum": [
+                            "RecreateStarted",
+                            "RecreateCompleted",
+                            "RecreateFailed",
+                            "DestroyStarted",
+                            "DestroyFailed",
+                            "DestroyCompleted",
+                            "DeployStarted",
+                            "DeployFailed",
+                            "DeployCompleted"
+                        ]
+                    },
+                    "createTime": {
+                        "type": "string",
+                        "description": "Time of service recreate.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "Time of update service recreate.",
+                        "format": "date-time"
+                    }
+                }
+            },
             "ServiceOrderStatusUpdate": {
                 "required": ["isOrderCompleted", "taskStatus"],
                 "type": "object",
@@ -11964,7 +12344,7 @@
                     }
                 }
             },
-            "ServiceConfigurationChangeRequestDetails": {
+            "ServiceConfigurationChangeDetails": {
                 "required": ["changeId", "configManager", "properties", "status"],
                 "type": "object",
                 "properties": {
@@ -11998,8 +12378,8 @@
                 },
                 "description": "Collection of service configuration change requests generated for the specific change order."
             },
-            "ServiceConfigurationUpdateRequestOrderDetails": {
-                "required": ["changeRequests", "orderId"],
+            "ServiceConfigurationChangeOrderDetails": {
+                "required": ["changeRequests", "configRequest", "orderId", "orderStatus"],
                 "type": "object",
                 "properties": {
                     "orderId": {
@@ -12007,11 +12387,21 @@
                         "description": "The id of the order.",
                         "format": "uuid"
                     },
+                    "orderStatus": {
+                        "type": "string",
+                        "description": "Order status of service configuration update result.",
+                        "enum": ["created", "in progress", "successful", "failed"]
+                    },
+                    "configRequest": {
+                        "type": "object",
+                        "additionalProperties": true,
+                        "description": "service configuration requested in the change request."
+                    },
                     "changeRequests": {
                         "type": "array",
                         "description": "Collection of service configuration change requests generated for the specific change order.",
                         "items": {
-                            "$ref": "#/components/schemas/ServiceConfigurationChangeRequestDetails"
+                            "$ref": "#/components/schemas/ServiceConfigurationChangeDetails"
                         }
                     }
                 }
@@ -12381,7 +12771,7 @@
                     "serviceProviderContactDetails": {
                         "$ref": "#/components/schemas/ServiceProviderContactDetails"
                     },
-                    "serviceAvailabilityConfigs": {
+                    "serviceAvailabilityConfig": {
                         "type": "array",
                         "description": "The list of availability zone configuration of the service.",
                         "items": {

@@ -15,7 +15,7 @@ export function DeploymentText({ deployment }: { deployment: Deployment }): Reac
         const yamlDocument = new YAML.Document();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        yamlDocument.contents = deployment.serviceAvailabilityConfigs;
+        yamlDocument.contents = deployment.serviceAvailabilityConfig;
         return (
             <Popover
                 content={<pre className={oclDisplayStyles.oclDeploymentScript}>{yamlDocument.toString()}</pre>}

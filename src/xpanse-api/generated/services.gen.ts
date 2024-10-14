@@ -55,8 +55,10 @@ import type {
     GetAccessTokenData,
     GetAccessTokenResponse,
     GetActiveCspsResponse,
-    GetAllServiceConfigurationUpdateRequestsData,
-    GetAllServiceConfigurationUpdateRequestsResponse,
+    GetAllOrdersByServiceIdData,
+    GetAllOrdersByServiceIdResponse,
+    GetAllServiceConfigurationChangeDetailsData,
+    GetAllServiceConfigurationChangeDetailsResponse,
     GetAvailabilityZonesData,
     GetAvailabilityZonesResponse,
     GetComputeResourceInventoryOfServiceData,
@@ -93,6 +95,8 @@ import type {
     GetPolicyDetailsResponse,
     GetPricesByServiceData,
     GetPricesByServiceResponse,
+    GetRecreateOrderDetailsByIdData,
+    GetRecreateOrderDetailsByIdResponse,
     GetRegistrationDetailsData,
     GetRegistrationDetailsResponse,
     GetSelfHostedServiceDetailsByIdData,
@@ -122,10 +126,10 @@ import type {
     ListOrderableServicesResponse,
     ListServiceMigrationsData,
     ListServiceMigrationsResponse,
-    ListServiceOrdersData,
-    ListServiceOrdersResponse,
     ListServicePoliciesData,
     ListServicePoliciesResponse,
+    ListServiceRecreatesData,
+    ListServiceRecreatesResponse,
     ListServiceStateManagementTasksData,
     ListServiceStateManagementTasksResponse,
     ListServiceTemplatesData,
@@ -144,6 +148,8 @@ import type {
     PurgeResponse,
     QueryTasksData,
     QueryTasksResponse,
+    RecreateServiceData,
+    RecreateServiceResponse,
     RedeployFailedDeploymentData,
     RedeployFailedDeploymentResponse,
     RegisterData,
@@ -414,6 +420,32 @@ export const restartService = (data: RestartServiceData): CancelablePromise<Rest
     return __request(OpenAPI, {
         method: 'PUT',
         url: '/xpanse/services/restart/{serviceId}',
+        path: {
+            serviceId: data.serviceId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Create a job to recreate the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId
+ * @returns string Accepted
+ * @throws ApiError
+ */
+export const recreateService = (data: RecreateServiceData): CancelablePromise<RecreateServiceResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/services/recreate/{serviceId}',
         path: {
             serviceId: data.serviceId,
         },
@@ -1461,7 +1493,9 @@ export const getComputeResourceInventoryOfService = (
  * @returns ServiceOrderDetails OK
  * @throws ApiError
  */
-export const listServiceOrders = (data: ListServiceOrdersData): CancelablePromise<ListServiceOrdersResponse> => {
+export const getAllOrdersByServiceId = (
+    data: GetAllOrdersByServiceIdData
+): CancelablePromise<GetAllOrdersByServiceIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/services/{serviceId}/orders',
@@ -1587,6 +1621,66 @@ export const deleteManagementTaskByTaskId = (
         url: '/xpanse/services/tasks/{taskId}',
         path: {
             taskId: data.taskId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * List all services recreate by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.recreateId Id of the service recreate
+ * @param data.serviceId Id of the old service
+ * @param data.recreateStatus Status of the service recreate
+ * @returns ServiceRecreateDetails OK
+ * @throws ApiError
+ */
+export const listServiceRecreates = (
+    data: ListServiceRecreatesData = {}
+): CancelablePromise<ListServiceRecreatesResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/recreate',
+        query: {
+            recreateId: data.recreateId,
+            serviceId: data.serviceId,
+            recreateStatus: data.recreateStatus,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Get recreate records based on recreate id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.recreateId Recreate ID
+ * @returns ServiceRecreateDetails OK
+ * @throws ApiError
+ */
+export const getRecreateOrderDetailsById = (
+    data: GetRecreateOrderDetailsByIdData
+): CancelablePromise<GetRecreateOrderDetailsByIdResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/recreate/{recreateId}',
+        path: {
+            recreateId: data.recreateId,
         },
         errors: {
             400: 'Bad Request',
@@ -1914,12 +2008,12 @@ export const getSelfHostedServiceDetailsById = (
  * @param data.resourceName name of the service resource
  * @param data.configManager Manager of the service configuration parameter.
  * @param data.status Status of the service configuration
- * @returns ServiceConfigurationUpdateRequestOrderDetails OK
+ * @returns ServiceConfigurationChangeOrderDetails OK
  * @throws ApiError
  */
-export const getAllServiceConfigurationUpdateRequests = (
-    data: GetAllServiceConfigurationUpdateRequestsData
-): CancelablePromise<GetAllServiceConfigurationUpdateRequestsResponse> => {
+export const getAllServiceConfigurationChangeDetails = (
+    data: GetAllServiceConfigurationChangeDetailsData
+): CancelablePromise<GetAllServiceConfigurationChangeDetailsResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/services/config/requests',
