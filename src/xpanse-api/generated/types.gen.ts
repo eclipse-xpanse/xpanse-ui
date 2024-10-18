@@ -1188,6 +1188,7 @@ export type ServiceTemplateDetailVo = {
      * End user license agreement content of the service.
      */
     eula?: string;
+    serviceConfigurationManage?: ServiceConfigurationManage;
     links?: Array<Link>;
 };
 
@@ -2772,6 +2773,10 @@ export type UserOrderableServiceVo = {
      * End user license agreement content of the service.
      */
     eula?: string;
+    /**
+     * The collection of service configuration parameters.
+     */
+    configurationParameters?: Array<ServiceConfigurationParameter>;
     links?: Array<Link>;
 };
 
@@ -3145,7 +3150,7 @@ export type UpdateConfigurationChangeResultData = {
     requestBody: ServiceConfigurationChangeResult;
 };
 
-export type UpdateConfigurationChangeResultResponse = unknown;
+export type UpdateConfigurationChangeResultResponse = void;
 
 export type ListDeployedServicesData = {
     /**
