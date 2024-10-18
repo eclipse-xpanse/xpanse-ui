@@ -69,7 +69,10 @@ export type Response = {
         | 'Service Price Calculation Failed'
         | 'Invalid Git Repo Details'
         | 'File Locked'
-        | 'Service Configuration Invalid';
+        | 'Service Configuration Invalid'
+        | 'Service Configuration Update Request Not Found'
+        | 'Service Configuration Not Found'
+        | 'Invalid Deployer Tool';
     /**
      * Details of the errors occurred
      */
@@ -144,6 +147,9 @@ export enum resultType {
     INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
     FILE_LOCKED = 'File Locked',
     SERVICE_CONFIGURATION_INVALID = 'Service Configuration Invalid',
+    SERVICE_CONFIGURATION_UPDATE_REQUEST_NOT_FOUND = 'Service Configuration Update Request Not Found',
+    SERVICE_CONFIGURATION_NOT_FOUND = 'Service Configuration Not Found',
+    INVALID_DEPLOYER_TOOL = 'Invalid Deployer Tool',
 }
 
 export type CreateCredential = {
@@ -318,7 +324,10 @@ export type OrderFailedResponse = {
         | 'Service Price Calculation Failed'
         | 'Invalid Git Repo Details'
         | 'File Locked'
-        | 'Service Configuration Invalid';
+        | 'Service Configuration Invalid'
+        | 'Service Configuration Update Request Not Found'
+        | 'Service Configuration Not Found'
+        | 'Invalid Deployer Tool';
     /**
      * Details of the errors occurred
      */
@@ -362,24 +371,21 @@ export type ServiceLockConfig = {
     destroyLocked?: boolean;
 };
 
-/**
- * Ansible script configuration details.
- */
 export type AnsibleScriptConfig = {
     /**
-     * name of the ansible playbook. Should be the fully qualified file name (including the directory path) in the repo.Eg.,'playbook-name.yml'
+     * name of the ansible playbook. Should be the fully qualified file name (including the directory path) in the repo.
      */
     playbookName: string;
     /**
-     * Path where the virtualenv is created.
+     * Path where the virtualenv must be created.
      */
     virtualEnv: string;
     /**
      * Version of the python. This version of python must be available in node which is acting as the configManager.
      */
-    pythonVersion: number;
+    pythonVersion: string;
     /**
-     * The agent will prepare the virtual environment if this true.Otherwise it is assumed that the environment is already prepared as part of the resource creation.
+     * The agent will prepare the virtual environment if this true.Otherwise it is assumed that the environment is already prepared as part of the resource creation or the VM base image build.
      */
     isPrepareAnsibleEnvironment: boolean;
     /**
@@ -391,7 +397,7 @@ export type AnsibleScriptConfig = {
      */
     branch: string;
     /**
-     * the python module requirements file in GIT repo. Should be the fully qualified file name (including the directory path). E.g modules/requirements.txt
+     * the python module requirements file in GIT repo. Should be the fully qualified file name (including the directory path).
      */
     requirementsFile: string;
     /**
@@ -639,13 +645,32 @@ export enum DeployVariableKind {
 }
 
 /**
+ * The deployer tool which will handle the service deployment.
+ */
+export type DeployerTool = {
+    /**
+     * The type of the deployer which will handle the service deployment.
+     */
+    kind: 'terraform' | 'opentofu';
+    /**
+     * The version of the deployer which will handle the service deployment.
+     */
+    version: string;
+};
+
+/**
+ * The type of the deployer which will handle the service deployment.
+ */
+export enum kind {
+    TERRAFORM = 'terraform',
+    OPENTOFU = 'opentofu',
+}
+
+/**
  * The deployment of the managed service
  */
 export type Deployment = {
-    /**
-     * The type of the Deployer which will handle the service deployment
-     */
-    kind: 'terraform' | 'opentofu';
+    deployerTool: DeployerTool;
     /**
      * The variables for the deployment, which will be passed to the deployer.The list elements must be unique.
      */
@@ -657,21 +682,13 @@ export type Deployment = {
     /**
      * The list of availability zone configuration of the service.The list elements must be unique.
      */
-    serviceAvailabilityConfigs?: Array<AvailabilityZoneConfig>;
+    serviceAvailabilityConfig?: Array<AvailabilityZoneConfig>;
     /**
      * The real deployer, something like terraform scripts. Either deployer or deployFromGitRepo must be provided.
      */
     deployer?: string;
     scriptsRepo?: ScriptsRepo;
 };
-
-/**
- * The type of the Deployer which will handle the service deployment
- */
-export enum kind {
-    TERRAFORM = 'terraform',
-    OPENTOFU = 'opentofu',
-}
 
 /**
  * The credential type to do the deployment
@@ -952,6 +969,10 @@ export type ServiceConfigurationManage = {
      * the tool used to manage the service configuration.
      */
     type: 'ansible';
+    /**
+     * the version of the agent that will be used by service resources.
+     */
+    agentVersion: string;
     /**
      * The collection of the configuration manage script.
      */
@@ -1303,6 +1324,21 @@ export type UserPolicy = {
      * Time of the policy updated.
      */
     lastModifiedTime: string;
+};
+
+export type AnsibleTaskResult = {
+    name?: string;
+    isSuccessful?: boolean;
+    message?: string;
+};
+
+/**
+ * result of the service configuration update request.
+ */
+export type ServiceConfigurationChangeResult = {
+    isSuccessful?: boolean;
+    error?: string;
+    tasks?: Array<AnsibleTaskResult>;
 };
 
 export type DeployRequest = {
@@ -1988,6 +2024,53 @@ export type DeploymentStatusUpdate = {
     isOrderCompleted: boolean;
 };
 
+export type ServiceRecreateDetails = {
+    /**
+     * The ID of the service recreate
+     */
+    recreateId: string;
+    /**
+     * The ID of the old service
+     */
+    serviceId: string;
+    /**
+     * The status of the service recreate
+     */
+    recreateStatus:
+        | 'RecreateStarted'
+        | 'RecreateCompleted'
+        | 'RecreateFailed'
+        | 'DestroyStarted'
+        | 'DestroyFailed'
+        | 'DestroyCompleted'
+        | 'DeployStarted'
+        | 'DeployFailed'
+        | 'DeployCompleted';
+    /**
+     * Time of service recreate.
+     */
+    createTime: string;
+    /**
+     * Time of update service recreate.
+     */
+    lastModifiedTime: string;
+};
+
+/**
+ * The status of the service recreate
+ */
+export enum recreateStatus {
+    RECREATE_STARTED = 'RecreateStarted',
+    RECREATE_COMPLETED = 'RecreateCompleted',
+    RECREATE_FAILED = 'RecreateFailed',
+    DESTROY_STARTED = 'DestroyStarted',
+    DESTROY_FAILED = 'DestroyFailed',
+    DESTROY_COMPLETED = 'DestroyCompleted',
+    DEPLOY_STARTED = 'DeployStarted',
+    DEPLOY_FAILED = 'DeployFailed',
+    DEPLOY_COMPLETED = 'DeployCompleted',
+}
+
 export type ServiceOrderStatusUpdate = {
     /**
      * Current task status of the service order.
@@ -2298,114 +2381,41 @@ export type VendorHostedDeployedServiceDetails = {
     };
 };
 
-export type DeployResourceEntity = {
-    createTime?: string;
-    lastModifiedTime?: string;
-    id?: string;
-    groupType?: string;
-    groupName?: string;
-    resourceId?: string;
+/**
+ * Collection of service configuration change requests generated for the specific change order.
+ */
+export type ServiceConfigurationChangeDetails = {
+    /**
+     * ID of the change request created as part of the change order.
+     */
+    changeId: string;
+    /**
+     * name of the resource on which the change request is executed. Null means any one of the resources that is part of the service and is of type configManager can execute it and until now none of the resource have picked up this request.
+     */
     resourceName?: string;
-    resourceKind?:
-        | 'vm'
-        | 'container'
-        | 'publicIP'
-        | 'vpc'
-        | 'volume'
-        | 'unknown'
-        | 'security_group'
-        | 'security_group_rule'
-        | 'keypair'
-        | 'subnet';
-    deployService?: DeployServiceEntity;
-    properties?: {
-        [key: string]: string;
-    };
-};
-
-export type DeployServiceEntity = {
-    createTime?: string;
-    lastModifiedTime?: string;
-    id?: string;
-    userId?: string;
-    category?:
-        | 'ai'
-        | 'compute'
-        | 'container'
-        | 'storage'
-        | 'network'
-        | 'database'
-        | 'mediaService'
-        | 'security'
-        | 'middleware'
-        | 'others';
-    name?: string;
-    customerServiceName?: string;
-    version?: string;
-    namespace?: string;
-    csp?:
-        | 'HuaweiCloud'
-        | 'FlexibleEngine'
-        | 'OpenstackTestlab'
-        | 'PlusServer'
-        | 'RegioCloud'
-        | 'AlibabaCloud'
-        | 'aws'
-        | 'azure'
-        | 'GoogleCloudPlatform';
-    flavor?: string;
-    serviceDeploymentState?:
-        | 'deploying'
-        | 'deployment successful'
-        | 'deployment failed'
-        | 'destroying'
-        | 'destroy successful'
-        | 'destroy failed'
-        | 'manual cleanup required'
-        | 'rollback failed'
-        | 'modifying'
-        | 'modification failed'
-        | 'modification successful';
+    /**
+     * type of the resource in the service that must execute the change request.
+     */
+    configManager: string;
+    /**
+     * message of change service configuration update request.
+     */
     resultMessage?: string;
-    serviceState?: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
-    serviceTemplateId?: string;
-    deployRequest?: DeployRequest;
-    deployResourceList?: Array<DeployResourceEntity>;
-    serviceConfigurationEntity?: ServiceConfigurationEntity;
-    properties?: {
-        [key: string]: string;
-    };
-    privateProperties?: {
-        [key: string]: string;
-    };
-    lastStartedAt?: string;
-    lastStoppedAt?: string;
-    lockConfig?: ServiceLockConfig;
-};
-
-export type ServiceConfigurationEntity = {
-    id?: string;
-    deployServiceEntity?: DeployServiceEntity;
-    configuration?: {
+    /**
+     * service configuration requested in the change request.
+     */
+    properties: {
         [key: string]: unknown;
     };
-    createdTime?: string;
-    updatedTime?: string;
+    /**
+     * status of change service configuration update request.
+     */
+    status: 'pending' | 'processing' | 'successful' | 'error';
 };
 
-export type ServiceConfigurationUpdateRequest = {
-    id?: string;
-    serviceOrderEntity?: ServiceOrderEntity;
-    deployServiceEntity?: DeployServiceEntity;
-    resourceName?: string;
-    configManager?: string;
-    resultMessage?: string;
-    properties?: {
-        [key: string]: unknown;
-    };
-    status?: 'pending' | 'processing' | 'successful' | 'error';
-};
-
+/**
+ * status of change service configuration update request.
+ */
 export enum status2 {
     PENDING = 'pending',
     PROCESSING = 'processing',
@@ -2413,24 +2423,44 @@ export enum status2 {
     ERROR = 'error',
 }
 
-export type ServiceOrderEntity = {
-    orderId?: string;
+export type ServiceConfigurationChangeOrderDetails = {
+    /**
+     * The id of the order.
+     */
+    orderId: string;
+    /**
+     * Order status of service configuration update result.
+     */
+    orderStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    /**
+     * service configuration requested in the change request.
+     */
+    configRequest: {
+        [key: string]: unknown;
+    };
+    /**
+     * Collection of service configuration change requests generated for the specific change order.
+     */
+    changeRequests: Array<ServiceConfigurationChangeDetails>;
+};
+
+/**
+ * Order status of service configuration update result.
+ */
+export enum orderStatus {
+    CREATED = 'created',
+    IN_PROGRESS = 'in progress',
+    SUCCESSFUL = 'successful',
+    FAILED = 'failed',
+}
+
+export type ServiceConfigurationDetails = {
     serviceId?: string;
-    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
-    userId?: string;
-    taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
-    errorMsg?: string;
-    startedTime?: string;
-    completedTime?: string;
-    previousDeployRequest?: DeployRequest;
-    newDeployRequest?: DeployRequest;
-    previousDeployedResources?: Array<DeployResource>;
-    previousDeployedServiceProperties?: {
-        [key: string]: string;
+    configuration?: {
+        [key: string]: unknown;
     };
-    previousDeployedResultProperties?: {
-        [key: string]: string;
-    };
+    createdTime?: string;
+    updatedTime?: string;
 };
 
 export type FlavorPriceResult = {
@@ -2616,31 +2646,7 @@ export type SystemStatus = {
 /**
  * The flavors of the orderable service.
  */
-export type ServiceFlavor = {
-    /**
-     * The flavor name
-     */
-    name: string;
-    /**
-     * The properties of the flavor
-     */
-    properties: {
-        [key: string]: string;
-    };
-    /**
-     * The priority of the flavor. The larger value means lower priority.
-     */
-    priority: number;
-    /**
-     * Important features and differentiators of the flavor.
-     */
-    features?: Array<string>;
-};
-
-/**
- * The flavors of the orderable service.
- */
-export type UserOrderableServiceFlavor = {
+export type EndUserFlavors = {
     /**
      * The flavor name
      */
@@ -2669,6 +2675,30 @@ export type UserOrderableServiceFlavor = {
      */
     isDowngradeAllowed: boolean;
     downgradeAllowed?: boolean;
+};
+
+/**
+ * The flavors of the orderable service.
+ */
+export type ServiceFlavor = {
+    /**
+     * The flavor name
+     */
+    name: string;
+    /**
+     * The properties of the flavor
+     */
+    properties: {
+        [key: string]: string;
+    };
+    /**
+     * The priority of the flavor. The larger value means lower priority.
+     */
+    priority: number;
+    /**
+     * Important features and differentiators of the flavor.
+     */
+    features?: Array<string>;
 };
 
 export type UserOrderableServiceVo = {
@@ -2727,7 +2757,7 @@ export type UserOrderableServiceVo = {
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
-    flavors: UserOrderableServiceFlavor;
+    flavors: EndUserFlavors;
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
@@ -2737,12 +2767,23 @@ export type UserOrderableServiceVo = {
     /**
      * The list of availability zone configuration of the service.
      */
-    serviceAvailabilityConfigs?: Array<AvailabilityZoneConfig>;
+    serviceAvailabilityConfig?: Array<AvailabilityZoneConfig>;
     /**
      * End user license agreement content of the service.
      */
     eula?: string;
     links?: Array<Link>;
+};
+
+export type ServiceConfigurationChangeRequest = {
+    changeId?: string;
+    configParameters?: {
+        [key: string]: unknown;
+    };
+    ansibleScriptConfig?: AnsibleScriptConfig;
+    ansibleInventory?: {
+        [key: string]: unknown;
+    };
 };
 
 export type TokenResponse = {
@@ -2876,6 +2917,12 @@ export type RestartServiceData = {
 };
 
 export type RestartServiceResponse = string;
+
+export type RecreateServiceData = {
+    serviceId: string;
+};
+
+export type RecreateServiceResponse = string;
 
 export type ModifyData = {
     requestBody: ModifyRequest;
@@ -3089,6 +3136,16 @@ export type DeleteIsvCloudCredentialData = {
 };
 
 export type DeleteIsvCloudCredentialResponse = void;
+
+export type UpdateConfigurationChangeResultData = {
+    /**
+     * id of the update request.
+     */
+    changeId: string;
+    requestBody: ServiceConfigurationChangeResult;
+};
+
+export type UpdateConfigurationChangeResultResponse = unknown;
 
 export type ListDeployedServicesData = {
     /**
@@ -3307,7 +3364,7 @@ export type GetComputeResourceInventoryOfServiceData = {
 
 export type GetComputeResourceInventoryOfServiceResponse = Array<DeployResource>;
 
-export type ListServiceOrdersData = {
+export type GetAllOrdersByServiceIdData = {
     /**
      * Id of the service
      */
@@ -3322,7 +3379,7 @@ export type ListServiceOrdersData = {
     taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
 };
 
-export type ListServiceOrdersResponse = Array<ServiceOrderDetails>;
+export type GetAllOrdersByServiceIdResponse = Array<ServiceOrderDetails>;
 
 export type DeleteOrdersByServiceIdData = {
     /**
@@ -3374,6 +3431,41 @@ export type DeleteManagementTaskByTaskIdData = {
 };
 
 export type DeleteManagementTaskByTaskIdResponse = void;
+
+export type ListServiceRecreatesData = {
+    /**
+     * Id of the service recreate
+     */
+    recreateId?: string;
+    /**
+     * Status of the service recreate
+     */
+    recreateStatus?:
+        | 'RecreateStarted'
+        | 'RecreateCompleted'
+        | 'RecreateFailed'
+        | 'DestroyStarted'
+        | 'DestroyFailed'
+        | 'DestroyCompleted'
+        | 'DeployStarted'
+        | 'DeployFailed'
+        | 'DeployCompleted';
+    /**
+     * Id of the old service
+     */
+    serviceId?: string;
+};
+
+export type ListServiceRecreatesResponse = Array<ServiceRecreateDetails>;
+
+export type GetRecreateOrderDetailsByIdData = {
+    /**
+     * Recreate ID
+     */
+    recreateId: string;
+};
+
+export type GetRecreateOrderDetailsByIdResponse = ServiceRecreateDetails;
 
 export type GetOrderDetailsByOrderIdData = {
     /**
@@ -3588,7 +3680,7 @@ export type GetSelfHostedServiceDetailsByIdData = {
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
 
-export type ListServiceConfigurationUpdateRequestData = {
+export type GetAllServiceConfigurationChangeDetailsData = {
     /**
      * Manager of the service configuration parameter.
      */
@@ -3604,14 +3696,23 @@ export type ListServiceConfigurationUpdateRequestData = {
     /**
      * Id of the deployed service
      */
-    serviceId?: string;
+    serviceId: string;
     /**
      * Status of the service configuration
      */
     status?: 'pending' | 'processing' | 'successful' | 'error';
 };
 
-export type ListServiceConfigurationUpdateRequestResponse = Array<ServiceConfigurationUpdateRequest>;
+export type GetAllServiceConfigurationChangeDetailsResponse = Array<ServiceConfigurationChangeOrderDetails>;
+
+export type GetCurrentConfigurationOfServiceData = {
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type GetCurrentConfigurationOfServiceResponse = ServiceConfigurationDetails;
 
 export type GetServicePriceByFlavorData = {
     /**
@@ -3966,6 +4067,19 @@ export type OpenApiData = {
 };
 
 export type OpenApiResponse = Link;
+
+export type GetPendingConfigurationChangeRequestData = {
+    /**
+     * The name of the resource of deployed service
+     */
+    resourceName: string;
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type GetPendingConfigurationChangeRequestResponse = ServiceConfigurationChangeRequest | void;
 
 export type GetAccessTokenData = {
     /**

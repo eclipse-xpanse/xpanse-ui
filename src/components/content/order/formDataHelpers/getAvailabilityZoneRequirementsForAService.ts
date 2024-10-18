@@ -9,13 +9,13 @@ export function getAvailabilityZoneRequirementsForAService(
     selectCsp: csp,
     services: UserOrderableServiceVo[] | undefined
 ): AvailabilityZoneConfig[] {
-    let availabilityZoneConfigs: AvailabilityZoneConfig[] = [];
+    let availabilityZoneConfig: AvailabilityZoneConfig[] = [];
     if (services) {
         services.forEach((userOrderableServiceVo) => {
             if (userOrderableServiceVo.csp === selectCsp) {
-                availabilityZoneConfigs = userOrderableServiceVo.serviceAvailabilityConfigs ?? [];
+                availabilityZoneConfig = userOrderableServiceVo.serviceAvailabilityConfig ?? [];
             }
         });
     }
-    return availabilityZoneConfigs;
+    return availabilityZoneConfig;
 }

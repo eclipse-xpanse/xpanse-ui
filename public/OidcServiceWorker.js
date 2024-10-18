@@ -497,7 +497,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.22.21";
+const version = "7.22.26";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {
@@ -769,9 +769,10 @@ const handleMessage = async (event) => {
   switch (data.type) {
     case "clear":
       currentDatabase.tokens = null;
-      currentDatabase.tabIds = [];
-      currentDatabase.state = {};
-      currentDatabase.codeVerifier = {};
+      currentDatabase.tabIds = currentDatabase.tabIds.filter((id2) => id2 !== tabId);
+      delete currentDatabase.state[tabId];
+      delete currentDatabase.codeVerifier[tabId];
+      delete currentDatabase.nonce[tabId];
       currentDatabase.demonstratingProofOfPossessionNonce = null;
       currentDatabase.demonstratingProofOfPossessionJwkJson = null;
       currentDatabase.demonstratingProofOfPossessionConfiguration = null;
