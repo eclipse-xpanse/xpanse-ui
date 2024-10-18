@@ -32,6 +32,7 @@ import { getDeployerToolIcon } from '../../../common/ocl/getDeployerToolIcon.ts'
 import { RegionText } from '../../../common/ocl/RegionText.tsx';
 import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
 import DeploymentVariables from '../../../deploymentVariables/DeploymentVariables.tsx';
+import DeploymentServiceConfigurationParameter from '../../../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -178,6 +179,11 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
             </Descriptions>
             <DeploymentVariables variables={serviceDetails.deployment.variables} />
+            {serviceDetails.serviceConfigurationManage?.configurationParameters ? (
+                <DeploymentServiceConfigurationParameter
+                    parameters={serviceDetails.serviceConfigurationManage.configurationParameters}
+                />
+            ) : null}
             <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
         </>
     );
