@@ -1063,7 +1063,7 @@ export const deleteIsvCloudCredential = (
  * @param data The data for the request.
  * @param data.changeId id of the update request.
  * @param data.requestBody
- * @returns unknown OK
+ * @returns void No Content
  * @throws ApiError
  */
 export const updateConfigurationChangeResult = (
