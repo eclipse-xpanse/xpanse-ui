@@ -10,6 +10,7 @@ import React from 'react';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
+import DeploymentServiceConfigurationParameter from '../../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
 import DeploymentVariables from '../../deploymentVariables/DeploymentVariables.tsx';
 import { cspMap } from '../csp/CspLogo';
@@ -118,6 +119,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 {ocl.eula ? <AgreementText eula={ocl.eula} /> : <span>Not Provided</span>}
                             </Descriptions.Item>
                         </Descriptions>
+                        <FlavorsText flavors={ocl.flavors.serviceFlavors} />
                         <h3 className={catalogStyles.catalogDetailsH3}>
                             <ProfileOutlined />
                             &nbsp;Deployment Information
@@ -141,7 +143,11 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             </Descriptions.Item>
                         </Descriptions>
                         <DeploymentVariables variables={ocl.deployment.variables} />
-                        <FlavorsText flavors={ocl.flavors.serviceFlavors} />
+                        {ocl.serviceConfigurationManage?.configurationParameters ? (
+                            <DeploymentServiceConfigurationParameter
+                                parameters={ocl.serviceConfigurationManage.configurationParameters}
+                            />
+                        ) : null}
                     </div>
                 </div>
             </>
