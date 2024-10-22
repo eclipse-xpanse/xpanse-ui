@@ -112,7 +112,7 @@
         "@types/uuid": "^10.0.0",
         "@typescript-eslint/eslint-plugin": "^8.11.0",
         "@typescript-eslint/parser": "^8.11.0",
-        "@vitejs/plugin-react": "^4.3.2",
+        "@vitejs/plugin-react": "^4.3.3",
         "env-cmd": "^10.1.0",
         "eslint": "^8.57.1",
         "eslint-config-prettier": "^9.0.0",
