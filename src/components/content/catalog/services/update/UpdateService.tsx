@@ -173,7 +173,7 @@ function UpdateService({
                     handleOk();
                 }}
                 onCancel={handleCancel}
-                width={'80em'}
+                width={'80%'}
             >
                 <div className={registerStyles.registerContent}>
                     <div className={appStyles.contentTitle}>

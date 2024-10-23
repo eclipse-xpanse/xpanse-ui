@@ -3,16 +3,20 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AppstoreOutlined } from '@ant-design/icons';
+import { FileTextOutlined } from '@ant-design/icons';
 import { Button, Popover, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { deployResourceKind, DeployVariable, sensitiveScope } from '../../../xpanse-api/generated';
+import { deployResourceKind, sensitiveScope, ServiceConfigurationParameter } from '../../../xpanse-api/generated';
 
-function DeploymentVariables({ variables }: { variables: DeployVariable[] }): React.JSX.Element {
-    const columns: ColumnsType<DeployVariable> = [
+function DeploymentServiceConfigurationParameter({
+    parameters,
+}: {
+    parameters: ServiceConfigurationParameter[];
+}): React.JSX.Element {
+    const columns: ColumnsType<ServiceConfigurationParameter> = [
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Name</div>,
             dataIndex: 'name',
@@ -44,7 +48,7 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Description</div>,
             dataIndex: 'description',
-            render: (_text: string, record: DeployVariable) => {
+            render: (_text: string, record: ServiceConfigurationParameter) => {
                 return (
                     <Popover
                         content={
@@ -67,29 +71,16 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
             },
         },
         {
-            title: <div className={deploymentVariablesStyles.variablesColumns}>Default</div>,
-            dataIndex: 'value',
+            title: <div className={deploymentVariablesStyles.variablesColumns}>InitialValue</div>,
+            dataIndex: 'initialValue',
             render: (text: string) => {
                 return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
             },
         },
         {
-            title: <div className={deploymentVariablesStyles.variablesColumns}>Mandatory</div>,
-            dataIndex: 'mandatory',
-            render: (text: boolean | undefined | null) => {
-                if (text === true) {
-                    return <div className={deploymentVariablesStyles.variablesColumns}>{`true`}</div>;
-                } else if (text === false) {
-                    return <div className={deploymentVariablesStyles.variablesColumns}>{`false`}</div>;
-                } else {
-                    return null;
-                }
-            },
-        },
-        {
             title: <div className={deploymentVariablesStyles.variablesColumns}>ValueSchema</div>,
             dataIndex: 'valueSchema',
-            render: (_text: string, record: DeployVariable) => {
+            render: (_text: string, record: ServiceConfigurationParameter) => {
                 if (!record.valueSchema) {
                     return '';
                 }
@@ -196,19 +187,33 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
                 },
             ],
         },
+        {
+            title: <div className={deploymentVariablesStyles.variablesColumns}>IsReadOnly</div>,
+            dataIndex: 'isReadOnly',
+            render: (text: string) => {
+                return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
+            },
+        },
+        {
+            title: <div className={deploymentVariablesStyles.variablesColumns}>ManagedBy</div>,
+            dataIndex: 'managedBy',
+            render: (text: string) => {
+                return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
+            },
+        },
     ];
 
     return (
         <>
             <h3 className={catalogStyles.catalogDetailsH3}>
-                <AppstoreOutlined />
-                &nbsp;Deployment Variables
+                <FileTextOutlined />
+                &nbsp;Service Configuration Parameters
             </h3>
             <div className={deploymentVariablesStyles.variablesTableContainer}>
-                <Table columns={columns} dataSource={variables} rowKey={'name'} bordered pagination={false} />
+                <Table columns={columns} dataSource={parameters} rowKey={'name'} bordered pagination={false} />
             </div>
         </>
     );
 }
 
-export default DeploymentVariables;
+export default DeploymentServiceConfigurationParameter;

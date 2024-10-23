@@ -22,6 +22,7 @@ import { FlavorsText } from '../common/ocl/FlavorsText';
 import { getDeployerToolIcon } from '../common/ocl/getDeployerToolIcon.ts';
 import { RegionText } from '../common/ocl/RegionText.tsx';
 import DeploymentVariables from '../deploymentVariables/DeploymentVariables.tsx';
+import DeploymentServiceConfigurationParameter from '../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -190,6 +191,7 @@ export const ServiceReviewsDetails = ({
                             )}
                         </Descriptions.Item>
                     </Descriptions>
+                    <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
                     <h3 className={catalogStyles.catalogDetailsH3}>
                         <ProfileOutlined />
                         &nbsp;Deployment Information
@@ -217,7 +219,11 @@ export const ServiceReviewsDetails = ({
                         </Descriptions.Item>
                     </Descriptions>
                     <DeploymentVariables variables={currentServiceTemplateVo.deployment.variables} />
-                    <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
+                    {currentServiceTemplateVo.serviceConfigurationManage?.configurationParameters ? (
+                        <DeploymentServiceConfigurationParameter
+                            parameters={currentServiceTemplateVo.serviceConfigurationManage.configurationParameters}
+                        />
+                    ) : null}
                     {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (
                         <>
                             <h3 className={catalogStyles.catalogDetailsH3}>
