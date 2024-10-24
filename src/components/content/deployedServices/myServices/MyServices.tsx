@@ -58,7 +58,6 @@ import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAle
 import {
     useLatestServiceOrderStatusQuery,
     useServiceDetailsByIdQuery,
-    useServiceDetailsPollingQuery,
 } from '../../order/orderStatus/useServiceDetailsPollingQuery';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
@@ -72,7 +71,6 @@ import StartServiceStatusAlert from '../../order/serviceState/start/StartService
 import { useServiceStateStartQuery } from '../../order/serviceState/start/useServiceStateStartQuery';
 import StopServiceStatusAlert from '../../order/serviceState/stop/StopServiceStatusAlert';
 import { useServiceStateStopQuery } from '../../order/serviceState/stop/useServiceStateStopQuery';
-import { useServiceDetailsByServiceStatePollingQuery } from '../../order/serviceState/useServiceDetailsByServiceStatePollingQuery';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
 import { DeployedBillingMode } from '../common/DeployedBillingMode.tsx';
 import { DeployedRegion } from '../common/DeployedRegion.tsx';
@@ -130,32 +128,29 @@ function MyServices(): React.JSX.Element {
     const navigate = useNavigate();
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceTemplateId);
-    const getServiceDetailsByIdQuery = useServiceDetailsPollingQuery(
-        activeRecord?.serviceId,
+
+    const getDestroyServiceStatusPollingQuery = useLatestServiceOrderStatusQuery(
+        serviceDestroyQuery.data?.orderId ?? '',
         serviceDestroyQuery.isSuccess,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        [serviceDeploymentState.DESTROY_FAILED, serviceDeploymentState.DESTROY_SUCCESSFUL]
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const getStartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.serviceId,
+    const getStartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
+        serviceStateStartQuery.data?.orderId ?? '',
         serviceStateStartQuery.isSuccess,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        [serviceState.RUNNING, serviceState.STOPPED]
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const getStopServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.serviceId,
+    const getStopServiceDetailsQuery = useLatestServiceOrderStatusQuery(
+        serviceStateStopQuery.data?.orderId ?? '',
         serviceStateStopQuery.isSuccess,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        [serviceState.STOPPED, serviceState.RUNNING]
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const getRestartServiceDetailsQuery = useServiceDetailsByServiceStatePollingQuery(
-        activeRecord?.serviceId,
+    const getRestartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
+        serviceStateRestartQuery.data?.orderId ?? '',
         serviceStateRestartQuery.isSuccess,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        [serviceState.RUNNING]
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
     const getReDeployLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
@@ -175,9 +170,18 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        getStartServiceDetailsQuery.data?.serviceState,
-        getStopServiceDetailsQuery.data?.serviceState,
-        getRestartServiceDetailsQuery.data?.serviceState,
+        serviceStateStartQuery.isError,
+        serviceStateStartQuery.isPending,
+        getStartServiceDetailsQuery.isError,
+        getStartServiceDetailsQuery.data?.isOrderCompleted,
+        serviceStateStopQuery.isError,
+        serviceStateStopQuery.isPending,
+        getStopServiceDetailsQuery.isError,
+        getStopServiceDetailsQuery.data?.isOrderCompleted,
+        serviceStateRestartQuery.isError,
+        serviceStateRestartQuery.isPending,
+        getRestartServiceDetailsQuery.isError,
+        getRestartServiceDetailsQuery.data?.isOrderCompleted,
         redeployFailedDeploymentQuery.isError,
         redeployFailedDeploymentQuery.isPending,
         getReDeployLatestServiceOrderStatusQuery.isError,
@@ -637,7 +641,7 @@ function MyServices(): React.JSX.Element {
             },
             {
                 key: 'history',
-                label: record.latestModificationAudit ? (
+                label: (
                     <Button
                         onClick={() => {
                             handleMyServiceHistoryOpenModal(record);
@@ -648,8 +652,6 @@ function MyServices(): React.JSX.Element {
                     >
                         history
                     </Button>
-                ) : (
-                    <></>
                 ),
             },
             {
@@ -1458,8 +1460,8 @@ function MyServices(): React.JSX.Element {
                     key={activeRecord.serviceId}
                     deployedService={activeRecord}
                     destroySubmitError={serviceDestroyQuery.error}
-                    statusPollingError={getServiceDetailsByIdQuery.error}
-                    deployedServiceDetails={getServiceDetailsByIdQuery.data}
+                    statusPollingError={getDestroyServiceStatusPollingQuery.error}
+                    deployedServiceDetails={getDestroyServiceStatusPollingQuery.data}
                     closeDestroyResultAlert={closeDestroyResultAlert}
                 />
             ) : null}

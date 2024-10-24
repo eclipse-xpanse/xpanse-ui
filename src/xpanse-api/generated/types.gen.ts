@@ -243,6 +243,17 @@ export type CredentialVariable = {
     value: string;
 };
 
+export type ServiceOrder = {
+    /**
+     * The id of the service order.
+     */
+    orderId: string;
+    /**
+     * The id of the deployed service.
+     */
+    serviceId: string;
+};
+
 export type ModifyRequest = {
     /**
      * Customer's name for the service. Used only for customer's reference. If not provided, the existing customerServiceName from the service will be reused.
@@ -344,17 +355,6 @@ export type OrderFailedResponse = {
      * The order id associated with the request.
      */
     orderId?: string;
-};
-
-export type ServiceOrder = {
-    /**
-     * The id of the service order.
-     */
-    orderId: string;
-    /**
-     * The id of the deployed service.
-     */
-    serviceId: string;
 };
 
 export type ServiceConfigurationUpdate = {
@@ -1690,64 +1690,6 @@ export type CredentialVariables = {
     variables: Array<CredentialVariable>;
 };
 
-/**
- * The deployed resources of the service before this service order.
- */
-export type DeployResource = {
-    /**
-     * The type of the group which configuration the deployed resource.
-     */
-    groupType: string;
-    /**
-     * The name of the group which configuration the deployed resource.
-     */
-    groupName: string;
-    /**
-     * The id of the deployed resource.
-     */
-    resourceId: string;
-    /**
-     * The name of the deployed resource.
-     */
-    resourceName: string;
-    /**
-     * The kind of the deployed resource.
-     */
-    resourceKind:
-        | 'vm'
-        | 'container'
-        | 'publicIP'
-        | 'vpc'
-        | 'volume'
-        | 'unknown'
-        | 'security_group'
-        | 'security_group_rule'
-        | 'keypair'
-        | 'subnet';
-    /**
-     * The properties of the deployed resource.
-     */
-    properties: {
-        [key: string]: string;
-    };
-};
-
-/**
- * The kind of the deployed resource.
- */
-export enum resourceKind {
-    VM = 'vm',
-    CONTAINER = 'container',
-    PUBLIC_IP = 'publicIP',
-    VPC = 'vpc',
-    VOLUME = 'volume',
-    UNKNOWN = 'unknown',
-    SECURITY_GROUP = 'security_group',
-    SECURITY_GROUP_RULE = 'security_group_rule',
-    KEYPAIR = 'keypair',
-    SUBNET = 'subnet',
-}
-
 export type DeployedService = {
     /**
      * The ID of the service
@@ -1849,8 +1791,6 @@ export type DeployedService = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
-    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceOrderDetails;
 };
 
 /**
@@ -1882,9 +1822,61 @@ export enum serviceState {
     RESTARTING = 'restarting',
 }
 
+export type DeployResource = {
+    /**
+     * The type of the group which configuration the deployed resource.
+     */
+    groupType: string;
+    /**
+     * The name of the group which configuration the deployed resource.
+     */
+    groupName: string;
+    /**
+     * The id of the deployed resource.
+     */
+    resourceId: string;
+    /**
+     * The name of the deployed resource.
+     */
+    resourceName: string;
+    /**
+     * The kind of the deployed resource.
+     */
+    resourceKind:
+        | 'vm'
+        | 'container'
+        | 'publicIP'
+        | 'vpc'
+        | 'volume'
+        | 'unknown'
+        | 'security_group'
+        | 'security_group_rule'
+        | 'keypair'
+        | 'subnet';
+    /**
+     * The properties of the deployed resource.
+     */
+    properties: {
+        [key: string]: string;
+    };
+};
+
 /**
- * The latest service management audit details.
+ * The kind of the deployed resource.
  */
+export enum resourceKind {
+    VM = 'vm',
+    CONTAINER = 'container',
+    PUBLIC_IP = 'publicIP',
+    VPC = 'vpc',
+    VOLUME = 'volume',
+    UNKNOWN = 'unknown',
+    SECURITY_GROUP = 'security_group',
+    SECURITY_GROUP_RULE = 'security_group_rule',
+    KEYPAIR = 'keypair',
+    SUBNET = 'subnet',
+}
+
 export type ServiceOrderDetails = {
     /**
      * The id of the service order.
@@ -1897,7 +1889,18 @@ export type ServiceOrderDetails = {
     /**
      * The task type of the service order.
      */
-    taskType: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
+    taskType:
+        | 'deploy'
+        | 'retry'
+        | 'rollback'
+        | 'modify'
+        | 'destroy'
+        | 'lockChange'
+        | 'configChange'
+        | 'purge'
+        | 'serviceStart'
+        | 'serviceStop'
+        | 'serviceRestart';
     /**
      * The task status of the service order.
      */
@@ -1943,11 +1946,16 @@ export type ServiceOrderDetails = {
  */
 export enum taskType {
     DEPLOY = 'deploy',
-    REDEPLOY = 'redeploy',
+    RETRY = 'retry',
+    ROLLBACK = 'rollback',
     MODIFY = 'modify',
     DESTROY = 'destroy',
-    SERVICE_CONFIGURATION_UPDATE = 'serviceConfigurationUpdate',
+    LOCK_CHANGE = 'lockChange',
+    CONFIG_CHANGE = 'configChange',
     PURGE = 'purge',
+    SERVICE_START = 'serviceStart',
+    SERVICE_STOP = 'serviceStop',
+    SERVICE_RESTART = 'serviceRestart',
 }
 
 /**
@@ -1958,49 +1966,6 @@ export enum taskStatus {
     IN_PROGRESS = 'in progress',
     SUCCESSFUL = 'successful',
     FAILED = 'failed',
-}
-
-/**
- * The latest running service management task details.
- */
-export type ServiceStateManagementTaskDetails = {
-    /**
-     * The id of the service state management task.
-     */
-    taskId: string;
-    /**
-     * The id of the deployed service.
-     */
-    serviceId: string;
-    /**
-     * The type of the service state management task.
-     */
-    taskType: 'start' | 'stop' | 'restart';
-    /**
-     * The status of the service state management task.
-     */
-    taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
-    /**
-     * The error message of the failed management task.
-     */
-    errorMsg?: string;
-    /**
-     * The started time of the task.
-     */
-    startedTime?: string;
-    /**
-     * The completed time of the task.
-     */
-    completedTime?: string;
-};
-
-/**
- * The type of the service state management task.
- */
-export enum taskType2 {
-    START = 'start',
-    STOP = 'stop',
-    RESTART = 'restart',
 }
 
 export type DeploymentStatusUpdate = {
@@ -2251,8 +2216,6 @@ export type DeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
-    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceOrderDetails;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -2371,8 +2334,6 @@ export type VendorHostedDeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
-    latestRunningManagementTask?: ServiceStateManagementTaskDetails;
-    latestModificationAudit?: ServiceOrderDetails;
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
@@ -2909,19 +2870,19 @@ export type StopServiceData = {
     serviceId: string;
 };
 
-export type StopServiceResponse = string;
+export type StopServiceResponse = ServiceOrder;
 
 export type StartServiceData = {
     serviceId: string;
 };
 
-export type StartServiceResponse = string;
+export type StartServiceResponse = ServiceOrder;
 
 export type RestartServiceData = {
     serviceId: string;
 };
 
-export type RestartServiceResponse = string;
+export type RestartServiceResponse = ServiceOrder;
 
 export type RecreateServiceData = {
     serviceId: string;
@@ -3334,32 +3295,6 @@ export type QueryTasksData = {
 
 export type QueryTasksResponse = Array<WorkFlowTask>;
 
-export type ListServiceStateManagementTasksData = {
-    /**
-     * id of the service
-     */
-    serviceId: string;
-    /**
-     * status of the task
-     */
-    taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
-    /**
-     * type of the management task
-     */
-    taskType?: 'start' | 'stop' | 'restart';
-};
-
-export type ListServiceStateManagementTasksResponse = Array<ServiceStateManagementTaskDetails>;
-
-export type DeleteManagementTasksByServiceIdData = {
-    /**
-     * id of the service
-     */
-    serviceId: string;
-};
-
-export type DeleteManagementTasksByServiceIdResponse = void;
-
 export type GetComputeResourceInventoryOfServiceData = {
     /**
      * Id of the deployed service
@@ -3381,7 +3316,18 @@ export type GetAllOrdersByServiceIdData = {
     /**
      * Task type of the service order.
      */
-    taskType?: 'deploy' | 'redeploy' | 'modify' | 'destroy' | 'serviceConfigurationUpdate' | 'purge';
+    taskType?:
+        | 'deploy'
+        | 'retry'
+        | 'rollback'
+        | 'modify'
+        | 'destroy'
+        | 'lockChange'
+        | 'configChange'
+        | 'purge'
+        | 'serviceStart'
+        | 'serviceStop'
+        | 'serviceRestart';
 };
 
 export type GetAllOrdersByServiceIdResponse = Array<ServiceOrderDetails>;
@@ -3418,24 +3364,6 @@ export type GetLatestServiceDeploymentStatusData = {
 };
 
 export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
-
-export type GetManagementTaskDetailsByTaskIdData = {
-    /**
-     * id of the task
-     */
-    taskId: string;
-};
-
-export type GetManagementTaskDetailsByTaskIdResponse = ServiceStateManagementTaskDetails;
-
-export type DeleteManagementTaskByTaskIdData = {
-    /**
-     * id of the task
-     */
-    taskId: string;
-};
-
-export type DeleteManagementTaskByTaskIdResponse = void;
 
 export type ListServiceRecreatesData = {
     /**

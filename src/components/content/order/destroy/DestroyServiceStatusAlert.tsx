@@ -9,9 +9,10 @@ import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    DeployedServiceDetails,
     Response,
     serviceDeploymentState,
+    ServiceOrderStatusUpdate,
+    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
@@ -28,20 +29,10 @@ function DestroyServiceStatusAlert({
     deployedService: DeployedService;
     destroySubmitError: Error | null;
     statusPollingError: Error | null;
-    deployedServiceDetails: DeployedServiceDetails | undefined;
+    deployedServiceDetails: ServiceOrderStatusUpdate | undefined;
     closeDestroyResultAlert: (arg: boolean) => void;
 }): React.JSX.Element {
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-    if (
-        deployedServiceDetails &&
-        [
-            serviceDeploymentState.DESTROY_FAILED.toString(),
-            serviceDeploymentState.DESTROY_SUCCESSFUL.toString(),
-        ].includes(deployedServiceDetails.serviceDeploymentState)
-    ) {
-        deployedService.serviceDeploymentState = deployedServiceDetails.serviceDeploymentState;
-        deployedService.serviceState = deployedServiceDetails.serviceState;
-    }
 
     const onClose = () => {
         closeDestroyResultAlert(true);
@@ -137,10 +128,7 @@ function DestroyServiceStatusAlert({
     }
 
     if (deployedServiceDetails !== undefined) {
-        if (
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-            serviceDeploymentState.DESTROY_SUCCESSFUL.toString()
-        ) {
+        if (deployedServiceDetails.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -159,10 +147,7 @@ function DestroyServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            deployedServiceDetails.serviceDeploymentState.toString() ===
-            serviceDeploymentState.DESTROY_FAILED.toString()
-        ) {
+        } else if (deployedServiceDetails.taskStatus.toString() === taskStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
