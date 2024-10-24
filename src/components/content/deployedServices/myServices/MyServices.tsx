@@ -9,6 +9,7 @@ import {
     CopyOutlined,
     DeleteOutlined,
     EditOutlined,
+    FileTextOutlined,
     FundOutlined,
     HistoryOutlined,
     InfoCircleOutlined,
@@ -64,6 +65,7 @@ import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestSta
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
+import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
 import { useServiceStateRestartQuery } from '../../order/serviceState/restart/useServiceStateRestartQuery';
 import StartServiceStatusAlert from '../../order/serviceState/start/StartServiceStatusAlert';
@@ -112,6 +114,7 @@ function MyServices(): React.JSX.Element {
     const [isRetryDeployRequestSubmitted, setIsRetryDeployRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
+    const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState(false);
     const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
     const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
@@ -649,6 +652,22 @@ function MyServices(): React.JSX.Element {
                     <></>
                 ),
             },
+            {
+                key: 'service configuration',
+                label: (
+                    <Button
+                        onClick={() => {
+                            handleMyServiceConfigurationOpenModal(record);
+                        }}
+                        className={myServicesStyles.buttonAsLink}
+                        disabled={isDisableServiceConfigBtn(record)}
+                        icon={<FileTextOutlined />}
+                        type={'link'}
+                    >
+                        service configuration
+                    </Button>
+                ),
+            },
         ];
     };
 
@@ -754,6 +773,23 @@ function MyServices(): React.JSX.Element {
     const isDisableRetryDeploymentBtn = (record: DeployedService) => {
         if (record.serviceDeploymentState === serviceDeploymentState.DEPLOYING) {
             return true;
+        }
+        return false;
+    };
+
+    const isDisableServiceConfigBtn = (record: DeployedService) => {
+        if (
+            record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+            record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
+            record.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        ) {
+            if (
+                getOrderableServiceDetails.isSuccess &&
+                getOrderableServiceDetails.data.configurationParameters &&
+                getOrderableServiceDetails.data.configurationParameters.length > 0
+            ) {
+                return true;
+            }
         }
         return false;
     };
@@ -1329,6 +1365,20 @@ function MyServices(): React.JSX.Element {
         setIsMyServiceHistoryModalOpen(false);
     };
 
+    const handleMyServiceConfigurationOpenModal = (record: DeployedService) => {
+        setActiveRecord(
+            record.serviceHostingType === serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        setIsMyServiceConfigurationModalOpen(true);
+    };
+
+    const handleMyServiceConfigurationModalClose = () => {
+        setActiveRecord(undefined);
+        setIsMyServiceConfigurationModalOpen(false);
+    };
+
     const handleCancelMigrateModel = () => {
         setActiveRecord(undefined);
         clearFormVariables();
@@ -1483,6 +1533,20 @@ function MyServices(): React.JSX.Element {
                     onCancel={handleMyServiceHistoryModalClose}
                 >
                     <MyServiceHistory deployedService={activeRecord} />
+                </Modal>
+            ) : null}
+            {activeRecord ? (
+                <Modal
+                    title={'Service Configuration'}
+                    width={1600}
+                    footer={null}
+                    open={isMyServiceConfigurationModalOpen}
+                    onCancel={handleMyServiceConfigurationModalClose}
+                >
+                    <CurrentServiceConfiguration
+                        userOrderableServiceVo={getOrderableServiceDetails.data}
+                        deployedService={activeRecord}
+                    />
                 </Modal>
             ) : null}
             {activeRecord ? (
