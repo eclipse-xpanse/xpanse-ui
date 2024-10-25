@@ -26,10 +26,6 @@ import type {
     CompleteTaskResponse,
     DeleteIsvCloudCredentialData,
     DeleteIsvCloudCredentialResponse,
-    DeleteManagementTaskByTaskIdData,
-    DeleteManagementTaskByTaskIdResponse,
-    DeleteManagementTasksByServiceIdData,
-    DeleteManagementTasksByServiceIdResponse,
     DeleteOrderByOrderIdData,
     DeleteOrderByOrderIdResponse,
     DeleteOrdersByServiceIdData,
@@ -79,8 +75,6 @@ import type {
     GetLatestServiceDeploymentStatusResponse,
     GetLatestServiceOrderStatusData,
     GetLatestServiceOrderStatusResponse,
-    GetManagementTaskDetailsByTaskIdData,
-    GetManagementTaskDetailsByTaskIdResponse,
     GetMetricsData,
     GetMetricsResponse,
     GetMigrationOrderDetailsByIdData,
@@ -130,8 +124,6 @@ import type {
     ListServicePoliciesResponse,
     ListServiceRecreatesData,
     ListServiceRecreatesResponse,
-    ListServiceStateManagementTasksData,
-    ListServiceStateManagementTasksResponse,
     ListServiceTemplatesData,
     ListServiceTemplatesResponse,
     ListUserPoliciesData,
@@ -361,7 +353,7 @@ export const deleteUserCloudCredential = (
  * Start a task to stop the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
- * @returns string Accepted
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const stopService = (data: StopServiceData): CancelablePromise<StopServiceResponse> => {
@@ -387,7 +379,7 @@ export const stopService = (data: StopServiceData): CancelablePromise<StopServic
  * Start a task to start the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
- * @returns string Accepted
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const startService = (data: StartServiceData): CancelablePromise<StartServiceResponse> => {
@@ -413,7 +405,7 @@ export const startService = (data: StartServiceData): CancelablePromise<StartSer
  * Start a task to restart the service instance.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
- * @returns string Accepted
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const restartService = (data: RestartServiceData): CancelablePromise<RestartServiceResponse> => {
@@ -1395,68 +1387,6 @@ export const queryTasks = (data: QueryTasksData = {}): CancelablePromise<QueryTa
 };
 
 /**
- * List state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.serviceId id of the service
- * @param data.taskType type of the management task
- * @param data.taskStatus status of the task
- * @returns ServiceStateManagementTaskDetails OK
- * @throws ApiError
- */
-export const listServiceStateManagementTasks = (
-    data: ListServiceStateManagementTasksData
-): CancelablePromise<ListServiceStateManagementTasksResponse> => {
-    return __request(OpenAPI, {
-        method: 'GET',
-        url: '/xpanse/services/{serviceId}/tasks',
-        path: {
-            serviceId: data.serviceId,
-        },
-        query: {
-            taskType: data.taskType,
-            taskStatus: data.taskStatus,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Delete all state management tasks of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.serviceId id of the service
- * @returns void No Content
- * @throws ApiError
- */
-export const deleteManagementTasksByServiceId = (
-    data: DeleteManagementTasksByServiceIdData
-): CancelablePromise<DeleteManagementTasksByServiceIdResponse> => {
-    return __request(OpenAPI, {
-        method: 'DELETE',
-        url: '/xpanse/services/{serviceId}/tasks',
-        path: {
-            serviceId: data.serviceId,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
  * List compute resources of the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the deployed service
@@ -1565,62 +1495,6 @@ export const getLatestServiceDeploymentStatus = (
         },
         query: {
             lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Get state management task details by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.taskId id of the task
- * @returns ServiceStateManagementTaskDetails OK
- * @throws ApiError
- */
-export const getManagementTaskDetailsByTaskId = (
-    data: GetManagementTaskDetailsByTaskIdData
-): CancelablePromise<GetManagementTaskDetailsByTaskIdResponse> => {
-    return __request(OpenAPI, {
-        method: 'GET',
-        url: '/xpanse/services/tasks/{taskId}',
-        path: {
-            taskId: data.taskId,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Delete service state management task by the task id.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.taskId id of the task
- * @returns void No Content
- * @throws ApiError
- */
-export const deleteManagementTaskByTaskId = (
-    data: DeleteManagementTaskByTaskIdData
-): CancelablePromise<DeleteManagementTaskByTaskIdResponse> => {
-    return __request(OpenAPI, {
-        method: 'DELETE',
-        url: '/xpanse/services/tasks/{taskId}',
-        path: {
-            taskId: data.taskId,
         },
         errors: {
             400: 'Bad Request',

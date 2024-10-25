@@ -11,7 +11,8 @@ import {
     ApiError,
     DeployedService,
     Response,
-    VendorHostedDeployedServiceDetails,
+    ServiceOrder,
+    ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
@@ -27,9 +28,9 @@ function RestartServiceStatusAlert({
     getRestartServiceDetailsQuery,
 }: {
     deployedService: DeployedService;
-    serviceStateRestartQuery: UseMutationResult<string, Error, DeployedService>;
+    serviceStateRestartQuery: UseMutationResult<ServiceOrder, Error, string>;
     closeRestartResultAlert: (arg: boolean) => void;
-    getRestartServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails>;
+    getRestartServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
 }): React.JSX.Element {
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
@@ -124,24 +125,13 @@ function RestartServiceStatusAlert({
         }
     }
 
-    if (
-        getRestartServiceDetailsQuery.isSuccess &&
-        getRestartServiceDetailsQuery.data.latestRunningManagementTask &&
-        getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskId === serviceStateRestartQuery.data
-    ) {
-        if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.SUCCESSFUL.toString()
-        ) {
+    if (getRestartServiceDetailsQuery.isSuccess) {
+        if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getRestartServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service restarted successfully'}
@@ -155,24 +145,17 @@ function RestartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.FAILED.toString()
-        ) {
+        } else if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getRestartServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getRestartServiceDetailsQuery.data.latestRunningManagementTask.errorMsg
-                                        ? getRestartServiceDetailsQuery.data.latestRunningManagementTask.errorMsg.toString()
+                                    getRestartServiceDetailsQuery.data.errorMsg
+                                        ? getRestartServiceDetailsQuery.data.errorMsg.toString()
                                         : 'Restart request failed'
                                 }
                                 uuid={deployedService.serviceId}
@@ -199,10 +182,7 @@ function RestartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getRestartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.IN_PROGRESS.toString()
-        ) {
+        } else if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.RESTARTING;
         }
     }

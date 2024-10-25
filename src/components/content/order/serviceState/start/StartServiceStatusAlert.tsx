@@ -11,7 +11,8 @@ import {
     ApiError,
     DeployedService,
     Response,
-    VendorHostedDeployedServiceDetails,
+    ServiceOrder,
+    ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
@@ -23,14 +24,13 @@ import OrderSubmitResultDetails from '../../orderStatus/OrderSubmitResultDetails
 function StartServiceStatusAlert({
     deployedService,
     serviceStateStartQuery,
-
     closeStartResultAlert,
     getStartServiceDetailsQuery,
 }: {
     deployedService: DeployedService;
-    serviceStateStartQuery: UseMutationResult<string, Error, DeployedService>;
+    serviceStateStartQuery: UseMutationResult<ServiceOrder, Error, string>;
     closeStartResultAlert: (arg: boolean) => void;
-    getStartServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails>;
+    getStartServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
 }): React.JSX.Element {
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
@@ -125,24 +125,13 @@ function StartServiceStatusAlert({
         }
     }
 
-    if (
-        getStartServiceDetailsQuery.isSuccess &&
-        getStartServiceDetailsQuery.data.latestRunningManagementTask &&
-        getStartServiceDetailsQuery.data.latestRunningManagementTask.taskId === serviceStateStartQuery.data
-    ) {
-        if (
-            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.SUCCESSFUL.toString()
-        ) {
+    if (getStartServiceDetailsQuery.isSuccess) {
+        if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getStartServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service started successfully'}
@@ -156,24 +145,17 @@ function StartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.FAILED.toString()
-        ) {
+        } else if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getStartServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getStartServiceDetailsQuery.data.latestRunningManagementTask.errorMsg
-                                        ? getStartServiceDetailsQuery.data.latestRunningManagementTask.errorMsg.toString()
+                                    getStartServiceDetailsQuery.data.errorMsg
+                                        ? getStartServiceDetailsQuery.data.errorMsg.toString()
                                         : 'Start failed'
                                 }
                                 uuid={deployedService.serviceId}
@@ -200,10 +182,7 @@ function StartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getStartServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.IN_PROGRESS.toString()
-        ) {
+        } else if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.STARTING;
         }
     }
