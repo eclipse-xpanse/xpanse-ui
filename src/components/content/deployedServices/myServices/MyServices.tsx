@@ -444,32 +444,31 @@ function MyServices(): React.JSX.Element {
                     </>
                 ),
             },
-            {
-                key: 'retryDeployment',
-                label:
-                    record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ? (
-                        <Popconfirm
-                            title='Retry Deployment the service'
-                            description='Are you sure to retry the service deployment?'
-                            cancelText='Yes'
-                            okText='No'
-                            onCancel={() => {
-                                retryDeployment(record);
-                            }}
-                        >
-                            <Button
-                                className={myServicesStyles.buttonAsLink}
-                                icon={<PlayCircleOutlined />}
-                                disabled={isDisableRetryDeploymentBtn(record)}
-                                type={'link'}
-                            >
-                                retry deployment
-                            </Button>
-                        </Popconfirm>
-                    ) : (
-                        <></>
-                    ),
-            },
+            record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString()
+                ? {
+                      key: 'retryDeployment',
+                      label: (
+                          <Popconfirm
+                              title='Retry Deployment the service'
+                              description='Are you sure to retry the service deployment?'
+                              cancelText='Yes'
+                              okText='No'
+                              onCancel={() => {
+                                  retryDeployment(record);
+                              }}
+                          >
+                              <Button
+                                  className={myServicesStyles.buttonAsLink}
+                                  icon={<PlayCircleOutlined />}
+                                  disabled={isDisableRetryDeploymentBtn(record)}
+                                  type={'link'}
+                              >
+                                  retry deployment
+                              </Button>
+                          </Popconfirm>
+                      ),
+                  }
+                : null,
             {
                 key:
                     record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
