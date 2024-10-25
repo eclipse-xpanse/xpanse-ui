@@ -11,7 +11,8 @@ import {
     ApiError,
     DeployedService,
     Response,
-    VendorHostedDeployedServiceDetails,
+    ServiceOrder,
+    ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
@@ -27,9 +28,9 @@ function StopServiceStatusAlert({
     getStopServiceDetailsQuery,
 }: {
     deployedService: DeployedService;
-    serviceStateStopQuery: UseMutationResult<string, Error, DeployedService>;
+    serviceStateStopQuery: UseMutationResult<ServiceOrder, Error, string>;
     closeStopResultAlert: (arg: boolean) => void;
-    getStopServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails>;
+    getStopServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
 }): React.JSX.Element {
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
 
@@ -128,24 +129,13 @@ function StopServiceStatusAlert({
         }
     }
 
-    if (
-        getStopServiceDetailsQuery.isSuccess &&
-        getStopServiceDetailsQuery.data.latestRunningManagementTask &&
-        getStopServiceDetailsQuery.data.latestRunningManagementTask.taskId === serviceStateStopQuery.data
-    ) {
-        if (
-            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.SUCCESSFUL.toString()
-        ) {
+    if (getStopServiceDetailsQuery.isSuccess) {
+        if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getStopServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service stopped successfully'}
@@ -159,24 +149,17 @@ function StopServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.FAILED.toString()
-        ) {
+        } else if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={
-                            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskType +
-                            ' ' +
-                            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus
-                        }
+                        message={getStopServiceDetailsQuery.data.taskStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getStopServiceDetailsQuery.data.latestRunningManagementTask.errorMsg
-                                        ? getStopServiceDetailsQuery.data.latestRunningManagementTask.errorMsg.toString()
+                                    getStopServiceDetailsQuery.data.errorMsg
+                                        ? getStopServiceDetailsQuery.data.errorMsg.toString()
                                         : 'Stop failed'
                                 }
                                 uuid={deployedService.serviceId}
@@ -203,10 +186,7 @@ function StopServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (
-            getStopServiceDetailsQuery.data.latestRunningManagementTask.taskStatus.toString() ===
-            taskStatus.IN_PROGRESS.toString()
-        ) {
+        } else if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.STOPPING;
         }
     }
