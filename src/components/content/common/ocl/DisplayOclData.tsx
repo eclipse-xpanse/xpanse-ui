@@ -3,26 +3,23 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { GlobalOutlined, ProfileOutlined } from '@ant-design/icons';
+import { GlobalOutlined } from '@ant-design/icons';
 import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
-import DeploymentServiceConfigurationParameter from '../../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
-import DeploymentVariables from '../../deploymentVariables/DeploymentVariables.tsx';
+import DeploymentManagement from '../../deployment/DeploymentManagement';
+import ServiceConfigManagement from '../../serviceConfigurationManage/ServiceConfigManagement';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
 import { BillingText } from './BillingText';
 import { ContactDetailsShowType } from './ContactDetailsShowType';
 import { ContactDetailsText } from './ContactDetailsText';
-import { DeploymentScriptText } from './DeploymentScript.tsx';
-import { DeploymentText } from './DeploymentText';
 import { FlavorsText } from './FlavorsText.tsx';
 import { RegionText } from './RegionText.tsx';
-import { getDeployerToolIcon } from './getDeployerToolIcon.ts';
 
 function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
     const PLACE_HOLDER_UNKNOWN_VALUE: string = 'NOT PROVIDED';
@@ -120,33 +117,9 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             </Descriptions.Item>
                         </Descriptions>
                         <FlavorsText flavors={ocl.flavors.serviceFlavors} />
-                        <h3 className={catalogStyles.catalogDetailsH3}>
-                            <ProfileOutlined />
-                            &nbsp;Deployment Information
-                        </h3>
-                        <Descriptions column={2} bordered className={oclDisplayStyles.oclDataInfoTable}>
-                            <Descriptions.Item label='Kind'>
-                                {
-                                    <img
-                                        src={getDeployerToolIcon(ocl.deployment.deployerTool.kind.valueOf())}
-                                        alt={ocl.deployment.deployerTool.kind}
-                                        className={oclDisplayStyles.oclDataDisplayDeploymentKind}
-                                    />
-                                }
-                            </Descriptions.Item>
-                            <Descriptions.Item label='Version'>{ocl.deployment.deployerTool.version}</Descriptions.Item>
-                            <Descriptions.Item label='Service Availability Config'>
-                                <DeploymentText deployment={ocl.deployment} />
-                            </Descriptions.Item>
-                            <Descriptions.Item label='Deployment Script'>
-                                <DeploymentScriptText deployment={ocl.deployment} />
-                            </Descriptions.Item>
-                        </Descriptions>
-                        <DeploymentVariables variables={ocl.deployment.variables} />
-                        {ocl.serviceConfigurationManage?.configurationParameters ? (
-                            <DeploymentServiceConfigurationParameter
-                                parameters={ocl.serviceConfigurationManage.configurationParameters}
-                            />
+                        <DeploymentManagement deployment={ocl.deployment} />
+                        {ocl.serviceConfigurationManage ? (
+                            <ServiceConfigManagement configurationManage={ocl.serviceConfigurationManage} />
                         ) : null}
                     </div>
                 </div>

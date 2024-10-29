@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { GlobalOutlined, InfoCircleOutlined, ProfileOutlined } from '@ant-design/icons';
+import { GlobalOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Tag } from 'antd';
 import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
@@ -25,14 +25,11 @@ import { AgreementText } from '../../../common/ocl/AgreementText';
 import { BillingText } from '../../../common/ocl/BillingText';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
-import { DeploymentScriptText } from '../../../common/ocl/DeploymentScript.tsx';
-import { DeploymentText } from '../../../common/ocl/DeploymentText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
-import { getDeployerToolIcon } from '../../../common/ocl/getDeployerToolIcon.ts';
 import { RegionText } from '../../../common/ocl/RegionText.tsx';
 import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
-import DeploymentVariables from '../../../deploymentVariables/DeploymentVariables.tsx';
-import DeploymentServiceConfigurationParameter from '../../../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
+import DeploymentManagement from '../../../deployment/DeploymentManagement';
+import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -157,33 +154,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 )}
             </Descriptions>
             <FlavorsText flavors={serviceDetails.flavors.serviceFlavors} />
-            <h3 className={catalogStyles.catalogDetailsH3}>
-                <ProfileOutlined />
-                &nbsp;Deployment Information
-            </h3>
-            <Descriptions column={2} bordered className={catalogStyles.catalogDeploymentInfoTable}>
-                <Descriptions.Item label='Kind'>
-                    {
-                        <img
-                            src={getDeployerToolIcon(serviceDetails.deployment.deployerTool.kind.valueOf())}
-                            alt={serviceDetails.deployment.deployerTool.kind}
-                            className={catalogStyles.catalogDisplayDeploymentKind}
-                        />
-                    }
-                </Descriptions.Item>
-                <Descriptions.Item label='Version'>{serviceDetails.deployment.deployerTool.version}</Descriptions.Item>
-                <Descriptions.Item label='Service Availability Config'>
-                    <DeploymentText deployment={serviceDetails.deployment} />
-                </Descriptions.Item>
-                <Descriptions.Item label='Deployment Script'>
-                    <DeploymentScriptText deployment={serviceDetails.deployment} />
-                </Descriptions.Item>
-            </Descriptions>
-            <DeploymentVariables variables={serviceDetails.deployment.variables} />
-            {serviceDetails.serviceConfigurationManage?.configurationParameters ? (
-                <DeploymentServiceConfigurationParameter
-                    parameters={serviceDetails.serviceConfigurationManage.configurationParameters}
-                />
+            <DeploymentManagement deployment={serviceDetails.deployment} />
+            {serviceDetails.serviceConfigurationManage ? (
+                <ServiceConfigManagement configurationManage={serviceDetails.serviceConfigurationManage} />
             ) : null}
         </>
     );
