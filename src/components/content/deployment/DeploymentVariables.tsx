@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { AppstoreOutlined } from '@ant-design/icons';
 import { Button, Popover, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
@@ -200,10 +199,9 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
 
     return (
         <>
-            <h3 className={catalogStyles.catalogDetailsH3}>
-                <AppstoreOutlined />
+            <div className={`${catalogStyles.catalogDetailsH6} ${catalogStyles.managementVariable}`}>
                 &nbsp;Deployment Variables
-            </h3>
+            </div>
             <div className={deploymentVariablesStyles.variablesTableContainer}>
                 <Table columns={columns} dataSource={variables} rowKey={'name'} bordered pagination={false} />
             </div>

@@ -31,23 +31,6 @@ export const CurrentServiceConfigurationDetails = ({
                     disabled={true}
                     className={serviceOrderStyles.orderFormInlineDisplay}
                 >
-                    <Row>
-                        <Col span={6} className={serviceOrderStyles.orderFormLabel}>
-                            <Form.Item
-                                label={
-                                    <p
-                                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                                    >
-                                        {'serviceId'}
-                                    </p>
-                                }
-                                labelCol={{ style: { textAlign: 'left' } }}
-                            ></Form.Item>
-                        </Col>
-                        <Col span={18}>
-                            <Input value={serviceConfigurationDetails.serviceId} />
-                        </Col>
-                    </Row>
                     <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
                         <Col span={6} className={serviceOrderStyles.orderFormLabel}>
                             <Form.Item
@@ -55,24 +38,7 @@ export const CurrentServiceConfigurationDetails = ({
                                     <p
                                         className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
                                     >
-                                        {'createdTime'}
-                                    </p>
-                                }
-                                labelCol={{ style: { textAlign: 'left' } }}
-                            ></Form.Item>
-                        </Col>
-                        <Col span={18}>
-                            <Input value={serviceConfigurationDetails.createdTime} />
-                        </Col>
-                    </Row>
-                    <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
-                        <Col span={6} className={serviceOrderStyles.orderFormLabel}>
-                            <Form.Item
-                                label={
-                                    <p
-                                        className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                                    >
-                                        {'updatedTime'}
+                                        {'Config Last Updated At'}
                                     </p>
                                 }
                                 labelCol={{ style: { textAlign: 'left' } }}

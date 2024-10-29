@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { BarsOutlined, GlobalOutlined, ProfileOutlined } from '@ant-design/icons';
+import { BarsOutlined, GlobalOutlined } from '@ant-design/icons';
 import { InfoCircleOutlined } from '@ant-design/icons/lib/icons';
 import { Button, Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
@@ -16,13 +16,11 @@ import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
 import { ContactDetailsShowType } from '../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../common/ocl/ContactDetailsText';
-import { DeploymentScriptText } from '../common/ocl/DeploymentScript.tsx';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
-import { getDeployerToolIcon } from '../common/ocl/getDeployerToolIcon.ts';
 import { RegionText } from '../common/ocl/RegionText.tsx';
-import DeploymentVariables from '../deploymentVariables/DeploymentVariables.tsx';
-import DeploymentServiceConfigurationParameter from '../deployServiceConfigParameter/DeploymentServiceConfigurationParameter';
+import DeploymentManagement from '../deployment/DeploymentManagement';
+import ServiceConfigManagement from '../serviceConfigurationManage/ServiceConfigManagement';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -192,36 +190,10 @@ export const ServiceReviewsDetails = ({
                         </Descriptions.Item>
                     </Descriptions>
                     <FlavorsText flavors={currentServiceTemplateVo.flavors.serviceFlavors} />
-                    <h3 className={catalogStyles.catalogDetailsH3}>
-                        <ProfileOutlined />
-                        &nbsp;Deployment Information
-                    </h3>
-                    <Descriptions column={2} bordered className={oclDisplayStyles.oclDataInfoTable}>
-                        <Descriptions.Item label='Kind'>
-                            {
-                                <img
-                                    src={getDeployerToolIcon(
-                                        currentServiceTemplateVo.deployment.deployerTool.kind.valueOf()
-                                    )}
-                                    alt={currentServiceTemplateVo.deployment.deployerTool.kind}
-                                    className={oclDisplayStyles.oclDataDisplayDeploymentKind}
-                                />
-                            }
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Version'>
-                            {currentServiceTemplateVo.deployment.deployerTool.version}
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Service Availability Config'>
-                            <DeploymentText deployment={currentServiceTemplateVo.deployment} />
-                        </Descriptions.Item>
-                        <Descriptions.Item label='Deployment Script'>
-                            <DeploymentScriptText deployment={currentServiceTemplateVo.deployment} />
-                        </Descriptions.Item>
-                    </Descriptions>
-                    <DeploymentVariables variables={currentServiceTemplateVo.deployment.variables} />
-                    {currentServiceTemplateVo.serviceConfigurationManage?.configurationParameters ? (
-                        <DeploymentServiceConfigurationParameter
-                            parameters={currentServiceTemplateVo.serviceConfigurationManage.configurationParameters}
+                    <DeploymentManagement deployment={currentServiceTemplateVo.deployment} />
+                    {currentServiceTemplateVo.serviceConfigurationManage ? (
+                        <ServiceConfigManagement
+                            configurationManage={currentServiceTemplateVo.serviceConfigurationManage}
                         />
                     ) : null}
                     {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (

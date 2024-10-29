@@ -3,7 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { FileTextOutlined } from '@ant-design/icons';
 import { Button, Popover, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
@@ -11,7 +10,7 @@ import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
 import { deployResourceKind, sensitiveScope, ServiceConfigurationParameter } from '../../../xpanse-api/generated';
 
-function DeploymentServiceConfigurationParameter({
+function ServiceConfigurationParameters({
     parameters,
 }: {
     parameters: ServiceConfigurationParameter[];
@@ -205,10 +204,9 @@ function DeploymentServiceConfigurationParameter({
 
     return (
         <>
-            <h3 className={catalogStyles.catalogDetailsH3}>
-                <FileTextOutlined />
+            <div className={`${catalogStyles.catalogDetailsH6} ${catalogStyles.managementVariable}`}>
                 &nbsp;Service Configuration Parameters
-            </h3>
+            </div>
             <div className={deploymentVariablesStyles.variablesTableContainer}>
                 <Table columns={columns} dataSource={parameters} rowKey={'name'} bordered pagination={false} />
             </div>
@@ -216,4 +214,4 @@ function DeploymentServiceConfigurationParameter({
     );
 }
 
-export default DeploymentServiceConfigurationParameter;
+export default ServiceConfigurationParameters;
