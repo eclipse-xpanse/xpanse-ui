@@ -109,8 +109,8 @@
     overflow: hidden;
 }
 
-.region-area,
 .region-site {
     display: flex;
     align-items: center;
+    font-size: 12px;
 }
