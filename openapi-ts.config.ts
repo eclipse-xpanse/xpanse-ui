@@ -12,8 +12,12 @@ export default defineConfig({
         format: 'prettier',
         path: 'src/xpanse-api/generated',
     },
-    types: {
-        enums: 'typescript',
-    },
-    schemas: false,
+    plugins: [
+        '@hey-api/services',
+        '@hey-api/types',
+        {
+            name: '@hey-api/types',
+            enums: 'typescript',
+        },
+    ],
 });
