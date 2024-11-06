@@ -138,7 +138,7 @@ function Workflows(): React.JSX.Element {
             title: 'Status',
             dataIndex: 'status',
             render: (taskStatus: status) => {
-                if (taskStatus === status.FAILED) {
+                if (taskStatus === status.ERROR) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
                             {taskStatus.valueOf()}
@@ -161,7 +161,7 @@ function Workflows(): React.JSX.Element {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: WorkFlowTask) => {
-                if (record.status === status.FAILED) {
+                if (record.status === 'failed') {
                     return (
                         <>
                             <Space size='middle'>
