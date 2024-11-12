@@ -2002,69 +2002,6 @@ export type ServiceLockConfig = {
     destroyLocked?: boolean;
 };
 
-export type ServiceMigrationDetails = {
-    /**
-     * The ID of the service migration
-     */
-    migrationId: string;
-    /**
-     * The ID of the old service
-     */
-    oldServiceId: string;
-    /**
-     * The ID of the new service
-     */
-    newServiceId: string;
-    /**
-     * The status of the service migration
-     */
-    migrationStatus:
-        | 'MigrationStarted'
-        | 'MigrationCompleted'
-        | 'MigrationFailed'
-        | 'DataExportStarted'
-        | 'DataExportFailed'
-        | 'DataExportCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted'
-        | 'DataImportStarted'
-        | 'DataImportFailed'
-        | 'DataImportCompleted'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted';
-    /**
-     * Time of service migration.
-     */
-    createTime: string;
-    /**
-     * Time of update service migration.
-     */
-    lastModifiedTime: string;
-};
-
-/**
- * The status of the service migration
- */
-export enum migrationStatus {
-    MIGRATION_STARTED = 'MigrationStarted',
-    MIGRATION_COMPLETED = 'MigrationCompleted',
-    MIGRATION_FAILED = 'MigrationFailed',
-    DATA_EXPORT_STARTED = 'DataExportStarted',
-    DATA_EXPORT_FAILED = 'DataExportFailed',
-    DATA_EXPORT_COMPLETED = 'DataExportCompleted',
-    DEPLOY_STARTED = 'DeployStarted',
-    DEPLOY_FAILED = 'DeployFailed',
-    DEPLOY_COMPLETED = 'DeployCompleted',
-    DATA_IMPORT_STARTED = 'DataImportStarted',
-    DATA_IMPORT_FAILED = 'DataImportFailed',
-    DATA_IMPORT_COMPLETED = 'DataImportCompleted',
-    DESTROY_STARTED = 'DestroyStarted',
-    DESTROY_FAILED = 'DestroyFailed',
-    DESTROY_COMPLETED = 'DestroyCompleted',
-}
-
 export type ServiceOrder = {
     /**
      * The id of the service order.
@@ -2094,6 +2031,8 @@ export type ServiceOrderDetails = {
         | 'rollback'
         | 'modify'
         | 'destroy'
+        | 'migrate'
+        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -2104,6 +2043,18 @@ export type ServiceOrderDetails = {
      * The task status of the service order.
      */
     taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    /**
+     * The id of the original service.
+     */
+    originalServiceId?: string;
+    /**
+     * The id of the parent service order.
+     */
+    parentOrderId?: string;
+    /**
+     * The id of the workflow.
+     */
+    workflowId?: string;
     /**
      * The error message if the service order task failed.
      */
@@ -2120,6 +2071,12 @@ export type ServiceOrderDetails = {
      * The completed time of the service order.
      */
     completedTime?: string;
+    /**
+     * The request json of the service order.
+     */
+    requestBody?: {
+        [key: string]: unknown;
+    };
     previousDeployRequest?: DeployRequest;
     newDeployRequest?: DeployRequest;
     /**
@@ -2149,6 +2106,8 @@ export enum taskType {
     ROLLBACK = 'rollback',
     MODIFY = 'modify',
     DESTROY = 'destroy',
+    MIGRATE = 'migrate',
+    RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
     PURGE = 'purge',
@@ -2268,53 +2227,6 @@ export type ServiceProviderContactDetails = {
      */
     websites?: Array<string>;
 };
-
-export type ServiceRecreateDetails = {
-    /**
-     * The ID of the service recreate
-     */
-    recreateId: string;
-    /**
-     * The ID of the old service
-     */
-    serviceId: string;
-    /**
-     * The status of the service recreate
-     */
-    recreateStatus:
-        | 'RecreateStarted'
-        | 'RecreateCompleted'
-        | 'RecreateFailed'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted';
-    /**
-     * Time of service recreate.
-     */
-    createTime: string;
-    /**
-     * Time of update service recreate.
-     */
-    lastModifiedTime: string;
-};
-
-/**
- * The status of the service recreate
- */
-export enum recreateStatus {
-    RECREATE_STARTED = 'RecreateStarted',
-    RECREATE_COMPLETED = 'RecreateCompleted',
-    RECREATE_FAILED = 'RecreateFailed',
-    DESTROY_STARTED = 'DestroyStarted',
-    DESTROY_FAILED = 'DestroyFailed',
-    DESTROY_COMPLETED = 'DestroyCompleted',
-    DEPLOY_STARTED = 'DeployStarted',
-    DEPLOY_FAILED = 'DeployFailed',
-    DEPLOY_COMPLETED = 'DeployCompleted',
-}
 
 export type ServiceTemplateDetailVo = {
     /**
@@ -2888,7 +2800,7 @@ export type RecreateServiceData = {
     serviceId: string;
 };
 
-export type RecreateServiceResponse = string;
+export type RecreateServiceResponse = ServiceOrder;
 
 export type ModifyData = {
     requestBody: ModifyRequest;
@@ -2924,7 +2836,7 @@ export type ChangeServiceLockConfigData = {
     serviceId: string;
 };
 
-export type ChangeServiceLockConfigResponse = void;
+export type ChangeServiceLockConfigResponse = ServiceOrder;
 
 export type DetailsData = {
     /**
@@ -3178,7 +3090,7 @@ export type MigrateData = {
     requestBody: MigrateRequest;
 };
 
-export type MigrateResponse = string;
+export type MigrateResponse = ServiceOrder;
 
 export type ListServiceTemplatesData = {
     /**
@@ -3322,6 +3234,8 @@ export type GetAllOrdersByServiceIdData = {
         | 'rollback'
         | 'modify'
         | 'destroy'
+        | 'migrate'
+        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -3365,41 +3279,6 @@ export type GetLatestServiceDeploymentStatusData = {
 
 export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
 
-export type ListServiceRecreatesData = {
-    /**
-     * Id of the service recreate
-     */
-    recreateId?: string;
-    /**
-     * Status of the service recreate
-     */
-    recreateStatus?:
-        | 'RecreateStarted'
-        | 'RecreateCompleted'
-        | 'RecreateFailed'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted';
-    /**
-     * Id of the old service
-     */
-    serviceId?: string;
-};
-
-export type ListServiceRecreatesResponse = Array<ServiceRecreateDetails>;
-
-export type GetRecreateOrderDetailsByIdData = {
-    /**
-     * Recreate ID
-     */
-    recreateId: string;
-};
-
-export type GetRecreateOrderDetailsByIdResponse = ServiceRecreateDetails;
-
 export type GetOrderDetailsByOrderIdData = {
     /**
      * Id of the service order
@@ -3430,51 +3309,6 @@ export type GetLatestServiceOrderStatusData = {
 };
 
 export type GetLatestServiceOrderStatusResponse = ServiceOrderStatusUpdate;
-
-export type ListServiceMigrationsData = {
-    /**
-     * Id of the service migrate
-     */
-    migrationId?: string;
-    /**
-     * Status of the service migrate
-     */
-    migrationStatus?:
-        | 'MigrationStarted'
-        | 'MigrationCompleted'
-        | 'MigrationFailed'
-        | 'DataExportStarted'
-        | 'DataExportFailed'
-        | 'DataExportCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted'
-        | 'DataImportStarted'
-        | 'DataImportFailed'
-        | 'DataImportCompleted'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted';
-    /**
-     * Id of the new service
-     */
-    newServiceId?: string;
-    /**
-     * Id of the old service
-     */
-    oldServiceId?: string;
-};
-
-export type ListServiceMigrationsResponse = Array<ServiceMigrationDetails>;
-
-export type GetMigrationOrderDetailsByIdData = {
-    /**
-     * Migration ID
-     */
-    migrationId: string;
-};
-
-export type GetMigrationOrderDetailsByIdResponse = ServiceMigrationDetails;
 
 export type ListDeployedServicesOfIsvData = {
     /**

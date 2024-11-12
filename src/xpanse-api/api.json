@@ -3,7 +3,7 @@
     "info": {
         "title": "XpanseAPI",
         "description": "RESTful Services to interact with Xpanse runtime.",
-        "version": "@project.version@"
+        "version": "1.0.22-SNAPSHOT"
     },
     "servers": [
         {
@@ -155,16 +155,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -177,6 +167,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -261,16 +261,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -283,6 +273,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -375,16 +375,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -397,6 +387,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -475,16 +475,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -497,6 +487,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -565,16 +565,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -587,6 +577,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -695,16 +695,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -717,6 +707,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -787,16 +787,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -809,6 +799,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -886,16 +886,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -908,6 +898,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -985,16 +985,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1007,6 +997,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1084,16 +1084,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1106,6 +1096,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1129,8 +1129,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "uuid"
+                                    "$ref": "#/components/schemas/ServiceOrder"
                                 }
                             }
                         }
@@ -1195,16 +1194,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "",
                         "content": {
@@ -1216,6 +1205,16 @@
                         }
                     },
                     "403": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1294,16 +1293,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "",
                         "content": {
@@ -1315,6 +1304,16 @@
                         }
                     },
                     "403": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1404,16 +1403,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1426,6 +1415,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1514,16 +1513,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1544,6 +1533,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "408": {
                         "description": "Request Timeout",
                         "content": {
@@ -1554,8 +1553,15 @@
                             }
                         }
                     },
-                    "204": {
-                        "description": "No Content"
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ServiceOrder"
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1607,16 +1613,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1629,6 +1625,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1715,16 +1721,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1737,6 +1733,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1813,16 +1819,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1835,6 +1831,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1906,16 +1912,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -1928,6 +1924,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2016,16 +2022,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2038,6 +2034,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2109,16 +2115,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2131,6 +2127,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2218,16 +2224,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2240,6 +2236,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2317,16 +2323,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2339,6 +2335,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2425,16 +2431,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2447,6 +2443,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2522,16 +2528,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2544,6 +2540,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2614,16 +2620,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2636,6 +2632,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2722,16 +2728,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2744,6 +2740,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2819,16 +2825,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2841,6 +2837,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2933,16 +2939,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -2955,6 +2951,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3033,16 +3039,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3055,6 +3051,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3123,16 +3129,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3145,6 +3141,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3253,16 +3259,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3275,6 +3271,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3356,16 +3362,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3378,6 +3374,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3521,16 +3527,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3543,6 +3539,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3621,16 +3627,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "",
                         "content": {
@@ -3642,6 +3638,16 @@
                         }
                     },
                     "403": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3720,16 +3726,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3742,6 +3738,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3765,8 +3771,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "type": "string",
-                                    "format": "uuid"
+                                    "$ref": "#/components/schemas/ServiceOrder"
                                 }
                             }
                         }
@@ -3892,16 +3897,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -3914,6 +3909,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3992,16 +3997,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4014,6 +4009,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4092,16 +4097,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4114,6 +4109,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4192,16 +4197,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4214,6 +4209,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4292,16 +4297,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4314,6 +4309,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4412,16 +4417,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4434,6 +4429,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4512,16 +4517,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4534,6 +4529,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4613,16 +4618,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4635,6 +4630,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4716,16 +4721,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4738,6 +4733,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4800,6 +4805,8 @@
                                 "rollback",
                                 "modify",
                                 "destroy",
+                                "migrate",
+                                "recreate",
                                 "lockChange",
                                 "configChange",
                                 "purge",
@@ -4851,16 +4858,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4873,6 +4870,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4952,16 +4959,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -4974,6 +4971,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5067,16 +5074,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -5089,6 +5086,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5113,238 +5120,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/DeploymentStatusUpdate"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/recreate": {
-            "get": {
-                "tags": ["Service"],
-                "description": "List all services recreate by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
-                "operationId": "listServiceRecreates",
-                "parameters": [
-                    {
-                        "name": "recreateId",
-                        "in": "query",
-                        "description": "Id of the service recreate",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "serviceId",
-                        "in": "query",
-                        "description": "Id of the old service",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "recreateStatus",
-                        "in": "query",
-                        "description": "Status of the service recreate",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "RecreateStarted",
-                                "RecreateCompleted",
-                                "RecreateFailed",
-                                "DestroyStarted",
-                                "DestroyFailed",
-                                "DestroyCompleted",
-                                "DeployStarted",
-                                "DeployFailed",
-                                "DeployCompleted"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "408": {
-                        "description": "Request Timeout",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ServiceRecreateDetails"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/recreate/{recreateId}": {
-            "get": {
-                "tags": ["Service"],
-                "description": "Get recreate records based on recreate id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
-                "operationId": "getRecreateOrderDetailsById",
-                "parameters": [
-                    {
-                        "name": "recreateId",
-                        "in": "path",
-                        "description": "Recreate ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "408": {
-                        "description": "Request Timeout",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ServiceRecreateDetails"
                                 }
                             }
                         }
@@ -5399,16 +5174,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -5421,6 +5186,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5497,16 +5272,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -5519,6 +5284,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5600,16 +5375,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -5622,6 +5387,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5646,256 +5421,6 @@
                             "application/json": {
                                 "schema": {
                                     "$ref": "#/components/schemas/ServiceOrderStatusUpdate"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/migrations": {
-            "get": {
-                "tags": ["Migration"],
-                "description": "List all services migration by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>",
-                "operationId": "listServiceMigrations",
-                "parameters": [
-                    {
-                        "name": "migrationId",
-                        "in": "query",
-                        "description": "Id of the service migrate",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    },
-                    {
-                        "name": "newServiceId",
-                        "in": "query",
-                        "description": "Id of the new service",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    },
-                    {
-                        "name": "oldServiceId",
-                        "in": "query",
-                        "description": "Id of the old service",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uuid"
-                        }
-                    },
-                    {
-                        "name": "migrationStatus",
-                        "in": "query",
-                        "description": "Status of the service migrate",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": [
-                                "MigrationStarted",
-                                "MigrationCompleted",
-                                "MigrationFailed",
-                                "DataExportStarted",
-                                "DataExportFailed",
-                                "DataExportCompleted",
-                                "DeployStarted",
-                                "DeployFailed",
-                                "DeployCompleted",
-                                "DataImportStarted",
-                                "DataImportFailed",
-                                "DataImportCompleted",
-                                "DestroyStarted",
-                                "DestroyFailed",
-                                "DestroyCompleted"
-                            ]
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "408": {
-                        "description": "Request Timeout",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "array",
-                                    "items": {
-                                        "$ref": "#/components/schemas/ServiceMigrationDetails"
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/xpanse/services/migration/{migrationId}": {
-            "get": {
-                "tags": ["Migration"],
-                "description": "Get migration records based on migration id.<br> Required role: <b>admin</b> or <b>user</b> </br>",
-                "operationId": "getMigrationOrderDetailsById",
-                "parameters": [
-                    {
-                        "name": "migrationId",
-                        "in": "path",
-                        "description": "Migration ID",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "502": {
-                        "description": "Bad Gateway",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "Forbidden",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "408": {
-                        "description": "Request Timeout",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "OK",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ServiceMigrationDetails"
                                 }
                             }
                         }
@@ -6022,16 +5547,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6044,6 +5559,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6125,16 +5650,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6147,6 +5662,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6297,16 +5822,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6319,6 +5834,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6400,16 +5925,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6422,6 +5937,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6500,16 +6025,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6522,6 +6037,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6637,16 +6162,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6659,6 +6174,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6740,16 +6265,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6762,6 +6277,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6877,16 +6402,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -6899,6 +6414,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7005,16 +6530,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7027,6 +6542,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7169,16 +6694,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7191,6 +6706,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7261,16 +6786,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7283,6 +6798,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7372,16 +6897,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7394,6 +6909,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7464,16 +6989,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7486,6 +7001,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7629,16 +7154,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7651,6 +7166,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7732,16 +7257,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7754,6 +7269,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7891,16 +7416,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -7913,6 +7428,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8032,16 +7557,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8054,6 +7569,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8156,16 +7681,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8178,6 +7693,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8286,16 +7811,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8308,6 +7823,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8400,16 +7925,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8422,6 +7937,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8565,16 +8090,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8587,6 +8102,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8676,16 +8201,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8698,6 +8213,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8775,16 +8300,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8797,6 +8312,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8884,16 +8409,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -8914,6 +8429,16 @@
                             }
                         }
                     },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
                     "408": {
                         "description": "Request Timeout",
                         "content": {
@@ -8924,6 +8449,9 @@
                             }
                         }
                     },
+                    "204": {
+                        "description": "no pending configuration update requests"
+                    },
                     "200": {
                         "description": "pending configuration update request details",
                         "content": {
@@ -8933,9 +8461,6 @@
                                 }
                             }
                         }
-                    },
-                    "204": {
-                        "description": "no pending configuration update requests"
                     }
                 }
             }
@@ -8996,16 +8521,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -9018,6 +8533,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9085,16 +8610,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Response"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "Bad Gateway",
                         "content": {
@@ -9107,6 +8622,16 @@
                     },
                     "403": {
                         "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Response"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9178,16 +8703,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "",
                         "content": {
@@ -9199,6 +8714,16 @@
                         }
                     },
                     "403": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9278,16 +8803,6 @@
                             }
                         }
                     },
-                    "401": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedResponse"
-                                }
-                            }
-                        }
-                    },
                     "502": {
                         "description": "",
                         "content": {
@@ -9299,6 +8814,16 @@
                         }
                     },
                     "403": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -11383,6 +10908,8 @@
                             "rollback",
                             "modify",
                             "destroy",
+                            "migrate",
+                            "recreate",
                             "lockChange",
                             "configChange",
                             "purge",
@@ -11395,6 +10922,20 @@
                         "type": "string",
                         "description": "The task status of the service order.",
                         "enum": ["created", "in progress", "successful", "failed"]
+                    },
+                    "originalServiceId": {
+                        "type": "string",
+                        "description": "The id of the original service.",
+                        "format": "uuid"
+                    },
+                    "parentOrderId": {
+                        "type": "string",
+                        "description": "The id of the parent service order.",
+                        "format": "uuid"
+                    },
+                    "workflowId": {
+                        "type": "string",
+                        "description": "The id of the workflow."
                     },
                     "errorMsg": {
                         "type": "string",
@@ -11413,6 +10954,10 @@
                         "type": "string",
                         "description": "The completed time of the service order.",
                         "format": "date-time"
+                    },
+                    "requestBody": {
+                        "type": "object",
+                        "description": "The request json of the service order."
                     },
                     "previousDeployRequest": {
                         "$ref": "#/components/schemas/DeployRequest"
@@ -11472,47 +11017,6 @@
                     }
                 }
             },
-            "ServiceRecreateDetails": {
-                "required": ["createTime", "lastModifiedTime", "recreateId", "recreateStatus", "serviceId"],
-                "type": "object",
-                "properties": {
-                    "recreateId": {
-                        "type": "string",
-                        "description": "The ID of the service recreate",
-                        "format": "uuid"
-                    },
-                    "serviceId": {
-                        "type": "string",
-                        "description": "The ID of the old service",
-                        "format": "uuid"
-                    },
-                    "recreateStatus": {
-                        "type": "string",
-                        "description": "The status of the service recreate",
-                        "enum": [
-                            "RecreateStarted",
-                            "RecreateCompleted",
-                            "RecreateFailed",
-                            "DestroyStarted",
-                            "DestroyFailed",
-                            "DestroyCompleted",
-                            "DeployStarted",
-                            "DeployFailed",
-                            "DeployCompleted"
-                        ]
-                    },
-                    "createTime": {
-                        "type": "string",
-                        "description": "Time of service recreate.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "Time of update service recreate.",
-                        "format": "date-time"
-                    }
-                }
-            },
             "ServiceOrderStatusUpdate": {
                 "required": ["isOrderCompleted", "taskStatus"],
                 "type": "object",
@@ -11529,65 +11033,6 @@
                     "errorMsg": {
                         "type": "string",
                         "description": "The error message if the service order failed."
-                    }
-                }
-            },
-            "ServiceMigrationDetails": {
-                "required": [
-                    "createTime",
-                    "lastModifiedTime",
-                    "migrationId",
-                    "migrationStatus",
-                    "newServiceId",
-                    "oldServiceId"
-                ],
-                "type": "object",
-                "properties": {
-                    "migrationId": {
-                        "type": "string",
-                        "description": "The ID of the service migration",
-                        "format": "uuid"
-                    },
-                    "oldServiceId": {
-                        "type": "string",
-                        "description": "The ID of the old service",
-                        "format": "uuid"
-                    },
-                    "newServiceId": {
-                        "type": "string",
-                        "description": "The ID of the new service",
-                        "format": "uuid"
-                    },
-                    "migrationStatus": {
-                        "type": "string",
-                        "description": "The status of the service migration",
-                        "enum": [
-                            "MigrationStarted",
-                            "MigrationCompleted",
-                            "MigrationFailed",
-                            "DataExportStarted",
-                            "DataExportFailed",
-                            "DataExportCompleted",
-                            "DeployStarted",
-                            "DeployFailed",
-                            "DeployCompleted",
-                            "DataImportStarted",
-                            "DataImportFailed",
-                            "DataImportCompleted",
-                            "DestroyStarted",
-                            "DestroyFailed",
-                            "DestroyCompleted"
-                        ]
-                    },
-                    "createTime": {
-                        "type": "string",
-                        "description": "Time of service migration.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "Time of update service migration.",
-                        "format": "date-time"
                     }
                 }
             },

@@ -13,20 +13,18 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { ApiError, DeployRequest, taskStatus } from '../../../../xpanse-api/generated';
 import {
-    CUSTOMER_SERVICE_NAME_FIELD,
     createServicePageRoute,
+    CUSTOMER_SERVICE_NAME_FIELD,
     homePageRoute,
     servicesSubPageRoute,
 } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
+import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
-import {
-    useLatestServiceOrderStatusQuery,
-    useServiceDetailsByIdQuery,
-} from '../orderStatus/useServiceDetailsPollingQuery';
+import { useServiceDetailsByIdQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';

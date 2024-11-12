@@ -46,6 +46,7 @@ import {
 import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
+import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
@@ -55,10 +56,7 @@ import { Locks } from '../../order/locks/Locks';
 import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
 import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAlert';
-import {
-    useLatestServiceOrderStatusQuery,
-    useServiceDetailsByIdQuery,
-} from '../../order/orderStatus/useServiceDetailsPollingQuery';
+import { useServiceDetailsByIdQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';

@@ -16,12 +16,13 @@ import {
     DeployedService,
     DeployRequest,
     MigrateRequest,
-    migrationStatus,
     Region,
     ServiceFlavor,
     serviceHostingType,
+    taskStatus,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
+import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
@@ -34,11 +35,7 @@ import CspSelect from '../formElements/CspSelect';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
-import {
-    useMigrateServiceDetailsPollingQuery,
-    useMigrateServiceQuery,
-    useServiceDetailsPollingQuery,
-} from './useMigrateServiceQuery';
+import { useMigrateServiceRequest, useServiceDetailsByServiceIdQuery } from './useMigrateServiceQuery';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
@@ -75,28 +72,24 @@ export const MigrateServiceSubmit = ({
         selectServiceHostingType,
         userOrderableServiceVoList
     );
-    const migrateServiceRequest = useMigrateServiceQuery();
-    const migrateServiceDetailsQuery = useMigrateServiceDetailsPollingQuery(
-        migrateServiceRequest.data,
+
+    const migrateServiceRequest = useMigrateServiceRequest();
+
+    const getMigrateLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
+        migrateServiceRequest.data?.orderId ?? '',
         migrateServiceRequest.isSuccess,
-        [
-            migrationStatus.MIGRATION_COMPLETED,
-            migrationStatus.MIGRATION_FAILED,
-            migrationStatus.DESTROY_FAILED,
-            migrationStatus.DATA_IMPORT_FAILED,
-            migrationStatus.DEPLOY_FAILED,
-            migrationStatus.DATA_EXPORT_FAILED,
-        ]
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
-    const deployServiceDetailsQuery = useServiceDetailsPollingQuery(
-        migrateServiceDetailsQuery.data?.newServiceId,
+
+    const deployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
+        migrateServiceRequest.data?.serviceId ?? '',
         selectServiceHostingType,
-        migrateServiceDetailsQuery.data?.migrationStatus
+        getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
     );
-    const destroyServiceDetailsQuery = useServiceDetailsPollingQuery(
+    const destroyServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         currentSelectedService.serviceId,
         currentSelectedService.serviceHostingType,
-        migrateServiceDetailsQuery.data?.migrationStatus
+        getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(currentSelectedService.serviceTemplateId);
@@ -112,20 +105,14 @@ export const MigrateServiceSubmit = ({
             setIsShowDeploymentResult(true);
         }
     };
-    const prev = () => {
+    const previous = () => {
         setCurrentMigrationStep(MigrationSteps.ImportServiceData);
     };
 
-    if (migrateServiceDetailsQuery.data) {
-        if (migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_COMPLETED) {
+    if (getMigrateLatestServiceOrderStatusQuery.data) {
+        if (getMigrateLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.SUCCESSFUL) {
             stepItem.status = 'finish';
-        } else if (
-            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DATA_EXPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DEPLOY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DATA_IMPORT_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.DESTROY_FAILED ||
-            migrateServiceDetailsQuery.data.migrationStatus === migrationStatus.MIGRATION_FAILED
-        ) {
+        } else if (getMigrateLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.FAILED) {
             stepItem.status = 'error';
         } else {
             stepItem.status = 'process';
@@ -136,11 +123,12 @@ export const MigrateServiceSubmit = ({
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusAlert
                     migrateRequestError={migrateServiceRequest.error}
+                    migrateRequestData={migrateServiceRequest.data}
                     deployedServiceDetails={deployServiceDetailsQuery.data}
                     oldDeployedServiceDetails={destroyServiceDetailsQuery.data}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
-                    isPollingError={migrateServiceDetailsQuery.isError}
-                    migrationDetails={migrateServiceDetailsQuery.data}
+                    isPollingError={getMigrateLatestServiceOrderStatusQuery.isError}
+                    migrationDetails={getMigrateLatestServiceOrderStatusQuery.data}
                 />
             ) : null}
             <Form
@@ -193,7 +181,7 @@ export const MigrateServiceSubmit = ({
                         <Button
                             type='primary'
                             onClick={() => {
-                                prev();
+                                previous();
                             }}
                             disabled={stepItem.status === 'finish' || stepItem.status === 'process'}
                         >

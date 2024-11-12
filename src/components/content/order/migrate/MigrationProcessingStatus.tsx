@@ -14,43 +14,72 @@ import {
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 
 export function MigrationProcessingStatus({
-    response,
-    currentServiceHostingType,
+    deployedResponse,
+    destroyedResponse,
 }: {
-    response: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
-    currentServiceHostingType: string;
+    deployedResponse: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
+    destroyedResponse: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
 }): React.JSX.Element {
     const endPointMap = new Map<string, string>();
-    if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
-        if (response.deployedServiceProperties) {
-            for (const key in response.deployedServiceProperties) {
-                endPointMap.set(key, response.deployedServiceProperties[key]);
+
+    if (deployedResponse && deployedResponse.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+        if (
+            destroyedResponse &&
+            destroyedResponse.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL
+        ) {
+            if (deployedResponse.deployedServiceProperties) {
+                for (const key in deployedResponse.deployedServiceProperties) {
+                    endPointMap.set(key, deployedResponse.deployedServiceProperties[key]);
+                }
             }
-        }
-        if (endPointMap.size > 0) {
+            if (endPointMap.size > 0) {
+                return (
+                    <>
+                        <span>{'Deployment Successful'}</span>
+                        <div className={myServicesStyles.serviceInstanceDetailPosition}>
+                            {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
+                        </div>
+                    </>
+                );
+            } else {
+                return <span>{'Migration Successful'}</span>;
+            }
+        } else if (
+            destroyedResponse &&
+            destroyedResponse.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED
+        ) {
             return (
-                <>
-                    <span>{'Deployment Successful'}</span>
-                    <div className={myServicesStyles.serviceInstanceDetailPosition}>
-                        {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
+                <div>
+                    <span>{'Migration Failed.'}</span>
+                    <div>
+                        {destroyedResponse.serviceHostingType === serviceHostingType.SELF.toString()
+                            ? (destroyedResponse as DeployedServiceDetails).resultMessage
+                                ? (destroyedResponse as DeployedServiceDetails).resultMessage
+                                : (destroyedResponse as DeployedServiceDetails).resultMessage
+                            : 'Migrate status polling failed. Please visit MyServices page to check ' +
+                              'the status of the request and contact service vendor for error details.'}
                     </div>
-                </>
+                </div>
             );
-        } else {
-            return <span>{'Migration Successful'}</span>;
         }
-    } else if (response.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED) {
+    } else if (
+        deployedResponse &&
+        deployedResponse.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED
+    ) {
         return (
             <div>
                 <span>{'Migration Failed.'}</span>
                 <div>
-                    {currentServiceHostingType === serviceHostingType.SELF.toString()
-                        ? (response as DeployedServiceDetails).resultMessage
+                    {deployedResponse.serviceHostingType === serviceHostingType.SELF.toString()
+                        ? (deployedResponse as DeployedServiceDetails).resultMessage
+                            ? (deployedResponse as DeployedServiceDetails).resultMessage
+                            : (deployedResponse as DeployedServiceDetails).resultMessage
                         : 'Migrate status polling failed. Please visit MyServices page to check ' +
                           'the status of the request and contact service vendor for error details.'}
                 </div>
             </div>
         );
     }
+
     return <></>;
 }
