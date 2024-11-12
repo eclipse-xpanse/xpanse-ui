@@ -5,21 +5,18 @@
 
 import { useMutation, useQuery } from '@tanstack/react-query';
 import {
-    GetMigrationOrderDetailsByIdData,
+    getSelfHostedServiceDetailsById,
     GetSelfHostedServiceDetailsByIdData,
+    getVendorHostedServiceDetailsById,
     GetVendorHostedServiceDetailsByIdData,
+    migrate,
     MigrateData,
     MigrateRequest,
-    getMigrationOrderDetailsById,
-    getSelfHostedServiceDetailsById,
-    getVendorHostedServiceDetailsById,
-    migrate,
-    migrationStatus,
     serviceHostingType,
+    taskStatus,
 } from '../../../../xpanse-api/generated';
-import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
-export function useMigrateServiceQuery() {
+export function useMigrateServiceRequest() {
     return useMutation({
         mutationFn: (migrateRequest: MigrateRequest) => {
             const data: MigrateData = {
@@ -30,33 +27,10 @@ export function useMigrateServiceQuery() {
     });
 }
 
-export function useMigrateServiceDetailsPollingQuery(
-    migrationId: string | undefined,
-    isStartPolling: boolean,
-    refetchUntilStates: migrationStatus[]
-) {
-    return useQuery({
-        queryKey: ['getServiceDetailsById', migrationId],
-        queryFn: () => {
-            const data: GetMigrationOrderDetailsByIdData = {
-                migrationId: migrationId ?? '',
-            };
-            return getMigrationOrderDetailsById(data);
-        },
-        refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.migrationStatus as migrationStatus)
-                ? false
-                : deploymentStatusPollingInterval,
-        refetchIntervalInBackground: true,
-        refetchOnWindowFocus: false,
-        enabled: migrationId !== undefined && isStartPolling,
-    });
-}
-
-export function useServiceDetailsPollingQuery(
+export function useServiceDetailsByServiceIdQuery(
     serviceId: string | undefined,
     currentServiceHostingType: string,
-    currentMigrationStatus: string | undefined
+    currentMigrationTaskStatus: string | undefined
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', serviceId, currentServiceHostingType],
@@ -75,9 +49,7 @@ export function useServiceDetailsPollingQuery(
         },
         enabled:
             serviceId !== undefined &&
-            (currentMigrationStatus === migrationStatus.MIGRATION_COMPLETED ||
-                currentMigrationStatus === migrationStatus.DEPLOY_FAILED ||
-                currentMigrationStatus === migrationStatus.DESTROY_FAILED),
+            (currentMigrationTaskStatus === taskStatus.SUCCESSFUL || currentMigrationTaskStatus === taskStatus.FAILED),
         staleTime: Infinity,
         gcTime: Infinity,
     });
