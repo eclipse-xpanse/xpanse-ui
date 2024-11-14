@@ -87,6 +87,8 @@ import type {
     GetPolicyDetailsResponse,
     GetPricesByServiceData,
     GetPricesByServiceResponse,
+    GetRecreateOrderDetailsByIdData,
+    GetRecreateOrderDetailsByIdResponse,
     GetRegistrationDetailsData,
     GetRegistrationDetailsResponse,
     GetSelfHostedServiceDetailsByIdData,
@@ -116,6 +118,8 @@ import type {
     ListOrderableServicesResponse,
     ListServicePoliciesData,
     ListServicePoliciesResponse,
+    ListServiceRecreatesData,
+    ListServiceRecreatesResponse,
     ListServiceTemplatesData,
     ListServiceTemplatesResponse,
     ListUserPoliciesData,
@@ -423,7 +427,7 @@ export const restartService = (data: RestartServiceData): CancelablePromise<Rest
  * Create a job to recreate the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId
- * @returns ServiceOrder Accepted
+ * @returns string Accepted
  * @throws ApiError
  */
 export const recreateService = (data: RecreateServiceData): CancelablePromise<RecreateServiceResponse> => {
@@ -1487,6 +1491,66 @@ export const getLatestServiceDeploymentStatus = (
         },
         query: {
             lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * List all services recreate by a user.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.recreateId Id of the service recreate
+ * @param data.serviceId Id of the old service
+ * @param data.recreateStatus Status of the service recreate
+ * @returns ServiceRecreateDetails OK
+ * @throws ApiError
+ */
+export const listServiceRecreates = (
+    data: ListServiceRecreatesData = {}
+): CancelablePromise<ListServiceRecreatesResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/recreate',
+        query: {
+            recreateId: data.recreateId,
+            serviceId: data.serviceId,
+            recreateStatus: data.recreateStatus,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Get recreate records based on recreate id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.recreateId Recreate ID
+ * @returns ServiceRecreateDetails OK
+ * @throws ApiError
+ */
+export const getRecreateOrderDetailsById = (
+    data: GetRecreateOrderDetailsByIdData
+): CancelablePromise<GetRecreateOrderDetailsByIdResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/recreate/{recreateId}',
+        path: {
+            recreateId: data.recreateId,
         },
         errors: {
             400: 'Bad Request',

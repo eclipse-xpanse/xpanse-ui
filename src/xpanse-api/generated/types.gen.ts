@@ -539,6 +539,7 @@ export type DeployedService = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    serviceConfigurationDetails?: ServiceConfigurationDetails;
 };
 
 /**
@@ -703,6 +704,7 @@ export type DeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    serviceConfigurationDetails?: ServiceConfigurationDetails;
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -1850,8 +1852,10 @@ export type ServiceConfigurationChangeResult = {
     tasks?: Array<AnsibleTaskResult>;
 };
 
+/**
+ * Details of the service configuration.
+ */
 export type ServiceConfigurationDetails = {
-    serviceId?: string;
     configuration?: {
         [key: string]: unknown;
     };
@@ -2032,7 +2036,6 @@ export type ServiceOrderDetails = {
         | 'modify'
         | 'destroy'
         | 'migrate'
-        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -2107,7 +2110,6 @@ export enum taskType {
     MODIFY = 'modify',
     DESTROY = 'destroy',
     MIGRATE = 'migrate',
-    RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
     PURGE = 'purge',
@@ -2227,6 +2229,53 @@ export type ServiceProviderContactDetails = {
      */
     websites?: Array<string>;
 };
+
+export type ServiceRecreateDetails = {
+    /**
+     * The ID of the service recreate
+     */
+    recreateId: string;
+    /**
+     * The ID of the old service
+     */
+    serviceId: string;
+    /**
+     * The status of the service recreate
+     */
+    recreateStatus:
+        | 'RecreateStarted'
+        | 'RecreateCompleted'
+        | 'RecreateFailed'
+        | 'DestroyStarted'
+        | 'DestroyFailed'
+        | 'DestroyCompleted'
+        | 'DeployStarted'
+        | 'DeployFailed'
+        | 'DeployCompleted';
+    /**
+     * Time of service recreate.
+     */
+    createTime: string;
+    /**
+     * Time of update service recreate.
+     */
+    lastModifiedTime: string;
+};
+
+/**
+ * The status of the service recreate
+ */
+export enum recreateStatus {
+    RECREATE_STARTED = 'RecreateStarted',
+    RECREATE_COMPLETED = 'RecreateCompleted',
+    RECREATE_FAILED = 'RecreateFailed',
+    DESTROY_STARTED = 'DestroyStarted',
+    DESTROY_FAILED = 'DestroyFailed',
+    DESTROY_COMPLETED = 'DestroyCompleted',
+    DEPLOY_STARTED = 'DeployStarted',
+    DEPLOY_FAILED = 'DeployFailed',
+    DEPLOY_COMPLETED = 'DeployCompleted',
+}
 
 export type ServiceTemplateDetailVo = {
     /**
@@ -2627,6 +2676,7 @@ export type VendorHostedDeployedServiceDetails = {
      */
     lastStoppedAt?: string;
     lockConfig?: ServiceLockConfig;
+    serviceConfigurationDetails?: ServiceConfigurationDetails;
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
@@ -2800,7 +2850,7 @@ export type RecreateServiceData = {
     serviceId: string;
 };
 
-export type RecreateServiceResponse = ServiceOrder;
+export type RecreateServiceResponse = string;
 
 export type ModifyData = {
     requestBody: ModifyRequest;
@@ -3235,7 +3285,6 @@ export type GetAllOrdersByServiceIdData = {
         | 'modify'
         | 'destroy'
         | 'migrate'
-        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -3278,6 +3327,41 @@ export type GetLatestServiceDeploymentStatusData = {
 };
 
 export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
+
+export type ListServiceRecreatesData = {
+    /**
+     * Id of the service recreate
+     */
+    recreateId?: string;
+    /**
+     * Status of the service recreate
+     */
+    recreateStatus?:
+        | 'RecreateStarted'
+        | 'RecreateCompleted'
+        | 'RecreateFailed'
+        | 'DestroyStarted'
+        | 'DestroyFailed'
+        | 'DestroyCompleted'
+        | 'DeployStarted'
+        | 'DeployFailed'
+        | 'DeployCompleted';
+    /**
+     * Id of the old service
+     */
+    serviceId?: string;
+};
+
+export type ListServiceRecreatesResponse = Array<ServiceRecreateDetails>;
+
+export type GetRecreateOrderDetailsByIdData = {
+    /**
+     * Recreate ID
+     */
+    recreateId: string;
+};
+
+export type GetRecreateOrderDetailsByIdResponse = ServiceRecreateDetails;
 
 export type GetOrderDetailsByOrderIdData = {
     /**

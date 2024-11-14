@@ -13,7 +13,6 @@ import {
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CurrentServiceConfigurationDetails } from './CurrentServiceConfigurationDetails';
-import getCurrentServiceConfiguration from './getCurrentServiceConfiguration';
 
 export const CurrentServiceConfiguration = ({
     userOrderableServiceVo,
@@ -22,8 +21,6 @@ export const CurrentServiceConfiguration = ({
     userOrderableServiceVo: UserOrderableServiceVo | undefined;
     deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
-    const serviceConfigurationDetails = getCurrentServiceConfiguration(deployedService.serviceId);
-
     const items: TabsProps['items'] = [
         {
             key: 'CurrentConfig',
@@ -32,7 +29,7 @@ export const CurrentServiceConfiguration = ({
             children: (
                 <CurrentServiceConfigurationDetails
                     userOrderableServiceVo={userOrderableServiceVo}
-                    serviceConfigurationDetails={serviceConfigurationDetails.data}
+                    serviceConfigurationDetails={deployedService.serviceConfigurationDetails}
                 />
             ),
         },
