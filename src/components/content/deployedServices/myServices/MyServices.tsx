@@ -782,15 +782,11 @@ function MyServices(): React.JSX.Element {
             record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
             record.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
         ) {
-            if (
-                getOrderableServiceDetails.isSuccess &&
-                getOrderableServiceDetails.data.configurationParameters &&
-                getOrderableServiceDetails.data.configurationParameters.length > 0
-            ) {
-                return true;
+            if (record.serviceConfigurationDetails) {
+                return false;
             }
         }
-        return false;
+        return true;
     };
 
     const closeDestroyResultAlert = (isClose: boolean) => {
