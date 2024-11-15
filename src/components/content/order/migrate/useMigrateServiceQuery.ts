@@ -3,18 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useMutation, useQuery } from '@tanstack/react-query';
-import {
-    getSelfHostedServiceDetailsById,
-    GetSelfHostedServiceDetailsByIdData,
-    getVendorHostedServiceDetailsById,
-    GetVendorHostedServiceDetailsByIdData,
-    migrate,
-    MigrateData,
-    MigrateRequest,
-    serviceHostingType,
-    taskStatus,
-} from '../../../../xpanse-api/generated';
+import { useMutation } from '@tanstack/react-query';
+import { migrate, MigrateData, MigrateRequest } from '../../../../xpanse-api/generated';
 
 export function useMigrateServiceRequest() {
     return useMutation({
@@ -24,33 +14,5 @@ export function useMigrateServiceRequest() {
             };
             return migrate(data);
         },
-    });
-}
-
-export function useServiceDetailsByServiceIdQuery(
-    serviceId: string | undefined,
-    currentServiceHostingType: string,
-    currentMigrationTaskStatus: string | undefined
-) {
-    return useQuery({
-        queryKey: ['getServiceDetailsById', serviceId, currentServiceHostingType],
-        queryFn: () => {
-            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
-                const data: GetSelfHostedServiceDetailsByIdData = {
-                    serviceId: serviceId ?? '',
-                };
-                return getSelfHostedServiceDetailsById(data);
-            } else {
-                const data: GetVendorHostedServiceDetailsByIdData = {
-                    serviceId: serviceId ?? '',
-                };
-                return getVendorHostedServiceDetailsById(data);
-            }
-        },
-        enabled:
-            serviceId !== undefined &&
-            (currentMigrationTaskStatus === taskStatus.SUCCESSFUL || currentMigrationTaskStatus === taskStatus.FAILED),
-        staleTime: Infinity,
-        gcTime: Infinity,
     });
 }
