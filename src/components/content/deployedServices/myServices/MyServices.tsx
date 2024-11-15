@@ -20,6 +20,7 @@ import {
     RiseOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
+import { UseMutationResult } from '@tanstack/react-query';
 import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -39,6 +40,7 @@ import {
     Region,
     serviceDeploymentState,
     serviceHostingType,
+    ServiceOrder,
     ServiceProviderContactDetails,
     serviceState,
     taskStatus,
@@ -123,7 +125,7 @@ function MyServices(): React.JSX.Element {
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
-    const serviceRecreateRequest = useRecreateRequest();
+    const serviceRecreateRequest: UseMutationResult<ServiceOrder, Error, string> = useRecreateRequest();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
     const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
     const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
@@ -163,7 +165,7 @@ function MyServices(): React.JSX.Element {
     );
 
     const getRecreateServiceOrderStatusPollingQuery = useLatestServiceOrderStatusQuery(
-        typeof serviceRecreateRequest.data?.orderId === 'string' ? serviceRecreateRequest.data.orderId : '',
+        serviceRecreateRequest.data?.orderId,
         serviceRecreateRequest.isSuccess,
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
