@@ -163,7 +163,7 @@ function MyServices(): React.JSX.Element {
     );
 
     const getRecreateServiceOrderStatusPollingQuery = useLatestServiceOrderStatusQuery(
-        serviceRecreateRequest.data?.orderId ?? '',
+        typeof serviceRecreateRequest.data?.orderId === 'string' ? serviceRecreateRequest.data.orderId : '',
         serviceRecreateRequest.isSuccess,
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );

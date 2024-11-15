@@ -12,7 +12,7 @@ import {
 import { deploymentStatusPollingInterval } from '../../../utils/constants.tsx';
 
 export function useLatestServiceOrderStatusQuery(
-    orderId: string | undefined,
+    orderId: string | undefined | null,
     isStartPolling: boolean,
     refetchUntilStates: taskStatus[]
 ) {
