@@ -3,14 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { OidcProvider, OidcSecure } from '@axa-fr/react-oidc';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
 import FallbackSkeleton from './components/content/common/lazy/FallBackSkeleton.tsx';
-import { OidcConfig } from './components/oidc/OidcConfig';
-import Protected from './components/protectedRoutes/ProtectedRoute';
+import { ConditionalOidcProtectedRoute } from './components/oidc/ConditionalOidcProtectedRoute.tsx';
+import { ConditionalOidcProvider } from './components/oidc/ConditionalOidcProvider.tsx';
 import {
     catalogPageRoute,
     createServicePageRoute,
@@ -66,37 +65,28 @@ const CreateService = lazy(() => import('./components/content/order/create/Creat
 const OrderSubmitPage = lazy(() => import('./components/content/order/create/OrderSubmit.tsx'));
 const NotFoundPage = lazy(() => import('./components/notFound/NotFoundPage.tsx'));
 const HealthCheckStatus = lazy(() => import('./components/content/systemStatus/HealthCheckStatus.tsx'));
-const SessionLost = lazy(() => import('./components/content/login/SessionLost.tsx'));
 
 function App(): React.JSX.Element {
     return (
         <QueryClientProvider client={queryClient}>
-            <OidcProvider configuration={OidcConfig} sessionLostComponent={SessionLost}>
+            <ConditionalOidcProvider>
                 <Routes>
                     <Route
                         key={homePageRoute}
                         path={homePageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Home />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
+                                <Home />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={''}
                         path={''}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv', 'user', 'admin', 'csp']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Home />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
+                                <Home />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
@@ -105,13 +95,9 @@ function App(): React.JSX.Element {
                                 key={path}
                                 path={path}
                                 element={
-                                    <OidcSecure>
-                                        <Protected allowedRole={['isv']}>
-                                            <Suspense fallback={<FallbackSkeleton />}>
-                                                <RegisterPanel />
-                                            </Suspense>
-                                        </Protected>
-                                    </OidcSecure>
+                                    <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                        <RegisterPanel />
+                                    </ConditionalOidcProtectedRoute>
                                 }
                             />
                         )
@@ -120,169 +106,117 @@ function App(): React.JSX.Element {
                         key={catalogPageRoute}
                         path={catalogPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <CatalogMainPage />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                <CatalogMainPage />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={orderPageRoute}
                         path={orderPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <OrderSubmitPage />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <OrderSubmitPage />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={servicesPageRoute}
                         path={servicesPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Services />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <Services />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={myServicesRoute}
                         path={myServicesRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <MyServices />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <MyServices />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={createServicePageRoute}
                         path={createServicePageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <CreateService />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <CreateService />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={monitorPageRoute}
                         path={monitorPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Monitor />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <Monitor />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={credentialPageRoute}
                         path={credentialPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user', 'isv']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Credentials />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user', 'isv']}>
+                                <Credentials />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={healthCheckPageRoute}
                         path={healthCheckPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['admin']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <HealthCheckStatus />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['admin']}>
+                                <HealthCheckStatus />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={policiesRoute}
                         path={policiesRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Policies />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <Policies />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={reportsRoute}
                         path={reportsRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['isv']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Reports />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                <Reports />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={workflowsPageRoute}
                         path={workflowsPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['user']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <Workflows />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                <Workflows />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={serviceReviewsPageRoute}
                         path={serviceReviewsPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['csp']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <ServiceReviews />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
+                                <ServiceReviews />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
                         key={registeredServicesPageRoute}
                         path={registeredServicesPageRoute}
                         element={
-                            <OidcSecure>
-                                <Protected allowedRole={['csp']}>
-                                    <Suspense fallback={<FallbackSkeleton />}>
-                                        <AvailableServices />
-                                    </Suspense>
-                                </Protected>
-                            </OidcSecure>
+                            <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
+                                <AvailableServices />
+                            </ConditionalOidcProtectedRoute>
                         }
                     />
                     <Route
@@ -294,7 +228,7 @@ function App(): React.JSX.Element {
                         }
                     />
                 </Routes>
-            </OidcProvider>
+            </ConditionalOidcProvider>
         </QueryClientProvider>
     );
 }

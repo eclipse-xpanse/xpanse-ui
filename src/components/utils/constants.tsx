@@ -54,3 +54,7 @@ export const registeredServicesPageRoute: string = '/registeredServices';
 export const registeredServicesLabelName: string = 'Registered Services';
 
 export const numberOfRetries: number = 2; // this will retry 3 times. Count starts from 0.
+
+export const dummyTestUser = 'test user';
+
+export type roles = 'isv' | 'user' | 'admin' | 'csp';
