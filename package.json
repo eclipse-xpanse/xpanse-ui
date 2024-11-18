@@ -25,6 +25,7 @@
         "build": "vite build",
         "serve": "vite preview --port 3000",
         "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite --port 3000",
+        "start-with-zitadel-local": "env-cmd -f .env.zitadel-local vite --port 3000",
         "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build",
         "test": "jest",
         "update-service-worker-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
