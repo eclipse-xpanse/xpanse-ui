@@ -4,13 +4,13 @@
  */
 
 import { UserOutlined } from '@ant-design/icons';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { env } from '../../../config/config.ts';
 import headerStyles from '../../../styles/header.module.css';
 import Logout from '../../content/login/Logout';
-import { allowRoleList, getRolesOfUser, getUserName } from '../../oidc/OidcConfig';
+import { allowRoleList } from '../../oidc/OidcConfig';
 import { homePageRoute } from '../../utils/constants';
 import { useCurrentUserRoleStore } from './useCurrentRoleStore';
 
@@ -32,7 +32,7 @@ function getItem(
     } as MenuItem;
 }
 
-export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): React.JSX.Element {
+export function HeaderUserRoles({ userName, roles }: { userName: string; roles: string[] }): React.JSX.Element {
     const navigate = useNavigate();
     const location = useLocation();
     const { useToken } = theme;
@@ -40,15 +40,13 @@ export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): 
     let menuProps: MenuProps | undefined = undefined;
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const updateCurrentUserRole = useCurrentUserRoleStore((state) => state.addCurrentUserRole);
-    const userName: string = getUserName(oidcIdToken.idTokenPayload as object);
-    const roleList: string[] = getRolesOfUser(oidcIdToken.idTokenPayload as object);
     let updatedRole: string | undefined = undefined;
     // we must take the previously selected role if available.
-    if (currentRole !== undefined && roleList.includes(currentRole)) {
+    if (currentRole !== undefined && roles.includes(currentRole)) {
         updatedRole = currentRole;
     } else {
         // if no role is already cached, then take the first valid role from the list of available roles for the user.
-        roleList.forEach((role) => {
+        roles.forEach((role) => {
             if (allowRoleList.includes(role)) {
                 updateCurrentUserRole(role);
                 updatedRole = role;
@@ -57,9 +55,9 @@ export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): 
         });
     }
 
-    if (roleList.length !== 0 && updatedRole) {
+    if (roles.length !== 0 && updatedRole) {
         const subItems: MenuItem[] = [];
-        roleList.forEach((item) => {
+        roles.forEach((item) => {
             const menuItem: MenuItem = { label: item, key: item };
             subItems.push(menuItem);
         });
@@ -79,7 +77,7 @@ export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): 
         menuProps = {
             items,
             onClick: handleMenuClick,
-            selectable: roleList.length > 1,
+            selectable: roles.length > 1,
             selectedKeys: [updatedRole],
             defaultOpenKeys: ['switchRole'],
             mode: 'vertical',
@@ -102,7 +100,7 @@ export function HeaderUserRoles({ oidcIdToken }: { oidcIdToken: OidcIdToken }): 
                         {menu}
                         <Divider style={{ margin: 0 }} />
                         <Space style={{ padding: 8 }}>
-                            <Logout />
+                            {env.VITE_APP_AUTH_DISABLED !== 'true' ? <Logout /> : <> </>}
                         </Space>
                     </div>
                 )}

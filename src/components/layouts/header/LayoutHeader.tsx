@@ -3,8 +3,6 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useOidcIdToken } from '@axa-fr/react-oidc';
-import { OidcIdToken } from '@axa-fr/react-oidc/dist/ReactOidc';
 import { Space } from 'antd';
 import { Header } from 'antd/es/layout/layout';
 import React from 'react';
@@ -15,8 +13,7 @@ import { HeaderUserRoles } from './HeaderUserRoles';
 import { SearchServices } from './SearchServices.tsx';
 import { useCurrentUserRoleStore } from './useCurrentRoleStore.ts';
 
-function LayoutHeader(): React.JSX.Element {
-    const oidcIdToken: OidcIdToken = useOidcIdToken();
+function LayoutHeader({ userName, roles }: { userName: string; roles: string[] }): React.JSX.Element {
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     return (
         <Header className={headerStyles.layoutHeader}>
@@ -24,9 +21,7 @@ function LayoutHeader(): React.JSX.Element {
                 <Space align='baseline'>
                     {currentRole && currentRole === 'user' ? <SearchServices /> : <></>}
                     <SystemStatusBar />
-                    {oidcIdToken.idToken ? (
-                        <HeaderUserRoles oidcIdToken={oidcIdToken} key={oidcIdToken.idToken as string} />
-                    ) : null}
+                    {userName !== '' ? <HeaderUserRoles userName={userName} roles={roles} /> : null}
                 </Space>
             </div>
         </Header>
