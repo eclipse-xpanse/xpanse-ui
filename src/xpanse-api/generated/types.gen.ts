@@ -1422,7 +1422,8 @@ export type OrderFailedResponse = {
         | 'Service Configuration Invalid'
         | 'Service Configuration Update Request Not Found'
         | 'Service Configuration Not Found'
-        | 'Invalid Deployer Tool';
+        | 'Invalid Deployer Tool'
+        | 'Deployment Scripts Creation Failed';
     /**
      * Details of the errors occurred
      */
@@ -1508,6 +1509,7 @@ export enum resultType {
     SERVICE_CONFIGURATION_UPDATE_REQUEST_NOT_FOUND = 'Service Configuration Update Request Not Found',
     SERVICE_CONFIGURATION_NOT_FOUND = 'Service Configuration Not Found',
     INVALID_DEPLOYER_TOOL = 'Invalid Deployer Tool',
+    DEPLOYMENT_SCRIPTS_CREATION_FAILED = 'Deployment Scripts Creation Failed',
 }
 
 /**
@@ -1711,7 +1713,8 @@ export type Response = {
         | 'Service Configuration Invalid'
         | 'Service Configuration Update Request Not Found'
         | 'Service Configuration Not Found'
-        | 'Invalid Deployer Tool';
+        | 'Invalid Deployer Tool'
+        | 'Deployment Scripts Creation Failed';
     /**
      * Details of the errors occurred
      */
@@ -2036,6 +2039,7 @@ export type ServiceOrderDetails = {
         | 'modify'
         | 'destroy'
         | 'migrate'
+        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -2110,6 +2114,7 @@ export enum taskType {
     MODIFY = 'modify',
     DESTROY = 'destroy',
     MIGRATE = 'migrate',
+    RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
     PURGE = 'purge',
@@ -2229,53 +2234,6 @@ export type ServiceProviderContactDetails = {
      */
     websites?: Array<string>;
 };
-
-export type ServiceRecreateDetails = {
-    /**
-     * The ID of the service recreate
-     */
-    recreateId: string;
-    /**
-     * The ID of the old service
-     */
-    serviceId: string;
-    /**
-     * The status of the service recreate
-     */
-    recreateStatus:
-        | 'RecreateStarted'
-        | 'RecreateCompleted'
-        | 'RecreateFailed'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted';
-    /**
-     * Time of service recreate.
-     */
-    createTime: string;
-    /**
-     * Time of update service recreate.
-     */
-    lastModifiedTime: string;
-};
-
-/**
- * The status of the service recreate
- */
-export enum recreateStatus {
-    RECREATE_STARTED = 'RecreateStarted',
-    RECREATE_COMPLETED = 'RecreateCompleted',
-    RECREATE_FAILED = 'RecreateFailed',
-    DESTROY_STARTED = 'DestroyStarted',
-    DESTROY_FAILED = 'DestroyFailed',
-    DESTROY_COMPLETED = 'DestroyCompleted',
-    DEPLOY_STARTED = 'DeployStarted',
-    DEPLOY_FAILED = 'DeployFailed',
-    DEPLOY_COMPLETED = 'DeployCompleted',
-}
 
 export type ServiceTemplateDetailVo = {
     /**
@@ -2850,7 +2808,7 @@ export type RecreateServiceData = {
     serviceId: string;
 };
 
-export type RecreateServiceResponse = string;
+export type RecreateServiceResponse = ServiceOrder;
 
 export type ModifyData = {
     requestBody: ModifyRequest;
@@ -3285,6 +3243,7 @@ export type GetAllOrdersByServiceIdData = {
         | 'modify'
         | 'destroy'
         | 'migrate'
+        | 'recreate'
         | 'lockChange'
         | 'configChange'
         | 'purge'
@@ -3327,41 +3286,6 @@ export type GetLatestServiceDeploymentStatusData = {
 };
 
 export type GetLatestServiceDeploymentStatusResponse = DeploymentStatusUpdate;
-
-export type ListServiceRecreatesData = {
-    /**
-     * Id of the service recreate
-     */
-    recreateId?: string;
-    /**
-     * Status of the service recreate
-     */
-    recreateStatus?:
-        | 'RecreateStarted'
-        | 'RecreateCompleted'
-        | 'RecreateFailed'
-        | 'DestroyStarted'
-        | 'DestroyFailed'
-        | 'DestroyCompleted'
-        | 'DeployStarted'
-        | 'DeployFailed'
-        | 'DeployCompleted';
-    /**
-     * Id of the old service
-     */
-    serviceId?: string;
-};
-
-export type ListServiceRecreatesResponse = Array<ServiceRecreateDetails>;
-
-export type GetRecreateOrderDetailsByIdData = {
-    /**
-     * Recreate ID
-     */
-    recreateId: string;
-};
-
-export type GetRecreateOrderDetailsByIdResponse = ServiceRecreateDetails;
 
 export type GetOrderDetailsByOrderIdData = {
     /**
