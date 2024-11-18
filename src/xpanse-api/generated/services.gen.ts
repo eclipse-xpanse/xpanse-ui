@@ -79,6 +79,8 @@ import type {
     GetMetricsResponse,
     GetOrderableServiceDetailsData,
     GetOrderableServiceDetailsResponse,
+    GetOrderableServicesData,
+    GetOrderableServicesResponse,
     GetOrderDetailsByOrderIdData,
     GetOrderDetailsByOrderIdResponse,
     GetPendingConfigurationChangeRequestData,
@@ -112,8 +114,6 @@ import type {
     ListDeployedServicesResponse,
     ListManagedServiceTemplatesData,
     ListManagedServiceTemplatesResponse,
-    ListOrderableServicesData,
-    ListOrderableServicesResponse,
     ListServicePoliciesData,
     ListServicePoliciesResponse,
     ListServiceTemplatesData,
@@ -1167,7 +1167,9 @@ export const migrate = (data: MigrateData): CancelablePromise<MigrateResponse> =
  * @param data.serviceName name of the service
  * @param data.serviceVersion version of the service
  * @param data.serviceHostingType who hosts ths cloud resources
- * @param data.serviceRegistrationState state of registration
+ * @param data.serviceTemplateRegistrationState state of service template registration
+ * @param data.availableInCatalog is available in catalog
+ * @param data.isUpdatePending is service template updating
  * @returns ServiceTemplateDetailVo OK
  * @throws ApiError
  */
@@ -1183,7 +1185,9 @@ export const listServiceTemplates = (
             serviceName: data.serviceName,
             serviceVersion: data.serviceVersion,
             serviceHostingType: data.serviceHostingType,
-            serviceRegistrationState: data.serviceRegistrationState,
+            serviceTemplateRegistrationState: data.serviceTemplateRegistrationState,
+            availableInCatalog: data.availableInCatalog,
+            isUpdatePending: data.isUpdatePending,
         },
         errors: {
             400: 'Bad Request',
@@ -1989,7 +1993,9 @@ export const getActiveCsps = (): CancelablePromise<GetActiveCspsResponse> => {
  * @param data.serviceName name of the service
  * @param data.serviceVersion version of the service
  * @param data.serviceHostingType who hosts ths cloud resources
- * @param data.serviceRegistrationState state of registration
+ * @param data.serviceTemplateRegistrationState state of service template registration
+ * @param data.availableInCatalog is available in catalog
+ * @param data.isUpdatePending is service template updating
  * @returns ServiceTemplateDetailVo OK
  * @throws ApiError
  */
@@ -2004,7 +2010,9 @@ export const listManagedServiceTemplates = (
             serviceName: data.serviceName,
             serviceVersion: data.serviceVersion,
             serviceHostingType: data.serviceHostingType,
-            serviceRegistrationState: data.serviceRegistrationState,
+            serviceTemplateRegistrationState: data.serviceTemplateRegistrationState,
+            availableInCatalog: data.availableInCatalog,
+            isUpdatePending: data.isUpdatePending,
         },
         errors: {
             400: 'Bad Request',
@@ -2219,9 +2227,9 @@ export const getCredentialTypes = (
  * @returns UserOrderableServiceVo OK
  * @throws ApiError
  */
-export const listOrderableServices = (
-    data: ListOrderableServicesData = {}
-): CancelablePromise<ListOrderableServicesResponse> => {
+export const getOrderableServices = (
+    data: GetOrderableServicesData = {}
+): CancelablePromise<GetOrderableServicesResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/catalog/services',

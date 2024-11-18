@@ -7,15 +7,15 @@ import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, Sy
 import { Tag } from 'antd';
 import React from 'react';
 import serviceReviewStyles from '../../../../styles/service-review.module.css';
-import { serviceRegistrationState } from '../../../../xpanse-api/generated';
+import { serviceTemplateRegistrationState } from '../../../../xpanse-api/generated';
 
 export function ServiceTemplateRegisterStatus({
     serviceRegistrationStatus,
 }: {
-    serviceRegistrationStatus: serviceRegistrationState;
+    serviceRegistrationStatus: serviceTemplateRegistrationState;
 }): React.JSX.Element {
     switch (serviceRegistrationStatus) {
-        case serviceRegistrationState.APPROVAL_PENDING:
+        case serviceTemplateRegistrationState.IN_PROGRESS:
             return (
                 <Tag
                     bordered={false}
@@ -26,7 +26,7 @@ export function ServiceTemplateRegisterStatus({
                     {serviceRegistrationStatus.valueOf()}
                 </Tag>
             );
-        case serviceRegistrationState.REJECTED:
+        case serviceTemplateRegistrationState.REJECTED:
             return (
                 <Tag
                     bordered={false}
@@ -37,7 +37,7 @@ export function ServiceTemplateRegisterStatus({
                     {serviceRegistrationStatus.valueOf()}
                 </Tag>
             );
-        case serviceRegistrationState.APPROVED:
+        case serviceTemplateRegistrationState.APPROVED:
             return (
                 <Tag
                     bordered={false}

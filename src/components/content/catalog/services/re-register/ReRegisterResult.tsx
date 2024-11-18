@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, category, Response, serviceRegistrationState } from '../../../../../xpanse-api/generated';
+import { ApiError, category, Response, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetReRegisterMutationState } from './ReRegisterMutation';
@@ -18,7 +18,7 @@ export function ReRegisterResult({
     category,
 }: {
     id: string;
-    serviceRegistrationStatus: serviceRegistrationState;
+    serviceRegistrationStatus: serviceTemplateRegistrationState;
     category: category;
 }): React.JSX.Element | undefined {
     const useReRegisterRequestState = useGetReRegisterMutationState(id);
@@ -38,7 +38,7 @@ export function ReRegisterResult({
             return (
                 <Alert
                     message={
-                        serviceRegistrationStatus === serviceRegistrationState.APPROVED
+                        serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED
                             ? 'service added to catalog again successfully'
                             : 'Service re-registered successfully'
                     }

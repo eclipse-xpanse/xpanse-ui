@@ -16,8 +16,8 @@ import {
     Deployment,
     kind,
     serviceHostingType,
-    serviceRegistrationState,
     ServiceTemplateDetailVo,
+    serviceTemplateRegistrationState,
 } from '../../../xpanse-api/generated';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
@@ -110,7 +110,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getRegistrationStatusFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(serviceRegistrationState).forEach((status) => {
+        Object.values(serviceTemplateRegistrationState).forEach((status) => {
             const filter = {
                 text: status,
                 value: status,
@@ -280,15 +280,15 @@ export default function ServiceReviews(): React.JSX.Element {
         },
         {
             title: 'Registration Status',
-            dataIndex: 'serviceRegistrationState',
+            dataIndex: 'serviceTemplateRegistrationState',
             filters: registrationStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
-                record.serviceRegistrationState.startsWith(value.toString()),
+                record.serviceTemplateRegistrationState.startsWith(value.toString()),
             align: 'left',
-            render: (serviceRegistrationState: serviceRegistrationState) => (
-                <ServiceTemplateRegisterStatus serviceRegistrationStatus={serviceRegistrationState} />
+            render: (serviceTemplateRegistrationState: serviceTemplateRegistrationState) => (
+                <ServiceTemplateRegisterStatus serviceRegistrationStatus={serviceTemplateRegistrationState} />
             ),
         },
         {
@@ -305,7 +305,8 @@ export default function ServiceReviews(): React.JSX.Element {
                                     handleServiceTemplateDetailsOpenModal(record);
                                 }}
                             >
-                                {record.serviceRegistrationState === serviceRegistrationState.APPROVAL_PENDING
+                                {record.serviceTemplateRegistrationState ===
+                                serviceTemplateRegistrationState.IN_PROGRESS
                                     ? 'review'
                                     : 'details'}
                             </Button>

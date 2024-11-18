@@ -14,8 +14,8 @@ import {
     csp,
     DeployedService,
     serviceDeploymentState,
-    serviceRegistrationState,
     ServiceTemplateDetailVo,
+    serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
@@ -123,7 +123,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Status'>
                     <ServiceTemplateRegisterStatus
-                        serviceRegistrationStatus={serviceDetails.serviceRegistrationState as serviceRegistrationState}
+                        serviceRegistrationStatus={
+                            serviceDetails.serviceTemplateRegistrationState as serviceTemplateRegistrationState
+                        }
                     />
                 </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>

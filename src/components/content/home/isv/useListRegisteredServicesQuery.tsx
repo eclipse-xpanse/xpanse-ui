@@ -16,7 +16,7 @@ export default function useListRegisteredServicesQuery() {
                 serviceName: undefined,
                 serviceVersion: undefined,
                 serviceHostingType: undefined,
-                serviceRegistrationState: undefined,
+                serviceTemplateRegistrationState: undefined,
             };
             return listServiceTemplates(data);
         },

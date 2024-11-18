@@ -9,7 +9,12 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo, category, name, serviceRegistrationState } from '../../../../../xpanse-api/generated';
+import {
+    ServiceTemplateDetailVo,
+    category,
+    name,
+    serviceTemplateRegistrationState,
+} from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -187,7 +192,8 @@ function ServiceProvider({
                             <ReRegisterResult
                                 id={activeServiceDetail.serviceTemplateId}
                                 serviceRegistrationStatus={
-                                    reRegisterRequest.data?.serviceRegistrationState as serviceRegistrationState
+                                    reRegisterRequest.data
+                                        ?.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                 }
                                 category={category}
                             />
@@ -208,7 +214,7 @@ function ServiceProvider({
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     serviceRegistrationStatus={
-                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                     }
                                 />
                                 <ReRegisterService
@@ -216,14 +222,14 @@ function ServiceProvider({
                                     setIsViewDisabled={setIsViewDisabled}
                                     reRegisterRequest={reRegisterRequest}
                                     serviceRegistrationStatus={
-                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                     }
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     serviceRegistrationStatus={
-                                        activeServiceDetail.serviceRegistrationState as serviceRegistrationState
+                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                     }
                                 />
                             </div>

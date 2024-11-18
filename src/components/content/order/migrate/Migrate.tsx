@@ -11,12 +11,12 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     DeployRequest,
     DeployedServiceDetails,
-    ListOrderableServicesData,
+    GetOrderableServicesData,
     Region,
     VendorHostedDeployedServiceDetails,
     billingMode,
     csp,
-    listOrderableServices,
+    getOrderableServices,
     serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
@@ -65,22 +65,22 @@ export const Migrate = ({
 
     const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
 
-    const listOrderableServicesQuery = useQuery({
+    const getOrderableServicesQuery = useQuery({
         queryKey: [
-            'listOrderableServices',
+            'getOrderableServices',
             currentSelectedService.category,
             currentSelectedService.name,
             currentSelectedService.version,
         ],
         queryFn: () => {
-            const data: ListOrderableServicesData = {
+            const data: GetOrderableServicesData = {
                 categoryName: currentSelectedService.category,
                 cspName: undefined,
                 serviceName: currentSelectedService.name,
                 serviceVersion: currentSelectedService.version,
                 serviceHostingType: undefined,
             };
-            return listOrderableServices(data);
+            return getOrderableServices(data);
         },
         refetchOnWindowFocus: false,
     });
@@ -119,7 +119,7 @@ export const Migrate = ({
         selectRegion.name,
         selectRegion.site,
         selectBillingMode,
-        getServiceFlavorList(selectCsp, selectServiceHostingType, listOrderableServicesQuery.data ?? [])
+        getServiceFlavorList(selectCsp, selectServiceHostingType, getOrderableServicesQuery.data ?? [])
     );
 
     const steps = useMemo(() => {
@@ -168,7 +168,7 @@ export const Migrate = ({
             case MigrationSteps.ExportServiceData:
                 return (
                     <ExportServiceData
-                        isQueryLoading={listOrderableServicesQuery.isLoading}
+                        isQueryLoading={getOrderableServicesQuery.isLoading}
                         setCurrentMigrationStep={setCurrentMigrationStep}
                         stepItem={items[MigrationSteps.ExportServiceData]}
                     />
@@ -179,7 +179,7 @@ export const Migrate = ({
                         target={target}
                         setTarget={setTarget}
                         currentSelectedService={currentSelectedService}
-                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
+                        userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
                         setCspList={setCspList}
                         setSelectCsp={setSelectCsp}
                         setServiceHostTypes={setServiceHostTypes}
@@ -197,7 +197,7 @@ export const Migrate = ({
             case MigrationSteps.SelectADestination:
                 return (
                     <SelectDestination
-                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
+                        userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
                         updateSelectedParameters={updateSelectedParameters}
                         cspList={cspList}
                         selectCsp={selectCsp}
@@ -233,7 +233,7 @@ export const Migrate = ({
             case MigrationSteps.PrepareDeploymentParameters:
                 return (
                     <DeploymentForm
-                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
+                        userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         selectServiceHostingType={selectServiceHostingType}
                         region={selectRegion}
@@ -248,7 +248,7 @@ export const Migrate = ({
             case MigrationSteps.MigrateService:
                 return (
                     <MigrateServiceSubmit
-                        userOrderableServiceVoList={listOrderableServicesQuery.data ?? []}
+                        userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         region={selectRegion}
                         availabilityZones={selectAvailabilityZones}

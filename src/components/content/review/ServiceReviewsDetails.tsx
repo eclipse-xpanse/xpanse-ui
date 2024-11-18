@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { name, serviceRegistrationState, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { name, ServiceTemplateDetailVo, serviceTemplateRegistrationState } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -58,7 +58,8 @@ export const ServiceReviewsDetails = ({
                     onClick={onClickApprove}
                     disabled={
                         approveOrRejectRequest.isSuccess ||
-                        currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
+                        currentServiceTemplateVo.serviceTemplateRegistrationState !==
+                            serviceTemplateRegistrationState.IN_PROGRESS
                     }
                 >
                     Approve
@@ -69,7 +70,8 @@ export const ServiceReviewsDetails = ({
                     className={serviceReviewStyles.rejectBtnClass}
                     disabled={
                         approveOrRejectRequest.isSuccess ||
-                        currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING
+                        currentServiceTemplateVo.serviceTemplateRegistrationState !==
+                            serviceTemplateRegistrationState.IN_PROGRESS
                     }
                 >
                     Reject
@@ -196,7 +198,8 @@ export const ServiceReviewsDetails = ({
                             configurationManage={currentServiceTemplateVo.serviceConfigurationManage}
                         />
                     ) : null}
-                    {currentServiceTemplateVo.serviceRegistrationState !== serviceRegistrationState.APPROVAL_PENDING ? (
+                    {currentServiceTemplateVo.serviceTemplateRegistrationState !==
+                    serviceTemplateRegistrationState.IN_PROGRESS ? (
                         <>
                             <h3 className={catalogStyles.catalogDetailsH3}>
                                 <BarsOutlined />
@@ -204,7 +207,7 @@ export const ServiceReviewsDetails = ({
                             </h3>
                             <Descriptions column={1} bordered className={oclDisplayStyles.oclDataInfoTable}>
                                 <Descriptions.Item label='Registration Status'>
-                                    {currentServiceTemplateVo.serviceRegistrationState.valueOf()}
+                                    {currentServiceTemplateVo.serviceTemplateRegistrationState.valueOf()}
                                 </Descriptions.Item>
                                 <Descriptions.Item label='Comments'>
                                     {currentServiceTemplateVo.reviewComment}
