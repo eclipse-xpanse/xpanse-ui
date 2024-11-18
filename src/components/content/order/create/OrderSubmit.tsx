@@ -19,12 +19,12 @@ import {
     servicesSubPageRoute,
 } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
-import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
+import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
+import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
-import { useServiceDetailsByIdQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
@@ -46,11 +46,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const getServiceDetailsByIdQuery = useServiceDetailsByIdQuery(
+    const getServiceDetailsByIdQuery = useServiceDetailsByServiceIdQuery(
         submitDeploymentRequest.data?.serviceId ?? '',
-        getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.SUCCESSFUL ||
-            getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.FAILED,
-        state.serviceHostingType
+        state.serviceHostingType,
+        getSubmitLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);

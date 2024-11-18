@@ -9,21 +9,19 @@ import {
     GetSelfHostedServiceDetailsByIdData,
     getVendorHostedServiceDetailsById,
     GetVendorHostedServiceDetailsByIdData,
-    serviceDeploymentState,
     serviceHostingType,
+    taskStatus,
 } from '../../../../xpanse-api/generated';
-import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
-export function useServiceDetailsPollingQuery(
+export function useServiceDetailsByServiceIdQuery(
     serviceId: string | undefined,
-    isStartPolling: boolean,
-    currentHostingType: serviceHostingType,
-    refetchUntilStates: serviceDeploymentState[]
+    currentServiceHostingType: string,
+    currentServiceOrderTaskStatus: string | undefined
 ) {
     return useQuery({
-        queryKey: ['getServiceDetailsById', serviceId, currentHostingType],
+        queryKey: ['getServiceDetailsById', serviceId, currentServiceHostingType],
         queryFn: () => {
-            if (currentHostingType === serviceHostingType.SELF) {
+            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
                 const data: GetSelfHostedServiceDetailsByIdData = {
                     serviceId: serviceId ?? '',
                 };
@@ -32,18 +30,14 @@ export function useServiceDetailsPollingQuery(
                 const data: GetVendorHostedServiceDetailsByIdData = {
                     serviceId: serviceId ?? '',
                 };
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
                 return getVendorHostedServiceDetailsById(data);
             }
         },
-        refetchInterval: (query) =>
-            query.state.data &&
-            refetchUntilStates.includes(query.state.data.serviceDeploymentState as serviceDeploymentState)
-                ? false
-                : deploymentStatusPollingInterval,
-        refetchIntervalInBackground: true,
-        refetchOnWindowFocus: false,
-        enabled: serviceId !== undefined && isStartPolling,
-        gcTime: 0,
+        enabled:
+            serviceId !== undefined &&
+            (currentServiceOrderTaskStatus === taskStatus.SUCCESSFUL ||
+                currentServiceOrderTaskStatus === taskStatus.FAILED),
+        staleTime: Infinity,
+        gcTime: Infinity,
     });
 }

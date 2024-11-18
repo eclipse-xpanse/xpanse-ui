@@ -16,6 +16,7 @@ import {
     LockOutlined,
     PlayCircleOutlined,
     PoweroffOutlined,
+    RedoOutlined,
     RiseOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
@@ -46,9 +47,10 @@ import {
 import { sortVersionNum } from '../../../utils/Sort';
 import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
-import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
+import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
+import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
 import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
@@ -56,10 +58,11 @@ import { Locks } from '../../order/locks/Locks';
 import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
 import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAlert';
-import { useServiceDetailsByIdQuery } from '../../order/orderStatus/useServiceDetailsPollingQuery';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
+import RecreateServiceStatusAlert from '../../order/recreate/RecreateServiceStatusAlert.tsx';
+import useRecreateRequest from '../../order/recreate/useRecreateRequest.ts';
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
@@ -108,6 +111,7 @@ function MyServices(): React.JSX.Element {
     const [isDestroyRequestSubmitted, setIsDestroyRequestSubmitted] = useState<boolean>(false);
     const [isPurgeRequestSubmitted, setIsPurgeRequestSubmitted] = useState<boolean>(false);
     const [isRetryDeployRequestSubmitted, setIsRetryDeployRequestSubmitted] = useState<boolean>(false);
+    const [isRecreateRequestSubmitted, setIsRecreateRequestSubmitted] = useState<boolean>(false);
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
     const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState(false);
@@ -119,6 +123,7 @@ function MyServices(): React.JSX.Element {
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
+    const serviceRecreateRequest = useRecreateRequest();
     const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
     const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
     const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
@@ -157,17 +162,26 @@ function MyServices(): React.JSX.Element {
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const getServiceDetailsQuery = useServiceDetailsByIdQuery(
+    const getRecreateServiceOrderStatusPollingQuery = useLatestServiceOrderStatusQuery(
+        serviceRecreateRequest.data?.orderId,
+        serviceRecreateRequest.isSuccess,
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+    );
+
+    const getServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         activeRecord?.serviceId,
-        getReDeployLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.SUCCESSFUL ||
-            getReDeployLatestServiceOrderStatusQuery.data?.taskStatus.toString() === taskStatus.FAILED,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
+        getReDeployLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
     useEffect(() => {
         void listDeployedServicesQuery.refetch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
+        serviceRecreateRequest.isError,
+        serviceRecreateRequest.isPending,
+        getRecreateServiceOrderStatusPollingQuery.isError,
+        getRecreateServiceOrderStatusPollingQuery.data?.isOrderCompleted,
         serviceStateStartQuery.isError,
         serviceStateStartQuery.isPending,
         getStartServiceDetailsQuery.isError,
@@ -465,6 +479,34 @@ function MyServices(): React.JSX.Element {
                                   type={'link'}
                               >
                                   retry deployment
+                              </Button>
+                          </Popconfirm>
+                      ),
+                  }
+                : null,
+            record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() ||
+            record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_FAILED.toString() ||
+            record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFICATION_FAILED.toString() ||
+            record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()
+                ? {
+                      key: 'recreateService',
+                      label: (
+                          <Popconfirm
+                              title='Recreate the service'
+                              description='Are you sure to recreate the service?'
+                              cancelText='Yes'
+                              okText='No'
+                              onCancel={() => {
+                                  recreate(record);
+                              }}
+                          >
+                              <Button
+                                  className={myServicesStyles.buttonAsLink}
+                                  icon={<RedoOutlined />}
+                                  disabled={isDisableRecreateBtn(record)}
+                                  type={'link'}
+                              >
+                                  recreate
                               </Button>
                           </Popconfirm>
                       ),
@@ -789,6 +831,18 @@ function MyServices(): React.JSX.Element {
         return true;
     };
 
+    const isDisableRecreateBtn = (record: DeployedService) => {
+        if (
+            record.serviceDeploymentState !== serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+            record.serviceDeploymentState !== serviceDeploymentState.DESTROY_FAILED &&
+            record.serviceDeploymentState !== serviceDeploymentState.MODIFICATION_FAILED &&
+            record.serviceDeploymentState !== serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        ) {
+            return true;
+        }
+        return false;
+    };
+
     const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
@@ -831,6 +885,14 @@ function MyServices(): React.JSX.Element {
         refreshData();
         setIsRetryDeployRequestSubmitted(false);
         setUniqueRequestId('');
+    };
+
+    const closeRecreateResultAlert = (isClose: boolean) => {
+        if (isClose) {
+            setActiveRecord(undefined);
+            refreshData();
+            setIsRecreateRequestSubmitted(false);
+        }
     };
 
     const columns: ColumnsType<DeployedService> = [
@@ -1162,6 +1224,16 @@ function MyServices(): React.JSX.Element {
         );
         redeployFailedDeploymentQuery.mutate(record.serviceId);
         record.serviceDeploymentState = serviceDeploymentState.DEPLOYING;
+    }
+
+    function recreate(record: DeployedService): void {
+        setIsRecreateRequestSubmitted(true);
+        setActiveRecord(
+            record.serviceHostingType === serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        serviceRecreateRequest.mutate(record.serviceId);
     }
 
     function onMonitor(record: DeployedService): void {
@@ -1506,6 +1578,16 @@ function MyServices(): React.JSX.Element {
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                     retryRequest={retryRequest}
                     onClose={closeRetryDeployResultAlert}
+                />
+            ) : null}
+            {isRecreateRequestSubmitted && activeRecord ? (
+                <RecreateServiceStatusAlert
+                    key={activeRecord.serviceId}
+                    currentSelectedService={activeRecord}
+                    recreateRequest={serviceRecreateRequest}
+                    recreateServiceOrderStatusPollingQueryError={getRecreateServiceOrderStatusPollingQuery.error}
+                    recreateServiceOrderStatusPollingQueryData={getRecreateServiceOrderStatusPollingQuery.data}
+                    closeRecreateResultAlert={closeRecreateResultAlert}
                 />
             ) : null}
             {activeRecord ? (

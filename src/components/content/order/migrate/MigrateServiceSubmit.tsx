@@ -22,7 +22,8 @@ import {
     taskStatus,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { useLatestServiceOrderStatusQuery } from '../../common/latestServiceOrderStatusQuery/useLatestServiceOrderStatusQuery.ts';
+import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
+import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
@@ -35,7 +36,7 @@ import CspSelect from '../formElements/CspSelect';
 import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
 import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
-import { useMigrateServiceRequest, useServiceDetailsByServiceIdQuery } from './useMigrateServiceQuery';
+import { useMigrateServiceRequest } from './useMigrateServiceQuery';
 
 export const MigrateServiceSubmit = ({
     userOrderableServiceVoList,
