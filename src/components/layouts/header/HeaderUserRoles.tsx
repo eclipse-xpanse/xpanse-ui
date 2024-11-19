@@ -99,9 +99,13 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
                     <div style={contentStyle}>
                         {menu}
                         <Divider style={{ margin: 0 }} />
-                        <Space style={{ padding: 8 }}>
-                            {env.VITE_APP_AUTH_DISABLED !== 'true' ? <Logout /> : <> </>}
-                        </Space>
+                        {env.VITE_APP_AUTH_DISABLED !== 'true' ? (
+                            <Space style={{ padding: 8 }}>
+                                <Logout />
+                            </Space>
+                        ) : (
+                            <> </>
+                        )}
                     </div>
                 )}
             >
