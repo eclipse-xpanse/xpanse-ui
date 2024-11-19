@@ -7,7 +7,7 @@ import { Alert, Button } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../styles/error-alert.module.css';
 import registerStyles from '../../../styles/register.module.css';
-import { Ocl, serviceRegistrationState } from '../../../xpanse-api/generated';
+import { Ocl, serviceTemplateRegistrationState } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 
 function RegisterResult({
@@ -19,7 +19,7 @@ function RegisterResult({
     retryRequest,
 }: {
     ocl: Ocl;
-    serviceRegistrationStatus: serviceRegistrationState;
+    serviceRegistrationStatus: serviceTemplateRegistrationState;
     registerRequestStatus: string;
     registerResult: string[];
     onRemove: () => void;
@@ -30,7 +30,7 @@ function RegisterResult({
             <Alert
                 type={'success'}
                 message={
-                    serviceRegistrationStatus === serviceRegistrationState.APPROVED ? (
+                    serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED ? (
                         <>
                             Service <b>{ocl.name}</b> registered and added to catalog successfully
                         </>

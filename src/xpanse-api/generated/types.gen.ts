@@ -1381,7 +1381,7 @@ export type OrderFailedResponse = {
         | 'Service Template Already Registered'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Not Approved'
+        | 'Service Template Is Unavailable'
         | 'Service Template Already Reviewed'
         | 'Invalid Service Version'
         | 'Invalid Service Flavors'
@@ -1467,7 +1467,7 @@ export enum resultType {
     SERVICE_TEMPLATE_ALREADY_REGISTERED = 'Service Template Already Registered',
     ICON_PROCESSING_FAILED = 'Icon Processing Failed',
     SERVICE_TEMPLATE_NOT_REGISTERED = 'Service Template Not Registered',
-    SERVICE_TEMPLATE_NOT_APPROVED = 'Service Template Not Approved',
+    SERVICE_TEMPLATE_IS_UNAVAILABLE = 'Service Template Is Unavailable',
     SERVICE_TEMPLATE_ALREADY_REVIEWED = 'Service Template Already Reviewed',
     INVALID_SERVICE_VERSION = 'Invalid Service Version',
     INVALID_SERVICE_FLAVORS = 'Invalid Service Flavors',
@@ -1672,7 +1672,7 @@ export type Response = {
         | 'Service Template Already Registered'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Not Approved'
+        | 'Service Template Is Unavailable'
         | 'Service Template Already Reviewed'
         | 'Invalid Service Version'
         | 'Invalid Service Flavors'
@@ -2313,7 +2313,15 @@ export type ServiceTemplateDetailVo = {
     /**
      * State of registered service template.
      */
-    serviceRegistrationState: 'unregistered' | 'approval pending' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState: 'inProgress' | 'approved' | 'rejected';
+    /**
+     * Is service template in updating.
+     */
+    isUpdatePending: boolean;
+    /**
+     * Is available in catalog.
+     */
+    availableInCatalog: boolean;
     /**
      * Comment of reviewed service template.
      */
@@ -2330,9 +2338,8 @@ export type ServiceTemplateDetailVo = {
 /**
  * State of registered service template.
  */
-export enum serviceRegistrationState {
-    UNREGISTERED = 'unregistered',
-    APPROVAL_PENDING = 'approval pending',
+export enum serviceTemplateRegistrationState {
+    IN_PROGRESS = 'inProgress',
     APPROVED = 'approved',
     REJECTED = 'rejected',
 }
@@ -3102,6 +3109,10 @@ export type MigrateResponse = ServiceOrder;
 
 export type ListServiceTemplatesData = {
     /**
+     * is available in catalog
+     */
+    availableInCatalog?: boolean;
+    /**
      * category of the service
      */
     categoryName?:
@@ -3129,6 +3140,10 @@ export type ListServiceTemplatesData = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
+     * is service template updating
+     */
+    isUpdatePending?: boolean;
+    /**
      * who hosts ths cloud resources
      */
     serviceHostingType?: 'self' | 'service-vendor';
@@ -3137,9 +3152,9 @@ export type ListServiceTemplatesData = {
      */
     serviceName?: string;
     /**
-     * state of registration
+     * state of service template registration
      */
-    serviceRegistrationState?: 'unregistered' | 'approval pending' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState?: 'inProgress' | 'approved' | 'rejected';
     /**
      * version of the service
      */
@@ -3602,6 +3617,10 @@ export type GetActiveCspsResponse = Array<
 
 export type ListManagedServiceTemplatesData = {
     /**
+     * is available in catalog
+     */
+    availableInCatalog?: boolean;
+    /**
      * category of the service
      */
     categoryName?:
@@ -3616,6 +3635,10 @@ export type ListManagedServiceTemplatesData = {
         | 'middleware'
         | 'others';
     /**
+     * is service template updating
+     */
+    isUpdatePending?: boolean;
+    /**
      * who hosts ths cloud resources
      */
     serviceHostingType?: 'self' | 'service-vendor';
@@ -3624,9 +3647,9 @@ export type ListManagedServiceTemplatesData = {
      */
     serviceName?: string;
     /**
-     * state of registration
+     * state of service template registration
      */
-    serviceRegistrationState?: 'unregistered' | 'approval pending' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState?: 'inProgress' | 'approved' | 'rejected';
     /**
      * version of the service
      */
@@ -3784,7 +3807,7 @@ export type GetCredentialTypesData = {
 
 export type GetCredentialTypesResponse = Array<'variables' | 'http_authentication' | 'api_key' | 'oauth2'>;
 
-export type ListOrderableServicesData = {
+export type GetOrderableServicesData = {
     /**
      * category of the service
      */
@@ -3826,7 +3849,7 @@ export type ListOrderableServicesData = {
     serviceVersion?: string;
 };
 
-export type ListOrderableServicesResponse = Array<UserOrderableServiceVo>;
+export type GetOrderableServicesResponse = Array<UserOrderableServiceVo>;
 
 export type GetOrderableServiceDetailsData = {
     /**

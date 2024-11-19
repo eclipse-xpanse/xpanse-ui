@@ -7,7 +7,7 @@ import { Alert, Button } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import errorAlertStyles from '../../../../../styles/error-alert.module.css';
-import { Ocl, serviceRegistrationState } from '../../../../../xpanse-api/generated';
+import { Ocl, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
 function UpdateResult({
@@ -20,7 +20,7 @@ function UpdateResult({
     tryNewFile,
 }: {
     ocl: Ocl;
-    serviceRegistrationStatus: serviceRegistrationState;
+    serviceRegistrationStatus: serviceTemplateRegistrationState;
     updateRequestStatus: string;
     updateResult: string[];
     onRemove: () => void;
@@ -32,7 +32,7 @@ function UpdateResult({
             <Alert
                 type={'success'}
                 message={
-                    serviceRegistrationStatus === serviceRegistrationState.APPROVED ? (
+                    serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED ? (
                         <>
                             Service <b>{ocl.name}</b> updated in catalog successfully.
                         </>

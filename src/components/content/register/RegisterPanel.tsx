@@ -18,7 +18,7 @@ import {
     ServiceTemplateDetailVo,
     category,
     register,
-    serviceRegistrationState,
+    serviceTemplateRegistrationState,
     type RegisterData,
 } from '../../../xpanse-api/generated';
 import {
@@ -40,7 +40,9 @@ function RegisterPanel(): React.JSX.Element {
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const registerResult = useRef<string[]>([]);
-    const serviceRegistrationStatus = useRef<serviceRegistrationState>(serviceRegistrationState.UNREGISTERED);
+    const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(
+        serviceTemplateRegistrationState.IN_PROGRESS
+    );
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const navigate = useNavigate();
@@ -57,7 +59,8 @@ function RegisterPanel(): React.JSX.Element {
         onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
             files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
-            serviceRegistrationStatus.current = serviceTemplateVo.serviceRegistrationState as serviceRegistrationState;
+            serviceRegistrationStatus.current =
+                serviceTemplateVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
             void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category as category) });
             navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
         },

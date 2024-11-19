@@ -15,7 +15,7 @@ export default function useListAllServiceTemplatesQuery() {
                 serviceName: undefined,
                 serviceVersion: undefined,
                 serviceHostingType: undefined,
-                serviceRegistrationState: undefined,
+                serviceTemplateRegistrationState: undefined,
             };
             return listManagedServiceTemplates(data);
         },
