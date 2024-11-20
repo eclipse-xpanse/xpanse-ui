@@ -13,10 +13,23 @@ updates:
           interval: weekly
       open-pull-requests-limit: 20
       groups:
-          dev-dependencies:
+          typescript-eslint:
               applies-to: version-updates
               patterns:
                   - '@typescript-eslint/*'
+          eslint:
+              applies-to: version-updates
+              patterns:
+                  - 'eslint'
+                  - '@eslint/js'
+          playwright:
+              applies-to: version-updates
+              patterns:
+                  - '*playwright/*'
+          axa-oidc:
+              applies-to: version-updates
+              patterns:
+                  - '@axa-fr/*'
     - package-ecosystem: docker
       directory: /docker
       schedule:

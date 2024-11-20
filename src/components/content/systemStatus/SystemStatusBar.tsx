@@ -24,6 +24,7 @@ function SystemStatusBar(): React.JSX.Element {
                     />
                 }
                 onClick={() => void healthCheckQuery.refetch()}
+                disabled={healthCheckQuery.isLoading}
             >
                 System Status
             </Button>
