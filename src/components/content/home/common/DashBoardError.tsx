@@ -6,8 +6,9 @@
 import { Alert, Button, Card } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../../styles/error-alert.module.css';
-import { ApiError, Response } from '../../../../xpanse-api/generated';
+import { ApiError, ErrorResponse } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 
 export default function DashBoardError({
     error,
@@ -16,12 +17,12 @@ export default function DashBoardError({
     error: unknown;
     retryRequest: () => void;
 }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-        const response: Response = error.body as Response;
+    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+        const response: ErrorResponse = error.body;
         return (
             <Card title='Services Dashboard' bordered={true}>
                 <Alert
-                    message={response.resultType.valueOf()}
+                    message={response.errorType.valueOf()}
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={false}

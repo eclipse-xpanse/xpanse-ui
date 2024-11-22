@@ -12,28 +12,29 @@ import credentialStyles from '../../../styles/credential.module.css';
 import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 
 import {
+    addIsvCloudCredential,
     AddIsvCloudCredentialData,
+    addUserCloudCredential,
     AddUserCloudCredentialData,
     ApiError,
     CreateCredential,
+    credentialType,
     CredentialVariable,
     CredentialVariables,
-    GetSitesOfCspData,
-    Response,
-    addIsvCloudCredential,
-    addUserCloudCredential,
-    credentialType,
     csp,
+    ErrorResponse,
     getActiveCsps,
     getCredentialCapabilities,
+    type GetCredentialCapabilitiesData,
     getCredentialTypes,
+    type GetCredentialTypesData,
     getSitesOfCsp,
+    GetSitesOfCspData,
     name,
     type,
-    type GetCredentialCapabilitiesData,
-    type GetCredentialTypesData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
@@ -134,10 +135,9 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
                 credentialCapabilitiesQuery.error.body &&
-                typeof credentialCapabilitiesQuery.error.body === 'object' &&
-                'details' in credentialCapabilitiesQuery.error.body
+                isErrorResponse(credentialCapabilitiesQuery.error.body)
             ) {
-                const response: Response = credentialCapabilitiesQuery.error.body as Response;
+                const response: ErrorResponse = credentialCapabilitiesQuery.error.body;
                 getTipInfo('error', response.details.join());
             } else if (credentialCapabilitiesQuery.error instanceof Error) {
                 getTipInfo('error', credentialCapabilitiesQuery.error.message);
@@ -154,8 +154,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             getTipInfo('success', 'Adding Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);

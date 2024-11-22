@@ -10,12 +10,13 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    Response,
+    ErrorResponse,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../../common/error/isErrorResponse';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -43,10 +44,9 @@ function StopServiceStatusAlert({
         if (
             serviceStateStopQuery.error instanceof ApiError &&
             serviceStateStopQuery.error.body &&
-            typeof serviceStateStopQuery.error.body === 'object' &&
-            'details' in serviceStateStopQuery.error.body
+            isErrorResponse(serviceStateStopQuery.error.body)
         ) {
-            const response: Response = serviceStateStopQuery.error.body as Response;
+            const response: ErrorResponse = serviceStateStopQuery.error.body;
             errorMessage = response.details;
         } else {
             errorMessage = serviceStateStopQuery.error.message;
@@ -90,10 +90,9 @@ function StopServiceStatusAlert({
         if (
             getStopServiceDetailsQuery.error instanceof ApiError &&
             getStopServiceDetailsQuery.error.body &&
-            typeof getStopServiceDetailsQuery.error.body === 'object' &&
-            'details' in getStopServiceDetailsQuery.error.body
+            isErrorResponse(getStopServiceDetailsQuery.error.body)
         ) {
-            const response: Response = getStopServiceDetailsQuery.error.body as Response;
+            const response: ErrorResponse = getStopServiceDetailsQuery.error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -158,8 +157,9 @@ function StopServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getStopServiceDetailsQuery.data.errorMsg
-                                        ? getStopServiceDetailsQuery.data.errorMsg.toString()
+                                    getStopServiceDetailsQuery.data.error &&
+                                    Array.isArray(getStopServiceDetailsQuery.data.error.details)
+                                        ? getStopServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Stop failed'
                                 }
                                 uuid={deployedService.serviceId}

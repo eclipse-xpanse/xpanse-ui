@@ -8,13 +8,14 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedServiceDetails,
-    Response,
+    ErrorResponse,
     serviceDeploymentState,
     serviceHostingType,
     ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import { OperationType } from '../types/OperationType';
@@ -70,10 +71,9 @@ function ScaleOrModifySubmitStatusAlert({
             if (
                 submitFailedResult instanceof ApiError &&
                 submitFailedResult.body &&
-                typeof submitFailedResult.body === 'object' &&
-                'details' in submitFailedResult.body
+                isErrorResponse(submitFailedResult.body)
             ) {
-                const response: Response = submitFailedResult.body as Response;
+                const response: ErrorResponse = submitFailedResult.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([submitFailedResult.message]);

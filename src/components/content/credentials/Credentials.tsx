@@ -21,16 +21,17 @@ import {
     AbstractCredentialInfo,
     ApiError,
     CredentialVariables,
-    DeleteIsvCloudCredentialData,
-    DeleteUserCloudCredentialData,
-    Response,
     csp,
     deleteIsvCloudCredential,
+    DeleteIsvCloudCredentialData,
     deleteUserCloudCredential,
+    DeleteUserCloudCredentialData,
+    ErrorResponse,
     name,
 } from '../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import AddCredential from './AddCredential';
 import CredentialDetails from './CredentialDetails';
 import { CredentialTip } from './CredentialTip';
@@ -62,10 +63,9 @@ function Credentials(): React.JSX.Element {
         if (
             credentialsQuery.error instanceof ApiError &&
             credentialsQuery.error.body &&
-            typeof credentialsQuery.error.body === 'object' &&
-            'details' in credentialsQuery.error.body
+            isErrorResponse(credentialsQuery.error.body)
         ) {
-            const response: Response = credentialsQuery.error.body as Response;
+            const response: ErrorResponse = credentialsQuery.error.body;
             tipType = 'error';
             tipMessage = response.details.join();
         } else if (credentialsQuery.error instanceof Error) {
@@ -82,8 +82,8 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 tipType = 'error';
                 tipMessage = response.details.join();
             } else {

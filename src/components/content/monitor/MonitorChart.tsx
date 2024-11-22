@@ -7,8 +7,9 @@ import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import React, { useRef, useState } from 'react';
 import monitorStyles from '../../../styles/monitor.module.css';
-import { ApiError, Metric, Response, monitorResourceType, unit } from '../../../xpanse-api/generated';
+import { ApiError, ErrorResponse, Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
 import {
     useGetLastKnownMetricForASpecificTypeQuery,
@@ -17,13 +18,13 @@ import {
 import { MonitorMetricsTypeTabs } from './MonitorMetricsTypeTabs';
 import { MonitorTip } from './MonitorTip';
 import {
-    MetricProps,
     convertMetricsToMetricProps,
     getOptionData,
     getTotalSecondsOfTimePeriod,
     groupMetricsByResourceIds,
     isMetricEmpty,
     lastMinuteRadioButtonKeyId,
+    MetricProps,
 } from './metricProps';
 
 export default function MonitorChart({
@@ -156,9 +157,9 @@ export default function MonitorChart({
 
     const setErrorAlertData = (error: Error) => {
         tipType = 'error';
-        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-            const response: Response = error.body as Response;
-            tipMessage = response.resultType.valueOf();
+        if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+            const response: ErrorResponse = error.body;
+            tipMessage = response.errorType.valueOf();
             tipDescription = response.details.join();
         } else {
             tipMessage = 'Error while fetching metrics data.';

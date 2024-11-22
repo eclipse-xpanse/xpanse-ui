@@ -10,12 +10,13 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    Response,
+    ErrorResponse,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../../common/error/isErrorResponse';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -43,10 +44,9 @@ function RestartServiceStatusAlert({
         if (
             serviceStateRestartQuery.error instanceof ApiError &&
             serviceStateRestartQuery.error.body &&
-            typeof serviceStateRestartQuery.error.body === 'object' &&
-            'details' in serviceStateRestartQuery.error.body
+            isErrorResponse(serviceStateRestartQuery.error.body)
         ) {
-            const response: Response = serviceStateRestartQuery.error.body as Response;
+            const response: ErrorResponse = serviceStateRestartQuery.error.body;
             errorMessage = response.details;
         } else {
             errorMessage = serviceStateRestartQuery.error.message;
@@ -86,10 +86,9 @@ function RestartServiceStatusAlert({
         if (
             getRestartServiceDetailsQuery.error instanceof ApiError &&
             getRestartServiceDetailsQuery.error.body &&
-            typeof getRestartServiceDetailsQuery.error.body === 'object' &&
-            'details' in getRestartServiceDetailsQuery.error.body
+            isErrorResponse(getRestartServiceDetailsQuery.error.body)
         ) {
-            const response: Response = getRestartServiceDetailsQuery.error.body as Response;
+            const response: ErrorResponse = getRestartServiceDetailsQuery.error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -154,8 +153,9 @@ function RestartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getRestartServiceDetailsQuery.data.errorMsg
-                                        ? getRestartServiceDetailsQuery.data.errorMsg.toString()
+                                    getRestartServiceDetailsQuery.data.error &&
+                                    Array.isArray(getRestartServiceDetailsQuery.data.error.details)
+                                        ? getRestartServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Restart request failed'
                                 }
                                 uuid={deployedService.serviceId}

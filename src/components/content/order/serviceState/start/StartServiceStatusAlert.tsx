@@ -10,12 +10,13 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    Response,
+    ErrorResponse,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../../common/error/isErrorResponse';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -43,10 +44,9 @@ function StartServiceStatusAlert({
         if (
             serviceStateStartQuery.error instanceof ApiError &&
             serviceStateStartQuery.error.body &&
-            typeof serviceStateStartQuery.error.body === 'object' &&
-            'details' in serviceStateStartQuery.error.body
+            isErrorResponse(serviceStateStartQuery.error.body)
         ) {
-            const response: Response = serviceStateStartQuery.error.body as Response;
+            const response: ErrorResponse = serviceStateStartQuery.error.body;
             errorMessage = response.details;
         } else {
             errorMessage = serviceStateStartQuery.error.message;
@@ -86,10 +86,9 @@ function StartServiceStatusAlert({
         if (
             getStartServiceDetailsQuery.error instanceof ApiError &&
             getStartServiceDetailsQuery.error.body &&
-            typeof getStartServiceDetailsQuery.error.body === 'object' &&
-            'details' in getStartServiceDetailsQuery.error.body
+            isErrorResponse(getStartServiceDetailsQuery.error.body)
         ) {
-            const response: Response = getStartServiceDetailsQuery.error.body as Response;
+            const response: ErrorResponse = getStartServiceDetailsQuery.error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
@@ -154,8 +153,9 @@ function StartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={
-                                    getStartServiceDetailsQuery.data.errorMsg
-                                        ? getStartServiceDetailsQuery.data.errorMsg.toString()
+                                    getStartServiceDetailsQuery.data.error &&
+                                    Array.isArray(getStartServiceDetailsQuery.data.error.details)
+                                        ? getStartServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Start failed'
                                 }
                                 uuid={deployedService.serviceId}

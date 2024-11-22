@@ -8,14 +8,15 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedServiceDetails,
+    ErrorResponse,
     GetLatestServiceOrderStatusResponse,
-    Response,
     ServiceOrder,
     ServiceProviderContactDetails,
     taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { MigrationOrderSubmitResult } from './MigrationOrderSubmitResult';
 import { MigrationProcessingStatus } from './MigrationProcessingStatus.tsx';
 
@@ -45,10 +46,9 @@ function MigrateServiceStatusAlert({
             if (
                 migrateRequestError instanceof ApiError &&
                 migrateRequestError.body &&
-                typeof migrateRequestError.body === 'object' &&
-                'details' in migrateRequestError.body
+                isErrorResponse(migrateRequestError.body)
             ) {
-                const response: Response = migrateRequestError.body as Response;
+                const response: ErrorResponse = migrateRequestError.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([migrateRequestError.message]);

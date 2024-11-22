@@ -9,10 +9,11 @@ import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    Response,
-    resultType,
+    ErrorResponse,
+    errorType,
     serviceDeploymentState,
 } from '../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -37,13 +38,8 @@ export function PurgeServiceStatusAlert({
 
     if (purgeSubmitError) {
         let errorMessage;
-        if (
-            purgeSubmitError instanceof ApiError &&
-            purgeSubmitError.body &&
-            typeof purgeSubmitError.body === 'object' &&
-            'details' in purgeSubmitError.body
-        ) {
-            const response: Response = purgeSubmitError.body as Response;
+        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && isErrorResponse(purgeSubmitError.body)) {
+            const response: ErrorResponse = purgeSubmitError.body;
             errorMessage = response.details;
         } else {
             errorMessage = purgeSubmitError.message;
@@ -84,11 +80,10 @@ export function PurgeServiceStatusAlert({
         if (
             statusPollingError instanceof ApiError &&
             statusPollingError.body &&
-            typeof statusPollingError.body === 'object' &&
-            'details' in statusPollingError.body
+            isErrorResponse(statusPollingError.body)
         ) {
-            const response: Response = statusPollingError.body as Response;
-            if (response.resultType !== resultType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+            const response: ErrorResponse = statusPollingError.body;
+            if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
                 return (
                     <div className={submitAlertStyles.submitAlertTip}>

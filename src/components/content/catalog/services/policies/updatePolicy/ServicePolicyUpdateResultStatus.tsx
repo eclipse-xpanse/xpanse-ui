@@ -6,7 +6,8 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../../../styles/submit-alert.module.css';
-import { ApiError, Response, ServicePolicy } from '../../../../../../xpanse-api/generated';
+import { ApiError, ErrorResponse, ServicePolicy } from '../../../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../../../common/error/isErrorResponse';
 import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 
 export default function ServicePolicyUpdateResultStatus({
@@ -21,13 +22,13 @@ export default function ServicePolicyUpdateResultStatus({
     currentServicePolicy: ServicePolicy | undefined;
 }): React.JSX.Element {
     if (isError) {
-        if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-            const response: Response = error.body as Response;
+        if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+            const response: ErrorResponse = error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={response.resultType.valueOf()}
+                        message={response.errorType.valueOf()}
                         description={<ServicePolicySubmitResult msg={response.details.toString()} uuid={''} />}
                         showIcon
                         closable={true}

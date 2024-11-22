@@ -9,11 +9,12 @@ import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import {
     ApiError,
     DeployedService,
-    Response,
+    ErrorResponse,
     serviceDeploymentState,
     ServiceOrderStatusUpdate,
     taskStatus,
 } from '../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -43,10 +44,9 @@ function DestroyServiceStatusAlert({
         if (
             destroySubmitError instanceof ApiError &&
             destroySubmitError.body &&
-            typeof destroySubmitError.body === 'object' &&
-            'details' in destroySubmitError.body
+            isErrorResponse(destroySubmitError.body)
         ) {
-            const response: Response = destroySubmitError.body as Response;
+            const response: ErrorResponse = destroySubmitError.body;
             errorMessage = response.details;
         } else {
             errorMessage = destroySubmitError.message;
@@ -88,10 +88,9 @@ function DestroyServiceStatusAlert({
         if (
             serviceStateDestroyQueryError instanceof ApiError &&
             serviceStateDestroyQueryError.body &&
-            typeof serviceStateDestroyQueryError.body === 'object' &&
-            'details' in serviceStateDestroyQueryError.body
+            isErrorResponse(serviceStateDestroyQueryError.body)
         ) {
-            const response: Response = serviceStateDestroyQueryError.body as Response;
+            const response: ErrorResponse = serviceStateDestroyQueryError.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}

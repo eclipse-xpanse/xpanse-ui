@@ -9,13 +9,14 @@ import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../styles/services-empty.module.css';
-import { ApiError, Response, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ApiError, ErrorResponse, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList.tsx';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import {
     groupRegisteredServicesByVersionForSpecificServiceName,
-    groupServiceTemplatesByNamespace,
     groupServicesByCategoryForSpecificNamespace,
     groupServicesByNameForSpecificCategory,
+    groupServiceTemplatesByNamespace,
 } from '../common/registeredServices/registeredServiceProps.ts';
 import useListAllServiceTemplatesQuery from '../review/query/useListAllServiceTemplatesQuery.ts';
 import { RegisteredServicesFullView } from './tree/RegisteredServicesFullView.tsx';
@@ -87,13 +88,12 @@ export default function RegisteredServices(): React.JSX.Element {
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
-            typeof availableServiceTemplatesQuery.error.body === 'object' &&
-            'details' in availableServiceTemplatesQuery.error.body
+            isErrorResponse(availableServiceTemplatesQuery.error.body)
         ) {
-            const response: Response = availableServiceTemplatesQuery.error.body as Response;
+            const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
             return (
                 <Alert
-                    message={response.resultType.valueOf()}
+                    message={response.errorType.valueOf()}
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}
