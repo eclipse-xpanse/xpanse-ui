@@ -110,7 +110,7 @@
         "@typescript-eslint/parser": "^8.16.0",
         "@vitejs/plugin-react": "^4.3.3",
         "env-cmd": "^10.1.0",
-        "eslint": "^8.57.1",
+        "eslint": "^9.15.0",
         "eslint-config-prettier": "^9.0.0",
         "eslint-config-react-app": "7.0.1",
         "eslint-plugin-css-modules": "^2.12.0",
