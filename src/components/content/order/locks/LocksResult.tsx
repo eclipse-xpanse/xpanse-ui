@@ -9,10 +9,11 @@ import locksStyles from '../../../../styles/locks.module.css';
 import {
     ApiError,
     DeployedServiceDetails,
-    Response,
+    ErrorResponse,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { useLockRequestState } from './useLockRequest';
 
 function LocksResult({
@@ -39,10 +40,9 @@ function LocksResult({
             lockRequestState[0] &&
             lockRequestState[0].error instanceof ApiError &&
             lockRequestState[0]?.error.body &&
-            typeof lockRequestState[0]?.error.body === 'object' &&
-            'details' in lockRequestState[0].error.body
+            isErrorResponse(lockRequestState[0]?.error.body)
         ) {
-            const response: Response = lockRequestState[0].error.body as Response;
+            const response: ErrorResponse = lockRequestState[0].error.body;
             errMsg = response.details;
         } else {
             errMsg = [

@@ -9,12 +9,13 @@ import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
-import { ApiError, Response, ServiceTemplateDetailVo, category } from '../../../../../xpanse-api/generated';
+import { ApiError, category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import {
-    groupServiceTemplatesByName,
     groupServicesByVersionForSpecificServiceName,
+    groupServiceTemplatesByName,
 } from '../../../common/catalog/catalogProps';
+import { isErrorResponse } from '../../../common/error/isErrorResponse';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
@@ -52,13 +53,12 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
-            typeof availableServiceTemplatesQuery.error.body === 'object' &&
-            'details' in availableServiceTemplatesQuery.error.body
+            isErrorResponse(availableServiceTemplatesQuery.error.body)
         ) {
-            const response: Response = availableServiceTemplatesQuery.error.body as Response;
+            const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
             return (
                 <Alert
-                    message={response.resultType.valueOf()}
+                    message={response.errorType}
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}

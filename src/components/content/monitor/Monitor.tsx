@@ -5,12 +5,13 @@
 
 import { MonitorOutlined } from '@ant-design/icons';
 import { Button, Col, Empty, Form, Input, Row, Select, Skeleton } from 'antd';
-import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import React, { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import monitorStyles from '../../../styles/monitor.module.css';
 import emptyServicesStyle from '../../../styles/services-empty.module.css';
 import tablesStyle from '../../../styles/table.module.css';
-import { ApiError, DeployedService, Response, serviceDeploymentState } from '../../../xpanse-api/generated';
+import { ApiError, DeployedService, ErrorResponse, serviceDeploymentState } from '../../../xpanse-api/generated';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
@@ -111,11 +112,10 @@ function Monitor(): React.JSX.Element {
         if (
             deployedServiceQuery.error instanceof ApiError &&
             deployedServiceQuery.error.body &&
-            typeof deployedServiceQuery.error.body === 'object' &&
-            'details' in deployedServiceQuery.error.body
+            isErrorResponse(deployedServiceQuery.error.body)
         ) {
-            const response: Response = deployedServiceQuery.error.body as Response;
-            tipMessage.current = response.resultType.valueOf();
+            const response: ErrorResponse = deployedServiceQuery.error.body;
+            tipMessage.current = response.errorType.valueOf();
             tipDescription.current = response.details.join();
         } else if (deployedServiceQuery.error instanceof Error) {
             tipMessage.current = 'Error while fetching all deployed services.';

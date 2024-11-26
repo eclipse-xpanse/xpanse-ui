@@ -14,12 +14,13 @@ import tableStyles from '../../../styles/table.module.css';
 import {
     ApiError,
     BackendSystemStatus,
-    Response,
-    SystemStatus,
     backendSystemType,
+    ErrorResponse,
     healthStatus,
+    SystemStatus,
 } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
@@ -117,14 +118,13 @@ export default function HealthCheckStatus(): React.JSX.Element {
         if (
             healthCheckQuery.error instanceof ApiError &&
             healthCheckQuery.error.body &&
-            typeof healthCheckQuery.error.body === 'object' &&
-            'details' in healthCheckQuery.error.body
+            isErrorResponse(healthCheckQuery.error.body)
         ) {
-            const response: Response = healthCheckQuery.error.body as Response;
+            const response: ErrorResponse = healthCheckQuery.error.body;
             healthCheckError = (
                 <div className={healthStatusStyles.healthRefreshAlertTip}>
                     <Alert
-                        message={response.resultType.valueOf()}
+                        message={response.errorType.valueOf()}
                         description={convertStringArrayToUnorderedList(response.details)}
                         type={'error'}
                         closable={true}

@@ -9,13 +9,14 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     ApiError,
     DeployedService,
-    Response,
+    ErrorResponse,
     serviceDeploymentState,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery.ts';
 import { RecreateOrderSubmitResult } from './RecreateOrderSubmitResult.tsx';
@@ -69,10 +70,9 @@ function RecreateServiceStatusAlert({
             if (
                 recreateRequest.error instanceof ApiError &&
                 recreateRequest.error.body &&
-                typeof recreateRequest.error.body === 'object' &&
-                'details' in recreateRequest.error.body
+                isErrorResponse(recreateRequest.error.body)
             ) {
-                const response: Response = recreateRequest.error.body as Response;
+                const response: ErrorResponse = recreateRequest.error.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([recreateRequest.error.message]);

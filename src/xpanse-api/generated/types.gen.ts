@@ -1054,6 +1054,155 @@ export type EndUserFlavors = {
     downgradeAllowed?: boolean;
 };
 
+export type ErrorResponse = {
+    /**
+     * The result code of response.
+     */
+    errorType:
+        | 'Runtime Error'
+        | 'Parameters Invalid'
+        | 'Terraform Script Invalid'
+        | 'Unprocessable Entity'
+        | 'Response Not Valid'
+        | 'Failure while connecting to backend'
+        | 'Credential Capability Not Found'
+        | 'Credentials Not Found'
+        | 'Credential Variables Not Complete'
+        | 'Flavor Invalid'
+        | 'Terraform Execution Failed'
+        | 'Plugin Not Found'
+        | 'Deployer Not Found'
+        | 'No Credential Definition Available'
+        | 'Invalid Service State'
+        | 'Resource Invalid For Monitoring'
+        | 'Unhandled Exception'
+        | 'Service Template Already Registered'
+        | 'Icon Processing Failed'
+        | 'Service Template Not Registered'
+        | 'Service Template Is Unavailable'
+        | 'Service Template Already Reviewed'
+        | 'Invalid Service Version'
+        | 'Invalid Service Flavors'
+        | 'Invalid Billing Config'
+        | 'Unavailable Service Regions'
+        | 'Service Deployment Not Found'
+        | 'Resource Not Found'
+        | 'Deployment Variable Invalid'
+        | 'Service Template Update Not Allowed'
+        | 'Service Template Still In Use'
+        | 'Unauthorized'
+        | 'Access Denied'
+        | 'Sensitive Field Encryption Or Decryption Failed Exception'
+        | 'Unsupported Enum Value'
+        | 'Terraform Boot Request Failed'
+        | 'Tofu Maker Request Failed'
+        | 'Metrics Data Not Ready'
+        | 'Variable Validation Failed'
+        | 'Variable Schema Definition Invalid'
+        | 'Policy Not Found'
+        | 'Duplicate Policy'
+        | 'Policy Validation Failed'
+        | 'Policy Evaluation Failed'
+        | 'Current Login User No Found'
+        | 'Service Details No Accessible'
+        | 'Migrating activiti Task Not Found'
+        | 'Service Migration Failed Exception'
+        | 'Service Migration Not Found'
+        | 'Service Locked'
+        | 'Eula Not Accepted'
+        | 'Service Flavor Downgrade Not Allowed'
+        | 'Billing Mode Not Supported'
+        | 'Service State Management Task Not Found'
+        | 'Service Order Not Found'
+        | 'Service Price Calculation Failed'
+        | 'Invalid Git Repo Details'
+        | 'File Locked'
+        | 'Service Configuration Invalid'
+        | 'Service Configuration Update Request Not Found'
+        | 'Service Configuration Not Found'
+        | 'Invalid Deployer Tool'
+        | 'Deployment Scripts Creation Failed'
+        | 'Async Start Service Error'
+        | 'Async Stop Service Error'
+        | 'Async Restart Service Error';
+    /**
+     * Details of the errors occurred
+     */
+    details: Array<string>;
+};
+
+/**
+ * The result code of response.
+ */
+export enum errorType {
+    RUNTIME_ERROR = 'Runtime Error',
+    PARAMETERS_INVALID = 'Parameters Invalid',
+    TERRAFORM_SCRIPT_INVALID = 'Terraform Script Invalid',
+    UNPROCESSABLE_ENTITY = 'Unprocessable Entity',
+    RESPONSE_NOT_VALID = 'Response Not Valid',
+    FAILURE_WHILE_CONNECTING_TO_BACKEND = 'Failure while connecting to backend',
+    CREDENTIAL_CAPABILITY_NOT_FOUND = 'Credential Capability Not Found',
+    CREDENTIALS_NOT_FOUND = 'Credentials Not Found',
+    CREDENTIAL_VARIABLES_NOT_COMPLETE = 'Credential Variables Not Complete',
+    FLAVOR_INVALID = 'Flavor Invalid',
+    TERRAFORM_EXECUTION_FAILED = 'Terraform Execution Failed',
+    PLUGIN_NOT_FOUND = 'Plugin Not Found',
+    DEPLOYER_NOT_FOUND = 'Deployer Not Found',
+    NO_CREDENTIAL_DEFINITION_AVAILABLE = 'No Credential Definition Available',
+    INVALID_SERVICE_STATE = 'Invalid Service State',
+    RESOURCE_INVALID_FOR_MONITORING = 'Resource Invalid For Monitoring',
+    UNHANDLED_EXCEPTION = 'Unhandled Exception',
+    SERVICE_TEMPLATE_ALREADY_REGISTERED = 'Service Template Already Registered',
+    ICON_PROCESSING_FAILED = 'Icon Processing Failed',
+    SERVICE_TEMPLATE_NOT_REGISTERED = 'Service Template Not Registered',
+    SERVICE_TEMPLATE_IS_UNAVAILABLE = 'Service Template Is Unavailable',
+    SERVICE_TEMPLATE_ALREADY_REVIEWED = 'Service Template Already Reviewed',
+    INVALID_SERVICE_VERSION = 'Invalid Service Version',
+    INVALID_SERVICE_FLAVORS = 'Invalid Service Flavors',
+    INVALID_BILLING_CONFIG = 'Invalid Billing Config',
+    UNAVAILABLE_SERVICE_REGIONS = 'Unavailable Service Regions',
+    SERVICE_DEPLOYMENT_NOT_FOUND = 'Service Deployment Not Found',
+    RESOURCE_NOT_FOUND = 'Resource Not Found',
+    DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
+    SERVICE_TEMPLATE_UPDATE_NOT_ALLOWED = 'Service Template Update Not Allowed',
+    SERVICE_TEMPLATE_STILL_IN_USE = 'Service Template Still In Use',
+    UNAUTHORIZED = 'Unauthorized',
+    ACCESS_DENIED = 'Access Denied',
+    SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
+    UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
+    TERRAFORM_BOOT_REQUEST_FAILED = 'Terraform Boot Request Failed',
+    TOFU_MAKER_REQUEST_FAILED = 'Tofu Maker Request Failed',
+    METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
+    VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
+    VARIABLE_SCHEMA_DEFINITION_INVALID = 'Variable Schema Definition Invalid',
+    POLICY_NOT_FOUND = 'Policy Not Found',
+    DUPLICATE_POLICY = 'Duplicate Policy',
+    POLICY_VALIDATION_FAILED = 'Policy Validation Failed',
+    POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
+    CURRENT_LOGIN_USER_NO_FOUND = 'Current Login User No Found',
+    SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
+    MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
+    SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
+    SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
+    SERVICE_LOCKED = 'Service Locked',
+    EULA_NOT_ACCEPTED = 'Eula Not Accepted',
+    SERVICE_FLAVOR_DOWNGRADE_NOT_ALLOWED = 'Service Flavor Downgrade Not Allowed',
+    BILLING_MODE_NOT_SUPPORTED = 'Billing Mode Not Supported',
+    SERVICE_STATE_MANAGEMENT_TASK_NOT_FOUND = 'Service State Management Task Not Found',
+    SERVICE_ORDER_NOT_FOUND = 'Service Order Not Found',
+    SERVICE_PRICE_CALCULATION_FAILED = 'Service Price Calculation Failed',
+    INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
+    FILE_LOCKED = 'File Locked',
+    SERVICE_CONFIGURATION_INVALID = 'Service Configuration Invalid',
+    SERVICE_CONFIGURATION_UPDATE_REQUEST_NOT_FOUND = 'Service Configuration Update Request Not Found',
+    SERVICE_CONFIGURATION_NOT_FOUND = 'Service Configuration Not Found',
+    INVALID_DEPLOYER_TOOL = 'Invalid Deployer Tool',
+    DEPLOYMENT_SCRIPTS_CREATION_FAILED = 'Deployment Scripts Creation Failed',
+    ASYNC_START_SERVICE_ERROR = 'Async Start Service Error',
+    ASYNC_STOP_SERVICE_ERROR = 'Async Stop Service Error',
+    ASYNC_RESTART_SERVICE_ERROR = 'Async Restart Service Error',
+}
+
 export type FlavorPriceResult = {
     /**
      * The name of the flavor.
@@ -1355,12 +1504,11 @@ export type Ocl = {
     serviceConfigurationManage?: ServiceConfigurationManage;
 };
 
-export type OrderFailedResponse = {
+export type OrderFailedErrorResponse = {
     /**
      * The result code of response.
      */
-    resultType:
-        | 'Success'
+    errorType:
         | 'Runtime Error'
         | 'Parameters Invalid'
         | 'Terraform Script Invalid'
@@ -1423,15 +1571,14 @@ export type OrderFailedResponse = {
         | 'Service Configuration Update Request Not Found'
         | 'Service Configuration Not Found'
         | 'Invalid Deployer Tool'
-        | 'Deployment Scripts Creation Failed';
+        | 'Deployment Scripts Creation Failed'
+        | 'Async Start Service Error'
+        | 'Async Stop Service Error'
+        | 'Async Restart Service Error';
     /**
      * Details of the errors occurred
      */
     details: Array<string>;
-    /**
-     * Describes if the request is successful
-     */
-    success: boolean;
     /**
      * The service id associated with the request.
      */
@@ -1441,76 +1588,6 @@ export type OrderFailedResponse = {
      */
     orderId?: string;
 };
-
-/**
- * The result code of response.
- */
-export enum resultType {
-    SUCCESS = 'Success',
-    RUNTIME_ERROR = 'Runtime Error',
-    PARAMETERS_INVALID = 'Parameters Invalid',
-    TERRAFORM_SCRIPT_INVALID = 'Terraform Script Invalid',
-    UNPROCESSABLE_ENTITY = 'Unprocessable Entity',
-    RESPONSE_NOT_VALID = 'Response Not Valid',
-    FAILURE_WHILE_CONNECTING_TO_BACKEND = 'Failure while connecting to backend',
-    CREDENTIAL_CAPABILITY_NOT_FOUND = 'Credential Capability Not Found',
-    CREDENTIALS_NOT_FOUND = 'Credentials Not Found',
-    CREDENTIAL_VARIABLES_NOT_COMPLETE = 'Credential Variables Not Complete',
-    FLAVOR_INVALID = 'Flavor Invalid',
-    TERRAFORM_EXECUTION_FAILED = 'Terraform Execution Failed',
-    PLUGIN_NOT_FOUND = 'Plugin Not Found',
-    DEPLOYER_NOT_FOUND = 'Deployer Not Found',
-    NO_CREDENTIAL_DEFINITION_AVAILABLE = 'No Credential Definition Available',
-    INVALID_SERVICE_STATE = 'Invalid Service State',
-    RESOURCE_INVALID_FOR_MONITORING = 'Resource Invalid For Monitoring',
-    UNHANDLED_EXCEPTION = 'Unhandled Exception',
-    SERVICE_TEMPLATE_ALREADY_REGISTERED = 'Service Template Already Registered',
-    ICON_PROCESSING_FAILED = 'Icon Processing Failed',
-    SERVICE_TEMPLATE_NOT_REGISTERED = 'Service Template Not Registered',
-    SERVICE_TEMPLATE_IS_UNAVAILABLE = 'Service Template Is Unavailable',
-    SERVICE_TEMPLATE_ALREADY_REVIEWED = 'Service Template Already Reviewed',
-    INVALID_SERVICE_VERSION = 'Invalid Service Version',
-    INVALID_SERVICE_FLAVORS = 'Invalid Service Flavors',
-    INVALID_BILLING_CONFIG = 'Invalid Billing Config',
-    UNAVAILABLE_SERVICE_REGIONS = 'Unavailable Service Regions',
-    SERVICE_DEPLOYMENT_NOT_FOUND = 'Service Deployment Not Found',
-    RESOURCE_NOT_FOUND = 'Resource Not Found',
-    DEPLOYMENT_VARIABLE_INVALID = 'Deployment Variable Invalid',
-    SERVICE_TEMPLATE_UPDATE_NOT_ALLOWED = 'Service Template Update Not Allowed',
-    SERVICE_TEMPLATE_STILL_IN_USE = 'Service Template Still In Use',
-    UNAUTHORIZED = 'Unauthorized',
-    ACCESS_DENIED = 'Access Denied',
-    SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
-    UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
-    TERRAFORM_BOOT_REQUEST_FAILED = 'Terraform Boot Request Failed',
-    TOFU_MAKER_REQUEST_FAILED = 'Tofu Maker Request Failed',
-    METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
-    VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
-    VARIABLE_SCHEMA_DEFINITION_INVALID = 'Variable Schema Definition Invalid',
-    POLICY_NOT_FOUND = 'Policy Not Found',
-    DUPLICATE_POLICY = 'Duplicate Policy',
-    POLICY_VALIDATION_FAILED = 'Policy Validation Failed',
-    POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
-    CURRENT_LOGIN_USER_NO_FOUND = 'Current Login User No Found',
-    SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
-    MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
-    SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
-    SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
-    SERVICE_LOCKED = 'Service Locked',
-    EULA_NOT_ACCEPTED = 'Eula Not Accepted',
-    SERVICE_FLAVOR_DOWNGRADE_NOT_ALLOWED = 'Service Flavor Downgrade Not Allowed',
-    BILLING_MODE_NOT_SUPPORTED = 'Billing Mode Not Supported',
-    SERVICE_STATE_MANAGEMENT_TASK_NOT_FOUND = 'Service State Management Task Not Found',
-    SERVICE_ORDER_NOT_FOUND = 'Service Order Not Found',
-    SERVICE_PRICE_CALCULATION_FAILED = 'Service Price Calculation Failed',
-    INVALID_GIT_REPO_DETAILS = 'Invalid Git Repo Details',
-    FILE_LOCKED = 'File Locked',
-    SERVICE_CONFIGURATION_INVALID = 'Service Configuration Invalid',
-    SERVICE_CONFIGURATION_UPDATE_REQUEST_NOT_FOUND = 'Service Configuration Update Request Not Found',
-    SERVICE_CONFIGURATION_NOT_FOUND = 'Service Configuration Not Found',
-    INVALID_DEPLOYER_TOOL = 'Invalid Deployer Tool',
-    DEPLOYMENT_SCRIPTS_CREATION_FAILED = 'Deployment Scripts Creation Failed',
-}
 
 /**
  * The price for the defined region and the defined site.
@@ -1644,85 +1721,6 @@ export type ResourceUsage = {
      * The listed price list of the flavor of the manged service.
      */
     markUpPrices?: Array<PriceWithRegion>;
-};
-
-export type Response = {
-    /**
-     * The result code of response.
-     */
-    resultType:
-        | 'Success'
-        | 'Runtime Error'
-        | 'Parameters Invalid'
-        | 'Terraform Script Invalid'
-        | 'Unprocessable Entity'
-        | 'Response Not Valid'
-        | 'Failure while connecting to backend'
-        | 'Credential Capability Not Found'
-        | 'Credentials Not Found'
-        | 'Credential Variables Not Complete'
-        | 'Flavor Invalid'
-        | 'Terraform Execution Failed'
-        | 'Plugin Not Found'
-        | 'Deployer Not Found'
-        | 'No Credential Definition Available'
-        | 'Invalid Service State'
-        | 'Resource Invalid For Monitoring'
-        | 'Unhandled Exception'
-        | 'Service Template Already Registered'
-        | 'Icon Processing Failed'
-        | 'Service Template Not Registered'
-        | 'Service Template Is Unavailable'
-        | 'Service Template Already Reviewed'
-        | 'Invalid Service Version'
-        | 'Invalid Service Flavors'
-        | 'Invalid Billing Config'
-        | 'Unavailable Service Regions'
-        | 'Service Deployment Not Found'
-        | 'Resource Not Found'
-        | 'Deployment Variable Invalid'
-        | 'Service Template Update Not Allowed'
-        | 'Service Template Still In Use'
-        | 'Unauthorized'
-        | 'Access Denied'
-        | 'Sensitive Field Encryption Or Decryption Failed Exception'
-        | 'Unsupported Enum Value'
-        | 'Terraform Boot Request Failed'
-        | 'Tofu Maker Request Failed'
-        | 'Metrics Data Not Ready'
-        | 'Variable Validation Failed'
-        | 'Variable Schema Definition Invalid'
-        | 'Policy Not Found'
-        | 'Duplicate Policy'
-        | 'Policy Validation Failed'
-        | 'Policy Evaluation Failed'
-        | 'Current Login User No Found'
-        | 'Service Details No Accessible'
-        | 'Migrating activiti Task Not Found'
-        | 'Service Migration Failed Exception'
-        | 'Service Migration Not Found'
-        | 'Service Locked'
-        | 'Eula Not Accepted'
-        | 'Service Flavor Downgrade Not Allowed'
-        | 'Billing Mode Not Supported'
-        | 'Service State Management Task Not Found'
-        | 'Service Order Not Found'
-        | 'Service Price Calculation Failed'
-        | 'Invalid Git Repo Details'
-        | 'File Locked'
-        | 'Service Configuration Invalid'
-        | 'Service Configuration Update Request Not Found'
-        | 'Service Configuration Not Found'
-        | 'Invalid Deployer Tool'
-        | 'Deployment Scripts Creation Failed';
-    /**
-     * Details of the errors occurred
-     */
-    details: Array<string>;
-    /**
-     * Describes if the request is successful
-     */
-    success: boolean;
 };
 
 export type ReviewRegistrationRequest = {
@@ -2142,10 +2140,7 @@ export type ServiceOrderStatusUpdate = {
      * Describes if the service order is now completed.
      */
     isOrderCompleted: boolean;
-    /**
-     * The error message if the service order failed.
-     */
-    errorMsg?: string;
+    error?: ErrorResponse;
 };
 
 export type ServicePolicy = {

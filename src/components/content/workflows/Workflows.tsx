@@ -12,12 +12,13 @@ import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
     ApiError,
-    Response,
-    WorkFlowTask,
+    ErrorResponse,
     manageFailedOrder,
-    status,
     type ManageFailedOrderData,
+    status,
+    WorkFlowTask,
 } from '../../../xpanse-api/generated';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import { WorkflowsTip } from './WorkflowsTip';
 import useAllTasksQuery from './query/useAllTasksQuery';
 
@@ -39,13 +40,8 @@ function Workflows(): React.JSX.Element {
     };
 
     if (tasksQuery.error) {
-        if (
-            tasksQuery.error instanceof ApiError &&
-            tasksQuery.error.body &&
-            typeof tasksQuery.error.body === 'object' &&
-            'details' in tasksQuery.error.body
-        ) {
-            const response: Response = tasksQuery.error.body as Response;
+        if (tasksQuery.error instanceof ApiError && tasksQuery.error.body && isErrorResponse(tasksQuery.error.body)) {
+            const response: ErrorResponse = tasksQuery.error.body;
             getTipInfo('error', response.details.join());
         } else if (tasksQuery.error instanceof Error) {
             getTipInfo('error', tasksQuery.error.message);
@@ -71,8 +67,8 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);
@@ -95,8 +91,8 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);

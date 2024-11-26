@@ -6,8 +6,9 @@
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
-import { ApiError, DeployResource, Response } from '../../../../xpanse-api/generated';
+import { ApiError, DeployResource, ErrorResponse } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
 import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
@@ -67,13 +68,12 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             getServiceDetailsByIdQuery.error.body &&
-            typeof getServiceDetailsByIdQuery.error.body === 'object' &&
-            'details' in getServiceDetailsByIdQuery.error.body
+            isErrorResponse(getServiceDetailsByIdQuery.error.body)
         ) {
-            const response: Response = getServiceDetailsByIdQuery.error.body as Response;
+            const response: ErrorResponse = getServiceDetailsByIdQuery.error.body;
             return (
                 <Alert
-                    message={response.resultType.valueOf()}
+                    message={response.errorType.valueOf()}
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}

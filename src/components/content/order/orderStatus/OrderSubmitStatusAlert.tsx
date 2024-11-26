@@ -10,7 +10,7 @@ import {
     ApiError,
     DeployedServiceDetails,
     DeployRequest,
-    Response,
+    ErrorResponse,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
@@ -18,6 +18,7 @@ import {
     taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
+import { isErrorResponse } from '../../common/error/isErrorResponse';
 import { OperationType } from '../types/OperationType';
 import { OrderSubmitResult } from './OrderSubmitResult';
 import { ProcessingStatus } from './ProcessingStatus';
@@ -55,10 +56,9 @@ function OrderSubmitStatusAlert({
             if (
                 redeployFailedDeploymentQuery.error instanceof ApiError &&
                 redeployFailedDeploymentQuery.error.body &&
-                typeof redeployFailedDeploymentQuery.error.body === 'object' &&
-                'details' in redeployFailedDeploymentQuery.error.body
+                isErrorResponse(redeployFailedDeploymentQuery.error.body)
             ) {
-                const response: Response = redeployFailedDeploymentQuery.error.body as Response;
+                const response: ErrorResponse = redeployFailedDeploymentQuery.error.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([redeployFailedDeploymentQuery.error.message]);
@@ -67,10 +67,9 @@ function OrderSubmitStatusAlert({
             if (
                 submitDeploymentRequest.error instanceof ApiError &&
                 submitDeploymentRequest.error.body &&
-                typeof submitDeploymentRequest.error.body === 'object' &&
-                'details' in submitDeploymentRequest.error.body
+                isErrorResponse(submitDeploymentRequest.error.body)
             ) {
-                const response: Response = submitDeploymentRequest.error.body as Response;
+                const response: ErrorResponse = submitDeploymentRequest.error.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([submitDeploymentRequest.error.message]);

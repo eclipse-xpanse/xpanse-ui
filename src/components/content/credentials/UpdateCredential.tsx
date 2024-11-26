@@ -15,7 +15,7 @@ import {
     CreateCredential,
     CredentialVariable,
     CredentialVariables,
-    Response,
+    ErrorResponse,
     credentialType,
     csp,
     name,
@@ -25,6 +25,7 @@ import {
     type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
+import { isErrorResponse } from '../common/error/isErrorResponse';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
@@ -70,8 +71,8 @@ function UpdateCredential({
             setTipMessage('Updating Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 setTipType('error');
                 setTipMessage(response.details.join());
             } else {

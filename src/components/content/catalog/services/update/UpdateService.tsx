@@ -13,14 +13,15 @@ import catalogStyles from '../../../../../styles/catalog.module.css';
 import registerStyles from '../../../../../styles/register.module.css';
 import {
     ApiError,
-    Ocl,
-    Response,
-    ServiceTemplateDetailVo,
     category,
+    ErrorResponse,
+    Ocl,
+    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
     update,
     type UpdateData,
 } from '../../../../../xpanse-api/generated';
+import { isErrorResponse } from '../../../common/error/isErrorResponse';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
 import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
 import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
@@ -65,8 +66,8 @@ function UpdateService({
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body) {
-                const response: Response = error.body as Response;
+            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+                const response: ErrorResponse = error.body;
                 updateResult.current = response.details;
             } else {
                 updateResult.current = [error.message];
