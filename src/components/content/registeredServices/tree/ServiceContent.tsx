@@ -95,7 +95,7 @@ function ServiceContent({
     }
 
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
-        navigate({
+        void navigate({
             pathname: registeredServicesPageRoute,
             search: createSearchParams({
                 namespace: selectedServiceNamespaceInTree,

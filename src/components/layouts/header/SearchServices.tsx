@@ -25,7 +25,7 @@ export function SearchServices() {
     const onSelectService = function (serviceName: string, latestVersion: string, category: category) {
         setIsSearchClicked(false);
         setSearchText('');
-        navigate(
+        void navigate(
             createServicePageRoute
                 .concat('?serviceName=', serviceName)
                 .concat('&latestVersion=', latestVersion.replace(' ', ''))

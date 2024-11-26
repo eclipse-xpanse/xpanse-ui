@@ -1237,7 +1237,7 @@ function MyServices(): React.JSX.Element {
     }
 
     function onMonitor(record: DeployedService): void {
-        navigate('/monitor', {
+        void navigate('/monitor', {
             state: record,
         });
     }

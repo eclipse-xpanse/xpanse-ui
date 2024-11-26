@@ -34,10 +34,6 @@ Tests can be executed using the command below:
 npm run test
 ```
 
-#### Run Tests from IDE
-
-To run tests from IDE, ensure the [config file](jest.config.json) is passed to the executor.
-
 ## Dependencies File
 
 All third-party related content is listed in the [DEPENDENCIES](DEPENDENCIES) file.

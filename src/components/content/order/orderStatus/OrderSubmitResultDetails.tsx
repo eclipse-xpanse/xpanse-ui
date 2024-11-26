@@ -30,7 +30,7 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                 >
                     <span
                         onClick={() => {
-                            navigate({
+                            void navigate({
                                 pathname: myServicesRoute,
                                 search: createSearchParams({
                                     serviceId: uuid,

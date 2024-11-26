@@ -78,7 +78,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
         version: string,
         serviceState: serviceDeploymentState[]
     ) => {
-        navigate({
+        void navigate({
             pathname: reportsRoute,
             search: createSearchParams({
                 serviceState: serviceState,

@@ -31,7 +31,7 @@ function Services(): React.JSX.Element {
     }, [clearFormVariables]);
 
     const onSelectService = function (serviceName: string, latestVersion: string) {
-        navigate(
+        void navigate(
             createServicePageRoute
                 .concat('?serviceName=', serviceName)
                 .concat('&latestVersion=', latestVersion.replace(' ', ''))

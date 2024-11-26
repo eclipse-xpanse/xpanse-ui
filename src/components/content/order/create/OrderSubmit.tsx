@@ -58,7 +58,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
 
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (state === undefined || state === null) {
-        navigate(homePageRoute);
+        void navigate(homePageRoute);
     }
 
     function onSubmit() {
@@ -107,7 +107,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     };
 
     const onClose = () => {
-        navigate(servicesSubPageRoute.concat(state.category));
+        void navigate(servicesSubPageRoute.concat(state.category));
     };
 
     const createServicePageUrl: string = createServicePageRoute

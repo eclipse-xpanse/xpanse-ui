@@ -105,7 +105,7 @@ export function RegisteredServicesFullView({
                     value.version === version
                 ) {
                     if (selectedKeyInTree.toString().length > 0) {
-                        navigate({
+                        void navigate({
                             pathname: registeredServicesPageRoute,
                             search: createSearchParams({
                                 namespace: namespace,

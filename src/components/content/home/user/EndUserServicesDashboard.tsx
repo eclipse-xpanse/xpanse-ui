@@ -59,7 +59,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     }
 
     const getMyServicesRedirectionUrl = (serviceState: serviceDeploymentState[]) => {
-        navigate({
+        void navigate({
             pathname: myServicesRoute,
             search: createSearchParams({
                 serviceState: serviceState,

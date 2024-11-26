@@ -27,7 +27,7 @@ export function ReRegisterResult({
 
     const onRemove = () => {
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-        navigate({
+        void navigate({
             pathname: catalogPageRoute,
             hash: '#' + category,
         });

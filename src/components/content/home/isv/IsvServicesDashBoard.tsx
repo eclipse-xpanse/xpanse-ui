@@ -78,14 +78,14 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     }
 
     const getCatalogRedirectionUrl = () => {
-        navigate({
+        void navigate({
             pathname: catalogPageRoute,
             hash: '#' + (registeredServicesCount > 0 ? listRegisteredServicesByIsvQuery.data[0].category : category.AI),
         });
     };
 
     const getReportsRedirectionUrl = (serviceState: serviceDeploymentState[]) => {
-        navigate({
+        void navigate({
             pathname: reportsRoute,
             search: createSearchParams({
                 serviceState: serviceState,

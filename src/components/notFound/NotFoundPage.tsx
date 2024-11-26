@@ -11,7 +11,7 @@ import { homePageRoute } from '../utils/constants';
 export default function NotFoundPage(): React.JSX.Element {
     const navigate = useNavigate();
     const backHome = () => {
-        navigate(homePageRoute);
+        void navigate(homePageRoute);
     };
 
     return (
