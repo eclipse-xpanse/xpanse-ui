@@ -24,7 +24,7 @@ jobs:
               run: npm install
             - name: Run EsLint
               working-directory: ./
-              run: npx eslint . --ext .js,.jsx,.ts,.tsx --config package.json --max-warnings=0
+              run: npx eslint . --max-warnings=0
             - name: Check Prettier Format
               working-directory: ./
               run: npx prettier --config .prettierrc --check .

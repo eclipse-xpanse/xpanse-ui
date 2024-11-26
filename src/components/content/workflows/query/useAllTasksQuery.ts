@@ -13,7 +13,7 @@ export default function useAllTasksQuery(status: 'done' | 'failed' | undefined) 
             const data: QueryTasksData = {
                 status: status,
             };
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-return
+
             return queryTasks(data);
         },
     });
