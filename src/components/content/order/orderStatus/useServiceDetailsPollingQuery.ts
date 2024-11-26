@@ -32,7 +32,7 @@ export function useServiceDetailsPollingQuery(
                 const data: GetVendorHostedServiceDetailsByIdData = {
                     serviceId: serviceId ?? '',
                 };
-                // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+
                 return getVendorHostedServiceDetailsById(data);
             }
         },

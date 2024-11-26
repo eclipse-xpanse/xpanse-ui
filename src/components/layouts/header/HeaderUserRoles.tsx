@@ -109,7 +109,6 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
                     </div>
                 )}
             >
-                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
                 <a
                     onClick={(e) => {
                         e.preventDefault();

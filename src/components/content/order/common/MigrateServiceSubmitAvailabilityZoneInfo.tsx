@@ -5,7 +5,6 @@
 
 import { Col, Flex, Form, Radio, Row } from 'antd';
 import React from 'react';
-import '../../../../styles/service-order.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 

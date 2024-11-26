@@ -29,62 +29,6 @@
         "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build",
         "update-service-worker-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
     },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "eslint:recommended",
-            "plugin:@typescript-eslint/recommended-type-checked",
-            "plugin:@typescript-eslint/stylistic-type-checked",
-            "plugin:@typescript-eslint/strict-type-checked",
-            "plugin:prettier/recommended",
-            "plugin:deprecation/recommended",
-            "plugin:react/recommended",
-            "plugin:css-modules/recommended"
-        ],
-        "plugins": [
-            "react",
-            "@typescript-eslint",
-            "@tanstack/query",
-            "require-explicit-generics",
-            "css-modules"
-        ],
-        "rules": {
-            "react/jsx-uses-react": "error",
-            "react/jsx-uses-vars": "error",
-            "no-undef": "off",
-            "@typescript-eslint/no-inferrable-types": "off",
-            "@tanstack/query/exhaustive-deps": "error",
-            "no-console": "error",
-            "@typescript-eslint/no-dynamic-delete": "off",
-            "react/react-in-jsx-scope": "off",
-            "import/newline-after-import": [
-                "error",
-                {
-                    "count": 1
-                }
-            ],
-            "css-modules/no-undef-class": [
-                2,
-                {
-                    "camelCase": true
-                }
-            ],
-            "css-modules/no-unused-class": "off"
-        },
-        "ignorePatterns": [
-            "src/xpanse-api/**",
-            "/public/OidcServiceWorker.js",
-            "/public/inject.js",
-            "dist",
-            "node_modules",
-            "/public/OidcTrustedDomains.js"
-        ],
-        "root": true,
-        "parser": "@typescript-eslint/parser",
-        "parserOptions": {
-            "project": true
-        }
-    },
     "browserslist": {
         "production": [
             ">0.2%",
@@ -99,8 +43,11 @@
     },
     "devDependencies": {
         "@axa-fr/oidc-client": "^7.22.32",
-        "@hey-api/openapi-ts": "^0.56.1",
         "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+        "@eslint/compat": "^1.2.3",
+        "@eslint/eslintrc": "^3.2.0",
+        "@eslint/js": "^9.15.0",
+        "@hey-api/openapi-ts": "^0.56.1",
         "@tanstack/eslint-plugin-query": "^5.61.3",
         "@types/node": "^22.9.0",
         "@types/react": "^18.3.12",
@@ -110,13 +57,14 @@
         "@typescript-eslint/parser": "^8.16.0",
         "@vitejs/plugin-react": "^4.3.3",
         "env-cmd": "^10.1.0",
-        "eslint": "^8.57.1",
+        "eslint": "^9.15.0",
         "eslint-config-prettier": "^9.0.0",
-        "eslint-config-react-app": "7.0.1",
+        "eslint-import-resolver-typescript": "^3.6.3",
         "eslint-plugin-css-modules": "^2.12.0",
-        "eslint-plugin-deprecation": "^3.0.0",
+        "eslint-plugin-import": "^2.31.0",
         "eslint-plugin-prettier": "^5.2.1",
         "eslint-plugin-react": "^7.37.2",
+        "eslint-plugin-react-hooks": "^5.0.0",
         "eslint-plugin-require-explicit-generics": "^1.0.0",
         "knip": "^5.37.2",
         "prettier": "3.3.3",
@@ -124,14 +72,12 @@
         "release-it": "^17.10.0",
         "typescript": "5.7.2",
         "uuid": "^11.0.3",
-        "vite": "^5.4.11"
+        "vite": "^5.4.11",
+        "typescript-eslint": "^8.16.0"
     },
     "overrides": {
         "react-scripts": {
             "typescript": "^5"
-        },
-        "eslint-config-react-app": {
-            "@typescript-eslint/eslint-plugin": "^8.0.0"
         }
     },
     "knip": {
@@ -146,11 +92,22 @@
         ],
         "ignoreDependencies": [
             "@babel/plugin-proposal-private-property-in-object",
-            "@hey-api/openapi-ts"
+            "@hey-api/openapi-ts",
+            "eslint-import-resolver-typescript",
+            "eslint-plugin-react-hooks",
+            "@typescript-eslint/eslint-plugin",
+            "@typescript-eslint/parser",
+            "eslint-config-prettier",
+            "eslint-plugin-prettier"
         ],
         "ignoreBinaries": [
             "zip"
-        ]
+        ],
+        "eslint": {
+            "config": [
+                "./eslint.config.mjs"
+            ]
+        }
     },
     "release-it": {
         "github": {
