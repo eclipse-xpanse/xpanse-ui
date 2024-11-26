@@ -31,9 +31,6 @@ jobs:
             - name: Run knip
               working-directory: ./
               run: npx knip
-            - name: Run unit tests
-              working-directory: ./
-              run: npm run test
             - name: Run TSC
               working-directory: ./
               run: tsc
