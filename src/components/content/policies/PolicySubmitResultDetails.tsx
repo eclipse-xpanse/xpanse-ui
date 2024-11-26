@@ -43,7 +43,7 @@ function PolicySubmitResultDetails({
                     >
                         <span
                             onClick={() => {
-                                navigate({
+                                void navigate({
                                     pathname: policiesRoute,
                                     search: createSearchParams({
                                         policyId: uuid,

@@ -19,7 +19,7 @@ export function DeleteResult({ id, category }: { id: string; category: category 
 
     const onRemove = () => {
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-        navigate({
+        void navigate({
             pathname: catalogPageRoute,
             hash: '#' + category,
         });

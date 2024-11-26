@@ -6,7 +6,7 @@ import { homePageRoute } from '../utils/constants';
 function NotAuthorized(): React.JSX.Element {
     const navigate = useNavigate();
     const backHome = () => {
-        navigate(homePageRoute);
+        void navigate(homePageRoute);
     };
 
     return (

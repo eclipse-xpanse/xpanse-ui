@@ -310,7 +310,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             selectBillingMode
         );
 
-        navigate(
+        void navigate(
             orderPageRoute
                 .concat('?serviceName=', orderSubmitParams.name)
                 .concat('&version=', orderSubmitParams.version)

@@ -63,7 +63,7 @@ function RegisterPanel(): React.JSX.Element {
             serviceRegistrationStatus.current =
                 serviceTemplateVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
             void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category as category) });
-            navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
+            void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
@@ -73,7 +73,7 @@ function RegisterPanel(): React.JSX.Element {
             } else {
                 registerResult.current = [error.message];
             }
-            navigate(registerFailedRoute);
+            void navigate(registerFailedRoute);
         },
     });
 
@@ -88,7 +88,7 @@ function RegisterPanel(): React.JSX.Element {
     // useEffect to route to /register URI when a user reloads the failed URI. Hence, this must be run only during component's first render.
     useEffect(() => {
         if (location.pathname.includes(registerFailedRoute) || location.pathname.includes(registerSuccessfulRoute)) {
-            navigate(registerPageRoute);
+            void navigate(registerPageRoute);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -117,7 +117,7 @@ function RegisterPanel(): React.JSX.Element {
                         } else {
                             yamlValidationResult.current = 'unhandled error occurred';
                         }
-                        navigate(registerInvalidRoute);
+                        void navigate(registerInvalidRoute);
                     }
                 }
             };
@@ -148,7 +148,7 @@ function RegisterPanel(): React.JSX.Element {
         setOclValidationStatus('notStarted');
         oclDisplayData.current = <></>;
         registerRequest.reset();
-        navigate(registerPageRoute);
+        void navigate(registerPageRoute);
     };
 
     const retryRequest = () => {

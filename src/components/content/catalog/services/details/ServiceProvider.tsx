@@ -152,7 +152,7 @@ function ServiceProvider({
     const reRegisterRequest = useReRegisterRequest(activeServiceDetail?.serviceTemplateId ?? '');
 
     const onChangeCsp = (key: string) => {
-        navigate({
+        void navigate({
             pathname: catalogPageRoute,
             hash: '#' + category,
             search: createSearchParams({
@@ -165,7 +165,7 @@ function ServiceProvider({
     };
 
     const onChangeServiceHostingType = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
-        navigate({
+        void navigate({
             pathname: catalogPageRoute,
             hash: '#' + category,
             search: createSearchParams({

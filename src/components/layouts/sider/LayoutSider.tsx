@@ -19,7 +19,7 @@ function LayoutSider(): React.JSX.Element {
     const { pathname, hash } = location;
 
     const onClicked = function (cfg: MenuInfo): void {
-        navigate(cfg.key);
+        void navigate(cfg.key);
     };
 
     function getSelectedKey(): string[] {

@@ -30,7 +30,7 @@ function NavigateOrderSubmission({
         if (toUrl.includes(servicesSubPageRoute)) {
             resetFormCache();
         }
-        navigate(to, { state: props });
+        void navigate(to, { state: props });
     }
 
     return (

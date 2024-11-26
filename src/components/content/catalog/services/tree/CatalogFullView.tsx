@@ -74,7 +74,7 @@ export function CatalogFullView({
                 for (const value of serviceTemplates) {
                     if (value.version === version) {
                         if (selectKey.toString() === previousSelectedKey.current.toString()) {
-                            navigate({
+                            void navigate({
                                 pathname: catalogPageRoute,
                                 hash: '#' + category,
                                 search: createSearchParams({
@@ -86,7 +86,7 @@ export function CatalogFullView({
                             });
                         } else {
                             previousSelectedKey.current = selectKey;
-                            navigate({
+                            void navigate({
                                 pathname: catalogPageRoute,
                                 hash: '#' + category,
                                 search: createSearchParams({

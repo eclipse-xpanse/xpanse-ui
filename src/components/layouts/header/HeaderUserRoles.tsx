@@ -71,7 +71,7 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
             updateCurrentUserRole(value.key);
             // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
-            navigate(origin);
+            void navigate(origin);
         };
 
         menuProps = {
