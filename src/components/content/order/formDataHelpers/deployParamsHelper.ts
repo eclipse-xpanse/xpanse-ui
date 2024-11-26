@@ -38,13 +38,13 @@ export const getDeployParams = (
     });
 
     const props: OrderSubmitProps = {
-        id: registeredServiceId,
         category: service?.category as category,
+        csp: service?.csp as csp,
+        id: registeredServiceId,
         name: service?.name ?? '',
         version: service?.version ?? '',
         region: region,
         area: region.area,
-        csp: service?.csp as csp,
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
         serviceHostingType: selectServiceHostingType,
