@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Huawei Inc.
 #
-FROM nginx:1.27.2-alpine
+FROM nginx:1.27.3-alpine
 WORKDIR /usr/share/nginx/html
 RUN apk add --no-cache bash envsubst
 COPY docker/nginx-entrypoint.sh /
