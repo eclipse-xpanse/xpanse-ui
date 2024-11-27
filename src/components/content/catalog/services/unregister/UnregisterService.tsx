@@ -43,7 +43,7 @@ function UnregisterService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         unregisterRequest.isSuccess ||
-                        serviceRegistrationStatus === serviceTemplateRegistrationState.IN_PROGRESS
+                        serviceRegistrationStatus === serviceTemplateRegistrationState.IN_REVIEW
                     }
                 >
                     Unregister

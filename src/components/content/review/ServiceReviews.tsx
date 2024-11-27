@@ -305,8 +305,7 @@ export default function ServiceReviews(): React.JSX.Element {
                                     handleServiceTemplateDetailsOpenModal(record);
                                 }}
                             >
-                                {record.serviceTemplateRegistrationState ===
-                                serviceTemplateRegistrationState.IN_PROGRESS
+                                {record.serviceTemplateRegistrationState === serviceTemplateRegistrationState.IN_REVIEW
                                     ? 'review'
                                     : 'details'}
                             </Button>

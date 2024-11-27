@@ -1124,7 +1124,9 @@ export type ErrorResponse = {
         | 'Deployment Scripts Creation Failed'
         | 'Async Start Service Error'
         | 'Async Stop Service Error'
-        | 'Async Restart Service Error';
+        | 'Async Restart Service Error'
+        | 'Deployment Failed Exception'
+        | 'Destroy Failed Exception';
     /**
      * Details of the errors occurred
      */
@@ -1201,6 +1203,8 @@ export enum errorType {
     ASYNC_START_SERVICE_ERROR = 'Async Start Service Error',
     ASYNC_STOP_SERVICE_ERROR = 'Async Stop Service Error',
     ASYNC_RESTART_SERVICE_ERROR = 'Async Restart Service Error',
+    DEPLOYMENT_FAILED_EXCEPTION = 'Deployment Failed Exception',
+    DESTROY_FAILED_EXCEPTION = 'Destroy Failed Exception',
 }
 
 export type FlavorPriceResult = {
@@ -1574,7 +1578,9 @@ export type OrderFailedErrorResponse = {
         | 'Deployment Scripts Creation Failed'
         | 'Async Start Service Error'
         | 'Async Stop Service Error'
-        | 'Async Restart Service Error';
+        | 'Async Restart Service Error'
+        | 'Deployment Failed Exception'
+        | 'Destroy Failed Exception';
     /**
      * Details of the errors occurred
      */
@@ -1810,7 +1816,7 @@ export type ServiceConfigurationChangeOrderDetails = {
     /**
      * Order status of service configuration update result.
      */
-    orderStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * service configuration requested in the change request.
      */
@@ -1828,7 +1834,7 @@ export type ServiceConfigurationChangeOrderDetails = {
  */
 export enum orderStatus {
     CREATED = 'created',
-    IN_PROGRESS = 'in progress',
+    IN_PROGRESS = 'in-progress',
     SUCCESSFUL = 'successful',
     FAILED = 'failed',
 }
@@ -2047,7 +2053,7 @@ export type ServiceOrderDetails = {
     /**
      * The task status of the service order.
      */
-    taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    taskStatus: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * The id of the original service.
      */
@@ -2126,7 +2132,7 @@ export enum taskType {
  */
 export enum taskStatus {
     CREATED = 'created',
-    IN_PROGRESS = 'in progress',
+    IN_PROGRESS = 'in-progress',
     SUCCESSFUL = 'successful',
     FAILED = 'failed',
 }
@@ -2135,7 +2141,7 @@ export type ServiceOrderStatusUpdate = {
     /**
      * Current task status of the service order.
      */
-    taskStatus: 'created' | 'in progress' | 'successful' | 'failed';
+    taskStatus: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * Describes if the service order is now completed.
      */
@@ -2230,6 +2236,17 @@ export type ServiceProviderContactDetails = {
     websites?: Array<string>;
 };
 
+export type ServiceTemplateChangeInfo = {
+    /**
+     * ID of the registered service template.
+     */
+    serviceTemplateId: string;
+    /**
+     * ID of the change history of the service template.
+     */
+    changeId: string;
+};
+
 export type ServiceTemplateDetailVo = {
     /**
      * ID of the registered service.
@@ -2308,7 +2325,7 @@ export type ServiceTemplateDetailVo = {
     /**
      * State of registered service template.
      */
-    serviceTemplateRegistrationState: 'inProgress' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState: 'in-review' | 'approved' | 'rejected';
     /**
      * Is service template in updating.
      */
@@ -2334,7 +2351,7 @@ export type ServiceTemplateDetailVo = {
  * State of registered service template.
  */
 export enum serviceTemplateRegistrationState {
-    IN_PROGRESS = 'inProgress',
+    IN_REVIEW = 'in-review',
     APPROVED = 'approved',
     REJECTED = 'rejected',
 }
@@ -2862,10 +2879,14 @@ export type UpdateData = {
      * id of service template
      */
     id: string;
+    /**
+     * If remove the service template from catalog until the updated one is approved
+     */
+    isRemoveServiceTemplateUntilApproved: boolean;
     requestBody: Ocl;
 };
 
-export type UpdateResponse = ServiceTemplateDetailVo;
+export type UpdateResponse = ServiceTemplateChangeInfo;
 
 export type DeleteServiceTemplateData = {
     /**
@@ -2910,12 +2931,16 @@ export type FetchUpdateData = {
      */
     id: string;
     /**
+     * If remove the service template from catalog until the updated one is approved
+     */
+    isRemoveServiceTemplateUntilApproved: boolean;
+    /**
      * URL of Ocl file
      */
     oclLocation: string;
 };
 
-export type FetchUpdateResponse = ServiceTemplateDetailVo;
+export type FetchUpdateResponse = ServiceTemplateChangeInfo;
 
 export type GetServicePolicyDetailsData = {
     id: string;
@@ -3149,7 +3174,7 @@ export type ListServiceTemplatesData = {
     /**
      * state of service template registration
      */
-    serviceTemplateRegistrationState?: 'inProgress' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState?: 'in-review' | 'approved' | 'rejected';
     /**
      * version of the service
      */
@@ -3162,7 +3187,7 @@ export type RegisterData = {
     requestBody: Ocl;
 };
 
-export type RegisterResponse = ServiceTemplateDetailVo;
+export type RegisterResponse = ServiceTemplateChangeInfo;
 
 export type FetchData = {
     /**
@@ -3171,7 +3196,7 @@ export type FetchData = {
     oclLocation: string;
 };
 
-export type FetchResponse = ServiceTemplateDetailVo;
+export type FetchResponse = ServiceTemplateChangeInfo;
 
 export type ListServicePoliciesData = {
     /**
@@ -3242,7 +3267,7 @@ export type GetAllOrdersByServiceIdData = {
     /**
      * Task status of the service order
      */
-    taskStatus?: 'created' | 'in progress' | 'successful' | 'failed';
+    taskStatus?: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * Task type of the service order.
      */
@@ -3319,7 +3344,7 @@ export type GetLatestServiceOrderStatusData = {
     /**
      * Last known service order task status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.
      */
-    lastKnownServiceDeploymentState?: 'created' | 'in progress' | 'successful' | 'failed';
+    lastKnownServiceDeploymentState?: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * Id of the service order
      */
@@ -3644,7 +3669,7 @@ export type ListManagedServiceTemplatesData = {
     /**
      * state of service template registration
      */
-    serviceTemplateRegistrationState?: 'inProgress' | 'approved' | 'rejected';
+    serviceTemplateRegistrationState?: 'in-review' | 'approved' | 'rejected';
     /**
      * version of the service
      */

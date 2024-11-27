@@ -14,9 +14,11 @@ import registerStyles from '../../../../../styles/register.module.css';
 import {
     ApiError,
     category,
+    details,
+    DetailsData,
     ErrorResponse,
     Ocl,
-    ServiceTemplateDetailVo,
+    ServiceTemplateChangeInfo,
     serviceTemplateRegistrationState,
     update,
     type UpdateData,
@@ -44,7 +46,7 @@ function UpdateService({
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const updateResult = useRef<string[]>([]);
     const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(
-        serviceTemplateRegistrationState.IN_PROGRESS
+        serviceTemplateRegistrationState.IN_REVIEW
     );
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
@@ -54,15 +56,20 @@ function UpdateService({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
                 id: id,
+                isRemoveServiceTemplateUntilApproved: true,
                 requestBody: ocl,
             };
             return update(data);
         },
-        onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
+        onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
             files.current[0].status = 'done';
-            updateResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
+            updateResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
+            const detailsData: DetailsData = {
+                id: serviceTemplateChangeInfo.serviceTemplateId,
+            };
+            const serviceTemplateDetailsVo = await details(detailsData);
             serviceRegistrationStatus.current =
-                serviceTemplateVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
+                serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
