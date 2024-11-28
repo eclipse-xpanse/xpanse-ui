@@ -19,6 +19,13 @@
         "noFallthroughCasesInSwitch": true,
         "allowSyntheticDefaultImports": true
     },
-    "include": ["./src/**/*.*", "vite.config.ts", "src/vite-env.d.ts", "openapi-ts.config.ts"],
+    "include": [
+        "./src/**/*.*",
+        "vite.config.ts",
+        "src/vite-env.d.ts",
+        "openapi-ts.config.ts",
+        "./tests/**/*.*",
+        "playwright.config.ts"
+    ],
     "exclude": ["node_modules", "dist", "eslint.config.mjs"]
 }

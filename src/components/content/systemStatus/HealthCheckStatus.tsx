@@ -127,7 +127,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         message={response.errorType.valueOf()}
                         description={convertStringArrayToUnorderedList(response.details)}
                         type={'error'}
-                        closable={true}
+                        closable={false}
                     />
                 </div>
             );
@@ -138,7 +138,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         message='Fetching Health Check Status Failed'
                         description={healthCheckQuery.error.message}
                         type={'error'}
-                        closable={true}
+                        closable={false}
                     />
                 </div>
             );
