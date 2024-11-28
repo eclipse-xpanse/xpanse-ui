@@ -46,7 +46,7 @@ function DeleteService({
                     disabled={
                         deleteRequest.isSuccess ||
                         (reRegisterState.length > 0 && reRegisterState[0].status === 'success') ||
-                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_PROGRESS
+                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_REVIEW
                     }
                 >
                     Delete

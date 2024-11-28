@@ -14,11 +14,13 @@ import registerStyles from '../../../styles/register.module.css';
 import {
     ApiError,
     category,
+    details,
+    DetailsData,
     ErrorResponse,
     Ocl,
     register,
     type RegisterData,
-    ServiceTemplateDetailVo,
+    ServiceTemplateChangeInfo,
     serviceTemplateRegistrationState,
 } from '../../../xpanse-api/generated';
 import {
@@ -42,7 +44,7 @@ function RegisterPanel(): React.JSX.Element {
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const registerResult = useRef<string[]>([]);
     const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(
-        serviceTemplateRegistrationState.IN_PROGRESS
+        serviceTemplateRegistrationState.IN_REVIEW
     );
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
@@ -57,13 +59,17 @@ function RegisterPanel(): React.JSX.Element {
             };
             return register(data);
         },
-        onSuccess: (serviceTemplateVo: ServiceTemplateDetailVo) => {
+        onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
             files.current[0].status = 'done';
-            registerResult.current = [`ID - ${serviceTemplateVo.serviceTemplateId}`];
+            registerResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
+            const detailsData: DetailsData = {
+                id: serviceTemplateChangeInfo.serviceTemplateId,
+            };
+            const serviceTemplateDetailsVo = await details(detailsData);
             serviceRegistrationStatus.current =
-                serviceTemplateVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
-            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateVo.category as category) });
-            void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateVo.serviceTemplateId}`));
+                serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
+            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateDetailsVo.category as category) });
+            void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateDetailsVo.serviceTemplateId}`));
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';

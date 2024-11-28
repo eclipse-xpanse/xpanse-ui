@@ -15,7 +15,7 @@ export function ServiceTemplateRegisterStatus({
     serviceRegistrationStatus: serviceTemplateRegistrationState;
 }): React.JSX.Element {
     switch (serviceRegistrationStatus) {
-        case serviceTemplateRegistrationState.IN_PROGRESS:
+        case serviceTemplateRegistrationState.IN_REVIEW:
             return (
                 <Tag
                     bordered={false}

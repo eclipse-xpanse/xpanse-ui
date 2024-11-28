@@ -46,7 +46,7 @@ function ReRegisterService({
                     disabled={
                         reRegisterRequest.isSuccess ||
                         (deleteState.length > 0 && deleteState[0].status === 'success') ||
-                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_PROGRESS
+                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_REVIEW
                     }
                 >
                     Re-register
