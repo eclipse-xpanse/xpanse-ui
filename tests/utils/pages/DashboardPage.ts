@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, Locator, Page } from '@playwright/test';
 
 export class DashboardPage {
     readonly page: Page;
@@ -24,25 +24,20 @@ export class DashboardPage {
         this.failedDestroysRedirectUrl = this.baseUrl + '/myServices?serviceState=destroy+failed';
     }
 
-    async getValueOfStatics(position: number) {
-        return await this.serviceStaticLocator
-            .nth(position)
-            .locator('+.ant-statistic-content') // sibling element selector
-            .locator(' .ant-statistic-content-value-int') // descendent element selector
+    async getValueOfStatistics(position: number) {
+        return (await this.getLocationOfStatisticElementAtPosition(position)) // descendent element selector
             .textContent();
     }
 
     getStaticsElementAtPosition(position: number) {
         return this.serviceStaticLocator.nth(position);
     }
-
-    async getStaticsColorAtPosition(position: number) {
+    async getLocationOfStatisticElementAtPosition(position: number) {
         const element = this.serviceStaticLocator
             .nth(position)
-            .locator('+.ant-statistic-content')
-            .locator(' .ant-statistic-content-value-int');
-        return await element.evaluate((el) => {
-            return window.getComputedStyle(el).getPropertyValue('color');
-        });
+            .locator('+.ant-statistic-content') // sibling element selector
+            .locator(' .ant-statistic-content-value-int'); // descendent element selector
+        await expect(element).toBeVisible();
+        return element;
     }
 }
