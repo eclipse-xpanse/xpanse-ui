@@ -178,6 +178,10 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
+        serviceDestroyQuery.isError,
+        serviceDestroyQuery.isPending,
+        getDestroyServiceStatusPollingQuery.isError,
+        getDestroyServiceStatusPollingQuery.data?.isOrderCompleted,
         serviceRecreateRequest.isError,
         serviceRecreateRequest.isPending,
         getRecreateServiceOrderStatusPollingQuery.isError,
@@ -1524,7 +1528,7 @@ function MyServices(): React.JSX.Element {
                 <DestroyServiceStatusAlert
                     key={activeRecord.serviceId}
                     deployedService={activeRecord}
-                    destroySubmitError={serviceDestroyQuery.error}
+                    destroySubmitRequest={serviceDestroyQuery}
                     serviceStateDestroyQueryError={getDestroyServiceStatusPollingQuery.error}
                     serviceStateDestroyQueryData={getDestroyServiceStatusPollingQuery.data}
                     closeDestroyResultAlert={closeDestroyResultAlert}
