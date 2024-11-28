@@ -71,7 +71,7 @@ test('click on system status refreshes health check data', async ({ page, baseUR
             callCount++;
         }
     });
-    await mockHealthCheckSuccessResponse(page, 2000);
+    await mockHealthCheckSuccessResponse(page, 0);
     const home = new HomePage(page, baseURL);
     await home.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);

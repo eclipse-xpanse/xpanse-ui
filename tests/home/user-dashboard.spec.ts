@@ -17,8 +17,9 @@ test('Show service statistics when backend is reachable', async ({ page, baseURL
     const successfulDeployment = dashboard.getStaticsElementAtPosition(0);
     await expect(successfulDeployment).toBeVisible();
     await expect(successfulDeployment).toHaveText('Successful Deployments');
-    expect(await dashboard.getValueOfStatics(0)).toBe('1');
-    expect(await dashboard.getStaticsColorAtPosition(0)).toBe(dashboard.successStaticColor);
+    expect(await dashboard.getValueOfStatistics(0)).toBe('1');
+    const successfulDeploymentValue = dashboard.getLocationOfStatisticElementAtPosition(0);
+    await expect(await successfulDeploymentValue).toHaveCSS('color', dashboard.successStaticColor, { timeout: 10000 });
     await successfulDeployment.click();
     await expect(page).toHaveURL(dashboard.successDeploymentRedirectUrl);
     await page.goBack();
@@ -26,8 +27,9 @@ test('Show service statistics when backend is reachable', async ({ page, baseURL
     const failedDeployments = dashboard.getStaticsElementAtPosition(1);
     await expect(failedDeployments).toBeVisible();
     await expect(failedDeployments).toHaveText('Failed Deployments');
-    expect(await dashboard.getValueOfStatics(1)).toBe('1');
-    expect(await dashboard.getStaticsColorAtPosition(1)).toBe(dashboard.failureStaticColor);
+    expect(await dashboard.getValueOfStatistics(1)).toBe('1');
+    const failedDeploymentValue = dashboard.getLocationOfStatisticElementAtPosition(1);
+    await expect(await failedDeploymentValue).toHaveCSS('color', dashboard.failureStaticColor, { timeout: 10000 });
     await failedDeployments.click();
     await expect(page).toHaveURL(dashboard.failedDeploymentsRedirectUrl);
     await page.goBack();
@@ -35,8 +37,9 @@ test('Show service statistics when backend is reachable', async ({ page, baseURL
     const successfulDestroys = dashboard.getStaticsElementAtPosition(2);
     await expect(successfulDestroys).toBeVisible();
     await expect(successfulDestroys).toHaveText('Successful Destroys');
-    expect(await dashboard.getValueOfStatics(2)).toBe('1');
-    expect(await dashboard.getStaticsColorAtPosition(2)).toBe(dashboard.successStaticColor);
+    expect(await dashboard.getValueOfStatistics(2)).toBe('1');
+    const successfulDestroysValue = dashboard.getLocationOfStatisticElementAtPosition(2);
+    await expect(await successfulDestroysValue).toHaveCSS('color', dashboard.successStaticColor, { timeout: 10000 });
     await successfulDestroys.click();
     await expect(page).toHaveURL(dashboard.successDestroysRedirectUrl);
     await page.goBack();
@@ -44,8 +47,9 @@ test('Show service statistics when backend is reachable', async ({ page, baseURL
     const failedDestroys = dashboard.getStaticsElementAtPosition(3);
     await expect(failedDestroys).toBeVisible();
     await expect(failedDestroys).toHaveText('Failed Destroys');
-    expect(await dashboard.getValueOfStatics(3)).toBe('0');
-    expect(await dashboard.getStaticsColorAtPosition(3)).toBe(dashboard.failureStaticColor);
+    expect(await dashboard.getValueOfStatistics(3)).toBe('0');
+    const failedDestroysValue = dashboard.getLocationOfStatisticElementAtPosition(3);
+    await expect(await failedDestroysValue).toHaveCSS('color', dashboard.failureStaticColor, { timeout: 10000 });
     await failedDestroys.click();
     await expect(page).toHaveURL(dashboard.failedDestroysRedirectUrl);
     await page.goBack();
