@@ -209,9 +209,6 @@ export const ServiceReviewsDetails = ({
                                 <Descriptions.Item label='Registration Status'>
                                     {currentServiceTemplateVo.serviceTemplateRegistrationState.valueOf()}
                                 </Descriptions.Item>
-                                <Descriptions.Item label='Comments'>
-                                    {currentServiceTemplateVo.reviewComment}
-                                </Descriptions.Item>
                             </Descriptions>
                         </>
                     ) : (

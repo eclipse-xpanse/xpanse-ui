@@ -55,6 +55,8 @@ import type {
     GetAllOrdersByServiceIdResponse,
     GetAllServiceConfigurationChangeDetailsData,
     GetAllServiceConfigurationChangeDetailsResponse,
+    GetAllServiceTemplatesByIsvData,
+    GetAllServiceTemplatesByIsvResponse,
     GetAvailabilityZonesData,
     GetAvailabilityZonesResponse,
     GetComputeResourceInventoryOfServiceData,
@@ -77,8 +79,8 @@ import type {
     GetLatestServiceOrderStatusResponse,
     GetMetricsData,
     GetMetricsResponse,
-    GetOrderableServiceDetailsData,
-    GetOrderableServiceDetailsResponse,
+    GetOrderableServiceDetailsByIdData,
+    GetOrderableServiceDetailsByIdResponse,
     GetOrderableServicesData,
     GetOrderableServicesResponse,
     GetOrderDetailsByOrderIdData,
@@ -116,8 +118,6 @@ import type {
     ListManagedServiceTemplatesResponse,
     ListServicePoliciesData,
     ListServicePoliciesResponse,
-    ListServiceTemplatesData,
-    ListServiceTemplatesResponse,
     ListUserPoliciesData,
     ListUserPoliciesResponse,
     ManageFailedOrderData,
@@ -313,7 +313,7 @@ export const addUserCloudCredential = (
  * @param data.cspName The cloud service provider.
  * @param data.siteName The site of the provider.
  * @param data.type The type of credential.
- * @param data.name The name of of credential.
+ * @param data.name The name of credential.
  * @returns void No Content
  * @throws ApiError
  */
@@ -594,7 +594,7 @@ export const details = (data: DetailsData): CancelablePromise<DetailsResponse> =
  * Update service template using id and ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
- * @param data.isRemoveServiceTemplateUntilApproved If remove the service template from catalog until the updated one is approved
+ * @param data.isRemoveServiceTemplateUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
  * @param data.requestBody
  * @returns ServiceTemplateChangeInfo OK
  * @throws ApiError
@@ -738,7 +738,7 @@ export const reRegisterServiceTemplate = (
  * Update service template using id and URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.id id of service template
- * @param data.isRemoveServiceTemplateUntilApproved If remove the service template from catalog until the updated one is approved
+ * @param data.isRemoveServiceTemplateUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
  * @param data.oclLocation URL of Ocl file
  * @returns ServiceTemplateChangeInfo OK
  * @throws ApiError
@@ -1179,9 +1179,9 @@ export const migrate = (data: MigrateData): CancelablePromise<MigrateResponse> =
  * @returns ServiceTemplateDetailVo OK
  * @throws ApiError
  */
-export const listServiceTemplates = (
-    data: ListServiceTemplatesData = {}
-): CancelablePromise<ListServiceTemplatesResponse> => {
+export const getAllServiceTemplatesByIsv = (
+    data: GetAllServiceTemplatesByIsvData = {}
+): CancelablePromise<GetAllServiceTemplatesByIsvResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/service_templates',
@@ -2265,9 +2265,9 @@ export const getOrderableServices = (
  * @returns UserOrderableServiceVo OK
  * @throws ApiError
  */
-export const getOrderableServiceDetails = (
-    data: GetOrderableServiceDetailsData
-): CancelablePromise<GetOrderableServiceDetailsResponse> => {
+export const getOrderableServiceDetailsById = (
+    data: GetOrderableServiceDetailsByIdData
+): CancelablePromise<GetOrderableServiceDetailsByIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/catalog/services/{id}',

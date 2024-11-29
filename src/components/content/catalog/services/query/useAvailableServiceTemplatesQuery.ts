@@ -4,16 +4,20 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { category, listServiceTemplates, ListServiceTemplatesData } from '../../../../../xpanse-api/generated';
+import {
+    category,
+    getAllServiceTemplatesByIsv,
+    GetAllServiceTemplatesByIsvData,
+} from '../../../../../xpanse-api/generated';
 
 export function useAvailableServiceTemplatesQuery(currentCategory: category) {
     return useQuery({
         queryKey: getQueryKey(currentCategory),
         queryFn: () => {
-            const data: ListServiceTemplatesData = {
+            const data: GetAllServiceTemplatesByIsvData = {
                 categoryName: currentCategory,
             };
-            return listServiceTemplates(data);
+            return getAllServiceTemplatesByIsv(data);
         },
         refetchOnWindowFocus: false,
     });
