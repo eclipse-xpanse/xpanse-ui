@@ -1079,7 +1079,7 @@ export type ErrorResponse = {
         | 'Service Template Already Registered'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Is Unavailable'
+        | 'Service Template Disabled'
         | 'Service Template Already Reviewed'
         | 'Invalid Service Version'
         | 'Invalid Service Flavors'
@@ -1157,7 +1157,7 @@ export enum errorType {
     SERVICE_TEMPLATE_ALREADY_REGISTERED = 'Service Template Already Registered',
     ICON_PROCESSING_FAILED = 'Icon Processing Failed',
     SERVICE_TEMPLATE_NOT_REGISTERED = 'Service Template Not Registered',
-    SERVICE_TEMPLATE_IS_UNAVAILABLE = 'Service Template Is Unavailable',
+    SERVICE_TEMPLATE_DISABLED = 'Service Template Disabled',
     SERVICE_TEMPLATE_ALREADY_REVIEWED = 'Service Template Already Reviewed',
     INVALID_SERVICE_VERSION = 'Invalid Service Version',
     INVALID_SERVICE_FLAVORS = 'Invalid Service Flavors',
@@ -1533,7 +1533,7 @@ export type OrderFailedErrorResponse = {
         | 'Service Template Already Registered'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Is Unavailable'
+        | 'Service Template Disabled'
         | 'Service Template Already Reviewed'
         | 'Invalid Service Version'
         | 'Invalid Service Flavors'
@@ -2334,10 +2334,6 @@ export type ServiceTemplateDetailVo = {
      * Is available in catalog.
      */
     availableInCatalog: boolean;
-    /**
-     * Comment of reviewed service template.
-     */
-    reviewComment?: string;
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
      * End user license agreement content of the service.
@@ -2790,7 +2786,7 @@ export type DeleteUserCloudCredentialData = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The name of of credential.
+     * The name of credential.
      */
     name: string;
     /**
@@ -2880,7 +2876,7 @@ export type UpdateData = {
      */
     id: string;
     /**
-     * If remove the service template from catalog until the updated one is approved
+     * If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
      */
     isRemoveServiceTemplateUntilApproved: boolean;
     requestBody: Ocl;
@@ -2931,7 +2927,7 @@ export type FetchUpdateData = {
      */
     id: string;
     /**
-     * If remove the service template from catalog until the updated one is approved
+     * If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
      */
     isRemoveServiceTemplateUntilApproved: boolean;
     /**
@@ -3035,7 +3031,7 @@ export type DeleteIsvCloudCredentialData = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The name of of credential.
+     * The name of credential.
      */
     name: string;
     /**
@@ -3127,7 +3123,7 @@ export type MigrateData = {
 
 export type MigrateResponse = ServiceOrder;
 
-export type ListServiceTemplatesData = {
+export type GetAllServiceTemplatesByIsvData = {
     /**
      * is available in catalog
      */
@@ -3181,7 +3177,7 @@ export type ListServiceTemplatesData = {
     serviceVersion?: string;
 };
 
-export type ListServiceTemplatesResponse = Array<ServiceTemplateDetailVo>;
+export type GetAllServiceTemplatesByIsvResponse = Array<ServiceTemplateDetailVo>;
 
 export type RegisterData = {
     requestBody: Ocl;
@@ -3871,14 +3867,14 @@ export type GetOrderableServicesData = {
 
 export type GetOrderableServicesResponse = Array<UserOrderableServiceVo>;
 
-export type GetOrderableServiceDetailsData = {
+export type GetOrderableServiceDetailsByIdData = {
     /**
      * The id of orderable service.
      */
     id: string;
 };
 
-export type GetOrderableServiceDetailsResponse = UserOrderableServiceVo;
+export type GetOrderableServiceDetailsByIdResponse = UserOrderableServiceVo;
 
 export type OpenApiData = {
     id: string;
