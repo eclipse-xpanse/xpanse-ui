@@ -43,7 +43,6 @@
     },
     "devDependencies": {
         "@axa-fr/oidc-client": "^7.22.32",
-        "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
         "@eslint/compat": "^1.2.3",
         "@eslint/eslintrc": "^3.2.0",
         "@eslint/js": "^9.16.0",
@@ -93,7 +92,6 @@
             "openapi-ts.config.ts"
         ],
         "ignoreDependencies": [
-            "@babel/plugin-proposal-private-property-in-object",
             "@hey-api/openapi-ts",
             "eslint-import-resolver-typescript",
             "eslint-plugin-react-hooks",
