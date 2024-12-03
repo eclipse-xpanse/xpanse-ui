@@ -17,6 +17,7 @@ updates:
               applies-to: version-updates
               patterns:
                   - '@typescript-eslint/*'
+                  - 'typescript-eslint'
           eslint:
               applies-to: version-updates
               patterns:
@@ -30,6 +31,20 @@ updates:
               applies-to: version-updates
               patterns:
                   - '@axa-fr/*'
+          tanstack-query:
+              applies-to: version-updates
+              patterns:
+                  - '@tanstack/*'      
+          antd:
+              applies-to: version-updates
+              patterns:
+                  - '@ant-design/icons'
+                  - 'antd'
+          vite:
+              applies-to: version-updates
+              patterns:
+                  - 'vite'
+                  - '@vitejs/plugin-react'        
     - package-ecosystem: docker
       directory: /docker
       schedule:
