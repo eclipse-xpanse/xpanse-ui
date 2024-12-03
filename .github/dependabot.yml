@@ -34,7 +34,7 @@ updates:
           tanstack-query:
               applies-to: version-updates
               patterns:
-                  - '@tanstack/*'      
+                  - '@tanstack/*'
           antd:
               applies-to: version-updates
               patterns:
@@ -44,7 +44,7 @@ updates:
               applies-to: version-updates
               patterns:
                   - 'vite'
-                  - '@vitejs/plugin-react'        
+                  - '@vitejs/plugin-react'
     - package-ecosystem: docker
       directory: /docker
       schedule:
