@@ -693,7 +693,7 @@ function MyServices(): React.JSX.Element {
                         icon={<HistoryOutlined />}
                         type={'link'}
                     >
-                        history
+                        order history
                     </Button>
                 ),
             },
@@ -1607,7 +1607,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {activeRecord ? (
                 <Modal
-                    title={'Service Modified History'}
+                    title={'Service Orders'}
                     width={1600}
                     footer={null}
                     open={isMyServiceHistoryModalOpen}

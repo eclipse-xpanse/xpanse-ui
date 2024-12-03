@@ -117,3 +117,24 @@
 .service-modify-warnings-content {
     width: 400px;
 }
+
+.service-order-error-data-hover {
+    padding: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.service-order-error-text {
+    max-height: 30vh;
+    position: relative;
+    overflow: auto;
+    max-width: 40vh;
+}
+
+.service-history-value {
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
