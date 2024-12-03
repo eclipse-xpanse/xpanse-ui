@@ -50,7 +50,6 @@
         "playwright-core": "^1.49.0",
         "@playwright/test": "^1.49.0",
         "@tanstack/eslint-plugin-query": "^5.62.1",
-        "@types/node": "^22.10.0",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
         "@types/uuid": "^10.0.0",
