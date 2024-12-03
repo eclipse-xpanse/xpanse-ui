@@ -7571,12 +7571,23 @@
                         }
                     },
                     {
+                        "name": "serviceTemplateId",
+                        "in": "query",
+                        "description": "Id of the serviceTemplate",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
                         "name": "serviceId",
                         "in": "query",
                         "description": "Id of the deployed service",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "uuid"
                         }
                     }
                 ],
