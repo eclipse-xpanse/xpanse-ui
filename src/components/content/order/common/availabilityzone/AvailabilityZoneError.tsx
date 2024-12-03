@@ -65,10 +65,14 @@ export function AvailabilityZoneError({
         return (
             <p className={serviceOrderStyles.orderFormAlert}>
                 <Alert
-                    message='Fetching Availability Regions Failed'
-                    description={
-                        ' This Availability Zone is not a mandatory field. You can proceed without this, ' +
+                    message={
+                        'Fetching Availability Regions Failed - This is not a mandatory field. You can proceed without this, ' +
                         'and the service will be deployed on one of the availability zones of the regions by default.'
+                    }
+                    description={
+                        error instanceof ApiError && error.body && Array.isArray(error.body)
+                            ? convertStringArrayToUnorderedList(error.body as string[])
+                            : error.message
                     }
                     type={'warning'}
                     closable={false}
