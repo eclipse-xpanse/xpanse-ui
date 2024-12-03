@@ -95,7 +95,17 @@ export const SelectDestination = ({
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const getServiceTemplateId = (): string => {
+        const service = userOrderableServiceVoList.find(
+            (service) => service.csp === selectCsp && selectServiceHostType === service.serviceHostingType
+        );
+        return service ? service.serviceTemplateId : '';
+    };
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(
+        selectCsp,
+        selectRegion,
+        getServiceTemplateId()
+    );
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         userOrderableServiceVoList
@@ -297,6 +307,7 @@ export const SelectDestination = ({
                                 selectAvailabilityZones={selectAvailabilityZones}
                                 selectCsp={selectCsp}
                                 key={availabilityZoneConfig.varName}
+                                selectedServiceTemplateId={getServiceTemplateId()}
                             />
                         );
                     })}
