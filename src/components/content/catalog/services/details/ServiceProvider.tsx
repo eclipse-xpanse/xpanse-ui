@@ -209,28 +209,22 @@ function ServiceProvider({
                                     id={activeServiceDetail.serviceTemplateId}
                                     category={category}
                                     isViewDisabled={isViewDisabled}
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                                 <UnregisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    availableInCatalog={activeServiceDetail.availableInCatalog}
                                 />
                                 <ReRegisterService
-                                    id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     reRegisterRequest={reRegisterRequest}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                             </div>
                             <h3 className={catalogStyles.catalogDetailsH3}>

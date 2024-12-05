@@ -5,7 +5,8 @@
 
 import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Col, Modal, Row, Upload, UploadFile } from 'antd';
+import { Button, Checkbox, Col, Form, Modal, Row, Space, Upload, UploadFile } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import appStyles from '../../../../../styles/app.module.css';
@@ -19,6 +20,7 @@ import {
     ErrorResponse,
     Ocl,
     ServiceTemplateChangeInfo,
+    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
     update,
     type UpdateData,
@@ -35,10 +37,12 @@ function UpdateService({
     id,
     category,
     isViewDisabled,
+    activeServiceDetail,
 }: {
     id: string;
     category: category;
     isViewDisabled: boolean;
+    activeServiceDetail: ServiceTemplateDetailVo;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
@@ -51,12 +55,13 @@ function UpdateService({
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isRemoveServiceTemplateUntilApproved, setIsRemoveServiceTemplateUntilApproved] = useState(true);
     const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
                 id: id,
-                isRemoveServiceTemplateUntilApproved: true,
+                isRemoveServiceTemplateUntilApproved: isRemoveServiceTemplateUntilApproved,
                 requestBody: ocl,
             };
             return update(data);
@@ -165,6 +170,10 @@ function UpdateService({
         return false;
     };
 
+    const onChange = (e: CheckboxChangeEvent) => {
+        setIsRemoveServiceTemplateUntilApproved(e.target.checked);
+    };
+
     return (
         <div className={catalogStyles.updateUnregisterBtnClass}>
             <Button
@@ -172,7 +181,7 @@ function UpdateService({
                 icon={<EditOutlined />}
                 onClick={showModal}
                 className={catalogStyles.catalogManageBtnClass}
-                disabled={isViewDisabled}
+                disabled={isViewDisabled || activeServiceDetail.serviceTemplateRegistrationState === 'in-review'}
             >
                 Update
             </Button>
@@ -202,6 +211,22 @@ function UpdateService({
                             retryRequest={retryRequest}
                         />
                     ) : null}
+                    <div className={registerStyles.removeServiceTemplateUntilApproved}>
+                        <Row>
+                            <Form.Item
+                                name='isRemoveServiceTemplateUntilApproved'
+                                label='RemoveServiceTemplateUntilApproved'
+                            >
+                                <Space wrap>
+                                    <Checkbox
+                                        checked={isRemoveServiceTemplateUntilApproved}
+                                        name='isRemoveServiceTemplateUntilApproved'
+                                        onChange={onChange}
+                                    ></Checkbox>
+                                </Space>
+                            </Form.Item>
+                        </Row>
+                    </div>
                     <div className={registerStyles.registerButtons}>
                         <Upload
                             name={'OCL File'}
