@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CheckCircleOutlined, MinusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
 import { Button, Popover, Table, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -11,16 +11,16 @@ import React from 'react';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import {
     DeployedServiceDetails,
-    DeployRequest,
     ErrorResponse,
     ServiceOrderDetails,
     taskStatus,
     taskType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
+import { MyServiceHistoryDetails } from './MyServiceHistoryDetails.tsx';
 import useListServiceOrdersHistoryQuery from './query/useListServiceModifyHistoryQuery.ts';
 
-const { Text } = Typography;
+const { Paragraph } = Typography;
 
 export const MyServiceHistory = ({
     deployedService,
@@ -81,72 +81,53 @@ export const MyServiceHistory = ({
             title: 'OrderId',
             dataIndex: 'orderId',
             align: 'center',
-            width: 120,
-            className: serviceModifyStyles.modifyHistoryValue,
+            width: 100,
             filters: orderIdFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.orderId.startsWith(value.toString()),
+            render: (value: string) => {
+                return (
+                    <div className={serviceModifyStyles.serviceHistoryValue}>
+                        <Paragraph
+                            className={serviceModifyStyles.serviceHistoryOrderIdClass}
+                            ellipsis={true}
+                            copyable={{ tooltips: value }}
+                        >
+                            {value}
+                        </Paragraph>
+                    </div>
+                );
+            },
         },
         {
             title: 'TaskType',
             dataIndex: 'taskType',
             align: 'center',
             width: 100,
-            className: serviceModifyStyles.modifyHistoryValue,
             filters: taskTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.taskType.startsWith(value.toString()),
-            render: (value: taskType) => {
-                return <div className={serviceModifyStyles.serviceHistoryValue}>{value}</div>;
-            },
         },
         {
-            title: 'Previous',
-            dataIndex: 'previousDeployRequest',
-            width: 300,
-            className: serviceModifyStyles.modifyHistoryValue,
+            title: 'Details',
+            dataIndex: 'details',
+            width: 100,
             align: 'center',
-            render: (value: DeployRequest) => {
+            render: (_, record) => {
                 return (
-                    <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-                        <li>
-                            <Text strong>Customer Service Name:</Text>&nbsp;{value.customerServiceName}
-                        </li>
-                        {value.serviceRequestProperties ? (
-                            <li>
-                                <Text strong>Service Request Properties:</Text>&nbsp;
-                                {JSON.stringify(value.serviceRequestProperties)}
-                            </li>
-                        ) : (
-                            <></>
-                        )}
-                    </ul>
-                );
-            },
-        },
-        {
-            title: 'New',
-            dataIndex: 'newDeployRequest',
-            className: serviceModifyStyles.modifyHistoryValue,
-            align: 'center',
-            width: 300,
-            render: (value: DeployRequest) => {
-                return (
-                    <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-                        <li>
-                            <Text strong>Customer Service Name:</Text>&nbsp;{value.customerServiceName}
-                        </li>
-                        {value.serviceRequestProperties ? (
-                            <li>
-                                <Text strong>Service Request Properties:</Text>&nbsp;
-                                {JSON.stringify(value.serviceRequestProperties)}
-                            </li>
-                        ) : (
-                            <></>
-                        )}
-                    </ul>
+                    <div>
+                        <Popover
+                            content={<MyServiceHistoryDetails record={record} />}
+                            title={'Details'}
+                            trigger='hover'
+                        >
+                            <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
+                                {'details'}
+                            </Button>
+                        </Popover>
+                    </div>
                 );
             },
         },
@@ -193,7 +174,7 @@ export const MyServiceHistory = ({
             render: (value) => {
                 if (value === taskStatus.FAILED) {
                     return (
-                        <Tag icon={<QuestionCircleOutlined />} color={'error'}>
+                        <Tag icon={<CloseCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
@@ -216,7 +197,7 @@ export const MyServiceHistory = ({
             title: 'Failure Reason',
             dataIndex: 'errorResponse',
             align: 'center',
-            width: 150,
+            width: 100,
             render: (value: ErrorResponse | undefined) => {
                 if (value) {
                     return (
@@ -226,7 +207,7 @@ export const MyServiceHistory = ({
                             trigger='hover'
                         >
                             <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
-                                {'error response'}
+                                {'failure reason'}
                             </Button>
                         </Popover>
                     );

@@ -128,13 +128,20 @@
     max-height: 30vh;
     position: relative;
     overflow: auto;
-    max-width: 40vh;
+    max-width: 60vh;
+}
+
+.ant-table-cell {
+    height: 100%;
 }
 
 .service-history-value {
-    margin-top: 25px;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     height: 100%;
+}
+
+.service-history-order-id-class {
+    margin-bottom: 0 !important;
 }
