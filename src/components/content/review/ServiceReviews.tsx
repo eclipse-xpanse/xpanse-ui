@@ -12,7 +12,6 @@ import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
     category,
-    csp,
     Deployment,
     kind,
     serviceHostingType,
@@ -28,7 +27,6 @@ import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQ
 export default function ServiceReviews(): React.JSX.Element {
     let serviceNameFilters: ColumnFilterItem[] = [];
     let versionFilters: ColumnFilterItem[] = [];
-    let cspFilters: ColumnFilterItem[] = [];
     let categoryFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
     let registrationStatusFilters: ColumnFilterItem[] = [];
@@ -53,17 +51,6 @@ export default function ServiceReviews(): React.JSX.Element {
         serviceHostingTypeFilters = filters;
     };
 
-    const getCspFilters = (): void => {
-        const filters: ColumnFilterItem[] = [];
-        Object.values(csp).forEach((csp) => {
-            const filter = {
-                text: csp,
-                value: csp,
-            };
-            filters.push(filter);
-        });
-        cspFilters = filters;
-    };
     const getServiceNameFilters = (serviceTemplateDetailVoList: ServiceTemplateDetailVo[]): void => {
         const filters: ColumnFilterItem[] = [];
         const nameSet = new Set<string>('');
@@ -137,7 +124,6 @@ export default function ServiceReviews(): React.JSX.Element {
         getServiceNameFilters(allServiceTemplatesListQuery.data);
         getVersionFilters(allServiceTemplatesListQuery.data);
         getServiceHostingTypeFilters();
-        getCspFilters();
         getCategoryFilters();
         getRegistrationStatusFilters();
         getDeployerTypeFilters();
@@ -237,15 +223,6 @@ export default function ServiceReviews(): React.JSX.Element {
                 }
                 return false;
             },
-            align: 'left',
-        },
-        {
-            title: 'Csp',
-            dataIndex: 'csp',
-            filters: cspFilters,
-            filterMode: 'tree',
-            filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             align: 'left',
         },
         {
