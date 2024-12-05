@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CheckCircleOutlined, CloseCircleOutlined, MinusCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
 import { Button, Popover, Table, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -184,9 +184,15 @@ export const MyServiceHistory = ({
                             {value}
                         </Tag>
                     );
+                } else if (value === taskStatus.IN_PROGRESS) {
+                    return (
+                        <Tag icon={<SyncOutlined />} color={'orange'}>
+                            {value}
+                        </Tag>
+                    );
                 } else {
                     return (
-                        <Tag icon={<MinusCircleOutlined />} color={'default'}>
+                        <Tag icon={<ClockCircleOutlined />} color={'default'}>
                             {value}
                         </Tag>
                     );
