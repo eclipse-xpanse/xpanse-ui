@@ -117,3 +117,31 @@
 .service-modify-warnings-content {
     width: 400px;
 }
+
+.service-order-error-data-hover {
+    padding: 0;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.service-order-error-text {
+    max-height: 30vh;
+    position: relative;
+    overflow: auto;
+    max-width: 60vh;
+}
+
+.ant-table-cell {
+    height: 100%;
+}
+
+.service-history-value {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.service-history-order-id-class {
+    margin-bottom: 0 !important;
+}
