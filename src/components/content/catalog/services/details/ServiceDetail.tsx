@@ -15,11 +15,9 @@ import {
     DeployedService,
     serviceDeploymentState,
     ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
-import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
 import { BillingText } from '../../../common/ocl/BillingText';
@@ -30,6 +28,7 @@ import { RegionText } from '../../../common/ocl/RegionText.tsx';
 import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
 import DeploymentManagement from '../../../deployment/DeploymentManagement';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
+import AvailableInCatalog from './AvailableInCatalog';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -113,6 +112,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
+                <Descriptions.Item label='availableInCatalog'>
+                    <AvailableInCatalog serviceDetails={serviceDetails} />
+                </Descriptions.Item>
                 <Descriptions.Item label='Namespace'>
                     <Tag color='cyan'>{serviceDetails.namespace}</Tag>
                 </Descriptions.Item>
@@ -121,13 +123,6 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
-                <Descriptions.Item label='Status'>
-                    <ServiceTemplateRegisterStatus
-                        serviceRegistrationStatus={
-                            serviceDetails.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                        }
-                    />
-                </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
                 <Descriptions.Item label='Billing Modes'>
                     <BillingText billing={serviceDetails.billing} />

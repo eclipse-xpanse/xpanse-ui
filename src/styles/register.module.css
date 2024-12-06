@@ -7,11 +7,17 @@
     padding: 24px;
 }
 
-.register-buttons {
+.remove-service-template-until-approved {
     display: flex;
     align-items: baseline;
     gap: 10px;
     margin-top: 20px;
+}
+.registerButtons {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-top: 10px;
 }
 
 .register-buttons-upload {
