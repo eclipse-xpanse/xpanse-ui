@@ -3,87 +3,131 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CheckCircleOutlined, MinusCircleOutlined, QuestionCircleOutlined } from '@ant-design/icons';
-import { Table, Tag, Tooltip, Typography } from 'antd';
+import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
+import { Button, Popover, Table, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import {
-    DeployRequest,
     DeployedServiceDetails,
+    ErrorResponse,
     ServiceOrderDetails,
-    VendorHostedDeployedServiceDetails,
     taskStatus,
+    taskType,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import useListServiceModifyHistoryQuery from './query/useListServiceModifyHistoryQuery';
+import { MyServiceHistoryDetails } from './MyServiceHistoryDetails.tsx';
+import useListServiceOrdersHistoryQuery from './query/useListServiceModifyHistoryQuery.ts';
 
-const { Text } = Typography;
+const { Paragraph } = Typography;
 
 export const MyServiceHistory = ({
     deployedService,
 }: {
     deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
-    let serviceModificationAuditHistoryList: ServiceOrderDetails[] = [];
-    const listServiceModifyHistoryQuery = useListServiceModifyHistoryQuery(deployedService.serviceId);
+    let orderIdFilters: ColumnFilterItem[] = [];
+    let taskTypeFilters: ColumnFilterItem[] = [];
+    let taskStatusFilters: ColumnFilterItem[] = [];
+    let serviceOrdersHistoryList: ServiceOrderDetails[] = [];
+    const listServiceOrdersHistoryQuery = useListServiceOrdersHistoryQuery(deployedService.serviceId);
 
-    if (listServiceModifyHistoryQuery.isSuccess && listServiceModifyHistoryQuery.data.length > 0) {
-        serviceModificationAuditHistoryList = listServiceModifyHistoryQuery.data;
+    if (listServiceOrdersHistoryQuery.isSuccess && listServiceOrdersHistoryQuery.data.length > 0) {
+        serviceOrdersHistoryList = listServiceOrdersHistoryQuery.data;
+        updateOrderIdFilters(listServiceOrdersHistoryQuery.data);
+        updateTaskTypeFilters();
+        updateTaskStatusFilters();
+    }
+
+    function updateOrderIdFilters(resp: ServiceOrderDetails[]): void {
+        const filters: ColumnFilterItem[] = [];
+        resp.forEach((respItem) => {
+            const filter = {
+                text: respItem.orderId,
+                value: respItem.orderId,
+            };
+            filters.push(filter);
+        });
+        orderIdFilters = filters;
+    }
+
+    function updateTaskTypeFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(taskType).forEach((taskTypeItem) => {
+            const filter = {
+                text: taskTypeItem,
+                value: taskTypeItem,
+            };
+            filters.push(filter);
+        });
+        taskTypeFilters = filters;
+    }
+
+    function updateTaskStatusFilters(): void {
+        const filters: ColumnFilterItem[] = [];
+        Object.values(taskStatus).forEach((taskStatusItem) => {
+            const filter = {
+                text: taskStatusItem,
+                value: taskStatusItem,
+            };
+            filters.push(filter);
+        });
+        taskStatusFilters = filters;
     }
 
     const columns: ColumnsType<ServiceOrderDetails> = [
         {
-            title: 'ModifyId',
+            title: 'OrderId',
             dataIndex: 'orderId',
             align: 'center',
             width: 100,
-            className: serviceModifyStyles.modifyHistoryValue,
-        },
-        {
-            title: 'Previous',
-            dataIndex: 'previousDeployRequest',
-            width: 300,
-            className: serviceModifyStyles.modifyHistoryValue,
-            align: 'center',
-            render: (value: DeployRequest) => {
+            filters: orderIdFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.orderId.startsWith(value.toString()),
+            render: (value: string) => {
                 return (
-                    <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-                        <li>
-                            <Text strong>Customer Service Name:</Text>&nbsp;{value.customerServiceName}
-                        </li>
-                        {value.serviceRequestProperties ? (
-                            <li>
-                                <Text strong>Service Request Properties:</Text>&nbsp;
-                                {JSON.stringify(value.serviceRequestProperties)}
-                            </li>
-                        ) : (
-                            <></>
-                        )}
-                    </ul>
+                    <div className={serviceModifyStyles.serviceHistoryValue}>
+                        <Paragraph
+                            className={serviceModifyStyles.serviceHistoryOrderIdClass}
+                            ellipsis={true}
+                            copyable={{ tooltips: value }}
+                        >
+                            {value}
+                        </Paragraph>
+                    </div>
                 );
             },
         },
         {
-            title: 'New',
-            dataIndex: 'newDeployRequest',
-            className: serviceModifyStyles.modifyHistoryValue,
+            title: 'TaskType',
+            dataIndex: 'taskType',
             align: 'center',
-            width: 300,
-            render: (value: DeployRequest) => {
+            width: 100,
+            filters: taskTypeFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.taskType.startsWith(value.toString()),
+        },
+        {
+            title: 'Details',
+            dataIndex: 'details',
+            width: 100,
+            align: 'center',
+            render: (_, record) => {
                 return (
-                    <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-                        <li>
-                            <Text strong>Customer Service Name:</Text>&nbsp;{value.customerServiceName}
-                        </li>
-                        {value.serviceRequestProperties ? (
-                            <li>
-                                <Text strong>Service Request Properties:</Text>&nbsp;
-                                {JSON.stringify(value.serviceRequestProperties)}
-                            </li>
-                        ) : (
-                            <></>
-                        )}
-                    </ul>
+                    <div>
+                        <Popover
+                            content={<MyServiceHistoryDetails record={record} />}
+                            title={'Details'}
+                            trigger='hover'
+                        >
+                            <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
+                                {'details'}
+                            </Button>
+                        </Popover>
+                    </div>
                 );
             },
         },
@@ -92,22 +136,45 @@ export const MyServiceHistory = ({
             dataIndex: 'startedTime',
             align: 'center',
             width: 150,
+            defaultSortOrder: 'descend',
+            sorter: (serviceOrderDetailsA, serviceOrderDetailsB): number => {
+                if (serviceOrderDetailsA.startedTime && serviceOrderDetailsB.startedTime) {
+                    return (
+                        new Date(serviceOrderDetailsA.startedTime).getTime() -
+                        new Date(serviceOrderDetailsB.startedTime).getTime()
+                    );
+                }
+                return 0;
+            },
         },
         {
             title: 'CompletedTime',
             dataIndex: 'completedTime',
             align: 'center',
             width: 150,
+            sorter: (serviceOrderDetailsA, serviceOrderDetailsB): number => {
+                if (serviceOrderDetailsA.completedTime && serviceOrderDetailsB.completedTime) {
+                    return (
+                        new Date(serviceOrderDetailsA.completedTime).getTime() -
+                        new Date(serviceOrderDetailsB.completedTime).getTime()
+                    );
+                }
+                return 0;
+            },
         },
         {
-            title: 'Status',
+            title: 'TaskStatus',
             dataIndex: 'taskStatus',
             align: 'center',
             width: 50,
+            filters: taskStatusFilters,
+            filterMode: 'tree',
+            filterSearch: true,
+            onFilter: (value: React.Key | boolean, record) => record.taskStatus.startsWith(value.toString()),
             render: (value) => {
                 if (value === taskStatus.FAILED) {
                     return (
-                        <Tag icon={<QuestionCircleOutlined />} color={'error'}>
+                        <Tag icon={<CloseCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
@@ -117,9 +184,15 @@ export const MyServiceHistory = ({
                             {value}
                         </Tag>
                     );
+                } else if (value === taskStatus.IN_PROGRESS) {
+                    return (
+                        <Tag icon={<SyncOutlined />} color={'orange'}>
+                            {value}
+                        </Tag>
+                    );
                 } else {
                     return (
-                        <Tag icon={<MinusCircleOutlined />} color={'default'}>
+                        <Tag icon={<ClockCircleOutlined />} color={'default'}>
                             {value}
                         </Tag>
                     );
@@ -128,15 +201,21 @@ export const MyServiceHistory = ({
         },
         {
             title: 'Failure Reason',
-            dataIndex: 'errorMsg',
+            dataIndex: 'errorResponse',
             align: 'center',
-            width: 150,
-            render: (value: string | undefined) => {
+            width: 100,
+            render: (value: ErrorResponse | undefined) => {
                 if (value) {
                     return (
-                        <Tooltip title={value}>
-                            <span className={serviceModifyStyles.modifyHistoryErrorMsgValue}>{value}</span>
-                        </Tooltip>
+                        <Popover
+                            content={<pre className={serviceModifyStyles.serviceOrderErrorText}>{value.details}</pre>}
+                            title={value.errorType}
+                            trigger='hover'
+                        >
+                            <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
+                                {'failure reason'}
+                            </Button>
+                        </Popover>
                     );
                 }
             },
@@ -147,8 +226,8 @@ export const MyServiceHistory = ({
         <div className={serviceModifyStyles.modifyContainer}>
             <Table
                 columns={columns}
-                dataSource={serviceModificationAuditHistoryList}
-                loading={listServiceModifyHistoryQuery.isPending || listServiceModifyHistoryQuery.isRefetching}
+                dataSource={serviceOrdersHistoryList}
+                loading={listServiceOrdersHistoryQuery.isPending || listServiceOrdersHistoryQuery.isRefetching}
                 rowKey={'id'}
                 scroll={{ x: 'max-content' }}
             />
