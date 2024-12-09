@@ -18,14 +18,20 @@ export function AvailabilityZoneFormItem({
     onAvailabilityZoneChange,
     selectAvailabilityZones,
     selectCsp,
+    selectedServiceTemplateId,
 }: {
     availabilityZoneConfig: AvailabilityZoneConfig;
     selectRegion: Region;
     onAvailabilityZoneChange: (varName: string, availabilityZone: string | undefined) => void;
     selectAvailabilityZones: Record<string, string | undefined>;
     selectCsp: csp;
+    selectedServiceTemplateId: string;
 }): React.JSX.Element {
-    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const availabilityZonesVariableRequest = useGetAvailabilityZonesForRegionQuery(
+        selectCsp,
+        selectRegion,
+        selectedServiceTemplateId
+    );
     const retryRequest = () => {
         if (availabilityZonesVariableRequest.isError) {
             void availabilityZonesVariableRequest.refetch();

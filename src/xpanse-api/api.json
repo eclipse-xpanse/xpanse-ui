@@ -7671,12 +7671,23 @@
                         }
                     },
                     {
+                        "name": "serviceTemplateId",
+                        "in": "query",
+                        "description": "Id of the serviceTemplate",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
                         "name": "serviceId",
                         "in": "query",
                         "description": "Id of the deployed service",
                         "required": false,
                         "schema": {
-                            "type": "string"
+                            "type": "string",
+                            "format": "uuid"
                         }
                     }
                 ],
@@ -8603,9 +8614,6 @@
                             }
                         }
                     },
-                    "204": {
-                        "description": "no pending configuration update requests"
-                    },
                     "200": {
                         "description": "pending configuration update request details",
                         "content": {
@@ -8615,6 +8623,9 @@
                                 }
                             }
                         }
+                    },
+                    "204": {
+                        "description": "no pending configuration update requests"
                     }
                 }
             }

@@ -3756,6 +3756,10 @@ export type GetAvailabilityZonesData = {
      */
     serviceId?: string;
     /**
+     * Id of the serviceTemplate
+     */
+    serviceTemplateId?: string;
+    /**
      * site of the region belongs to
      */
     siteName: string;
