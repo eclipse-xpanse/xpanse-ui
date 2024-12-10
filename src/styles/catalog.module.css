@@ -51,6 +51,11 @@
     display: flex;
 }
 
+.service-template-card {
+    margin-top: 10px;
+    padding-top: 0px !important;
+}
+
 .catalog-skeleton {
     margin: 30px;
     position: absolute;
@@ -76,7 +81,10 @@
 }
 
 .catalog-details-h3 {
+    padding-top: 15px;
     font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .catalog-details-h6 {
@@ -124,4 +132,20 @@
     width: 100px;
     height: 26px;
     display: inline-block;
+}
+
+.service-template-state {
+    animation: blink-animation 1s infinite;
+}
+
+@keyframes blink-animation {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
