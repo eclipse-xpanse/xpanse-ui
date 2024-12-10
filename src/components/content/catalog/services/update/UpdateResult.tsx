@@ -34,7 +34,7 @@ function UpdateResult({
                 message={
                     serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED ? (
                         <>
-                            Service <b>{ocl.name}</b> updated in catalog successfully.
+                            Service <b>{ocl.name}</b> updated was submitted for review.
                         </>
                     ) : (
                         <>

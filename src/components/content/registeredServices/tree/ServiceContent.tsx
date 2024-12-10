@@ -17,9 +17,9 @@ import {
     serviceNamespaceQuery,
     serviceVersionKeyQuery,
 } from '../../../utils/constants.tsx';
-import ServiceDetail from '../../catalog/services/details/ServiceDetail.tsx';
 import { ServiceHostingOptions } from '../../catalog/services/details/ServiceHostingOptions.tsx';
 import { ServiceProviderSkeleton } from '../../catalog/services/details/ServiceProviderSkeleton.tsx';
+import ServiceTemplateBasicDetail from '../../catalog/services/details/ServiceTemplateBasicDetail.tsx';
 
 function ServiceContent({
     availableServiceList,
@@ -134,7 +134,7 @@ function ServiceContent({
                                 serviceHostingTypeInQuery={serviceHostingTypeInQuery}
                                 updateServiceHostingType={onChangeServiceHostingType}
                             />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
+                            <ServiceTemplateBasicDetail serviceDetails={activeServiceDetail} />
                         </>
                     ) : (
                         // Necessary when user manually enters wrong details in the URL query parameters.

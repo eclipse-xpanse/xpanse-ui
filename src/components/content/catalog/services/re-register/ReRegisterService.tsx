@@ -8,21 +8,17 @@ import { UseMutationResult } from '@tanstack/react-query';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
-import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 
 function ReRegisterService({
-    id,
     setIsViewDisabled,
     reRegisterRequest,
-    serviceRegistrationStatus,
+    activeServiceDetail,
 }: {
-    id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     reRegisterRequest: UseMutationResult<ServiceTemplateDetailVo, Error, void>;
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
+    activeServiceDetail: ServiceTemplateDetailVo;
 }): React.JSX.Element {
-    const deleteState = useGetDeleteMutationState(id);
     const reRegister = () => {
         setIsViewDisabled(true);
         reRegisterRequest.mutate();
@@ -45,8 +41,8 @@ function ReRegisterService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         reRegisterRequest.isSuccess ||
-                        (deleteState.length > 0 && deleteState[0].status === 'success') ||
-                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_REVIEW
+                        activeServiceDetail.availableInCatalog ||
+                        activeServiceDetail.serviceTemplateRegistrationState !== 'approved'
                     }
                 >
                     Re-register

@@ -15,11 +15,9 @@ import {
     DeployedService,
     serviceDeploymentState,
     ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
-import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
 import { BillingText } from '../../../common/ocl/BillingText';
@@ -32,7 +30,11 @@ import DeploymentManagement from '../../../deployment/DeploymentManagement';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
 import { ShowIcon } from './ShowIcon';
 
-function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
+function ServiceTemplateBasicDetail({
+    serviceDetails,
+}: {
+    serviceDetails: ServiceTemplateDetailVo;
+}): React.JSX.Element {
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
@@ -121,13 +123,6 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
-                <Descriptions.Item label='Status'>
-                    <ServiceTemplateRegisterStatus
-                        serviceRegistrationStatus={
-                            serviceDetails.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                        }
-                    />
-                </Descriptions.Item>
                 <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
                 <Descriptions.Item label='Billing Modes'>
                     <BillingText billing={serviceDetails.billing} />
@@ -164,4 +159,4 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     );
 }
 
-export default ServiceDetail;
+export default ServiceTemplateBasicDetail;
