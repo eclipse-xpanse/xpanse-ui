@@ -14,9 +14,9 @@ import registerStyles from '../../../../../styles/register.module.css';
 import {
     ApiError,
     category,
-    details,
-    DetailsData,
     ErrorResponse,
+    getServiceTemplateDetailsById,
+    GetServiceTemplateDetailsByIdData,
     Ocl,
     ServiceTemplateChangeInfo,
     serviceTemplateRegistrationState,
@@ -55,7 +55,7 @@ function UpdateService({
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
-                id: id,
+                serviceTemplateId: id,
                 isRemoveServiceTemplateUntilApproved: true,
                 requestBody: ocl,
             };
@@ -64,10 +64,10 @@ function UpdateService({
         onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
             files.current[0].status = 'done';
             updateResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
-            const detailsData: DetailsData = {
-                id: serviceTemplateChangeInfo.serviceTemplateId,
+            const detailsData: GetServiceTemplateDetailsByIdData = {
+                serviceTemplateId: serviceTemplateChangeInfo.serviceTemplateId,
             };
-            const serviceTemplateDetailsVo = await details(detailsData);
+            const serviceTemplateDetailsVo = await getServiceTemplateDetailsById(detailsData);
             serviceRegistrationStatus.current =
                 serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
         },

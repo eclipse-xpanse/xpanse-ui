@@ -11,7 +11,7 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { UserOrderableServiceVo, category } from '../../../../xpanse-api/generated';
+import { category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { createServicePageRoute } from '../../../utils/constants';
 import { groupServicesByLatestVersion } from '../common/utils/groupServicesByLatestVersion.ts';
 import ServicesLoadingError from '../query/ServicesLoadingError';
@@ -104,6 +104,9 @@ function Services(): React.JSX.Element {
                                                 </span>
                                                 <span className={serviceOrderStyles.serviceTypeOptionDescription}>
                                                     {item.content}
+                                                </span>
+                                                <span className={serviceOrderStyles.serviceTypeOptionVendor}>
+                                                    Vendor - {item.namespace}
                                                 </span>
                                             </div>
                                         </div>

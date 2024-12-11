@@ -199,6 +199,9 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             </Tooltip>
                         </Col>
                         <Col span={4}>
+                            <span className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
+                                Vendor - {state.namespace}
+                            </span>
                             <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
                         </Col>
                     </Row>

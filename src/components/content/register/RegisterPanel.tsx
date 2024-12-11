@@ -14,9 +14,9 @@ import registerStyles from '../../../styles/register.module.css';
 import {
     ApiError,
     category,
-    details,
-    DetailsData,
     ErrorResponse,
+    getServiceTemplateDetailsById,
+    GetServiceTemplateDetailsByIdData,
     Ocl,
     register,
     type RegisterData,
@@ -62,10 +62,10 @@ function RegisterPanel(): React.JSX.Element {
         onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
             files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
-            const detailsData: DetailsData = {
-                id: serviceTemplateChangeInfo.serviceTemplateId,
+            const detailsData: GetServiceTemplateDetailsByIdData = {
+                serviceTemplateId: serviceTemplateChangeInfo.serviceTemplateId,
             };
-            const serviceTemplateDetailsVo = await details(detailsData);
+            const serviceTemplateDetailsVo = await getServiceTemplateDetailsById(detailsData);
             serviceRegistrationStatus.current =
                 serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
             void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateDetailsVo.category as category) });

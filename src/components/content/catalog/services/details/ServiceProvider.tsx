@@ -10,9 +10,9 @@ import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
-    ServiceTemplateDetailVo,
     category,
     name,
+    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import {
@@ -30,7 +30,7 @@ import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
 import { ServicePolicies } from '../policies/ServicePolicies';
-import { useReRegisterRequest } from '../re-register/ReRegisterMutation';
+import useGetServiceTemplateDetailsById, { useReRegisterRequest } from '../re-register/ReRegisterMutation';
 import { ReRegisterResult } from '../re-register/ReRegisterResult';
 import ReRegisterService from '../re-register/ReRegisterService';
 import { UnregisterResult } from '../unregister/UnregisterResult';
@@ -151,6 +151,8 @@ function ServiceProvider({
 
     const reRegisterRequest = useReRegisterRequest(activeServiceDetail?.serviceTemplateId ?? '');
 
+    const serviceTemplateDetailsVo = useGetServiceTemplateDetailsById(reRegisterRequest.data?.serviceTemplateId ?? '');
+
     const onChangeCsp = (key: string) => {
         void navigate({
             pathname: catalogPageRoute,
@@ -192,7 +194,7 @@ function ServiceProvider({
                             <ReRegisterResult
                                 id={activeServiceDetail.serviceTemplateId}
                                 serviceRegistrationStatus={
-                                    reRegisterRequest.data
+                                    serviceTemplateDetailsVo.data
                                         ?.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                 }
                                 category={category}

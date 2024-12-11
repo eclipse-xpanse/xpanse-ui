@@ -155,8 +155,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -165,8 +165,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -261,8 +261,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -271,8 +271,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -375,8 +375,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -385,8 +385,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -475,8 +475,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -485,8 +485,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -565,8 +565,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -575,8 +575,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -695,8 +695,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -705,8 +705,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -787,8 +787,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -797,8 +797,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -886,8 +886,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -896,8 +896,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -985,8 +985,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -995,8 +995,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1084,8 +1084,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1094,8 +1094,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1194,7 +1194,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1204,7 +1204,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1293,7 +1293,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1303,7 +1303,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1403,8 +1403,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1413,8 +1413,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1513,8 +1513,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1523,8 +1523,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1566,14 +1566,14 @@
                 }
             }
         },
-        "/xpanse/service_templates/{id}": {
+        "/xpanse/service_templates/{serviceTemplateId}": {
             "get": {
                 "tags": ["ServiceVendor"],
                 "description": "Get service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
-                "operationId": "details",
+                "operationId": "getServiceTemplateDetailsById",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -1613,8 +1613,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1623,8 +1623,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1671,7 +1671,7 @@
                 "operationId": "update",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -1730,8 +1730,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1740,8 +1740,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1788,7 +1788,7 @@
                 "operationId": "deleteServiceTemplate",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -1828,8 +1828,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1838,8 +1838,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1874,14 +1874,14 @@
                 }
             }
         },
-        "/xpanse/service_templates/unregister/{id}": {
+        "/xpanse/service_templates/unregister/{serviceTemplateId}": {
             "put": {
                 "tags": ["ServiceVendor"],
                 "description": "Unregister service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "unregister",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -1921,8 +1921,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1931,8 +1931,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1966,7 +1966,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ServiceTemplateDetailVo"
+                                    "$ref": "#/components/schemas/ServiceTemplateChangeInfo"
                                 }
                             }
                         }
@@ -2031,8 +2031,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2041,8 +2041,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2077,14 +2077,14 @@
                 }
             }
         },
-        "/xpanse/service_templates/re-register/{id}": {
+        "/xpanse/service_templates/re-register/{serviceTemplateId}": {
             "put": {
                 "tags": ["ServiceVendor"],
                 "description": "Re-register the unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "reRegisterServiceTemplate",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -2124,8 +2124,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2134,8 +2134,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2169,7 +2169,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/ServiceTemplateDetailVo"
+                                    "$ref": "#/components/schemas/ServiceTemplateChangeInfo"
                                 }
                             }
                         }
@@ -2177,14 +2177,14 @@
                 }
             }
         },
-        "/xpanse/service_templates/file/{id}": {
+        "/xpanse/service_templates/file/{serviceTemplateId}": {
             "put": {
                 "tags": ["ServiceVendor"],
                 "description": "Update service template using id and URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
                 "operationId": "fetchUpdate",
                 "parameters": [
                     {
-                        "name": "id",
+                        "name": "serviceTemplateId",
                         "in": "path",
                         "description": "id of service template",
                         "required": true,
@@ -2242,8 +2242,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2252,8 +2252,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2341,8 +2341,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2351,8 +2351,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2449,8 +2449,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2459,8 +2459,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2546,8 +2546,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2556,8 +2556,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2638,8 +2638,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2648,8 +2648,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2746,8 +2746,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2756,8 +2756,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2843,8 +2843,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2853,8 +2853,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2957,8 +2957,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2967,8 +2967,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3057,8 +3057,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3067,8 +3067,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3147,8 +3147,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3157,8 +3157,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3277,8 +3277,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3287,8 +3287,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3380,8 +3380,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3390,8 +3390,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3545,8 +3545,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3555,8 +3555,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3645,7 +3645,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3655,7 +3655,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3744,8 +3744,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3754,8 +3754,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3933,8 +3933,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3943,8 +3943,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4033,8 +4033,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4043,8 +4043,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4133,8 +4133,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4143,8 +4143,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4233,8 +4233,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4243,8 +4243,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4333,8 +4333,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4343,8 +4343,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4453,8 +4453,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4463,8 +4463,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4553,8 +4553,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4563,8 +4563,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4654,8 +4654,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4664,8 +4664,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4757,8 +4757,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4767,8 +4767,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4857,8 +4857,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4867,8 +4867,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4994,8 +4994,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5004,8 +5004,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5095,8 +5095,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5105,8 +5105,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5210,8 +5210,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5220,8 +5220,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5310,8 +5310,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5320,8 +5320,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5408,8 +5408,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5418,8 +5418,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5511,8 +5511,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5521,8 +5521,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5683,8 +5683,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5693,8 +5693,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5786,8 +5786,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5796,8 +5796,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5958,8 +5958,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5968,8 +5968,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6061,8 +6061,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6071,8 +6071,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6161,8 +6161,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6171,8 +6171,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6298,8 +6298,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6308,8 +6308,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6347,6 +6347,229 @@
                                     "items": {
                                         "$ref": "#/components/schemas/ServiceConfigurationChangeOrderDetails"
                                     }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/service_templates/{serviceTemplateId}/history": {
+            "get": {
+                "tags": ["ServiceVendor"],
+                "description": "List service template history using id of service template. The history returned is sorted by the ascending order of the change requested time.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
+                "operationId": "getServiceTemplateHistoryByServiceTemplateId",
+                "parameters": [
+                    {
+                        "name": "serviceTemplateId",
+                        "in": "path",
+                        "description": "id of service template",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "requestType",
+                        "in": "query",
+                        "description": "type of service template request",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["register", "update", "unregister", "re-register"]
+                        }
+                    },
+                    {
+                        "name": "changeStatus",
+                        "in": "query",
+                        "description": "status of service template request",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": ["in-review", "accepted", "rejected"]
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ServiceTemplateHistoryVo"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/xpanse/service_templates/request/{changeId}": {
+            "get": {
+                "tags": ["ServiceVendor"],
+                "description": "Get requested service template request using change Id.<br> Required role: <b>admin</b> or <b>isv</b> </br>",
+                "operationId": "getRequestedServiceTemplateByChangeId",
+                "parameters": [
+                    {
+                        "name": "changeId",
+                        "in": "path",
+                        "description": "id of service template request",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Forbidden",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "502": {
+                        "description": "Bad Gateway",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "408": {
+                        "description": "Request Timeout",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ocl"
                                 }
                             }
                         }
@@ -6401,8 +6624,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6411,8 +6634,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6538,8 +6761,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6548,8 +6771,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6666,8 +6889,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6676,8 +6899,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6830,8 +7053,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6840,8 +7063,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6922,8 +7145,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6932,8 +7155,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7033,8 +7256,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7043,8 +7266,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7125,8 +7348,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7135,8 +7358,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7308,8 +7531,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7318,8 +7541,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7411,8 +7634,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7421,8 +7644,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7570,8 +7793,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7580,8 +7803,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7722,8 +7945,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7732,8 +7955,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7846,8 +8069,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7856,8 +8079,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7976,8 +8199,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7986,8 +8209,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8090,8 +8313,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8100,8 +8323,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8255,8 +8478,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8265,8 +8488,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8366,8 +8589,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8376,8 +8599,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8465,8 +8688,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8475,8 +8698,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8574,8 +8797,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8584,8 +8807,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8686,8 +8909,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8696,8 +8919,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8775,8 +8998,8 @@
                             }
                         }
                     },
-                    "502": {
-                        "description": "Bad Gateway",
+                    "403": {
+                        "description": "Forbidden",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8785,8 +9008,8 @@
                             }
                         }
                     },
-                    "403": {
-                        "description": "Forbidden",
+                    "502": {
+                        "description": "Bad Gateway",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8868,7 +9091,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -8878,7 +9101,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -8968,7 +9191,7 @@
                             }
                         }
                     },
-                    "502": {
+                    "403": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -8978,7 +9201,7 @@
                             }
                         }
                     },
-                    "403": {
+                    "502": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9049,11 +9272,11 @@
                             "Invalid Service State",
                             "Resource Invalid For Monitoring",
                             "Unhandled Exception",
-                            "Service Template Already Registered",
                             "Icon Processing Failed",
                             "Service Template Not Registered",
                             "Service Template Disabled",
-                            "Service Template Already Reviewed",
+                            "Service Template Change Request Not Allowed",
+                            "Service Template Change Request Not Found",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
                             "Invalid Billing Config",
@@ -9061,8 +9284,6 @@
                             "Service Deployment Not Found",
                             "Resource Not Found",
                             "Deployment Variable Invalid",
-                            "Service Template Update Not Allowed",
-                            "Service Template Still In Use",
                             "Unauthorized",
                             "Access Denied",
                             "Sensitive Field Encryption Or Decryption Failed Exception",
@@ -9250,11 +9471,11 @@
                             "Invalid Service State",
                             "Resource Invalid For Monitoring",
                             "Unhandled Exception",
-                            "Service Template Already Registered",
                             "Icon Processing Failed",
                             "Service Template Not Registered",
                             "Service Template Disabled",
-                            "Service Template Already Reviewed",
+                            "Service Template Change Request Not Allowed",
+                            "Service Template Change Request Not Found",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
                             "Invalid Billing Config",
@@ -9262,8 +9483,6 @@
                             "Service Deployment Not Found",
                             "Resource Not Found",
                             "Deployment Variable Invalid",
-                            "Service Template Update Not Allowed",
-                            "Service Template Still In Use",
                             "Unauthorized",
                             "Access Denied",
                             "Sensitive Field Encryption Or Decryption Failed Exception",
@@ -9335,10 +9554,10 @@
             "ServiceLockConfig": {
                 "type": "object",
                 "properties": {
-                    "modifyLocked": {
+                    "destroyLocked": {
                         "type": "boolean"
                     },
-                    "destroyLocked": {
+                    "modifyLocked": {
                         "type": "boolean"
                     }
                 }
@@ -10111,188 +10330,6 @@
                         "type": "string",
                         "description": "ID of the change history of the service template.",
                         "format": "uuid"
-                    }
-                }
-            },
-            "Link": {
-                "type": "object",
-                "properties": {
-                    "rel": {
-                        "type": "string"
-                    },
-                    "href": {
-                        "type": "string"
-                    },
-                    "hreflang": {
-                        "type": "string"
-                    },
-                    "media": {
-                        "type": "string"
-                    },
-                    "title": {
-                        "type": "string"
-                    },
-                    "type": {
-                        "type": "string"
-                    },
-                    "deprecation": {
-                        "type": "string"
-                    },
-                    "profile": {
-                        "type": "string"
-                    },
-                    "name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "ServiceTemplateDetailVo": {
-                "required": [
-                    "availableInCatalog",
-                    "billing",
-                    "category",
-                    "createTime",
-                    "csp",
-                    "deployment",
-                    "description",
-                    "flavors",
-                    "icon",
-                    "isUpdatePending",
-                    "lastModifiedTime",
-                    "name",
-                    "namespace",
-                    "regions",
-                    "serviceHostingType",
-                    "serviceProviderContactDetails",
-                    "serviceTemplateId",
-                    "serviceTemplateRegistrationState",
-                    "variables",
-                    "version"
-                ],
-                "type": "object",
-                "properties": {
-                    "serviceTemplateId": {
-                        "type": "string",
-                        "description": "ID of the registered service.",
-                        "format": "uuid"
-                    },
-                    "name": {
-                        "type": "string",
-                        "description": "Name of the registered service."
-                    },
-                    "version": {
-                        "type": "string",
-                        "description": "Version of the registered service."
-                    },
-                    "csp": {
-                        "type": "string",
-                        "description": "Csp of the registered service.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
-                    },
-                    "category": {
-                        "type": "string",
-                        "description": "Category of the registered service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
-                    },
-                    "namespace": {
-                        "type": "string",
-                        "description": "Namespace of the user who registered service template."
-                    },
-                    "regions": {
-                        "type": "array",
-                        "description": "The regions of the Cloud Service Provider.",
-                        "items": {
-                            "$ref": "#/components/schemas/Region"
-                        }
-                    },
-                    "description": {
-                        "type": "string",
-                        "description": "The description of the registered service."
-                    },
-                    "icon": {
-                        "type": "string",
-                        "description": "The icon of the registered service."
-                    },
-                    "deployment": {
-                        "$ref": "#/components/schemas/Deployment"
-                    },
-                    "variables": {
-                        "type": "array",
-                        "description": "The variables for the deployment, which will be passed to the deployer.",
-                        "items": {
-                            "$ref": "#/components/schemas/DeployVariable"
-                        }
-                    },
-                    "flavors": {
-                        "$ref": "#/components/schemas/FlavorsWithPrice"
-                    },
-                    "billing": {
-                        "$ref": "#/components/schemas/Billing"
-                    },
-                    "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
-                    },
-                    "createTime": {
-                        "type": "string",
-                        "description": "createTime of the registered service.",
-                        "format": "date-time"
-                    },
-                    "lastModifiedTime": {
-                        "type": "string",
-                        "description": "Last updateTime of the registered service.",
-                        "format": "date-time"
-                    },
-                    "serviceTemplateRegistrationState": {
-                        "type": "string",
-                        "description": "State of registered service template.",
-                        "enum": ["in-review", "approved", "rejected"]
-                    },
-                    "isUpdatePending": {
-                        "type": "boolean",
-                        "description": "Is service template in updating."
-                    },
-                    "availableInCatalog": {
-                        "type": "boolean",
-                        "description": "Is available in catalog."
-                    },
-                    "serviceProviderContactDetails": {
-                        "$ref": "#/components/schemas/ServiceProviderContactDetails"
-                    },
-                    "eula": {
-                        "type": "string",
-                        "description": "End user license agreement content of the service."
-                    },
-                    "serviceConfigurationManage": {
-                        "$ref": "#/components/schemas/ServiceConfigurationManage"
-                    },
-                    "links": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Link"
-                        }
                     }
                 }
             },
@@ -11106,6 +11143,38 @@
                 },
                 "description": "The flavors of the orderable service."
             },
+            "Link": {
+                "type": "object",
+                "properties": {
+                    "rel": {
+                        "type": "string"
+                    },
+                    "href": {
+                        "type": "string"
+                    },
+                    "hreflang": {
+                        "type": "string"
+                    },
+                    "media": {
+                        "type": "string"
+                    },
+                    "title": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    },
+                    "deprecation": {
+                        "type": "string"
+                    },
+                    "profile": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    }
+                }
+            },
             "ServiceFlavor": {
                 "required": ["name", "priority", "properties"],
                 "type": "object",
@@ -11148,6 +11217,7 @@
                     "flavors",
                     "icon",
                     "name",
+                    "namespace",
                     "regions",
                     "serviceHostingType",
                     "serviceProviderContactDetails",
@@ -11207,6 +11277,10 @@
                         "items": {
                             "$ref": "#/components/schemas/Region"
                         }
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "The namespace of the orderable service."
                     },
                     "description": {
                         "type": "string",
@@ -11834,6 +11908,207 @@
                         "items": {
                             "$ref": "#/components/schemas/ServiceConfigurationChangeDetails"
                         }
+                    }
+                }
+            },
+            "ServiceTemplateDetailVo": {
+                "required": [
+                    "availableInCatalog",
+                    "billing",
+                    "category",
+                    "createTime",
+                    "csp",
+                    "deployment",
+                    "description",
+                    "flavors",
+                    "icon",
+                    "isUpdatePending",
+                    "lastModifiedTime",
+                    "name",
+                    "namespace",
+                    "regions",
+                    "serviceHostingType",
+                    "serviceProviderContactDetails",
+                    "serviceTemplateId",
+                    "serviceTemplateRegistrationState",
+                    "variables",
+                    "version"
+                ],
+                "type": "object",
+                "properties": {
+                    "serviceTemplateId": {
+                        "type": "string",
+                        "description": "ID of the registered service.",
+                        "format": "uuid"
+                    },
+                    "name": {
+                        "type": "string",
+                        "description": "Name of the registered service."
+                    },
+                    "version": {
+                        "type": "string",
+                        "description": "Version of the registered service."
+                    },
+                    "csp": {
+                        "type": "string",
+                        "description": "Csp of the registered service.",
+                        "enum": [
+                            "HuaweiCloud",
+                            "FlexibleEngine",
+                            "OpenstackTestlab",
+                            "PlusServer",
+                            "RegioCloud",
+                            "AlibabaCloud",
+                            "aws",
+                            "azure",
+                            "GoogleCloudPlatform"
+                        ]
+                    },
+                    "category": {
+                        "type": "string",
+                        "description": "Category of the registered service.",
+                        "enum": [
+                            "ai",
+                            "compute",
+                            "container",
+                            "storage",
+                            "network",
+                            "database",
+                            "mediaService",
+                            "security",
+                            "middleware",
+                            "others"
+                        ]
+                    },
+                    "namespace": {
+                        "type": "string",
+                        "description": "Namespace of the user who registered service template."
+                    },
+                    "regions": {
+                        "type": "array",
+                        "description": "The regions of the Cloud Service Provider.",
+                        "items": {
+                            "$ref": "#/components/schemas/Region"
+                        }
+                    },
+                    "description": {
+                        "type": "string",
+                        "description": "The description of the registered service."
+                    },
+                    "icon": {
+                        "type": "string",
+                        "description": "The icon of the registered service."
+                    },
+                    "deployment": {
+                        "$ref": "#/components/schemas/Deployment"
+                    },
+                    "variables": {
+                        "type": "array",
+                        "description": "The variables for the deployment, which will be passed to the deployer.",
+                        "items": {
+                            "$ref": "#/components/schemas/DeployVariable"
+                        }
+                    },
+                    "flavors": {
+                        "$ref": "#/components/schemas/FlavorsWithPrice"
+                    },
+                    "billing": {
+                        "$ref": "#/components/schemas/Billing"
+                    },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
+                    "createTime": {
+                        "type": "string",
+                        "description": "createTime of the registered service.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "Last updateTime of the registered service.",
+                        "format": "date-time"
+                    },
+                    "serviceTemplateRegistrationState": {
+                        "type": "string",
+                        "description": "State of registered service template.",
+                        "enum": ["in-review", "approved", "rejected"]
+                    },
+                    "isUpdatePending": {
+                        "type": "boolean",
+                        "description": "Is service template in updating."
+                    },
+                    "availableInCatalog": {
+                        "type": "boolean",
+                        "description": "Is available in catalog."
+                    },
+                    "serviceProviderContactDetails": {
+                        "$ref": "#/components/schemas/ServiceProviderContactDetails"
+                    },
+                    "eula": {
+                        "type": "string",
+                        "description": "End user license agreement content of the service."
+                    },
+                    "serviceConfigurationManage": {
+                        "$ref": "#/components/schemas/ServiceConfigurationManage"
+                    },
+                    "links": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Link"
+                        }
+                    }
+                }
+            },
+            "ServiceTemplateHistoryVo": {
+                "required": [
+                    "changeId",
+                    "createTime",
+                    "lastModifiedTime",
+                    "requestType",
+                    "serviceTemplateId",
+                    "status"
+                ],
+                "type": "object",
+                "properties": {
+                    "serviceTemplateId": {
+                        "type": "string",
+                        "description": "ID of the registered service template.",
+                        "format": "uuid"
+                    },
+                    "changeId": {
+                        "type": "string",
+                        "description": "ID of the change history of the service template.",
+                        "format": "uuid"
+                    },
+                    "requestType": {
+                        "type": "string",
+                        "description": "Type of the request.",
+                        "enum": ["register", "update", "unregister", "re-register"]
+                    },
+                    "status": {
+                        "type": "string",
+                        "description": "Status of the request.",
+                        "enum": ["in-review", "accepted", "rejected"]
+                    },
+                    "reviewComment": {
+                        "type": "string",
+                        "description": "Comment of the review request."
+                    },
+                    "blockTemplateUntilReviewed": {
+                        "type": "boolean",
+                        "description": "Status of the request."
+                    },
+                    "createTime": {
+                        "type": "string",
+                        "description": "Create time of the service template request.",
+                        "format": "date-time"
+                    },
+                    "lastModifiedTime": {
+                        "type": "string",
+                        "description": "Last update time of the service template request.",
+                        "format": "date-time"
                     }
                 }
             },

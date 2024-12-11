@@ -4,7 +4,7 @@
  */
 
 import { Skeleton } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import { category } from '../../../../xpanse-api/generated';
@@ -14,8 +14,9 @@ import { SelectServiceForm } from './SelectServiceForm';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
+    const [categoryName] = useState(location.hash.split('#')[1]);
+
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
     const orderableServicesQuery = userOrderableServicesQuery(categoryName as category, serviceName);
 
     if (orderableServicesQuery.isSuccess) {
