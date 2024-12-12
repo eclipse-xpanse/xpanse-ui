@@ -100,6 +100,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         versionToServicesMap.get(selectVersion)
     );
     const [selectRegion, setSelectRegion] = useState<Region>(serviceInfo ? serviceInfo.region : regionList[0].region);
+    const getServiceTemplateId = (): string => {
+        const service = services.find(
+            (service) =>
+                service.version === selectVersion &&
+                service.csp === selectCsp &&
+                selectServiceHostType === service.serviceHostingType
+        );
+        return service ? service.serviceTemplateId : '';
+    };
     const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
         serviceInfo?.availabilityZones ?? {}
     );
@@ -135,7 +144,11 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         getContactServiceDetailsOfServiceByCsp(selectCsp, versionToServicesMap.get(selectVersion));
     const currentEula: string | undefined = getEulaByCsp(selectCsp, versionToServicesMap.get(selectVersion));
 
-    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(selectCsp, selectRegion);
+    const getAvailabilityZonesForRegionQuery = useGetAvailabilityZonesForRegionQuery(
+        selectCsp,
+        selectRegion,
+        getServiceTemplateId()
+    );
     const availabilityZoneConfigs: AvailabilityZoneConfig[] = getAvailabilityZoneRequirementsForAService(
         selectCsp,
         services
@@ -279,16 +292,6 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         return availabilityZoneConfigs.filter((availabilityZoneConfig) => availabilityZoneConfig.mandatory).length > 0;
     }
 
-    const getServiceTemplateId = (): string => {
-        const service = services.find(
-            (service) =>
-                service.version === selectVersion &&
-                service.csp === selectCsp &&
-                selectServiceHostType === service.serviceHostingType
-        );
-        return service ? service.serviceTemplateId : '';
-    };
-
     const getServicePriceQuery = useGetServicePricesQuery(
         getServiceTemplateId(),
         selectRegion.name,
@@ -410,6 +413,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                                         selectAvailabilityZones={selectAvailabilityZones}
                                         selectCsp={selectCsp}
                                         key={availabilityZoneConfig.varName}
+                                        selectedServiceTemplateId={getServiceTemplateId()}
                                     />
                                 </div>
                             );

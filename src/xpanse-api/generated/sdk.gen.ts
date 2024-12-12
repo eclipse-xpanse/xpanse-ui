@@ -2134,6 +2134,7 @@ export const getExistingResourceNamesWithKind = (
  * @param data.cspName name of the cloud service provider
  * @param data.siteName site of the region belongs to
  * @param data.regionName name of the region
+ * @param data.serviceTemplateId Id of the serviceTemplate
  * @param data.serviceId Id of the deployed service
  * @returns string OK
  * @throws ApiError
@@ -2148,6 +2149,7 @@ export const getAvailabilityZones = (
             cspName: data.cspName,
             siteName: data.siteName,
             regionName: data.regionName,
+            serviceTemplateId: data.serviceTemplateId,
             serviceId: data.serviceId,
         },
         errors: {
