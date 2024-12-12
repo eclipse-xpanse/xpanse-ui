@@ -27,6 +27,7 @@ import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { ShowIsv } from '../common/ShowIsv.tsx';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
@@ -39,9 +40,9 @@ import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper.ts';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
-import { getNamespaceByVersionAndCspAndServiceHostingTypeHelper } from '../formDataHelpers/getNamespaceByVersionAndCspAndServiceHostTypeHelper.ts';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { getNamespaceByVersionAndCspAndServiceHostingTypeHelper } from '../formDataHelpers/serviceNamespaceHelper.ts';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import CspSelect from '../formElements/CspSelect';
 import VersionSelect from '../formElements/VersionSelect';
@@ -377,22 +378,14 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             </Tooltip>
                         </Col>
                         {currentServiceProviderContactDetails !== undefined ? (
-                            <Col span={4}>
-                                <Row>
-                                    <Col span={24}>
-                                        <span className={serviceOrderStyles.serviceOrderTypeOptionVendor}>
-                                            Vendor - {namespace}
-                                        </span>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={24}>
-                                        <ContactDetailsText
-                                            serviceProviderContactDetails={currentServiceProviderContactDetails}
-                                            showFor={ContactDetailsShowType.Order}
-                                        />
-                                    </Col>
-                                </Row>
+                            <Col span={5}>
+                                <span className={serviceOrderStyles.serviceOrderTypeOptionVendor}>
+                                    <ShowIsv namespace={namespace} />
+                                </span>
+                                <ContactDetailsText
+                                    serviceProviderContactDetails={currentServiceProviderContactDetails}
+                                    showFor={ContactDetailsShowType.Order}
+                                />
                             </Col>
                         ) : (
                             <></>

@@ -13,6 +13,7 @@ import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { createServicePageRoute } from '../../../utils/constants';
+import { ShowIsv } from '../common/ShowIsv.tsx';
 import { groupServicesByLatestVersion } from '../common/utils/groupServicesByLatestVersion.ts';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
@@ -106,7 +107,7 @@ function Services(): React.JSX.Element {
                                                     {item.content}
                                                 </span>
                                                 <span className={serviceOrderStyles.serviceTypeOptionVendor}>
-                                                    Vendor - {item.namespace}
+                                                    <ShowIsv namespace={item.namespace} />
                                                 </span>
                                             </div>
                                         </div>

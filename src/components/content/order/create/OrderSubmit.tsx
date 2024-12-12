@@ -22,6 +22,7 @@ import { ApiDoc } from '../../common/doc/ApiDoc';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
+import { ShowIsv } from '../common/ShowIsv.tsx';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
@@ -200,12 +201,13 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         </Col>
                         <Col span={4}>
                             <span className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
-                                Vendor - {state.namespace}
+                                <ShowIsv namespace={state.namespace} />
                             </span>
-                            <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                            <div className={serviceOrderStyles.serviceApiDocClass}>
+                                <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                            </div>
                         </Col>
                     </Row>
-
                     {isShowDeploymentResult ? (
                         <OrderSubmitStatusAlert
                             key={uniqueRequestId.current}
