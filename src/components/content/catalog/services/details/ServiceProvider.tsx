@@ -3,8 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { EnvironmentOutlined } from '@ant-design/icons';
-import { Empty, Image, Tabs } from 'antd';
+import { Badge, Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
@@ -29,16 +28,14 @@ import {
 import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
-import { ServicePolicies } from '../policies/ServicePolicies';
 import { useReRegisterRequest } from '../re-register/ReRegisterMutation';
 import { ReRegisterResult } from '../re-register/ReRegisterResult';
 import ReRegisterService from '../re-register/ReRegisterService';
 import { UnregisterResult } from '../unregister/UnregisterResult';
 import UnregisterService from '../unregister/UnregisterService';
 import UpdateService from '../update/UpdateService';
-import ServiceDetail from './ServiceDetail';
-import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
+import ServiceTemplateDetails from './ServiceTemplateDetails';
 
 function ServiceProvider({
     categoryOclData,
@@ -208,47 +205,129 @@ function ServiceProvider({
                                 <UpdateService
                                     id={activeServiceDetail.serviceTemplateId}
                                     category={category}
-                                    isViewDisabled={isViewDisabled}
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                                 <UnregisterService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    availableInCatalog={activeServiceDetail.availableInCatalog}
                                 />
                                 <ReRegisterService
-                                    id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     reRegisterRequest={reRegisterRequest}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    activeServiceDetail={activeServiceDetail}
                                 />
                             </div>
-                            <h3 className={catalogStyles.catalogDetailsH3}>
-                                <EnvironmentOutlined />
-                                &nbsp;Service Hosting Options
-                            </h3>
-                            <ServiceHostingOptions
-                                serviceTemplateDetailVos={groupServiceTemplatesByCsp.get(serviceCspInQuery) ?? []}
-                                defaultDisplayedService={activeServiceDetail}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                updateServiceHostingType={onChangeServiceHostingType}
-                            />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
-                            <ServicePolicies
-                                key={activeServiceDetail.serviceTemplateId}
-                                serviceDetails={activeServiceDetail}
-                                isViewDisabled={isViewDisabled}
-                            />
+                            {(activeServiceDetail.serviceTemplateRegistrationState === 'in-review' ||
+                                activeServiceDetail.serviceTemplateRegistrationState === 'approved') &&
+                            !activeServiceDetail.availableInCatalog ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={<div className={catalogStyles.serviceTemplateState}>Review In-Progress</div>}
+                                    color='#e67300'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : activeServiceDetail.serviceTemplateRegistrationState === 'approved' &&
+                              activeServiceDetail.availableInCatalog ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={<div>Available In Catalog</div>}
+                                    color='#87d068'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : activeServiceDetail.isUpdatePending && activeServiceDetail.availableInCatalog ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={
+                                        <div className={catalogStyles.serviceTemplateState}>
+                                            Available in catalog <br />
+                                            Updated template review in progress.
+                                        </div>
+                                    }
+                                    color='#e67300'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : activeServiceDetail.serviceTemplateRegistrationState === 'approved' &&
+                              !activeServiceDetail.availableInCatalog &&
+                              !activeServiceDetail.isUpdatePending ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={<div>Not Available in Catalog</div>}
+                                    color='#cd201f'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : activeServiceDetail.serviceTemplateRegistrationState === 'rejected' &&
+                              !activeServiceDetail.availableInCatalog &&
+                              activeServiceDetail.isUpdatePending ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={<div className={catalogStyles.serviceTemplateState}>Review In-Progress</div>}
+                                    color='#e67300'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : activeServiceDetail.serviceTemplateRegistrationState === 'approved' &&
+                              activeServiceDetail.availableInCatalog &&
+                              activeServiceDetail.isUpdatePending ? (
+                                <Badge.Ribbon
+                                    placement={'start'}
+                                    text={<div>Available In Catalog</div>}
+                                    color='#87d068'
+                                >
+                                    <ServiceTemplateDetails
+                                        isViewDisabled={isViewDisabled}
+                                        serviceDetails={activeServiceDetail}
+                                        groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                        serviceCspInQuery={serviceCspInQuery}
+                                        serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                        onChangeServiceHostingType={onChangeServiceHostingType}
+                                    />
+                                </Badge.Ribbon>
+                            ) : null}
                         </>
                     ) : (
                         // Necessary when user manually enters wrong details in the URL query parameters.

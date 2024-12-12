@@ -5,7 +5,8 @@
 
 import { AppstoreAddOutlined, CloudUploadOutlined, EditOutlined, UploadOutlined } from '@ant-design/icons';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Button, Col, Modal, Row, Upload, UploadFile } from 'antd';
+import { Button, Col, Form, Modal, Radio, Row, Upload, UploadFile } from 'antd';
+import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import appStyles from '../../../../../styles/app.module.css';
@@ -19,6 +20,7 @@ import {
     ErrorResponse,
     Ocl,
     ServiceTemplateChangeInfo,
+    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
     update,
     type UpdateData,
@@ -34,12 +36,13 @@ import UpdateResult from './UpdateResult';
 function UpdateService({
     id,
     category,
-    isViewDisabled,
+    activeServiceDetail,
 }: {
     id: string;
     category: category;
-    isViewDisabled: boolean;
+    activeServiceDetail: ServiceTemplateDetailVo;
 }): React.JSX.Element {
+    const [form] = Form.useForm();
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
@@ -51,12 +54,13 @@ function UpdateService({
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isRemoveServiceTemplateUntilApproved, setIsRemoveServiceTemplateUntilApproved] = useState(false);
     const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
                 id: id,
-                isRemoveServiceTemplateUntilApproved: true,
+                isRemoveServiceTemplateUntilApproved: isRemoveServiceTemplateUntilApproved,
                 requestBody: ocl,
             };
             return update(data);
@@ -165,6 +169,10 @@ function UpdateService({
         return false;
     };
 
+    const onChange = (e: CheckboxChangeEvent) => {
+        setIsRemoveServiceTemplateUntilApproved(e.target.checked);
+    };
+
     return (
         <div className={catalogStyles.updateUnregisterBtnClass}>
             <Button
@@ -172,7 +180,7 @@ function UpdateService({
                 icon={<EditOutlined />}
                 onClick={showModal}
                 className={catalogStyles.catalogManageBtnClass}
-                disabled={isViewDisabled}
+                disabled={activeServiceDetail.isUpdatePending}
             >
                 Update
             </Button>
@@ -203,71 +211,101 @@ function UpdateService({
                         />
                     ) : null}
                     <div className={registerStyles.registerButtons}>
-                        <Upload
-                            name={'OCL File'}
-                            multiple={false}
-                            beforeUpload={setFileData}
-                            maxCount={1}
-                            fileList={files.current}
-                            onRemove={tryNewFile}
-                            accept={'.yaml, .yml'}
-                            showUploadList={{
-                                showRemoveIcon: true,
-                                removeIcon: updateServiceRequest.isPending,
-                            }}
+                        <Form
+                            form={form}
+                            autoComplete='off'
+                            onFinish={sendRequestRequest}
+                            validateTrigger={['sendRequestRequest', 'onChange']}
                         >
-                            <Row>
-                                <Col>
-                                    <div className={registerStyles.registerButtonsUpload}>
-                                        <Button
-                                            size={'large'}
-                                            disabled={yamlSyntaxValidationStatus === 'completed'}
-                                            loading={yamlSyntaxValidationStatus === 'inProgress'}
-                                            type={'primary'}
-                                            icon={<UploadOutlined />}
-                                        >
-                                            Upload File
-                                        </Button>
-                                    </div>
-                                </Col>
-                                <Col>
-                                    <div className={registerStyles.registerButtonsRegister}>
-                                        <Button
-                                            size={'large'}
-                                            disabled={
-                                                yamlSyntaxValidationStatus === 'notStarted' ||
-                                                (updateServiceRequest.isIdle &&
-                                                    yamlSyntaxValidationStatus === 'error') ||
-                                                updateServiceRequest.isError ||
-                                                updateServiceRequest.isSuccess ||
-                                                oclValidationStatus === 'error'
-                                            }
-                                            type={'primary'}
-                                            icon={<CloudUploadOutlined />}
-                                            onClick={(event: React.MouseEvent) => {
-                                                sendRequestRequest({ event: event });
-                                            }}
-                                            loading={updateServiceRequest.isPending}
-                                        >
-                                            Update
-                                        </Button>
-                                    </div>
-                                </Col>
-                                <Col>
-                                    <div className={registerStyles.registerButtonsValidate}>
-                                        {yamlSyntaxValidationStatus === 'completed' ||
-                                        yamlSyntaxValidationStatus === 'error' ? (
-                                            <YamlSyntaxValidationResult
-                                                validationResult={yamlValidationResult.current}
-                                                yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
-                                            />
-                                        ) : null}
-                                    </div>
-                                </Col>
-                            </Row>
-                        </Upload>
+                            <Upload
+                                name={'OCL File'}
+                                multiple={false}
+                                beforeUpload={setFileData}
+                                maxCount={1}
+                                fileList={files.current}
+                                onRemove={tryNewFile}
+                                accept={'.yaml, .yml'}
+                                showUploadList={{
+                                    showRemoveIcon: true,
+                                    removeIcon: updateServiceRequest.isPending,
+                                }}
+                            >
+                                <Row>
+                                    <Col>
+                                        <div className={registerStyles.registerButtonsRegister}>
+                                            <Button
+                                                size={'large'}
+                                                disabled={yamlSyntaxValidationStatus === 'completed'}
+                                                loading={yamlSyntaxValidationStatus === 'inProgress'}
+                                                type={'primary'}
+                                                icon={<UploadOutlined />}
+                                            >
+                                                Upload File
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        <div className={registerStyles.registerButtonsRegister}>
+                                            <Button
+                                                size={'large'}
+                                                disabled={
+                                                    yamlSyntaxValidationStatus === 'notStarted' ||
+                                                    (updateServiceRequest.isIdle &&
+                                                        yamlSyntaxValidationStatus === 'error') ||
+                                                    updateServiceRequest.isError ||
+                                                    updateServiceRequest.isSuccess ||
+                                                    oclValidationStatus === 'error'
+                                                }
+                                                type={'primary'}
+                                                icon={<CloudUploadOutlined />}
+                                                onClick={(event: React.MouseEvent) => {
+                                                    sendRequestRequest({ event: event });
+                                                }}
+                                                loading={updateServiceRequest.isPending}
+                                            >
+                                                Update
+                                            </Button>
+                                        </div>
+                                    </Col>
+                                    <Col>
+                                        <div className={registerStyles.registerButtonsValidate}>
+                                            {yamlSyntaxValidationStatus === 'completed' ||
+                                            yamlSyntaxValidationStatus === 'error' ? (
+                                                <YamlSyntaxValidationResult
+                                                    validationResult={yamlValidationResult.current}
+                                                    yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
+                                                />
+                                            ) : null}
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Upload>
+                            {files.current.length > 0 ? (
+                                <Form.Item
+                                    name='isRemoveServiceTemplateUntilApproved'
+                                    label={
+                                        <span style={{ fontWeight: 'bold' }}>
+                                            Remove current service template until updated service template is approved
+                                        </span>
+                                    }
+                                    required={true}
+                                    rules={[{ required: true, message: 'Eula needs to be accepted' }]}
+                                >
+                                    <Radio.Group
+                                        disabled={updateServiceRequest.isPending || updateServiceRequest.isSuccess}
+                                        onChange={onChange}
+                                        defaultValue={isRemoveServiceTemplateUntilApproved}
+                                    >
+                                        <Radio value={true}>true</Radio>
+                                        <Radio value={false}>false</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            ) : null}
+                        </Form>
                     </div>
-                    <div>{oclDisplayData.current}</div>
+                    <div>
+                        <div>{oclDisplayData.current}</div>
+                    </div>
                 </div>
             </Modal>
         </div>
