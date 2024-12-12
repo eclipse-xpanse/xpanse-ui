@@ -1,5 +1,5 @@
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { DeleteServiceTemplateData, deleteServiceTemplate } from '../../../../../xpanse-api/generated';
+import { deleteServiceTemplate, DeleteServiceTemplateData } from '../../../../../xpanse-api/generated';
 
 const deleteKey: string = 'delete';
 
@@ -8,7 +8,7 @@ export function useDeleteRequest(id: string) {
         mutationKey: [id, deleteKey],
         mutationFn: () => {
             const deleteData: DeleteServiceTemplateData = {
-                id: id,
+                serviceTemplateId: id,
             };
             return deleteServiceTemplate(deleteData);
         },

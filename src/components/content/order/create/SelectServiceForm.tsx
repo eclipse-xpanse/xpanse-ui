@@ -12,13 +12,13 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
     AvailabilityZoneConfig,
-    Region,
-    ServiceFlavor,
-    ServiceProviderContactDetails,
-    UserOrderableServiceVo,
     billingMode,
     csp,
+    Region,
+    ServiceFlavor,
     serviceHostingType,
+    ServiceProviderContactDetails,
+    UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -27,6 +27,7 @@ import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { ShowIsv } from '../common/ShowIsv.tsx';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
@@ -41,6 +42,7 @@ import { getServiceFlavorList } from '../formDataHelpers/flavorHelper.ts';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
+import { getNamespaceByVersionAndCspAndServiceHostingTypeHelper } from '../formDataHelpers/serviceNamespaceHelper.ts';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import CspSelect from '../formElements/CspSelect';
 import VersionSelect from '../formElements/VersionSelect';
@@ -55,8 +57,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const navigate = useNavigate();
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
-
+    const categoryName: string = location.hash.split('#')[1];
     const servicePageUrl = servicesSubPageRoute + categoryName;
     let serviceInfo: OrderSubmitProps | undefined;
     const versionToServicesMap = useMemo<Map<string, UserOrderableServiceVo[]>>(() => {
@@ -100,6 +101,16 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         versionToServicesMap.get(selectVersion)
     );
     const [selectRegion, setSelectRegion] = useState<Region>(serviceInfo ? serviceInfo.region : regionList[0].region);
+
+    // get the namespace from the service template with servicename, category, serviceVersion, csp and serviceHostType
+    const selectNamespace = getNamespaceByVersionAndCspAndServiceHostingTypeHelper(
+        selectCsp,
+        selectServiceHostType,
+        versionToServicesMap.get(selectVersion)
+    );
+
+    const [namespace, setNamespace] = useState<string>(serviceInfo ? serviceInfo.namespace : selectNamespace);
+
     const getServiceTemplateId = (): string => {
         const service = services.find(
             (service) =>
@@ -176,6 +187,13 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
         location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
+        setNamespace(
+            getNamespaceByVersionAndCspAndServiceHostingTypeHelper(
+                selectCsp,
+                serviceHostingType,
+                versionToServicesMap.get(selectVersion)
+            )
+        );
 
         areaList = convertAreasToTabs(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
         setSelectArea(areaList[0].key);
@@ -242,6 +260,13 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             serviceHostTypes[0],
             versionToServicesMap.get(currentVersion)
         );
+        setNamespace(
+            getNamespaceByVersionAndCspAndServiceHostingTypeHelper(
+                cspList[0],
+                serviceHostTypes[0],
+                versionToServicesMap.get(currentVersion)
+            )
+        );
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
@@ -250,6 +275,14 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
         serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
         setSelectServiceHostType(serviceHostTypes[0]);
+
+        setNamespace(
+            getNamespaceByVersionAndCspAndServiceHostingTypeHelper(
+                csp,
+                serviceHostTypes[0],
+                versionToServicesMap.get(selectVersion)
+            )
+        );
 
         areaList = convertAreasToTabs(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         setSelectArea(areaList[0]?.key ?? '');
@@ -345,7 +378,10 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                             </Tooltip>
                         </Col>
                         {currentServiceProviderContactDetails !== undefined ? (
-                            <Col span={4}>
+                            <Col span={5}>
+                                <span className={serviceOrderStyles.serviceOrderTypeOptionVendor}>
+                                    <ShowIsv namespace={namespace} />
+                                </span>
                                 <ContactDetailsText
                                     serviceProviderContactDetails={currentServiceProviderContactDetails}
                                     showFor={ContactDetailsShowType.Order}

@@ -26,6 +26,7 @@ export function groupServicesByLatestVersion(
                     icon: versionMapper.get(latestVersion)?.[0].icon,
                     latestVersion: latestVersion,
                     category: versionMapper.get(latestVersion)?.[0].category,
+                    namespace: versionMapper.get(latestVersion)?.[0].namespace,
                 };
                 serviceList.push(serviceItem as UserServiceLatestVersionDisplayType);
             }
