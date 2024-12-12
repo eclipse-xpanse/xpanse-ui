@@ -5,20 +5,20 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    getOrderableServiceDetailsById,
-    type GetOrderableServiceDetailsByIdData,
+    getOrderableServiceDetailsByServiceId,
+    GetOrderableServiceDetailsByServiceIdData,
 } from '../../../../../xpanse-api/generated';
 
-export default function useGetOrderableServiceDetailsQuery(serviceTemplateId: string | undefined) {
+export default function useGetOrderableServiceDetailsQuery(serviceId: string | undefined) {
     return useQuery({
-        queryKey: ['getOrderableServiceDetailsById', serviceTemplateId],
+        queryKey: ['getOrderableServiceDetailsByServiceId', serviceId],
         queryFn: () => {
-            const data: GetOrderableServiceDetailsByIdData = {
-                id: serviceTemplateId ?? '',
+            const data: GetOrderableServiceDetailsByServiceIdData = {
+                serviceId: serviceId ?? '',
             };
-            return getOrderableServiceDetailsById(data);
+            return getOrderableServiceDetailsByServiceId(data);
         },
         refetchOnWindowFocus: false,
-        enabled: serviceTemplateId !== undefined && serviceTemplateId.length > 0,
+        enabled: serviceId !== undefined && serviceId.length > 0,
     });
 }

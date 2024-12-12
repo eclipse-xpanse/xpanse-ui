@@ -130,7 +130,7 @@ function MyServices(): React.JSX.Element {
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
     const navigate = useNavigate();
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceTemplateId);
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceId);
 
     const getDestroyServiceStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceDestroyQuery.data?.orderId ?? '',
