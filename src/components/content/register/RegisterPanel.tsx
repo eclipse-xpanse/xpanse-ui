@@ -14,14 +14,14 @@ import registerStyles from '../../../styles/register.module.css';
 import {
     ApiError,
     category,
-    details,
-    DetailsData,
     ErrorResponse,
+    getServiceTemplateDetailsById,
+    GetServiceTemplateDetailsByIdData,
     Ocl,
     register,
     type RegisterData,
-    ServiceTemplateChangeInfo,
     serviceTemplateRegistrationState,
+    ServiceTemplateRequestInfo,
 } from '../../../xpanse-api/generated';
 import {
     registerFailedRoute,
@@ -59,13 +59,13 @@ function RegisterPanel(): React.JSX.Element {
             };
             return register(data);
         },
-        onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
+        onSuccess: async (serviceTemplateRequestInfo: ServiceTemplateRequestInfo) => {
             files.current[0].status = 'done';
-            registerResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
-            const detailsData: DetailsData = {
-                id: serviceTemplateChangeInfo.serviceTemplateId,
+            registerResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
+            const getServiceTemplateDetailsByIdData: GetServiceTemplateDetailsByIdData = {
+                serviceTemplateId: serviceTemplateRequestInfo.serviceTemplateId,
             };
-            const serviceTemplateDetailsVo = await details(detailsData);
+            const serviceTemplateDetailsVo = await getServiceTemplateDetailsById(getServiceTemplateDetailsByIdData);
             serviceRegistrationStatus.current =
                 serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
             void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateDetailsVo.category as category) });

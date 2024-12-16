@@ -12,32 +12,30 @@ import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
     category,
-    Deployment,
     kind,
     serviceHostingType,
-    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
+    ServiceTemplateRequestToReview,
 } from '../../../xpanse-api/generated';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
 import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
-import useListAllServiceTemplatesQuery from './query/useListAllServiceTemplatesQuery';
+import useGetPendingServiceReviewRequestQuery from './query/useGetPendingServiceReviewRequestQuery';
 
 export default function ServiceReviews(): React.JSX.Element {
     let serviceNameFilters: ColumnFilterItem[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let categoryFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
-    let registrationStatusFilters: ColumnFilterItem[] = [];
     let deployerTypeFilters: ColumnFilterItem[] = [];
-    let serviceTemplateList: ServiceTemplateDetailVo[] = [];
-    const [currentServiceTemplateVo, setCurrentServiceTemplateVo] = useState<ServiceTemplateDetailVo | undefined>(
-        undefined
-    );
+    let serviceTemplateRequestToReviewList: ServiceTemplateRequestToReview[] = [];
+    const [currentServiceTemplateRequestToReview, setCurrentServiceTemplateRequestToReview] = useState<
+        ServiceTemplateRequestToReview | undefined
+    >(undefined);
     const [isServiceTemplateDetailsModalOpen, setIsServiceTemplateDetailsModalOpen] = useState(false);
 
-    const allServiceTemplatesListQuery = useListAllServiceTemplatesQuery();
+    const pendingServiceReviewRequestQuery = useGetPendingServiceReviewRequestQuery(undefined);
 
     const getServiceHostingTypeFilters = (): void => {
         const filters: ColumnFilterItem[] = [];
@@ -51,11 +49,11 @@ export default function ServiceReviews(): React.JSX.Element {
         serviceHostingTypeFilters = filters;
     };
 
-    const getServiceNameFilters = (serviceTemplateDetailVoList: ServiceTemplateDetailVo[]): void => {
+    const getServiceNameFilters = (serviceTemplateRequestToReviewList: ServiceTemplateRequestToReview[]): void => {
         const filters: ColumnFilterItem[] = [];
         const nameSet = new Set<string>('');
-        serviceTemplateDetailVoList.forEach((v) => {
-            nameSet.add(v.name);
+        serviceTemplateRequestToReviewList.forEach((v) => {
+            nameSet.add(v.ocl.name);
         });
         nameSet.forEach((name) => {
             const filter = {
@@ -67,11 +65,11 @@ export default function ServiceReviews(): React.JSX.Element {
         serviceNameFilters = filters;
     };
 
-    const getVersionFilters = (serviceTemplateDetailVoList: ServiceTemplateDetailVo[]): void => {
+    const getVersionFilters = (serviceTemplateRequestToReviewList: ServiceTemplateRequestToReview[]): void => {
         const filters: ColumnFilterItem[] = [];
         const versionSet = new Set<string>('');
-        serviceTemplateDetailVoList.forEach((v) => {
-            versionSet.add(v.version);
+        serviceTemplateRequestToReviewList.forEach((v) => {
+            versionSet.add(v.ocl.version);
         });
         versionSet.forEach((version) => {
             const filter = {
@@ -95,18 +93,6 @@ export default function ServiceReviews(): React.JSX.Element {
         categoryFilters = filters;
     }
 
-    function getRegistrationStatusFilters(): void {
-        const filters: ColumnFilterItem[] = [];
-        Object.values(serviceTemplateRegistrationState).forEach((status) => {
-            const filter = {
-                text: status,
-                value: status,
-            };
-            filters.push(filter);
-        });
-        registrationStatusFilters = filters;
-    }
-
     function getDeployerTypeFilters(): void {
         const filters: ColumnFilterItem[] = [];
         Object.values(kind).forEach((kind) => {
@@ -119,13 +105,12 @@ export default function ServiceReviews(): React.JSX.Element {
         deployerTypeFilters = filters;
     }
 
-    if (allServiceTemplatesListQuery.isSuccess && allServiceTemplatesListQuery.data.length > 0) {
-        serviceTemplateList = allServiceTemplatesListQuery.data;
-        getServiceNameFilters(allServiceTemplatesListQuery.data);
-        getVersionFilters(allServiceTemplatesListQuery.data);
+    if (pendingServiceReviewRequestQuery.isSuccess && pendingServiceReviewRequestQuery.data.length > 0) {
+        serviceTemplateRequestToReviewList = pendingServiceReviewRequestQuery.data;
+        getServiceNameFilters(pendingServiceReviewRequestQuery.data);
+        getVersionFilters(pendingServiceReviewRequestQuery.data);
         getServiceHostingTypeFilters();
         getCategoryFilters();
-        getRegistrationStatusFilters();
         getDeployerTypeFilters();
     }
 
@@ -138,7 +123,19 @@ export default function ServiceReviews(): React.JSX.Element {
         }
     };
 
-    const columns: ColumnsType<ServiceTemplateDetailVo> = [
+    const columns: ColumnsType<ServiceTemplateRequestToReview> = [
+        {
+            title: 'Request Id',
+            dataIndex: 'requestId',
+            onFilter: (value: React.Key | boolean, record) => record.requestId.startsWith(value.toString()),
+            align: 'left',
+        },
+        {
+            title: 'Request Type',
+            dataIndex: 'requestType',
+            onFilter: (value: React.Key | boolean, record) => record.requestType.startsWith(value.toString()),
+            align: 'left',
+        },
         {
             title: 'Service Template Id',
             dataIndex: 'serviceTemplateId',
@@ -192,8 +189,9 @@ export default function ServiceReviews(): React.JSX.Element {
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.ocl.category.startsWith(value.toString()),
             align: 'left',
+            render: (_, record) => <div>{record.ocl.category}</div>,
         },
         {
             title: 'Service Name',
@@ -202,13 +200,14 @@ export default function ServiceReviews(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => {
-                if (record.name) {
-                    const customerServiceName = record.name;
+                if (record.ocl.name) {
+                    const customerServiceName = record.ocl.name;
                     return customerServiceName.startsWith(value.toString());
                 }
                 return false;
             },
             align: 'left',
+            render: (_, record) => <div>{record.ocl.name}</div>,
         },
         {
             title: 'Version',
@@ -217,13 +216,14 @@ export default function ServiceReviews(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => {
-                if (record.version) {
-                    const customerServiceName = record.version;
+                if (record.ocl.version) {
+                    const customerServiceName = record.ocl.version;
                     return customerServiceName.startsWith(value.toString());
                 }
                 return false;
             },
             align: 'left',
+            render: (_, record) => <div>{record.ocl.version}</div>,
         },
         {
             title: 'Service Hosting Type',
@@ -231,9 +231,14 @@ export default function ServiceReviews(): React.JSX.Element {
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) =>
+                record.ocl.serviceHostingType.startsWith(value.toString()),
             align: 'center',
-            render: (value: serviceHostingType) => <DeployedServicesHostingType currentServiceHostingType={value} />,
+            render: (_, record) => (
+                <DeployedServicesHostingType
+                    currentServiceHostingType={record.ocl.serviceHostingType as serviceHostingType}
+                />
+            ),
         },
         {
             title: 'Deployer Type',
@@ -242,36 +247,28 @@ export default function ServiceReviews(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
-                record.deployment.deployerTool.kind.toString() === value.toString(),
+                record.ocl.deployment.deployerTool.kind.toString() === value.toString(),
             align: 'left',
-            render: (deployment: Deployment) =>
-                deployment.deployerTool.kind.toString() === kind.TERRAFORM.toString() ? (
-                    <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
-                        {'Terraform'}
-                    </Tag>
-                ) : (
-                    <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
-                        {'Opentofu'}
-                    </Tag>
-                ),
+            render: (_, record) => (
+                <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
+                    {record.ocl.deployment.deployerTool.kind.toString() === kind.TERRAFORM.toString()
+                        ? 'Terraform'
+                        : 'Opentofu'}
+                </Tag>
+            ),
         },
         {
             title: 'Registration Status',
             dataIndex: 'serviceTemplateRegistrationState',
-            filters: registrationStatusFilters,
-            filterMode: 'tree',
-            filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) =>
-                record.serviceTemplateRegistrationState.startsWith(value.toString()),
             align: 'left',
-            render: (serviceTemplateRegistrationState: serviceTemplateRegistrationState) => (
-                <ServiceTemplateRegisterStatus serviceRegistrationStatus={serviceTemplateRegistrationState} />
+            render: () => (
+                <ServiceTemplateRegisterStatus serviceRegistrationStatus={serviceTemplateRegistrationState.IN_REVIEW} />
             ),
         },
         {
             title: 'Operation',
             dataIndex: 'operation',
-            render: (_text: string, record: ServiceTemplateDetailVo) => {
+            render: (_text: string, record: ServiceTemplateRequestToReview) => {
                 return (
                     <>
                         <Space size='middle'>
@@ -282,9 +279,7 @@ export default function ServiceReviews(): React.JSX.Element {
                                     handleServiceTemplateDetailsOpenModal(record);
                                 }}
                             >
-                                {record.serviceTemplateRegistrationState === serviceTemplateRegistrationState.IN_REVIEW
-                                    ? 'review'
-                                    : 'details'}
+                                review
                             </Button>
                         </Space>
                     </>
@@ -294,18 +289,18 @@ export default function ServiceReviews(): React.JSX.Element {
         },
     ];
 
-    const handleServiceTemplateDetailsOpenModal = (serviceTemplateDetailVo: ServiceTemplateDetailVo) => {
-        setCurrentServiceTemplateVo(serviceTemplateDetailVo);
+    const handleServiceTemplateDetailsOpenModal = (serviceTemplateRequestToReview: ServiceTemplateRequestToReview) => {
+        setCurrentServiceTemplateRequestToReview(serviceTemplateRequestToReview);
         setIsServiceTemplateDetailsModalOpen(true);
     };
 
     const refreshData = () => {
         setIsServiceTemplateDetailsModalOpen(false);
-        void allServiceTemplatesListQuery.refetch();
+        void pendingServiceReviewRequestQuery.refetch();
     };
 
     const handleServiceTemplateDetailsModalClose = () => {
-        setCurrentServiceTemplateVo(undefined);
+        setCurrentServiceTemplateRequestToReview(undefined);
         setIsServiceTemplateDetailsModalOpen(false);
         refreshData();
     };
@@ -319,7 +314,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     return (
         <div className={tableStyles.genericTableContainer}>
-            {currentServiceTemplateVo ? (
+            {currentServiceTemplateRequestToReview ? (
                 <Modal
                     title={'Service Details'}
                     width={'80%'}
@@ -329,7 +324,7 @@ export default function ServiceReviews(): React.JSX.Element {
                     onCancel={handleServiceTemplateDetailsModalClose}
                 >
                     <ServiceReviewsDetails
-                        currentServiceTemplateVo={currentServiceTemplateVo}
+                        currentServiceTemplateRequestToReview={currentServiceTemplateRequestToReview}
                         setAlertTipCloseStatus={setAlertTipCloseStatus}
                     />
                 </Modal>
@@ -346,8 +341,8 @@ export default function ServiceReviews(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
-            {allServiceTemplatesListQuery.isError ? (
-                <GetServiceTemplatesListError error={allServiceTemplatesListQuery.error} />
+            {pendingServiceReviewRequestQuery.isError ? (
+                <GetServiceTemplatesListError error={pendingServiceReviewRequestQuery.error} />
             ) : (
                 <></>
             )}
@@ -356,8 +351,10 @@ export default function ServiceReviews(): React.JSX.Element {
                 <div className={serviceReviewStyles.serviceInstanceList}>
                     <Table
                         columns={columns}
-                        dataSource={serviceTemplateList}
-                        loading={allServiceTemplatesListQuery.isLoading || allServiceTemplatesListQuery.isRefetching}
+                        dataSource={serviceTemplateRequestToReviewList}
+                        loading={
+                            pendingServiceReviewRequestQuery.isLoading || pendingServiceReviewRequestQuery.isRefetching
+                        }
                         rowKey={'id'}
                     />
                 </div>
