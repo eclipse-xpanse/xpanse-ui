@@ -14,12 +14,12 @@ import registerStyles from '../../../../../styles/register.module.css';
 import {
     ApiError,
     category,
-    details,
-    DetailsData,
     ErrorResponse,
+    getServiceTemplateDetailsById,
+    GetServiceTemplateDetailsByIdData,
     Ocl,
-    ServiceTemplateChangeInfo,
     serviceTemplateRegistrationState,
+    ServiceTemplateRequestInfo,
     update,
     type UpdateData,
 } from '../../../../../xpanse-api/generated';
@@ -55,19 +55,19 @@ function UpdateService({
     const updateServiceRequest = useMutation({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
-                id: id,
+                serviceTemplateId: id,
                 isRemoveServiceTemplateUntilApproved: true,
                 requestBody: ocl,
             };
             return update(data);
         },
-        onSuccess: async (serviceTemplateChangeInfo: ServiceTemplateChangeInfo) => {
+        onSuccess: async (serviceTemplateRequestInfo: ServiceTemplateRequestInfo) => {
             files.current[0].status = 'done';
-            updateResult.current = [`ID - ${serviceTemplateChangeInfo.serviceTemplateId}`];
-            const detailsData: DetailsData = {
-                id: serviceTemplateChangeInfo.serviceTemplateId,
+            updateResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
+            const getServiceTemplateDetailsByIdData: GetServiceTemplateDetailsByIdData = {
+                serviceTemplateId: serviceTemplateRequestInfo.serviceTemplateId,
             };
-            const serviceTemplateDetailsVo = await details(detailsData);
+            const serviceTemplateDetailsVo = await getServiceTemplateDetailsById(getServiceTemplateDetailsByIdData);
             serviceRegistrationStatus.current =
                 serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
         },

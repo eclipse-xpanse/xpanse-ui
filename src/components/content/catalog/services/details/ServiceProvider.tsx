@@ -189,14 +189,7 @@ function ServiceProvider({
                     {activeServiceDetail ? (
                         <>
                             <UnregisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
-                            <ReRegisterResult
-                                id={activeServiceDetail.serviceTemplateId}
-                                serviceRegistrationStatus={
-                                    reRegisterRequest.data
-                                        ?.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                }
-                                category={category}
-                            />
+                            <ReRegisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <Tabs
                                 items={items}
