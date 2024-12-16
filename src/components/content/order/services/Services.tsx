@@ -11,8 +11,9 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { UserOrderableServiceVo, category } from '../../../../xpanse-api/generated';
+import { category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { createServicePageRoute } from '../../../utils/constants';
+import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
 import { groupServicesByLatestVersion } from '../common/utils/groupServicesByLatestVersion.ts';
 import ServicesLoadingError from '../query/ServicesLoadingError';
 import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
@@ -93,7 +94,7 @@ function Services(): React.JSX.Element {
                                             </div>
                                             <div className={serviceOrderStyles.serviceTypeOptionInfo}>
                                                 <span className={serviceOrderStyles.serviceTypeOption}>
-                                                    <Tooltip placement='topLeft' title={item.name}>
+                                                    <Tooltip placement='topLeft' title={item.name} color={'blue'}>
                                                         <Paragraph
                                                             className={serviceOrderStyles.serviceTypeOptionServiceName}
                                                             ellipsis={true}
@@ -104,6 +105,9 @@ function Services(): React.JSX.Element {
                                                 </span>
                                                 <span className={serviceOrderStyles.serviceTypeOptionDescription}>
                                                     {item.content}
+                                                </span>
+                                                <span className={serviceOrderStyles.serviceTypeOptionVendor}>
+                                                    <IsvNameDisplay namespace={item.namespace} />
                                                 </span>
                                             </div>
                                         </div>

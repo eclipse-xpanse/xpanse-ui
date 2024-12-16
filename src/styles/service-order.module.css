@@ -88,8 +88,9 @@
     flex-flow: nowrap row;
     padding: 15px;
     width: 300px;
-    height: 100px;
+    height: 120px;
     border: 1px solid #edeeee;
+    position: relative;
 }
 
 .service-type-option-detail-skeleton {
@@ -110,7 +111,7 @@
     flex-flow: nowrap row;
     padding: 20px;
     width: 300px;
-    height: 100px;
+    height: 130px;
     border: 3px solid #f2f1f1;
 }
 
@@ -207,6 +208,7 @@
 .order-form-item-name {
     font-weight: bold;
 }
+
 .order-form-alert {
     margin-left: 10px;
 }
@@ -241,7 +243,6 @@
     display: inline;
     padding: 0;
     margin-top: 10px;
-    float: right;
 }
 
 .services-loading-error {
@@ -379,6 +380,7 @@
     .order-form-label {
         width: 10%;
     }
+
     .order-form-az-content {
         width: 88%;
     }
@@ -388,6 +390,7 @@
     .order-form-label {
         width: 12%;
     }
+
     .order-form-az-content {
         width: 86%;
     }
@@ -397,6 +400,7 @@
     .order-form-label {
         width: 14%;
     }
+
     .order-form-az-content {
         width: 84%;
     }
@@ -406,6 +410,7 @@
     .order-form-label {
         width: 18%;
     }
+
     .order-form-az-content {
         width: 80%;
     }
@@ -415,6 +420,7 @@
     .order-form-label {
         width: 24%;
     }
+
     .order-form-az-content {
         width: 74%;
     }
@@ -424,6 +430,7 @@
     .order-form-label {
         width: 28%;
     }
+
     .order-form-az-content {
         width: 72%;
     }
@@ -433,6 +440,7 @@
     .order-form-label {
         width: 30%;
     }
+
     .order-form-az-content {
         width: 68%;
     }
@@ -442,6 +450,7 @@
     .order-form-label {
         width: 40%;
     }
+
     .order-form-az-content {
         width: 58%;
     }
@@ -451,7 +460,64 @@
     .order-form-label {
         width: 50%;
     }
+
     .order-form-az-content {
         width: 48%;
     }
+}
+
+.service-type-option-vendor {
+    margin: 4px 0 0 0;
+    word-break: normal;
+    width: auto;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    position: absolute;
+    bottom: 4px;
+    right: 0;
+    transition: transform 0.3s ease;
+}
+
+.service-order-type-option-vendor {
+    padding: 4px 0;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    float: left;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+.service-order-submit-option-vendor {
+    border: none;
+    display: inline;
+    padding: 0;
+    margin-top: 15px;
+    margin-left: 10px;
+    float: left;
+}
+
+.service-isv-vendor {
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.service-api-doc-vendor-class {
+    margin: 10px 0 0 10px;
+}
+
+.service-api-doc-class {
+    margin: 0 10px 0 10px;
+}
+
+.service-order-submit-api-doc-class {
+    margin: 10px 10px 0 10px;
+}
+
+.service-vendor-contact-class {
+    display: flex;
+    margin-right: 0;
+    justify-content: flex-end;
 }

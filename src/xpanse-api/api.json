@@ -125,8 +125,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -155,18 +165,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -231,8 +231,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -261,18 +271,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -345,8 +345,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -375,18 +385,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -445,8 +445,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -475,18 +485,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -535,8 +535,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -565,18 +575,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -665,8 +665,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -695,18 +705,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -757,8 +757,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -787,18 +797,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -856,8 +856,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -886,18 +896,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -955,8 +955,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -985,18 +995,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1054,8 +1054,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1084,18 +1094,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1164,7 +1164,17 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1194,17 +1204,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
+                    "500": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1263,7 +1263,17 @@
                     }
                 ],
                 "responses": {
-                    "500": {
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1293,17 +1303,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
+                    "500": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -1373,8 +1373,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1403,18 +1413,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1483,8 +1483,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1513,18 +1523,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1584,8 +1584,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1614,18 +1624,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1702,8 +1702,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1732,18 +1742,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1801,8 +1801,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1831,18 +1841,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1895,8 +1895,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1925,18 +1935,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -1996,8 +1996,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2026,18 +2036,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2115,8 +2115,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2145,18 +2155,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2214,8 +2214,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2244,18 +2254,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2322,8 +2322,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2352,18 +2362,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2419,8 +2419,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2449,18 +2459,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2511,8 +2511,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2541,18 +2551,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2619,8 +2619,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2649,18 +2659,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2716,8 +2716,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2746,18 +2756,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2830,8 +2830,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2860,18 +2870,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2930,8 +2930,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -2960,18 +2970,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3020,8 +3020,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3050,18 +3060,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3150,8 +3150,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3180,18 +3190,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3254,8 +3254,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3284,18 +3294,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3357,8 +3357,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3387,18 +3397,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3522,8 +3522,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3552,18 +3562,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3622,7 +3622,17 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3652,17 +3662,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
+                    "500": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -3721,8 +3721,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3751,18 +3761,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3910,8 +3910,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -3940,18 +3950,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4010,8 +4010,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4040,18 +4050,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4110,8 +4110,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4140,18 +4150,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4210,8 +4210,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4240,18 +4250,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4310,8 +4310,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4340,18 +4350,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4430,8 +4430,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4460,18 +4470,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4530,8 +4530,18 @@
                     "required": true
                 },
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4560,18 +4570,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4631,8 +4631,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4661,18 +4671,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4734,8 +4734,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4764,18 +4774,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4834,8 +4834,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4864,18 +4874,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -4971,8 +4971,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5001,18 +5011,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5072,8 +5072,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5102,18 +5112,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5187,8 +5187,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5217,18 +5227,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5287,8 +5287,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5317,18 +5327,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5385,8 +5385,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5415,18 +5425,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5488,8 +5488,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5518,18 +5528,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5660,8 +5660,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5690,18 +5700,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5763,8 +5763,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5793,18 +5803,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5935,8 +5935,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -5965,18 +5975,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6038,8 +6038,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6068,18 +6078,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6138,8 +6138,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6168,18 +6178,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6275,8 +6275,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6305,18 +6315,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6399,8 +6399,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6429,18 +6439,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6503,8 +6503,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6533,18 +6543,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6603,8 +6603,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6633,18 +6643,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6740,8 +6740,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6770,18 +6780,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6868,8 +6868,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -6898,18 +6908,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7032,8 +7032,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7062,18 +7072,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7124,8 +7124,18 @@
                 "description": "Check health of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "healthCheck",
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7154,18 +7164,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7235,8 +7235,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7265,18 +7275,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7327,8 +7327,18 @@
                 "description": "List cloud service providers with active plugin.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>",
                 "operationId": "getActiveCsps",
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7357,18 +7367,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7510,8 +7510,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7540,18 +7550,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7614,8 +7614,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7644,18 +7654,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7715,8 +7715,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7745,18 +7755,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7877,8 +7877,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -7907,18 +7917,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8029,8 +8029,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8059,18 +8069,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8153,8 +8153,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8183,18 +8193,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8283,8 +8283,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8313,18 +8323,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8397,8 +8397,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8427,18 +8437,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8562,8 +8562,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8592,18 +8602,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8673,8 +8673,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8703,18 +8713,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8772,8 +8772,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8802,18 +8812,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8881,8 +8881,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8911,18 +8921,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -8993,8 +8993,18 @@
                     }
                 ],
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9023,18 +9033,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9082,8 +9082,18 @@
                 "description": "Get and redirect authorization url for user to authenticate.",
                 "operationId": "authorize",
                 "responses": {
-                    "500": {
-                        "description": "Internal Server Error",
+                    "400": {
+                        "description": "Bad Request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9112,18 +9122,8 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "Bad Request",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/ErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "description": "Unprocessable Entity",
+                    "500": {
+                        "description": "Internal Server Error",
                         "content": {
                             "application/json": {
                                 "schema": {
@@ -9175,7 +9175,17 @@
                     }
                 ],
                 "responses": {
-                    "500": {
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9205,17 +9215,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
+                    "500": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9275,7 +9275,17 @@
                     }
                 ],
                 "responses": {
-                    "500": {
+                    "400": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9305,17 +9315,7 @@
                             }
                         }
                     },
-                    "400": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OrderFailedErrorResponse"
-                                }
-                            }
-                        }
-                    },
-                    "422": {
+                    "500": {
                         "description": "",
                         "content": {
                             "application/json": {
@@ -9394,6 +9394,7 @@
                             "Service Template Request Already Reviewed",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
+                            "Mandatory Value Missing",
                             "Invalid Billing Config",
                             "Unavailable Service Regions",
                             "Service Deployment Not Found",
@@ -9594,6 +9595,7 @@
                             "Service Template Request Already Reviewed",
                             "Invalid Service Version",
                             "Invalid Service Flavors",
+                            "Mandatory Value Missing",
                             "Invalid Billing Config",
                             "Unavailable Service Regions",
                             "Service Deployment Not Found",
