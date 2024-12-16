@@ -11,4 +11,5 @@ export interface UserServiceLatestVersionDisplayType {
     icon: string;
     latestVersion: string;
     category: category;
+    namespace: string;
 }
