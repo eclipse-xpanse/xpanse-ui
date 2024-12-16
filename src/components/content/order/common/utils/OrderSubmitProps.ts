@@ -17,6 +17,7 @@ export interface OrderSubmitProps {
     id: string;
     category: category;
     name: string;
+    namespace: string;
     version: string;
     region: Region;
     area: string;

@@ -19,9 +19,12 @@ import {
     servicesSubPageRoute,
 } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType.ts';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
+import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
@@ -198,11 +201,25 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                                 </Paragraph>
                             </Tooltip>
                         </Col>
-                        <Col span={4}>
-                            <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                        <Col span={8}>
+                            <div className={serviceOrderStyles.serviceVendorContactClass}>
+                                <div className={serviceOrderStyles.serviceOrderSubmitApiDocClass}>
+                                    <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                                </div>
+                                <div className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
+                                    <IsvNameDisplay namespace={state.namespace} />
+                                </div>
+                                {state.contactServiceDetails ? (
+                                    <div className={serviceOrderStyles.serviceApiDocVendorClass}>
+                                        <ContactDetailsText
+                                            serviceProviderContactDetails={state.contactServiceDetails}
+                                            showFor={ContactDetailsShowType.Order}
+                                        />
+                                    </div>
+                                ) : null}
+                            </div>
                         </Col>
                     </Row>
-
                     {isShowDeploymentResult ? (
                         <OrderSubmitStatusAlert
                             key={uniqueRequestId.current}

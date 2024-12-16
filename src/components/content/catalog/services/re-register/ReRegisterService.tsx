@@ -9,6 +9,7 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { serviceTemplateRegistrationState, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
+
 import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
 
 function ReRegisterService({

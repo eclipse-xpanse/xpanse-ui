@@ -10,9 +10,9 @@ import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
-    ServiceTemplateDetailVo,
     category,
     name,
+    ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import {
