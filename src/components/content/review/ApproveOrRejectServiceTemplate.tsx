@@ -7,19 +7,19 @@ import { UseMutationResult } from '@tanstack/react-query';
 import { Alert, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ApiError, ErrorResponse, reviewResult, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ApiError, ErrorResponse, reviewResult, ServiceTemplateRequestToReview } from '../../../xpanse-api/generated';
 import { isErrorResponse } from '../common/error/isErrorResponse';
 import { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
 export const ApproveOrRejectServiceTemplate = ({
-    currentServiceTemplateVo,
+    currentServiceTemplateRequestToReview,
     isApproved,
     isModalOpen,
     handleModalClose,
     setAlertTipCloseStatus,
     approveOrRejectRequest,
 }: {
-    currentServiceTemplateVo: ServiceTemplateDetailVo;
+    currentServiceTemplateRequestToReview: ServiceTemplateRequestToReview;
     isApproved: boolean | undefined;
     isModalOpen: boolean;
     handleModalClose: (arg: boolean) => void;
@@ -31,8 +31,8 @@ export const ApproveOrRejectServiceTemplate = ({
     const handleOk = () => {
         if (isApproved !== undefined) {
             const request: ApproveOrRejectRequestParams = {
-                id: currentServiceTemplateVo.serviceTemplateId,
-                reviewRegistrationRequest: {
+                id: currentServiceTemplateRequestToReview.requestId,
+                reviewServiceTemplateRequest: {
                     reviewResult: isApproved ? reviewResult.APPROVED : reviewResult.REJECTED,
                     reviewComment: comments,
                 },

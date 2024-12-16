@@ -3,12 +3,12 @@ import { reRegisterServiceTemplate, type ReRegisterServiceTemplateData } from '.
 
 const reRegisterKey: string = 're-register';
 
-export function useReRegisterRequest(id: string) {
+export function useReRegisterRequest(serviceTemplateId: string) {
     return useMutation({
-        mutationKey: [id, reRegisterKey],
+        mutationKey: [serviceTemplateId, reRegisterKey],
         mutationFn: () => {
             const data: ReRegisterServiceTemplateData = {
-                id: id,
+                serviceTemplateId: serviceTemplateId,
             };
             return reRegisterServiceTemplate(data);
         },
@@ -16,9 +16,9 @@ export function useReRegisterRequest(id: string) {
     });
 }
 
-export function useGetReRegisterMutationState(id: string) {
+export function useGetReRegisterMutationState(serviceTemplateId: string) {
     return useMutationState({
-        filters: { mutationKey: [id, reRegisterKey], exact: true },
+        filters: { mutationKey: [serviceTemplateId, reRegisterKey], exact: true },
         select: (mutation) => mutation.state,
     });
 }

@@ -5,27 +5,27 @@
 
 import { useMutation } from '@tanstack/react-query';
 import {
-    ReviewRegistrationData,
-    ReviewRegistrationRequest,
-    reviewRegistration,
+    ReviewServiceTemplateRequest,
+    reviewServiceTemplateRequest,
+    ReviewServiceTemplateRequestData,
 } from '../../../../xpanse-api/generated';
 
 const reviewKey: string = 'review';
 
 export interface ApproveOrRejectRequestParams {
     id: string;
-    reviewRegistrationRequest: ReviewRegistrationRequest;
+    reviewServiceTemplateRequest: ReviewServiceTemplateRequest;
 }
 
 export default function useApproveOrRejectRequest(id: string) {
     return useMutation({
         mutationKey: [id, reviewKey],
         mutationFn: (requestParams: ApproveOrRejectRequestParams) => {
-            const data: ReviewRegistrationData = {
-                id: requestParams.id,
-                requestBody: requestParams.reviewRegistrationRequest,
+            const data: ReviewServiceTemplateRequestData = {
+                requestId: requestParams.id,
+                requestBody: requestParams.reviewServiceTemplateRequest,
             };
-            return reviewRegistration(data);
+            return reviewServiceTemplateRequest(data);
         },
     });
 }

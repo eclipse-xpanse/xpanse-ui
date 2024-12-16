@@ -7,20 +7,12 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, category, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
+import { ApiError, category } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetReRegisterMutationState } from './ReRegisterMutation';
 
-export function ReRegisterResult({
-    id,
-    serviceRegistrationStatus,
-    category,
-}: {
-    id: string;
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
-    category: category;
-}): React.JSX.Element | undefined {
+export function ReRegisterResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
     const useReRegisterRequestState = useGetReRegisterMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -37,11 +29,7 @@ export function ReRegisterResult({
         if (useReRegisterRequestState[0].status === 'success') {
             return (
                 <Alert
-                    message={
-                        serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED
-                            ? 'service added to catalog again successfully'
-                            : 'Service re-registered successfully'
-                    }
+                    message={'service added to catalog again successfully'}
                     description={'Service submitted for review of cloud provider.'}
                     showIcon
                     type={'success'}

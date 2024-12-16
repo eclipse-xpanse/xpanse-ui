@@ -13,7 +13,7 @@ export function useUnregisterRequest(id: string) {
         mutationKey: [id, unregisterKey],
         mutationFn: () => {
             const data: UnregisterData = {
-                id: id,
+                serviceTemplateId: id,
             };
             return unregister(data);
         },
