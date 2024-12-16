@@ -8,7 +8,7 @@ import { UseMutationResult } from '@tanstack/react-query';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateDetailVo, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
+import { serviceTemplateRegistrationState, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
 
 function ReRegisterService({
@@ -19,7 +19,7 @@ function ReRegisterService({
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    reRegisterRequest: UseMutationResult<ServiceTemplateDetailVo, Error, void>;
+    reRegisterRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
     serviceRegistrationStatus: serviceTemplateRegistrationState;
 }): React.JSX.Element {
     const deleteState = useGetDeleteMutationState(id);

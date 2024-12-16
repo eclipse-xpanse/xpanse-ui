@@ -8,7 +8,7 @@ export function useDeleteRequest(id: string) {
         mutationKey: [id, deleteKey],
         mutationFn: () => {
             const deleteData: DeleteServiceTemplateData = {
-                id: id,
+                serviceTemplateId: id,
             };
             return deleteServiceTemplate(deleteData);
         },
