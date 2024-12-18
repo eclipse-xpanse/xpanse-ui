@@ -6,7 +6,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.5.2",
         "@axa-fr/react-oidc": "^7.23.1",
-        "@tanstack/react-query": "^5.62.7",
+        "@tanstack/react-query": "^5.62.8",
         "antd": "^5.22.5",
         "echarts": "5.5.1",
         "echarts-for-react": "^3.0.2",
