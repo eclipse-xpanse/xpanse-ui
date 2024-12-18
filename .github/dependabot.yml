@@ -26,7 +26,8 @@ updates:
           playwright:
               applies-to: version-updates
               patterns:
-                  - '*playwright/*'
+                  - '@playwright/*'
+                  - 'playwright-core'
           axa-oidc:
               applies-to: version-updates
               patterns:
