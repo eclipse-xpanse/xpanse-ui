@@ -107,8 +107,8 @@ import type {
     GetServiceTemplateDetailsByIdResponse,
     GetServiceTemplateDetailsData,
     GetServiceTemplateDetailsResponse,
-    GetServiceTemplateHistoryByServiceTemplateIdData,
-    GetServiceTemplateHistoryByServiceTemplateIdResponse,
+    GetServiceTemplateRequestHistoryByServiceTemplateIdData,
+    GetServiceTemplateRequestHistoryByServiceTemplateIdResponse,
     GetSitesOfCspData,
     GetSitesOfCspResponse,
     GetUserCloudCredentialsData,
@@ -140,14 +140,16 @@ import type {
     PurgeResponse,
     QueryTasksData,
     QueryTasksResponse,
+    ReAddToCatalogData,
+    ReAddToCatalogResponse,
     RecreateServiceData,
     RecreateServiceResponse,
     RedeployFailedDeploymentData,
     RedeployFailedDeploymentResponse,
     RegisterData,
     RegisterResponse,
-    ReRegisterServiceTemplateData,
-    ReRegisterServiceTemplateResponse,
+    RemoveFromCatalogData,
+    RemoveFromCatalogResponse,
     RestartServiceData,
     RestartServiceResponse,
     ReviewServiceTemplateRequestData,
@@ -156,8 +158,6 @@ import type {
     StartServiceResponse,
     StopServiceData,
     StopServiceResponse,
-    UnregisterData,
-    UnregisterResponse,
     UpdateConfigurationChangeResultData,
     UpdateConfigurationChangeResultResponse,
     UpdateData,
@@ -634,7 +634,7 @@ export const update = (data: UpdateData): CancelablePromise<UpdateResponse> => {
 };
 
 /**
- * Delete unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Delete service template not in catalog using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns void No Content
@@ -662,16 +662,16 @@ export const deleteServiceTemplate = (
 };
 
 /**
- * Unregister service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Remove service template from catalog using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
  */
-export const unregister = (data: UnregisterData): CancelablePromise<UnregisterResponse> => {
+export const removeFromCatalog = (data: RemoveFromCatalogData): CancelablePromise<RemoveFromCatalogResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/service_templates/unregister/{serviceTemplateId}',
+        url: '/xpanse/service_templates/remove_from_catalog/{serviceTemplateId}',
         path: {
             serviceTemplateId: data.serviceTemplateId,
         },
@@ -688,18 +688,16 @@ export const unregister = (data: UnregisterData): CancelablePromise<UnregisterRe
 };
 
 /**
- * Re-register the unregistered service template using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Re-add the service template to catalog using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
  */
-export const reRegisterServiceTemplate = (
-    data: ReRegisterServiceTemplateData
-): CancelablePromise<ReRegisterServiceTemplateResponse> => {
+export const reAddToCatalog = (data: ReAddToCatalogData): CancelablePromise<ReAddToCatalogResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/service_templates/re-register/{serviceTemplateId}',
+        url: '/xpanse/service_templates/re_add_to_catalog/{serviceTemplateId}',
         path: {
             serviceTemplateId: data.serviceTemplateId,
         },
@@ -1186,8 +1184,8 @@ export const migrate = (data: MigrateData): CancelablePromise<MigrateResponse> =
  * @param data.serviceVersion version of the service
  * @param data.serviceHostingType who hosts ths cloud resources
  * @param data.serviceTemplateRegistrationState state of service template registration
- * @param data.availableInCatalog is available in catalog
- * @param data.isUpdatePending is service template updating
+ * @param data.isAvailableInCatalog is available in catalog
+ * @param data.isReviewInProgress is any request in review progress
  * @returns ServiceTemplateDetailVo OK
  * @throws ApiError
  */
@@ -1204,8 +1202,8 @@ export const getAllServiceTemplatesByIsv = (
             serviceVersion: data.serviceVersion,
             serviceHostingType: data.serviceHostingType,
             serviceTemplateRegistrationState: data.serviceTemplateRegistrationState,
-            availableInCatalog: data.availableInCatalog,
-            isUpdatePending: data.isUpdatePending,
+            isAvailableInCatalog: data.isAvailableInCatalog,
+            isReviewInProgress: data.isReviewInProgress,
         },
         errors: {
             400: 'Bad Request',
@@ -1839,12 +1837,12 @@ export const getAllServiceConfigurationChangeDetails = (
  * @returns ServiceTemplateRequestHistory OK
  * @throws ApiError
  */
-export const getServiceTemplateHistoryByServiceTemplateId = (
-    data: GetServiceTemplateHistoryByServiceTemplateIdData
-): CancelablePromise<GetServiceTemplateHistoryByServiceTemplateIdResponse> => {
+export const getServiceTemplateRequestHistoryByServiceTemplateId = (
+    data: GetServiceTemplateRequestHistoryByServiceTemplateIdData
+): CancelablePromise<GetServiceTemplateRequestHistoryByServiceTemplateIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/service_templates/{serviceTemplateId}/history',
+        url: '/xpanse/service_templates/{serviceTemplateId}/requests',
         path: {
             serviceTemplateId: data.serviceTemplateId,
         },
@@ -1876,7 +1874,7 @@ export const getRequestedServiceTemplateByRequestId = (
 ): CancelablePromise<GetRequestedServiceTemplateByRequestIdResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/service_templates/request/{requestId}',
+        url: '/xpanse/service_templates/requests/{requestId}',
         path: {
             requestId: data.requestId,
         },
@@ -2102,8 +2100,8 @@ export const getActiveCsps = (): CancelablePromise<GetActiveCspsResponse> => {
  * @param data.serviceVersion version of the service
  * @param data.serviceHostingType who hosts ths cloud resources
  * @param data.serviceTemplateRegistrationState state of service template registration
- * @param data.availableInCatalog is available in catalog
- * @param data.isUpdatePending is service template updating
+ * @param data.isAvailableInCatalog is available in catalog
+ * @param data.isReviewInProgress is any request in review progress
  * @returns ServiceTemplateDetailVo OK
  * @throws ApiError
  */
@@ -2119,8 +2117,8 @@ export const listManagedServiceTemplates = (
             serviceVersion: data.serviceVersion,
             serviceHostingType: data.serviceHostingType,
             serviceTemplateRegistrationState: data.serviceTemplateRegistrationState,
-            availableInCatalog: data.availableInCatalog,
-            isUpdatePending: data.isUpdatePending,
+            isAvailableInCatalog: data.isAvailableInCatalog,
+            isReviewInProgress: data.isReviewInProgress,
         },
         errors: {
             400: 'Bad Request',

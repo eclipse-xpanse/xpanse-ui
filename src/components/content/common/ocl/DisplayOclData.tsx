@@ -95,15 +95,15 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
                                 {ocl.category ? ocl.category : PLACE_HOLDER_UNKNOWN_VALUE}
                             </Descriptions.Item>
-                            <Descriptions.Item label='Version'>{ocl.serviceVersion}</Descriptions.Item>
-                            <Descriptions.Item label='Namespace'>
-                                <Tag color='cyan'>{ocl.namespace}</Tag>
+                            <Descriptions.Item label='Service Version'>{ocl.serviceVersion}</Descriptions.Item>
+                            <Descriptions.Item label='Service Vendor'>
+                                <Tag color='cyan'>{ocl.serviceVendor}</Tag>
                             </Descriptions.Item>
                             <Descriptions.Item label='Description'>{ocl.description}</Descriptions.Item>
                             <Descriptions.Item label='Billing Modes'>
                                 <BillingText billing={ocl.billing} />
                             </Descriptions.Item>
-                            <Descriptions.Item label='CredentialType'>
+                            <Descriptions.Item label='Credential Type'>
                                 {ocl.deployment.credentialType ? ocl.deployment.credentialType.valueOf() : ''}
                             </Descriptions.Item>
                             <Descriptions.Item label='Contact Details'>

@@ -7,14 +7,14 @@ import { Descriptions } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
-import { ServiceConfigurationManage } from '../../../xpanse-api/generated';
+import { ServiceChangeManage } from '../../../xpanse-api/generated';
 import { ConfigurationManageScriptText } from './ConfigurationManageScriptText';
 import { getServiceConfigurationToolIcon } from './getServiceConfigurationToolIcon';
 
 function ServiceConfigurationScripts({
     configurationManage,
 }: {
-    configurationManage: ServiceConfigurationManage;
+    configurationManage: ServiceChangeManage;
 }): React.JSX.Element {
     return (
         <>

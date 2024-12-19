@@ -1,5 +1,5 @@
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { reRegisterServiceTemplate, type ReRegisterServiceTemplateData } from '../../../../../xpanse-api/generated';
+import { reAddToCatalog, type ReAddToCatalogData } from '../../../../../xpanse-api/generated';
 
 const reRegisterKey: string = 're-register';
 
@@ -7,10 +7,10 @@ export function useReRegisterRequest(serviceTemplateId: string) {
     return useMutation({
         mutationKey: [serviceTemplateId, reRegisterKey],
         mutationFn: () => {
-            const data: ReRegisterServiceTemplateData = {
+            const data: ReAddToCatalogData = {
                 serviceTemplateId: serviceTemplateId,
             };
-            return reRegisterServiceTemplate(data);
+            return reAddToCatalog(data);
         },
         gcTime: 0,
     });

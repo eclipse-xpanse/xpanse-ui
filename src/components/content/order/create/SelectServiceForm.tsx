@@ -43,7 +43,7 @@ import { getServiceFlavorList } from '../formDataHelpers/flavorHelper.ts';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { serviceNamespaceHelper } from '../formDataHelpers/serviceNamespaceHelper.ts';
+import { serviceVendorHelper } from '../formDataHelpers/serviceVendorHelper.ts';
 import { getSortedVersionList } from '../formDataHelpers/versionHelper';
 import CspSelect from '../formElements/CspSelect';
 import VersionSelect from '../formElements/VersionSelect';
@@ -103,14 +103,16 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     );
     const [selectRegion, setSelectRegion] = useState<Region>(serviceInfo ? serviceInfo.region : regionList[0].region);
 
-    // get the namespace from the service template with servicename, category, serviceVersion, csp and serviceHostType
-    const selectNamespace = serviceNamespaceHelper(
+    // get the service vendor from the service template with servicename, category, serviceVersion, csp and serviceHostType
+    const selectServiceVendor = serviceVendorHelper(
         selectCsp,
         selectServiceHostType,
         versionToServicesMap.get(selectVersion)
     );
 
-    const [namespace, setNamespace] = useState<string>(serviceInfo ? serviceInfo.namespace : selectNamespace);
+    const [serviceVendor, setServiceVendor] = useState<string>(
+        serviceInfo ? serviceInfo.serviceVendor : selectServiceVendor
+    );
 
     const getServiceTemplateId = (): string => {
         const service = services.find(
@@ -188,7 +190,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
         location.state = undefined;
         setSelectServiceHostType(serviceHostingType);
-        setNamespace(serviceNamespaceHelper(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion)));
+        setServiceVendor(serviceVendorHelper(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion)));
 
         areaList = convertAreasToTabs(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
         setSelectArea(areaList[0].key);
@@ -255,7 +257,9 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             serviceHostTypes[0],
             versionToServicesMap.get(currentVersion)
         );
-        setNamespace(serviceNamespaceHelper(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion)));
+        setServiceVendor(
+            serviceVendorHelper(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion))
+        );
         setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
     };
 
@@ -265,7 +269,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         serviceHostTypes = getAvailableServiceHostingTypes(csp, versionToServicesMap.get(selectVersion));
         setSelectServiceHostType(serviceHostTypes[0]);
 
-        setNamespace(serviceNamespaceHelper(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion)));
+        setServiceVendor(serviceVendorHelper(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion)));
 
         areaList = convertAreasToTabs(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         setSelectArea(areaList[0]?.key ?? '');
@@ -370,7 +374,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                                         ></ApiDoc>
                                     </div>
                                     <div className={serviceOrderStyles.serviceOrderTypeOptionVendor}>
-                                        <IsvNameDisplay namespace={namespace} />
+                                        <IsvNameDisplay serviceVendor={serviceVendor} />
                                     </div>
                                     <div>
                                         {' '}

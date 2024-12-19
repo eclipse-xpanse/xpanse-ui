@@ -8,14 +8,10 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { deployResourceKind, sensitiveScope, ServiceConfigurationParameter } from '../../../xpanse-api/generated';
+import { deployResourceKind, sensitiveScope, ServiceChangeParameter } from '../../../xpanse-api/generated';
 
-function ServiceConfigurationParameters({
-    parameters,
-}: {
-    parameters: ServiceConfigurationParameter[];
-}): React.JSX.Element {
-    const columns: ColumnsType<ServiceConfigurationParameter> = [
+function ServiceConfigurationParameters({ parameters }: { parameters: ServiceChangeParameter[] }): React.JSX.Element {
+    const columns: ColumnsType<ServiceChangeParameter> = [
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Name</div>,
             dataIndex: 'name',
@@ -47,7 +43,7 @@ function ServiceConfigurationParameters({
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Description</div>,
             dataIndex: 'description',
-            render: (_text: string, record: ServiceConfigurationParameter) => {
+            render: (_text: string, record: ServiceChangeParameter) => {
                 return (
                     <Popover
                         content={
@@ -79,7 +75,7 @@ function ServiceConfigurationParameters({
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>ValueSchema</div>,
             dataIndex: 'valueSchema',
-            render: (_text: string, record: ServiceConfigurationParameter) => {
+            render: (_text: string, record: ServiceChangeParameter) => {
                 if (!record.valueSchema) {
                     return '';
                 }
