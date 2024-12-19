@@ -69,7 +69,7 @@ export default function ServiceReviews(): React.JSX.Element {
         const filters: ColumnFilterItem[] = [];
         const versionSet = new Set<string>('');
         serviceTemplateRequestToReviewList.forEach((v) => {
-            versionSet.add(v.ocl.version);
+            versionSet.add(v.ocl.serviceVersion);
         });
         versionSet.forEach((version) => {
             const filter = {
@@ -210,20 +210,20 @@ export default function ServiceReviews(): React.JSX.Element {
             render: (_, record) => <div>{record.ocl.name}</div>,
         },
         {
-            title: 'Version',
-            dataIndex: 'version',
+            title: 'Service Version',
+            dataIndex: 'serviceVersion',
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => {
-                if (record.ocl.version) {
-                    const customerServiceName = record.ocl.version;
+                if (record.ocl.serviceVersion) {
+                    const customerServiceName = record.ocl.serviceVersion;
                     return customerServiceName.startsWith(value.toString());
                 }
                 return false;
             },
             align: 'left',
-            render: (_, record) => <div>{record.ocl.version}</div>,
+            render: (_, record) => <div>{record.ocl.serviceVersion}</div>,
         },
         {
             title: 'Service Hosting Type',

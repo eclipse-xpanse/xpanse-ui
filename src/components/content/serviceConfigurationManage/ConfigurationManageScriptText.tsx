@@ -7,12 +7,12 @@ import { Button, Popover } from 'antd';
 import React from 'react';
 import YAML from 'yaml';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
-import { ConfigManageScript } from '../../../xpanse-api/generated';
+import { ServiceChangeScript } from '../../../xpanse-api/generated';
 
 export function ConfigurationManageScriptText({
     configManageScripts,
 }: {
-    configManageScripts: ConfigManageScript[] | undefined;
+    configManageScripts: ServiceChangeScript[] | undefined;
 }): React.JSX.Element {
     if (configManageScripts && configManageScripts.length > 0) {
         const yamlDocument = new YAML.Document();

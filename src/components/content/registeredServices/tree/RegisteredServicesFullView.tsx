@@ -13,7 +13,7 @@ import {
     registeredServicesPageRoute,
     serviceCategoryQuery,
     serviceNameKeyQuery,
-    serviceNamespaceQuery,
+    serviceVendorQuery,
     serviceVersionKeyQuery,
 } from '../../../utils/constants.tsx';
 import { getFourthLevelKeysFromAvailableServicesTree } from '../../common/registeredServices/registeredServiceProps.ts';
@@ -31,8 +31,8 @@ export function RegisteredServicesFullView({
     const [urlParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState('');
 
-    const serviceNamespaceInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceNamespaceQuery) ?? '');
+    const serviceVendorInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceVendorQuery) ?? '');
         if (queryInUri.length > 0) {
             return queryInUri;
         }
@@ -70,8 +70,8 @@ export function RegisteredServicesFullView({
 
     function getDefaultSelectedKey() {
         //if user directly opens an url.
-        if (serviceNamespaceInQuery && serviceCategoryInQuery && serviceNameInQuery && serviceVersionInQuery) {
-            const fullKey = `${serviceNamespaceInQuery}@${serviceCategoryInQuery}@${serviceNameInQuery}@${serviceVersionInQuery}`;
+        if (serviceVendorInQuery && serviceCategoryInQuery && serviceNameInQuery && serviceVersionInQuery) {
+            const fullKey = `${serviceVendorInQuery}@${serviceCategoryInQuery}@${serviceNameInQuery}@${serviceVersionInQuery}`;
 
             if (allKeysInTree.includes(fullKey)) {
                 return fullKey;
@@ -82,14 +82,14 @@ export function RegisteredServicesFullView({
 
     // useEffect necessary since we are updating URL outside the React context.
     useEffect(() => {
-        let namespace: string = '';
+        let serviceVendor: string = '';
         let category: string = '';
         let name: string = '';
         let version: string = '';
         if (selectedKeyInTree && typeof selectedKeyInTree === 'string') {
             const parts = selectedKeyInTree.split('@');
             if (parts.length === 4) {
-                namespace = parts[0];
+                serviceVendor = parts[0];
                 category = parts[1];
                 name = parts[2];
                 version = parts[3];
@@ -99,7 +99,7 @@ export function RegisteredServicesFullView({
         if (availableServiceList.length > 0) {
             for (const value of availableServiceList) {
                 if (
-                    value.namespace === namespace &&
+                    value.serviceVendor === serviceVendor &&
                     value.category.toString() === category &&
                     value.name === name &&
                     value.version === version
@@ -108,7 +108,7 @@ export function RegisteredServicesFullView({
                         void navigate({
                             pathname: registeredServicesPageRoute,
                             search: createSearchParams({
-                                namespace: namespace,
+                                serviceVendor: serviceVendor,
                                 category: category,
                                 serviceName: name,
                                 version: version,
@@ -159,7 +159,7 @@ export function RegisteredServicesFullView({
                 <div className={catalogStyles.leftTitleClass}>Service Details</div>
                 <ServiceContent
                     availableServiceList={availableServiceList}
-                    selectedServiceNamespaceInTree={selectedKeyInTree.toString().split('@')[0]}
+                    selectedServiceVendorInTree={selectedKeyInTree.toString().split('@')[0]}
                     selectedServiceCategoryInTree={selectedKeyInTree.toString().split('@')[1]}
                     selectedServiceNameInTree={selectedKeyInTree.toString().split('@')[2]}
                     selectedServiceVersionInTree={selectedKeyInTree.toString().split('@')[3]}

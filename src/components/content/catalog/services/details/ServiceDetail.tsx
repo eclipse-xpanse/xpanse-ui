@@ -108,13 +108,13 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
                     <ShowIcon serviceDetails={serviceDetails} />
                 </Descriptions.Item>
-                <Descriptions.Item label='ServiceTemplateId' labelStyle={{ width: '230px' }}>
+                <Descriptions.Item label='Service Template Id' labelStyle={{ width: '230px' }}>
                     {serviceDetails.serviceTemplateId}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
-                <Descriptions.Item label='Namespace'>
-                    <Tag color='cyan'>{serviceDetails.namespace}</Tag>
+                <Descriptions.Item label='Service Vendor'>
+                    <Tag color='cyan'>{serviceDetails.serviceVendor}</Tag>
                 </Descriptions.Item>
                 <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
                     {serviceDetails.description}
@@ -128,7 +128,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                         }
                     />
                 </Descriptions.Item>
-                <Descriptions.Item label='CredentialType'>{serviceDetails.deployment.credentialType}</Descriptions.Item>
+                <Descriptions.Item label='Credential Type'>
+                    {serviceDetails.deployment.credentialType}
+                </Descriptions.Item>
                 <Descriptions.Item label='Billing Modes'>
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>

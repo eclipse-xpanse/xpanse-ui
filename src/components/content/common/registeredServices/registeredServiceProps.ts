@@ -6,36 +6,36 @@
 import { DataNode } from 'antd/es/tree';
 import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
-export const groupServiceTemplatesByNamespace = (
+export const groupServiceTemplatesByServiceVendor = (
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
-    const serviceMapperByNamespace: Map<string, ServiceTemplateDetailVo[]> = new Map<
+    const serviceMapperByServiceVendor: Map<string, ServiceTemplateDetailVo[]> = new Map<
         string,
         ServiceTemplateDetailVo[]
     >();
     for (const serviceTemplate of serviceTemplateList) {
-        if (serviceTemplate.namespace) {
-            if (!serviceMapperByNamespace.has(serviceTemplate.namespace)) {
-                serviceMapperByNamespace.set(
-                    serviceTemplate.namespace,
-                    serviceTemplateList.filter((data) => data.namespace === serviceTemplate.namespace)
+        if (serviceTemplate.serviceVendor) {
+            if (!serviceMapperByServiceVendor.has(serviceTemplate.serviceVendor)) {
+                serviceMapperByServiceVendor.set(
+                    serviceTemplate.serviceVendor,
+                    serviceTemplateList.filter((data) => data.serviceVendor === serviceTemplate.serviceVendor)
                 );
             }
         }
     }
 
-    return serviceMapperByNamespace;
+    return serviceMapperByServiceVendor;
 };
 
-export const groupServicesByCategoryForSpecificNamespace = (
-    currentNamespace: string,
+export const groupServicesByCategoryForSpecificServiceVendor = (
+    currentServiceVendor: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const categoryMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-    const namespaceMapper: Map<string, ServiceTemplateDetailVo[]> =
-        groupServiceTemplatesByNamespace(serviceTemplateList);
-    namespaceMapper.forEach((serviceList, namespace) => {
-        if (namespace === currentNamespace) {
+    const serviceVendorMapper: Map<string, ServiceTemplateDetailVo[]> =
+        groupServiceTemplatesByServiceVendor(serviceTemplateList);
+    serviceVendorMapper.forEach((serviceList, serviceVendor) => {
+        if (serviceVendor === currentServiceVendor) {
             for (const service of serviceList) {
                 if (service.category.toString()) {
                     if (!categoryMapper.has(service.category.toString())) {
@@ -52,13 +52,13 @@ export const groupServicesByCategoryForSpecificNamespace = (
 };
 
 export const groupServicesByNameForSpecificCategory = (
-    currentNamespace: string,
+    currentServiceVendor: string,
     currentCategory: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const serviceNameMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-    const categoryMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByCategoryForSpecificNamespace(
-        currentNamespace,
+    const categoryMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByCategoryForSpecificServiceVendor(
+        currentServiceVendor,
         serviceTemplateList
     );
     categoryMapper.forEach((serviceList, category) => {
@@ -79,14 +79,14 @@ export const groupServicesByNameForSpecificCategory = (
 };
 
 export const groupRegisteredServicesByVersionForSpecificServiceName = (
-    currentNamespace: string,
+    currentServiceVendor: string,
     currentCategory: string,
     currentServiceName: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const versionMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
     const serviceNameMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByNameForSpecificCategory(
-        currentNamespace,
+        currentServiceVendor,
         currentCategory,
         serviceTemplateList
     );

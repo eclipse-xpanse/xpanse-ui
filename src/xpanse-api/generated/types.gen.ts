@@ -317,21 +317,6 @@ export enum name {
     GOOGLE_CLOUD_PLATFORM = 'GoogleCloudPlatform',
 }
 
-/**
- * The collection of the configuration manage script.
- */
-export type ConfigManageScript = {
-    /**
-     * should be the name of the resource available in the deployer script.
-     */
-    configManager: string;
-    /**
-     * Means should the configuration update run on each node of the specific component or just one.
-     */
-    runOnlyOnce: boolean;
-    ansibleScriptConfig: AnsibleScriptConfig;
-};
-
 export type CreateCredential = {
     /**
      * The name of the credential
@@ -1126,7 +1111,8 @@ export type ErrorResponse = {
         | 'Async Stop Service Error'
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
-        | 'Destroy Failed Exception';
+        | 'Destroy Failed Exception'
+        | 'Service Action Invalid';
     /**
      * Details of the errors occurred
      */
@@ -1205,6 +1191,7 @@ export enum errorType {
     ASYNC_RESTART_SERVICE_ERROR = 'Async Restart Service Error',
     DEPLOYMENT_FAILED_EXCEPTION = 'Deployment Failed Exception',
     DESTROY_FAILED_EXCEPTION = 'Destroy Failed Exception',
+    SERVICE_ACTION_INVALID = 'Service Action Invalid',
 }
 
 export type FlavorPriceResult = {
@@ -1485,9 +1472,9 @@ export type Ocl = {
      */
     description: string;
     /**
-     * The namespace of the managed service
+     * The serviceVendor of the managed service
      */
-    namespace: string;
+    serviceVendor: string;
     /**
      * The icon of the managed service
      */
@@ -1505,7 +1492,11 @@ export type Ocl = {
      * End user license agreement content of the service.
      */
     eula?: string;
-    serviceConfigurationManage?: ServiceConfigurationManage;
+    serviceConfigurationManage?: ServiceChangeManage;
+    /**
+     * manage service action.
+     */
+    serviceActions?: Array<ServiceAction>;
 };
 
 export type OrderFailedErrorResponse = {
@@ -1580,7 +1571,8 @@ export type OrderFailedErrorResponse = {
         | 'Async Stop Service Error'
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
-        | 'Destroy Failed Exception';
+        | 'Destroy Failed Exception'
+        | 'Service Action Invalid';
     /**
      * Details of the errors occurred
      */
@@ -1767,6 +1759,123 @@ export type ScriptsRepo = {
 };
 
 /**
+ * manage service action.
+ */
+export type ServiceAction = {
+    /**
+     * the name of service action.
+     */
+    name: string;
+    /**
+     * the tool used to manage the service action.
+     */
+    type: 'ansible';
+    /**
+     * The collection of the action manage script.
+     */
+    actionManageScripts?: Array<ServiceChangeScript>;
+    /**
+     * The collection of service action parameters.
+     */
+    actionParameters?: Array<ServiceChangeParameter>;
+};
+
+/**
+ * the tool used to manage the service action.
+ */
+export enum type4 {
+    ANSIBLE = 'ansible',
+}
+
+/**
+ * manage service configuration.
+ */
+export type ServiceChangeManage = {
+    /**
+     * the tool used to manage the service configuration.
+     */
+    type: 'ansible';
+    /**
+     * the version of the agent that will be used by service resources.
+     */
+    agentVersion: string;
+    /**
+     * The collection of the configuration manage script.
+     */
+    configManageScripts?: Array<ServiceChangeScript>;
+    /**
+     * The collection of service configuration parameters.
+     */
+    configurationParameters?: Array<ServiceChangeParameter>;
+};
+
+/**
+ * The collection of service action parameters.
+ */
+export type ServiceChangeParameter = {
+    /**
+     * The name of the service config parameter
+     */
+    name: string;
+    kind: DeployVariableKind;
+    /**
+     * The type of the service config parameter
+     */
+    dataType: 'string' | 'number' | 'boolean';
+    /**
+     * The example value of the service config parameter
+     */
+    example?: string;
+    /**
+     * The description of the service config parameter
+     */
+    description: string;
+    /**
+     * The value of the service config parameter. Value can be provided for initial value
+     */
+    value?: string;
+    /**
+     * The init value of the service config parameter
+     */
+    initialValue: string;
+    /**
+     * valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
+     */
+    valueSchema?: {
+        [key: string]: unknown;
+    };
+    /**
+     * Sensitive scope of service config parameter storage
+     */
+    sensitiveScope?: 'none' | 'once' | 'always';
+    autoFill?: AutoFill;
+    modificationImpact: ModificationImpact;
+    /**
+     * Whether the service configuration parameters are read-only
+     */
+    isReadOnly: boolean;
+    /**
+     * Service component which manages this configuration parameter.
+     */
+    managedBy: string;
+};
+
+/**
+ * The collection of the action manage script.
+ */
+export type ServiceChangeScript = {
+    /**
+     * should be the name of the resource available in the deployer script.
+     */
+    changeHandler: string;
+    /**
+     * Means should the configuration update run on each node of the specific component or just one.
+     */
+    runOnlyOnce: boolean;
+    ansibleScriptConfig: AnsibleScriptConfig;
+};
+
+/**
  * Collection of service configuration change requests generated for the specific change order.
  */
 export type ServiceConfigurationChangeDetails = {
@@ -1868,86 +1977,6 @@ export type ServiceConfigurationDetails = {
     };
     createdTime?: string;
     updatedTime?: string;
-};
-
-/**
- * manage service configuration.
- */
-export type ServiceConfigurationManage = {
-    /**
-     * the tool used to manage the service configuration.
-     */
-    type: 'ansible';
-    /**
-     * the version of the agent that will be used by service resources.
-     */
-    agentVersion: string;
-    /**
-     * The collection of the configuration manage script.
-     */
-    configManageScripts?: Array<ConfigManageScript>;
-    /**
-     * The collection of service configuration parameters.
-     */
-    configurationParameters?: Array<ServiceConfigurationParameter>;
-};
-
-/**
- * the tool used to manage the service configuration.
- */
-export enum type4 {
-    ANSIBLE = 'ansible',
-}
-
-/**
- * The collection of service configuration parameters.
- */
-export type ServiceConfigurationParameter = {
-    /**
-     * The name of the service config parameter
-     */
-    name: string;
-    kind: DeployVariableKind;
-    /**
-     * The type of the service config parameter
-     */
-    dataType: 'string' | 'number' | 'boolean';
-    /**
-     * The example value of the service config parameter
-     */
-    example?: string;
-    /**
-     * The description of the service config parameter
-     */
-    description: string;
-    /**
-     * The value of the service config parameter. Value can be provided for initial value
-     */
-    value?: string;
-    /**
-     * The init value of the service config parameter
-     */
-    initialValue: string;
-    /**
-     * valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
-     */
-    valueSchema?: {
-        [key: string]: unknown;
-    };
-    /**
-     * Sensitive scope of service config parameter storage
-     */
-    sensitiveScope?: 'none' | 'once' | 'always';
-    autoFill?: AutoFill;
-    modificationImpact: ModificationImpact;
-    /**
-     * Whether the service configuration parameters are read-only
-     */
-    isReadOnly: boolean;
-    /**
-     * Service component which manages this configuration parameter.
-     */
-    managedBy: string;
 };
 
 export type ServiceConfigurationUpdate = {
@@ -2300,9 +2329,9 @@ export type ServiceTemplateDetailVo = {
         | 'middleware'
         | 'others';
     /**
-     * Namespace of the user who registered service template.
+     * ServiceVendor of the user who registered service template.
      */
-    namespace: string;
+    serviceVendor: string;
     /**
      * The regions of the Cloud Service Provider.
      */
@@ -2335,28 +2364,28 @@ export type ServiceTemplateDetailVo = {
      */
     lastModifiedTime: string;
     /**
-     * State of registered service template.
+     * Registration state of service template.
      */
     serviceTemplateRegistrationState: 'in-review' | 'approved' | 'rejected';
     /**
-     * Is service template in updating.
+     * If any request for the service template has a review in-progress.
      */
-    isUpdatePending: boolean;
+    isReviewInProgress: boolean;
     /**
      * Is available in catalog.
      */
-    availableInCatalog: boolean;
+    isAvailableInCatalog: boolean;
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
      * End user license agreement content of the service.
      */
     eula?: string;
-    serviceConfigurationManage?: ServiceConfigurationManage;
+    serviceConfigurationManage?: ServiceChangeManage;
     links?: Array<Link>;
 };
 
 /**
- * State of registered service template.
+ * Registration state of service template.
  */
 export enum serviceTemplateRegistrationState {
     IN_REVIEW = 'in-review',
@@ -2376,7 +2405,7 @@ export type ServiceTemplateRequestHistory = {
     /**
      * Type of the request.
      */
-    requestType: 'register' | 'update' | 'unregister' | 're-register';
+    requestType: 'register' | 'update' | 'remove from catalog' | 're-add to catalog';
     /**
      * Status of the request.
      */
@@ -2406,8 +2435,8 @@ export type ServiceTemplateRequestHistory = {
 export enum requestType {
     REGISTER = 'register',
     UPDATE = 'update',
-    UNREGISTER = 'unregister',
-    RE_REGISTER = 're-register',
+    REMOVE_FROM_CATALOG = 'remove from catalog',
+    RE_ADD_TO_CATALOG = 're-add to catalog',
 }
 
 /**
@@ -2443,7 +2472,7 @@ export type ServiceTemplateRequestToReview = {
     /**
      * Type of the request.
      */
-    requestType: 'register' | 'update' | 'unregister' | 're-register';
+    requestType: 'register' | 'update' | 'remove from catalog' | 're-add to catalog';
     ocl: Ocl;
     /**
      * Create time of the service template request.
@@ -2535,9 +2564,9 @@ export type UserOrderableServiceVo = {
      */
     regions: Array<Region>;
     /**
-     * The namespace of the orderable service.
+     * The serviceVendor of the orderable service.
      */
-    namespace: string;
+    serviceVendor: string;
     /**
      * The description of the orderable service.
      */
@@ -2568,7 +2597,7 @@ export type UserOrderableServiceVo = {
     /**
      * The collection of service configuration parameters.
      */
-    configurationParameters?: Array<ServiceConfigurationParameter>;
+    configurationParameters?: Array<ServiceChangeParameter>;
     links?: Array<Link>;
 };
 
@@ -3001,23 +3030,23 @@ export type DeleteServiceTemplateData = {
 
 export type DeleteServiceTemplateResponse = void;
 
-export type UnregisterData = {
+export type RemoveFromCatalogData = {
     /**
      * id of service template
      */
     serviceTemplateId: string;
 };
 
-export type UnregisterResponse = ServiceTemplateRequestInfo;
+export type RemoveFromCatalogResponse = ServiceTemplateRequestInfo;
 
-export type ReRegisterServiceTemplateData = {
+export type ReAddToCatalogData = {
     /**
      * id of service template
      */
     serviceTemplateId: string;
 };
 
-export type ReRegisterServiceTemplateResponse = ServiceTemplateRequestInfo;
+export type ReAddToCatalogResponse = ServiceTemplateRequestInfo;
 
 export type FetchUpdateData = {
     /**
@@ -3233,10 +3262,6 @@ export type MigrateResponse = ServiceOrder;
 
 export type GetAllServiceTemplatesByIsvData = {
     /**
-     * is available in catalog
-     */
-    availableInCatalog?: boolean;
-    /**
      * category of the service
      */
     categoryName?:
@@ -3264,9 +3289,13 @@ export type GetAllServiceTemplatesByIsvData = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * is service template updating
+     * is available in catalog
      */
-    isUpdatePending?: boolean;
+    isAvailableInCatalog?: boolean;
+    /**
+     * is any request in review progress
+     */
+    isReviewInProgress?: boolean;
     /**
      * who hosts ths cloud resources
      */
@@ -3628,7 +3657,7 @@ export type GetAllServiceConfigurationChangeDetailsData = {
 
 export type GetAllServiceConfigurationChangeDetailsResponse = Array<ServiceConfigurationChangeOrderDetails>;
 
-export type GetServiceTemplateHistoryByServiceTemplateIdData = {
+export type GetServiceTemplateRequestHistoryByServiceTemplateIdData = {
     /**
      * status of service template request
      */
@@ -3636,14 +3665,14 @@ export type GetServiceTemplateHistoryByServiceTemplateIdData = {
     /**
      * type of service template request
      */
-    requestType?: 'register' | 'update' | 'unregister' | 're-register';
+    requestType?: 'register' | 'update' | 'remove from catalog' | 're-add to catalog';
     /**
      * id of service template
      */
     serviceTemplateId: string;
 };
 
-export type GetServiceTemplateHistoryByServiceTemplateIdResponse = Array<ServiceTemplateRequestHistory>;
+export type GetServiceTemplateRequestHistoryByServiceTemplateIdResponse = Array<ServiceTemplateRequestHistory>;
 
 export type GetRequestedServiceTemplateByRequestIdData = {
     /**
@@ -3776,10 +3805,6 @@ export type GetActiveCspsResponse = Array<
 
 export type ListManagedServiceTemplatesData = {
     /**
-     * is available in catalog
-     */
-    availableInCatalog?: boolean;
-    /**
      * category of the service
      */
     categoryName?:
@@ -3794,9 +3819,13 @@ export type ListManagedServiceTemplatesData = {
         | 'middleware'
         | 'others';
     /**
-     * is service template updating
+     * is available in catalog
      */
-    isUpdatePending?: boolean;
+    isAvailableInCatalog?: boolean;
+    /**
+     * is any request in review progress
+     */
+    isReviewInProgress?: boolean;
     /**
      * who hosts ths cloud resources
      */

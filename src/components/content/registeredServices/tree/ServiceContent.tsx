@@ -14,7 +14,7 @@ import {
     serviceCategoryQuery,
     serviceHostingTypeQuery,
     serviceNameKeyQuery,
-    serviceNamespaceQuery,
+    serviceVendorQuery,
     serviceVersionKeyQuery,
 } from '../../../utils/constants.tsx';
 import ServiceDetail from '../../catalog/services/details/ServiceDetail.tsx';
@@ -23,13 +23,13 @@ import { ServiceProviderSkeleton } from '../../catalog/services/details/ServiceP
 
 function ServiceContent({
     availableServiceList,
-    selectedServiceNamespaceInTree,
+    selectedServiceVendorInTree,
     selectedServiceCategoryInTree,
     selectedServiceNameInTree,
     selectedServiceVersionInTree,
 }: {
     availableServiceList: ServiceTemplateDetailVo[];
-    selectedServiceNamespaceInTree: string;
+    selectedServiceVendorInTree: string;
     selectedServiceCategoryInTree: string;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
@@ -37,8 +37,8 @@ function ServiceContent({
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
 
-    const serviceNamespaceInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceNamespaceQuery) ?? '');
+    const serviceVendorInQuery = useMemo(() => {
+        const queryInUri = decodeURI(urlParams.get(serviceVendorQuery) ?? '');
         if (queryInUri.length > 0) {
             return queryInUri;
         }
@@ -98,7 +98,7 @@ function ServiceContent({
         void navigate({
             pathname: registeredServicesPageRoute,
             search: createSearchParams({
-                namespace: selectedServiceNamespaceInTree,
+                serviceVendor: selectedServiceVendorInTree,
                 category: selectedServiceCategoryInTree,
                 serviceName: selectedServiceNameInTree,
                 version: selectedServiceVersionInTree,
@@ -109,7 +109,7 @@ function ServiceContent({
 
     // this component renders even before the values are set in the URL. We must wait until it is done.
     if (
-        !serviceNamespaceInQuery &&
+        !serviceVendorInQuery &&
         !serviceCategoryInQuery &&
         !serviceNameInQuery &&
         !serviceVersionInQuery &&

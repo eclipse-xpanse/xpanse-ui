@@ -151,16 +151,16 @@ export const ServiceReviewsDetails = ({
                                 ? currentServiceTemplateRequestToReview.ocl.category
                                 : PLACE_HOLDER_UNKNOWN_VALUE}
                         </Descriptions.Item>
-                        <Descriptions.Item label='Version'>
-                            {currentServiceTemplateRequestToReview.ocl.version}
+                        <Descriptions.Item label='Service Version'>
+                            {currentServiceTemplateRequestToReview.ocl.serviceVersion}
                         </Descriptions.Item>
-                        <Descriptions.Item label='Namespace'>
-                            <Tag color='cyan'>{currentServiceTemplateRequestToReview.ocl.namespace}</Tag>
+                        <Descriptions.Item label='Service Vendor'>
+                            <Tag color='cyan'>{currentServiceTemplateRequestToReview.ocl.serviceVendor}</Tag>
                         </Descriptions.Item>
                         <Descriptions.Item label='Description'>
                             {currentServiceTemplateRequestToReview.ocl.description}
                         </Descriptions.Item>
-                        <Descriptions.Item label='CredentialType'>
+                        <Descriptions.Item label='Credential Type'>
                             {currentServiceTemplateRequestToReview.ocl.deployment.credentialType
                                 ? currentServiceTemplateRequestToReview.ocl.deployment.credentialType
                                 : ''}

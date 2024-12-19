@@ -5,7 +5,7 @@
 
 import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
-export function serviceNamespaceHelper(
+export function serviceVendorHelper(
     selectCsp: string,
     selectServiceHostingType: string,
     userOrderableServices: UserOrderableServiceVo[] | undefined
@@ -16,7 +16,7 @@ export function serviceNamespaceHelper(
                 userOrderableServiceVo.csp === selectCsp &&
                 userOrderableServiceVo.serviceHostingType === selectServiceHostingType
             ) {
-                return userOrderableServiceVo.namespace;
+                return userOrderableServiceVo.serviceVendor;
             }
         }
     }
