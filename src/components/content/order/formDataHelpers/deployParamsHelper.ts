@@ -48,7 +48,7 @@ export const getDeployParams = (
         flavor: selectFlavor,
         params: new Array<DeployParam>(),
         serviceHostingType: selectServiceHostingType,
-        namespace: service?.namespace ?? '',
+        serviceVendor: service?.serviceVendor ?? '',
         contactServiceDetails: currentContactServiceDetails ?? undefined,
         availabilityZones: availabilityZones,
         eula: eula,

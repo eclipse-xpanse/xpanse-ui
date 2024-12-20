@@ -107,7 +107,7 @@ function Services(): React.JSX.Element {
                                                     {item.content}
                                                 </span>
                                                 <span className={serviceOrderStyles.serviceTypeOptionVendor}>
-                                                    <IsvNameDisplay namespace={item.namespace} />
+                                                    <IsvNameDisplay serviceVendor={item.serviceVendor} />
                                                 </span>
                                             </div>
                                         </div>
