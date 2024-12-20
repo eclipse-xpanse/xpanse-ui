@@ -4,7 +4,7 @@
  */
 
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { unregister, type UnregisterData } from '../../../../../xpanse-api/generated';
+import { removeFromCatalog, type RemoveFromCatalogData } from '../../../../../xpanse-api/generated';
 
 const unregisterKey: string = 'unregister';
 
@@ -12,10 +12,10 @@ export function useUnregisterRequest(id: string) {
     return useMutation({
         mutationKey: [id, unregisterKey],
         mutationFn: () => {
-            const data: UnregisterData = {
+            const data: RemoveFromCatalogData = {
                 serviceTemplateId: id,
             };
-            return unregister(data);
+            return removeFromCatalog(data);
         },
         // necessary to clear the mutationCache immediately.
         // Otherwise, the mutation state is cached and with retries, it is not possible to get state of the

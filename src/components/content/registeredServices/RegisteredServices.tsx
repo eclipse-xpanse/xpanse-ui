@@ -14,9 +14,9 @@ import { convertStringArrayToUnorderedList } from '../../utils/generateUnordered
 import { isErrorResponse } from '../common/error/isErrorResponse';
 import {
     groupRegisteredServicesByVersionForSpecificServiceName,
-    groupServicesByCategoryForSpecificNamespace,
+    groupServicesByCategoryForSpecificServiceVendor,
     groupServicesByNameForSpecificCategory,
-    groupServiceTemplatesByNamespace,
+    groupServiceTemplatesByServiceVendor,
 } from '../common/registeredServices/registeredServiceProps.ts';
 import useListAllServiceTemplatesQuery from '../review/query/useListAllServiceTemplatesQuery.ts';
 import { RegisteredServicesFullView } from './tree/RegisteredServicesFullView.tsx';
@@ -30,35 +30,42 @@ export default function RegisteredServices(): React.JSX.Element {
     if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
         availableServiceList = availableServiceTemplatesQuery.data;
         const availableServicesData: Map<string, ServiceTemplateDetailVo[]> =
-            groupServiceTemplatesByNamespace(availableServiceList);
+            groupServiceTemplatesByServiceVendor(availableServiceList);
 
-        availableServicesData.forEach((_value: ServiceTemplateDetailVo[], namespace: string) => {
+        availableServicesData.forEach((_value: ServiceTemplateDetailVo[], serviceVendor: string) => {
             const dataNode: DataNode = {
-                title: <div className={catalogStyles.catalogTreeNode}>{namespace}</div>,
-                key: namespace || '',
+                title: <div className={catalogStyles.catalogTreeNode}>{serviceVendor}</div>,
+                key: serviceVendor || '',
                 children: [],
             };
 
-            const categoryServiceMapper = groupServicesByCategoryForSpecificNamespace(namespace, availableServiceList);
+            const categoryServiceMapper = groupServicesByCategoryForSpecificServiceVendor(
+                serviceVendor,
+                availableServiceList
+            );
             categoryServiceMapper.forEach((_value: ServiceTemplateDetailVo[], category: string) => {
                 const categoryNode: DataNode = {
                     title: category,
-                    key: `${namespace}@${category}`,
+                    key: `${serviceVendor}@${category}`,
                     icon: <GroupOutlined />,
                     children: [],
                 };
 
-                const serviceMapper = groupServicesByNameForSpecificCategory(namespace, category, availableServiceList);
+                const serviceMapper = groupServicesByNameForSpecificCategory(
+                    serviceVendor,
+                    category,
+                    availableServiceList
+                );
                 serviceMapper.forEach((_value: ServiceTemplateDetailVo[], serviceName: string) => {
                     const serviceNode: DataNode = {
                         title: serviceName,
-                        key: `${namespace}@${category}@${serviceName}`,
+                        key: `${serviceVendor}@${category}@${serviceName}`,
                         icon: <CloudServerOutlined />,
                         children: [],
                     };
 
                     const versionMapper = groupRegisteredServicesByVersionForSpecificServiceName(
-                        namespace,
+                        serviceVendor,
                         category,
                         serviceName,
                         availableServiceList
@@ -66,7 +73,7 @@ export default function RegisteredServices(): React.JSX.Element {
                     versionMapper.forEach((_value: ServiceTemplateDetailVo[], version: string) => {
                         const versionNode: DataNode = {
                             title: version,
-                            key: `${namespace}@${category}@${serviceName}@${version}`,
+                            key: `${serviceVendor}@${category}@${serviceName}@${version}`,
                             icon: <TagOutlined />,
                             children: [],
                         };

@@ -6,14 +6,14 @@
 import { ControlOutlined } from '@ant-design/icons';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
-import { ServiceConfigurationManage } from '../../../xpanse-api/generated';
+import { ServiceChangeManage } from '../../../xpanse-api/generated';
 import ServiceConfigurationParameters from './ServiceConfigurationParameters';
 import ServiceConfigurationScripts from './ServiceConfigurationScripts';
 
 function ServiceConfigManagement({
     configurationManage,
 }: {
-    configurationManage: ServiceConfigurationManage;
+    configurationManage: ServiceChangeManage;
 }): React.JSX.Element {
     return (
         <>
