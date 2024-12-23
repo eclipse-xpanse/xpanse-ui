@@ -18,6 +18,8 @@ import type {
     AddUserPolicyData,
     AddUserPolicyResponse,
     AuthorizeResponse,
+    CancelServiceTemplateRequestByRequestIdData,
+    CancelServiceTemplateRequestByRequestIdResponse,
     ChangeServiceConfigurationData,
     ChangeServiceConfigurationResponse,
     ChangeServiceLockConfigData,
@@ -140,16 +142,14 @@ import type {
     PurgeResponse,
     QueryTasksData,
     QueryTasksResponse,
-    ReAddToCatalogData,
-    ReAddToCatalogResponse,
     RecreateServiceData,
     RecreateServiceResponse,
     RedeployFailedDeploymentData,
     RedeployFailedDeploymentResponse,
     RegisterData,
     RegisterResponse,
-    RemoveFromCatalogData,
-    RemoveFromCatalogResponse,
+    RepublishData,
+    RepublishResponse,
     RestartServiceData,
     RestartServiceResponse,
     ReviewServiceTemplateRequestData,
@@ -158,6 +158,8 @@ import type {
     StartServiceResponse,
     StopServiceData,
     StopServiceResponse,
+    UnpublishData,
+    UnpublishResponse,
     UpdateConfigurationChangeResultData,
     UpdateConfigurationChangeResultResponse,
     UpdateData,
@@ -601,10 +603,10 @@ export const getServiceTemplateDetailsById = (
 };
 
 /**
- * Update service template using id and ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Updates an existing service template using Ocl model.  When the request is approved, the updated service template will be published to catalog.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
- * @param data.isRemoveServiceTemplateUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
+ * @param data.isUnpublishUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
  * @param data.requestBody
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
@@ -617,7 +619,7 @@ export const update = (data: UpdateData): CancelablePromise<UpdateResponse> => {
             serviceTemplateId: data.serviceTemplateId,
         },
         query: {
-            isRemoveServiceTemplateUntilApproved: data.isRemoveServiceTemplateUntilApproved,
+            isUnpublishUntilApproved: data.isUnpublishUntilApproved,
         },
         body: data.requestBody,
         mediaType: 'application/json',
@@ -662,16 +664,16 @@ export const deleteServiceTemplate = (
 };
 
 /**
- * Remove service template from catalog using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Remove the service template from catalog.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
  */
-export const removeFromCatalog = (data: RemoveFromCatalogData): CancelablePromise<RemoveFromCatalogResponse> => {
+export const unpublish = (data: UnpublishData): CancelablePromise<UnpublishResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/service_templates/remove_from_catalog/{serviceTemplateId}',
+        url: '/xpanse/service_templates/unpublish/{serviceTemplateId}',
         path: {
             serviceTemplateId: data.serviceTemplateId,
         },
@@ -688,16 +690,44 @@ export const removeFromCatalog = (data: RemoveFromCatalogData): CancelablePromis
 };
 
 /**
- * Re-add the service template to catalog using id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Cancel service template request using request id.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * @param data The data for the request.
+ * @param data.requestId id of service template request
+ * @returns void No Content
+ * @throws ApiError
+ */
+export const cancelServiceTemplateRequestByRequestId = (
+    data: CancelServiceTemplateRequestByRequestIdData
+): CancelablePromise<CancelServiceTemplateRequestByRequestIdResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/service_templates/requests/cancel/{requestId}',
+        path: {
+            requestId: data.requestId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Publishes the same service template to catalog again using.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
  */
-export const reAddToCatalog = (data: ReAddToCatalogData): CancelablePromise<ReAddToCatalogResponse> => {
+export const republish = (data: RepublishData): CancelablePromise<RepublishResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/service_templates/re_add_to_catalog/{serviceTemplateId}',
+        url: '/xpanse/service_templates/republish/{serviceTemplateId}',
         path: {
             serviceTemplateId: data.serviceTemplateId,
         },
@@ -714,10 +744,10 @@ export const reAddToCatalog = (data: ReAddToCatalogData): CancelablePromise<ReAd
 };
 
 /**
- * Update service template using id and URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Updates an existing service template using URL of Ocl file. When the request is approved, the updated service template will be published to catalog.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
- * @param data.isRemoveServiceTemplateUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
+ * @param data.isUnpublishUntilApproved If true, the old service template is also removed from catalog until the updated one is reviewed and approved.
  * @param data.oclLocation URL of Ocl file
  * @returns ServiceTemplateRequestInfo OK
  * @throws ApiError
@@ -730,7 +760,7 @@ export const fetchUpdate = (data: FetchUpdateData): CancelablePromise<FetchUpdat
             serviceTemplateId: data.serviceTemplateId,
         },
         query: {
-            isRemoveServiceTemplateUntilApproved: data.isRemoveServiceTemplateUntilApproved,
+            isUnpublishUntilApproved: data.isUnpublishUntilApproved,
             oclLocation: data.oclLocation,
         },
         errors: {
@@ -1218,7 +1248,7 @@ export const getAllServiceTemplatesByIsv = (
 };
 
 /**
- * Register new service template using ocl model.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Submits a new service template using Ocl model. When the request is approved, the service template will be published to catalog.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns ServiceTemplateRequestInfo OK
@@ -1243,7 +1273,7 @@ export const register = (data: RegisterData): CancelablePromise<RegisterResponse
 };
 
 /**
- * Register new service template using URL of Ocl file.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Submits a new service template using URL of Ocl file. When the request is approved, the service template will be published to catalog.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.oclLocation URL of Ocl file
  * @returns ServiceTemplateRequestInfo OK
@@ -1800,7 +1830,7 @@ export const getSelfHostedServiceDetailsById = (
  * @param data.resourceName name of the service resource
  * @param data.configManager Manager of the service configuration parameter.
  * @param data.status Status of the service configuration
- * @returns ServiceConfigurationChangeOrderDetails OK
+ * @returns ServiceChangeOrderDetails OK
  * @throws ApiError
  */
 export const getAllServiceConfigurationChangeDetails = (
@@ -1829,7 +1859,7 @@ export const getAllServiceConfigurationChangeDetails = (
 };
 
 /**
- * Get service template requests using id of service template. The returned requests is sorted by the ascending order of the change requested time.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Get service template requests using id of service template. The returned requests is sorted in descending order according to the requested time.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @param data.requestType type of service template request
@@ -1992,7 +2022,7 @@ export const getPricesByService = (data: GetPricesByServiceData): CancelableProm
  * @param data.serviceId Id of the deployed service
  * @param data.resourceId Id of resource in the deployed service
  * @param data.monitorResourceType Types of the monitor resource.
- * @param data.from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
+ * @param data._from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
  * @param data.to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
  * @param data.granularity Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
  * @param data.onlyLastKnownMetric Returns only the last known metric. When this parameter is set then all other query parameters are ignored.

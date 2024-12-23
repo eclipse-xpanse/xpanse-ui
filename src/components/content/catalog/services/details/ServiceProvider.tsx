@@ -30,11 +30,11 @@ import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
 import { ServicePolicies } from '../policies/ServicePolicies';
-import { useReRegisterRequest } from '../re-register/ReRegisterMutation';
-import { ReRegisterResult } from '../re-register/ReRegisterResult';
-import ReRegisterService from '../re-register/ReRegisterService';
-import { UnregisterResult } from '../unregister/UnregisterResult';
-import UnregisterService from '../unregister/UnregisterService';
+import { useRepublishRequest } from '../republish/RepublishMutation.ts';
+import { RepublishResult } from '../republish/RepublishResult.tsx';
+import RepublishService from '../republish/RepublishService.tsx';
+import { UnpublishResult } from '../unpublish/UnpublishResult.tsx';
+import UnpublishService from '../unpublish/UnpublishService.tsx';
 import UpdateService from '../update/UpdateService';
 import ServiceDetail from './ServiceDetail';
 import { ServiceHostingOptions } from './ServiceHostingOptions';
@@ -149,7 +149,7 @@ function ServiceProvider({
         }
     }
 
-    const reRegisterRequest = useReRegisterRequest(activeServiceDetail?.serviceTemplateId ?? '');
+    const republishRequest = useRepublishRequest(activeServiceDetail?.serviceTemplateId ?? '');
 
     const onChangeCsp = (key: string) => {
         void navigate({
@@ -188,8 +188,8 @@ function ServiceProvider({
                 <>
                     {activeServiceDetail ? (
                         <>
-                            <UnregisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
-                            <ReRegisterResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <UnpublishResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <RepublishResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <Tabs
                                 items={items}
@@ -197,33 +197,38 @@ function ServiceProvider({
                                 activeKey={serviceCspInQuery}
                                 className={catalogStyles.antTabsTabBtn}
                             />
-                            <div className={catalogStyles.updateUnregisterBtnClass}>
+                            <div className={catalogStyles.updateUnpublishBtnClass}>
                                 <UpdateService
                                     id={activeServiceDetail.serviceTemplateId}
                                     category={category}
                                     isViewDisabled={isViewDisabled}
+                                    registrationState={
+                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
+                                    }
+                                    isReviewInProgress={activeServiceDetail.isReviewInProgress}
                                 />
-                                <UnregisterService
+                                <UnpublishService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
                                     serviceRegistrationStatus={
                                         activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                     }
+                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
                                 />
-                                <ReRegisterService
+                                <RepublishService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    reRegisterRequest={reRegisterRequest}
+                                    republishRequest={republishRequest}
                                     serviceRegistrationStatus={
                                         activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
                                     }
+                                    isReviewInProgress={activeServiceDetail.isReviewInProgress}
+                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
                                 />
                                 <DeleteService
                                     id={activeServiceDetail.serviceTemplateId}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
+                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
                                 />
                             </div>
                             <h3 className={catalogStyles.catalogDetailsH3}>

@@ -35,19 +35,21 @@ function UpdateService({
     id,
     category,
     isViewDisabled,
+    registrationState,
+    isReviewInProgress,
 }: {
     id: string;
     category: category;
     isViewDisabled: boolean;
+    registrationState: serviceTemplateRegistrationState;
+    isReviewInProgress: boolean;
 }): React.JSX.Element {
     const ocl = useRef<Ocl | undefined>(undefined);
     const files = useRef<UploadFile[]>([]);
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const updateResult = useRef<string[]>([]);
-    const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(
-        serviceTemplateRegistrationState.IN_REVIEW
-    );
+    const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(registrationState);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +58,7 @@ function UpdateService({
         mutationFn: (ocl: Ocl) => {
             const data: UpdateData = {
                 serviceTemplateId: id,
-                isRemoveServiceTemplateUntilApproved: true,
+                isUnpublishUntilApproved: true,
                 requestBody: ocl,
             };
             return update(data);
@@ -166,13 +168,16 @@ function UpdateService({
     };
 
     return (
-        <div className={catalogStyles.updateUnregisterBtnClass}>
+        <div className={catalogStyles.updateUnpublishBtnClass}>
             <Button
                 type='primary'
                 icon={<EditOutlined />}
                 onClick={showModal}
                 className={catalogStyles.catalogManageBtnClass}
-                disabled={isViewDisabled}
+                disabled={
+                    isViewDisabled ||
+                    (isReviewInProgress && registrationState === serviceTemplateRegistrationState.APPROVED)
+                }
             >
                 Update
             </Button>
