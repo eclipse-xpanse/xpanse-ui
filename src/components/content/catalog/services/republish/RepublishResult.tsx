@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { ApiError, category } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
-import { useGetReRegisterMutationState } from './ReRegisterMutation';
+import { useGetRepublishMutationState } from './RepublishMutation.ts';
 
-export function ReRegisterResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
-    const useReRegisterRequestState = useGetReRegisterMutationState(id);
+export function RepublishResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
+    const useRepublishRequestState = useGetRepublishMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -25,8 +25,8 @@ export function ReRegisterResult({ id, category }: { id: string; category: categ
         });
     };
 
-    if (useReRegisterRequestState[0]) {
-        if (useReRegisterRequestState[0].status === 'success') {
+    if (useRepublishRequestState[0]) {
+        if (useRepublishRequestState[0].status === 'success') {
             return (
                 <Alert
                     message={'service added to catalog again successfully'}
@@ -39,17 +39,17 @@ export function ReRegisterResult({ id, category }: { id: string; category: categ
             );
         }
 
-        if (useReRegisterRequestState[0].status === 'error') {
-            if (useReRegisterRequestState[0].error) {
+        if (useRepublishRequestState[0].status === 'error') {
+            if (useRepublishRequestState[0].error) {
                 return (
                     <div>
-                        {useReRegisterRequestState[0].error instanceof ApiError &&
-                        useReRegisterRequestState[0].error.body &&
-                        typeof useReRegisterRequestState[0].error.body === 'object' &&
-                        'details' in useReRegisterRequestState[0].error.body ? (
+                        {useRepublishRequestState[0].error instanceof ApiError &&
+                        useRepublishRequestState[0].error.body &&
+                        typeof useRepublishRequestState[0].error.body === 'object' &&
+                        'details' in useRepublishRequestState[0].error.body ? (
                             <Alert
-                                message='Re-Register Request Failed'
-                                description={String(useReRegisterRequestState[0].error.body.details)}
+                                message='Republish Request Failed'
+                                description={String(useRepublishRequestState[0].error.body.details)}
                                 showIcon
                                 type={'error'}
                                 closable={true}
@@ -57,8 +57,8 @@ export function ReRegisterResult({ id, category }: { id: string; category: categ
                             />
                         ) : (
                             <Alert
-                                message='Re-Register Request Failed'
-                                description={useReRegisterRequestState[0].error.message}
+                                message='Republish Request Failed'
+                                description={useRepublishRequestState[0].error.message}
                                 showIcon
                                 type={'error'}
                                 closable={true}

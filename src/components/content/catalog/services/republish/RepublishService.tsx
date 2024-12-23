@@ -12,32 +12,36 @@ import { serviceTemplateRegistrationState, ServiceTemplateRequestInfo } from '..
 
 import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
 
-function ReRegisterService({
+function RepublishService({
     id,
     setIsViewDisabled,
-    reRegisterRequest,
+    republishRequest,
     serviceRegistrationStatus,
+    isReviewInProgress,
+    isAvailableInCatalog,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    reRegisterRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
     serviceRegistrationStatus: serviceTemplateRegistrationState;
+    isReviewInProgress: boolean;
+    isAvailableInCatalog: boolean;
 }): React.JSX.Element {
     const deleteState = useGetDeleteMutationState(id);
-    const reRegister = () => {
+    const republish = () => {
         setIsViewDisabled(true);
-        reRegisterRequest.mutate();
+        republishRequest.mutate();
     };
 
     return (
-        <div className={catalogStyles.updateUnregisterBtnClass}>
+        <div className={catalogStyles.updateUnpublishBtnClass}>
             <Popconfirm
-                title='re-register the service'
-                description='Are you sure to re-register this service?'
+                title='republish the service'
+                description='Are you sure to republish this service?'
                 cancelText='Yes'
                 okText='No'
                 onCancel={() => {
-                    reRegister();
+                    republish();
                 }}
             >
                 <Button
@@ -45,16 +49,18 @@ function ReRegisterService({
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
-                        reRegisterRequest.isSuccess ||
+                        republishRequest.isSuccess ||
                         (deleteState.length > 0 && deleteState[0].status === 'success') ||
-                        serviceRegistrationStatus !== serviceTemplateRegistrationState.IN_REVIEW
+                        serviceRegistrationStatus !== serviceTemplateRegistrationState.APPROVED ||
+                        isReviewInProgress ||
+                        isAvailableInCatalog
                     }
                 >
-                    Re-register
+                    Republish
                 </Button>
             </Popconfirm>
         </div>
     );
 }
 
-export default ReRegisterService;
+export default RepublishService;

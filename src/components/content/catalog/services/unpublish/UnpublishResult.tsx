@@ -10,10 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { ApiError, category } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
-import { useGetUnregisterMutationState } from './UnregisterMutation';
+import { useGetUnpublishMutationState } from './UnpublishMutation.ts';
 
-export function UnregisterResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
-    const useUnregisterRequestState = useGetUnregisterMutationState(id);
+export function UnpublishResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
+    const useUnpublishRequestState = useGetUnpublishMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
@@ -25,11 +25,11 @@ export function UnregisterResult({ id, category }: { id: string; category: categ
         });
     };
 
-    if (useUnregisterRequestState[0]) {
-        if (useUnregisterRequestState[0].status === 'success') {
+    if (useUnpublishRequestState[0]) {
+        if (useUnpublishRequestState[0].status === 'success') {
             return (
                 <Alert
-                    message='Service Unregistered Successfully'
+                    message='Service Unpublished Successfully'
                     description={'Service removed from the catalog.'}
                     showIcon
                     type={'success'}
@@ -39,17 +39,17 @@ export function UnregisterResult({ id, category }: { id: string; category: categ
             );
         }
 
-        if (useUnregisterRequestState[0].status === 'error') {
-            if (useUnregisterRequestState[0].error) {
+        if (useUnpublishRequestState[0].status === 'error') {
+            if (useUnpublishRequestState[0].error) {
                 return (
                     <div>
-                        {useUnregisterRequestState[0].error instanceof ApiError &&
-                        useUnregisterRequestState[0].error.body &&
-                        typeof useUnregisterRequestState[0].error.body === 'object' &&
-                        'details' in useUnregisterRequestState[0].error.body ? (
+                        {useUnpublishRequestState[0].error instanceof ApiError &&
+                        useUnpublishRequestState[0].error.body &&
+                        typeof useUnpublishRequestState[0].error.body === 'object' &&
+                        'details' in useUnpublishRequestState[0].error.body ? (
                             <Alert
-                                message='Unregister Request Failed'
-                                description={String(useUnregisterRequestState[0].error.body.details)}
+                                message='Unpublish Request Failed'
+                                description={String(useUnpublishRequestState[0].error.body.details)}
                                 showIcon
                                 type={'error'}
                                 closable={true}
@@ -57,8 +57,8 @@ export function UnregisterResult({ id, category }: { id: string; category: categ
                             />
                         ) : (
                             <Alert
-                                message='Unregister Request Failed'
-                                description={useUnregisterRequestState[0].error.message}
+                                message='Unpublish Request Failed'
+                                description={useUnpublishRequestState[0].error.message}
                                 showIcon
                                 type={'error'}
                                 closable={true}

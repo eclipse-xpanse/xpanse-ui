@@ -4,18 +4,18 @@
  */
 
 import { useMutation, useMutationState } from '@tanstack/react-query';
-import { removeFromCatalog, type RemoveFromCatalogData } from '../../../../../xpanse-api/generated';
+import { unpublish, type UnpublishData } from '../../../../../xpanse-api/generated';
 
-const unregisterKey: string = 'unregister';
+const unpublishKey: string = 'unpublish';
 
-export function useUnregisterRequest(id: string) {
+export function useUnpublishRequest(id: string) {
     return useMutation({
-        mutationKey: [id, unregisterKey],
+        mutationKey: [id, unpublishKey],
         mutationFn: () => {
-            const data: RemoveFromCatalogData = {
+            const data: UnpublishData = {
                 serviceTemplateId: id,
             };
-            return removeFromCatalog(data);
+            return unpublish(data);
         },
         // necessary to clear the mutationCache immediately.
         // Otherwise, the mutation state is cached and with retries, it is not possible to get state of the
@@ -24,9 +24,9 @@ export function useUnregisterRequest(id: string) {
     });
 }
 
-export function useGetUnregisterMutationState(id: string) {
+export function useGetUnpublishMutationState(id: string) {
     return useMutationState({
-        filters: { mutationKey: [id, unregisterKey], exact: true },
+        filters: { mutationKey: [id, unpublishKey], exact: true },
         select: (mutation) => mutation.state,
     });
 }

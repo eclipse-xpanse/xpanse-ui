@@ -8,33 +8,35 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
-import { useUnregisterRequest } from './UnregisterMutation';
+import { useUnpublishRequest } from './UnpublishMutation.ts';
 
-function UnregisterService({
+function UnpublishService({
     id,
     setIsViewDisabled,
     serviceRegistrationStatus,
+    isAvailableInCatalog,
 }: {
     id: string;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     serviceRegistrationStatus: serviceTemplateRegistrationState;
+    isAvailableInCatalog: boolean;
 }): React.JSX.Element {
-    const unregisterRequest = useUnregisterRequest(id);
+    const unpublishRequest = useUnpublishRequest(id);
 
-    const unregister = () => {
+    const unpublish = () => {
         setIsViewDisabled(true);
-        unregisterRequest.mutate();
+        unpublishRequest.mutate();
     };
 
     return (
-        <div className={catalogStyles.updateUnregisterBtnClass}>
+        <div className={catalogStyles.updateUnpublishBtnClass}>
             <Popconfirm
-                title='Unregister the service'
-                description='Are you sure to unregister this service?'
+                title='Unpublish the service'
+                description='Are you sure to unpublish this service?'
                 cancelText='Yes'
                 okText='No'
                 onCancel={() => {
-                    unregister();
+                    unpublish();
                 }}
             >
                 <Button
@@ -42,15 +44,16 @@ function UnregisterService({
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
-                        unregisterRequest.isSuccess ||
-                        serviceRegistrationStatus === serviceTemplateRegistrationState.IN_REVIEW
+                        unpublishRequest.isSuccess ||
+                        serviceRegistrationStatus !== serviceTemplateRegistrationState.APPROVED ||
+                        !isAvailableInCatalog
                     }
                 >
-                    Unregister
+                    Unpublish
                 </Button>
             </Popconfirm>
         </div>
     );
 }
 
-export default UnregisterService;
+export default UnpublishService;
