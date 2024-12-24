@@ -39,11 +39,18 @@ export const ServiceReviewsDetails = ({
     const onClickApprove = () => {
         setIsApproved(true);
         setIsReviewCommentsModalOpen(true);
+        if (approveOrRejectRequest.isError) {
+            approveOrRejectRequest.reset();
+        }
     };
     const onClickReject = () => {
         setIsApproved(false);
         setIsReviewCommentsModalOpen(true);
+        if (approveOrRejectRequest.isError) {
+            approveOrRejectRequest.reset();
+        }
     };
+
     const handleReviewCommentsModalClose = (isClose: boolean) => {
         if (isClose) {
             setIsReviewCommentsModalOpen(false);
@@ -52,6 +59,15 @@ export const ServiceReviewsDetails = ({
     return (
         <div className={serviceReviewStyles.modalContainer}>
             {' '}
+            <ApproveOrRejectServiceTemplate
+                key={currentServiceTemplateRequestToReview.serviceTemplateId}
+                currentServiceTemplateRequestToReview={currentServiceTemplateRequestToReview}
+                isApproved={isApproved}
+                isModalOpen={isReviewCommentsModalOpen}
+                handleModalClose={handleReviewCommentsModalClose}
+                setAlertTipCloseStatus={setAlertTipCloseStatus}
+                approveOrRejectRequest={approveOrRejectRequest}
+            />
             <div className={serviceReviewStyles.modalContainer}>
                 <Button type='primary' onClick={onClickApprove} disabled={approveOrRejectRequest.isSuccess}>
                     Approve
@@ -65,15 +81,6 @@ export const ServiceReviewsDetails = ({
                     Reject
                 </Button>
             </div>
-            <ApproveOrRejectServiceTemplate
-                key={currentServiceTemplateRequestToReview.serviceTemplateId}
-                currentServiceTemplateRequestToReview={currentServiceTemplateRequestToReview}
-                isApproved={isApproved}
-                isModalOpen={isReviewCommentsModalOpen}
-                handleModalClose={handleReviewCommentsModalClose}
-                setAlertTipCloseStatus={setAlertTipCloseStatus}
-                approveOrRejectRequest={approveOrRejectRequest}
-            />
             <div className={oclDisplayStyles.oclDataDisplay}>
                 <div className={oclDisplayStyles.oclDataMainInfo}>
                     <div>
