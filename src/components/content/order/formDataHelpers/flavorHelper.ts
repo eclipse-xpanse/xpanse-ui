@@ -37,8 +37,8 @@ export function getServiceFlavorList(
 }
 
 export const getServicePriceErrorDetails = (error: Error) => {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-        const response: ErrorResponse = error.body;
+    if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+        const response: ErrorResponse = error.body as ErrorResponse;
         return response.details;
     } else {
         return [error.message];

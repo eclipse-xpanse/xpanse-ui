@@ -46,9 +46,9 @@ function MigrateServiceStatusAlert({
             if (
                 migrateRequestError instanceof ApiError &&
                 migrateRequestError.body &&
-                isErrorResponse(migrateRequestError.body)
+                isErrorResponse(migrateRequestError)
             ) {
-                const response: ErrorResponse = migrateRequestError.body;
+                const response: ErrorResponse = migrateRequestError.body as ErrorResponse;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([migrateRequestError.message]);

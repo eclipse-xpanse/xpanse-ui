@@ -135,9 +135,9 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             if (
                 credentialCapabilitiesQuery.error instanceof ApiError &&
                 credentialCapabilitiesQuery.error.body &&
-                isErrorResponse(credentialCapabilitiesQuery.error.body)
+                isErrorResponse(credentialCapabilitiesQuery.error)
             ) {
-                const response: ErrorResponse = credentialCapabilitiesQuery.error.body;
+                const response: ErrorResponse = credentialCapabilitiesQuery.error.body as ErrorResponse;
                 getTipInfo('error', response.details.join());
             } else if (credentialCapabilitiesQuery.error instanceof Error) {
                 getTipInfo('error', credentialCapabilitiesQuery.error.message);
@@ -154,8 +154,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             getTipInfo('success', 'Adding Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);

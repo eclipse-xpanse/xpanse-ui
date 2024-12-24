@@ -65,9 +65,9 @@ function DestroyServiceStatusAlert({
         if (
             destroySubmitRequest.error instanceof ApiError &&
             destroySubmitRequest.error.body &&
-            isErrorResponse(destroySubmitRequest.error.body)
+            isErrorResponse(destroySubmitRequest.error)
         ) {
-            const response: ErrorResponse = destroySubmitRequest.error.body;
+            const response: ErrorResponse = destroySubmitRequest.error.body as ErrorResponse;
             errorMessage = response.details;
         } else {
             errorMessage = destroySubmitRequest.error.message;
@@ -109,9 +109,9 @@ function DestroyServiceStatusAlert({
         if (
             serviceStateDestroyQueryError instanceof ApiError &&
             serviceStateDestroyQueryError.body &&
-            isErrorResponse(serviceStateDestroyQueryError.body)
+            isErrorResponse(serviceStateDestroyQueryError)
         ) {
-            const response: ErrorResponse = serviceStateDestroyQueryError.body;
+            const response: ErrorResponse = serviceStateDestroyQueryError.body as ErrorResponse;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}

@@ -56,9 +56,9 @@ function OrderSubmitStatusAlert({
             if (
                 redeployFailedDeploymentQuery.error instanceof ApiError &&
                 redeployFailedDeploymentQuery.error.body &&
-                isErrorResponse(redeployFailedDeploymentQuery.error.body)
+                isErrorResponse(redeployFailedDeploymentQuery.error)
             ) {
-                const response: ErrorResponse = redeployFailedDeploymentQuery.error.body;
+                const response: ErrorResponse = redeployFailedDeploymentQuery.error.body as ErrorResponse;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([redeployFailedDeploymentQuery.error.message]);
@@ -67,9 +67,9 @@ function OrderSubmitStatusAlert({
             if (
                 submitDeploymentRequest.error instanceof ApiError &&
                 submitDeploymentRequest.error.body &&
-                isErrorResponse(submitDeploymentRequest.error.body)
+                isErrorResponse(submitDeploymentRequest.error)
             ) {
-                const response: ErrorResponse = submitDeploymentRequest.error.body;
+                const response: ErrorResponse = submitDeploymentRequest.error.body as ErrorResponse;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([submitDeploymentRequest.error.message]);

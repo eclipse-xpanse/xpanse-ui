@@ -68,9 +68,9 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
         if (
             getServiceDetailsByIdQuery.error instanceof ApiError &&
             getServiceDetailsByIdQuery.error.body &&
-            isErrorResponse(getServiceDetailsByIdQuery.error.body)
+            isErrorResponse(getServiceDetailsByIdQuery.error)
         ) {
-            const response: ErrorResponse = getServiceDetailsByIdQuery.error.body;
+            const response: ErrorResponse = getServiceDetailsByIdQuery.error.body as ErrorResponse;
             return (
                 <Alert
                     message={response.errorType.valueOf()}

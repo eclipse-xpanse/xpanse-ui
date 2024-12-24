@@ -95,9 +95,9 @@ export default function RegisteredServices(): React.JSX.Element {
         if (
             availableServiceTemplatesQuery.error instanceof ApiError &&
             availableServiceTemplatesQuery.error.body &&
-            isErrorResponse(availableServiceTemplatesQuery.error.body)
+            isErrorResponse(availableServiceTemplatesQuery.error)
         ) {
-            const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
+            const response: ErrorResponse = availableServiceTemplatesQuery.error.body as ErrorResponse;
             return (
                 <Alert
                     message={response.errorType.valueOf()}

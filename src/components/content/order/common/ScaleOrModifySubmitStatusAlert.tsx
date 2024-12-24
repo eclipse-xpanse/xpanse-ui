@@ -71,9 +71,9 @@ function ScaleOrModifySubmitStatusAlert({
             if (
                 submitFailedResult instanceof ApiError &&
                 submitFailedResult.body &&
-                isErrorResponse(submitFailedResult.body)
+                isErrorResponse(submitFailedResult)
             ) {
-                const response: ErrorResponse = submitFailedResult.body;
+                const response: ErrorResponse = submitFailedResult.body as ErrorResponse;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([submitFailedResult.message]);

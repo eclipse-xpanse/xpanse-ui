@@ -40,9 +40,9 @@ function LocksResult({
             lockRequestState[0] &&
             lockRequestState[0].error instanceof ApiError &&
             lockRequestState[0]?.error.body &&
-            isErrorResponse(lockRequestState[0]?.error.body)
+            isErrorResponse(lockRequestState[0]?.error)
         ) {
-            const response: ErrorResponse = lockRequestState[0].error.body;
+            const response: ErrorResponse = lockRequestState[0].error.body as ErrorResponse;
             errMsg = response.details;
         } else {
             errMsg = [

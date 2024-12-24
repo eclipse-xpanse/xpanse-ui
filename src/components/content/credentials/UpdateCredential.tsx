@@ -13,15 +13,15 @@ import styles from '../../../styles/credential.module.css';
 import {
     ApiError,
     CreateCredential,
+    credentialType,
     CredentialVariable,
     CredentialVariables,
-    ErrorResponse,
-    credentialType,
     csp,
+    ErrorResponse,
     name,
     updateIsvCloudCredential,
-    updateUserCloudCredential,
     type UpdateIsvCloudCredentialData,
+    updateUserCloudCredential,
     type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
@@ -71,8 +71,8 @@ function UpdateCredential({
             setTipMessage('Updating Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 setTipType('error');
                 setTipMessage(response.details.join());
             } else {

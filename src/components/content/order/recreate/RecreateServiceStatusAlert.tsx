@@ -70,9 +70,9 @@ function RecreateServiceStatusAlert({
             if (
                 recreateRequest.error instanceof ApiError &&
                 recreateRequest.error.body &&
-                isErrorResponse(recreateRequest.error.body)
+                isErrorResponse(recreateRequest.error)
             ) {
-                const response: ErrorResponse = recreateRequest.error.body;
+                const response: ErrorResponse = recreateRequest.error.body as ErrorResponse;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {
                 return getOrderSubmissionFailedDisplay([recreateRequest.error.message]);

@@ -112,9 +112,9 @@ function Monitor(): React.JSX.Element {
         if (
             deployedServiceQuery.error instanceof ApiError &&
             deployedServiceQuery.error.body &&
-            isErrorResponse(deployedServiceQuery.error.body)
+            isErrorResponse(deployedServiceQuery.error)
         ) {
-            const response: ErrorResponse = deployedServiceQuery.error.body;
+            const response: ErrorResponse = deployedServiceQuery.error.body as ErrorResponse;
             tipMessage.current = response.errorType.valueOf();
             tipDescription.current = response.details.join();
         } else if (deployedServiceQuery.error instanceof Error) {
