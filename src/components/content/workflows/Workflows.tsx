@@ -40,10 +40,10 @@ function Workflows(): React.JSX.Element {
     };
 
     if (tasksQuery.error) {
-        if (tasksQuery.error instanceof ApiError && tasksQuery.error.body && isErrorResponse(tasksQuery.error.body)) {
-            const response: ErrorResponse = tasksQuery.error.body;
+        if (tasksQuery.error instanceof ApiError && tasksQuery.error.body && isErrorResponse(tasksQuery.error)) {
+            const response: ErrorResponse = tasksQuery.error.body as ErrorResponse;
             getTipInfo('error', response.details.join());
-        } else if (tasksQuery.error instanceof Error) {
+        } else {
             getTipInfo('error', tasksQuery.error.message);
         }
         setIsRefresh(false);
@@ -67,8 +67,8 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);
@@ -91,8 +91,8 @@ function Workflows(): React.JSX.Element {
         },
         onError: (error: Error) => {
             setIsRefresh(false);
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 getTipInfo('error', response.details.join());
             } else {
                 getTipInfo('error', error.message);

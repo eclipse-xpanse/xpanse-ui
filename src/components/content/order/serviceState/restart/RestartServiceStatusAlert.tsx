@@ -44,9 +44,9 @@ function RestartServiceStatusAlert({
         if (
             serviceStateRestartQuery.error instanceof ApiError &&
             serviceStateRestartQuery.error.body &&
-            isErrorResponse(serviceStateRestartQuery.error.body)
+            isErrorResponse(serviceStateRestartQuery.error)
         ) {
-            const response: ErrorResponse = serviceStateRestartQuery.error.body;
+            const response: ErrorResponse = serviceStateRestartQuery.error.body as ErrorResponse;
             errorMessage = response.details;
         } else {
             errorMessage = serviceStateRestartQuery.error.message;
@@ -86,9 +86,9 @@ function RestartServiceStatusAlert({
         if (
             getRestartServiceDetailsQuery.error instanceof ApiError &&
             getRestartServiceDetailsQuery.error.body &&
-            isErrorResponse(getRestartServiceDetailsQuery.error.body)
+            isErrorResponse(getRestartServiceDetailsQuery.error)
         ) {
-            const response: ErrorResponse = getRestartServiceDetailsQuery.error.body;
+            const response: ErrorResponse = getRestartServiceDetailsQuery.error.body as ErrorResponse;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}

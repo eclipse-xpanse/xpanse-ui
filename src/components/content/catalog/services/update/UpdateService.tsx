@@ -75,8 +75,8 @@ function UpdateService({
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 updateResult.current = response.details;
             } else {
                 updateResult.current = [error.message];

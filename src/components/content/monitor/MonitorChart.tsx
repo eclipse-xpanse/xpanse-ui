@@ -157,8 +157,8 @@ export default function MonitorChart({
 
     const setErrorAlertData = (error: Error) => {
         tipType = 'error';
-        if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-            const response: ErrorResponse = error.body;
+        if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+            const response: ErrorResponse = error.body as ErrorResponse;
             tipMessage = response.errorType.valueOf();
             tipDescription = response.details.join();
         } else {

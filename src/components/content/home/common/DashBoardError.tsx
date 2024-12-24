@@ -17,8 +17,8 @@ export default function DashBoardError({
     error: unknown;
     retryRequest: () => void;
 }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-        const response: ErrorResponse = error.body;
+    if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+        const response: ErrorResponse = error.body as ErrorResponse;
         return (
             <Card title='Services Dashboard' bordered={true}>
                 <Alert

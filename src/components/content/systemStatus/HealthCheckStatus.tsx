@@ -118,9 +118,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         if (
             healthCheckQuery.error instanceof ApiError &&
             healthCheckQuery.error.body &&
-            isErrorResponse(healthCheckQuery.error.body)
+            isErrorResponse(healthCheckQuery.error)
         ) {
-            const response: ErrorResponse = healthCheckQuery.error.body;
+            const response: ErrorResponse = healthCheckQuery.error.body as ErrorResponse;
             healthCheckError = (
                 <div className={healthStatusStyles.healthRefreshAlertTip}>
                     <Alert

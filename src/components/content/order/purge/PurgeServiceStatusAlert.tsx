@@ -38,8 +38,8 @@ export function PurgeServiceStatusAlert({
 
     if (purgeSubmitError) {
         let errorMessage;
-        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && isErrorResponse(purgeSubmitError.body)) {
-            const response: ErrorResponse = purgeSubmitError.body;
+        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && isErrorResponse(purgeSubmitError)) {
+            const response: ErrorResponse = purgeSubmitError.body as ErrorResponse;
             errorMessage = response.details;
         } else {
             errorMessage = purgeSubmitError.message;
@@ -77,12 +77,8 @@ export function PurgeServiceStatusAlert({
     }
 
     if (deployedService.serviceId && statusPollingError) {
-        if (
-            statusPollingError instanceof ApiError &&
-            statusPollingError.body &&
-            isErrorResponse(statusPollingError.body)
-        ) {
-            const response: ErrorResponse = statusPollingError.body;
+        if (statusPollingError instanceof ApiError && statusPollingError.body && isErrorResponse(statusPollingError)) {
+            const response: ErrorResponse = statusPollingError.body as ErrorResponse;
             if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
                 return (

@@ -60,9 +60,9 @@ export const ApproveOrRejectServiceTemplate = ({
         if (
             approveOrRejectRequest.error instanceof ApiError &&
             approveOrRejectRequest.error.body &&
-            isErrorResponse(approveOrRejectRequest.error.body)
+            isErrorResponse(approveOrRejectRequest.error)
         ) {
-            const response: ErrorResponse = approveOrRejectRequest.error.body;
+            const response: ErrorResponse = approveOrRejectRequest.error.body as ErrorResponse;
             errorMessage = response.details.join();
         } else {
             errorMessage = approveOrRejectRequest.error.message;

@@ -11,8 +11,8 @@ import { convertStringArrayToUnorderedList } from '../../utils/generateUnordered
 import { isErrorResponse } from '../common/error/isErrorResponse';
 
 export default function PoliciesManagementServiceListError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-        const response: ErrorResponse = error.body;
+    if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+        const response: ErrorResponse = error.body as ErrorResponse;
         return (
             <div>
                 <Alert

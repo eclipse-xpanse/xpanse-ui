@@ -63,9 +63,9 @@ function Credentials(): React.JSX.Element {
         if (
             credentialsQuery.error instanceof ApiError &&
             credentialsQuery.error.body &&
-            isErrorResponse(credentialsQuery.error.body)
+            isErrorResponse(credentialsQuery.error)
         ) {
-            const response: ErrorResponse = credentialsQuery.error.body;
+            const response: ErrorResponse = credentialsQuery.error.body as ErrorResponse;
             tipType = 'error';
             tipMessage = response.details.join();
         } else if (credentialsQuery.error instanceof Error) {
@@ -82,8 +82,8 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
-                const response: ErrorResponse = error.body;
+            if (error instanceof ApiError && error.body && isErrorResponse(error)) {
+                const response: ErrorResponse = error.body as ErrorResponse;
                 tipType = 'error';
                 tipMessage = response.details.join();
             } else {

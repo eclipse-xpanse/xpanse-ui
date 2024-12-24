@@ -3,15 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ErrorResponse } from '../../../../xpanse-api/generated';
+import { ApiError } from '../../../../xpanse-api/generated';
 
-export function isErrorResponse(body: unknown): body is ErrorResponse {
-    return (
-        typeof body === 'object' &&
-        body !== null &&
-        'details' in body &&
-        'errorType' in body &&
-        Array.isArray(String(body.details)) &&
-        typeof (body as Record<string, unknown>).errorType === 'string'
-    );
+export function isErrorResponse(error: Error) {
+    return error instanceof ApiError && error.body && typeof error.body === 'object' && 'details' in error.body;
 }
