@@ -59,9 +59,11 @@ function OrderSubmitStatusAlert({
                 isErrorResponse(redeployFailedDeploymentQuery.error.body)
             ) {
                 const response: ErrorResponse = redeployFailedDeploymentQuery.error.body;
-                return getOrderSubmissionFailedDisplay(response.details);
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
             } else {
-                return getOrderSubmissionFailedDisplay([redeployFailedDeploymentQuery.error.message]);
+                return getOrderSubmissionFailedDisplay(redeployFailedDeploymentQuery.error.name, [
+                    redeployFailedDeploymentQuery.error.message,
+                ]);
             }
         } else if (submitDeploymentRequest.isError) {
             if (
@@ -70,9 +72,11 @@ function OrderSubmitStatusAlert({
                 isErrorResponse(submitDeploymentRequest.error.body)
             ) {
                 const response: ErrorResponse = submitDeploymentRequest.error.body;
-                return getOrderSubmissionFailedDisplay(response.details);
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
             } else {
-                return getOrderSubmissionFailedDisplay([submitDeploymentRequest.error.message]);
+                return getOrderSubmissionFailedDisplay(submitDeploymentRequest.error.name, [
+                    submitDeploymentRequest.error.message,
+                ]);
             }
         } else if (submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess) {
             if (
@@ -142,10 +146,10 @@ function OrderSubmitStatusAlert({
         return 'success';
     }, [stopWatch, submitDeploymentRequest, redeployFailedDeploymentQuery, getSubmitLatestServiceOrderStatusQuery]);
 
-    function getOrderSubmissionFailedDisplay(reasons: string[]) {
+    function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
             <div>
-                <span>{'Service deployment request failed.'}</span>
+                <span>{errorType.length > 0 ? errorType : 'Service deployment request failed.'}</span>
                 <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );
