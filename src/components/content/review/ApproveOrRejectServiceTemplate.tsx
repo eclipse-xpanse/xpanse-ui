@@ -28,8 +28,14 @@ export const ApproveOrRejectServiceTemplate = ({
 }): React.JSX.Element => {
     const { TextArea } = Input;
     const [comments, setComments] = useState<string>('');
+    const [error, setError] = useState<string>('');
     const handleOk = () => {
         if (isApproved !== undefined) {
+            if (comments.trim() === '') {
+                setError('Comments are required.');
+                return;
+            }
+
             const request: ApproveOrRejectRequestParams = {
                 id: currentServiceTemplateRequestToReview.requestId,
                 reviewServiceTemplateRequest: {
@@ -40,18 +46,24 @@ export const ApproveOrRejectServiceTemplate = ({
             approveOrRejectRequest.mutate(request);
             handleModalClose(true);
             setComments('');
+            setError('');
         }
     };
 
     const handleCancel = () => {
+        setError('');
+        setComments('');
         handleModalClose(true);
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setError('');
         setComments(e.target.value);
     };
 
     const onClose = () => {
+        setError('');
+        setComments('');
         setAlertTipCloseStatus(true);
     };
 
@@ -104,12 +116,14 @@ export const ApproveOrRejectServiceTemplate = ({
                 onOk={handleOk}
                 onCancel={handleCancel}
             >
+                {error && <p className={serviceReviewStyles.reviewCommentsRequired}>{error}</p>}
                 <TextArea
                     rows={10}
                     placeholder='Please input your comments.'
                     maxLength={1000}
                     value={comments}
                     onChange={handleChange}
+                    rootClassName={error ? serviceReviewStyles.reviewCommentsRequiredText : ''}
                 />
             </Modal>
         </>
