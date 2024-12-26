@@ -43,9 +43,7 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                     </span>
                 </Paragraph>
             </div>
-            <pre>
-                <div className={submitResultStyles.orderSubmitResultContent}>{msg}</div>
-            </pre>
+            {msg}
         </div>
     );
 }
