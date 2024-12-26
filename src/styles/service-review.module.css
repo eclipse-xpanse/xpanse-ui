@@ -46,3 +46,12 @@
 .modal-container {
     padding: 24px;
 }
+
+.review-comments-required {
+    color: red;
+}
+
+.review-comments-required-text {
+    border-color: red;
+    border-width: 1px;
+}
