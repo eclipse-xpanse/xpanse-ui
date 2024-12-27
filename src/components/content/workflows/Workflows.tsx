@@ -52,7 +52,7 @@ function Workflows(): React.JSX.Element {
     const completeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => {
             const data: ManageFailedOrderData = {
-                id: taskId,
+                taskId: taskId,
                 retryOrder: true,
             };
             return manageFailedOrder(data);
@@ -79,7 +79,7 @@ function Workflows(): React.JSX.Element {
     const closeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => {
             const data: ManageFailedOrderData = {
-                id: taskId,
+                taskId: taskId,
                 retryOrder: false,
             };
             return manageFailedOrder(data);
