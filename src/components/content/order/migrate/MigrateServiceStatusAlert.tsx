@@ -6,7 +6,6 @@
 import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
-    ApiError,
     DeployedServiceDetails,
     ErrorResponse,
     GetLatestServiceOrderStatusResponse,
@@ -16,7 +15,7 @@ import {
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { MigrationOrderSubmitResult } from './MigrationOrderSubmitResult';
 import { MigrationProcessingStatus } from './MigrationProcessingStatus.tsx';
 
@@ -43,11 +42,7 @@ function MigrateServiceStatusAlert({
 
     const msg = useMemo(() => {
         if (migrateRequestError) {
-            if (
-                migrateRequestError instanceof ApiError &&
-                migrateRequestError.body &&
-                isErrorResponse(migrateRequestError.body)
-            ) {
+            if (isHandleKnownErrorResponse(migrateRequestError)) {
                 const response: ErrorResponse = migrateRequestError.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {

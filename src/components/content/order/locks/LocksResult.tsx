@@ -7,13 +7,12 @@ import { Alert } from 'antd';
 import React from 'react';
 import locksStyles from '../../../../styles/locks.module.css';
 import {
-    ApiError,
     DeployedServiceDetails,
     ErrorResponse,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { useLockRequestState } from './useLockRequest';
 
 function LocksResult({
@@ -36,12 +35,7 @@ function LocksResult({
         );
     } else if (lockRequestState[0]?.status === 'error') {
         let errMsg: string[];
-        if (
-            lockRequestState[0] &&
-            lockRequestState[0].error instanceof ApiError &&
-            lockRequestState[0]?.error.body &&
-            isErrorResponse(lockRequestState[0]?.error.body)
-        ) {
+        if (lockRequestState[0] && isHandleKnownErrorResponse(lockRequestState[0].error)) {
             const response: ErrorResponse = lockRequestState[0].error.body;
             errMsg = response.details;
         } else {

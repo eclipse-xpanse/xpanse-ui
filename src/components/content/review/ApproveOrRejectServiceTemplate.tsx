@@ -7,8 +7,8 @@ import { UseMutationResult } from '@tanstack/react-query';
 import { Alert, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { ApiError, ErrorResponse, reviewResult, ServiceTemplateRequestToReview } from '../../../xpanse-api/generated';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { ErrorResponse, reviewResult, ServiceTemplateRequestToReview } from '../../../xpanse-api/generated';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { ApproveOrRejectRequestParams } from './query/useApproveOrRejectRequest';
 
 export const ApproveOrRejectServiceTemplate = ({
@@ -69,11 +69,7 @@ export const ApproveOrRejectServiceTemplate = ({
 
     if (approveOrRejectRequest.isError) {
         let errorMessage;
-        if (
-            approveOrRejectRequest.error instanceof ApiError &&
-            approveOrRejectRequest.error.body &&
-            isErrorResponse(approveOrRejectRequest.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(approveOrRejectRequest.error)) {
             const response: ErrorResponse = approveOrRejectRequest.error.body;
             errorMessage = response.details.join();
         } else {

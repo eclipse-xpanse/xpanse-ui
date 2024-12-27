@@ -8,7 +8,6 @@ import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import {
-    ApiError,
     DeployedService,
     ErrorResponse,
     serviceDeploymentState,
@@ -16,7 +15,7 @@ import {
     ServiceOrderStatusUpdate,
     taskStatus,
 } from '../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
@@ -62,11 +61,7 @@ function DestroyServiceStatusAlert({
 
     if (destroySubmitRequest.isError) {
         let errorMessage;
-        if (
-            destroySubmitRequest.error instanceof ApiError &&
-            destroySubmitRequest.error.body &&
-            isErrorResponse(destroySubmitRequest.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(destroySubmitRequest.error)) {
             const response: ErrorResponse = destroySubmitRequest.error.body;
             errorMessage = response.details;
         } else {
@@ -106,11 +101,7 @@ function DestroyServiceStatusAlert({
 
     if (serviceStateDestroyQueryError !== null) {
         deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
-        if (
-            serviceStateDestroyQueryError instanceof ApiError &&
-            serviceStateDestroyQueryError.body &&
-            isErrorResponse(serviceStateDestroyQueryError.body)
-        ) {
+        if (isHandleKnownErrorResponse(serviceStateDestroyQueryError)) {
             const response: ErrorResponse = serviceStateDestroyQueryError.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>

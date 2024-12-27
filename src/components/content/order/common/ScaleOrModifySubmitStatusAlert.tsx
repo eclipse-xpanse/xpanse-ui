@@ -6,7 +6,6 @@
 import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
-    ApiError,
     DeployedServiceDetails,
     ErrorResponse,
     serviceDeploymentState,
@@ -15,7 +14,7 @@ import {
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ProcessingStatus } from '../orderStatus/ProcessingStatus';
 import { useServiceDetailsPollingQuery } from '../orderStatus/useServiceDetailsPollingQuery';
 import { OperationType } from '../types/OperationType';
@@ -68,11 +67,7 @@ function ScaleOrModifySubmitStatusAlert({
                 );
             }
         } else if (isSubmitFailed && submitFailedResult) {
-            if (
-                submitFailedResult instanceof ApiError &&
-                submitFailedResult.body &&
-                isErrorResponse(submitFailedResult.body)
-            ) {
+            if (isHandleKnownErrorResponse(submitFailedResult)) {
                 const response: ErrorResponse = submitFailedResult.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {

@@ -7,8 +7,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, category } from '../../../../../xpanse-api/generated';
+import { category } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetUnpublishMutationState } from './UnpublishMutation.ts';
 
@@ -43,10 +44,7 @@ export function UnpublishResult({ id, category }: { id: string; category: catego
             if (useUnpublishRequestState[0].error) {
                 return (
                     <div>
-                        {useUnpublishRequestState[0].error instanceof ApiError &&
-                        useUnpublishRequestState[0].error.body &&
-                        typeof useUnpublishRequestState[0].error.body === 'object' &&
-                        'details' in useUnpublishRequestState[0].error.body ? (
+                        {isHandleKnownErrorResponse(useUnpublishRequestState[0].error) ? (
                             <Alert
                                 message='Unpublish Request Failed'
                                 description={String(useUnpublishRequestState[0].error.body.details)}

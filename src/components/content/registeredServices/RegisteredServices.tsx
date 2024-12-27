@@ -9,9 +9,9 @@ import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../styles/services-empty.module.css';
-import { ApiError, ErrorResponse, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { ErrorResponse, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList.tsx';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import {
     groupRegisteredServicesByVersionForSpecificServiceName,
     groupServicesByCategoryForSpecificServiceVendor,
@@ -92,11 +92,7 @@ export default function RegisteredServices(): React.JSX.Element {
     }
 
     if (availableServiceTemplatesQuery.isError) {
-        if (
-            availableServiceTemplatesQuery.error instanceof ApiError &&
-            availableServiceTemplatesQuery.error.body &&
-            isErrorResponse(availableServiceTemplatesQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(availableServiceTemplatesQuery.error)) {
             const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
             return (
                 <Alert

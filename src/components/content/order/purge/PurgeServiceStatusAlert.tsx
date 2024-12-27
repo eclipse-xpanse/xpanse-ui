@@ -6,14 +6,8 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
-import {
-    ApiError,
-    DeployedService,
-    ErrorResponse,
-    errorType,
-    serviceDeploymentState,
-} from '../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { DeployedService, ErrorResponse, errorType, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -38,7 +32,7 @@ export function PurgeServiceStatusAlert({
 
     if (purgeSubmitError) {
         let errorMessage;
-        if (purgeSubmitError instanceof ApiError && purgeSubmitError.body && isErrorResponse(purgeSubmitError.body)) {
+        if (isHandleKnownErrorResponse(purgeSubmitError)) {
             const response: ErrorResponse = purgeSubmitError.body;
             errorMessage = response.details;
         } else {
@@ -77,11 +71,7 @@ export function PurgeServiceStatusAlert({
     }
 
     if (deployedService.serviceId && statusPollingError) {
-        if (
-            statusPollingError instanceof ApiError &&
-            statusPollingError.body &&
-            isErrorResponse(statusPollingError.body)
-        ) {
+        if (isHandleKnownErrorResponse(statusPollingError)) {
             const response: ErrorResponse = statusPollingError.body;
             if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                 deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;

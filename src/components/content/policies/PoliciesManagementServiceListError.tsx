@@ -6,12 +6,12 @@
 import { Alert } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../styles/error-alert.module.css';
-import { ApiError, ErrorResponse } from '../../../xpanse-api/generated';
+import { ErrorResponse } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 
-export default function PoliciesManagementServiceListError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+export default function PoliciesManagementServiceListError({ error }: { error: Error }): React.JSX.Element {
+    if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
             <div>
@@ -29,7 +29,7 @@ export default function PoliciesManagementServiceListError({ error }: { error: u
             <div>
                 <Alert
                     message='Fetching Policies Management Service Details Failed'
-                    description={(error as Error).message}
+                    description={error.message}
                     type={'error'}
                     closable={false}
                     className={errorAlertStyles.errorFailureAlert}

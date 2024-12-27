@@ -7,8 +7,9 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApiError, category } from '../../../../../xpanse-api/generated';
+import { category } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetRepublishMutationState } from './RepublishMutation.ts';
 
@@ -43,10 +44,7 @@ export function RepublishResult({ id, category }: { id: string; category: catego
             if (useRepublishRequestState[0].error) {
                 return (
                     <div>
-                        {useRepublishRequestState[0].error instanceof ApiError &&
-                        useRepublishRequestState[0].error.body &&
-                        typeof useRepublishRequestState[0].error.body === 'object' &&
-                        'details' in useRepublishRequestState[0].error.body ? (
+                        {isHandleKnownErrorResponse(useRepublishRequestState[0].error) ? (
                             <Alert
                                 message='Republish Request Failed'
                                 description={String(useRepublishRequestState[0].error.body.details)}

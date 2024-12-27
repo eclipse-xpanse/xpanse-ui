@@ -11,21 +11,20 @@ import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { v4 } from 'uuid';
 import styles from '../../../styles/credential.module.css';
 import {
-    ApiError,
     CreateCredential,
+    credentialType,
     CredentialVariable,
     CredentialVariables,
-    ErrorResponse,
-    credentialType,
     csp,
+    ErrorResponse,
     name,
     updateIsvCloudCredential,
-    updateUserCloudCredential,
     type UpdateIsvCloudCredentialData,
+    updateUserCloudCredential,
     type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { CredentialApiDoc } from './CredentialApiDoc';
 import { CredentialTip } from './CredentialTip';
 import useCredentialsListQuery from './query/queryCredentialsList';
@@ -71,7 +70,7 @@ function UpdateCredential({
             setTipMessage('Updating Credential Successful.');
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+            if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
                 setTipType('error');
                 setTipMessage(response.details.join());
