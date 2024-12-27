@@ -8,9 +8,9 @@ import { deleteUserPolicy, DeleteUserPolicyData } from '../../../../xpanse-api/g
 
 export function useDeletePolicyRequest() {
     return useMutation({
-        mutationFn: (id: string) => {
+        mutationFn: (policyId: string) => {
             const data: DeleteUserPolicyData = {
-                id: id,
+                policyId: policyId,
             };
             return deleteUserPolicy(data);
         },

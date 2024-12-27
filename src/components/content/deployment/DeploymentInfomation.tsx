@@ -32,7 +32,7 @@ function DeploymentInfomation({ deployment }: { deployment: Deployment }): React
                 <Descriptions.Item label='Service Availability Config'>
                     <DeploymentText deployment={deployment} />
                 </Descriptions.Item>
-                <Descriptions.Item label='Deployment Script'>
+                <Descriptions.Item label='Deployment Scripts'>
                     <DeploymentScriptText deployment={deployment} />
                 </Descriptions.Item>
             </Descriptions>

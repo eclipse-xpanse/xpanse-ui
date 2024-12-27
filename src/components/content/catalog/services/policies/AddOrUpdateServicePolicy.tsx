@@ -75,7 +75,7 @@ export const AddOrUpdateServicePolicy = ({
             };
             setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
-                id: currentServicePolicy.servicePolicyId,
+                policyId: currentServicePolicy.servicePolicyId,
                 policyUpdateRequest: policyUpdateRequest,
             });
         }

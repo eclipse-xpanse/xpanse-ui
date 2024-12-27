@@ -177,7 +177,7 @@ import type {
 /**
  * Manage failed task orders.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
- * @param data.id ID of the workflow task that needs to be handled
+ * @param data.taskId ID of the workflow task that needs to be handled
  * @param data.retryOrder Controls if the order must be retried again or simply closed.
  * @returns unknown OK
  * @throws ApiError
@@ -185,9 +185,9 @@ import type {
 export const manageFailedOrder = (data: ManageFailedOrderData): CancelablePromise<ManageFailedOrderResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/workflow/task/{id}',
+        url: '/xpanse/workflow/task/{taskId}',
         path: {
-            id: data.id,
+            taskId: data.taskId,
         },
         query: {
             retryOrder: data.retryOrder,
@@ -207,7 +207,7 @@ export const manageFailedOrder = (data: ManageFailedOrderData): CancelablePromis
 /**
  * Complete tasks by task ID and set global process variables .<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
- * @param data.id ID of the workflow task that needs to be handled
+ * @param data.taskId ID of the workflow task that needs to be handled
  * @param data.requestBody
  * @returns unknown OK
  * @throws ApiError
@@ -215,9 +215,9 @@ export const manageFailedOrder = (data: ManageFailedOrderData): CancelablePromis
 export const completeTask = (data: CompleteTaskData): CancelablePromise<CompleteTaskResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/workflow/complete/task/{id}',
+        url: '/xpanse/workflow/complete/task/{taskId}',
         path: {
-            id: data.id,
+            taskId: data.taskId,
         },
         body: data.requestBody,
         mediaType: 'application/json',
@@ -718,7 +718,7 @@ export const cancelServiceTemplateRequestByRequestId = (
 };
 
 /**
- * Publishes the same service template to catalog again using.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * Publishes the same service template to catalog again.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
  * @returns ServiceTemplateRequestInfo OK
@@ -778,7 +778,7 @@ export const fetchUpdate = (data: FetchUpdateData): CancelablePromise<FetchUpdat
 /**
  * Get details of policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
- * @param data.id
+ * @param data.policyId
  * @returns ServicePolicy OK
  * @throws ApiError
  */
@@ -787,9 +787,9 @@ export const getServicePolicyDetails = (
 ): CancelablePromise<GetServicePolicyDetailsResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
-        url: '/xpanse/service/policies/{id}',
+        url: '/xpanse/service/policies/{policyId}',
         path: {
-            id: data.id,
+            policyId: data.policyId,
         },
         errors: {
             400: 'Bad Request',
@@ -806,7 +806,7 @@ export const getServicePolicyDetails = (
 /**
  * Update the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
- * @param data.id ID of the policy to be updated
+ * @param data.policyId ID of the policy to be updated
  * @param data.requestBody
  * @returns ServicePolicy OK
  * @throws ApiError
@@ -814,9 +814,9 @@ export const getServicePolicyDetails = (
 export const updateServicePolicy = (data: UpdateServicePolicyData): CancelablePromise<UpdateServicePolicyResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
-        url: '/xpanse/service/policies/{id}',
+        url: '/xpanse/service/policies/{policyId}',
         path: {
-            id: data.id,
+            policyId: data.policyId,
         },
         body: data.requestBody,
         mediaType: 'application/json',
@@ -835,42 +835,16 @@ export const updateServicePolicy = (data: UpdateServicePolicyData): CancelablePr
 /**
  * Delete the policy belongs to the registered service template.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
- * @param data.id
+ * @param data.policyId
  * @returns void No Content
  * @throws ApiError
  */
 export const deleteServicePolicy = (data: DeleteServicePolicyData): CancelablePromise<DeleteServicePolicyResponse> => {
     return __request(OpenAPI, {
         method: 'DELETE',
-        url: '/xpanse/service/policies/{id}',
+        url: '/xpanse/service/policies/{policyId}',
         path: {
-            id: data.id,
-        },
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Get the details of the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.id
- * @returns UserPolicy OK
- * @throws ApiError
- */
-export const getPolicyDetails = (data: GetPolicyDetailsData): CancelablePromise<GetPolicyDetailsResponse> => {
-    return __request(OpenAPI, {
-        method: 'GET',
-        url: '/xpanse/policies/{id}',
-        path: {
-            id: data.id,
+            policyId: data.policyId,
         },
         errors: {
             400: 'Bad Request',
@@ -901,32 +875,6 @@ export const updateUserPolicy = (data: UpdateUserPolicyData): CancelablePromise<
         },
         body: data.requestBody,
         mediaType: 'application/json',
-        errors: {
-            400: 'Bad Request',
-            401: 'Unauthorized',
-            403: 'Forbidden',
-            408: 'Request Timeout',
-            422: 'Unprocessable Entity',
-            500: 'Internal Server Error',
-            502: 'Bad Gateway',
-        },
-    });
-};
-
-/**
- * Delete the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
- * @param data The data for the request.
- * @param data.id
- * @returns void No Content
- * @throws ApiError
- */
-export const deleteUserPolicy = (data: DeleteUserPolicyData): CancelablePromise<DeleteUserPolicyResponse> => {
-    return __request(OpenAPI, {
-        method: 'DELETE',
-        url: '/xpanse/policies/{id}',
-        path: {
-            id: data.id,
-        },
         errors: {
             400: 'Bad Request',
             401: 'Unauthorized',
@@ -2003,6 +1951,58 @@ export const getPricesByService = (data: GetPricesByServiceData): CancelableProm
             regionName: data.regionName,
             siteName: data.siteName,
             billingMode: data.billingMode,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Get the details of the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.policyId
+ * @returns UserPolicy OK
+ * @throws ApiError
+ */
+export const getPolicyDetails = (data: GetPolicyDetailsData): CancelablePromise<GetPolicyDetailsResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/policies/{policyId}',
+        path: {
+            policyId: data.policyId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Delete the policy created by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.policyId
+ * @returns void No Content
+ * @throws ApiError
+ */
+export const deleteUserPolicy = (data: DeleteUserPolicyData): CancelablePromise<DeleteUserPolicyResponse> => {
+    return __request(OpenAPI, {
+        method: 'DELETE',
+        url: '/xpanse/policies/{policyId}',
+        path: {
+            policyId: data.policyId,
         },
         errors: {
             400: 'Bad Request',
