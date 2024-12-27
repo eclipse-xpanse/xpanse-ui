@@ -6,12 +6,12 @@
 import { Alert } from 'antd';
 import React from 'react';
 import tableStyles from '../../../../../styles/table.module.css';
-import { ApiError, ErrorResponse } from '../../../../../xpanse-api/generated';
+import { ErrorResponse } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 
-export default function ServicePolicyListError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+export default function ServicePolicyListError({ error }: { error: Error }): React.JSX.Element {
+    if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
             <div>
@@ -29,7 +29,7 @@ export default function ServicePolicyListError({ error }: { error: unknown }): R
             <div>
                 <Alert
                     message='Fetching Service Policies Details Failed'
-                    description={(error as Error).message}
+                    description={error.message}
                     type={'error'}
                     closable={false}
                     className={tableStyles.tableLoadFailureAlert}

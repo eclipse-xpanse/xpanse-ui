@@ -10,8 +10,8 @@ import { useLocation } from 'react-router-dom';
 import monitorStyles from '../../../styles/monitor.module.css';
 import emptyServicesStyle from '../../../styles/services-empty.module.css';
 import tablesStyle from '../../../styles/table.module.css';
-import { ApiError, DeployedService, ErrorResponse, serviceDeploymentState } from '../../../xpanse-api/generated';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { DeployedService, ErrorResponse, serviceDeploymentState } from '../../../xpanse-api/generated';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
 import { MetricTimePeriodRadioButton } from './MetricTimePeriodRadioButton';
@@ -109,15 +109,11 @@ function Monitor(): React.JSX.Element {
 
     if (deployedServiceQuery.isError) {
         tipType.current = 'error';
-        if (
-            deployedServiceQuery.error instanceof ApiError &&
-            deployedServiceQuery.error.body &&
-            isErrorResponse(deployedServiceQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(deployedServiceQuery.error)) {
             const response: ErrorResponse = deployedServiceQuery.error.body;
             tipMessage.current = response.errorType.valueOf();
             tipDescription.current = response.details.join();
-        } else if (deployedServiceQuery.error instanceof Error) {
+        } else {
             tipMessage.current = 'Error while fetching all deployed services.';
             tipDescription.current = deployedServiceQuery.error.message;
         }

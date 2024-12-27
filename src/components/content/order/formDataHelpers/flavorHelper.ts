@@ -4,13 +4,12 @@
  */
 
 import {
-    ApiError,
     ErrorResponse,
     FlavorPriceResult,
     ServiceFlavor,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice.ts';
 
 export function getServiceFlavorList(
@@ -37,7 +36,7 @@ export function getServiceFlavorList(
 }
 
 export const getServicePriceErrorDetails = (error: Error) => {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+    if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return response.details;
     } else {

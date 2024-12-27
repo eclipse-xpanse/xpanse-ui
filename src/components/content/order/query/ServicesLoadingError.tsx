@@ -6,12 +6,12 @@
 import { Alert } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { ApiError, ErrorResponse } from '../../../../xpanse-api/generated';
+import { ErrorResponse } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 
-function ServicesLoadingError({ error }: { error: unknown }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+function ServicesLoadingError({ error }: { error: Error }): React.JSX.Element {
+    if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
             <Alert
@@ -26,7 +26,7 @@ function ServicesLoadingError({ error }: { error: unknown }): React.JSX.Element 
         return (
             <Alert
                 message='Fetching Available Services Failed'
-                description={(error as Error).message}
+                description={error.message}
                 type={'error'}
                 closable={true}
                 className={serviceOrderStyles.servicesLoadingError}

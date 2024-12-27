@@ -19,7 +19,6 @@ import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
-    ApiError,
     CredentialVariables,
     csp,
     deleteIsvCloudCredential,
@@ -31,7 +30,7 @@ import {
 } from '../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { cspMap } from '../common/csp/CspLogo';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import AddCredential from './AddCredential';
 import CredentialDetails from './CredentialDetails';
 import { CredentialTip } from './CredentialTip';
@@ -60,15 +59,11 @@ function Credentials(): React.JSX.Element {
     }
 
     if (credentialsQuery.isError) {
-        if (
-            credentialsQuery.error instanceof ApiError &&
-            credentialsQuery.error.body &&
-            isErrorResponse(credentialsQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(credentialsQuery.error)) {
             const response: ErrorResponse = credentialsQuery.error.body;
             tipType = 'error';
             tipMessage = response.details.join();
-        } else if (credentialsQuery.error instanceof Error) {
+        } else {
             tipType = 'error';
             tipMessage = credentialsQuery.error.message;
         }
@@ -82,7 +77,7 @@ function Credentials(): React.JSX.Element {
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+            if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
                 tipType = 'error';
                 tipMessage = response.details.join();

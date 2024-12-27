@@ -7,7 +7,6 @@ import { UseMutationResult } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
-    ApiError,
     DeployedService,
     ErrorResponse,
     serviceDeploymentState,
@@ -16,7 +15,7 @@ import {
     taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery.ts';
 import { RecreateOrderSubmitResult } from './RecreateOrderSubmitResult.tsx';
@@ -67,11 +66,7 @@ function RecreateServiceStatusAlert({
         }
         if (recreateRequest.isError) {
             currentSelectedService.serviceDeploymentState = serviceDeploymentState.DEPLOYMENT_FAILED;
-            if (
-                recreateRequest.error instanceof ApiError &&
-                recreateRequest.error.body &&
-                isErrorResponse(recreateRequest.error.body)
-            ) {
+            if (isHandleKnownErrorResponse(recreateRequest.error)) {
                 const response: ErrorResponse = recreateRequest.error.body;
                 return getOrderSubmissionFailedDisplay(response.details);
             } else {

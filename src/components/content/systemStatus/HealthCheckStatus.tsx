@@ -12,7 +12,6 @@ import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
-    ApiError,
     BackendSystemStatus,
     backendSystemType,
     ErrorResponse,
@@ -20,7 +19,7 @@ import {
     SystemStatus,
 } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
@@ -115,11 +114,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
 
     if (healthCheckQuery.isError) {
         backendSystemStatusFilters = [];
-        if (
-            healthCheckQuery.error instanceof ApiError &&
-            healthCheckQuery.error.body &&
-            isErrorResponse(healthCheckQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(healthCheckQuery.error)) {
             const response: ErrorResponse = healthCheckQuery.error.body;
             healthCheckError = (
                 <div className={healthStatusStyles.healthRefreshAlertTip}>

@@ -12,7 +12,6 @@ import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import registerStyles from '../../../../../styles/register.module.css';
 import {
-    ApiError,
     category,
     ErrorResponse,
     getServiceTemplateDetailsById,
@@ -23,7 +22,7 @@ import {
     update,
     type UpdateData,
 } from '../../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
 import { ValidationStatus } from '../../../common/ocl/ValidationStatus';
 import YamlSyntaxValidationResult from '../../../common/ocl/YamlSyntaxValidationResult';
@@ -75,7 +74,7 @@ function UpdateService({
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
-            if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+            if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
                 updateResult.current = response.details;
             } else {

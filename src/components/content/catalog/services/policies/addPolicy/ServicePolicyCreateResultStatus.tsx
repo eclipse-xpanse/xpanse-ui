@@ -6,8 +6,8 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../../../styles/submit-alert.module.css';
-import { ApiError, ErrorResponse, ServicePolicy } from '../../../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../../../common/error/isErrorResponse';
+import { ErrorResponse, ServicePolicy } from '../../../../../../xpanse-api/generated';
+import { isHandleKnownErrorResponse } from '../../../../common/error/isHandleKnownErrorResponse.ts';
 import ServicePolicySubmitResult from '../ServicePolicySubmitResult';
 
 export default function ServicePolicyCreateResultStatus({
@@ -22,7 +22,7 @@ export default function ServicePolicyCreateResultStatus({
     currentServicePolicy: ServicePolicy | undefined;
 }): React.JSX.Element {
     if (isError) {
-        if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+        if (isHandleKnownErrorResponse(error)) {
             const response: ErrorResponse = error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
