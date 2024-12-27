@@ -15,11 +15,11 @@ export function DeploymentScriptText({ deployment }: { deployment: Deployment })
         const yamlDocument = new YAML.Document();
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        yamlDocument.contents = deployment.deployer ? deployment.deployer : deployment.scriptsRepo;
+        yamlDocument.contents = deployment.scriptFiles ? deployment.scriptFiles : deployment.scriptsRepo;
         return (
             <Popover
                 content={<pre className={oclDisplayStyles.oclDeploymentScript}>{yamlDocument.toString()}</pre>}
-                title={'Deployment Script'}
+                title={'Deployment Scripts'}
                 trigger='hover'
             >
                 <Button className={oclDisplayStyles.oclDataHover} type={'link'}>

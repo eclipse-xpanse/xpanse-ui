@@ -747,9 +747,11 @@ export type Deployment = {
      */
     serviceAvailabilityConfig?: Array<AvailabilityZoneConfig>;
     /**
-     * The real deployer, something like terraform scripts. Either deployer or deployFromGitRepo must be provided.
+     * Deployment scripts stored in a Map. file name as the key and content as the value. Either scriptFiles or scriptsRepo must be provided.
      */
-    deployer?: string;
+    scriptFiles?: {
+        [key: string]: string;
+    };
     scriptsRepo?: ScriptsRepo;
 };
 
@@ -1729,7 +1731,7 @@ export type ReviewServiceTemplateRequest = {
     /**
      * The comment of review registration.
      */
-    reviewComment?: string;
+    reviewComment: string;
 };
 
 /**
@@ -1741,7 +1743,7 @@ export enum reviewResult {
 }
 
 /**
- * Deployment scripts hosted on a GIT repo. Either deployer or deployFromGitRepo must be provided.
+ * Deployment scripts hosted on a GIT repo. Either scriptFiles or scriptsRepo must be provided.
  */
 export type ScriptsRepo = {
     /**
@@ -2851,27 +2853,27 @@ export enum status3 {
 
 export type ManageFailedOrderData = {
     /**
-     * ID of the workflow task that needs to be handled
-     */
-    id: string;
-    /**
      * Controls if the order must be retried again or simply closed.
      */
     retryOrder: boolean;
+    /**
+     * ID of the workflow task that needs to be handled
+     */
+    taskId: string;
 };
 
 export type ManageFailedOrderResponse = unknown;
 
 export type CompleteTaskData = {
-    /**
-     * ID of the workflow task that needs to be handled
-     */
-    id: string;
     requestBody: {
         [key: string]: {
             [key: string]: unknown;
         };
     };
+    /**
+     * ID of the workflow task that needs to be handled
+     */
+    taskId: string;
 };
 
 export type CompleteTaskResponse = unknown;
@@ -3077,7 +3079,7 @@ export type FetchUpdateData = {
 export type FetchUpdateResponse = ServiceTemplateRequestInfo;
 
 export type GetServicePolicyDetailsData = {
-    id: string;
+    policyId: string;
 };
 
 export type GetServicePolicyDetailsResponse = ServicePolicy;
@@ -3086,23 +3088,17 @@ export type UpdateServicePolicyData = {
     /**
      * ID of the policy to be updated
      */
-    id: string;
+    policyId: string;
     requestBody: ServicePolicyUpdateRequest;
 };
 
 export type UpdateServicePolicyResponse = ServicePolicy;
 
 export type DeleteServicePolicyData = {
-    id: string;
+    policyId: string;
 };
 
 export type DeleteServicePolicyResponse = void;
-
-export type GetPolicyDetailsData = {
-    id: string;
-};
-
-export type GetPolicyDetailsResponse = UserPolicy;
 
 export type UpdateUserPolicyData = {
     /**
@@ -3113,12 +3109,6 @@ export type UpdateUserPolicyData = {
 };
 
 export type UpdateUserPolicyResponse = UserPolicy;
-
-export type DeleteUserPolicyData = {
-    id: string;
-};
-
-export type DeleteUserPolicyResponse = void;
 
 export type GetIsvCloudCredentialsData = {
     /**
@@ -3748,6 +3738,18 @@ export type GetPricesByServiceData = {
 };
 
 export type GetPricesByServiceResponse = Array<FlavorPriceResult>;
+
+export type GetPolicyDetailsData = {
+    policyId: string;
+};
+
+export type GetPolicyDetailsResponse = UserPolicy;
+
+export type DeleteUserPolicyData = {
+    policyId: string;
+};
+
+export type DeleteUserPolicyResponse = void;
 
 export type GetMetricsData = {
     /**
