@@ -6,9 +6,9 @@
 import { Alert, Skeleton } from 'antd';
 import React from 'react';
 import myServicesStyle from '../../../../styles/my-services.module.css';
-import { ApiError, DeployResource, ErrorResponse } from '../../../../xpanse-api/generated';
+import { DeployResource, ErrorResponse } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
 import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
@@ -65,11 +65,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
     }
 
     if (getServiceDetailsByIdQuery.isError) {
-        if (
-            getServiceDetailsByIdQuery.error instanceof ApiError &&
-            getServiceDetailsByIdQuery.error.body &&
-            isErrorResponse(getServiceDetailsByIdQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(getServiceDetailsByIdQuery.error)) {
             const response: ErrorResponse = getServiceDetailsByIdQuery.error.body;
             return (
                 <Alert
@@ -80,7 +76,7 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
                     className={myServicesStyle.myServiceDetailsSkeleton}
                 />
             );
-        } else if (getServiceDetailsByIdQuery.error instanceof Error) {
+        } else {
             return (
                 <Alert
                     message='Fetching Service Details Failed'

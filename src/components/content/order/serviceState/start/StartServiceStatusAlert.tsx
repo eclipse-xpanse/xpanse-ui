@@ -8,7 +8,6 @@ import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
-    ApiError,
     DeployedService,
     ErrorResponse,
     ServiceOrder,
@@ -16,7 +15,7 @@ import {
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -41,11 +40,7 @@ function StartServiceStatusAlert({
 
     if (serviceStateStartQuery.isError) {
         let errorMessage;
-        if (
-            serviceStateStartQuery.error instanceof ApiError &&
-            serviceStateStartQuery.error.body &&
-            isErrorResponse(serviceStateStartQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(serviceStateStartQuery.error)) {
             const response: ErrorResponse = serviceStateStartQuery.error.body;
             errorMessage = response.details;
         } else {
@@ -83,11 +78,7 @@ function StartServiceStatusAlert({
     }
 
     if (getStartServiceDetailsQuery.isError) {
-        if (
-            getStartServiceDetailsQuery.error instanceof ApiError &&
-            getStartServiceDetailsQuery.error.body &&
-            isErrorResponse(getStartServiceDetailsQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(getStartServiceDetailsQuery.error)) {
             const response: ErrorResponse = getStartServiceDetailsQuery.error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>

@@ -9,13 +9,13 @@ import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
-import { ApiError, category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 import {
     groupServicesByVersionForSpecificServiceName,
     groupServiceTemplatesByName,
 } from '../../../common/catalog/catalogProps';
-import { isErrorResponse } from '../../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
@@ -50,11 +50,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
     }
 
     if (availableServiceTemplatesQuery.isError) {
-        if (
-            availableServiceTemplatesQuery.error instanceof ApiError &&
-            availableServiceTemplatesQuery.error.body &&
-            isErrorResponse(availableServiceTemplatesQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(availableServiceTemplatesQuery.error)) {
             const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
             return (
                 <Alert

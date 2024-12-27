@@ -7,9 +7,9 @@ import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import React, { useRef, useState } from 'react';
 import monitorStyles from '../../../styles/monitor.module.css';
-import { ApiError, ErrorResponse, Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
+import { ErrorResponse, Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
-import { isErrorResponse } from '../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
 import {
     useGetLastKnownMetricForASpecificTypeQuery,
@@ -157,7 +157,7 @@ export default function MonitorChart({
 
     const setErrorAlertData = (error: Error) => {
         tipType = 'error';
-        if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+        if (isHandleKnownErrorResponse(error)) {
             const response: ErrorResponse = error.body;
             tipMessage = response.errorType.valueOf();
             tipDescription = response.details.join();

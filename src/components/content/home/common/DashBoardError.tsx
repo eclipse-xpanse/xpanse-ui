@@ -6,18 +6,18 @@
 import { Alert, Button, Card } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../../styles/error-alert.module.css';
-import { ApiError, ErrorResponse } from '../../../../xpanse-api/generated';
+import { ErrorResponse } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
-import { isErrorResponse } from '../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 
 export default function DashBoardError({
     error,
     retryRequest,
 }: {
-    error: unknown;
+    error: Error | null;
     retryRequest: () => void;
 }): React.JSX.Element {
-    if (error instanceof ApiError && error.body && isErrorResponse(error.body)) {
+    if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
             <Card title='Services Dashboard' bordered={true}>
@@ -46,7 +46,7 @@ export default function DashBoardError({
             <Card title='Services Dashboard' bordered={true}>
                 <Alert
                     message='Fetching Service Details Failed'
-                    description={(error as Error).message}
+                    description={error?.message}
                     type={'error'}
                     closable={false}
                     className={errorAlertStyles.errorFailureAlert}

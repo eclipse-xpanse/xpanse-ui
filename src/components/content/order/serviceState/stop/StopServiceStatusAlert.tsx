@@ -8,7 +8,6 @@ import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
-    ApiError,
     DeployedService,
     ErrorResponse,
     ServiceOrder,
@@ -16,7 +15,7 @@ import {
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
-import { isErrorResponse } from '../../../common/error/isErrorResponse';
+import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
@@ -41,11 +40,7 @@ function StopServiceStatusAlert({
 
     if (serviceStateStopQuery.isError) {
         let errorMessage;
-        if (
-            serviceStateStopQuery.error instanceof ApiError &&
-            serviceStateStopQuery.error.body &&
-            isErrorResponse(serviceStateStopQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(serviceStateStopQuery.error)) {
             const response: ErrorResponse = serviceStateStopQuery.error.body;
             errorMessage = response.details;
         } else {
@@ -87,11 +82,7 @@ function StopServiceStatusAlert({
     }
 
     if (getStopServiceDetailsQuery.isError) {
-        if (
-            getStopServiceDetailsQuery.error instanceof ApiError &&
-            getStopServiceDetailsQuery.error.body &&
-            isErrorResponse(getStopServiceDetailsQuery.error.body)
-        ) {
+        if (isHandleKnownErrorResponse(getStopServiceDetailsQuery.error)) {
             const response: ErrorResponse = getStopServiceDetailsQuery.error.body;
             return (
                 <div className={submitAlertStyles.submitAlertTip}>

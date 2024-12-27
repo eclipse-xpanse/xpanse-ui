@@ -11,7 +11,7 @@ import { v4 } from 'uuid';
 import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { ApiError, DeployRequest, taskStatus } from '../../../../xpanse-api/generated';
+import { DeployRequest, taskStatus } from '../../../../xpanse-api/generated';
 import {
     createServicePageRoute,
     CUSTOMER_SERVICE_NAME_FIELD,
@@ -19,6 +19,7 @@ import {
     servicesSubPageRoute,
 } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
+import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType.ts';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
@@ -99,9 +100,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.data.serviceId);
         } else {
             if (
-                submitDeploymentRequest.error instanceof ApiError &&
-                submitDeploymentRequest.error.body &&
-                typeof submitDeploymentRequest.error.body === 'object' &&
+                isHandleKnownErrorResponse(submitDeploymentRequest.error) &&
                 'serviceId' in submitDeploymentRequest.error.body
             ) {
                 redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.error.body.serviceId as string);
