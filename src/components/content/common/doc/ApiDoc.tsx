@@ -7,10 +7,16 @@ import { LinkOutlined } from '@ant-design/icons';
 import React from 'react';
 import { Link, openApi, OpenApiData } from '../../../../xpanse-api/generated';
 
-export function ApiDoc({ id, styleClass }: { id: string; styleClass: string }): React.JSX.Element {
+export function ApiDoc({
+    serviceTemplateId,
+    styleClass,
+}: {
+    serviceTemplateId: string;
+    styleClass: string;
+}): React.JSX.Element {
     function onclick() {
         const data: OpenApiData = {
-            id: id,
+            serviceTemplateId: serviceTemplateId,
         };
         void openApi(data).then((link: Link) => {
             if (link.href !== undefined) {

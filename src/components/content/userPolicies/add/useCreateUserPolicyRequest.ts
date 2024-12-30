@@ -6,7 +6,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { addUserPolicy, AddUserPolicyData, UserPolicyCreateRequest } from '../../../../xpanse-api/generated';
 
-export function useCreatePolicyRequest() {
+export function useCreateUserPolicyRequest() {
     return useMutation({
         mutationFn: (requestBody: UserPolicyCreateRequest) => {
             const data: AddUserPolicyData = {

@@ -6,7 +6,7 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
-import PolicySubmitResultDetails from '../PolicySubmitResultDetails';
+import UserPolicySubmitResultDetails from '../UserPolicySubmitResultDetails.tsx';
 
 export default function UpdateSubmitResult({ isUpdated }: { isUpdated: boolean }): React.JSX.Element {
     if (isUpdated) {
@@ -15,7 +15,7 @@ export default function UpdateSubmitResult({ isUpdated }: { isUpdated: boolean }
                 {' '}
                 <Alert
                     message={'There is no change in the current data'}
-                    description={<PolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
+                    description={<UserPolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
                     showIcon
                     closable={true}
                     type={'error'}

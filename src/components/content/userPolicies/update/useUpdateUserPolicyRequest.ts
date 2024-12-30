@@ -6,11 +6,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { UserPolicyUpdateRequest, updateUserPolicy, type UpdateUserPolicyData } from '../../../../xpanse-api/generated';
 
-export function useUpdatePolicyRequest() {
+export function useUpdateUserPolicyRequest() {
     return useMutation({
-        mutationFn: ({ id, requestBody }: { id: string; requestBody: UserPolicyUpdateRequest }) => {
+        mutationFn: ({ userPolicyId, requestBody }: { userPolicyId: string; requestBody: UserPolicyUpdateRequest }) => {
             const data: UpdateUserPolicyData = {
-                id: id,
+                userPolicyId: userPolicyId,
                 requestBody: requestBody,
             };
             return updateUserPolicy(data);

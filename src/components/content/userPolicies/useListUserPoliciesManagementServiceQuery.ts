@@ -6,9 +6,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { listUserPolicies, ListUserPoliciesData } from '../../../xpanse-api/generated';
 
-export default function useListPoliciesManagementServiceQuery() {
+export default function useListUserPoliciesManagementServiceQuery() {
     return useQuery({
-        queryKey: ['listPoliciesManagementService'],
+        queryKey: ['listUserPoliciesManagementService'],
         queryFn: () => {
             const data: ListUserPoliciesData = {
                 cspName: undefined,

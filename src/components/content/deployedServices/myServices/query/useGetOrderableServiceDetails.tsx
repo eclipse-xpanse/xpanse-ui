@@ -14,7 +14,7 @@ export default function useGetOrderableServiceDetails(serviceTemplateId: string 
         queryKey: ['getOrderableServiceDetailsById', serviceTemplateId],
         queryFn: () => {
             const data: GetOrderableServiceDetailsByIdData = {
-                id: serviceTemplateId ?? '',
+                serviceTemplateId: serviceTemplateId ?? '',
             };
             return getOrderableServiceDetailsById(data);
         },
