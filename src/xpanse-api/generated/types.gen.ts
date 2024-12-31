@@ -3079,36 +3079,51 @@ export type FetchUpdateData = {
 export type FetchUpdateResponse = ServiceTemplateRequestInfo;
 
 export type GetServicePolicyDetailsData = {
-    policyId: string;
+    servicePolicyId: string;
 };
 
 export type GetServicePolicyDetailsResponse = ServicePolicy;
 
 export type UpdateServicePolicyData = {
+    requestBody: ServicePolicyUpdateRequest;
     /**
      * ID of the policy to be updated
      */
-    policyId: string;
-    requestBody: ServicePolicyUpdateRequest;
+    servicePolicyId: string;
 };
 
 export type UpdateServicePolicyResponse = ServicePolicy;
 
 export type DeleteServicePolicyData = {
-    policyId: string;
+    servicePolicyId: string;
 };
 
 export type DeleteServicePolicyResponse = void;
 
+export type GetPolicyDetailsData = {
+    userPolicyId: string;
+};
+
+export type GetPolicyDetailsResponse = UserPolicy;
+
 export type UpdateUserPolicyData = {
-    /**
-     * ID of the policy to be updated
-     */
-    id: string;
     requestBody: UserPolicyUpdateRequest;
+    /**
+     * id of the policy created by user to be updated
+     */
+    userPolicyId: string;
 };
 
 export type UpdateUserPolicyResponse = UserPolicy;
+
+export type DeleteUserPolicyData = {
+    /**
+     * id of the policy created by user to be updated
+     */
+    userPolicyId: string;
+};
+
+export type DeleteUserPolicyResponse = void;
 
 export type GetIsvCloudCredentialsData = {
     /**
@@ -3334,7 +3349,7 @@ export type FetchResponse = ServiceTemplateRequestInfo;
 
 export type ListServicePoliciesData = {
     /**
-     * The id of registered service template which the policy belongs to.
+     * The id of service template which the policy belongs to.
      */
     serviceTemplateId: string;
 };
@@ -3707,13 +3722,13 @@ export type GetServicePriceByFlavorData = {
      */
     regionName: string;
     /**
+     * id of the service template
+     */
+    serviceTemplateId: string;
+    /**
      * site name of the region belongs to
      */
     siteName: string;
-    /**
-     * id of the service template
-     */
-    templateId: string;
 };
 
 export type GetServicePriceByFlavorResponse = FlavorPriceResult;
@@ -3728,28 +3743,16 @@ export type GetPricesByServiceData = {
      */
     regionName: string;
     /**
+     * id of the service template
+     */
+    serviceTemplateId: string;
+    /**
      * site name of the region belongs to
      */
     siteName: string;
-    /**
-     * id of the service template
-     */
-    templateId: string;
 };
 
 export type GetPricesByServiceResponse = Array<FlavorPriceResult>;
-
-export type GetPolicyDetailsData = {
-    policyId: string;
-};
-
-export type GetPolicyDetailsResponse = UserPolicy;
-
-export type DeleteUserPolicyData = {
-    policyId: string;
-};
-
-export type DeleteUserPolicyResponse = void;
 
 export type GetMetricsData = {
     /**
@@ -4069,13 +4072,13 @@ export type GetOrderableServiceDetailsByIdData = {
     /**
      * The id of orderable service.
      */
-    id: string;
+    serviceTemplateId: string;
 };
 
 export type GetOrderableServiceDetailsByIdResponse = UserOrderableServiceVo;
 
 export type OpenApiData = {
-    id: string;
+    serviceTemplateId: string;
 };
 
 export type OpenApiResponse = Link;

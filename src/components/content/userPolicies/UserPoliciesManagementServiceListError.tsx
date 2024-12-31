@@ -10,7 +10,7 @@ import { ErrorResponse } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 
-export default function PoliciesManagementServiceListError({ error }: { error: Error }): React.JSX.Element {
+export default function UserPoliciesManagementServiceListError({ error }: { error: Error }): React.JSX.Element {
     if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
@@ -28,7 +28,7 @@ export default function PoliciesManagementServiceListError({ error }: { error: E
         return (
             <div>
                 <Alert
-                    message='Fetching Policies Management Service Details Failed'
+                    message='Fetching UserPolicies Management Service Details Failed'
                     description={error.message}
                     type={'error'}
                     closable={false}

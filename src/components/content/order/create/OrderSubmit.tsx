@@ -203,7 +203,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                         <Col span={8}>
                             <div className={serviceOrderStyles.serviceVendorContactClass}>
                                 <div className={serviceOrderStyles.serviceOrderSubmitApiDocClass}>
-                                    <ApiDoc id={state.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                                    <ApiDoc
+                                        serviceTemplateId={state.id}
+                                        styleClass={serviceOrderStyles.contentTitleApi}
+                                    ></ApiDoc>
                                 </div>
                                 <div className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
                                     <IsvNameDisplay serviceVendor={state.serviceVendor} />

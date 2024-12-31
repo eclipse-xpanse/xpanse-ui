@@ -28,7 +28,7 @@ export default function ServicePolicyListError({ error }: { error: Error }): Rea
         return (
             <div>
                 <Alert
-                    message='Fetching Service Policies Details Failed'
+                    message='Fetching Service UserPolicies Details Failed'
                     description={error.message}
                     type={'error'}
                     closable={false}
