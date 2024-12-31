@@ -11,7 +11,7 @@ import { v4 as uuidv4 } from 'uuid';
 import submitResultStyles from '../../../styles/submit-result.module.css';
 import { policiesRoute } from '../../utils/constants';
 
-function PolicySubmitResultDetails({
+function UserPolicySubmitResultDetails({
     msg,
     uuid,
 }: {
@@ -63,4 +63,4 @@ function PolicySubmitResultDetails({
     );
 }
 
-export default PolicySubmitResultDetails;
+export default UserPolicySubmitResultDetails;

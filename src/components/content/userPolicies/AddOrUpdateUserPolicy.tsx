@@ -20,15 +20,15 @@ import {
     name,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
-import PolicySubmitResultDetails from './PolicySubmitResultDetails';
-import PolicyCreateResultStatus from './add/PolicyCreateResultStatus';
-import { useCreatePolicyRequest } from './add/useCreatePolicyRequest';
-import { PolicyUploadFileStatus, policiesStatuses } from './policiesParams';
-import PolicyUpdateResultStatus from './update/PolicyUpdateResultStatus';
+import UserPolicySubmitResultDetails from './UserPolicySubmitResultDetails.tsx';
+import UserPolicyCreateResultStatus from './add/UserPolicyCreateResultStatus.tsx';
+import { useCreateUserPolicyRequest } from './add/useCreateUserPolicyRequest.ts';
 import UpdateSubmitResult from './update/UpdateSubmitResult';
-import { useUpdatePolicyRequest } from './update/useUpdatePolicyRequest';
+import UserPolicyUpdateResultStatus from './update/UserPolicyUpdateResultStatus.tsx';
+import { useUpdateUserPolicyRequest } from './update/useUpdateUserPolicyRequest.ts';
+import { PolicyUploadFileStatus, policiesStatuses } from './userPoliciesParams.ts';
 
-export const AddOrUpdatePolicy = ({
+export const AddOrUpdateUserPolicy = ({
     currentPolicyService,
     getCancelUpdateStatus,
 }: {
@@ -44,8 +44,8 @@ export const AddOrUpdatePolicy = ({
     const files = useRef<UploadFile[]>([]);
     const [regoFileUploadStatus, setRegoFileUploadStatus] = useState<PolicyUploadFileStatus>('notStarted');
     const activeCspList = useRef<csp[]>([]);
-    const createPoliciesManagementServiceRequest = useCreatePolicyRequest();
-    const updatePoliciesManagementServiceRequest = useUpdatePolicyRequest();
+    const createPoliciesManagementServiceRequest = useCreateUserPolicyRequest();
+    const updatePoliciesManagementServiceRequest = useUpdateUserPolicyRequest();
 
     const getActiveCspsQuery = useQuery({
         queryKey: ['getActiveCspsQuery'],
@@ -78,7 +78,7 @@ export const AddOrUpdatePolicy = ({
             policyUpdateRequest.policy = policyRequest.policy;
             setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
-                id: currentPolicyService.userPolicyId,
+                userPolicyId: currentPolicyService.userPolicyId,
                 requestBody: policyUpdateRequest,
             });
         }
@@ -145,7 +145,10 @@ export const AddOrUpdatePolicy = ({
                                     <Alert
                                         message={e.message}
                                         description={
-                                            <PolicySubmitResultDetails msg={'Policy file upload failed'} uuid={''} />
+                                            <UserPolicySubmitResultDetails
+                                                msg={'Policy file upload failed'}
+                                                uuid={''}
+                                            />
                                         }
                                         showIcon
                                         closable={true}
@@ -160,7 +163,10 @@ export const AddOrUpdatePolicy = ({
                                     <Alert
                                         message={'unhandled error occurred'}
                                         description={
-                                            <PolicySubmitResultDetails msg={'Policy file upload failed'} uuid={''} />
+                                            <UserPolicySubmitResultDetails
+                                                msg={'Policy file upload failed'}
+                                                uuid={''}
+                                            />
                                         }
                                         showIcon
                                         closable={true}
@@ -199,7 +205,7 @@ export const AddOrUpdatePolicy = ({
     return (
         <>
             {createPolicyRequest !== undefined && createPolicyRequest.policy.length > 0 ? (
-                <PolicyCreateResultStatus
+                <UserPolicyCreateResultStatus
                     isError={createPoliciesManagementServiceRequest.isError}
                     isSuccess={createPoliciesManagementServiceRequest.isSuccess}
                     error={createPoliciesManagementServiceRequest.error}
@@ -207,7 +213,7 @@ export const AddOrUpdatePolicy = ({
                 />
             ) : null}
             {updatePolicyRequest !== undefined ? (
-                <PolicyUpdateResultStatus
+                <UserPolicyUpdateResultStatus
                     isError={updatePoliciesManagementServiceRequest.isError}
                     isSuccess={updatePoliciesManagementServiceRequest.isSuccess}
                     error={updatePoliciesManagementServiceRequest.error}

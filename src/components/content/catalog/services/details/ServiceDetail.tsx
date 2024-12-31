@@ -135,7 +135,10 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                     <BillingText billing={serviceDetails.billing} />
                 </Descriptions.Item>
                 <Descriptions.Item label={'Service API'}>
-                    <ApiDoc id={serviceDetails.serviceTemplateId} styleClass={appStyles.serviceApiDocLink} />
+                    <ApiDoc
+                        serviceTemplateId={serviceDetails.serviceTemplateId}
+                        styleClass={appStyles.serviceApiDocLink}
+                    />
                 </Descriptions.Item>
                 <Descriptions.Item label='Contact Details'>
                     <ContactDetailsText

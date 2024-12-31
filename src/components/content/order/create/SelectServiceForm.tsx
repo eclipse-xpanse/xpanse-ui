@@ -369,7 +369,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                                 <div className={serviceOrderStyles.serviceVendorContactClass}>
                                     <div className={serviceOrderStyles.serviceApiDocClass}>
                                         <ApiDoc
-                                            id={getServiceTemplateId()}
+                                            serviceTemplateId={getServiceTemplateId()}
                                             styleClass={serviceOrderStyles.contentTitleApi}
                                         ></ApiDoc>
                                     </div>

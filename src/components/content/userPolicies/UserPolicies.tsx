@@ -13,23 +13,23 @@ import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import { UserPolicy, csp, name } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
-import { AddOrUpdatePolicy } from './AddOrUpdatePolicy';
-import PoliciesManagementServiceListError from './PoliciesManagementServiceListError';
-import PolicyDeleteResultStatus from './delete/PolicyDeleteResultStatus';
-import { useDeletePolicyRequest } from './delete/useDeletePolicyRequest';
-import { updateCspFilters, updateEnabledFilters } from './policiesParams';
-import useListPoliciesManagementServiceQuery from './useListPoliciesManagementServiceQuery';
+import { AddOrUpdateUserPolicy } from './AddOrUpdateUserPolicy.tsx';
+import UserPoliciesManagementServiceListError from './UserPoliciesManagementServiceListError.tsx';
+import UserPolicyDeleteResultStatus from './delete/UserPolicyDeleteResultStatus.tsx';
+import { useDeleteUserPolicyRequest } from './delete/useDeleteUserPolicyRequest';
+import useListUserPoliciesManagementServiceQuery from './useListUserPoliciesManagementServiceQuery.ts';
+import { updateCspFilters, updateEnabledFilters } from './userPoliciesParams.ts';
 
-function Policies(): React.JSX.Element {
+function UserPolicies(): React.JSX.Element {
     const [id, setId] = useState<string>('');
     const [currentPolicyService, setCurrentPolicyService] = useState<UserPolicy | undefined>(undefined);
     let cspFilters: ColumnFilterItem[] = [];
     let enabledFilters: ColumnFilterItem[] = [];
     let policiesManagementServiceList: UserPolicy[] = [];
-    const listPoliciesManagementServiceQuery = useListPoliciesManagementServiceQuery();
+    const listPoliciesManagementServiceQuery = useListUserPoliciesManagementServiceQuery();
     const [isOpenAddOrUpdatePolicyModal, setIsOpenAddOrUpdatePolicyModal] = useState<boolean>(false);
 
-    const deletePoliciesManagementServiceRequest = useDeletePolicyRequest();
+    const deletePoliciesManagementServiceRequest = useDeleteUserPolicyRequest();
 
     if (listPoliciesManagementServiceQuery.isSuccess) {
         cspFilters = updateCspFilters();
@@ -196,7 +196,7 @@ function Policies(): React.JSX.Element {
         <>
             <div className={tableStyles.genericTableContainer}>
                 {deletePoliciesManagementServiceRequest.isSuccess && id.length > 0 ? (
-                    <PolicyDeleteResultStatus
+                    <UserPolicyDeleteResultStatus
                         id={id}
                         isError={deletePoliciesManagementServiceRequest.isError}
                         isSuccess={deletePoliciesManagementServiceRequest.isSuccess}
@@ -238,7 +238,7 @@ function Policies(): React.JSX.Element {
                     </div>
                 </div>
                 {listPoliciesManagementServiceQuery.isError ? (
-                    <PoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />
+                    <UserPoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />
                 ) : (
                     <></>
                 )}
@@ -251,7 +251,7 @@ function Policies(): React.JSX.Element {
                     destroyOnClose={true}
                     onCancel={closeAddOrUpdatePoliciesManagementServiceModal}
                 >
-                    <AddOrUpdatePolicy
+                    <AddOrUpdateUserPolicy
                         currentPolicyService={currentPolicyService}
                         getCancelUpdateStatus={getCancelUpdateStatus}
                     />
@@ -269,4 +269,4 @@ function Policies(): React.JSX.Element {
     );
 }
 
-export default Policies;
+export default UserPolicies;

@@ -56,7 +56,7 @@ const Services = lazy(() => import('./components/content/order/services/Services
 const MyServices = lazy(() => import('./components/content/deployedServices/myServices/MyServices.tsx'));
 const Monitor = lazy(() => import('./components/content/monitor/Monitor.tsx'));
 const Credentials = lazy(() => import('./components/content/credentials/Credentials.tsx'));
-const Policies = lazy(() => import('.//components/content/policies/Policies.tsx'));
+const Policies = lazy(() => import('./components/content/userPolicies/UserPolicies.tsx'));
 const Reports = lazy(() => import('./components/content/deployedServices/reports/Reports.tsx'));
 const Workflows = lazy(() => import('./components/content/workflows/Workflows.tsx'));
 const ServiceReviews = lazy(() => import('./components/content/review/ServiceReviews.tsx'));

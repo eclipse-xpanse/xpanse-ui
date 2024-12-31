@@ -6,11 +6,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { deleteUserPolicy, DeleteUserPolicyData } from '../../../../xpanse-api/generated';
 
-export function useDeletePolicyRequest() {
+export function useDeleteUserPolicyRequest() {
     return useMutation({
-        mutationFn: (policyId: string) => {
+        mutationFn: (userPolicyId: string) => {
             const data: DeleteUserPolicyData = {
-                policyId: policyId,
+                userPolicyId: userPolicyId,
             };
             return deleteUserPolicy(data);
         },

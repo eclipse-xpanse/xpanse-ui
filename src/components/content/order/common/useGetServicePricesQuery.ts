@@ -24,7 +24,7 @@ export default function useGetServicePricesQuery(
         queryKey: ['getServicePricesQuery', serviceTemplateId, regionName, siteName, billingMode, flavorList],
         queryFn: async () => {
             const data: GetPricesByServiceData = {
-                templateId: serviceTemplateId,
+                serviceTemplateId: serviceTemplateId,
                 regionName: regionName,
                 siteName: siteName,
                 billingMode: billingMode as billingMode,

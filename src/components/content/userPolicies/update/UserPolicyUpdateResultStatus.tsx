@@ -8,9 +8,9 @@ import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ErrorResponse, UserPolicy } from '../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import PolicySubmitResultDetails from '../PolicySubmitResultDetails';
+import UserPolicySubmitResultDetails from '../UserPolicySubmitResultDetails.tsx';
 
-export default function PolicyUpdateResultStatus({
+export default function UserPolicyUpdateResultStatus({
     isError,
     isSuccess,
     error,
@@ -29,7 +29,7 @@ export default function PolicyUpdateResultStatus({
                     {' '}
                     <Alert
                         message={response.details}
-                        description={<PolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
+                        description={<UserPolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
                         showIcon
                         closable={true}
                         type={'error'}
@@ -42,7 +42,7 @@ export default function PolicyUpdateResultStatus({
                     {' '}
                     <Alert
                         message={error?.message}
-                        description={<PolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
+                        description={<UserPolicySubmitResultDetails msg={'Policy update request failed'} uuid={''} />}
                         showIcon
                         closable={true}
                         type={'error'}
@@ -59,7 +59,7 @@ export default function PolicyUpdateResultStatus({
                 <Alert
                     message={'Policy Process Status'}
                     description={
-                        <PolicySubmitResultDetails
+                        <UserPolicySubmitResultDetails
                             msg={'Policy updated successfully'}
                             uuid={currentPolicyService === undefined ? '' : currentPolicyService.userPolicyId}
                         />

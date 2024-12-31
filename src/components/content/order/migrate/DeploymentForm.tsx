@@ -104,7 +104,10 @@ export const DeploymentForm = ({
                 <div className={tableStyles.genericTableContainer}>
                     <div className={appStyles.contentTitle}>
                         <div>
-                            <ApiDoc id={deployParams.id} styleClass={serviceOrderStyles.contentTitleApi}></ApiDoc>
+                            <ApiDoc
+                                serviceTemplateId={deployParams.id}
+                                styleClass={serviceOrderStyles.contentTitleApi}
+                            ></ApiDoc>
                         </div>
                     </div>
                 </div>
