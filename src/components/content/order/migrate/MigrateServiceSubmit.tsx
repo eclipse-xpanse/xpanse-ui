@@ -24,7 +24,7 @@ import {
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
+import useGetOrderableServiceDetailsByServiceIdQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
 import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
@@ -93,7 +93,7 @@ export const MigrateServiceSubmit = ({
         getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(currentSelectedService.serviceTemplateId);
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);
 
     const migrate = () => {
         if (deployParams !== undefined) {

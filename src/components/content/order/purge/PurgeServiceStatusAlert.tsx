@@ -6,11 +6,17 @@
 import { Alert } from 'antd';
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
-import { DeployedService, ErrorResponse, errorType, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import {
+    DeployedService,
+    ErrorResponse,
+    errorType,
+    serviceDeploymentState,
+    ServiceProviderContactDetails,
+} from '../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList.tsx';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 export function PurgeServiceStatusAlert({
@@ -18,46 +24,51 @@ export function PurgeServiceStatusAlert({
     purgeSubmitError,
     statusPollingError,
     closePurgeResultAlert,
+    serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
     purgeSubmitError: Error | null;
     statusPollingError: Error | null;
     closePurgeResultAlert: (arg: boolean) => void;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-
     const onClose = () => {
         closePurgeResultAlert(true);
     };
+
+    function getPurgeSubmissionFailedDisplay(reasons: string[]) {
+        return (
+            <div>
+                <span>{'Purge request failed.'}</span>
+                <div>{convertStringArrayToUnorderedList(reasons)}</div>
+            </div>
+        );
+    }
 
     if (purgeSubmitError) {
         let errorMessage;
         if (isHandleKnownErrorResponse(purgeSubmitError)) {
             const response: ErrorResponse = purgeSubmitError.body;
-            errorMessage = response.details;
+            errorMessage = getPurgeSubmissionFailedDisplay(response.details);
         } else {
-            errorMessage = purgeSubmitError.message;
+            errorMessage = getPurgeSubmissionFailedDisplay([purgeSubmitError.message]);
         }
         deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
         return (
             <div className={submitAlertStyles.submitAlertTip}>
                 {' '}
                 <Alert
-                    message={errorMessage}
-                    description={
-                        <OrderSubmitResultDetails msg={'Purge request failed'} uuid={deployedService.serviceId} />
-                    }
+                    message={'Processing Status'}
+                    description={<OrderSubmitResultDetails msg={errorMessage} uuid={deployedService.serviceId} />}
                     showIcon
                     closable={true}
                     onClose={onClose}
                     type={'error'}
                     action={
                         <>
-                            {getOrderableServiceDetails.isSuccess ? (
+                            {serviceProviderContactDetails ? (
                                 <ContactDetailsText
-                                    serviceProviderContactDetails={
-                                        getOrderableServiceDetails.data.serviceProviderContactDetails
-                                    }
+                                    serviceProviderContactDetails={serviceProviderContactDetails}
                                     showFor={ContactDetailsShowType.Order}
                                 />
                             ) : (
@@ -79,10 +90,10 @@ export function PurgeServiceStatusAlert({
                     <div className={submitAlertStyles.submitAlertTip}>
                         {' '}
                         <Alert
-                            message={response.details}
+                            message={'Processing Status'}
                             description={
                                 <OrderSubmitResultDetails
-                                    msg={'Purge request failed'}
+                                    msg={getPurgeSubmissionFailedDisplay(response.details)}
                                     uuid={deployedService.serviceId}
                                 />
                             }
@@ -92,11 +103,9 @@ export function PurgeServiceStatusAlert({
                             type={'error'}
                             action={
                                 <>
-                                    {getOrderableServiceDetails.isSuccess ? (
+                                    {serviceProviderContactDetails ? (
                                         <ContactDetailsText
-                                            serviceProviderContactDetails={
-                                                getOrderableServiceDetails.data.serviceProviderContactDetails
-                                            }
+                                            serviceProviderContactDetails={serviceProviderContactDetails}
                                             showFor={ContactDetailsShowType.Order}
                                         />
                                     ) : (

@@ -9,7 +9,7 @@ import { DeployResource } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import useGetOrderableServiceDetailsQuery from '../myServices/query/useGetOrderableServiceDetailsQuery';
+import useGetOrderableServiceDetailsByServiceIdQuery from '../myServices/query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import { DeployedResources } from './DeployedResources';
 
 export function DeployedServicesDetailsContent({
@@ -17,16 +17,16 @@ export function DeployedServicesDetailsContent({
     requestParams,
     resultMessage,
     deployResources,
-    serviceTemplateId,
+    serviceId,
 }: {
     content: Map<string, string>;
     requestParams: Map<string, unknown>;
     resultMessage: React.JSX.Element | undefined;
     deployResources: DeployResource[];
-    serviceTemplateId?: string;
+    serviceId: string;
 }): React.JSX.Element {
     const items: React.JSX.Element[] = [];
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(serviceTemplateId);
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(serviceId);
 
     if (getOrderableServiceDetails.isSuccess) {
         items.push(

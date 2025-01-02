@@ -63,7 +63,7 @@ export const MyServiceDetails = ({
                 requestParams={requestMap}
                 resultMessage={resultMessage}
                 deployResources={deployResourceMap}
-                serviceTemplateId={deployedService.serviceTemplateId}
+                serviceId={deployedService.serviceId}
             />
         </>
     );
