@@ -12,13 +12,13 @@ import {
     ErrorResponse,
     ServiceOrder,
     ServiceOrderStatusUpdate,
+    ServiceProviderContactDetails,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
-import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import OrderSubmitResultDetails from '../../orderStatus/OrderSubmitResultDetails';
 
 function RestartServiceStatusAlert({
@@ -26,14 +26,14 @@ function RestartServiceStatusAlert({
     serviceStateRestartQuery,
     closeRestartResultAlert,
     getRestartServiceDetailsQuery,
+    serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
     serviceStateRestartQuery: UseMutationResult<ServiceOrder, Error, string>;
     closeRestartResultAlert: (arg: boolean) => void;
     getRestartServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-
     const onClose = () => {
         closeRestartResultAlert(true);
     };
@@ -60,11 +60,9 @@ function RestartServiceStatusAlert({
                     type={'error'}
                     action={
                         <>
-                            {getOrderableServiceDetails.isSuccess ? (
+                            {serviceProviderContactDetails ? (
                                 <ContactDetailsText
-                                    serviceProviderContactDetails={
-                                        getOrderableServiceDetails.data.serviceProviderContactDetails
-                                    }
+                                    serviceProviderContactDetails={serviceProviderContactDetails}
                                     showFor={ContactDetailsShowType.Order}
                                 />
                             ) : (
@@ -97,11 +95,9 @@ function RestartServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (
@@ -158,11 +154,9 @@ function RestartServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (

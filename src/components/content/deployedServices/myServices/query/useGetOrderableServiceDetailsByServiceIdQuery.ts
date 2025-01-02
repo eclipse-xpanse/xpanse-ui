@@ -9,7 +9,7 @@ import {
     GetOrderableServiceDetailsByServiceIdData,
 } from '../../../../../xpanse-api/generated';
 
-export default function useGetOrderableServiceDetailsQuery(serviceId: string | undefined) {
+export default function useGetOrderableServiceDetailsByServiceIdQuery(serviceId: string | undefined) {
     return useQuery({
         queryKey: ['getOrderableServiceDetailsByServiceId', serviceId],
         queryFn: () => {

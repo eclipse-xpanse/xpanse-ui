@@ -59,7 +59,7 @@ import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
 import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAlert';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
-import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery';
+import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery.ts';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
 import RecreateServiceStatusAlert from '../../order/recreate/RecreateServiceStatusAlert.tsx';
 import useRecreateRequest from '../../order/recreate/useRecreateRequest.ts';
@@ -81,7 +81,7 @@ import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunning
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
-import useGetOrderableServiceDetailsQuery from './query/useGetOrderableServiceDetailsQuery';
+import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
 
 function MyServices(): React.JSX.Element {
@@ -124,13 +124,13 @@ function MyServices(): React.JSX.Element {
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
     const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery();
     const serviceRecreateRequest = useRecreateRequest();
-    const serviceStateStartQuery = useServiceStateStartQuery(refreshData);
-    const serviceStateStopQuery = useServiceStateStopQuery(refreshData);
-    const serviceStateRestartQuery = useServiceStateRestartQuery(refreshData);
+    const serviceStateStartQuery = useServiceStateStartQuery();
+    const serviceStateStopQuery = useServiceStateStopQuery();
+    const serviceStateRestartQuery = useServiceStateRestartQuery();
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
     const navigate = useNavigate();
     const listDeployedServicesQuery = useListDeployedServicesDetailsQuery();
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(activeRecord?.serviceId);
+    const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(activeRecord?.serviceId);
 
     const getDestroyServiceStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceDestroyQuery.data?.orderId ?? '',
@@ -168,6 +168,12 @@ function MyServices(): React.JSX.Element {
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
+    const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
+        activeRecord?.serviceId,
+        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
+        servicePurgeQuery.isSuccess
+    );
+
     const getServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         activeRecord?.serviceId,
         activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
@@ -175,40 +181,64 @@ function MyServices(): React.JSX.Element {
     );
 
     useEffect(() => {
-        void listDeployedServicesQuery.refetch();
+        if (
+            servicePurgeQuery.isPending ||
+            servicePurgeQuery.isError ||
+            getPurgeServiceDetailsQuery.isError ||
+            serviceDestroyQuery.isError ||
+            getDestroyServiceStatusPollingQuery.data?.isOrderCompleted ||
+            serviceRecreateRequest.isPending ||
+            serviceRecreateRequest.isError ||
+            getRecreateServiceOrderStatusPollingQuery.isError ||
+            getRecreateServiceOrderStatusPollingQuery.data?.isOrderCompleted ||
+            serviceStateStartQuery.isPending ||
+            serviceStateStartQuery.isError ||
+            getStartServiceDetailsQuery.isError ||
+            getStartServiceDetailsQuery.data?.isOrderCompleted ||
+            serviceStateStopQuery.isPending ||
+            serviceStateStopQuery.isError ||
+            getStopServiceDetailsQuery.isError ||
+            getStopServiceDetailsQuery.data?.isOrderCompleted ||
+            serviceStateRestartQuery.isPending ||
+            serviceStateRestartQuery.isError ||
+            getRestartServiceDetailsQuery.isError ||
+            getRestartServiceDetailsQuery.data?.isOrderCompleted ||
+            redeployFailedDeploymentQuery.isPending ||
+            redeployFailedDeploymentQuery.isError ||
+            getReDeployLatestServiceOrderStatusQuery.isError ||
+            getReDeployLatestServiceOrderStatusQuery.data?.isOrderCompleted
+        ) {
+            void listDeployedServicesQuery.refetch();
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
+        servicePurgeQuery.isPending,
+        servicePurgeQuery.isError,
+        getPurgeServiceDetailsQuery.isError,
         serviceDestroyQuery.isError,
-        serviceDestroyQuery.isPending,
-        getDestroyServiceStatusPollingQuery.isError,
         getDestroyServiceStatusPollingQuery.data?.isOrderCompleted,
-        serviceRecreateRequest.isError,
         serviceRecreateRequest.isPending,
+        serviceRecreateRequest.isError,
         getRecreateServiceOrderStatusPollingQuery.isError,
         getRecreateServiceOrderStatusPollingQuery.data?.isOrderCompleted,
-        serviceStateStartQuery.isError,
         serviceStateStartQuery.isPending,
+        serviceStateStartQuery.isError,
         getStartServiceDetailsQuery.isError,
         getStartServiceDetailsQuery.data?.isOrderCompleted,
-        serviceStateStopQuery.isError,
         serviceStateStopQuery.isPending,
+        serviceStateStopQuery.isError,
         getStopServiceDetailsQuery.isError,
         getStopServiceDetailsQuery.data?.isOrderCompleted,
-        serviceStateRestartQuery.isError,
         serviceStateRestartQuery.isPending,
+        serviceStateRestartQuery.isError,
         getRestartServiceDetailsQuery.isError,
         getRestartServiceDetailsQuery.data?.isOrderCompleted,
-        redeployFailedDeploymentQuery.isError,
         redeployFailedDeploymentQuery.isPending,
+        redeployFailedDeploymentQuery.isError,
         getReDeployLatestServiceOrderStatusQuery.isError,
         getReDeployLatestServiceOrderStatusQuery.data?.isOrderCompleted,
     ]);
-
-    const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
-        activeRecord?.serviceId,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        servicePurgeQuery.isSuccess
-    );
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
         if (serviceDeploymentStateInQuery) {
@@ -850,7 +880,6 @@ function MyServices(): React.JSX.Element {
     const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
-            refreshData();
             setIsDestroyRequestSubmitted(false);
         }
     };
@@ -879,7 +908,6 @@ function MyServices(): React.JSX.Element {
     const closePurgeResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
-            refreshData();
             setIsPurgeRequestSubmitted(false);
         }
     };
@@ -894,7 +922,6 @@ function MyServices(): React.JSX.Element {
     const closeRecreateResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
-            refreshData();
             setIsRecreateRequestSubmitted(false);
         }
     };
@@ -1532,6 +1559,7 @@ function MyServices(): React.JSX.Element {
                     serviceStateDestroyQueryError={getDestroyServiceStatusPollingQuery.error}
                     serviceStateDestroyQueryData={getDestroyServiceStatusPollingQuery.data}
                     closeDestroyResultAlert={closeDestroyResultAlert}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {isStartRequestSubmitted && activeRecord ? (
@@ -1541,6 +1569,7 @@ function MyServices(): React.JSX.Element {
                     serviceStateStartQuery={serviceStateStartQuery}
                     closeStartResultAlert={closeStartResultAlert}
                     getStartServiceDetailsQuery={getStartServiceDetailsQuery}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {isStopRequestSubmitted && activeRecord ? (
@@ -1550,6 +1579,7 @@ function MyServices(): React.JSX.Element {
                     serviceStateStopQuery={serviceStateStopQuery}
                     closeStopResultAlert={closeStopResultAlert}
                     getStopServiceDetailsQuery={getStopServiceDetailsQuery}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {isRestartRequestSubmitted && activeRecord ? (
@@ -1559,6 +1589,7 @@ function MyServices(): React.JSX.Element {
                     serviceStateRestartQuery={serviceStateRestartQuery}
                     closeRestartResultAlert={closeRestartResultAlert}
                     getRestartServiceDetailsQuery={getRestartServiceDetailsQuery}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {isPurgeRequestSubmitted && activeRecord ? (
@@ -1568,6 +1599,7 @@ function MyServices(): React.JSX.Element {
                     purgeSubmitError={servicePurgeQuery.error}
                     statusPollingError={getPurgeServiceDetailsQuery.error}
                     closePurgeResultAlert={closePurgeResultAlert}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {isRetryDeployRequestSubmitted && activeRecord ? (
@@ -1592,6 +1624,7 @@ function MyServices(): React.JSX.Element {
                     recreateServiceOrderStatusPollingQueryError={getRecreateServiceOrderStatusPollingQuery.error}
                     recreateServiceOrderStatusPollingQueryData={getRecreateServiceOrderStatusPollingQuery.data}
                     closeRecreateResultAlert={closeRecreateResultAlert}
+                    serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
             {activeRecord ? (

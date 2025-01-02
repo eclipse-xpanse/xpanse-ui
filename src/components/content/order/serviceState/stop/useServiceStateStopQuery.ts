@@ -6,7 +6,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { stopService, type StopServiceData } from '../../../../../xpanse-api/generated';
 
-export function useServiceStateStopQuery(refreshData: () => void) {
+export function useServiceStateStopQuery() {
     return useMutation({
         mutationFn: (serviceId: string) => {
             const data: StopServiceData = {
@@ -14,6 +14,5 @@ export function useServiceStateStopQuery(refreshData: () => void) {
             };
             return stopService(data);
         },
-        onSuccess: refreshData,
     });
 }
