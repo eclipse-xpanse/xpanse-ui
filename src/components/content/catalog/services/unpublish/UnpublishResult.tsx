@@ -3,17 +3,25 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useQueryClient } from '@tanstack/react-query';
+import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { category } from '../../../../../xpanse-api/generated';
+import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetUnpublishMutationState } from './UnpublishMutation.ts';
 
-export function UnpublishResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
+export function UnpublishResult({
+    id,
+    category,
+    unPublishRequest,
+}: {
+    id: string;
+    category: category;
+    unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+}): React.JSX.Element | undefined {
     const useUnpublishRequestState = useGetUnpublishMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -27,7 +35,7 @@ export function UnpublishResult({ id, category }: { id: string; category: catego
     };
 
     if (useUnpublishRequestState[0]) {
-        if (useUnpublishRequestState[0].status === 'success') {
+        if (useUnpublishRequestState[0].status === 'success' && unPublishRequest.isSuccess) {
             return (
                 <Alert
                     message='Service Unpublished Successfully'
@@ -40,7 +48,7 @@ export function UnpublishResult({ id, category }: { id: string; category: catego
             );
         }
 
-        if (useUnpublishRequestState[0].status === 'error') {
+        if (useUnpublishRequestState[0].status === 'error' || unPublishRequest.isError) {
             if (useUnpublishRequestState[0].error) {
                 return (
                     <div>

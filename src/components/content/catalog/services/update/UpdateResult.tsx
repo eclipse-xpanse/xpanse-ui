@@ -3,42 +3,41 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UseMutationResult } from '@tanstack/react-query';
 import { Alert, Button } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import errorAlertStyles from '../../../../../styles/error-alert.module.css';
-import { Ocl, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
+import { Ocl, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
 function UpdateResult({
     ocl,
-    serviceRegistrationStatus,
-    updateRequestStatus,
+    updateServiceRequest,
     updateResult,
     onRemove,
     retryRequest,
     tryNewFile,
 }: {
     ocl: Ocl;
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
-    updateRequestStatus: string;
+    updateServiceRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, Ocl>;
     updateResult: string[];
     onRemove: () => void;
     retryRequest: () => void;
     tryNewFile: () => void;
 }): React.JSX.Element {
-    if (updateRequestStatus === 'success') {
+    if (updateServiceRequest.isSuccess) {
         return (
             <Alert
                 type={'success'}
                 message={
-                    serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED ? (
+                    updateServiceRequest.data.requestSubmittedForReview ? (
                         <>
-                            Service <b>{ocl.name}</b> updated in catalog successfully.
+                            Service template <b>{ocl.name}</b> update request submitted to review.
                         </>
                     ) : (
                         <>
-                            Service <b>{ocl.name}</b> update request submitted successfully.
+                            Service template <b>{ocl.name}</b> updated in catalog successfully.
                         </>
                     )
                 }
@@ -48,7 +47,9 @@ function UpdateResult({
                 description={convertStringArrayToUnorderedList(updateResult)}
             />
         );
-    } else if (updateRequestStatus === 'error') {
+    }
+
+    if (updateServiceRequest.isError) {
         return (
             <Alert
                 type={'error'}
