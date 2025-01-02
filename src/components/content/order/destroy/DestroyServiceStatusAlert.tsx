@@ -13,13 +13,13 @@ import {
     serviceDeploymentState,
     ServiceOrder,
     ServiceOrderStatusUpdate,
+    ServiceProviderContactDetails,
     taskStatus,
 } from '../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
 function DestroyServiceStatusAlert({
@@ -28,15 +28,15 @@ function DestroyServiceStatusAlert({
     serviceStateDestroyQueryError,
     serviceStateDestroyQueryData,
     closeDestroyResultAlert,
+    serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
     destroySubmitRequest: UseMutationResult<ServiceOrder, Error, string>;
     serviceStateDestroyQueryError: Error | null;
     serviceStateDestroyQueryData: ServiceOrderStatusUpdate | undefined;
     closeDestroyResultAlert: (arg: boolean) => void;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-
     const getRecreateDeployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         destroySubmitRequest.data?.serviceId ?? '',
         deployedService.serviceHostingType,
@@ -82,11 +82,9 @@ function DestroyServiceStatusAlert({
                     type={'error'}
                     action={
                         <>
-                            {getOrderableServiceDetails.isSuccess ? (
+                            {serviceProviderContactDetails ? (
                                 <ContactDetailsText
-                                    serviceProviderContactDetails={
-                                        getOrderableServiceDetails.data.serviceProviderContactDetails
-                                    }
+                                    serviceProviderContactDetails={serviceProviderContactDetails}
                                     showFor={ContactDetailsShowType.Order}
                                 />
                             ) : (
@@ -120,11 +118,9 @@ function DestroyServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (
@@ -173,11 +169,9 @@ function DestroyServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (

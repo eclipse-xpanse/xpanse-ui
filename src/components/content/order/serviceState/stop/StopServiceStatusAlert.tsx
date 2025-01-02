@@ -12,13 +12,13 @@ import {
     ErrorResponse,
     ServiceOrder,
     ServiceOrderStatusUpdate,
+    ServiceProviderContactDetails,
     serviceState,
     taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
-import useGetOrderableServiceDetailsQuery from '../../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery';
 import OrderSubmitResultDetails from '../../orderStatus/OrderSubmitResultDetails';
 
 function StopServiceStatusAlert({
@@ -26,14 +26,14 @@ function StopServiceStatusAlert({
     serviceStateStopQuery,
     closeStopResultAlert,
     getStopServiceDetailsQuery,
+    serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
     serviceStateStopQuery: UseMutationResult<ServiceOrder, Error, string>;
     closeStopResultAlert: (arg: boolean) => void;
     getStopServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(deployedService.serviceTemplateId);
-
     const onClose = () => {
         closeStopResultAlert(true);
     };
@@ -64,11 +64,9 @@ function StopServiceStatusAlert({
                     type={'error'}
                     action={
                         <>
-                            {getOrderableServiceDetails.isSuccess ? (
+                            {serviceProviderContactDetails ? (
                                 <ContactDetailsText
-                                    serviceProviderContactDetails={
-                                        getOrderableServiceDetails.data.serviceProviderContactDetails
-                                    }
+                                    serviceProviderContactDetails={serviceProviderContactDetails}
                                     showFor={ContactDetailsShowType.Order}
                                 />
                             ) : (
@@ -101,11 +99,9 @@ function StopServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (
@@ -162,11 +158,9 @@ function StopServiceStatusAlert({
                         type={'error'}
                         action={
                             <>
-                                {getOrderableServiceDetails.isSuccess ? (
+                                {serviceProviderContactDetails ? (
                                     <ContactDetailsText
-                                        serviceProviderContactDetails={
-                                            getOrderableServiceDetails.data.serviceProviderContactDetails
-                                        }
+                                        serviceProviderContactDetails={serviceProviderContactDetails}
                                         showFor={ContactDetailsShowType.Order}
                                     />
                                 ) : (

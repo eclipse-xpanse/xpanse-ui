@@ -12,12 +12,12 @@ import {
     serviceDeploymentState,
     ServiceOrder,
     ServiceOrderStatusUpdate,
+    ServiceProviderContactDetails,
     taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
-import useGetOrderableServiceDetailsQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsQuery.ts';
 import { RecreateOrderSubmitResult } from './RecreateOrderSubmitResult.tsx';
 import { RecreationProcessingStatus } from './RecreationProcessingStatus.tsx';
 
@@ -27,15 +27,15 @@ function RecreateServiceStatusAlert({
     recreateServiceOrderStatusPollingQueryError,
     recreateServiceOrderStatusPollingQueryData,
     closeRecreateResultAlert,
+    serviceProviderContactDetails,
 }: {
     currentSelectedService: DeployedService;
     recreateRequest: UseMutationResult<ServiceOrder, Error, string>;
     recreateServiceOrderStatusPollingQueryError: Error | null;
     recreateServiceOrderStatusPollingQueryData: ServiceOrderStatusUpdate | undefined;
     closeRecreateResultAlert: (arg: boolean) => void;
+    serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getOrderableServiceDetails = useGetOrderableServiceDetailsQuery(currentSelectedService.serviceTemplateId);
-
     const getRecreateDeployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         recreateRequest.data?.serviceId ?? '',
         currentSelectedService.serviceHostingType,
@@ -135,9 +135,7 @@ function RecreateServiceStatusAlert({
             type={alertType}
             stopWatch={stopWatch}
             closeRecreateResultAlert={closeRecreateResultAlert}
-            contactServiceDetails={
-                alertType !== 'success' ? getOrderableServiceDetails.data?.serviceProviderContactDetails : undefined
-            }
+            contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
         />
     );
 }

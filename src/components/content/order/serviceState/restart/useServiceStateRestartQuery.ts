@@ -6,7 +6,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { restartService, type RestartServiceData } from '../../../../../xpanse-api/generated';
 
-export function useServiceStateRestartQuery(refreshData: () => void) {
+export function useServiceStateRestartQuery() {
     return useMutation({
         mutationFn: (serviceId: string) => {
             const data: RestartServiceData = {
@@ -14,6 +14,5 @@ export function useServiceStateRestartQuery(refreshData: () => void) {
             };
             return restartService(data);
         },
-        onSuccess: refreshData,
     });
 }
