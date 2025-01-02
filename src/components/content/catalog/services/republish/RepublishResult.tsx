@@ -3,17 +3,25 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useQueryClient } from '@tanstack/react-query';
+import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { category } from '../../../../../xpanse-api/generated';
+import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute } from '../../../../utils/constants';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetRepublishMutationState } from './RepublishMutation.ts';
 
-export function RepublishResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
+export function RepublishResult({
+    id,
+    category,
+    republishRequest,
+}: {
+    id: string;
+    category: category;
+    republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+}): React.JSX.Element | undefined {
     const useRepublishRequestState = useGetRepublishMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
@@ -27,10 +35,14 @@ export function RepublishResult({ id, category }: { id: string; category: catego
     };
 
     if (useRepublishRequestState[0]) {
-        if (useRepublishRequestState[0].status === 'success') {
+        if (republishRequest.isSuccess && useRepublishRequestState[0].status === 'success') {
             return (
                 <Alert
-                    message={'service added to catalog again successfully'}
+                    message={
+                        republishRequest.data.requestSubmittedForReview
+                            ? 'service template update request submitted to review'
+                            : 'Service template updated in catalog successfully'
+                    }
                     description={'Service submitted for review of cloud provider.'}
                     showIcon
                     type={'success'}
@@ -40,7 +52,7 @@ export function RepublishResult({ id, category }: { id: string; category: catego
             );
         }
 
-        if (useRepublishRequestState[0].status === 'error') {
+        if (republishRequest.isError || useRepublishRequestState[0].status === 'error') {
             if (useRepublishRequestState[0].error) {
                 return (
                     <div>

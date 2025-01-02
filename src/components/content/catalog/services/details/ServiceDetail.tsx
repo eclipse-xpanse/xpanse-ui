@@ -121,7 +121,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
-                <Descriptions.Item label='Status'>
+                <Descriptions.Item label='Registration Status'>
                     <ServiceTemplateRegisterStatus
                         serviceRegistrationStatus={
                             serviceDetails.serviceTemplateRegistrationState as serviceTemplateRegistrationState

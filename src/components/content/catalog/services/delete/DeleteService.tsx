@@ -7,18 +7,17 @@ import { CloseCircleOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
+import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { useDeleteRequest } from './DeleteServiceMutation';
 
 function DeleteService({
-    id,
+    serviceDetail,
     setIsViewDisabled,
-    isAvailableInCatalog,
 }: {
-    id: string;
+    serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    isAvailableInCatalog: boolean;
 }): React.JSX.Element {
-    const deleteRequest = useDeleteRequest(id);
+    const deleteRequest = useDeleteRequest(serviceDetail.serviceTemplateId);
     const deleteService = () => {
         setIsViewDisabled(true);
         deleteRequest.mutate();
@@ -39,7 +38,7 @@ function DeleteService({
                     icon={<CloseCircleOutlined />}
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
-                    disabled={deleteRequest.isSuccess || isAvailableInCatalog}
+                    disabled={deleteRequest.isSuccess || serviceDetail.isAvailableInCatalog}
                 >
                     Delete
                 </Button>

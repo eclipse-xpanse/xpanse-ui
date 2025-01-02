@@ -3,18 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { EnvironmentOutlined } from '@ant-design/icons';
 import { Empty, Image, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import {
-    category,
-    name,
-    ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
-} from '../../../../../xpanse-api/generated';
+import { category, name, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -29,17 +23,15 @@ import {
 import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
-import { ServicePolicies } from '../policies/ServicePolicies';
-import { useRepublishRequest } from '../republish/RepublishMutation.ts';
+import { useRepublishRequest } from '../republish/RepublishMutation';
 import { RepublishResult } from '../republish/RepublishResult.tsx';
 import RepublishService from '../republish/RepublishService.tsx';
+import { useUnpublishRequest } from '../unpublish/UnpublishMutation';
 import { UnpublishResult } from '../unpublish/UnpublishResult.tsx';
 import UnpublishService from '../unpublish/UnpublishService.tsx';
 import UpdateService from '../update/UpdateService';
-import ServiceDetail from './ServiceDetail';
-import { ServiceHostingOptions } from './ServiceHostingOptions';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
-
+import ServiceTemplateDetails from './serviceTemplateDetails';
 function ServiceProvider({
     categoryOclData,
     selectedServiceNameInTree,
@@ -57,39 +49,18 @@ function ServiceProvider({
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
-    const serviceCspInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }, [urlParams]);
 
-    const serviceHostingTypeInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceHostingTypeQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }, [urlParams]);
+    // Memoized query params
+    const serviceCspInQuery = useMemo(() => decodeURI(urlParams.get(serviceCspQuery) ?? ''), [urlParams]);
+    const serviceHostingTypeInQuery = useMemo(
+        () => decodeURI(urlParams.get(serviceHostingTypeQuery) ?? ''),
+        [urlParams]
+    );
+    const serviceVersionInQuery = useMemo(() => decodeURI(urlParams.get(serviceVersionKeyQuery) ?? ''), [urlParams]);
+    const serviceNameInQuery = useMemo(() => decodeURI(urlParams.get(serviceNameKeyQuery) ?? ''), [urlParams]);
 
-    const serviceVersionInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }, [urlParams]);
-
-    const serviceNameInQuery = useMemo(() => {
-        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return '';
-    }, [urlParams]);
-
-    let activeServiceDetail: ServiceTemplateDetailVo | undefined = undefined;
+    // Always call the hook with a default value (can be `null` or `undefined`)
+    let activeServiceDetail: ServiceTemplateDetailVo | undefined;
 
     const groupServiceTemplatesByCsp: Map<string, ServiceTemplateDetailVo[]> = new Map<
         string,
@@ -148,9 +119,8 @@ function ServiceProvider({
             }
         }
     }
-
     const republishRequest = useRepublishRequest(activeServiceDetail?.serviceTemplateId ?? '');
-
+    const unPublishRequest = useUnpublishRequest(activeServiceDetail?.serviceTemplateId ?? '');
     const onChangeCsp = (key: string) => {
         void navigate({
             pathname: catalogPageRoute,
@@ -188,8 +158,16 @@ function ServiceProvider({
                 <>
                     {activeServiceDetail ? (
                         <>
-                            <UnpublishResult id={activeServiceDetail.serviceTemplateId} category={category} />
-                            <RepublishResult id={activeServiceDetail.serviceTemplateId} category={category} />
+                            <UnpublishResult
+                                id={activeServiceDetail.serviceTemplateId}
+                                category={category}
+                                unPublishRequest={unPublishRequest}
+                            />
+                            <RepublishResult
+                                id={activeServiceDetail.serviceTemplateId}
+                                category={category}
+                                republishRequest={republishRequest}
+                            />
                             <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
                             <Tabs
                                 items={items}
@@ -199,53 +177,32 @@ function ServiceProvider({
                             />
                             <div className={catalogStyles.updateUnpublishBtnClass}>
                                 <UpdateService
-                                    id={activeServiceDetail.serviceTemplateId}
+                                    serviceDetail={activeServiceDetail}
                                     category={category}
                                     isViewDisabled={isViewDisabled}
-                                    registrationState={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
-                                    isReviewInProgress={activeServiceDetail.isReviewInProgress}
                                 />
                                 <UnpublishService
-                                    id={activeServiceDetail.serviceTemplateId}
+                                    serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
-                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
+                                    unPublishRequest={unPublishRequest}
                                 />
                                 <RepublishService
-                                    id={activeServiceDetail.serviceTemplateId}
+                                    serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
                                     republishRequest={republishRequest}
-                                    serviceRegistrationStatus={
-                                        activeServiceDetail.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                                    }
-                                    isReviewInProgress={activeServiceDetail.isReviewInProgress}
-                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
                                 />
                                 <DeleteService
-                                    id={activeServiceDetail.serviceTemplateId}
+                                    serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
-                                    isAvailableInCatalog={activeServiceDetail.isAvailableInCatalog}
                                 />
                             </div>
-                            <h3 className={catalogStyles.catalogDetailsH3}>
-                                <EnvironmentOutlined />
-                                &nbsp;Service Hosting Options
-                            </h3>
-                            <ServiceHostingOptions
-                                serviceTemplateDetailVos={groupServiceTemplatesByCsp.get(serviceCspInQuery) ?? []}
-                                defaultDisplayedService={activeServiceDetail}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                updateServiceHostingType={onChangeServiceHostingType}
-                            />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
-                            <ServicePolicies
-                                key={activeServiceDetail.serviceTemplateId}
-                                serviceDetails={activeServiceDetail}
+                            <ServiceTemplateDetails
                                 isViewDisabled={isViewDisabled}
+                                serviceDetails={activeServiceDetail}
+                                groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                                serviceCspInQuery={serviceCspInQuery}
+                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                onChangeServiceHostingType={onChangeServiceHostingType}
                             />
                         </>
                     ) : (
