@@ -4,28 +4,28 @@
  */
 
 import { MinusCircleOutlined } from '@ant-design/icons';
+import { UseMutationResult } from '@tanstack/react-query';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
-import { useUnpublishRequest } from './UnpublishMutation.ts';
+import {
+    ServiceTemplateDetailVo,
+    serviceTemplateRegistrationState,
+    ServiceTemplateRequestInfo,
+} from '../../../../../xpanse-api/generated';
 
 function UnpublishService({
-    id,
+    serviceDetail,
     setIsViewDisabled,
-    serviceRegistrationStatus,
-    isAvailableInCatalog,
+    unPublishRequest,
 }: {
-    id: string;
+    serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
-    isAvailableInCatalog: boolean;
+    unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
 }): React.JSX.Element {
-    const unpublishRequest = useUnpublishRequest(id);
-
     const unpublish = () => {
         setIsViewDisabled(true);
-        unpublishRequest.mutate();
+        unPublishRequest.mutate();
     };
 
     return (
@@ -44,9 +44,9 @@ function UnpublishService({
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
-                        unpublishRequest.isSuccess ||
-                        serviceRegistrationStatus !== serviceTemplateRegistrationState.APPROVED ||
-                        !isAvailableInCatalog
+                        unPublishRequest.isSuccess ||
+                        serviceDetail.serviceTemplateRegistrationState !== serviceTemplateRegistrationState.APPROVED ||
+                        !serviceDetail.isAvailableInCatalog
                     }
                 >
                     Unpublish

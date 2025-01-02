@@ -25,6 +25,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
 
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
 
+    // Process data conditionally, but don't return yet
     if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
         const userAvailableServiceList: ServiceTemplateDetailVo[] = availableServiceTemplatesQuery.data;
         categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
@@ -49,6 +50,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
         });
     }
 
+    // Handle errors
     if (availableServiceTemplatesQuery.isError) {
         if (isHandleKnownErrorResponse(availableServiceTemplatesQuery.error)) {
             const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
@@ -74,6 +76,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
         }
     }
 
+    // Handle loading state
     if (availableServiceTemplatesQuery.isLoading || availableServiceTemplatesQuery.isFetching) {
         return (
             <Skeleton
@@ -86,6 +89,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
         );
     }
 
+    // Handle empty state
     if (availableServiceTemplatesQuery.data && availableServiceTemplatesQuery.data.length === 0) {
         return (
             <div className={servicesEmptyStyles.serviceBlankClass}>
@@ -94,6 +98,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
         );
     }
 
+    // Main return
     return (
         <div className={catalogStyles.catalogMiddleware}>
             <div className={catalogStyles.container}>
