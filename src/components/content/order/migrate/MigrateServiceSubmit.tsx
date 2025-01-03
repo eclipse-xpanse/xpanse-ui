@@ -51,6 +51,7 @@ export const MigrateServiceSubmit = ({
     currentSelectedService,
     stepItem,
     getServicePriceQuery,
+    getMigrateModalClosableStatus,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: csp;
@@ -64,6 +65,7 @@ export const MigrateServiceSubmit = ({
     currentSelectedService: DeployedService;
     stepItem: StepProps;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
+    getMigrateModalClosableStatus: (arg: boolean) => void;
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
@@ -123,13 +125,13 @@ export const MigrateServiceSubmit = ({
         <>
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusAlert
-                    migrateRequestError={migrateServiceRequest.error}
-                    migrateRequestData={migrateServiceRequest.data}
+                    selectServiceHostingType={selectServiceHostingType}
+                    migrateServiceRequest={migrateServiceRequest}
                     deployedServiceDetails={deployServiceDetailsQuery.data}
                     oldDeployedServiceDetails={destroyServiceDetailsQuery.data}
+                    getMigrateLatestServiceOrderStatusQuery={getMigrateLatestServiceOrderStatusQuery}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
-                    isPollingError={getMigrateLatestServiceOrderStatusQuery.isError}
-                    migrationDetails={getMigrateLatestServiceOrderStatusQuery.data}
+                    getMigrateModalClosableStatus={getMigrateModalClosableStatus}
                 />
             ) : null}
             <Form

@@ -32,8 +32,10 @@ import { SelectMigrationTarget } from './SelectMigrationTarget';
 
 export const Migrate = ({
     currentSelectedService,
+    getMigrateModalClosableStatus,
 }: {
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
+    getMigrateModalClosableStatus: (arg: boolean) => void;
 }): React.JSX.Element => {
     const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
 
@@ -260,6 +262,7 @@ export const Migrate = ({
                         currentSelectedService={currentSelectedService}
                         stepItem={items[MigrationSteps.MigrateService]}
                         getServicePriceQuery={getServicePriceQuery}
+                        getMigrateModalClosableStatus={getMigrateModalClosableStatus}
                     />
                 );
         }

@@ -34,7 +34,7 @@ export const MigrationOrderSubmitResult = ({
                 message={`Processing Status`}
                 description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
                 showIcon
-                closable={true}
+                closable={false}
                 type={type}
                 action={
                     <>
