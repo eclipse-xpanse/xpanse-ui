@@ -4,28 +4,40 @@
  */
 
 import { MinusCircleOutlined } from '@ant-design/icons';
-import { UseMutationResult } from '@tanstack/react-query';
+import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
+    category,
     ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
     ServiceTemplateRequestInfo,
 } from '../../../../../xpanse-api/generated';
+import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 function UnpublishService({
+    category,
     serviceDetail,
     setIsViewDisabled,
     unPublishRequest,
 }: {
+    category: category;
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
 }): React.JSX.Element {
+    const queryClient = useQueryClient();
     const unpublish = () => {
         setIsViewDisabled(true);
-        unPublishRequest.mutate();
+        unPublishRequest.mutate(undefined, {
+            onSuccess: () => {
+                void queryClient.invalidateQueries({ queryKey: getQueryKey(category) });
+            },
+            onSettled: () => {
+                setIsViewDisabled(false);
+            },
+        });
     };
 
     return (
