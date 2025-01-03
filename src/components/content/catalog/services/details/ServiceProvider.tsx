@@ -182,11 +182,13 @@ function ServiceProvider({
                                     isViewDisabled={isViewDisabled}
                                 />
                                 <UnpublishService
+                                    category={category}
                                     serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
                                     unPublishRequest={unPublishRequest}
                                 />
                                 <RepublishService
+                                    category={category}
                                     serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
                                     republishRequest={republishRequest}
