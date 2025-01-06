@@ -3,13 +3,16 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedServiceDetails,
     ErrorResponse,
-    GetLatestServiceOrderStatusResponse,
+    MigrateRequest,
+    serviceHostingType,
     ServiceOrder,
+    ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
     taskStatus,
     VendorHostedDeployedServiceDetails,
@@ -20,90 +23,121 @@ import { MigrationOrderSubmitResult } from './MigrationOrderSubmitResult';
 import { MigrationProcessingStatus } from './MigrationProcessingStatus.tsx';
 
 function MigrateServiceStatusAlert({
-    migrateRequestError,
-    migrateRequestData,
+    selectServiceHostingType,
+    migrateServiceRequest,
     deployedServiceDetails,
-    oldDeployedServiceDetails,
+    getMigrateLatestServiceOrderStatusQuery,
     serviceProviderContactDetails,
-    isPollingError,
-    migrationDetails,
 }: {
-    migrateRequestError: Error | null;
-    migrateRequestData: ServiceOrder | undefined;
+    selectServiceHostingType: serviceHostingType;
+    migrateServiceRequest: UseMutationResult<ServiceOrder, Error, MigrateRequest>;
     deployedServiceDetails: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
-    oldDeployedServiceDetails: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
+    getMigrateLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
-    isPollingError: boolean;
-    migrationDetails: GetLatestServiceOrderStatusResponse | undefined;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
         autoStart: true,
     });
 
     const msg = useMemo(() => {
-        if (migrateRequestError) {
-            if (isHandleKnownErrorResponse(migrateRequestError)) {
-                const response: ErrorResponse = migrateRequestError.body;
-                return getOrderSubmissionFailedDisplay(response.details);
+        if (migrateServiceRequest.isPending) {
+            return 'Migrate request submission in-progress';
+        } else if (migrateServiceRequest.isError) {
+            if (isHandleKnownErrorResponse(migrateServiceRequest.error)) {
+                const response: ErrorResponse = migrateServiceRequest.error.body;
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
             } else {
-                return getOrderSubmissionFailedDisplay([migrateRequestError.message]);
+                return getOrderSubmissionFailedDisplay(migrateServiceRequest.error.name, [
+                    migrateServiceRequest.error.message,
+                ]);
             }
-        } else if (isPollingError) {
-            return 'Migration status polling failed. Please visit MyServices page to check the status of the request.';
-        } else if (migrationDetails) {
-            if (migrationDetails.isOrderCompleted) {
-                return (
-                    <MigrationProcessingStatus
-                        deployedResponse={deployedServiceDetails}
-                        destroyedResponse={oldDeployedServiceDetails}
-                    />
-                );
+        } else if (migrateServiceRequest.isSuccess) {
+            if (getMigrateLatestServiceOrderStatusQuery.isSuccess) {
+                if (
+                    getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                    taskStatus.SUCCESSFUL.toString()
+                ) {
+                    return <MigrationProcessingStatus deployedResponse={deployedServiceDetails} />;
+                } else if (
+                    getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                        taskStatus.FAILED.toString() &&
+                    getMigrateLatestServiceOrderStatusQuery.data.error
+                ) {
+                    return getOrderSubmissionFailedDisplay(
+                        getMigrateLatestServiceOrderStatusQuery.data.error.errorType,
+                        getMigrateLatestServiceOrderStatusQuery.data.error.details
+                    );
+                } else if (
+                    getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
+                    taskStatus.IN_PROGRESS.toString()
+                ) {
+                    return 'Migrating, Please wait...';
+                }
+            } else if (getMigrateLatestServiceOrderStatusQuery.isError) {
+                if (selectServiceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                    return 'Migrate status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
+                } else {
+                    return 'Migrate status polling failed. Please visit MyServices page to check the status of the request';
+                }
             } else {
-                return 'Migrating... Please wait...';
+                return 'Migrating, Please wait...';
             }
         }
-        return 'Migrate request submission in-progress';
-    }, [deployedServiceDetails, migrationDetails, isPollingError, migrateRequestError, oldDeployedServiceDetails]);
+    }, [
+        selectServiceHostingType,
+        deployedServiceDetails,
+        migrateServiceRequest,
+        getMigrateLatestServiceOrderStatusQuery,
+    ]);
 
     const alertType = useMemo(() => {
-        if (isPollingError || migrateRequestError) {
+        if (migrateServiceRequest.isPending) {
+            return 'success';
+        } else if (migrateServiceRequest.isError || getMigrateLatestServiceOrderStatusQuery.isError) {
+            if (stopWatch.isRunning) {
+                stopWatch.pause();
+            }
             return 'error';
-        }
-        if (migrationDetails) {
-            if (migrationDetails.taskStatus === taskStatus.FAILED) {
+        } else if (migrateServiceRequest.isSuccess) {
+            if (
+                getMigrateLatestServiceOrderStatusQuery.isSuccess &&
+                getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+            ) {
+                if (stopWatch.isRunning) {
+                    stopWatch.pause();
+                }
                 return 'error';
+            } else if (
+                getMigrateLatestServiceOrderStatusQuery.isSuccess &&
+                getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+            ) {
+                if (stopWatch.isRunning) {
+                    stopWatch.pause();
+                }
+                return 'success';
+            } else if (
+                getMigrateLatestServiceOrderStatusQuery.isPending ||
+                getMigrateLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+            ) {
+                return 'success';
             }
         }
         return 'success';
-    }, [migrationDetails, isPollingError, migrateRequestError]);
+    }, [stopWatch, migrateServiceRequest, getMigrateLatestServiceOrderStatusQuery]);
 
-    if (isPollingError || migrateRequestError || migrationDetails?.isOrderCompleted) {
-        if (stopWatch.isRunning) {
-            stopWatch.pause();
-        }
-    }
-
-    function getOrderSubmissionFailedDisplay(reasons: string[]) {
+    function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
             <div>
-                <span>{'Service deployment request failed.'}</span>
+                <span>{errorType.length > 0 ? errorType : 'Service deployment request failed.'}</span>
                 <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );
     }
 
-    if (migrationDetails) {
-        if (migrationDetails.taskStatus === taskStatus.FAILED) {
-            if (stopWatch.isRunning) {
-                stopWatch.pause();
-            }
-        }
-    }
-
     return (
         <MigrationOrderSubmitResult
-            msg={msg}
-            uuid={migrateRequestData?.serviceId ?? '-'}
+            msg={msg ?? ''}
+            uuid={migrateServiceRequest.data?.serviceId ?? '-'}
             type={alertType}
             stopWatch={stopWatch}
             contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
