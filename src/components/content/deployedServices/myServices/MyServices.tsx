@@ -50,19 +50,18 @@ import { cspMap } from '../../common/csp/CspLogo';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
 import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
-import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
 import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
 import { Locks } from '../../order/locks/Locks';
 import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
-import OrderSubmitStatusAlert from '../../order/orderStatus/OrderSubmitStatusAlert';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery.ts';
 import { usePurgeRequestSubmitQuery } from '../../order/purge/usePurgeRequestSubmitQuery';
 import RecreateServiceStatusAlert from '../../order/recreate/RecreateServiceStatusAlert.tsx';
 import useRecreateRequest from '../../order/recreate/useRecreateRequest.ts';
+import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubmit.tsx';
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
@@ -172,12 +171,6 @@ function MyServices(): React.JSX.Element {
         activeRecord?.serviceId,
         activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
         servicePurgeQuery.isSuccess
-    );
-
-    const getServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        activeRecord?.serviceId,
-        activeRecord ? (activeRecord.serviceHostingType as serviceHostingType) : serviceHostingType.SELF,
-        getReDeployLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
     useEffect(() => {
@@ -1603,14 +1596,12 @@ function MyServices(): React.JSX.Element {
                 />
             ) : null}
             {isRetryDeployRequestSubmitted && activeRecord ? (
-                <OrderSubmitStatusAlert
+                <RetryServiceSubmit
                     key={uniqueRequestId}
-                    uuid={activeRecord.serviceId}
-                    serviceHostType={activeRecord.serviceHostingType as serviceHostingType}
+                    currentSelectedService={activeRecord}
                     submitDeploymentRequest={redeployFailedDeploymentQuery}
                     redeployFailedDeploymentQuery={redeployFailedDeploymentQuery}
                     getSubmitLatestServiceOrderStatusQuery={getReDeployLatestServiceOrderStatusQuery}
-                    deployedServiceDetails={getServiceDetailsQuery.data}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                     retryRequest={retryRequest}
                     onClose={closeRetryDeployResultAlert}
@@ -1665,6 +1656,7 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {activeRecord ? (
                 <Modal
+                    key={`${activeRecord.serviceId}-migrate`}
                     open={isMigrateModalOpen}
                     title={migrationTitle(activeRecord)}
                     closable={true}
