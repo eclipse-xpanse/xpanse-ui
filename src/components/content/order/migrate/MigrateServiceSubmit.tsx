@@ -87,11 +87,6 @@ export const MigrateServiceSubmit = ({
         selectServiceHostingType,
         getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
     );
-    const destroyServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        currentSelectedService.serviceId,
-        currentSelectedService.serviceHostingType,
-        getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
-    );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);
 
@@ -123,13 +118,11 @@ export const MigrateServiceSubmit = ({
         <>
             {isShowDeploymentResult ? (
                 <MigrateServiceStatusAlert
-                    migrateRequestError={migrateServiceRequest.error}
-                    migrateRequestData={migrateServiceRequest.data}
+                    selectServiceHostingType={selectServiceHostingType}
+                    migrateServiceRequest={migrateServiceRequest}
                     deployedServiceDetails={deployServiceDetailsQuery.data}
-                    oldDeployedServiceDetails={destroyServiceDetailsQuery.data}
+                    getMigrateLatestServiceOrderStatusQuery={getMigrateLatestServiceOrderStatusQuery}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
-                    isPollingError={getMigrateLatestServiceOrderStatusQuery.isError}
-                    migrationDetails={getMigrateLatestServiceOrderStatusQuery.data}
                 />
             ) : null}
             <Form
