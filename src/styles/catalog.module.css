@@ -133,3 +133,6 @@
     height: 26px;
     display: inline-block;
 }
+.requested-service-template-history-error {
+    margin-bottom: 10px;
+}
