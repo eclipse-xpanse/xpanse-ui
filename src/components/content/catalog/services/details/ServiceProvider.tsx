@@ -23,6 +23,7 @@ import {
 import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
+import ServiceTemplateHistory from '../history/ServiceTemplateHistory';
 import { useRepublishRequest } from '../republish/RepublishMutation';
 import { RepublishResult } from '../republish/RepublishResult.tsx';
 import RepublishService from '../republish/RepublishService.tsx';
@@ -32,6 +33,7 @@ import UnpublishService from '../unpublish/UnpublishService.tsx';
 import UpdateService from '../update/UpdateService';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
 import ServiceTemplateDetails from './serviceTemplateDetails';
+
 function ServiceProvider({
     categoryOclData,
     selectedServiceNameInTree,
@@ -197,6 +199,7 @@ function ServiceProvider({
                                     serviceDetail={activeServiceDetail}
                                     setIsViewDisabled={setIsViewDisabled}
                                 />
+                                <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
                             </div>
                             <ServiceTemplateDetails
                                 isViewDisabled={isViewDisabled}
