@@ -71,7 +71,7 @@ export const AddOrUpdateServicePolicy = ({
             const policyUpdateRequest: ServicePolicyUpdateRequest = {
                 enabled: policyRequest.enabled,
                 policy: policyRequest.policy,
-                flavorNameList: policyRequest.flavors,
+                flavorNames: policyRequest.flavors,
             };
             setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
