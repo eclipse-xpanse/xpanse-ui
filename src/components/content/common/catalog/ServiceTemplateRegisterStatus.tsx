@@ -20,7 +20,7 @@ export function ServiceTemplateRegisterStatus({
                 <Tag
                     bordered={false}
                     icon={<SyncOutlined spin={false} />}
-                    color='processing'
+                    color='#ffa366'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationStatus.valueOf()}
@@ -31,7 +31,7 @@ export function ServiceTemplateRegisterStatus({
                 <Tag
                     bordered={false}
                     icon={<CloseCircleOutlined />}
-                    color='magenta'
+                    color='#ff6666'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationStatus.valueOf()}
@@ -42,7 +42,7 @@ export function ServiceTemplateRegisterStatus({
                 <Tag
                     bordered={false}
                     icon={<CheckCircleOutlined />}
-                    color='success'
+                    color='#87d068'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationStatus.valueOf()}
@@ -53,7 +53,7 @@ export function ServiceTemplateRegisterStatus({
                 <Tag
                     bordered={false}
                     icon={<ExclamationCircleOutlined />}
-                    color='warning'
+                    color='default'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
                     {serviceRegistrationStatus as unknown as string}
