@@ -1299,7 +1299,7 @@ export const fetch = (data: FetchData): CancelablePromise<FetchResponse> => {
 };
 
 /**
- * List the userPolicies belongs to the service.<br> Required role: <b>admin</b> or <b>isv</b> </br>
+ * List the policies belongs to the service.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId The id of service template which the policy belongs to.
  * @returns ServicePolicy OK
@@ -1350,7 +1350,7 @@ export const addServicePolicy = (data: AddServicePolicyData): CancelablePromise<
 };
 
 /**
- * List the userPolicies defined by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * List the policies defined by the user.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.cspName Name of csp which the policy belongs to.
  * @param data.enabled Is the policy enabled.
@@ -2022,7 +2022,7 @@ export const getPricesByService = (data: GetPricesByServiceData): CancelableProm
  * @param data.serviceId Id of the deployed service
  * @param data.resourceId Id of resource in the deployed service
  * @param data.monitorResourceType Types of the monitor resource.
- * @param data.from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
+ * @param data._from Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
  * @param data.to End UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the current time.
  * @param data.granularity Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
  * @param data.onlyLastKnownMetric Returns only the last known metric. When this parameter is set then all other query parameters are ignored.
@@ -2037,7 +2037,7 @@ export const getMetrics = (data: GetMetricsData): CancelablePromise<GetMetricsRe
             serviceId: data.serviceId,
             resourceId: data.resourceId,
             monitorResourceType: data.monitorResourceType,
-            from: data.from,
+            from: data._from,
             to: data.to,
             granularity: data.granularity,
             onlyLastKnownMetric: data.onlyLastKnownMetric,
@@ -2383,7 +2383,7 @@ export const getCredentialTypes = (
 };
 
 /**
- * List of all approved service templates which are available for user to order.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * List of all approved services which are available for user to order.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -2419,7 +2419,7 @@ export const getOrderableServices = (
 };
 
 /**
- * Get deployable service template by id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * Get deployable service by id.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId The id of orderable service.
  * @returns UserOrderableServiceVo OK

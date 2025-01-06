@@ -142,7 +142,7 @@ export type AnsibleTaskResult = {
 };
 
 /**
- * Service config parameter autofill
+ * Variable autofill. Defines if the variable must be one of the existing resources of a specific type.
  */
 export type AutoFill = {
     /**
@@ -735,7 +735,7 @@ export enum kind {
 export type Deployment = {
     deployerTool: DeployerTool;
     /**
-     * The variables for the deployment, which will be passed to the deployer.The list elements must be unique.
+     * The variables for the deployment, which will be passed to the deployer.The list elements must be unique. All variables are put together to build a JSON 'object' with each variable as a property of this object.
      */
     variables: Array<DeployVariable>;
     /**
@@ -911,7 +911,7 @@ export enum resourceKind {
 }
 
 /**
- * The variables for the deployment, which will be passed to the deployer.The list elements must be unique.
+ * The variables for the deployment, which will be passed to the deployer.The list elements must be unique. All variables are put together to build a JSON 'object' with each variable as a property of this object.
  */
 export type DeployVariable = {
     /**
@@ -940,7 +940,7 @@ export type DeployVariable = {
      */
     mandatory: boolean;
     /**
-     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
+     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
      */
     valueSchema?: {
         [key: string]: unknown;
@@ -1777,7 +1777,7 @@ export type ServiceAction = {
      */
     actionManageScripts?: Array<ServiceChangeScript>;
     /**
-     * The collection of service action parameters.
+     * The configuration parameters of service .The list elements must be unique. All parameters are put together to build a JSON 'object' with each parameter as a property of this object.
      */
     actionParameters?: Array<ServiceChangeParameter>;
 };
@@ -1885,7 +1885,7 @@ export enum orderStatus {
 }
 
 /**
- * The collection of service action parameters.
+ * The configuration parameters of service .The list elements must be unique. All parameters are put together to build a JSON 'object' with each parameter as a property of this object.
  */
 export type ServiceChangeParameter = {
     /**
@@ -1914,7 +1914,7 @@ export type ServiceChangeParameter = {
      */
     initialValue: string;
     /**
-     * valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
+     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
      */
     valueSchema?: {
         [key: string]: unknown;
@@ -1923,7 +1923,6 @@ export type ServiceChangeParameter = {
      * Sensitive scope of service config parameter storage
      */
     sensitiveScope?: 'none' | 'once' | 'always';
-    autoFill?: AutoFill;
     modificationImpact: ModificationImpact;
     /**
      * Whether the service configuration parameters are read-only
@@ -2255,9 +2254,9 @@ export type ServicePolicyCreateRequest = {
 
 export type ServicePolicyUpdateRequest = {
     /**
-     * The flavor name list which the policy belongs to. If the list is empty, then the policy will be executed for during service deployment of all flavors.
+     * The flavor names to which the policy belongs. If the list is empty, then the policy will be executed for during service deployment of all flavors.
      */
-    flavorNameList?: Array<string>;
+    flavorNames?: Array<string>;
     /**
      * The policy.
      */
@@ -2832,7 +2831,7 @@ export type WorkFlowTask = {
     /**
      * The businessKey of the Process
      */
-    businessKey: string;
+    businessKey?: string;
     /**
      * The status of the Task
      */
@@ -3758,7 +3757,7 @@ export type GetMetricsData = {
     /**
      * Start UNIX timestamp in milliseconds. If no value filled,the default value is the UNIX timestamp in milliseconds of the five minutes ago.
      */
-    from?: number;
+    _from?: number;
     /**
      * Return metrics collected in provided time interval. This depends on how the source systems have generated/collected metrics.
      */
