@@ -29,7 +29,7 @@ export const BuildMetricGraphs = ({
                                 placement='bottom'
                                 title={chartsTitle[i].Id}
                                 color={'#8ca2e4'}
-                                overlayStyle={{ maxWidth: 300 }}
+                                styles={{ root: { maxWidth: 300 } }}
                             >
                                 <Button className={monitorStyles.chartSubtitleHoverClass}>
                                     {chartsTitle[i].metricTitle}
