@@ -6,7 +6,7 @@
     "dependencies": {
         "@ant-design/icons": "^5.5.2",
         "@axa-fr/react-oidc": "^7.23.1",
-        "@tanstack/react-query": "^5.62.11",
+        "@tanstack/react-query": "^5.62.16",
         "antd": "^5.22.7",
         "echarts": "5.6.0",
         "echarts-for-react": "^3.0.2",
@@ -49,7 +49,7 @@
         "@hey-api/openapi-ts": "^0.60.1",
         "playwright-core": "^1.49.1",
         "@playwright/test": "^1.49.1",
-        "@tanstack/eslint-plugin-query": "^5.62.9",
+        "@tanstack/eslint-plugin-query": "^5.62.16",
         "@types/react": "^18.3.12",
         "@types/react-dom": "^18.3.1",
         "@types/uuid": "^10.0.0",
