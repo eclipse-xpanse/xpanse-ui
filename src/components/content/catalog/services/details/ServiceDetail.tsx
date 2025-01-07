@@ -105,10 +105,10 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
             </h3>
 
             <Descriptions bordered column={2}>
-                <Descriptions.Item label='Service' labelStyle={{ width: '230px' }}>
+                <Descriptions.Item label='Service' styles={{ label: { width: '230px' } }}>
                     <ShowIcon serviceDetails={serviceDetails} />
                 </Descriptions.Item>
-                <Descriptions.Item label='Service Template Id' labelStyle={{ width: '230px' }}>
+                <Descriptions.Item label='Service Template Id' styles={{ label: { width: '230px' } }}>
                     {serviceDetails.serviceTemplateId}
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
@@ -116,7 +116,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Service Vendor'>
                     <Tag color='cyan'>{serviceDetails.serviceVendor}</Tag>
                 </Descriptions.Item>
-                <Descriptions.Item label='Description' labelStyle={{ width: '230px' }}>
+                <Descriptions.Item label='Description' styles={{ label: { width: '230px' } }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
                 <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
