@@ -175,28 +175,22 @@ function MyServices(): React.JSX.Element {
 
     useEffect(() => {
         if (
-            servicePurgeQuery.isPending ||
             servicePurgeQuery.isError ||
             getPurgeServiceDetailsQuery.isError ||
             serviceDestroyQuery.isError ||
             getDestroyServiceStatusPollingQuery.data?.isOrderCompleted ||
-            serviceRecreateRequest.isPending ||
             serviceRecreateRequest.isError ||
             getRecreateServiceOrderStatusPollingQuery.isError ||
             getRecreateServiceOrderStatusPollingQuery.data?.isOrderCompleted ||
-            serviceStateStartQuery.isPending ||
             serviceStateStartQuery.isError ||
             getStartServiceDetailsQuery.isError ||
             getStartServiceDetailsQuery.data?.isOrderCompleted ||
-            serviceStateStopQuery.isPending ||
             serviceStateStopQuery.isError ||
             getStopServiceDetailsQuery.isError ||
             getStopServiceDetailsQuery.data?.isOrderCompleted ||
-            serviceStateRestartQuery.isPending ||
             serviceStateRestartQuery.isError ||
             getRestartServiceDetailsQuery.isError ||
             getRestartServiceDetailsQuery.data?.isOrderCompleted ||
-            redeployFailedDeploymentQuery.isPending ||
             redeployFailedDeploymentQuery.isError ||
             getReDeployLatestServiceOrderStatusQuery.isError ||
             getReDeployLatestServiceOrderStatusQuery.data?.isOrderCompleted
@@ -206,28 +200,22 @@ function MyServices(): React.JSX.Element {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        servicePurgeQuery.isPending,
         servicePurgeQuery.isError,
         getPurgeServiceDetailsQuery.isError,
         serviceDestroyQuery.isError,
         getDestroyServiceStatusPollingQuery.data?.isOrderCompleted,
-        serviceRecreateRequest.isPending,
         serviceRecreateRequest.isError,
         getRecreateServiceOrderStatusPollingQuery.isError,
         getRecreateServiceOrderStatusPollingQuery.data?.isOrderCompleted,
-        serviceStateStartQuery.isPending,
         serviceStateStartQuery.isError,
         getStartServiceDetailsQuery.isError,
         getStartServiceDetailsQuery.data?.isOrderCompleted,
-        serviceStateStopQuery.isPending,
         serviceStateStopQuery.isError,
         getStopServiceDetailsQuery.isError,
         getStopServiceDetailsQuery.data?.isOrderCompleted,
-        serviceStateRestartQuery.isPending,
         serviceStateRestartQuery.isError,
         getRestartServiceDetailsQuery.isError,
         getRestartServiceDetailsQuery.data?.isOrderCompleted,
-        redeployFailedDeploymentQuery.isPending,
         redeployFailedDeploymentQuery.isError,
         getReDeployLatestServiceOrderStatusQuery.isError,
         getReDeployLatestServiceOrderStatusQuery.data?.isOrderCompleted,
