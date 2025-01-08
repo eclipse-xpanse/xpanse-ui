@@ -6,37 +6,37 @@
 import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
-import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
+import { category } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
-export function UnpublishResult({
+export function CancelServiceTemplateRequestResult({
     category,
-    isShowUnpublishAlert,
-    setIsShowUnpublishAlert,
-    unPublishRequest,
+    isShowCancelRequestAlert,
+    setIsShowCancelRequestAlert,
+    cancelServiceTemplateRequest,
 }: {
     category: category;
-    isShowUnpublishAlert: boolean;
-    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
-    unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    isShowCancelRequestAlert: boolean;
+    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
+    cancelServiceTemplateRequest: UseMutationResult<void, Error, string>;
 }): React.JSX.Element | undefined {
     const queryClient = useQueryClient();
 
     const onRemove = () => {
-        setIsShowUnpublishAlert(false);
+        setIsShowCancelRequestAlert(false);
     };
 
-    if (unPublishRequest.isSuccess) {
-        setIsShowUnpublishAlert(true);
-        void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
+    if (cancelServiceTemplateRequest.isSuccess) {
+        setIsShowCancelRequestAlert(true);
+        void queryClient.invalidateQueries({ queryKey: getQueryKey(category) });
     }
 
-    if (isShowUnpublishAlert) {
+    if (isShowCancelRequestAlert) {
         return (
             <Alert
-                message='Service Unpublished Successfully'
-                description={'Service removed from the catalog.'}
+                message='Request cancelled'
+                description={'Pending service template request cancelled successfully.'}
                 showIcon
                 type={'success'}
                 closable={true}
@@ -45,13 +45,13 @@ export function UnpublishResult({
         );
     }
 
-    if (unPublishRequest.isError) {
+    if (cancelServiceTemplateRequest.isError) {
         return (
             <div>
-                {isHandleKnownErrorResponse(unPublishRequest.error) ? (
+                {isHandleKnownErrorResponse(cancelServiceTemplateRequest.error) ? (
                     <Alert
-                        message='Unpublish Request Failed'
-                        description={String(unPublishRequest.error.body.details)}
+                        message='Cancellation failed'
+                        description={String(cancelServiceTemplateRequest.error.body.details)}
                         showIcon
                         type={'error'}
                         closable={true}
@@ -59,8 +59,8 @@ export function UnpublishResult({
                     />
                 ) : (
                     <Alert
-                        message='Unpublish Request Failed'
-                        description={unPublishRequest.error.message}
+                        message='Cancellation failed'
+                        description={cancelServiceTemplateRequest.error.message}
                         showIcon
                         type={'error'}
                         closable={true}

@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
@@ -35,7 +35,7 @@ function DeleteService({
                 }}
             >
                 <Button
-                    icon={<CloseCircleOutlined />}
+                    icon={<DeleteOutlined />}
                     type='primary'
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={deleteRequest.isSuccess || serviceDetail.isAvailableInCatalog}

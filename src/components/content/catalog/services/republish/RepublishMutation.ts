@@ -1,4 +1,4 @@
-import { useMutation, useMutationState } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { republish, type RepublishData } from '../../../../../xpanse-api/generated';
 
 const republishKey: string = 'republish';
@@ -13,12 +13,5 @@ export function useRepublishRequest(serviceTemplateId: string) {
             return republish(data);
         },
         gcTime: 0,
-    });
-}
-
-export function useGetRepublishMutationState(serviceTemplateId: string) {
-    return useMutationState({
-        filters: { mutationKey: [serviceTemplateId, republishKey], exact: true },
-        select: (mutation) => mutation.state,
     });
 }
