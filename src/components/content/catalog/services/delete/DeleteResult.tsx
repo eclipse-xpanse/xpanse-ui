@@ -3,23 +3,32 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useQueryClient } from '@tanstack/react-query';
+import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { category } from '../../../../../xpanse-api/generated';
-import { catalogPageRoute } from '../../../../utils/constants';
+import { catalogPageRoute } from '../../../../utils/constants.tsx';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetDeleteMutationState } from './DeleteServiceMutation';
 
-export function DeleteResult({ id, category }: { id: string; category: category }): React.JSX.Element | undefined {
+export function DeleteResult({
+    id,
+    category,
+    deleteServiceRequest,
+}: {
+    id: string;
+    category: category;
+    deleteServiceRequest: UseMutationResult<void, Error, void>;
+}): React.JSX.Element | undefined {
     const deleteRequestState = useGetDeleteMutationState(id);
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
     const onRemove = () => {
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
+        deleteServiceRequest.reset();
         void navigate({
             pathname: catalogPageRoute,
             hash: '#' + category,

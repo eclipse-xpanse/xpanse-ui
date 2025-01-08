@@ -6,7 +6,7 @@
 import { TagOutlined } from '@ant-design/icons';
 import { Alert, Empty, Skeleton } from 'antd';
 import { DataNode } from 'antd/es/tree';
-import React from 'react';
+import React, { useMemo } from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
 import { category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
@@ -20,15 +20,20 @@ import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceT
 import { CatalogFullView } from './CatalogFullView';
 
 function CategoryCatalog({ category }: { category: category }): React.JSX.Element {
-    const treeData: DataNode[] = [];
-    let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
 
     // Process data conditionally, but don't return yet
-    if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
-        const userAvailableServiceList: ServiceTemplateDetailVo[] = availableServiceTemplatesQuery.data;
-        categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
+    const categoryOclData: Map<string, ServiceTemplateDetailVo[]> = useMemo(() => {
+        let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+        if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
+            const userAvailableServiceList: ServiceTemplateDetailVo[] = availableServiceTemplatesQuery.data;
+            categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
+        }
+        return categoryOclData;
+    }, [availableServiceTemplatesQuery]);
+
+    const treeData: DataNode[] = useMemo(() => {
+        const treeData: DataNode[] = [];
         categoryOclData.forEach((_value: ServiceTemplateDetailVo[], serviceName: string) => {
             const dataNode: DataNode = {
                 title: <div className={catalogStyles.catalogTreeNode}>{serviceName}</div>,
@@ -37,7 +42,7 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
             };
             const versionMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByVersionForSpecificServiceName(
                 serviceName,
-                userAvailableServiceList
+                availableServiceTemplatesQuery.data ?? []
             );
             versionMapper.forEach((_value: ServiceTemplateDetailVo[], versionName: string) => {
                 dataNode.children?.push({
@@ -48,7 +53,8 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
             });
             treeData.push(dataNode);
         });
-    }
+        return treeData;
+    }, [availableServiceTemplatesQuery, categoryOclData]);
 
     // Handle errors
     if (availableServiceTemplatesQuery.isError) {

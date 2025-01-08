@@ -11,13 +11,17 @@ export const groupServiceTemplatesByName = (
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
     const serviceMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    serviceTemplateList.sort((a, b) => a.name.localeCompare(b.name));
     for (const serviceTemplate of serviceTemplateList) {
         if (serviceTemplate.name) {
             if (!serviceMapper.has(serviceTemplate.name)) {
-                serviceMapper.set(
-                    serviceTemplate.name,
-                    serviceTemplateList.filter((data) => data.name === serviceTemplate.name)
-                );
+                const filteredList = serviceTemplateList.filter((data) => data.name === serviceTemplate.name);
+                filteredList.sort((a, b) => {
+                    if (a.version < b.version) return 1;
+                    if (a.version > b.version) return -1;
+                    return 0;
+                });
+                serviceMapper.set(serviceTemplate.name, filteredList);
             }
         }
     }
