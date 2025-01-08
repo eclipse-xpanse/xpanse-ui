@@ -48,8 +48,10 @@ export function CatalogFullView({
         }
         return '';
     }, [urlParams]);
+
     const navigate = useNavigate();
     const allKeysInTree: React.Key[] = getAllKeysFromCatalogTree(treeData);
+
     const [selectKey, setSelectKey] = useState<React.Key>(getDefaultSelectedKey());
     const [isViewDisabled, setIsViewDisabled] = useState<boolean>(false);
     // necessary to store previous selected key to check and reuse previous values where possible.
@@ -60,6 +62,12 @@ export function CatalogFullView({
         if (serviceNameInQuery && serviceVersionInQuery) {
             if (allKeysInTree.includes(serviceNameInQuery + '@' + serviceVersionInQuery)) {
                 return serviceNameInQuery + '@' + serviceVersionInQuery;
+            } else {
+                // if service name is not found in tree, then use first service template of that service name.
+                const serviceTemplates = categoryOclData.get(serviceNameInQuery);
+                if (serviceTemplates) {
+                    return serviceTemplates[0].name + '@' + serviceTemplates[0].version;
+                }
             }
         }
         return allKeysInTree[0];
@@ -67,13 +75,18 @@ export function CatalogFullView({
 
     // useEffect necessary since we are updating URL outside the React context.
     useEffect(() => {
-        if (allKeysInTree.length > 0) {
+        if (allKeysInTree.length > 0 && selectKey) {
             const [name, version] = selectKey.toString().split('@');
             const serviceTemplates = categoryOclData.get(name);
             if (serviceTemplates) {
                 for (const value of serviceTemplates) {
                     if (value.version === version) {
-                        if (selectKey.toString() === previousSelectedKey.current.toString()) {
+                        if (
+                            selectKey ===
+                            decodeURI(urlParams.get(serviceNameKeyQuery) ?? '') +
+                                '@' +
+                                decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '')
+                        ) {
                             void navigate({
                                 pathname: catalogPageRoute,
                                 hash: '#' + category,
@@ -103,7 +116,7 @@ export function CatalogFullView({
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectKey]);
+    }, [selectKey, serviceNameInQuery, serviceVersionInQuery, urlParams]);
 
     function isParentTreeSelected(selectedKeyInTree: React.Key): boolean {
         let isParentNode: boolean = false;

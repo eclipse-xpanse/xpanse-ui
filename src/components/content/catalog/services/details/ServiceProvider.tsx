@@ -23,6 +23,7 @@ import {
 import { cspMap } from '../../../common/csp/CspLogo';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
+import { useDeleteRequest } from '../delete/DeleteServiceMutation.ts';
 import ServiceTemplateHistory from '../history/ServiceTemplateHistory';
 import { useRepublishRequest } from '../republish/RepublishMutation';
 import { RepublishResult } from '../republish/RepublishResult.tsx';
@@ -62,7 +63,22 @@ function ServiceProvider({
     const serviceNameInQuery = useMemo(() => decodeURI(urlParams.get(serviceNameKeyQuery) ?? ''), [urlParams]);
 
     // Always call the hook with a default value (can be `null` or `undefined`)
-    let activeServiceDetail: ServiceTemplateDetailVo | undefined;
+    const activeServiceDetail: ServiceTemplateDetailVo | undefined = useMemo(() => {
+        if (serviceNameInQuery) {
+            const serviceTemplates = categoryOclData.get(serviceNameInQuery);
+            if (serviceTemplates) {
+                for (const value of serviceTemplates) {
+                    if (
+                        value.version === serviceVersionInQuery &&
+                        value.serviceHostingType.toString() === serviceHostingTypeInQuery &&
+                        value.csp.toString() === serviceCspInQuery
+                    ) {
+                        return value;
+                    }
+                }
+            }
+        }
+    }, [serviceNameInQuery, categoryOclData, serviceVersionInQuery, serviceHostingTypeInQuery, serviceCspInQuery]);
 
     const groupServiceTemplatesByCsp: Map<string, ServiceTemplateDetailVo[]> = new Map<
         string,
@@ -107,22 +123,9 @@ function ServiceProvider({
 
     const items: Tab[] = getCspTabs(categoryOclData);
 
-    if (serviceNameInQuery) {
-        const serviceTemplates = categoryOclData.get(serviceNameInQuery);
-        if (serviceTemplates) {
-            for (const value of serviceTemplates) {
-                if (
-                    value.version === serviceVersionInQuery &&
-                    value.serviceHostingType.toString() === serviceHostingTypeInQuery &&
-                    value.csp.toString() === serviceCspInQuery
-                ) {
-                    activeServiceDetail = value;
-                }
-            }
-        }
-    }
     const republishRequest = useRepublishRequest(activeServiceDetail?.serviceTemplateId ?? '');
     const unPublishRequest = useUnpublishRequest(activeServiceDetail?.serviceTemplateId ?? '');
+    const deleteServiceRequest = useDeleteRequest(activeServiceDetail?.serviceTemplateId ?? '');
     const onChangeCsp = (key: string) => {
         void navigate({
             pathname: catalogPageRoute,
@@ -149,75 +152,73 @@ function ServiceProvider({
         });
     };
 
+    if (selectedServiceNameInTree.length === 0) {
+        return <Empty description={'No services available.'} />;
+    }
+
     // this component renders even before the values are set in the URL. We must wait until it is done.
-    if (!serviceCspInQuery && !serviceVersionInQuery && !serviceHostingTypeInQuery && !serviceNameInQuery) {
+    if (
+        !serviceCspInQuery ||
+        !serviceVersionInQuery ||
+        !serviceHostingTypeInQuery ||
+        !serviceNameInQuery ||
+        !activeServiceDetail
+    ) {
         return <ServiceProviderSkeleton />;
     }
 
     return (
         <>
-            {selectedServiceNameInTree.length > 0 ? (
-                <>
-                    {activeServiceDetail ? (
-                        <>
-                            <UnpublishResult
-                                id={activeServiceDetail.serviceTemplateId}
-                                category={category}
-                                unPublishRequest={unPublishRequest}
-                            />
-                            <RepublishResult
-                                id={activeServiceDetail.serviceTemplateId}
-                                category={category}
-                                republishRequest={republishRequest}
-                            />
-                            <DeleteResult id={activeServiceDetail.serviceTemplateId} category={category} />
-                            <Tabs
-                                items={items}
-                                onChange={onChangeCsp}
-                                activeKey={serviceCspInQuery}
-                                className={catalogStyles.antTabsTabBtn}
-                            />
-                            <div className={catalogStyles.updateUnpublishBtnClass}>
-                                <UpdateService
-                                    serviceDetail={activeServiceDetail}
-                                    category={category}
-                                    isViewDisabled={isViewDisabled}
-                                />
-                                <UnpublishService
-                                    category={category}
-                                    serviceDetail={activeServiceDetail}
-                                    setIsViewDisabled={setIsViewDisabled}
-                                    unPublishRequest={unPublishRequest}
-                                />
-                                <RepublishService
-                                    category={category}
-                                    serviceDetail={activeServiceDetail}
-                                    setIsViewDisabled={setIsViewDisabled}
-                                    republishRequest={republishRequest}
-                                />
-                                <DeleteService
-                                    serviceDetail={activeServiceDetail}
-                                    setIsViewDisabled={setIsViewDisabled}
-                                />
-                                <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
-                            </div>
-                            <ServiceTemplateDetails
-                                isViewDisabled={isViewDisabled}
-                                serviceDetails={activeServiceDetail}
-                                groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
-                                serviceCspInQuery={serviceCspInQuery}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                onChangeServiceHostingType={onChangeServiceHostingType}
-                            />
-                        </>
-                    ) : (
-                        // Necessary when user manually enters wrong details in the URL query parameters.
-                        <Empty description={'No services available for the provided query parameters in the url.'} />
-                    )}
-                </>
-            ) : (
-                <Empty description={'No services available.'} />
-            )}
+            <UnpublishResult
+                id={activeServiceDetail.serviceTemplateId}
+                category={category}
+                unPublishRequest={unPublishRequest}
+            />
+            <RepublishResult
+                id={activeServiceDetail.serviceTemplateId}
+                category={category}
+                republishRequest={republishRequest}
+            />
+            <DeleteResult
+                id={activeServiceDetail.serviceTemplateId}
+                category={category}
+                deleteServiceRequest={deleteServiceRequest}
+            />
+            <Tabs
+                items={items}
+                onChange={onChangeCsp}
+                activeKey={serviceCspInQuery}
+                className={catalogStyles.antTabsTabBtn}
+            />
+            <div className={catalogStyles.updateUnpublishBtnClass}>
+                <UpdateService
+                    serviceDetail={activeServiceDetail}
+                    category={category}
+                    isViewDisabled={isViewDisabled}
+                />
+                <UnpublishService
+                    category={category}
+                    serviceDetail={activeServiceDetail}
+                    setIsViewDisabled={setIsViewDisabled}
+                    unPublishRequest={unPublishRequest}
+                />
+                <RepublishService
+                    category={category}
+                    serviceDetail={activeServiceDetail}
+                    setIsViewDisabled={setIsViewDisabled}
+                    republishRequest={republishRequest}
+                />
+                <DeleteService serviceDetail={activeServiceDetail} setIsViewDisabled={setIsViewDisabled} />
+                <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
+            </div>
+            <ServiceTemplateDetails
+                isViewDisabled={isViewDisabled}
+                serviceDetails={activeServiceDetail}
+                groupServiceTemplatesByCsp={groupServiceTemplatesByCsp}
+                serviceCspInQuery={serviceCspInQuery}
+                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                onChangeServiceHostingType={onChangeServiceHostingType}
+            />
         </>
     );
 }
