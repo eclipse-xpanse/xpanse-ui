@@ -21,6 +21,9 @@ import {
     groupServicesByVersionForSpecificServiceName,
 } from '../../../common/catalog/catalogProps';
 import { cspMap } from '../../../common/csp/CspLogo';
+import CancelServiceTemplateRequest from '../cancel/CancelServiceTemplateRequest';
+import { CancelServiceTemplateRequestResult } from '../cancel/CancelServiceTemplateRequestResult';
+import { useCancelServiceTemplateRequest } from '../cancel/useCancelServiceTemplateRequest';
 import { DeleteResult } from '../delete/DeleteResult';
 import DeleteService from '../delete/DeleteService';
 import { useDeleteRequest } from '../delete/DeleteServiceMutation.ts';
@@ -42,6 +45,12 @@ function ServiceProvider({
     category,
     isViewDisabled,
     setIsViewDisabled,
+    isShowUnpublishAlert,
+    setIsShowUnpublishAlert,
+    isShowRepublishAlert,
+    setIsShowRepublishAlert,
+    isShowCancelRequestAlert,
+    setIsShowCancelRequestAlert,
 }: {
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
@@ -49,9 +58,16 @@ function ServiceProvider({
     category: category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
+    isShowUnpublishAlert: boolean;
+    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
+    isShowRepublishAlert: boolean;
+    setIsShowRepublishAlert: (isShowRepublishAlert: boolean) => void;
+    isShowCancelRequestAlert: boolean;
+    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
+    const cancelServiceTemplateRequest = useCancelServiceTemplateRequest();
 
     // Memoized query params
     const serviceCspInQuery = useMemo(() => decodeURI(urlParams.get(serviceCspQuery) ?? ''), [urlParams]);
@@ -170,19 +186,27 @@ function ServiceProvider({
     return (
         <>
             <UnpublishResult
-                id={activeServiceDetail.serviceTemplateId}
                 category={category}
+                isShowUnpublishAlert={isShowUnpublishAlert}
+                setIsShowUnpublishAlert={setIsShowUnpublishAlert}
                 unPublishRequest={unPublishRequest}
             />
             <RepublishResult
-                id={activeServiceDetail.serviceTemplateId}
                 category={category}
+                isShowRepublishAlert={isShowRepublishAlert}
+                setIsShowRepublishAlert={setIsShowRepublishAlert}
                 republishRequest={republishRequest}
             />
             <DeleteResult
                 id={activeServiceDetail.serviceTemplateId}
                 category={category}
                 deleteServiceRequest={deleteServiceRequest}
+            />
+            <CancelServiceTemplateRequestResult
+                category={category}
+                isShowCancelRequestAlert={isShowCancelRequestAlert}
+                setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
+                cancelServiceTemplateRequest={cancelServiceTemplateRequest}
             />
             <Tabs
                 items={items}
@@ -203,13 +227,17 @@ function ServiceProvider({
                     unPublishRequest={unPublishRequest}
                 />
                 <RepublishService
-                    category={category}
                     serviceDetail={activeServiceDetail}
                     setIsViewDisabled={setIsViewDisabled}
                     republishRequest={republishRequest}
                 />
                 <DeleteService serviceDetail={activeServiceDetail} setIsViewDisabled={setIsViewDisabled} />
                 <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
+                <CancelServiceTemplateRequest
+                    serviceDetail={activeServiceDetail}
+                    setIsViewDisabled={setIsViewDisabled}
+                    cancelServiceTemplateRequest={cancelServiceTemplateRequest}
+                />
             </div>
             <ServiceTemplateDetails
                 isViewDisabled={isViewDisabled}

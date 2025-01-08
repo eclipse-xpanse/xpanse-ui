@@ -25,10 +25,22 @@ export function CatalogFullView({
     treeData,
     categoryOclData,
     category,
+    isShowUnpublishAlert,
+    setIsShowUnpublishAlert,
+    isShowRepublishAlert,
+    setIsShowRepublishAlert,
+    isShowCancelRequestAlert,
+    setIsShowCancelRequestAlert,
 }: {
     treeData: DataNode[];
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     category: category;
+    isShowUnpublishAlert: boolean;
+    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
+    isShowRepublishAlert: boolean;
+    setIsShowRepublishAlert: (isShowRepublishAlert: boolean) => void;
+    isShowCancelRequestAlert: boolean;
+    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState('');
@@ -160,6 +172,12 @@ export function CatalogFullView({
                     category={category}
                     isViewDisabled={isViewDisabled}
                     setIsViewDisabled={setIsViewDisabled}
+                    isShowUnpublishAlert={isShowUnpublishAlert}
+                    setIsShowUnpublishAlert={setIsShowUnpublishAlert}
+                    isShowRepublishAlert={isShowRepublishAlert}
+                    setIsShowRepublishAlert={setIsShowRepublishAlert}
+                    isShowCancelRequestAlert={isShowCancelRequestAlert}
+                    setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
                 />
             </div>
         </>

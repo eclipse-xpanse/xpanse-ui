@@ -16,7 +16,11 @@ function ServiceTemplateHistory({
 }: {
     serviceTemplateDetailVo: ServiceTemplateDetailVo;
 }): React.JSX.Element {
-    const serviceTemplateHistoryQuery = useServiceTemplateHistoryQuery(serviceTemplateDetailVo.serviceTemplateId);
+    const serviceTemplateHistoryQuery = useServiceTemplateHistoryQuery(
+        serviceTemplateDetailVo.serviceTemplateId,
+        undefined,
+        undefined
+    );
     const [isServiceTemplateHistoryModalOpen, setIsServiceTemplateHistoryModalOpen] = useState(false);
 
     let serviceTemplateRequestHistoryList: ServiceTemplateRequestHistory[] = [];
@@ -33,7 +37,7 @@ function ServiceTemplateHistory({
     };
 
     return (
-        <div>
+        <div className={catalogStyles.updateUnpublishBtnClass}>
             {isServiceTemplateHistoryModalOpen && serviceTemplateRequestHistoryList.length > 0 ? (
                 <Modal
                     title={'Service Template History'}

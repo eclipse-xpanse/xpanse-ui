@@ -6,7 +6,7 @@
 import { TagOutlined } from '@ant-design/icons';
 import { Alert, Empty, Skeleton } from 'antd';
 import { DataNode } from 'antd/es/tree';
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
 import { category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
@@ -21,6 +21,10 @@ import { CatalogFullView } from './CatalogFullView';
 
 function CategoryCatalog({ category }: { category: category }): React.JSX.Element {
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
+
+    const [isShowUnpublishAlert, setIsShowUnpublishAlert] = useState(false);
+    const [isShowRepublishAlert, setIsShowRepublishAlert] = useState(false);
+    const [isShowCancelRequestAlert, setIsShowCancelRequestAlert] = useState(false);
 
     // Process data conditionally, but don't return yet
     const categoryOclData: Map<string, ServiceTemplateDetailVo[]> = useMemo(() => {
@@ -108,7 +112,17 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
     return (
         <div className={catalogStyles.catalogMiddleware}>
             <div className={catalogStyles.container}>
-                <CatalogFullView treeData={treeData} categoryOclData={categoryOclData} category={category} />
+                <CatalogFullView
+                    treeData={treeData}
+                    categoryOclData={categoryOclData}
+                    category={category}
+                    isShowUnpublishAlert={isShowUnpublishAlert}
+                    setIsShowUnpublishAlert={setIsShowUnpublishAlert}
+                    isShowRepublishAlert={isShowRepublishAlert}
+                    setIsShowRepublishAlert={setIsShowRepublishAlert}
+                    isShowCancelRequestAlert={isShowCancelRequestAlert}
+                    setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
+                />
             </div>
         </div>
     );
