@@ -16,7 +16,8 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants';
 export function usePurgeRequestStatusQuery(
     uuid: string | undefined,
     currentServiceHostingType: serviceHostingType,
-    isStartPolling: boolean
+    isStartPolling: boolean,
+    isPurgeRequestSubmitted: boolean
 ) {
     return useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, currentServiceHostingType],
@@ -35,7 +36,7 @@ export function usePurgeRequestStatusQuery(
         },
         refetchOnWindowFocus: false,
         refetchInterval: (query) => (query.state.status !== 'error' && uuid ? deploymentStatusPollingInterval : false),
-        enabled: uuid !== undefined && isStartPolling,
+        enabled: uuid !== undefined && isStartPolling && isPurgeRequestSubmitted,
         retry: 0,
     });
 }
