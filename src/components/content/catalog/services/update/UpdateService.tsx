@@ -56,7 +56,9 @@ function UpdateService({
             const data: UpdateData = {
                 serviceTemplateId: serviceDetail.serviceTemplateId,
                 isUnpublishUntilApproved:
-                    serviceDetail.serviceTemplateRegistrationState === serviceTemplateRegistrationState.APPROVED
+                    serviceDetail.isAvailableInCatalog &&
+                    serviceDetail.serviceTemplateRegistrationState === serviceTemplateRegistrationState.APPROVED &&
+                    files.current.length > 0
                         ? isRemoveServiceTemplateUntilApproved
                         : false,
                 requestBody: ocl,
@@ -275,8 +277,10 @@ function UpdateService({
                                     </Col>
                                 </Row>
                             </Upload>
-                            {serviceDetail.serviceTemplateRegistrationState ===
-                                serviceTemplateRegistrationState.APPROVED && files.current.length > 0 ? (
+                            {serviceDetail.isAvailableInCatalog &&
+                            serviceDetail.serviceTemplateRegistrationState ===
+                                serviceTemplateRegistrationState.APPROVED &&
+                            files.current.length > 0 ? (
                                 <Form.Item
                                     name='isRemoveServiceTemplateUntilApproved'
                                     label={
