@@ -622,59 +622,99 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'stop',
                 label: (
-                    <Popconfirm
-                        title='Stop the service'
-                        description='Are you sure to stop the service?'
-                        cancelText='Yes'
-                        okText='No'
-                        onCancel={() => {
-                            stop(record);
-                        }}
-                    >
-                        <Button
-                            icon={<PoweroffOutlined />}
-                            className={myServicesStyles.buttonAsLink}
-                            disabled={isDisabledStopOrRestartBtn(
-                                record,
-                                activeRecord,
-                                serviceStateStartQuery.isPending,
-                                serviceStateStopQuery.isPending,
-                                serviceStateRestartQuery.isPending
-                            )}
-                            type={'link'}
-                        >
-                            stop
-                        </Button>
-                    </Popconfirm>
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'stop has been locked for this service.'}
+                            >
+                                <Button
+                                    className={myServicesStyles.buttonAsLink}
+                                    icon={<PoweroffOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    stop
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Popconfirm
+                                title='Stop the service'
+                                description='Are you sure to stop the service?'
+                                cancelText='Yes'
+                                okText='No'
+                                onCancel={() => {
+                                    stop(record);
+                                }}
+                            >
+                                <Button
+                                    className={myServicesStyles.buttonAsLink}
+                                    icon={<PoweroffOutlined />}
+                                    disabled={isDisabledStopOrRestartBtn(
+                                        record,
+                                        activeRecord,
+                                        serviceStateStartQuery.isPending,
+                                        serviceStateStopQuery.isPending,
+                                        serviceStateRestartQuery.isPending
+                                    )}
+                                    type={'link'}
+                                >
+                                    stop
+                                </Button>
+                            </Popconfirm>
+                        )}
+                    </>
                 ),
             },
             {
                 key: 'restart',
                 label: (
-                    <Popconfirm
-                        title='Restart the service'
-                        description='Are you sure to restart the service?'
-                        cancelText='Yes'
-                        okText='No'
-                        onCancel={() => {
-                            restart(record);
-                        }}
-                    >
-                        <Button
-                            icon={<SyncOutlined />}
-                            className={myServicesStyles.buttonAsLink}
-                            disabled={isDisabledStopOrRestartBtn(
-                                record,
-                                activeRecord,
-                                serviceStateStartQuery.isPending,
-                                serviceStateStopQuery.isPending,
-                                serviceStateRestartQuery.isPending
-                            )}
-                            type={'link'}
-                        >
-                            restart
-                        </Button>
-                    </Popconfirm>
+                    <>
+                        {record.lockConfig?.modifyLocked ? (
+                            <Tooltip
+                                placement={'left'}
+                                style={{ maxWidth: '100%' }}
+                                title={'restart has been locked for this service.'}
+                            >
+                                <Button
+                                    className={myServicesStyles.buttonAsLink}
+                                    icon={<SyncOutlined />}
+                                    disabled={true}
+                                    type={'link'}
+                                >
+                                    restart
+                                </Button>
+                                <LockOutlined />
+                            </Tooltip>
+                        ) : (
+                            <Popconfirm
+                                title='Restart the service'
+                                description='Are you sure to restart the service?'
+                                cancelText='Yes'
+                                okText='No'
+                                onCancel={() => {
+                                    restart(record);
+                                }}
+                            >
+                                <Button
+                                    className={myServicesStyles.buttonAsLink}
+                                    icon={<SyncOutlined />}
+                                    disabled={isDisabledStopOrRestartBtn(
+                                        record,
+                                        activeRecord,
+                                        serviceStateStartQuery.isPending,
+                                        serviceStateStopQuery.isPending,
+                                        serviceStateRestartQuery.isPending
+                                    )}
+                                    type={'link'}
+                                >
+                                    restart
+                                </Button>
+                            </Popconfirm>
+                        )}
+                    </>
                 ),
             },
             {
