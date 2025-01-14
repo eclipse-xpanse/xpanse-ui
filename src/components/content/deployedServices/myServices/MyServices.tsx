@@ -1132,6 +1132,7 @@ function MyServices(): React.JSX.Element {
                 : (record as VendorHostedDeployedServiceDetails)
         );
         serviceRecreateRequest.mutate(record.serviceId);
+        record.serviceDeploymentState = serviceDeploymentState.DESTROYING;
     }
 
     function onMonitor(record: DeployedService): void {
@@ -1293,8 +1294,7 @@ function MyServices(): React.JSX.Element {
                     key={`${activeRecord.serviceId}-recreate`}
                     currentSelectedService={activeRecord}
                     recreateRequest={serviceRecreateRequest}
-                    recreateServiceOrderStatusPollingQueryError={getRecreateServiceOrderStatusPollingQuery.error}
-                    recreateServiceOrderStatusPollingQueryData={getRecreateServiceOrderStatusPollingQuery.data}
+                    recreateServiceOrderStatusPollingQuery={getRecreateServiceOrderStatusPollingQuery}
                     closeRecreateResultAlert={closeRecreateResultAlert}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />

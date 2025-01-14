@@ -29,7 +29,7 @@ export function RecreationProcessingStatus({
         if (endPointMap.size > 0) {
             return (
                 <>
-                    <span>{'Deployment Successful'}</span>
+                    <span>{'Recreation Successful'}</span>
                     <div className={myServicesStyles.serviceInstanceDetailPosition}>
                         {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                     </div>
