@@ -133,7 +133,7 @@ function Workflows(): React.JSX.Element {
             title: 'Status',
             dataIndex: 'status',
             render: (taskStatus: status) => {
-                if (taskStatus === status.ERROR) {
+                if (taskStatus === status.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
                             {taskStatus.valueOf()}
