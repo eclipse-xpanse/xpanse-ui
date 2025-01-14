@@ -475,6 +475,9 @@ export type DeployedService = {
      * The billing mode of the managed service.
      */
     billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The region of the service.
+     */
     region: Region;
     /**
      * The id of the Service Template
@@ -523,7 +526,13 @@ export type DeployedService = {
      * Time of stop service.
      */
     lastStoppedAt?: string;
+    /**
+     * The locks whether the service can be modified or destroyed.
+     */
     lockConfig?: ServiceLockConfig;
+    /**
+     * Details of the service configuration.
+     */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
 };
 
@@ -640,6 +649,9 @@ export type DeployedServiceDetails = {
      * The billing mode of the managed service.
      */
     billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The region of the service.
+     */
     region: Region;
     /**
      * The id of the Service Template
@@ -688,8 +700,17 @@ export type DeployedServiceDetails = {
      * Time of stop service.
      */
     lastStoppedAt?: string;
+    /**
+     * The locks whether the service can be modified or destroyed.
+     */
     lockConfig?: ServiceLockConfig;
+    /**
+     * Details of the service configuration.
+     */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
+    /**
+     * The create request of the deployed service.
+     */
     deployRequest: DeployRequest;
     /**
      * The resource list of the deployed service.
@@ -733,6 +754,9 @@ export enum kind {
  * The deployment of the managed service
  */
 export type Deployment = {
+    /**
+     * The deployer tool which will handle the service deployment.
+     */
     deployerTool: DeployerTool;
     /**
      * The variables for the deployment, which will be passed to the deployer.The list elements must be unique. All variables are put together to build a JSON 'object' with each variable as a property of this object.
@@ -752,6 +776,9 @@ export type Deployment = {
     scriptFiles?: {
         [key: string]: string;
     };
+    /**
+     * Deployment scripts hosted on a GIT repo. Either scriptFiles or scriptsRepo must be provided.
+     */
     scriptsRepo?: ScriptsRepo;
 };
 
@@ -814,6 +841,9 @@ export type DeployRequest = {
      * The version of service
      */
     version: string;
+    /**
+     * The region of the provider.
+     */
     region: Region;
     /**
      * The csp of the Service.
@@ -918,6 +948,9 @@ export type DeployVariable = {
      * The name of the deploy variable
      */
     name: string;
+    /**
+     * The kind of the deploy variable
+     */
     kind: DeployVariableKind;
     /**
      * The type of the deploy variable
@@ -949,7 +982,13 @@ export type DeployVariable = {
      * Sensitive scope of variable storage
      */
     sensitiveScope?: 'none' | 'once' | 'always';
+    /**
+     * Variable autofill. Defines if the variable must be one of the existing resources of a specific type.
+     */
     autoFill?: AutoFill;
+    /**
+     * Variable modificationImpact
+     */
     modificationImpact: ModificationImpact;
 };
 
@@ -1033,6 +1072,9 @@ export type EndUserFlavors = {
      * The flavors of the orderable service.
      */
     serviceFlavors: Array<ServiceFlavor>;
+    /**
+     * Impact on service when flavor is changed.
+     */
     modificationImpact: ModificationImpact;
     /**
      * Whether the downgrading is allowed, default value: true.
@@ -1205,7 +1247,13 @@ export type FlavorPriceResult = {
      * The billing mode of the price.
      */
     billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The recurring price of the flavor.
+     */
     recurringPrice?: Price;
+    /**
+     * The one time payment price of the flavor.
+     */
     oneTimePaymentPrice?: Price;
     /**
      * Error reason when price calculation fails.
@@ -1222,6 +1270,9 @@ export type FlavorsWithPrice = {
      * The flavors of the managed service. The list elements must be unique.
      */
     serviceFlavors: Array<ServiceFlavorWithPrice>;
+    /**
+     * Impact on service when flavor is changed.
+     */
     modificationImpact: ModificationImpact;
     /**
      * Whether the downgrading is allowed, default value: true.
@@ -1366,6 +1417,9 @@ export type MigrateRequest = {
      * The version of service
      */
     version: string;
+    /**
+     * The region of the provider.
+     */
     region: Region;
     /**
      * The csp of the Service.
@@ -1481,19 +1535,37 @@ export type Ocl = {
      * The icon of the managed service
      */
     icon: string;
+    /**
+     * The cloud service provider of the managed service
+     */
     cloudServiceProvider: CloudServiceProvider;
+    /**
+     * The deployment of the managed service
+     */
     deployment: Deployment;
+    /**
+     * The flavors of the managed service
+     */
     flavors: FlavorsWithPrice;
+    /**
+     * The billing policy of the managed service
+     */
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */
     serviceHostingType: 'self' | 'service-vendor';
+    /**
+     * The contact details of the service provider.
+     */
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
      * End user license agreement content of the service.
      */
     eula?: string;
+    /**
+     * manage service configuration.
+     */
     serviceConfigurationManage?: ServiceChangeManage;
     /**
      * manage service action.
@@ -1639,6 +1711,9 @@ export type PriceWithRegion = {
      * The defined site name. If the special name 'default' provided, this price for all sites.
      */
     siteName: string;
+    /**
+     * The price for the defined region and the defined site.
+     */
     price: Price;
 };
 
@@ -1650,6 +1725,9 @@ export type RatingMode = {
      * The fixed prices of the flavor in the managed service for regions. The fixed price of the region includes all prices and shown to the customer.
      */
     fixedPrices?: Array<PriceWithRegion>;
+    /**
+     * The resource usage of the flavor in the managed service.
+     */
     resourceUsage?: ResourceUsage;
     /**
      * Whether the price is only for management layer. Consumption of the workload resources will be billed additionally..
@@ -1792,48 +1870,19 @@ export enum type4 {
 /**
  * Collection of service change details requests generated for the specific change order.
  */
-export type ServiceChangeDetails = {
+export type ServiceActionRequest = {
     /**
-     * ID of the change request created as part of the change order.
+     * The name service action.
      */
-    changeId: string;
+    actionName: string;
     /**
-     * name of the resource on which the change request is executed. Null means any one of the resources that is part of the service and is of type configManager can execute it and until now none of the resource have picked up this request.
+     * The service actions parameter to be modified
      */
-    resourceName?: string;
-    /**
-     * type of the resource in the service that must execute the change request.
-     */
-    configManager: string;
-    /**
-     * message of change service configuration update request.
-     */
-    resultMessage?: string;
-    /**
-     * service configuration requested in the change request.
-     */
-    properties: {
+    actionParameters: {
         [key: string]: unknown;
     };
-    /**
-     * status of change service configuration update request.
-     */
-    status: 'pending' | 'processing' | 'successful' | 'error';
 };
 
-/**
- * status of change service configuration update request.
- */
-export enum status {
-    PENDING = 'pending',
-    PROCESSING = 'processing',
-    SUCCESSFUL = 'successful',
-    ERROR = 'error',
-}
-
-/**
- * manage service configuration.
- */
 export type ServiceChangeManage = {
     /**
      * the tool used to manage the service configuration.
@@ -1853,45 +1902,14 @@ export type ServiceChangeManage = {
     configurationParameters?: Array<ServiceChangeParameter>;
 };
 
-export type ServiceChangeOrderDetails = {
-    /**
-     * The id of the order.
-     */
-    orderId: string;
-    /**
-     * Order status of service configuration update result.
-     */
-    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
-    /**
-     * service configuration requested in the change request.
-     */
-    configRequest: {
-        [key: string]: unknown;
-    };
-    /**
-     * Collection of service change details requests generated for the specific change order.
-     */
-    changeRequests: Array<ServiceChangeDetails>;
-};
-
-/**
- * Order status of service configuration update result.
- */
-export enum orderStatus {
-    CREATED = 'created',
-    IN_PROGRESS = 'in-progress',
-    SUCCESSFUL = 'successful',
-    FAILED = 'failed',
-}
-
-/**
- * The configuration parameters of service .The list elements must be unique. All parameters are put together to build a JSON 'object' with each parameter as a property of this object.
- */
 export type ServiceChangeParameter = {
     /**
      * The name of the service config parameter
      */
     name: string;
+    /**
+     * The kind of the service config parameter
+     */
     kind: DeployVariableKind;
     /**
      * The type of the service config parameter
@@ -1923,6 +1941,9 @@ export type ServiceChangeParameter = {
      * Sensitive scope of service config parameter storage
      */
     sensitiveScope?: 'none' | 'once' | 'always';
+    /**
+     * Service config parameter modificationImpact
+     */
     modificationImpact: ModificationImpact;
     /**
      * Whether the service configuration parameters are read-only
@@ -1934,22 +1955,7 @@ export type ServiceChangeParameter = {
     managedBy: string;
 };
 
-/**
- * The collection of the action manage script.
- */
-export type ServiceChangeScript = {
-    /**
-     * should be the name of the resource available in the deployer script.
-     */
-    changeHandler: string;
-    /**
-     * Means should the configuration update run on each node of the specific component or just one.
-     */
-    runOnlyOnce: boolean;
-    ansibleScriptConfig: AnsibleScriptConfig;
-};
-
-export type ServiceConfigurationChangeRequest = {
+export type ServiceChangeRequest = {
     changeId?: string;
     configParameters?: {
         [key: string]: unknown;
@@ -1960,8 +1966,23 @@ export type ServiceConfigurationChangeRequest = {
     };
 };
 
+export type ServiceChangeScript = {
+    /**
+     * should be the name of the resource available in the deployer script.
+     */
+    changeHandler: string;
+    /**
+     * Means should the configuration update run on each node of the specific component or just one.
+     */
+    runOnlyOnce: boolean;
+    /**
+     * Ansible script configuration details.
+     */
+    ansibleScriptConfig: AnsibleScriptConfig;
+};
+
 /**
- * result of the service configuration update request.
+ * result of the service change request.
  */
 export type ServiceConfigurationChangeResult = {
     isSuccessful?: boolean;
@@ -2035,6 +2056,9 @@ export type ServiceFlavorWithPrice = {
      * Important features and differentiators of the flavor.
      */
     features?: Array<string>;
+    /**
+     * The pricing of the flavor
+     */
     pricing: RatingMode;
 };
 
@@ -2076,6 +2100,7 @@ export type ServiceOrderDetails = {
         | 'recreate'
         | 'lockChange'
         | 'configChange'
+        | 'service_action'
         | 'purge'
         | 'serviceStart'
         | 'serviceStop'
@@ -2096,6 +2121,9 @@ export type ServiceOrderDetails = {
      * The id of the workflow.
      */
     workflowId?: string;
+    /**
+     * The error response if the service order task failed.
+     */
     errorResponse?: ErrorResponse;
     /**
      * The id of the user who created the service order.
@@ -2112,10 +2140,14 @@ export type ServiceOrderDetails = {
     /**
      * The request json of the service order.
      */
-    requestBody?: {
-        [key: string]: unknown;
-    };
+    requestBody?: unknown;
+    /**
+     * The deploy request of the service before this service order.
+     */
     previousDeployRequest?: DeployRequest;
+    /**
+     * The deploy request of the service from this service order.
+     */
     newDeployRequest?: DeployRequest;
     /**
      * The deployed resources of the service before this service order.
@@ -2160,6 +2192,7 @@ export enum taskType {
     RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
+    SERVICE_ACTION = 'service_action',
     PURGE = 'purge',
     SERVICE_START = 'serviceStart',
     SERVICE_STOP = 'serviceStop',
@@ -2199,6 +2232,9 @@ export type ServiceOrderStatusUpdate = {
      * Describes if the service order is now completed.
      */
     isOrderCompleted: boolean;
+    /**
+     * The error message if the service order failed.
+     */
     error?: ErrorResponse;
 };
 
@@ -2345,12 +2381,21 @@ export type ServiceTemplateDetailVo = {
      * The icon of the registered service.
      */
     icon: string;
+    /**
+     * The deployment of the managed service
+     */
     deployment: Deployment;
     /**
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
+    /**
+     * The flavors of the registered service.
+     */
     flavors: FlavorsWithPrice;
+    /**
+     * The billing policy of the registered service.
+     */
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
@@ -2376,11 +2421,17 @@ export type ServiceTemplateDetailVo = {
      * Is available in catalog.
      */
     isAvailableInCatalog: boolean;
+    /**
+     * The contact details of the service provider.
+     */
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
      * End user license agreement content of the service.
      */
     eula?: string;
+    /**
+     * manage service configuration.
+     */
     serviceConfigurationManage?: ServiceChangeManage;
     links?: Array<Link>;
 };
@@ -2444,7 +2495,7 @@ export enum requestType {
 /**
  * Status of the request.
  */
-export enum status2 {
+export enum status {
     IN_REVIEW = 'in-review',
     ACCEPTED = 'accepted',
     REJECTED = 'rejected',
@@ -2476,6 +2527,9 @@ export type ServiceTemplateRequestToReview = {
      * Type of the request.
      */
     requestType: 'register' | 'update' | 'unpublish' | 'republish';
+    /**
+     * Type of the request.
+     */
     ocl: Ocl;
     /**
      * Create time of the service template request.
@@ -2582,12 +2636,21 @@ export type UserOrderableServiceVo = {
      * The variables for the deployment, which will be passed to the deployer.
      */
     variables: Array<DeployVariable>;
+    /**
+     * The flavors of the orderable service.
+     */
     flavors: EndUserFlavors;
+    /**
+     * The billing policy of the orderable service.
+     */
     billing: Billing;
     /**
      * Defines which cloud service account is used for deploying cloud resources.
      */
     serviceHostingType: 'self' | 'service-vendor';
+    /**
+     * The contact details of the service provider.
+     */
     serviceProviderContactDetails: ServiceProviderContactDetails;
     /**
      * The list of availability zone configuration of the service.
@@ -2740,6 +2803,9 @@ export type VendorHostedDeployedServiceDetails = {
      * The billing mode of the managed service.
      */
     billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The region of the service.
+     */
     region: Region;
     /**
      * The id of the Service Template
@@ -2788,8 +2854,17 @@ export type VendorHostedDeployedServiceDetails = {
      * Time of stop service.
      */
     lastStoppedAt?: string;
+    /**
+     * The locks whether the service can be modified or destroyed.
+     */
     lockConfig?: ServiceLockConfig;
+    /**
+     * Details of the service configuration.
+     */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
+    /**
+     * The create request of the deployed service.
+     */
     deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
@@ -2845,7 +2920,7 @@ export type WorkFlowTask = {
 /**
  * The status of the Task
  */
-export enum status3 {
+export enum status2 {
     DONE = 'done',
     FAILED = 'failed',
 }
@@ -2865,9 +2940,7 @@ export type ManageFailedOrderResponse = unknown;
 
 export type CompleteTaskData = {
     requestBody: {
-        [key: string]: {
-            [key: string]: unknown;
-        };
+        [key: string]: unknown;
     };
     /**
      * ID of the workflow task that needs to be handled
@@ -3000,6 +3073,16 @@ export type ChangeServiceLockConfigData = {
 };
 
 export type ChangeServiceLockConfigResponse = ServiceOrder;
+
+export type CreateServiceActionData = {
+    requestBody: ServiceActionRequest;
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type CreateServiceActionResponse = ServiceOrder;
 
 export type GetServiceTemplateDetailsByIdData = {
     /**
@@ -3198,7 +3281,7 @@ export type ReviewServiceTemplateRequestData = {
 
 export type ReviewServiceTemplateRequestResponse = void;
 
-export type UpdateConfigurationChangeResultData = {
+export type UpdateServiceChangeResultData = {
     /**
      * id of the update request.
      */
@@ -3206,7 +3289,7 @@ export type UpdateConfigurationChangeResultData = {
     requestBody: ServiceConfigurationChangeResult;
 };
 
-export type UpdateConfigurationChangeResultResponse = void;
+export type UpdateServiceChangeResultResponse = void;
 
 export type ListDeployedServicesData = {
     /**
@@ -3438,6 +3521,7 @@ export type GetAllOrdersByServiceIdData = {
         | 'recreate'
         | 'lockChange'
         | 'configChange'
+        | 'service_action'
         | 'purge'
         | 'serviceStart'
         | 'serviceStop'
@@ -3646,31 +3730,6 @@ export type GetSelfHostedServiceDetailsByIdData = {
 };
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
-
-export type GetAllServiceConfigurationChangeDetailsData = {
-    /**
-     * Manager of the service configuration parameter.
-     */
-    configManager?: string;
-    /**
-     * id of the service order
-     */
-    orderId?: string;
-    /**
-     * name of the service resource
-     */
-    resourceName?: string;
-    /**
-     * Id of the deployed service
-     */
-    serviceId: string;
-    /**
-     * Status of the service configuration
-     */
-    status?: 'pending' | 'processing' | 'successful' | 'error';
-};
-
-export type GetAllServiceConfigurationChangeDetailsResponse = Array<ServiceChangeOrderDetails>;
 
 export type GetServiceTemplateRequestHistoryByServiceTemplateIdData = {
     /**
@@ -4082,7 +4141,7 @@ export type OpenApiData = {
 
 export type OpenApiResponse = Link;
 
-export type GetPendingConfigurationChangeRequestData = {
+export type GetPendingServiceChangeRequestData = {
     /**
      * The name of the resource of deployed service
      */
@@ -4093,7 +4152,7 @@ export type GetPendingConfigurationChangeRequestData = {
     serviceId: string;
 };
 
-export type GetPendingConfigurationChangeRequestResponse = ServiceConfigurationChangeRequest | void;
+export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
 
 export type GetAccessTokenData = {
     /**
