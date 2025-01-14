@@ -41,18 +41,18 @@ function ServiceTemplateHistoryTable({ data }: { data: ServiceTemplateRequestHis
             },
         },
         {
-            title: 'Status',
-            dataIndex: 'status',
+            title: 'RequestStatus',
+            dataIndex: 'requestStatus',
             align: 'center',
             render: (_text, record) => {
-                if (record.status === 'in-review') {
-                    return <Tag color='#ffa366'>{record.status}</Tag>;
-                } else if (record.status === 'accepted') {
-                    return <Tag color='#87d068'>{record.status}</Tag>;
-                } else if (record.status === 'rejected') {
-                    return <Tag color='#ff6666'>{record.status}</Tag>;
+                if (record.requestStatus === 'in-review') {
+                    return <Tag color='#ffa366'>{record.requestStatus}</Tag>;
+                } else if (record.requestStatus === 'accepted') {
+                    return <Tag color='#87d068'>{record.requestStatus}</Tag>;
+                } else if (record.requestStatus === 'rejected') {
+                    return <Tag color='#ff6666'>{record.requestStatus}</Tag>;
                 } else {
-                    return <Tag color='default'>{record.status}</Tag>;
+                    return <Tag color='default'>{record.requestStatus}</Tag>;
                 }
             },
         },

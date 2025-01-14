@@ -6,51 +6,46 @@
 import { Typography } from 'antd';
 import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import { ServiceOrderDetails } from '../../../../xpanse-api/generated';
-
 const { Text } = Typography;
-
 export const MyServiceHistoryDetails = ({ record }: { record: ServiceOrderDetails }) => {
-    const previousDeployRequest = record.previousDeployRequest;
-    const newDeployRequest = record.newDeployRequest;
+    const requestBodyContent =
+        record.requestBody && Object.keys(record.requestBody).length > 0 ? (
+            <>
+                <ul className={serviceModifyStyles.modifyHistoryValueLi}>
+                    {Object.entries(record.requestBody).map(([key, value]) => (
+                        <li key={key}>
+                            <Text strong>{key}:</Text>
+                            <pre>{JSON.stringify(value, null, 2)}</pre>
+                        </li>
+                    ))}
+                </ul>
+            </>
+        ) : (
+            <Text>Empty Requests</Text>
+        );
 
-    const previousContent = previousDeployRequest ? (
-        <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-            <li>
-                <Text strong>Customer Service Name:</Text>&nbsp;{previousDeployRequest.customerServiceName}
-            </li>
-            {previousDeployRequest.serviceRequestProperties ? (
-                <li>
-                    <Text strong>Service Request Properties:</Text>&nbsp;
-                    {JSON.stringify(previousDeployRequest.serviceRequestProperties)}
-                </li>
-            ) : (
-                <></>
-            )}
-        </ul>
-    ) : null;
-
-    const newContent = newDeployRequest ? (
-        <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-            <li>
-                <Text strong>Customer Service Name:</Text>&nbsp;{newDeployRequest.customerServiceName}
-            </li>
-            {newDeployRequest.serviceRequestProperties ? (
-                <li>
-                    <Text strong>Service Request Properties:</Text>&nbsp;
-                    {JSON.stringify(newDeployRequest.serviceRequestProperties)}
-                </li>
-            ) : (
-                <></>
-            )}
-        </ul>
-    ) : null;
+    const resultPropertiesContent =
+        record.resultProperties && Object.keys(record.resultProperties).length > 0 ? (
+            <>
+                <ul className={serviceModifyStyles.modifyHistoryValueLi}>
+                    {Object.entries(record.resultProperties).map(([key, value]) => (
+                        <li key={key}>
+                            <Text strong>{key}:</Text>
+                            <pre>{JSON.stringify(value, null, 2)}</pre>
+                        </li>
+                    ))}
+                </ul>
+            </>
+        ) : (
+            <Text>No Results Changed</Text>
+        );
 
     return (
-        <div>
-            <h4>Previous Deploy Request:</h4>
-            {previousContent}
-            <h4>New Deploy Request:</h4>
-            {newContent}
+        <div style={{ maxHeight: '60vh', maxWidth: '60vw', overflowY: 'auto' }}>
+            <h4>Request Body:</h4>
+            {requestBodyContent}
+            <h4>Result Properties:</h4>
+            {resultPropertiesContent}
         </div>
     );
 };
