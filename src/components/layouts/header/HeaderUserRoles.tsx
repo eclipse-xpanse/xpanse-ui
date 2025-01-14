@@ -6,12 +6,10 @@
 import { UserOutlined } from '@ant-design/icons';
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import { env } from '../../../config/config.ts';
 import headerStyles from '../../../styles/header.module.css';
 import Logout from '../../content/login/Logout';
 import { allowRoleList } from '../../oidc/OidcConfig';
-import { homePageRoute } from '../../utils/constants';
 import { useCurrentUserRoleStore } from './useCurrentRoleStore';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -33,8 +31,6 @@ function getItem(
 }
 
 export function HeaderUserRoles({ userName, roles }: { userName: string; roles: string[] }): React.JSX.Element {
-    const navigate = useNavigate();
-    const location = useLocation();
     const { useToken } = theme;
     const { token } = useToken();
     let menuProps: MenuProps | undefined = undefined;
@@ -69,9 +65,6 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
 
         const handleMenuClick: MenuProps['onClick'] = (value) => {
             updateCurrentUserRole(value.key);
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-            const origin: string = (location.state?.from?.pathname as string) || homePageRoute;
-            void navigate(origin);
         };
 
         menuProps = {
