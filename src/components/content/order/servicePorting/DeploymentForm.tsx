@@ -24,7 +24,7 @@ import { OrderItem } from '../common/utils/OrderItem';
 import { getDeployParams } from '../formDataHelpers/deployParamsHelper';
 import { getEulaByCsp } from '../formDataHelpers/eulaHelper';
 import { useOrderFormStore } from '../store/OrderFormStore';
-import { MigrationSteps } from '../types/MigrationSteps';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
 export const DeploymentForm = ({
     userOrderableServiceVoList,
@@ -34,7 +34,7 @@ export const DeploymentForm = ({
     availabilityZones,
     selectFlavor,
     selectBillingMode,
-    setCurrentMigrationStep,
+    setCurrentPortingStep,
     setDeployParameters,
     stepItem,
 }: {
@@ -45,7 +45,7 @@ export const DeploymentForm = ({
     availabilityZones: Record<string, string>;
     selectFlavor: string;
     selectBillingMode: billingMode;
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
@@ -66,7 +66,7 @@ export const DeploymentForm = ({
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
 
     const prev = () => {
-        setCurrentMigrationStep(MigrationSteps.SelectADestination);
+        setCurrentPortingStep(ServicePortingSteps.SelectADestination);
     };
 
     const handleFinish = () => {
@@ -95,12 +95,12 @@ export const DeploymentForm = ({
         createRequest.serviceRequestProperties = serviceRequestProperties;
         setDeployParameters(createRequest);
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.ImportServiceData);
+        setCurrentPortingStep(ServicePortingSteps.ImportServiceData);
     };
 
     return (
         <div>
-            <div className={serviceOrderStyles.migrateShowDeployClass}>
+            <div className={serviceOrderStyles.portingShowDeployClass}>
                 <div className={tableStyles.genericTableContainer}>
                     <div className={appStyles.contentTitle}>
                         <div>

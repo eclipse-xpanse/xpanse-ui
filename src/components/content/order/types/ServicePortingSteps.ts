@@ -3,12 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-export enum MigrationSteps {
+export enum ServicePortingSteps {
     ExportServiceData = 0,
 
-    SelectMigrateTarget = 1,
+    SelectPortingTarget = 1,
     SelectADestination = 2,
     PrepareDeploymentParameters = 3,
     ImportServiceData = 4,
-    MigrateService = 5,
+    PortService = 5,
 }

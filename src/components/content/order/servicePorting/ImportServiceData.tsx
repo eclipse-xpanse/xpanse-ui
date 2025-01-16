@@ -6,31 +6,31 @@
 import { Button, Space, StepProps } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { MigrationSteps } from '../types/MigrationSteps';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
 export const ImportServiceData = ({
-    setCurrentMigrationStep,
+    setCurrentPortingStep,
     stepItem,
 }: {
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const importDataContentDescription: string = 'The data import function is not yet implemented.';
 
     const prev = () => {
         stepItem.status = 'wait';
-        setCurrentMigrationStep(MigrationSteps.PrepareDeploymentParameters);
+        setCurrentPortingStep(ServicePortingSteps.PrepareDeploymentParameters);
     };
 
     const next = () => {
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.MigrateService);
+        setCurrentPortingStep(ServicePortingSteps.PortService);
     };
 
     return (
         <>
-            <div className={serviceOrderStyles.migrateExportImportDataClass}>{importDataContentDescription}</div>
-            <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+            <div className={serviceOrderStyles.portingExportImportDataClass}>{importDataContentDescription}</div>
+            <div className={serviceOrderStyles.portingStepButtonInnerClass}>
                 <Space size={'large'}>
                     <Button
                         type='primary'

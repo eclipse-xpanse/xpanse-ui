@@ -14,7 +14,7 @@ import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import DeploymentTimer from '../orderStatus/DeploymentTimer';
 import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
 
-export const MigrationOrderSubmitResult = ({
+export const PortServiceOrderSubmitResult = ({
     msg,
     uuid,
     type,

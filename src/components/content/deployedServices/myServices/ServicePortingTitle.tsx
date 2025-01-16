@@ -8,7 +8,7 @@ import appStyles from '../../../../styles/app.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { DeployedService } from '../../../../xpanse-api/generated';
 
-export const MigrationTitle = ({ record }: { record: DeployedService }): React.JSX.Element => {
+export const ServicePortingTitle = ({ record }: { record: DeployedService }): React.JSX.Element => {
     return (
         <div className={tableStyles.genericTableContainer}>
             <div className={appStyles.contentTitle}>

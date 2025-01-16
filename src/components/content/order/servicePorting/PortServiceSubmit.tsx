@@ -15,10 +15,10 @@ import {
     csp,
     DeployedService,
     DeployRequest,
-    MigrateRequest,
     Region,
     ServiceFlavor,
     serviceHostingType,
+    ServicePortingRequest,
     taskStatus,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -26,19 +26,19 @@ import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatest
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import useGetOrderableServiceDetailsByServiceIdQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
-import { MigrateServiceSubmitAvailabilityZoneInfo } from '../common/MigrateServiceSubmitAvailabilityZoneInfo';
-import { MigrateServiceSubmitBillingMode } from '../common/MigrateServiceSubmitBillingMode';
+import { PortServiceSubmitAvailabilityZoneInfo } from '../common/PortServiceSubmitAvailabilityZoneInfo.tsx';
+import { PortServiceSubmitBillingMode } from '../common/PortServiceSubmitBillingMode.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
 import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/getAvailabilityZoneRequirementsForAService';
 import CspSelect from '../formElements/CspSelect';
-import { MigrationSteps } from '../types/MigrationSteps';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
-import MigrateServiceStatusAlert from './MigrateServiceStatusAlert';
-import { useMigrateServiceRequest } from './useMigrateServiceQuery';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
+import PortServiceStatusAlert from './PortServiceStatusAlert.tsx';
+import { usePortServiceRequest } from './usePortServiceRequest.ts';
 
-export const MigrateServiceSubmit = ({
+export const PortServiceSubmit = ({
     userOrderableServiceVoList,
     selectCsp,
     region,
@@ -46,7 +46,7 @@ export const MigrateServiceSubmit = ({
     selectFlavor,
     selectServiceHostingType,
     selectBillingMode,
-    setCurrentMigrationStep,
+    setCurrentPortingStep,
     deployParams,
     currentSelectedService,
     stepItem,
@@ -59,7 +59,7 @@ export const MigrateServiceSubmit = ({
     selectFlavor: string;
     selectServiceHostingType: serviceHostingType;
     selectBillingMode: billingMode;
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
     stepItem: StepProps;
@@ -74,54 +74,61 @@ export const MigrateServiceSubmit = ({
         userOrderableServiceVoList
     );
 
-    const migrateServiceRequest = useMigrateServiceRequest();
+    const portServiceRequest = usePortServiceRequest();
 
-    const getMigrateLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
-        migrateServiceRequest.data?.orderId ?? '',
-        migrateServiceRequest.isSuccess,
+    const getPortLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
+        portServiceRequest.data?.orderId ?? '',
+        portServiceRequest.isSuccess,
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
     const deployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        migrateServiceRequest.data?.serviceId ?? '',
+        portServiceRequest.data?.serviceId ?? '',
         selectServiceHostingType,
-        getMigrateLatestServiceOrderStatusQuery.data?.taskStatus
+        getPortLatestServiceOrderStatusQuery.data?.taskStatus
     );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);
 
-    const migrate = () => {
+    const port = () => {
         if (deployParams !== undefined) {
-            const migrateRequest: MigrateRequest = deployParams as MigrateRequest;
-            migrateRequest.region = region;
-            migrateRequest.originalServiceId = currentSelectedService.serviceId;
-            migrateRequest.billingMode = selectBillingMode;
-            migrateServiceRequest.mutate(migrateRequest);
+            const servicePortingRequest: ServicePortingRequest = deployParams as ServicePortingRequest;
+            servicePortingRequest.region = region;
+            servicePortingRequest.originalServiceId = currentSelectedService.serviceId;
+            servicePortingRequest.billingMode = selectBillingMode;
+            portServiceRequest.mutate(servicePortingRequest);
             stepItem.status = 'process';
             setIsShowDeploymentResult(true);
         }
     };
     const previous = () => {
-        setCurrentMigrationStep(MigrationSteps.ImportServiceData);
+        setCurrentPortingStep(ServicePortingSteps.ImportServiceData);
     };
 
-    if (getMigrateLatestServiceOrderStatusQuery.data) {
-        if (getMigrateLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.SUCCESSFUL) {
-            stepItem.status = 'finish';
-        } else if (getMigrateLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.FAILED) {
-            stepItem.status = 'error';
-        } else {
-            stepItem.status = 'process';
+    if (portServiceRequest.isError) {
+        stepItem.status = 'error';
+    } else if (portServiceRequest.isPending) {
+        stepItem.status = 'process';
+    } else {
+        if (getPortLatestServiceOrderStatusQuery.data) {
+            if (getPortLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.SUCCESSFUL) {
+                stepItem.status = 'finish';
+            } else if (getPortLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.FAILED) {
+                stepItem.status = 'error';
+            } else {
+                stepItem.status = 'process';
+            }
         }
     }
+
     return (
         <>
             {isShowDeploymentResult ? (
-                <MigrateServiceStatusAlert
+                <PortServiceStatusAlert
                     selectServiceHostingType={selectServiceHostingType}
-                    migrateServiceRequest={migrateServiceRequest}
+                    portServiceRequest={portServiceRequest}
                     deployedServiceDetails={deployServiceDetailsQuery.data}
-                    getMigrateLatestServiceOrderStatusQuery={getMigrateLatestServiceOrderStatusQuery}
+                    getPortLatestServiceOrderStatusQuery={getPortLatestServiceOrderStatusQuery}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
             ) : null}
@@ -153,7 +160,7 @@ export const MigrateServiceSubmit = ({
                             />
                         </div>
                         <RegionSelection selectArea={region.area} selectRegion={region} disabled={true} />
-                        <MigrateServiceSubmitAvailabilityZoneInfo
+                        <PortServiceSubmitAvailabilityZoneInfo
                             availabilityZoneConfigs={getAvailabilityZoneRequirementsForAService(
                                 selectCsp,
                                 userOrderableServiceVoList
@@ -162,7 +169,7 @@ export const MigrateServiceSubmit = ({
                         />
                     </div>
                     <div className={serviceOrderStyles.orderFormGroupItems}>
-                        <MigrateServiceSubmitBillingMode selectBillMode={selectBillingMode} />
+                        <PortServiceSubmitBillingMode selectBillMode={selectBillingMode} />
                         <FlavorSelection
                             selectFlavor={selectFlavor}
                             flavorList={currentFlavorList}
@@ -170,7 +177,7 @@ export const MigrateServiceSubmit = ({
                         />
                     </div>
                 </div>
-                <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+                <div className={serviceOrderStyles.portingStepButtonInnerClass}>
                     <Space size={'large'}>
                         <Button
                             type='primary'
@@ -182,18 +189,18 @@ export const MigrateServiceSubmit = ({
                             Previous
                         </Button>
                         <Popconfirm
-                            title='Migrate service'
-                            description='Are you sure to migrate service?'
+                            title='Port service'
+                            description='Are you sure to port service?'
                             okText='No'
                             cancelText='Yes'
-                            onCancel={migrate}
+                            onCancel={port}
                         >
                             <Button
                                 type='primary'
                                 loading={stepItem.status === 'process'}
                                 disabled={stepItem.status === 'finish' || stepItem.status === 'process'}
                             >
-                                Migrate
+                                Port
                             </Button>
                         </Popconfirm>
                     </Space>

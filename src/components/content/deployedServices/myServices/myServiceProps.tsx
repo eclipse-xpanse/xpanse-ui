@@ -256,7 +256,7 @@ export const isDisableModifyBtn = (
     return false;
 };
 
-export const isDisableMigrateBtn = (
+export const isDisableServicePortingBtn = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {

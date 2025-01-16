@@ -134,12 +134,12 @@ import type {
     ListUserPoliciesResponse,
     ManageFailedOrderData,
     ManageFailedOrderResponse,
-    MigrateData,
-    MigrateResponse,
     ModifyData,
     ModifyResponse,
     OpenApiData,
     OpenApiResponse,
+    PortData,
+    PortResponse,
     PurgeData,
     PurgeResponse,
     QueryTasksData,
@@ -1212,16 +1212,16 @@ export const deploy = (data: DeployData): CancelablePromise<DeployResponse> => {
 };
 
 /**
- * Create a job to migrate the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * Create a job to port the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.requestBody
  * @returns ServiceOrder Accepted
  * @throws ApiError
  */
-export const migrate = (data: MigrateData): CancelablePromise<MigrateResponse> => {
+export const port = (data: PortData): CancelablePromise<PortResponse> => {
     return __request(OpenAPI, {
         method: 'POST',
-        url: '/xpanse/services/migration',
+        url: '/xpanse/services/porting',
         body: data.requestBody,
         mediaType: 'application/json',
         errors: {

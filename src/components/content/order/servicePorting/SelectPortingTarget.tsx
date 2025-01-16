@@ -20,10 +20,10 @@ import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
-import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
-export const SelectMigrationTarget = ({
+export const SelectPortingTarget = ({
     target,
     setTarget,
     currentSelectedService,
@@ -38,7 +38,7 @@ export const SelectMigrationTarget = ({
     setSelectRegion,
     setBillingModes,
     setSelectBillingMode,
-    setCurrentMigrationStep,
+    setCurrentPortingStep,
     stepItem,
 }: {
     target: string | undefined;
@@ -55,7 +55,7 @@ export const SelectMigrationTarget = ({
     setSelectRegion: Dispatch<SetStateAction<Region>>;
     setBillingModes: Dispatch<SetStateAction<billingMode[] | undefined>>;
     setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
@@ -147,46 +147,43 @@ export const SelectMigrationTarget = ({
 
     const next = () => {
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.SelectADestination);
+        setCurrentPortingStep(ServicePortingSteps.SelectADestination);
     };
 
     const prev = () => {
         stepItem.status = 'wait';
-        setCurrentMigrationStep(MigrationSteps.ExportServiceData);
+        setCurrentPortingStep(ServicePortingSteps.ExportServiceData);
     };
 
     return (
         <>
             <>
                 <Form form={form} layout='vertical' autoComplete='off' onFinish={next} validateTrigger={['next']}>
-                    <div className={serviceOrderStyles.orderSelectMigrateTarget}>
+                    <div className={serviceOrderStyles.orderSelectPortingTarget}>
                         <div className={serviceOrderStyles.orderParamItemLeft} />
                         <div className={serviceOrderStyles.orderParamItemContent}>
                             <Form.Item
-                                name='Choose the migration Destination'
-                                label='Choose the migration Destination'
+                                name='Choose the porting destination'
+                                label='Choose the porting destination'
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Please select the type of migration you wish to perform.',
+                                        message: 'Please select the type of porting you wish to perform.',
                                     },
                                 ]}
                             >
                                 <Radio.Group onChange={onChange} value={target}>
                                     <Radio value={'region'}>
-                                        Migrate service to a different region offered by the same cloud service
-                                        provider.
+                                        Port service to a different region offered by the same cloud service provider.
                                     </Radio>
                                     {userOrderableServiceVoList.length > 1 ? (
-                                        <Radio value={'csp'}>
-                                            Migrate service to a different cloud service provider.
-                                        </Radio>
+                                        <Radio value={'csp'}>Port service to a different cloud service provider.</Radio>
                                     ) : null}
                                 </Radio.Group>
                             </Form.Item>
                         </div>
                     </div>
-                    <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+                    <div className={serviceOrderStyles.portingStepButtonInnerClass}>
                         <Space size={'large'}>
                             <Button
                                 type='primary'

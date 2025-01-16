@@ -48,7 +48,6 @@ import { getExistingServiceParameters } from '../../order/common/utils/existingS
 import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
 import { Locks } from '../../order/locks/Locks';
-import { Migrate } from '../../order/migrate/Migrate';
 import { Modify } from '../../order/modify/Modify';
 import { PurgeServiceStatusAlert } from '../../order/purge/PurgeServiceStatusAlert.tsx';
 import { usePurgeRequestStatusQuery } from '../../order/purge/usePurgeRequestStatusQuery.ts';
@@ -59,6 +58,7 @@ import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubm
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
+import { ServicePorting } from '../../order/servicePorting/ServicePorting.tsx';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
 import { useServiceStateRestartQuery } from '../../order/serviceState/restart/useServiceStateRestartQuery';
 import StartServiceStatusAlert from '../../order/serviceState/start/StartServiceStatusAlert';
@@ -73,7 +73,6 @@ import { DeployedServicesHostingType } from '../common/DeployedServicesHostingTy
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import { LocksTitle } from './LocksTitle.tsx';
-import { MigrationTitle } from './MigrationTitle.tsx';
 import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
 import {
@@ -84,11 +83,11 @@ import {
     isDisableDetails,
     isDisabledStopOrRestartBtn,
     isDisableLocksBtn,
-    isDisableMigrateBtn,
     isDisableModifyBtn,
     isDisableRecreateBtn,
     isDisableRetryDeploymentBtn,
     isDisableServiceConfigBtn,
+    isDisableServicePortingBtn,
     isDisableStartBtn,
     updateBillingModeFilters,
     updateCategoryFilters,
@@ -104,6 +103,7 @@ import {
 } from './myServiceProps.tsx';
 import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
+import { ServicePortingTitle } from './ServicePortingTitle.tsx';
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
@@ -146,7 +146,7 @@ function MyServices(): React.JSX.Element {
     const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
     const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState(false);
 
-    const [isMigrateModalOpen, setIsMigrateModalOpen] = useState<boolean>(false);
+    const [isServicePortingModalOpen, setIsServicePortingModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
     const [isScaleModalOpen, setIsScaleModalOpen] = useState<boolean>(false);
     const [isLocksModalOpen, setIsLocksModalOpen] = useState<boolean>(false);
@@ -394,14 +394,14 @@ function MyServices(): React.JSX.Element {
                 ),
             },
             {
-                key: 'migrate',
+                key: 'servicePorting',
                 label: (
                     <>
                         {record.lockConfig?.modifyLocked ? (
                             <Tooltip
                                 placement={'left'}
                                 style={{ maxWidth: '100%' }}
-                                title={'migration has been locked for this service.'}
+                                title={'service porting has been locked for this service.'}
                             >
                                 <Button
                                     className={myServicesStyles.buttonAsLink}
@@ -409,21 +409,21 @@ function MyServices(): React.JSX.Element {
                                     disabled={true}
                                     type={'link'}
                                 >
-                                    migrate
+                                    port service
                                 </Button>
                                 <LockOutlined />
                             </Tooltip>
                         ) : (
                             <Button
                                 onClick={() => {
-                                    migrate(record);
+                                    servicePorting(record);
                                 }}
                                 className={myServicesStyles.buttonAsLink}
                                 icon={<CopyOutlined />}
-                                disabled={isDisableMigrateBtn(record, activeRecord)}
+                                disabled={isDisableServicePortingBtn(record, activeRecord)}
                                 type={'link'}
                             >
-                                migrate
+                                port service
                             </Button>
                         )}
                     </>
@@ -1065,13 +1065,13 @@ function MyServices(): React.JSX.Element {
         record.serviceState = serviceState.RESTARTING;
     }
 
-    function migrate(record: DeployedService): void {
+    function servicePorting(record: DeployedService): void {
         setActiveRecord(
             record.serviceHostingType === serviceHostingType.SELF
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
-        setIsMigrateModalOpen(true);
+        setIsServicePortingModalOpen(true);
     }
 
     function modify(record: DeployedService): void {
@@ -1189,11 +1189,11 @@ function MyServices(): React.JSX.Element {
         setIsMyServiceConfigurationModalOpen(false);
     };
 
-    const handleCancelMigrateModel = () => {
+    const handleCancelServicePortingModel = () => {
         setActiveRecord(undefined);
         clearFormVariables();
         refreshData();
-        setIsMigrateModalOpen(false);
+        setIsServicePortingModalOpen(false);
     };
 
     const handleCancelModifyModel = () => {
@@ -1337,18 +1337,18 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {activeRecord ? (
                 <Modal
-                    key={`${activeRecord.serviceId}-migrate`}
-                    open={isMigrateModalOpen}
-                    title={<MigrationTitle record={activeRecord} />}
+                    key={`${activeRecord.serviceId}-servicePorting`}
+                    open={isServicePortingModalOpen}
+                    title={<ServicePortingTitle record={activeRecord} />}
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}
                     footer={null}
-                    onCancel={handleCancelMigrateModel}
+                    onCancel={handleCancelServicePortingModel}
                     width={1600}
                     mask={true}
                 >
-                    <Migrate currentSelectedService={activeRecord} />
+                    <ServicePorting currentSelectedService={activeRecord} />
                 </Modal>
             ) : null}
 
@@ -1371,7 +1371,7 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     open={isScaleModalOpen}
-                    title={<MigrationTitle record={activeRecord} />}
+                    title={<ServicePortingTitle record={activeRecord} />}
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}
@@ -1387,7 +1387,7 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     open={isModifyModalOpen}
-                    title={<MigrationTitle record={activeRecord} />}
+                    title={<ServicePortingTitle record={activeRecord} />}
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}

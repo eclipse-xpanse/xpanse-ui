@@ -1104,9 +1104,9 @@ export type ErrorResponse = {
         | 'Policy Evaluation Failed'
         | 'Current Login User No Found'
         | 'Service Details No Accessible'
-        | 'Migrating activiti Task Not Found'
-        | 'Service Migration Failed Exception'
-        | 'Service Migration Not Found'
+        | 'Service Porting Activiti Task Not Found'
+        | 'Service Porting Failed Exception'
+        | 'Service Porting Not Found'
         | 'Service Locked'
         | 'Eula Not Accepted'
         | 'Service Flavor Downgrade Not Allowed'
@@ -1183,9 +1183,9 @@ export enum errorType {
     POLICY_EVALUATION_FAILED = 'Policy Evaluation Failed',
     CURRENT_LOGIN_USER_NO_FOUND = 'Current Login User No Found',
     SERVICE_DETAILS_NO_ACCESSIBLE = 'Service Details No Accessible',
-    MIGRATING_ACTIVITI_TASK_NOT_FOUND = 'Migrating activiti Task Not Found',
-    SERVICE_MIGRATION_FAILED_EXCEPTION = 'Service Migration Failed Exception',
-    SERVICE_MIGRATION_NOT_FOUND = 'Service Migration Not Found',
+    SERVICE_PORTING_ACTIVITI_TASK_NOT_FOUND = 'Service Porting Activiti Task Not Found',
+    SERVICE_PORTING_FAILED_EXCEPTION = 'Service Porting Failed Exception',
+    SERVICE_PORTING_NOT_FOUND = 'Service Porting Not Found',
     SERVICE_LOCKED = 'Service Locked',
     EULA_NOT_ACCEPTED = 'Eula Not Accepted',
     SERVICE_FLAVOR_DOWNGRADE_NOT_ALLOWED = 'Service Flavor Downgrade Not Allowed',
@@ -1354,81 +1354,6 @@ export enum type3 {
     SUM = 'sum',
 }
 
-export type MigrateRequest = {
-    /**
-     * The category of the service
-     */
-    category:
-        | 'ai'
-        | 'compute'
-        | 'container'
-        | 'storage'
-        | 'network'
-        | 'database'
-        | 'mediaService'
-        | 'security'
-        | 'middleware'
-        | 'others';
-    /**
-     * The name of the service ordered.
-     */
-    serviceName: string;
-    /**
-     * Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated
-     */
-    customerServiceName?: string;
-    /**
-     * The version of service
-     */
-    version: string;
-    /**
-     * The region of the provider.
-     */
-    region: Region;
-    /**
-     * The csp of the Service.
-     */
-    csp:
-        | 'HuaweiCloud'
-        | 'FlexibleEngine'
-        | 'OpenstackTestlab'
-        | 'PlusServer'
-        | 'RegioCloud'
-        | 'AlibabaCloud'
-        | 'aws'
-        | 'azure'
-        | 'GoogleCloudPlatform';
-    /**
-     * The flavor of the Service.
-     */
-    flavor: string;
-    /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
-    /**
-     * The properties for the requested service
-     */
-    serviceRequestProperties?: {
-        [key: string]: unknown;
-    };
-    /**
-     * The availability zones to deploy the service instance.
-     */
-    availabilityZones?: {
-        [key: string]: string;
-    };
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
-    /**
-     * The id of the service to migrate
-     */
-    originalServiceId: string;
-    eulaAccepted?: boolean;
-};
-
 export type ModificationImpact = {
     /**
      * Is data lost when service configuration is modified.
@@ -1585,9 +1510,9 @@ export type OrderFailedErrorResponse = {
         | 'Policy Evaluation Failed'
         | 'Current Login User No Found'
         | 'Service Details No Accessible'
-        | 'Migrating activiti Task Not Found'
-        | 'Service Migration Failed Exception'
-        | 'Service Migration Not Found'
+        | 'Service Porting Activiti Task Not Found'
+        | 'Service Porting Failed Exception'
+        | 'Service Porting Not Found'
         | 'Service Locked'
         | 'Eula Not Accepted'
         | 'Service Flavor Downgrade Not Allowed'
@@ -2021,7 +1946,7 @@ export type ServiceOrderDetails = {
         | 'rollback'
         | 'modify'
         | 'destroy'
-        | 'migrate'
+        | 'port'
         | 'recreate'
         | 'lockChange'
         | 'configChange'
@@ -2085,7 +2010,7 @@ export enum taskType {
     ROLLBACK = 'rollback',
     MODIFY = 'modify',
     DESTROY = 'destroy',
-    MIGRATE = 'migrate',
+    PORT = 'port',
     RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
@@ -2184,6 +2109,81 @@ export type ServicePolicyUpdateRequest = {
      * Is the policy enabled. true:enabled;false:disabled.
      */
     enabled?: boolean;
+};
+
+export type ServicePortingRequest = {
+    /**
+     * The category of the service
+     */
+    category:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
+    /**
+     * The name of the service ordered.
+     */
+    serviceName: string;
+    /**
+     * Customer's name for the service. Used only for customer's reference.If not provided, this value will be auto-generated
+     */
+    customerServiceName?: string;
+    /**
+     * The version of service
+     */
+    version: string;
+    /**
+     * The region of the provider.
+     */
+    region: Region;
+    /**
+     * The csp of the Service.
+     */
+    csp:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+    /**
+     * The flavor of the Service.
+     */
+    flavor: string;
+    /**
+     * Defines which cloud service account is used for deploying cloud resources.
+     */
+    serviceHostingType: 'self' | 'service-vendor';
+    /**
+     * The properties for the requested service
+     */
+    serviceRequestProperties?: {
+        [key: string]: unknown;
+    };
+    /**
+     * The availability zones to deploy the service instance.
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The id of the service to port
+     */
+    originalServiceId: string;
+    eulaAccepted?: boolean;
 };
 
 export type ServiceProviderContactDetails = {
@@ -3232,11 +3232,11 @@ export type DeployData = {
 
 export type DeployResponse = ServiceOrder;
 
-export type MigrateData = {
-    requestBody: MigrateRequest;
+export type PortData = {
+    requestBody: ServicePortingRequest;
 };
 
-export type MigrateResponse = ServiceOrder;
+export type PortResponse = ServiceOrder;
 
 export type GetAllServiceTemplatesByIsvData = {
     /**
@@ -3397,7 +3397,7 @@ export type GetAllOrdersByServiceIdData = {
         | 'rollback'
         | 'modify'
         | 'destroy'
-        | 'migrate'
+        | 'port'
         | 'recreate'
         | 'lockChange'
         | 'configChange'
