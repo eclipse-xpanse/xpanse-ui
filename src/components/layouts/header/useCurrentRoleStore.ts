@@ -9,23 +9,29 @@ import { createWithEqualityFn } from 'zustand/traditional';
 
 interface CurrentUserRoleStore {
     currentUserRole: string | undefined;
+    isRoleUpdated: boolean;
 }
 
 const initialState: CurrentUserRoleStore = {
     currentUserRole: undefined,
+    isRoleUpdated: false,
 };
 
 interface updateState {
-    addCurrentUserRole: (currentUserRole: string) => void;
+    addCurrentUserRole: (currentUserRole: string, isRoleUpdated: boolean) => void;
     clearCurrentUserRole: () => void;
+    isPageLoadedWithoutRoleChange: (isRoleUpdated: boolean) => void;
 }
 
 export const useCurrentUserRoleStore = createWithEqualityFn<CurrentUserRoleStore & updateState>()(
     persist(
         (set) => ({
             ...initialState,
-            addCurrentUserRole: (currentUserRole) => {
-                set({ currentUserRole: currentUserRole });
+            addCurrentUserRole: (currentUserRole, isRoleUpdated) => {
+                set({ currentUserRole: currentUserRole, isRoleUpdated: isRoleUpdated });
+            },
+            isPageLoadedWithoutRoleChange: (isRoleUpdated: boolean) => {
+                set({ isRoleUpdated: !isRoleUpdated });
             },
             clearCurrentUserRole: () => {
                 set(initialState);
