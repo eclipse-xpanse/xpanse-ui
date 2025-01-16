@@ -6,7 +6,7 @@
 import { Button, Space, Spin, StepProps } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { MigrationSteps } from '../types/MigrationSteps';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
 export const ExportServiceData = ({
     isQueryLoading,
@@ -14,28 +14,28 @@ export const ExportServiceData = ({
     stepItem,
 }: {
     isQueryLoading: boolean;
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentMigrationStep: (currentMigrationStep: ServicePortingSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const exportDataContentDescription: string = 'The export function is not yet implemented.';
 
     const next = () => {
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.SelectMigrateTarget);
+        setCurrentMigrationStep(ServicePortingSteps.SelectPortingTarget);
     };
 
     return (
         <>
             {isQueryLoading ? (
                 <Spin tip='Loading' size='large'>
-                    <div className={serviceOrderStyles.migrateExportImportDataClass} />
+                    <div className={serviceOrderStyles.portingExportImportDataClass} />
                 </Spin>
             ) : (
                 <>
-                    <div className={serviceOrderStyles.migrateExportImportDataClass}>
+                    <div className={serviceOrderStyles.portingExportImportDataClass}>
                         {exportDataContentDescription}
                     </div>
-                    <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+                    <div className={serviceOrderStyles.portingStepButtonInnerClass}>
                         <Space size={'large'}>
                             <Button
                                 type='primary'

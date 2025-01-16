@@ -32,9 +32,9 @@ import { getAvailabilityZoneRequirementsForAService } from '../formDataHelpers/g
 import { getRegionDropDownValues } from '../formDataHelpers/regionHelper';
 import { getAvailableServiceHostingTypes } from '../formDataHelpers/serviceHostingTypeHelper';
 import CspSelect from '../formElements/CspSelect';
-import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
 export const SelectDestination = ({
     userOrderableServiceVoList,
@@ -57,7 +57,7 @@ export const SelectDestination = ({
     billingModes,
     selectBillingMode,
     setSelectBillingMode,
-    setCurrentMigrationStep,
+    setCurrentPortingStep,
     stepItem,
     onChangeFlavor,
     getServicePriceQuery,
@@ -89,7 +89,7 @@ export const SelectDestination = ({
     billingModes: billingMode[] | undefined;
     selectBillingMode: billingMode;
     setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
-    setCurrentMigrationStep: (currentMigrationStep: MigrationSteps) => void;
+    setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     stepItem: StepProps;
     onChangeFlavor: (newFlavor: string) => void;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
@@ -136,13 +136,13 @@ export const SelectDestination = ({
 
     const prev = () => {
         stepItem.status = 'wait';
-        setCurrentMigrationStep(MigrationSteps.SelectMigrateTarget);
+        setCurrentPortingStep(ServicePortingSteps.SelectPortingTarget);
     };
 
     const next = () => {
         setIsPreviousDisabled(true);
         stepItem.status = 'finish';
-        setCurrentMigrationStep(MigrationSteps.PrepareDeploymentParameters);
+        setCurrentPortingStep(ServicePortingSteps.PrepareDeploymentParameters);
     };
 
     const onChangeServiceHostingType = (serviceHostingType: serviceHostingType) => {
@@ -327,11 +327,10 @@ export const SelectDestination = ({
                     />
                 </div>
             </div>
-            <div className={serviceOrderStyles.migrateStepButtonInnerClass}>
+            <div className={serviceOrderStyles.portingStepButtonInnerClass}>
                 <Space size={'large'}>
                     <Button
                         type='primary'
-                        className={'migrate-steps-operation-button-clas'}
                         onClick={() => {
                             prev();
                         }}

@@ -7,7 +7,7 @@ import { Col, Flex, Form, Radio, Row } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 
-export const MigrateServiceSubmitBillingMode = ({ selectBillMode }: { selectBillMode: string }): React.JSX.Element => {
+export const PortServiceSubmitBillingMode = ({ selectBillMode }: { selectBillMode: string }): React.JSX.Element => {
     return (
         <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
             <Col className={serviceOrderStyles.orderFormLabel}>

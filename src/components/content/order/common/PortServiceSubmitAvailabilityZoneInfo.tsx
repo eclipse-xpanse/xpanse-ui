@@ -8,7 +8,7 @@ import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { AvailabilityZoneConfig } from '../../../../xpanse-api/generated';
 
-export const MigrateServiceSubmitAvailabilityZoneInfo = ({
+export const PortServiceSubmitAvailabilityZoneInfo = ({
     availabilityZoneConfigs,
     availabilityZones,
 }: {

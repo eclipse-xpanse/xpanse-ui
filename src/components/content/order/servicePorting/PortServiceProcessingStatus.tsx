@@ -12,7 +12,7 @@ import {
 } from '../../../../xpanse-api/generated';
 import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList';
 
-export function MigrationProcessingStatus({
+export function PortServiceProcessingStatus({
     deployedResponse,
 }: {
     deployedResponse: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
@@ -28,14 +28,14 @@ export function MigrationProcessingStatus({
         if (endPointMap.size > 0) {
             return (
                 <>
-                    <span>{'Migration Successful'}</span>
+                    <span>{'Service ported successfully'}</span>
                     <div className={myServicesStyles.serviceInstanceDetailPosition}>
                         {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                     </div>
                 </>
             );
         } else {
-            return <span>{'Migration Successful'}</span>;
+            return <span>{'Service ported successfully'}</span>;
         }
     }
 

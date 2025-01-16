@@ -21,21 +21,23 @@ import {
 } from '../../../../xpanse-api/generated';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
-import { MigrationSteps } from '../types/MigrationSteps';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
+import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 import { DeploymentForm } from './DeploymentForm';
 import { ExportServiceData } from './ExportServiceData';
 import { ImportServiceData } from './ImportServiceData';
-import { MigrateServiceSubmit } from './MigrateServiceSubmit';
+import { PortServiceSubmit } from './PortServiceSubmit.tsx';
 import { SelectDestination } from './SelectDestination';
-import { SelectMigrationTarget } from './SelectMigrationTarget';
+import { SelectPortingTarget } from './SelectPortingTarget.tsx';
 
-export const Migrate = ({
+export const ServicePorting = ({
     currentSelectedService,
 }: {
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
-    const [currentMigrationStep, setCurrentMigrationStep] = useState<MigrationSteps>(MigrationSteps.ExportServiceData);
+    const [currentPortingStep, setCurrentPortingStep] = useState<ServicePortingSteps>(
+        ServicePortingSteps.ExportServiceData
+    );
 
     const [target, setTarget] = useState<string | undefined>(undefined);
 
@@ -129,13 +131,13 @@ export const Migrate = ({
                 description: 'Export service data.',
             },
             {
-                title: 'Select a migrate target',
+                title: 'Select a porting target',
                 description:
-                    'Select between migrating between different regions within the same cloud or migrating between different clouds',
+                    'Select between porting between different regions within the same cloud or porting between different clouds',
             },
             {
                 title: 'Select a destination',
-                description: 'Select a destination for migrating the existing deployment.',
+                description: 'Select a destination for porting the existing deployment.',
             },
             {
                 title: 'Prepare deployment parameters',
@@ -146,8 +148,8 @@ export const Migrate = ({
                 description: 'Import service data.',
             },
             {
-                title: 'Migrate',
-                description: 'Migrate service to the new destination.',
+                title: 'Port Service',
+                description: 'Port service to the new destination.',
             },
         ];
     }, []);
@@ -163,19 +165,19 @@ export const Migrate = ({
         [steps]
     );
 
-    function renderStepContent(migrationStep: MigrationSteps): React.JSX.Element {
+    function renderStepContent(migrationStep: ServicePortingSteps): React.JSX.Element {
         switch (migrationStep) {
-            case MigrationSteps.ExportServiceData:
+            case ServicePortingSteps.ExportServiceData:
                 return (
                     <ExportServiceData
                         isQueryLoading={getOrderableServicesQuery.isLoading}
-                        setCurrentMigrationStep={setCurrentMigrationStep}
-                        stepItem={items[MigrationSteps.ExportServiceData]}
+                        setCurrentMigrationStep={setCurrentPortingStep}
+                        stepItem={items[ServicePortingSteps.ExportServiceData]}
                     />
                 );
-            case MigrationSteps.SelectMigrateTarget:
+            case ServicePortingSteps.SelectPortingTarget:
                 return (
-                    <SelectMigrationTarget
+                    <SelectPortingTarget
                         target={target}
                         setTarget={setTarget}
                         currentSelectedService={currentSelectedService}
@@ -190,11 +192,11 @@ export const Migrate = ({
                         setSelectRegion={setSelectRegion}
                         setBillingModes={setBillingModes}
                         setSelectBillingMode={setSelectBillingMode}
-                        setCurrentMigrationStep={setCurrentMigrationStep}
-                        stepItem={items[MigrationSteps.SelectMigrateTarget]}
+                        setCurrentPortingStep={setCurrentPortingStep}
+                        stepItem={items[ServicePortingSteps.SelectPortingTarget]}
                     />
                 );
-            case MigrationSteps.SelectADestination:
+            case ServicePortingSteps.SelectADestination:
                 return (
                     <SelectDestination
                         userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
@@ -217,20 +219,20 @@ export const Migrate = ({
                         billingModes={billingModes}
                         selectBillingMode={selectBillingMode}
                         setSelectBillingMode={setSelectBillingMode}
-                        setCurrentMigrationStep={setCurrentMigrationStep}
-                        stepItem={items[MigrationSteps.SelectADestination]}
+                        setCurrentPortingStep={setCurrentPortingStep}
+                        stepItem={items[ServicePortingSteps.SelectADestination]}
                         onChangeFlavor={onChangeFlavor}
                         getServicePriceQuery={getServicePriceQuery}
                     />
                 );
-            case MigrationSteps.ImportServiceData:
+            case ServicePortingSteps.ImportServiceData:
                 return (
                     <ImportServiceData
-                        setCurrentMigrationStep={setCurrentMigrationStep}
-                        stepItem={items[MigrationSteps.ImportServiceData]}
+                        setCurrentPortingStep={setCurrentPortingStep}
+                        stepItem={items[ServicePortingSteps.ImportServiceData]}
                     />
                 );
-            case MigrationSteps.PrepareDeploymentParameters:
+            case ServicePortingSteps.PrepareDeploymentParameters:
                 return (
                     <DeploymentForm
                         userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
@@ -240,14 +242,14 @@ export const Migrate = ({
                         availabilityZones={selectAvailabilityZones}
                         selectFlavor={selectFlavor}
                         selectBillingMode={selectBillingMode}
-                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        setCurrentPortingStep={setCurrentPortingStep}
                         setDeployParameters={setDeployParams}
-                        stepItem={items[MigrationSteps.PrepareDeploymentParameters]}
+                        stepItem={items[ServicePortingSteps.PrepareDeploymentParameters]}
                     />
                 );
-            case MigrationSteps.MigrateService:
+            case ServicePortingSteps.PortService:
                 return (
-                    <MigrateServiceSubmit
+                    <PortServiceSubmit
                         userOrderableServiceVoList={getOrderableServicesQuery.data ?? []}
                         selectCsp={selectCsp}
                         region={selectRegion}
@@ -255,10 +257,10 @@ export const Migrate = ({
                         selectFlavor={selectFlavor}
                         selectServiceHostingType={selectServiceHostingType}
                         selectBillingMode={selectBillingMode}
-                        setCurrentMigrationStep={setCurrentMigrationStep}
+                        setCurrentPortingStep={setCurrentPortingStep}
                         deployParams={deployParams}
                         currentSelectedService={currentSelectedService}
-                        stepItem={items[MigrationSteps.MigrateService]}
+                        stepItem={items[ServicePortingSteps.PortService]}
                         getServicePriceQuery={getServicePriceQuery}
                     />
                 );
@@ -266,9 +268,9 @@ export const Migrate = ({
     }
 
     return (
-        <div className={serviceOrderStyles.migrateSelectDestinationClass}>
-            <Steps current={currentMigrationStep} items={items} />
-            {renderStepContent(currentMigrationStep)}
+        <div className={serviceOrderStyles.portingSelectDestinationClass}>
+            <Steps current={currentPortingStep} items={items} />
+            {renderStepContent(currentPortingStep)}
         </div>
     );
 };
