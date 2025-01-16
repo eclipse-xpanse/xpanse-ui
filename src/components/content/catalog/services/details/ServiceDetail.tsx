@@ -27,7 +27,7 @@ import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowTy
 import { ContactDetailsText } from '../../../common/ocl/ContactDetailsText';
 import { FlavorsText } from '../../../common/ocl/FlavorsText';
 import { RegionText } from '../../../common/ocl/RegionText.tsx';
-import useDeployedServicesByIsvQuery from '../../../deployedServices/myServices/query/useDeployedServiceByIsvQuery';
+import useDeployedServicesQuery from '../../../deployedServices/myServices/query/useDeployedServiceQuery';
 import DeploymentManagement from '../../../deployment/DeploymentManagement';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
 import { ShowIcon } from './ShowIcon';
@@ -36,7 +36,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
-    const listDeployedServicesByIsvQuery = useDeployedServicesByIsvQuery(
+    const listDeployedServicesByIsvQuery = useDeployedServicesQuery(
         serviceDetails.category as category,
         serviceDetails.csp as csp,
         serviceDetails.name,
