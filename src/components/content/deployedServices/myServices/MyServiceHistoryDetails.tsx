@@ -9,7 +9,7 @@ import { ServiceOrderDetails } from '../../../../xpanse-api/generated';
 const { Text } = Typography;
 export const MyServiceHistoryDetails = ({ record }: { record: ServiceOrderDetails }) => {
     const requestBodyContent =
-        record.requestBody && Object.keys(record.requestBody).length > 0 ? (
+        Object.keys(record.requestBody).length > 0 ? (
             <>
                 <ul className={serviceModifyStyles.modifyHistoryValueLi}>
                     {Object.entries(record.requestBody).map(([key, value]) => (

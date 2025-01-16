@@ -5,9 +5,12 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    getServiceTemplateRequestHistoryByServiceTemplateId,
-    GetServiceTemplateRequestHistoryByServiceTemplateIdData,
+    getServiceTemplateRequestHistoryForCsp,
+    GetServiceTemplateRequestHistoryForCspData,
+    getServiceTemplateRequestHistoryForIsv,
+    GetServiceTemplateRequestHistoryForIsvData,
 } from '../../../../../xpanse-api/generated';
+import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 
 export default function useServiceTemplateHistoryQuery(
     serviceTemplateId: string,
@@ -22,12 +25,18 @@ export default function useServiceTemplateHistoryQuery(
             requestType,
         ],
         queryFn: () => {
-            const data: GetServiceTemplateRequestHistoryByServiceTemplateIdData = {
+            const data: GetServiceTemplateRequestHistoryForIsvData | GetServiceTemplateRequestHistoryForCspData = {
                 serviceTemplateId: serviceTemplateId,
                 requestStatus: requestStatus,
                 requestType: requestType,
             };
-            return getServiceTemplateRequestHistoryByServiceTemplateId(data);
+            if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
+                return getServiceTemplateRequestHistoryForIsv(data);
+            } else if (useCurrentUserRoleStore.getState().currentUserRole === 'csp') {
+                return getServiceTemplateRequestHistoryForCsp(data);
+            } else {
+                throw new Error('The current user role does not allow access to service template history information.');
+            }
         },
         refetchOnWindowFocus: false,
     });

@@ -1077,7 +1077,7 @@ export type ErrorResponse = {
         | 'Unhandled Exception'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Disabled'
+        | 'Service Template Unavailable'
         | 'Service Template Request Not Allowed'
         | 'Service Template Request Not Found'
         | 'Review Service Template Request Not Allowed'
@@ -1156,7 +1156,7 @@ export enum errorType {
     UNHANDLED_EXCEPTION = 'Unhandled Exception',
     ICON_PROCESSING_FAILED = 'Icon Processing Failed',
     SERVICE_TEMPLATE_NOT_REGISTERED = 'Service Template Not Registered',
-    SERVICE_TEMPLATE_DISABLED = 'Service Template Disabled',
+    SERVICE_TEMPLATE_UNAVAILABLE = 'Service Template Unavailable',
     SERVICE_TEMPLATE_REQUEST_NOT_ALLOWED = 'Service Template Request Not Allowed',
     SERVICE_TEMPLATE_REQUEST_NOT_FOUND = 'Service Template Request Not Found',
     REVIEW_SERVICE_TEMPLATE_REQUEST_NOT_ALLOWED = 'Review Service Template Request Not Allowed',
@@ -1558,7 +1558,7 @@ export type OrderFailedErrorResponse = {
         | 'Unhandled Exception'
         | 'Icon Processing Failed'
         | 'Service Template Not Registered'
-        | 'Service Template Disabled'
+        | 'Service Template Unavailable'
         | 'Service Template Request Not Allowed'
         | 'Service Template Request Not Found'
         | 'Review Service Template Request Not Allowed'
@@ -1889,6 +1889,17 @@ export type ServiceChangeParameter = {
     managedBy: string;
 };
 
+export type ServiceChangeRequest = {
+    changeId?: string;
+    configParameters?: {
+        [key: string]: unknown;
+    };
+    ansibleScriptConfig?: AnsibleScriptConfig;
+    ansibleInventory?: {
+        [key: string]: unknown;
+    };
+};
+
 export type ServiceChangeScript = {
     /**
      * should be the name of the resource available in the deployer script.
@@ -1904,19 +1915,8 @@ export type ServiceChangeScript = {
     ansibleScriptConfig: AnsibleScriptConfig;
 };
 
-export type ServiceConfigurationChangeRequest = {
-    changeId?: string;
-    configParameters?: {
-        [key: string]: unknown;
-    };
-    ansibleScriptConfig?: AnsibleScriptConfig;
-    ansibleInventory?: {
-        [key: string]: unknown;
-    };
-};
-
 /**
- * result of the service configuration update request.
+ * result of the service change request.
  */
 export type ServiceConfigurationChangeResult = {
     isSuccessful?: boolean;
@@ -2065,7 +2065,7 @@ export type ServiceOrderDetails = {
     /**
      * The requests of the service order.
      */
-    requestBody?: {
+    requestBody: {
         [key: string]: unknown;
     };
     /**
@@ -3161,7 +3161,7 @@ export type ReviewServiceTemplateRequestData = {
 
 export type ReviewServiceTemplateRequestResponse = void;
 
-export type UpdateConfigurationChangeResultData = {
+export type UpdateServiceChangeResultData = {
     /**
      * id of the update request.
      */
@@ -3169,7 +3169,7 @@ export type UpdateConfigurationChangeResultData = {
     requestBody: ServiceConfigurationChangeResult;
 };
 
-export type UpdateConfigurationChangeResultResponse = void;
+export type UpdateServiceChangeResultResponse = void;
 
 export type ListDeployedServicesData = {
     /**
@@ -3611,7 +3611,7 @@ export type GetSelfHostedServiceDetailsByIdData = {
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
 
-export type GetServiceTemplateRequestHistoryByServiceTemplateIdData = {
+export type GetServiceTemplateRequestHistoryForIsvData = {
     /**
      * status of service template request
      */
@@ -3626,7 +3626,7 @@ export type GetServiceTemplateRequestHistoryByServiceTemplateIdData = {
     serviceTemplateId: string;
 };
 
-export type GetServiceTemplateRequestHistoryByServiceTemplateIdResponse = Array<ServiceTemplateRequestHistory>;
+export type GetServiceTemplateRequestHistoryForIsvResponse = Array<ServiceTemplateRequestHistory>;
 
 export type GetRequestedServiceTemplateByRequestIdData = {
     /**
@@ -3808,6 +3808,23 @@ export type GetServiceTemplateDetailsData = {
 };
 
 export type GetServiceTemplateDetailsResponse = ServiceTemplateDetailVo;
+
+export type GetServiceTemplateRequestHistoryForCspData = {
+    /**
+     * status of service template request
+     */
+    requestStatus?: 'in-review' | 'accepted' | 'rejected' | 'cancelled';
+    /**
+     * type of service template request
+     */
+    requestType?: 'register' | 'update' | 'unpublish' | 'republish';
+    /**
+     * id of service template
+     */
+    serviceTemplateId: string;
+};
+
+export type GetServiceTemplateRequestHistoryForCspResponse = Array<ServiceTemplateRequestHistory>;
 
 export type GetPendingServiceReviewRequestsData = {
     /**
@@ -4021,7 +4038,7 @@ export type OpenApiData = {
 
 export type OpenApiResponse = Link;
 
-export type GetPendingConfigurationChangeRequestData = {
+export type GetPendingServiceChangeRequestData = {
     /**
      * The name of the resource of deployed service
      */
@@ -4032,7 +4049,7 @@ export type GetPendingConfigurationChangeRequestData = {
     serviceId: string;
 };
 
-export type GetPendingConfigurationChangeRequestResponse = ServiceConfigurationChangeRequest | void;
+export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
 
 export type GetAccessTokenData = {
     /**
