@@ -3611,6 +3611,61 @@ export type GetSelfHostedServiceDetailsByIdData = {
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
 
+export type ListDeployedServicesOfCspData = {
+    /**
+     * category of the service
+     */
+    categoryName?:
+        | 'ai'
+        | 'compute'
+        | 'container'
+        | 'storage'
+        | 'network'
+        | 'database'
+        | 'mediaService'
+        | 'security'
+        | 'middleware'
+        | 'others';
+    /**
+     * name of the cloud service provider
+     */
+    cspName?:
+        | 'HuaweiCloud'
+        | 'FlexibleEngine'
+        | 'OpenstackTestlab'
+        | 'PlusServer'
+        | 'RegioCloud'
+        | 'AlibabaCloud'
+        | 'aws'
+        | 'azure'
+        | 'GoogleCloudPlatform';
+    /**
+     * name of the service
+     */
+    serviceName?: string;
+    /**
+     * deployment state of the service
+     */
+    serviceState?:
+        | 'deploying'
+        | 'deployment successful'
+        | 'deployment failed'
+        | 'destroying'
+        | 'destroy successful'
+        | 'destroy failed'
+        | 'manual cleanup required'
+        | 'rollback failed'
+        | 'modifying'
+        | 'modification failed'
+        | 'modification successful';
+    /**
+     * version of the service
+     */
+    serviceVersion?: string;
+};
+
+export type ListDeployedServicesOfCspResponse = Array<DeployedService>;
+
 export type GetServiceTemplateRequestHistoryForIsvData = {
     /**
      * status of service template request

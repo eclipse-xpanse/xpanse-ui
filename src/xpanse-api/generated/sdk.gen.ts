@@ -123,6 +123,8 @@ import type {
     ListDeployedServicesData,
     ListDeployedServicesDetailsData,
     ListDeployedServicesDetailsResponse,
+    ListDeployedServicesOfCspData,
+    ListDeployedServicesOfCspResponse,
     ListDeployedServicesOfIsvData,
     ListDeployedServicesOfIsvResponse,
     ListDeployedServicesResponse,
@@ -1840,6 +1842,42 @@ export const getSelfHostedServiceDetailsById = (
         url: '/xpanse/services/details/self_hosted/{serviceId}',
         path: {
             serviceId: data.serviceId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * List all deployed services by a user.<br> Required role: <b>csp</b> </br>
+ * @param data The data for the request.
+ * @param data.categoryName category of the service
+ * @param data.cspName name of the cloud service provider
+ * @param data.serviceName name of the service
+ * @param data.serviceVersion version of the service
+ * @param data.serviceState deployment state of the service
+ * @returns DeployedService OK
+ * @throws ApiError
+ */
+export const listDeployedServicesOfCsp = (
+    data: ListDeployedServicesOfCspData = {}
+): CancelablePromise<ListDeployedServicesOfCspResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/csp',
+        query: {
+            categoryName: data.categoryName,
+            cspName: data.cspName,
+            serviceName: data.serviceName,
+            serviceVersion: data.serviceVersion,
+            serviceState: data.serviceState,
         },
         errors: {
             400: 'Bad Request',
