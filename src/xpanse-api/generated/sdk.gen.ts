@@ -87,8 +87,8 @@ import type {
     GetOrderableServicesResponse,
     GetOrderDetailsByOrderIdData,
     GetOrderDetailsByOrderIdResponse,
-    GetPendingConfigurationChangeRequestData,
-    GetPendingConfigurationChangeRequestResponse,
+    GetPendingServiceChangeRequestData,
+    GetPendingServiceChangeRequestResponse,
     GetPendingServiceReviewRequestsData,
     GetPendingServiceReviewRequestsResponse,
     GetPolicyDetailsData,
@@ -109,8 +109,10 @@ import type {
     GetServiceTemplateDetailsByIdResponse,
     GetServiceTemplateDetailsData,
     GetServiceTemplateDetailsResponse,
-    GetServiceTemplateRequestHistoryByServiceTemplateIdData,
-    GetServiceTemplateRequestHistoryByServiceTemplateIdResponse,
+    GetServiceTemplateRequestHistoryForCspData,
+    GetServiceTemplateRequestHistoryForCspResponse,
+    GetServiceTemplateRequestHistoryForIsvData,
+    GetServiceTemplateRequestHistoryForIsvResponse,
     GetSitesOfCspData,
     GetSitesOfCspResponse,
     GetUserCloudCredentialsData,
@@ -160,12 +162,12 @@ import type {
     StopServiceResponse,
     UnpublishData,
     UnpublishResponse,
-    UpdateConfigurationChangeResultData,
-    UpdateConfigurationChangeResultResponse,
     UpdateData,
     UpdateIsvCloudCredentialData,
     UpdateIsvCloudCredentialResponse,
     UpdateResponse,
+    UpdateServiceChangeResultData,
+    UpdateServiceChangeResultResponse,
     UpdateServicePolicyData,
     UpdateServicePolicyResponse,
     UpdateUserCloudCredentialData,
@@ -1118,16 +1120,16 @@ export const reviewServiceTemplateRequest = (
 };
 
 /**
- * Update configuration change result for agents.
+ * Update service change result for agents.
  * @param data The data for the request.
  * @param data.changeId id of the update request.
  * @param data.requestBody
  * @returns void No Content
  * @throws ApiError
  */
-export const updateConfigurationChangeResult = (
-    data: UpdateConfigurationChangeResultData
-): CancelablePromise<UpdateConfigurationChangeResultResponse> => {
+export const updateServiceChangeResult = (
+    data: UpdateServiceChangeResultData
+): CancelablePromise<UpdateServiceChangeResultResponse> => {
     return __request(OpenAPI, {
         method: 'PUT',
         url: '/xpanse/agent/update/status/{changeId}',
@@ -1860,9 +1862,9 @@ export const getSelfHostedServiceDetailsById = (
  * @returns ServiceTemplateRequestHistory OK
  * @throws ApiError
  */
-export const getServiceTemplateRequestHistoryByServiceTemplateId = (
-    data: GetServiceTemplateRequestHistoryByServiceTemplateIdData
-): CancelablePromise<GetServiceTemplateRequestHistoryByServiceTemplateIdResponse> => {
+export const getServiceTemplateRequestHistoryForIsv = (
+    data: GetServiceTemplateRequestHistoryForIsvData
+): CancelablePromise<GetServiceTemplateRequestHistoryForIsvResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/service_templates/{serviceTemplateId}/requests',
@@ -2184,6 +2186,40 @@ export const getServiceTemplateDetails = (
 };
 
 /**
+ * Get service template requests using id of service template. The returned requests is sorted in descending order according to the requested time.<br> Required role: <b>admin</b> or <b>csp</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceTemplateId id of service template
+ * @param data.requestType type of service template request
+ * @param data.requestStatus status of service template request
+ * @returns ServiceTemplateRequestHistory OK
+ * @throws ApiError
+ */
+export const getServiceTemplateRequestHistoryForCsp = (
+    data: GetServiceTemplateRequestHistoryForCspData
+): CancelablePromise<GetServiceTemplateRequestHistoryForCspResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/csp/service_templates/{serviceTemplateId}/requests',
+        path: {
+            serviceTemplateId: data.serviceTemplateId,
+        },
+        query: {
+            requestType: data.requestType,
+            requestStatus: data.requestStatus,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * Get service template requests pending to review.<br> Required role: <b>admin</b> or <b>csp</b> </br>
  * @param data The data for the request.
  * @param data.serviceTemplateId id of service template
@@ -2466,17 +2502,17 @@ export const openApi = (data: OpenApiData): CancelablePromise<OpenApiResponse> =
 };
 
 /**
- * Get pending configuration change request for agents to poll.
+ * Get pending service change request for agents to poll.
  * @param data The data for the request.
  * @param data.serviceId The id of the deployed service
  * @param data.resourceName The name of the resource of deployed service
- * @returns ServiceConfigurationChangeRequest pending configuration update request details
- * @returns void no pending configuration update requests
+ * @returns ServiceChangeRequest pending service change update request details
+ * @returns void no pending service change update requests
  * @throws ApiError
  */
-export const getPendingConfigurationChangeRequest = (
-    data: GetPendingConfigurationChangeRequestData
-): CancelablePromise<GetPendingConfigurationChangeRequestResponse> => {
+export const getPendingServiceChangeRequest = (
+    data: GetPendingServiceChangeRequestData
+): CancelablePromise<GetPendingServiceChangeRequestResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/agent/poll/{serviceId}/{resourceName}',

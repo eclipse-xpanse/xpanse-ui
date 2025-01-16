@@ -4,7 +4,7 @@
  */
 
 import { EnvironmentOutlined } from '@ant-design/icons';
-import { Empty } from 'antd';
+import { Card, Empty } from 'antd';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../styles/catalog.module.css';
@@ -20,6 +20,7 @@ import {
 import ServiceDetail from '../../catalog/services/details/ServiceDetail.tsx';
 import { ServiceHostingOptions } from '../../catalog/services/details/ServiceHostingOptions.tsx';
 import { ServiceProviderSkeleton } from '../../catalog/services/details/ServiceProviderSkeleton.tsx';
+import ServiceTemplateHistory from '../../catalog/services/history/ServiceTemplateHistory';
 
 function ServiceContent({
     availableServiceList,
@@ -124,17 +125,20 @@ function ServiceContent({
                 <>
                     {activeServiceDetail ? (
                         <>
-                            <h3 className={catalogStyles.catalogDetailsH3}>
-                                <EnvironmentOutlined />
-                                &nbsp;Service Hosting Options
-                            </h3>
-                            <ServiceHostingOptions
-                                serviceTemplateDetailVos={[activeServiceDetail]}
-                                defaultDisplayedService={activeServiceDetail}
-                                serviceHostingTypeInQuery={serviceHostingTypeInQuery}
-                                updateServiceHostingType={onChangeServiceHostingType}
-                            />
-                            <ServiceDetail serviceDetails={activeServiceDetail} />
+                            <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
+                            <Card className={catalogStyles.serviceTemplateCard}>
+                                <h3 className={catalogStyles.registeredServicesServiceHosting}>
+                                    <EnvironmentOutlined />
+                                    &nbsp;Service Hosting Options
+                                </h3>
+                                <ServiceHostingOptions
+                                    serviceTemplateDetailVos={[activeServiceDetail]}
+                                    defaultDisplayedService={activeServiceDetail}
+                                    serviceHostingTypeInQuery={serviceHostingTypeInQuery}
+                                    updateServiceHostingType={onChangeServiceHostingType}
+                                />
+                                <ServiceDetail serviceDetails={activeServiceDetail} />
+                            </Card>
                         </>
                     ) : (
                         // Necessary when user manually enters wrong details in the URL query parameters.

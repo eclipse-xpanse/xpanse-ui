@@ -86,6 +86,9 @@
     font-weight: bold;
     padding-bottom: 10px;
 }
+.registered-services-service-hosting {
+    margin-top: 0px !important;
+}
 
 .catalog-details-h6 {
     font-size: 13px;
