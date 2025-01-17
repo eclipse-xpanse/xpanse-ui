@@ -9,9 +9,11 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import appStyles from '../../../styles/app.module.css';
 import { catalogPageRoute, homePageRoute, servicesPageRoute } from '../../utils/constants';
+import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore.ts';
 import { getMenuItems } from './menuItems';
 
 function LayoutSider(): React.JSX.Element {
+    const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
     const [collapsed, setCollapsed] = useState(false);
     const [isBroken, setIsBroken] = useState(false);
     const navigate = useNavigate();
@@ -65,7 +67,7 @@ function LayoutSider(): React.JSX.Element {
                 </Link>
             </div>
             <Menu
-                items={getMenuItems()}
+                items={getMenuItems(currentRole ?? '')}
                 mode='inline'
                 theme='dark'
                 onClick={onClicked}

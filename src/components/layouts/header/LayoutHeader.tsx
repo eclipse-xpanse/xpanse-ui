@@ -9,7 +9,7 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import headerStyles from '../../../styles/header.module.css';
 import SystemStatusBar from '../../content/systemStatus/SystemStatusBar';
-import { HeaderUserRoles } from './HeaderUserRoles';
+import HeaderUserRoles from './HeaderUserRoles';
 import { SearchServices } from './SearchServices.tsx';
 import { useCurrentUserRoleStore } from './useCurrentRoleStore.ts';
 

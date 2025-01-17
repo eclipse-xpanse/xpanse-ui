@@ -8,6 +8,8 @@ import React, { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import CatalogMainPage from './components/content/catalog/services/menu/CatalogMainMenu';
 import FallbackSkeleton from './components/content/common/lazy/FallBackSkeleton.tsx';
+import AppLayout from './components/layouts/AppLayout.tsx';
+import { useCurrentUserRoleStore } from './components/layouts/header/useCurrentRoleStore.ts';
 import { ConditionalOidcProtectedRoute } from './components/oidc/ConditionalOidcProtectedRoute.tsx';
 import { ConditionalOidcProvider } from './components/oidc/ConditionalOidcProvider.tsx';
 import {
@@ -67,167 +69,172 @@ const NotFoundPage = lazy(() => import('./components/notFound/NotFoundPage.tsx')
 const HealthCheckStatus = lazy(() => import('./components/content/systemStatus/HealthCheckStatus.tsx'));
 
 function App(): React.JSX.Element {
+    // This component loads when the page loads the first time. So we update the zustand state accordingly.
+    const isPageLoadedWithoutRoleChange = useCurrentUserRoleStore((state) => state.isPageLoadedWithoutRoleChange);
+    isPageLoadedWithoutRoleChange(true);
     return (
         <QueryClientProvider client={queryClient}>
             <ConditionalOidcProvider>
-                <Routes>
-                    <Route
-                        key={homePageRoute}
-                        path={homePageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
-                                <Home />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={''}
-                        path={''}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
-                                <Home />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
-                        (path) => (
-                            <Route
-                                key={path}
-                                path={path}
-                                element={
-                                    <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
-                                        <RegisterPanel />
-                                    </ConditionalOidcProtectedRoute>
-                                }
-                            />
-                        )
-                    )}
-                    <Route
-                        key={catalogPageRoute}
-                        path={catalogPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
-                                <CatalogMainPage />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={orderPageRoute}
-                        path={orderPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <OrderSubmitPage />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={servicesPageRoute}
-                        path={servicesPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <Services />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={myServicesRoute}
-                        path={myServicesRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <MyServices />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={createServicePageRoute}
-                        path={createServicePageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <CreateService />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={monitorPageRoute}
-                        path={monitorPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <Monitor />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={credentialPageRoute}
-                        path={credentialPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user', 'isv']}>
-                                <Credentials />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={healthCheckPageRoute}
-                        path={healthCheckPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['admin']}>
-                                <HealthCheckStatus />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={policiesRoute}
-                        path={policiesRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <Policies />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={reportsRoute}
-                        path={reportsRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
-                                <Reports />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={workflowsPageRoute}
-                        path={workflowsPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['user']}>
-                                <Workflows />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={serviceReviewsPageRoute}
-                        path={serviceReviewsPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
-                                <ServiceReviews />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        key={registeredServicesPageRoute}
-                        path={registeredServicesPageRoute}
-                        element={
-                            <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
-                                <AvailableServices />
-                            </ConditionalOidcProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path='*'
-                        element={
-                            <Suspense fallback={<FallbackSkeleton />}>
-                                <NotFoundPage />
-                            </Suspense>
-                        }
-                    />
-                </Routes>
+                <AppLayout>
+                    <Routes>
+                        <Route
+                            key={homePageRoute}
+                            path={homePageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
+                                    <Home />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={''}
+                            path={''}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['isv', 'user', 'admin', 'csp']}>
+                                    <Home />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        {[registerPageRoute, registerFailedRoute, registerInvalidRoute, registerSuccessfulRoute].map(
+                            (path) => (
+                                <Route
+                                    key={path}
+                                    path={path}
+                                    element={
+                                        <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                            <RegisterPanel />
+                                        </ConditionalOidcProtectedRoute>
+                                    }
+                                />
+                            )
+                        )}
+                        <Route
+                            key={catalogPageRoute}
+                            path={catalogPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                    <CatalogMainPage />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={orderPageRoute}
+                            path={orderPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <OrderSubmitPage />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={servicesPageRoute}
+                            path={servicesPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <Services />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={myServicesRoute}
+                            path={myServicesRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <MyServices />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={createServicePageRoute}
+                            path={createServicePageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <CreateService />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={monitorPageRoute}
+                            path={monitorPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <Monitor />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={credentialPageRoute}
+                            path={credentialPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user', 'isv']}>
+                                    <Credentials />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={healthCheckPageRoute}
+                            path={healthCheckPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['admin']}>
+                                    <HealthCheckStatus />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={policiesRoute}
+                            path={policiesRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <Policies />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={reportsRoute}
+                            path={reportsRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['isv']}>
+                                    <Reports />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={workflowsPageRoute}
+                            path={workflowsPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['user']}>
+                                    <Workflows />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={serviceReviewsPageRoute}
+                            path={serviceReviewsPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
+                                    <ServiceReviews />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            key={registeredServicesPageRoute}
+                            path={registeredServicesPageRoute}
+                            element={
+                                <ConditionalOidcProtectedRoute allowedRoles={['csp']}>
+                                    <AvailableServices />
+                                </ConditionalOidcProtectedRoute>
+                            }
+                        />
+                        <Route
+                            path='*'
+                            element={
+                                <Suspense fallback={<FallbackSkeleton />}>
+                                    <NotFoundPage />
+                                </Suspense>
+                            }
+                        />
+                    </Routes>
+                </AppLayout>
             </ConditionalOidcProvider>
         </QueryClientProvider>
     );

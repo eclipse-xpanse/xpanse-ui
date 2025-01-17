@@ -7,7 +7,6 @@ import { ItemType } from 'antd/es/menu/interface';
 import { category } from '../../../xpanse-api/generated';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
-import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore';
 import {
     credentialMenu,
     healthCheckMenu,
@@ -21,13 +20,13 @@ import {
     workflowsMenu,
 } from './servicesMenu';
 
-export function getMenuItems(): ItemType[] {
+export function getMenuItems(currentRole: string): ItemType[] {
     const serviceCategories: string[] = Object.values(category).filter((v) => isNaN(Number(v)));
-    if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
+    if (currentRole === 'isv') {
         return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu(), reportsMenu()];
-    } else if (useCurrentUserRoleStore.getState().currentUserRole === 'admin') {
+    } else if (currentRole === 'admin') {
         return [healthCheckMenu()];
-    } else if (useCurrentUserRoleStore.getState().currentUserRole === 'csp') {
+    } else if (currentRole === 'csp') {
         return [serviceReviewsMenu(), registeredServicesMenu()];
     } else {
         return [

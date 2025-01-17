@@ -5,7 +5,7 @@
 
 import { UserOutlined } from '@ant-design/icons';
 import { Divider, Dropdown, MenuProps, Space, theme } from 'antd';
-import React from 'react';
+import React, { memo } from 'react';
 import { env } from '../../../config/config.ts';
 import headerStyles from '../../../styles/header.module.css';
 import Logout from '../../content/login/Logout';
@@ -30,7 +30,10 @@ function getItem(
     } as MenuItem;
 }
 
-export function HeaderUserRoles({ userName, roles }: { userName: string; roles: string[] }): React.JSX.Element {
+// we cache this component to ensure it does not render again when the user changes the role.
+// the parent component listens to zustand state which causes this component to render again.
+// To avoid this, the component is wrapped with a memo.
+const HeaderUserRoles = memo(({ userName, roles }: { userName: string; roles: string[] }) => {
     const { useToken } = theme;
     const { token } = useToken();
     let menuProps: MenuProps | undefined = undefined;
@@ -44,7 +47,7 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
         // if no role is already cached, then take the first valid role from the list of available roles for the user.
         roles.forEach((role) => {
             if (allowRoleList.includes(role)) {
-                updateCurrentUserRole(role);
+                updateCurrentUserRole(role, false);
                 updatedRole = role;
                 return;
             }
@@ -64,7 +67,7 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
         };
 
         const handleMenuClick: MenuProps['onClick'] = (value) => {
-            updateCurrentUserRole(value.key);
+            updateCurrentUserRole(value.key, true);
         };
 
         menuProps = {
@@ -115,4 +118,7 @@ export function HeaderUserRoles({ userName, roles }: { userName: string; roles: 
             </Dropdown>
         </Space>
     );
-}
+});
+
+HeaderUserRoles.displayName = 'HeaderUserRoles';
+export default HeaderUserRoles;
