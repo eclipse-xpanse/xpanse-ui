@@ -4,20 +4,20 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { listDeployedServicesOfIsv, ListDeployedServicesOfIsvData } from '../../../../../xpanse-api/generated';
+import { getAllDeployedServicesByIsv, GetAllDeployedServicesByIsvData } from '../../../../../xpanse-api/generated';
 
 export default function useListDeployedServicesByIsvQuery() {
     return useQuery({
         queryKey: ['listDeployedServicesByIsv'],
         queryFn: () => {
-            const data: ListDeployedServicesOfIsvData = {
+            const data: GetAllDeployedServicesByIsvData = {
                 categoryName: undefined,
                 cspName: undefined,
                 serviceName: undefined,
                 serviceVersion: undefined,
                 serviceState: undefined,
             };
-            return listDeployedServicesOfIsv(data);
+            return getAllDeployedServicesByIsv(data);
         },
         refetchOnWindowFocus: false,
     });

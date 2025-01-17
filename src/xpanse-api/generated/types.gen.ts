@@ -3474,7 +3474,7 @@ export type GetLatestServiceOrderStatusData = {
 
 export type GetLatestServiceOrderStatusResponse = ServiceOrderStatusUpdate;
 
-export type ListDeployedServicesOfIsvData = {
+export type GetAllDeployedServicesByIsvData = {
     /**
      * category of the service
      */
@@ -3527,7 +3527,7 @@ export type ListDeployedServicesOfIsvData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesOfIsvResponse = Array<DeployedService>;
+export type GetAllDeployedServicesByIsvResponse = Array<DeployedService>;
 
 export type GetServiceDetailsByIdForIsvData = {
     /**
@@ -3611,7 +3611,7 @@ export type GetSelfHostedServiceDetailsByIdData = {
 
 export type GetSelfHostedServiceDetailsByIdResponse = DeployedServiceDetails;
 
-export type ListDeployedServicesOfCspData = {
+export type GetAllDeployedServicesByCspData = {
     /**
      * category of the service
      */
@@ -3626,19 +3626,6 @@ export type ListDeployedServicesOfCspData = {
         | 'security'
         | 'middleware'
         | 'others';
-    /**
-     * name of the cloud service provider
-     */
-    cspName?:
-        | 'HuaweiCloud'
-        | 'FlexibleEngine'
-        | 'OpenstackTestlab'
-        | 'PlusServer'
-        | 'RegioCloud'
-        | 'AlibabaCloud'
-        | 'aws'
-        | 'azure'
-        | 'GoogleCloudPlatform';
     /**
      * name of the service
      */
@@ -3664,7 +3651,7 @@ export type ListDeployedServicesOfCspData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesOfCspResponse = Array<DeployedService>;
+export type GetAllDeployedServicesByCspResponse = Array<DeployedService>;
 
 export type GetServiceTemplateRequestHistoryForIsvData = {
     /**

@@ -7,10 +7,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
     category,
     csp,
-    listDeployedServicesOfCsp,
-    ListDeployedServicesOfCspData,
-    listDeployedServicesOfIsv,
-    type ListDeployedServicesOfIsvData,
+    getAllDeployedServicesByCsp,
+    getAllDeployedServicesByIsv,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 
@@ -23,17 +21,21 @@ export default function useDeployedServicesQuery(
     return useQuery({
         queryKey: ['listDeployedServices', categoryName, cspName, serviceName, serviceVersion],
         queryFn: () => {
-            const data: ListDeployedServicesOfIsvData | ListDeployedServicesOfCspData = {
-                categoryName: categoryName,
-                cspName: cspName,
-                serviceName: serviceName,
-                serviceVersion: serviceVersion,
-                serviceState: undefined,
-            };
             if (useCurrentUserRoleStore.getState().currentUserRole === 'isv') {
-                return listDeployedServicesOfIsv(data);
+                return getAllDeployedServicesByIsv({
+                    categoryName: categoryName,
+                    cspName: cspName,
+                    serviceName: serviceName,
+                    serviceVersion: serviceVersion,
+                    serviceState: undefined,
+                });
             } else if (useCurrentUserRoleStore.getState().currentUserRole === 'csp') {
-                return listDeployedServicesOfCsp(data);
+                return getAllDeployedServicesByCsp({
+                    categoryName: categoryName,
+                    serviceName: serviceName,
+                    serviceVersion: serviceVersion,
+                    serviceState: undefined,
+                });
             } else {
                 throw new Error('The current user role does not allow access to deployed service information.');
             }

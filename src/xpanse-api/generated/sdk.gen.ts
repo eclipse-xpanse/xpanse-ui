@@ -53,6 +53,10 @@ import type {
     GetAccessTokenData,
     GetAccessTokenResponse,
     GetActiveCspsResponse,
+    GetAllDeployedServicesByCspData,
+    GetAllDeployedServicesByCspResponse,
+    GetAllDeployedServicesByIsvData,
+    GetAllDeployedServicesByIsvResponse,
     GetAllOrdersByServiceIdData,
     GetAllOrdersByServiceIdResponse,
     GetAllServiceTemplatesByIsvData,
@@ -123,10 +127,6 @@ import type {
     ListDeployedServicesData,
     ListDeployedServicesDetailsData,
     ListDeployedServicesDetailsResponse,
-    ListDeployedServicesOfCspData,
-    ListDeployedServicesOfCspResponse,
-    ListDeployedServicesOfIsvData,
-    ListDeployedServicesOfIsvResponse,
     ListDeployedServicesResponse,
     ListManagedServiceTemplatesData,
     ListManagedServiceTemplatesResponse,
@@ -1700,7 +1700,7 @@ export const getLatestServiceOrderStatus = (
 };
 
 /**
- * List all deployed services by a user.<br> Required role: <b>isv</b> </br>
+ * List services of an ISV deployed by users. <br> Required role: <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
  * @param data.cspName name of the cloud service provider
@@ -1710,9 +1710,9 @@ export const getLatestServiceOrderStatus = (
  * @returns DeployedService OK
  * @throws ApiError
  */
-export const listDeployedServicesOfIsv = (
-    data: ListDeployedServicesOfIsvData = {}
-): CancelablePromise<ListDeployedServicesOfIsvResponse> => {
+export const getAllDeployedServicesByIsv = (
+    data: GetAllDeployedServicesByIsvData = {}
+): CancelablePromise<GetAllDeployedServicesByIsvResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/services/isv',
@@ -1856,25 +1856,23 @@ export const getSelfHostedServiceDetailsById = (
 };
 
 /**
- * List all deployed services by a user.<br> Required role: <b>csp</b> </br>
+ * List of services deployed on a cloud provider.<br> Required role: <b>csp</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
- * @param data.cspName name of the cloud service provider
  * @param data.serviceName name of the service
  * @param data.serviceVersion version of the service
  * @param data.serviceState deployment state of the service
  * @returns DeployedService OK
  * @throws ApiError
  */
-export const listDeployedServicesOfCsp = (
-    data: ListDeployedServicesOfCspData = {}
-): CancelablePromise<ListDeployedServicesOfCspResponse> => {
+export const getAllDeployedServicesByCsp = (
+    data: GetAllDeployedServicesByCspData = {}
+): CancelablePromise<GetAllDeployedServicesByCspResponse> => {
     return __request(OpenAPI, {
         method: 'GET',
         url: '/xpanse/services/csp',
         query: {
             categoryName: data.categoryName,
-            cspName: data.cspName,
             serviceName: data.serviceName,
             serviceVersion: data.serviceVersion,
             serviceState: data.serviceState,
