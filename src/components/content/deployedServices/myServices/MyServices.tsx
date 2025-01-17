@@ -44,6 +44,7 @@ import {
 import { sortVersionNum } from '../../../utils/Sort';
 import { cspMap } from '../../common/csp/CspLogo';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
+import { ServiceTitle } from '../../order/common/ServiceTitle.tsx';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
 import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
@@ -103,7 +104,6 @@ import {
 } from './myServiceProps.tsx';
 import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
-import { ServicePortingTitle } from './ServicePortingTitle.tsx';
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
@@ -1339,7 +1339,13 @@ function MyServices(): React.JSX.Element {
                 <Modal
                     key={`${activeRecord.serviceId}-servicePorting`}
                     open={isServicePortingModalOpen}
-                    title={<ServicePortingTitle record={activeRecord} />}
+                    title={
+                        <ServiceTitle
+                            title={activeRecord.name}
+                            version={activeRecord.version}
+                            icon={getOrderableServiceDetails.data?.icon ?? ''}
+                        />
+                    }
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}
@@ -1371,7 +1377,13 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     open={isScaleModalOpen}
-                    title={<ServicePortingTitle record={activeRecord} />}
+                    title={
+                        <ServiceTitle
+                            title={activeRecord.name}
+                            version={activeRecord.version}
+                            icon={getOrderableServiceDetails.data?.icon ?? ''}
+                        />
+                    }
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}
@@ -1387,7 +1399,13 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     open={isModifyModalOpen}
-                    title={<ServicePortingTitle record={activeRecord} />}
+                    title={
+                        <ServiceTitle
+                            title={activeRecord.name}
+                            version={activeRecord.version}
+                            icon={getOrderableServiceDetails.data?.icon ?? ''}
+                        />
+                    }
                     closable={true}
                     maskClosable={false}
                     destroyOnClose={true}

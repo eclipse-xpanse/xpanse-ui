@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Button, Col, Form, Row, Tabs, Tooltip, Typography } from 'antd';
+import { Button, Col, Form, Row, Tabs } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { To, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -29,6 +29,7 @@ import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
+import { ServiceTitle } from '../common/ServiceTitle.tsx';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
@@ -51,14 +52,13 @@ import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
-    const { Paragraph } = Typography;
     const [form] = Form.useForm();
     const [urlParams] = useSearchParams();
     const location = useLocation();
     const navigate = useNavigate();
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const categoryName: string = location.hash.split('#')[1];
+    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
     const servicePageUrl = servicesSubPageRoute + categoryName;
     let serviceInfo: OrderSubmitProps | undefined;
     const versionToServicesMap = useMemo<Map<string, UserOrderableServiceVo[]>>(() => {
@@ -358,11 +358,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 <div className={tableStyles.genericTableContainer}>
                     <Row justify='space-between'>
                         <Col span={6}>
-                            <Tooltip placement='topLeft' title={serviceName}>
-                                <Paragraph ellipsis={true} className={appStyles.contentTitle}>
-                                    Service: {serviceName}
-                                </Paragraph>
-                            </Tooltip>
+                            <ServiceTitle title={serviceName} icon={services[0].icon} />
                         </Col>
                         {currentServiceProviderContactDetails !== undefined ? (
                             <Col span={8}>
