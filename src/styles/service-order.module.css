@@ -521,3 +521,29 @@
     margin-right: 0;
     justify-content: flex-end;
 }
+
+.service-title-class {
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.service-title-icon-class {
+    width: 60px;
+    height: auto;
+}
+
+.serviceTitleTextContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.serviceTitleText {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.serviceTitleVersionClass {
+    font-size: 20px;
+}
