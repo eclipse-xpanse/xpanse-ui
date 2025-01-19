@@ -497,7 +497,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.22.32";
+const version = "7.24.1";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {
@@ -543,9 +543,14 @@ async function generateDpopAsync(originalRequest, currentDatabase, url, extrasCl
   if ((currentDatabase == null ? void 0 : currentDatabase.demonstratingProofOfPossessionConfiguration) && currentDatabase.demonstratingProofOfPossessionJwkJson && (!currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent || currentDatabase.demonstratingProofOfPossessionOnlyWhenDpopHeaderPresent && headersExtras["dpop"])) {
     const dpopConfiguration = currentDatabase.demonstratingProofOfPossessionConfiguration;
     const jwk = currentDatabase.demonstratingProofOfPossessionJwkJson;
-    headersExtras["dpop"] = await generateJwtDemonstratingProofOfPossessionAsync(self)(
-      dpopConfiguration
-    )(jwk, "POST", url, extrasClaims);
+    const method = originalRequest.method;
+    const dpop = await generateJwtDemonstratingProofOfPossessionAsync(self)(dpopConfiguration)(
+      jwk,
+      method,
+      url,
+      extrasClaims
+    );
+    headersExtras["dpop"] = dpop;
     if (currentDatabase.demonstratingProofOfPossessionNonce != null) {
       headersExtras["nonce"] = currentDatabase.demonstratingProofOfPossessionNonce;
     }
@@ -584,10 +589,28 @@ const handleFetch = async (event) => {
       if (authorization) {
         authenticationMode = authorization.split(" ")[0];
       }
-      headers = {
-        ...serializeHeaders(originalRequest.headers),
-        authorization: authenticationMode + " " + currentDatabaseForRequestAccessToken.tokens.access_token
-      };
+      if (authenticationMode.toLowerCase() == "dpop") {
+        const claimsExtras = {
+          ath: await base64urlOfHashOfASCIIEncodingAsync(
+            currentDatabaseForRequestAccessToken.tokens.access_token
+          )
+        };
+        const dpopHeaders = await generateDpopAsync(
+          originalRequest,
+          currentDatabaseForRequestAccessToken,
+          url,
+          claimsExtras
+        );
+        headers = {
+          ...dpopHeaders,
+          authorization: authenticationMode + " " + currentDatabaseForRequestAccessToken.tokens.access_token
+        };
+      } else {
+        headers = {
+          ...serializeHeaders(originalRequest.headers),
+          authorization: authenticationMode + " " + currentDatabaseForRequestAccessToken.tokens.access_token
+        };
+      }
     }
     let init;
     if (originalRequest.mode === "navigate") {
