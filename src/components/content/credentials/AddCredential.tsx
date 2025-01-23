@@ -21,7 +21,6 @@ import {
     CredentialVariable,
     CredentialVariables,
     csp,
-    ErrorResponse,
     getActiveCsps,
     getCredentialCapabilities,
     type GetCredentialCapabilitiesData,
@@ -33,9 +32,9 @@ import {
     type,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
-import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { CredentialApiDoc } from './CredentialApiDoc';
-import { CredentialTip } from './CredentialTip';
+import CredentialListStatus from './CredentialListStatus.tsx';
+import CredentialProcessStatus from './CredentialProcessStatus.tsx';
 import useCredentialsListQuery from './query/queryCredentialsList';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
@@ -52,8 +51,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const credentialTypeList = useRef<type[]>([]);
     const nameList = useRef<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
-    const [tipMessage, setTipMessage] = useState<string>('');
-    const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const credentialsQuery = useCredentialsListQuery();
 
     const getActiveCspsQuery = useQuery({
@@ -63,11 +60,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         },
         staleTime: 60000,
     });
-
-    const getTipInfo = (tipType: 'error' | 'success' | undefined, tipMessage: string) => {
-        setTipType(tipType);
-        setTipMessage(tipMessage);
-    };
 
     const sitesQuery = useQuery({
         queryKey: ['sitesQuery', currentCsp],
@@ -129,32 +121,12 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         nameList.current = names;
     }
 
-    if (credentialCapabilitiesQuery.error) {
-        if (currentCsp && currentType !== undefined) {
-            if (isHandleKnownErrorResponse(credentialCapabilitiesQuery.error)) {
-                const response: ErrorResponse = credentialCapabilitiesQuery.error.body;
-                getTipInfo('error', response.details.join());
-            } else {
-                getTipInfo('error', credentialCapabilitiesQuery.error.message);
-            }
-        }
-    }
-
     const addCredentialRequest = useMutation({
         mutationFn: (createCredential: CreateCredential) => {
             return addCredentialByRole(createCredential);
         },
         onSuccess: () => {
             void credentialsQuery.refetch();
-            getTipInfo('success', 'Adding Credential Successful.');
-        },
-        onError: (error: Error) => {
-            if (isHandleKnownErrorResponse(error)) {
-                const response: ErrorResponse = error.body;
-                getTipInfo('error', response.details.join());
-            } else {
-                getTipInfo('error', error.message);
-            }
         },
     });
 
@@ -219,8 +191,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             setCredentialVariableList([]);
             form.setFieldsValue({ variables: [] });
             form.setFieldsValue({ description: '' });
-
-            getTipInfo(undefined, '');
         },
         [form]
     );
@@ -385,16 +355,17 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         addCredentialRequest.reset();
         clear();
         form.resetFields();
-        getTipInfo(undefined, '');
         setSiteDisabled(true);
         setTypeDisabled(true);
         setNameDisable(true);
     };
 
-    const onRemove = () => {
-        onReset();
-        onCancel();
-        void credentialsQuery.refetch();
+    const getCloseStatus = (isClose: boolean) => {
+        if (isClose) {
+            onReset();
+            onCancel();
+            void credentialsQuery.refetch();
+        }
     };
 
     return (
@@ -415,7 +386,20 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 style={{ maxWidth: 1000 }}
                 onFinish={submit}
             >
-                <CredentialTip type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
+                {credentialCapabilitiesQuery.isError ? (
+                    <CredentialListStatus error={credentialCapabilitiesQuery.error} />
+                ) : (
+                    <></>
+                )}
+                {addCredentialRequest.isSuccess ? (
+                    <CredentialProcessStatus
+                        isError={addCredentialRequest.isError}
+                        isSuccess={addCredentialRequest.isSuccess}
+                        successMsg={'Adding Credential Successful.'}
+                        error={addCredentialRequest.error}
+                        getCloseStatus={getCloseStatus}
+                    />
+                ) : null}
                 <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
