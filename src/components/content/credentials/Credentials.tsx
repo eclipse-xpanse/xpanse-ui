@@ -41,8 +41,9 @@ function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
     const [isUpdateOpen, setIsUpdateOpen] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-    let tipMessage: string = '';
-    let tipType: 'error' | 'success' | undefined = undefined;
+
+    const [tipMessage, setTipMessage] = useState<string>('');
+    const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     let abstractCredentialInfoList: AbstractCredentialInfo[] = [];
     const [activeCredential, setActiveCredential] = useState<CredentialVariables | undefined>(undefined);
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
@@ -61,29 +62,29 @@ function Credentials(): React.JSX.Element {
     if (credentialsQuery.isError) {
         if (isHandleKnownErrorResponse(credentialsQuery.error)) {
             const response: ErrorResponse = credentialsQuery.error.body;
-            tipType = 'error';
-            tipMessage = response.details.join();
+            setTipType('error');
+            setTipMessage(response.details.join());
         } else {
-            tipType = 'error';
-            tipMessage = credentialsQuery.error.message;
+            setTipType('error');
+            setTipMessage(credentialsQuery.error.message);
         }
     }
 
     const deleteCredentialRequest = useMutation({
         mutationFn: (credentialVariables: CredentialVariables) => deleteCredentialByRole(credentialVariables),
         onSuccess: () => {
-            tipType = 'success';
-            tipMessage = 'Deleting Credentials Successful.';
+            setTipType('success');
+            setTipMessage('Deleting Credentials Successful.');
             void credentialsQuery.refetch();
         },
         onError: (error: Error) => {
             if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
-                tipType = 'error';
-                tipMessage = response.details.join();
+                setTipType('error');
+                setTipMessage(response.details.join());
             } else {
-                tipType = 'error';
-                tipMessage = error.message;
+                setTipType('error');
+                setTipMessage(error.message);
             }
         },
     });
@@ -221,13 +222,17 @@ function Credentials(): React.JSX.Element {
     };
 
     const onRemove = () => {
-        tipMessage = '';
-        tipType = undefined;
+        setTipType(undefined);
+        setTipMessage('');
     };
 
     return (
         <div className={tableStyles.genericTableContainer}>
-            <CredentialTip key={v4().toString()} type={tipType} msg={tipMessage} onRemove={onRemove}></CredentialTip>
+            {tipType !== undefined && tipMessage !== '' ? (
+                <CredentialTip key={v4().toString()} type={tipType} msg={tipMessage} onRemove={onRemove} />
+            ) : (
+                <></>
+            )}
             <div>
                 {/* this condition will unmount and mount the modal completely. So that the old values are not retained. */}
                 {isAddOpen ? (
