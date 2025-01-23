@@ -7,8 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Image, Input, InputNumber, Table, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { v4 } from 'uuid';
+import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import styles from '../../../styles/credential.module.css';
 import {
     CreateCredential,
@@ -16,7 +15,6 @@ import {
     CredentialVariable,
     CredentialVariables,
     csp,
-    ErrorResponse,
     name,
     updateIsvCloudCredential,
     type UpdateIsvCloudCredentialData,
@@ -24,9 +22,8 @@ import {
     type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
-import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { CredentialApiDoc } from './CredentialApiDoc';
-import { CredentialTip } from './CredentialTip';
+import CredentialProcessStatus from './CredentialProcessStatus.tsx';
 import useCredentialsListQuery from './query/queryCredentialsList';
 
 function UpdateCredential({
@@ -40,8 +37,6 @@ function UpdateCredential({
 }): React.JSX.Element {
     const [form] = Form.useForm();
     const credentialVariablesCopy: CredentialVariables = credentialVariables;
-    const [tipMessage, setTipMessage] = useState<string>('');
-    const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
 
     // Copy necessary to replace already masked values with empty string to avoid user to misunderstand.
     credentialVariablesCopy.variables.forEach((credentialVariable) => {
@@ -65,20 +60,6 @@ function UpdateCredential({
 
     const updateCredentialRequest = useMutation({
         mutationFn: (createCredential: CreateCredential) => updateCredentialByRole(createCredential),
-        onSuccess: () => {
-            setTipType('success');
-            setTipMessage('Updating Credential Successful.');
-        },
-        onError: (error: Error) => {
-            if (isHandleKnownErrorResponse(error)) {
-                const response: ErrorResponse = error.body;
-                setTipType('error');
-                setTipMessage(response.details.join());
-            } else {
-                setTipType('error');
-                setTipMessage(error.message);
-            }
-        },
     });
 
     const updateCredentialByRole = useCallback(
@@ -124,11 +105,11 @@ function UpdateCredential({
         form.setFieldsValue({ variables: credentialVariablesCopy.variables });
     };
 
-    const onRemove = () => {
-        setTipType(undefined);
-        setTipMessage('');
-        onUpdateCancel();
-        void credentialsQuery.refetch();
+    const getCloseStatus = (isClose: boolean) => {
+        if (isClose) {
+            onUpdateCancel();
+            void credentialsQuery.refetch();
+        }
     };
 
     const isContainsEmpty = (credentialVariableList: CredentialVariable[]) => {
@@ -241,12 +222,15 @@ function UpdateCredential({
                 style={{ maxWidth: 1200 }}
                 onFinish={submit}
             >
-                <CredentialTip
-                    key={v4().toString()}
-                    type={tipType}
-                    msg={tipMessage}
-                    onRemove={onRemove}
-                ></CredentialTip>
+                {updateCredentialRequest.isSuccess ? (
+                    <CredentialProcessStatus
+                        isError={updateCredentialRequest.isError}
+                        isSuccess={updateCredentialRequest.isSuccess}
+                        successMsg={'Updating Credential Successful.'}
+                        error={updateCredentialRequest.error}
+                        getCloseStatus={getCloseStatus}
+                    />
+                ) : null}
                 <div className={styles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp'>
                         <Image
