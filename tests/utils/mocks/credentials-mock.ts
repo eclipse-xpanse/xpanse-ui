@@ -150,3 +150,72 @@ export const mockCredentialsCapabilitiesSuccessResponse = async (page: Page, tim
         await route.fulfill(response);
     });
 };
+
+export const mockCredentialsPostErrorResponse = async (
+    page: Page,
+    timeToWaitForResponse: number,
+    statusCode: number,
+    errorMessage: string
+) => {
+    await page.route(credentialsUrl, async (route, request) => {
+        if (request.method() === 'POST') {
+            await new Promise((resolve) => {
+                setTimeout(resolve, timeToWaitForResponse);
+            });
+
+            await route.fulfill({
+                status: statusCode,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: errorMessage }),
+            });
+        } else {
+            await route.continue();
+        }
+    });
+};
+
+export const mockCredentialsPutErrorResponse = async (
+    page: Page,
+    timeToWaitForResponse: number,
+    statusCode: number,
+    errorMessage: string
+) => {
+    await page.route(credentialsUrl, async (route, request) => {
+        if (request.method() === 'PUT') {
+            await new Promise((resolve) => {
+                setTimeout(resolve, timeToWaitForResponse);
+            });
+
+            await route.fulfill({
+                status: statusCode,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: errorMessage }),
+            });
+        } else {
+            await route.continue();
+        }
+    });
+};
+
+export const mockCredentialsDeleteErrorResponse = async (
+    page: Page,
+    timeToWaitForResponse: number,
+    statusCode: number,
+    errorMessage: string
+) => {
+    await page.route(credentialsDeleteUrl, async (route, request) => {
+        if (request.method() === 'DELETE') {
+            await new Promise((resolve) => {
+                setTimeout(resolve, timeToWaitForResponse);
+            });
+
+            await route.fulfill({
+                status: statusCode,
+                contentType: 'application/json',
+                body: JSON.stringify({ error: errorMessage }),
+            });
+        } else {
+            await route.continue();
+        }
+    });
+};

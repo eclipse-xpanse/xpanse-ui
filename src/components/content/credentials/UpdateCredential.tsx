@@ -214,6 +214,15 @@ function UpdateCredential({
                 credentialType={credentialVariables.type as credentialType}
                 styleClass={styles.updateCredentialApiDoc}
             />
+            {updateCredentialRequest.isSuccess || updateCredentialRequest.isError ? (
+                <CredentialProcessStatus
+                    isError={updateCredentialRequest.isError}
+                    isSuccess={updateCredentialRequest.isSuccess}
+                    successMsg={'Updating Credential Successful.'}
+                    error={updateCredentialRequest.error}
+                    getCloseStatus={getCloseStatus}
+                />
+            ) : null}
             <Form
                 form={form}
                 labelCol={{ span: 4 }}
@@ -222,15 +231,6 @@ function UpdateCredential({
                 style={{ maxWidth: 1200 }}
                 onFinish={submit}
             >
-                {updateCredentialRequest.isSuccess ? (
-                    <CredentialProcessStatus
-                        isError={updateCredentialRequest.isError}
-                        isSuccess={updateCredentialRequest.isSuccess}
-                        successMsg={'Updating Credential Successful.'}
-                        error={updateCredentialRequest.error}
-                        getCloseStatus={getCloseStatus}
-                    />
-                ) : null}
                 <div className={styles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp'>
                         <Image

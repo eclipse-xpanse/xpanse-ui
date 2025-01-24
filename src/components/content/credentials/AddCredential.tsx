@@ -377,6 +377,20 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     styleClass={credentialStyles.addCredentialApiDoc}
                 />
             ) : undefined}
+            {credentialCapabilitiesQuery.isError ? (
+                <CredentialListStatus error={credentialCapabilitiesQuery.error} />
+            ) : (
+                <></>
+            )}
+            {addCredentialRequest.isSuccess || addCredentialRequest.isError ? (
+                <CredentialProcessStatus
+                    isError={addCredentialRequest.isError}
+                    isSuccess={addCredentialRequest.isSuccess}
+                    successMsg={'Adding Credential Successful.'}
+                    error={addCredentialRequest.error}
+                    getCloseStatus={getCloseStatus}
+                />
+            ) : null}
 
             <Form
                 form={form}
@@ -386,20 +400,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 style={{ maxWidth: 1000 }}
                 onFinish={submit}
             >
-                {credentialCapabilitiesQuery.isError ? (
-                    <CredentialListStatus error={credentialCapabilitiesQuery.error} />
-                ) : (
-                    <></>
-                )}
-                {addCredentialRequest.isSuccess ? (
-                    <CredentialProcessStatus
-                        isError={addCredentialRequest.isError}
-                        isSuccess={addCredentialRequest.isSuccess}
-                        successMsg={'Adding Credential Successful.'}
-                        error={addCredentialRequest.error}
-                        getCloseStatus={getCloseStatus}
-                    />
-                ) : null}
                 <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
