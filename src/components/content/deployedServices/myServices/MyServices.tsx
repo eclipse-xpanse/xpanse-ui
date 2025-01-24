@@ -58,6 +58,7 @@ import useRecreateRequest from '../../order/recreate/useRecreateRequest.ts';
 import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubmit.tsx';
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
+import { CreateServiceActionForm } from '../../order/serviceActions/CreateServiceActionForm';
 import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
 import { ServicePorting } from '../../order/servicePorting/ServicePorting.tsx';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
@@ -145,6 +146,7 @@ function MyServices(): React.JSX.Element {
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
     const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState(false);
+    const [isServiceActionsModalOpen, setIsServiceActionsModalOpen] = useState(false);
 
     const [isServicePortingModalOpen, setIsServicePortingModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
@@ -733,7 +735,7 @@ function MyServices(): React.JSX.Element {
                 ),
             },
             {
-                key: 'service configuration',
+                key: 'configuration',
                 label: (
                     <Button
                         onClick={() => {
@@ -744,7 +746,22 @@ function MyServices(): React.JSX.Element {
                         icon={<FileTextOutlined />}
                         type={'link'}
                     >
-                        service configuration
+                        configuration
+                    </Button>
+                ),
+            },
+            {
+                key: 'actions',
+                label: (
+                    <Button
+                        onClick={() => {
+                            handleServiceActionsOpenModal(record);
+                        }}
+                        className={myServicesStyles.buttonAsLink}
+                        icon={<FileTextOutlined />}
+                        type={'link'}
+                    >
+                        actions
                     </Button>
                 ),
             },
@@ -1189,6 +1206,20 @@ function MyServices(): React.JSX.Element {
         setIsMyServiceConfigurationModalOpen(false);
     };
 
+    const handleServiceActionsOpenModal = (record: DeployedService) => {
+        setActiveRecord(
+            record.serviceHostingType === serviceHostingType.SELF
+                ? (record as DeployedServiceDetails)
+                : (record as VendorHostedDeployedServiceDetails)
+        );
+        setIsServiceActionsModalOpen(true);
+    };
+
+    const handleServiceActionsModalClose = () => {
+        setActiveRecord(undefined);
+        setIsServiceActionsModalOpen(false);
+    };
+
     const handleCancelServicePortingModel = () => {
         setActiveRecord(undefined);
         clearFormVariables();
@@ -1332,6 +1363,20 @@ function MyServices(): React.JSX.Element {
                     <CurrentServiceConfiguration
                         userOrderableServiceVo={getOrderableServiceDetails.data}
                         deployedService={activeRecord}
+                    />
+                </Modal>
+            ) : null}
+            {activeRecord ? (
+                <Modal
+                    title={'Service Actions'}
+                    width={1600}
+                    footer={null}
+                    open={isServiceActionsModalOpen}
+                    onCancel={handleServiceActionsModalClose}
+                >
+                    <CreateServiceActionForm
+                        deployedService={activeRecord}
+                        userOrderableServiceVo={getOrderableServiceDetails.data}
                     />
                 </Modal>
             ) : null}
