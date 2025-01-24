@@ -2544,6 +2544,10 @@ export type UserOrderableServiceVo = {
      * The collection of service configuration parameters.
      */
     configurationParameters?: Array<ServiceChangeParameter>;
+    /**
+     * manage service action.
+     */
+    serviceActions?: Array<ServiceAction>;
     links?: Array<Link>;
 };
 
