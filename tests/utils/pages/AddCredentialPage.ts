@@ -44,6 +44,10 @@ export class AddCredentialPage {
         return this.page.getByText('Adding Credential Successful.');
     }
 
+    get backendErrorAlert() {
+        return this.page.getByRole('alert');
+    }
+
     async isElementFullyVisibleInsideViewport(element: Locator): Promise<boolean> {
         const boundingBox = await element.boundingBox();
         if (!boundingBox) return false;

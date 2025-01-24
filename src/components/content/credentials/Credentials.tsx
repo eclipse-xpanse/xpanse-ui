@@ -199,7 +199,7 @@ function Credentials(): React.JSX.Element {
 
     return (
         <div className={tableStyles.genericTableContainer}>
-            {deleteCredentialRequest.isSuccess ? (
+            {deleteCredentialRequest.isSuccess || deleteCredentialRequest.isError ? (
                 <CredentialProcessStatus
                     isError={deleteCredentialRequest.isError}
                     isSuccess={deleteCredentialRequest.isSuccess}

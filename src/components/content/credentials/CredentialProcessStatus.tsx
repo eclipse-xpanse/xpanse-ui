@@ -53,7 +53,7 @@ export default function CredentialProcessStatus({
                         showIcon
                         closable={true}
                         onClose={onClose}
-                        type={'success'}
+                        type={'error'}
                     />{' '}
                 </div>
             );
