@@ -237,15 +237,15 @@ function MyServices(): React.JSX.Element {
     ]);
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-        if (serviceDeploymentStateInQuery) {
+        if (serviceDeploymentStateInQuery && serviceDeploymentStateInQuery.length > 0) {
             serviceVoList = listDeployedServicesQuery.data.filter((serviceVo: DeployedService) =>
                 serviceDeploymentStateInQuery.includes(serviceVo.serviceDeploymentState as serviceDeploymentState)
             );
-        } else if (serviceStateInQuery) {
+        } else if (serviceStateInQuery && serviceStateInQuery.length > 0) {
             serviceVoList = listDeployedServicesQuery.data.filter((serviceVo: DeployedService) =>
                 serviceStateInQuery.includes(serviceVo.serviceState as serviceState)
             );
-        } else if (serviceIdInQuery) {
+        } else if (serviceIdInQuery && serviceIdInQuery.length > 0) {
             serviceVoList = listDeployedServicesQuery.data.filter(
                 (serviceVo: { serviceId: string }) => serviceVo.serviceId === serviceIdInQuery
             );
