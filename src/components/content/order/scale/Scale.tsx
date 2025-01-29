@@ -49,9 +49,7 @@ export const Scale = ({
     let isDowngradeAllowed: boolean = true;
     let getParams: DeployParam[] = [];
     const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
-    const [selectFlavor, setSelectFlavor] = useState<string>(
-        currentSelectedService.flavor ? currentSelectedService.flavor : ''
-    );
+    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor ?? '');
     const [scaleWarning, setScaleWarning] = useState<string>('Are you sure to scale the service?');
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);

@@ -94,11 +94,8 @@ export const SelectPortingTarget = ({
             userOrderableServiceVoList
         );
         setSelectBillingMode(
-            defaultBillingMode
-                ? defaultBillingMode
-                : billingModes
-                  ? billingModes[0]
-                  : (currentSelectedService.deployRequest.billingMode as billingMode)
+            defaultBillingMode ??
+                (billingModes ? billingModes[0] : (currentSelectedService.deployRequest.billingMode as billingMode))
         );
     };
 

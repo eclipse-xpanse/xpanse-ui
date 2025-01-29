@@ -147,11 +147,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const [selectBillingMode, setSelectBillMode] = useState<billingMode>(
         serviceInfo
             ? serviceInfo.billingMode
-            : defaultBillingMode
-              ? defaultBillingMode
-              : billingModes
-                ? billingModes[0]
-                : billingMode.FIXED
+            : (defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED))
     );
 
     let currentServiceProviderContactDetails: ServiceProviderContactDetails | undefined =
@@ -208,7 +204,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
             serviceHostingType,
             versionToServicesMap.get(selectVersion)
         );
-        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
+        setSelectBillMode(defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED));
 
         flavorList = getServiceFlavorList(selectCsp, serviceHostingType, versionToServicesMap.get(selectVersion));
         setSelectFlavor(flavorList[0]?.name ?? '');
@@ -260,7 +256,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
         setServiceVendor(
             serviceVendorHelper(cspList[0], serviceHostTypes[0], versionToServicesMap.get(currentVersion))
         );
-        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
+        setSelectBillMode(defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED));
     };
 
     const onChangeCloudProvider = (csp: csp) => {
@@ -284,7 +280,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
 
         billingModes = getBillingModes(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         defaultBillingMode = getDefaultBillingMode(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
-        setSelectBillMode(defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED);
+        setSelectBillMode(defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED));
 
         flavorList = getServiceFlavorList(csp, serviceHostTypes[0], versionToServicesMap.get(selectVersion));
         setSelectFlavor(flavorList[0]?.name ?? '');

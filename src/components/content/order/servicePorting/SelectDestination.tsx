@@ -154,9 +154,7 @@ export const SelectDestination = ({
             selectServiceHostType,
             userOrderableServiceVoList
         );
-        setSelectBillingMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED
-        );
+        setSelectBillingMode(defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED));
         updateSelectedParameters(
             selectCsp,
             selectArea,
@@ -221,9 +219,7 @@ export const SelectDestination = ({
             selectServiceHostType,
             userOrderableServiceVoList
         );
-        setSelectBillingMode(
-            defaultBillingMode ? defaultBillingMode : billingModes ? billingModes[0] : billingMode.FIXED
-        );
+        setSelectBillingMode(defaultBillingMode ?? (billingModes ? billingModes[0] : billingMode.FIXED));
         updateSelectedParameters(
             csp,
             areaList[0]?.key ?? '',

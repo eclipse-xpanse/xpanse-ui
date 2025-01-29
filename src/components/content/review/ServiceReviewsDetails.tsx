@@ -168,9 +168,7 @@ export const ServiceReviewsDetails = ({
                             {currentServiceTemplateRequestToReview.ocl.description}
                         </Descriptions.Item>
                         <Descriptions.Item label='Credential Type'>
-                            {currentServiceTemplateRequestToReview.ocl.deployment.credentialType
-                                ? currentServiceTemplateRequestToReview.ocl.deployment.credentialType
-                                : ''}
+                            {currentServiceTemplateRequestToReview.ocl.deployment.credentialType ?? ''}
                         </Descriptions.Item>
                         <Descriptions.Item label='Billing Modes'>
                             <BillingText billing={currentServiceTemplateRequestToReview.ocl.billing} />

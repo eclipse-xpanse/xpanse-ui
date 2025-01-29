@@ -13,7 +13,7 @@ export class HomePage {
         this.documentationWebsite = page.getByRole('link', { name: 'Getting started with Xpanse' });
         this.configurationLanguageLink = page.getByRole('link', { name: 'Xpanse Service Description Language' });
         this.logoOnHomePage = page.getByRole('link').first();
-        this.baseUrl = baseUrl ? baseUrl : 'http://localhost:3000';
+        this.baseUrl = baseUrl ?? 'http://localhost:3000';
     }
 
     async openHomePage() {

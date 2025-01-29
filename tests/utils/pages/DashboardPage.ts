@@ -13,7 +13,7 @@ export class DashboardPage {
 
     constructor(page: Page, baseUrl: string | undefined) {
         this.page = page;
-        this.baseUrl = baseUrl ? baseUrl : 'http://localhost:3000';
+        this.baseUrl = baseUrl ?? 'http://localhost:3000';
         this.serviceStaticLocator = page.locator('.ant-statistic-title');
         this.successDeploymentRedirectUrl =
             this.baseUrl + '/myServices?serviceState=deployment+successful&serviceState=modification+successful';

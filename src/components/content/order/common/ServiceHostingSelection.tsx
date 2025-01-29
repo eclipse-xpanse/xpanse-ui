@@ -25,11 +25,8 @@ export function ServiceHostingSelection({
         }
     };
 
-    const value: string | undefined = previousSelection
-        ? previousSelection
-        : serviceHostingTypes.length > 0
-          ? serviceHostingTypes[0]
-          : undefined;
+    const value: string | undefined =
+        previousSelection ?? (serviceHostingTypes.length > 0 ? serviceHostingTypes[0] : undefined);
 
     return (
         <Row className={serviceOrderStyles.orderFormSelectionFirstInGroup}>
