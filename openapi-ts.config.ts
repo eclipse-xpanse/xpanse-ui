@@ -6,9 +6,7 @@
 import { defineConfig } from '@hey-api/openapi-ts';
 
 export default defineConfig({
-    client: 'legacy/fetch',
     input: 'src/xpanse-api/api.json',
-    experimentalParser: true,
     output: {
         format: 'prettier',
         path: 'src/xpanse-api/generated',
@@ -20,5 +18,6 @@ export default defineConfig({
             exportInlineEnums: true,
             enums: 'typescript',
         },
+        'legacy/fetch',
     ],
 });
