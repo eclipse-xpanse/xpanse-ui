@@ -17,15 +17,10 @@ import {
     homePageRoute,
     servicesSubPageRoute,
 } from '../../../utils/constants';
-import { ApiDoc } from '../../common/doc/ApiDoc';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType.ts';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
-import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
-import { ServiceTitle } from '../common/ServiceTitle.tsx';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
@@ -33,6 +28,7 @@ import userOrderableServicesQuery from '../query/userOrderableServicesQuery.ts';
 import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
+import { ServiceHead } from './ServiceHead.tsx';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
@@ -192,139 +188,116 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
 
     return (
         <>
-            <div>
-                <div className={tableStyles.genericTableContainer}>
-                    <Row justify='space-between'>
-                        <Col span={6}>
-                            <ServiceTitle
-                                title={state.name}
-                                version={state.version}
-                                icon={orderableServicesQuery.isSuccess ? orderableServicesQuery.data[0].icon : ''}
+            <div className={tableStyles.genericTableContainer}>
+                <ServiceHead
+                    title={state.name}
+                    version={state.version}
+                    icon={orderableServicesQuery.isSuccess ? orderableServicesQuery.data[0].icon : ''}
+                    id={state.id}
+                    serviceVendor={state.serviceVendor}
+                    contactServiceDetails={state.contactServiceDetails}
+                />
+
+                {isShowDeploymentResult ? (
+                    <OrderSubmitStatusAlert
+                        key={uniqueRequestId.current}
+                        uuid={submitDeploymentRequest.data?.serviceId ?? ''}
+                        serviceHostType={state.serviceHostingType}
+                        submitDeploymentRequest={submitDeploymentRequest}
+                        redeployFailedDeploymentQuery={redeployFailedDeploymentQuery}
+                        getSubmitLatestServiceOrderStatusQuery={getSubmitLatestServiceOrderStatusQuery}
+                        deployedServiceDetails={getServiceDetailsByIdQuery.data}
+                        serviceProviderContactDetails={state.contactServiceDetails}
+                        retryRequest={retryRequest}
+                        onClose={onClose}
+                    />
+                ) : null}
+                <Form
+                    form={form}
+                    layout='vertical'
+                    autoComplete='off'
+                    initialValues={useOrderFormStore.getState().deployParams}
+                    onFinish={onSubmit}
+                    validateTrigger={['onSubmit', 'onBlur', 'onChange']}
+                    key='deploy'
+                    disabled={submitDeploymentRequest.isSuccess}
+                >
+                    <div className={serviceOrderStyles.orderFormGroupItems}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <Form.Item
+                            name={'Name'}
+                            label={'Name: Service Name'}
+                            rules={[{ required: true }, { type: 'string', min: 5 }]}
+                            colon={true}
+                            className={serviceOrderStyles.orderParamsFirstParam}
+                        >
+                            <Input
+                                name={'Name'}
+                                showCount
+                                placeholder={'customer defined name for service ordered'}
+                                maxLength={256}
+                                onChange={(e) => {
+                                    cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
+                                }}
+                                className={serviceOrderStyles.orderParamItemContent}
+                                suffix={
+                                    <Tooltip title={'Customer defined name for the service instance created'}>
+                                        <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
+                                    </Tooltip>
+                                }
                             />
+                        </Form.Item>
+                        <div
+                            className={
+                                getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() ===
+                                taskStatus.IN_PROGRESS.toString()
+                                    ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
+                                    : ''
+                            }
+                        >
+                            {state.params.map((item) =>
+                                item.kind === 'variable' || item.kind === 'env' ? (
+                                    <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
+                                ) : undefined
+                            )}
+                        </div>
+                    </div>
+                    <div className={serviceOrderStyles.orderParamsFirstParam} />
+                    <div className={serviceOrderStyles.orderParamItemRow}>
+                        <div className={serviceOrderStyles.orderParamItemLeft} />
+                        <div className={serviceOrderStyles.orderParamItemContent}>
+                            <EulaInfo
+                                eula={state.eula}
+                                isEulaAccepted={isEulaAccepted}
+                                setIsEulaAccepted={setIsEulaAccepted}
+                            />
+                        </div>
+                    </div>
+                    <Row justify='space-around'>
+                        <Col span={6}>
+                            <div>
+                                <NavigateOrderSubmission
+                                    text={'Back'}
+                                    to={createServicePageUrl as To}
+                                    props={state}
+                                    disabled={isBackDisabled()}
+                                />
+                            </div>
                         </Col>
-                        <Col span={8}>
-                            <div className={serviceOrderStyles.serviceVendorContactClass}>
-                                <div className={serviceOrderStyles.serviceOrderSubmitApiDocClass}>
-                                    <ApiDoc
-                                        serviceTemplateId={state.id}
-                                        styleClass={serviceOrderStyles.contentTitleApi}
-                                    ></ApiDoc>
-                                </div>
-                                <div className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
-                                    <IsvNameDisplay serviceVendor={state.serviceVendor} />
-                                </div>
-                                {state.contactServiceDetails ? (
-                                    <div className={serviceOrderStyles.serviceApiDocVendorClass}>
-                                        <ContactDetailsText
-                                            serviceProviderContactDetails={state.contactServiceDetails}
-                                            showFor={ContactDetailsShowType.Order}
-                                        />
-                                    </div>
-                                ) : null}
+                        <Col span={4}>
+                            <div className={serviceOrderStyles.orderParamDeploy}>
+                                <Button
+                                    type='primary'
+                                    loading={isDeployLoading()}
+                                    htmlType='submit'
+                                    disabled={isDeployDisabled()}
+                                >
+                                    Deploy
+                                </Button>
                             </div>
                         </Col>
                     </Row>
-                    {isShowDeploymentResult ? (
-                        <OrderSubmitStatusAlert
-                            key={uniqueRequestId.current}
-                            uuid={submitDeploymentRequest.data?.serviceId ?? ''}
-                            serviceHostType={state.serviceHostingType}
-                            submitDeploymentRequest={submitDeploymentRequest}
-                            redeployFailedDeploymentQuery={redeployFailedDeploymentQuery}
-                            getSubmitLatestServiceOrderStatusQuery={getSubmitLatestServiceOrderStatusQuery}
-                            deployedServiceDetails={getServiceDetailsByIdQuery.data}
-                            serviceProviderContactDetails={state.contactServiceDetails}
-                            retryRequest={retryRequest}
-                            onClose={onClose}
-                        />
-                    ) : null}
-                    <Form
-                        form={form}
-                        layout='vertical'
-                        autoComplete='off'
-                        initialValues={useOrderFormStore.getState().deployParams}
-                        onFinish={onSubmit}
-                        validateTrigger={['onSubmit', 'onBlur', 'onChange']}
-                        key='deploy'
-                        disabled={submitDeploymentRequest.isSuccess}
-                    >
-                        <div className={serviceOrderStyles.orderFormGroupItems}>
-                            <div className={serviceOrderStyles.orderParamItemLeft} />
-                            <Form.Item
-                                name={'Name'}
-                                label={'Name: Service Name'}
-                                rules={[{ required: true }, { type: 'string', min: 5 }]}
-                                colon={true}
-                                className={serviceOrderStyles.orderParamsFirstParam}
-                            >
-                                <Input
-                                    name={'Name'}
-                                    showCount
-                                    placeholder={'customer defined name for service ordered'}
-                                    maxLength={256}
-                                    onChange={(e) => {
-                                        cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
-                                    }}
-                                    className={serviceOrderStyles.orderParamItemContent}
-                                    suffix={
-                                        <Tooltip title={'Customer defined name for the service instance created'}>
-                                            <InfoCircleOutlined style={{ color: 'rgba(0,0,0,.45)' }} />
-                                        </Tooltip>
-                                    }
-                                />
-                            </Form.Item>
-                            <div
-                                className={
-                                    getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() ===
-                                    taskStatus.IN_PROGRESS.toString()
-                                        ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
-                                        : ''
-                                }
-                            >
-                                {state.params.map((item) =>
-                                    item.kind === 'variable' || item.kind === 'env' ? (
-                                        <OrderItem key={item.name} item={item} csp={state.csp} region={state.region} />
-                                    ) : undefined
-                                )}
-                            </div>
-                        </div>
-                        <div className={serviceOrderStyles.orderParamsFirstParam} />
-                        <div className={serviceOrderStyles.orderParamItemRow}>
-                            <div className={serviceOrderStyles.orderParamItemLeft} />
-                            <div className={serviceOrderStyles.orderParamItemContent}>
-                                <EulaInfo
-                                    eula={state.eula}
-                                    isEulaAccepted={isEulaAccepted}
-                                    setIsEulaAccepted={setIsEulaAccepted}
-                                />
-                            </div>
-                        </div>
-                        <Row justify='space-around'>
-                            <Col span={6}>
-                                <div>
-                                    <NavigateOrderSubmission
-                                        text={'Back'}
-                                        to={createServicePageUrl as To}
-                                        props={state}
-                                        disabled={isBackDisabled()}
-                                    />
-                                </div>
-                            </Col>
-                            <Col span={4}>
-                                <div className={serviceOrderStyles.orderParamDeploy}>
-                                    <Button
-                                        type='primary'
-                                        loading={isDeployLoading()}
-                                        htmlType='submit'
-                                        disabled={isDeployDisabled()}
-                                    >
-                                        Deploy
-                                    </Button>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Form>
-                </div>
+                </Form>
             </div>
         </>
     );
