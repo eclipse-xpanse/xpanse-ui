@@ -4,7 +4,9 @@
  */
 
 import { LinkOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 import React from 'react';
+import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import { Link, openApi, OpenApiData } from '../../../../xpanse-api/generated';
 
 export function ApiDoc({
@@ -26,8 +28,12 @@ export function ApiDoc({
     }
 
     return (
-        <button className={styleClass} onClick={onclick}>
+        <Button
+            className={`${styleClass} ${serviceOrderStyles.serviceOrderApiDocCustomButton}`}
+            onClick={onclick}
+            type={'text'}
+        >
             <LinkOutlined /> API Documentation
-        </button>
+        </Button>
     );
 }

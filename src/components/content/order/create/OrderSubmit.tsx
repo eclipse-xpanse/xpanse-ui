@@ -17,14 +17,9 @@ import {
     homePageRoute,
     servicesSubPageRoute,
 } from '../../../utils/constants';
-import { ApiDoc } from '../../common/doc/ApiDoc';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType.ts';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { EulaInfo } from '../common/EulaInfo';
-import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
-import { ServiceTitle } from '../common/ServiceTitle.tsx';
 import { OrderItem } from '../common/utils/OrderItem';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
 import OrderSubmitStatusAlert from '../orderStatus/OrderSubmitStatusAlert';
@@ -32,6 +27,7 @@ import userOrderableServicesQuery from '../query/userOrderableServicesQuery.ts';
 import useRedeployFailedDeploymentQuery from '../retryDeployment/useRedeployFailedDeploymentQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
+import { NewOrderHeaderElements } from './NewOrderHeaderElements.tsx';
 import { useDeployRequestSubmitQuery } from './useDeployRequestSubmitQuery';
 
 function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
@@ -187,36 +183,14 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         <>
             <div>
                 <div className={tableStyles.genericTableContainer}>
-                    <Row justify='space-between'>
-                        <Col span={6}>
-                            <ServiceTitle
-                                title={state.name}
-                                version={state.version}
-                                icon={orderableServicesQuery.isSuccess ? orderableServicesQuery.data[0].icon : ''}
-                            />
-                        </Col>
-                        <Col span={8}>
-                            <div className={serviceOrderStyles.serviceVendorContactClass}>
-                                <div className={serviceOrderStyles.serviceOrderSubmitApiDocClass}>
-                                    <ApiDoc
-                                        serviceTemplateId={state.id}
-                                        styleClass={serviceOrderStyles.contentTitleApi}
-                                    ></ApiDoc>
-                                </div>
-                                <div className={serviceOrderStyles.serviceOrderSubmitOptionVendor}>
-                                    <IsvNameDisplay serviceVendor={state.serviceVendor} />
-                                </div>
-                                {state.contactServiceDetails ? (
-                                    <div className={serviceOrderStyles.serviceApiDocVendorClass}>
-                                        <ContactDetailsText
-                                            serviceProviderContactDetails={state.contactServiceDetails}
-                                            showFor={ContactDetailsShowType.Order}
-                                        />
-                                    </div>
-                                ) : null}
-                            </div>
-                        </Col>
-                    </Row>
+                    <NewOrderHeaderElements
+                        title={state.name}
+                        version={state.version}
+                        icon={orderableServicesQuery.isSuccess ? orderableServicesQuery.data[0].icon : ''}
+                        id={state.id}
+                        serviceVendor={state.serviceVendor}
+                        contactServiceDetails={state.contactServiceDetails}
+                    />
                     {isShowDeploymentResult ? (
                         <OrderSubmitStatusAlert
                             key={uniqueRequestId.current}

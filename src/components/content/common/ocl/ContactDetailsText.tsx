@@ -25,8 +25,10 @@ export function ContactDetailsText({
             trigger='hover'
         >
             <Button className={oclDisplayStyles.oclDataHover} type={'link'}>
-                <ContactsOutlined />
-                {showFor === ContactDetailsShowType.Order ? ' Contact Service Vendor ' : ' support '}
+                <span className={oclDisplayStyles.iconTextContainer}>
+                    <ContactsOutlined className={oclDisplayStyles.icon} />
+                    {showFor === ContactDetailsShowType.Order ? 'Contact Service Vendor' : 'support'}
+                </span>
             </Button>
         </Popover>
     );
