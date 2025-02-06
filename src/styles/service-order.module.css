@@ -235,14 +235,15 @@
 }
 
 .content-title-api {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: bold;
     background-color: transparent;
     border: none;
     cursor: pointer;
     display: inline;
     padding: 0;
-    margin-top: 10px;
+    width: 131px;
+    height: 18px;
 }
 
 .services-loading-error {
@@ -348,6 +349,7 @@
 
 .order-form-group-items {
     box-shadow:
+        0 1px 1px 0 rgba(0, 0, 0, 0.1),
         0 1px 1px 0 rgba(0, 0, 0, 0),
         0 6px 20px 0 rgba(0, 0, 0, 0.1);
     padding-left: 50px;
@@ -490,18 +492,13 @@
     margin-left: 10px;
 }
 
-.service-order-submit-option-vendor {
-    border: none;
-    display: inline;
-    padding: 0;
-    margin-top: 15px;
-    margin-left: 10px;
-    float: left;
-}
-
 .service-isv-vendor {
     font-size: 12px;
     font-weight: bold;
+}
+
+.service-isv-vendor-tag {
+    margin-inline-end: 0 !important;
 }
 
 .service-api-doc-vendor-class {
@@ -512,14 +509,14 @@
     margin: 0 10px 0 10px;
 }
 
-.service-order-submit-api-doc-class {
-    margin: 10px 10px 0 10px;
-}
-
 .service-vendor-contact-class {
     display: flex;
     margin-right: 0;
-    justify-content: flex-end;
+    justify-content: space-between;
+    margin-left: auto;
+    text-align: right;
+    align-items: center;
+    gap: 16px;
 }
 
 .service-title-class {
@@ -546,4 +543,34 @@
 
 .serviceTitleVersionClass {
     font-size: 20px;
+}
+
+.service-head-class {
+    min-height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.service-head-left-content {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.service-order-head-right-class {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-order-api-doc-custom-button {
+    background-color: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.service-order-api-doc-custom-button:hover {
+    background-color: transparent !important;
 }

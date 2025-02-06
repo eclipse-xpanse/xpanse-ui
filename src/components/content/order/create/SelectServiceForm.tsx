@@ -21,15 +21,10 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { orderPageRoute, servicesSubPageRoute } from '../../../utils/constants';
-import { ApiDoc } from '../../common/doc/ApiDoc.tsx';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
 import { BillingModeSelection } from '../common/BillingModeSelection';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
-import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
 import { RegionSelection } from '../common/RegionSelection.tsx';
 import { ServiceHostingSelection } from '../common/ServiceHostingSelection';
-import { ServiceTitle } from '../common/ServiceTitle.tsx';
 import { AvailabilityZoneFormItem } from '../common/availabilityzone/AvailabilityZoneFormItem';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { OrderSubmitProps } from '../common/utils/OrderSubmitProps';
@@ -50,6 +45,7 @@ import CspSelect from '../formElements/CspSelect';
 import VersionSelect from '../formElements/VersionSelect';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import NavigateOrderSubmission from './NavigateOrderSubmission';
+import { NewOrderHeaderElements } from './NewOrderHeaderElements.tsx';
 
 export function SelectServiceForm({ services }: { services: UserOrderableServiceVo[] }): React.JSX.Element {
     const [form] = Form.useForm();
@@ -352,35 +348,15 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
                 className={serviceOrderStyles.orderFormInlineDisplay}
             >
                 <div className={tableStyles.genericTableContainer}>
-                    <Row justify='space-between'>
-                        <Col span={6}>
-                            <ServiceTitle title={serviceName} icon={services[0].icon} />
-                        </Col>
-                        {currentServiceProviderContactDetails !== undefined ? (
-                            <Col span={8}>
-                                <div className={serviceOrderStyles.serviceVendorContactClass}>
-                                    <div className={serviceOrderStyles.serviceApiDocClass}>
-                                        <ApiDoc
-                                            serviceTemplateId={getServiceTemplateId()}
-                                            styleClass={serviceOrderStyles.contentTitleApi}
-                                        ></ApiDoc>
-                                    </div>
-                                    <div className={serviceOrderStyles.serviceOrderTypeOptionVendor}>
-                                        <IsvNameDisplay serviceVendor={serviceVendor} />
-                                    </div>
-                                    <div>
-                                        {' '}
-                                        <ContactDetailsText
-                                            serviceProviderContactDetails={currentServiceProviderContactDetails}
-                                            showFor={ContactDetailsShowType.Order}
-                                        />
-                                    </div>
-                                </div>
-                            </Col>
-                        ) : (
-                            <></>
-                        )}
-                    </Row>
+                    <NewOrderHeaderElements
+                        title={serviceName}
+                        version={selectVersion}
+                        icon={services[0].icon}
+                        id={getServiceTemplateId()}
+                        serviceVendor={serviceVendor}
+                        contactServiceDetails={currentServiceProviderContactDetails}
+                    />
+
                     <div className={serviceOrderStyles.orderFormGroupItems}>
                         <VersionSelect
                             selectVersion={selectVersion}
