@@ -76,8 +76,8 @@
         "typescript-eslint": "^8.23.0"
     },
     "overrides": {
-        "react-scripts": {
-            "typescript": "^5"
+        "zustand": {
+            "use-sync-external-store": "^1.4.0"
         }
     },
     "knip": {
