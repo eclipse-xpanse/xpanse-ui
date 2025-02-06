@@ -19,9 +19,11 @@ import {
     ModifyRequest,
     serviceDeploymentState,
     ServiceFlavor,
+    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
+import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import useGetOrderableServiceDetails from '../../deployedServices/myServices/query/useGetOrderableServiceDetails.tsx';
 import { FlavorFeatures } from '../common/FlavorFeatures';
 import { FlavorPrice } from '../common/FlavorPrice.tsx';
@@ -65,6 +67,11 @@ export const Scale = ({
             return modify(data);
         },
     });
+    const getScaleServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
+        modifyServiceRequest.data?.orderId ?? '',
+        modifyServiceRequest.isSuccess,
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+    );
 
     if (orderableServiceDetailsQuery.isSuccess) {
         if (orderableServiceDetailsQuery.data.flavors.serviceFlavors.length > 0) {
@@ -148,9 +155,8 @@ export const Scale = ({
             <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>Change Flavor:</div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
-                    isSubmitFailed={modifyServiceRequest.isError}
-                    submitFailedResult={modifyServiceRequest.error}
-                    isSubmitInProgress={modifyServiceRequest.isPending}
+                    modifyServiceRequest={modifyServiceRequest}
+                    getScaleOrModifyServiceOrderStatusQuery={getScaleServiceOrderStatusQuery}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
                         orderableServiceDetailsQuery.isSuccess
