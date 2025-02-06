@@ -18,9 +18,11 @@ import {
     type ModifyData,
     ModifyRequest,
     serviceDeploymentState,
+    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
+import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import useGetOrderableServiceDetails from '../../deployedServices/myServices/query/useGetOrderableServiceDetails.tsx';
 import ScaleOrModifySubmitStatusAlert from '../common/ScaleOrModifySubmitStatusAlert';
 import { ModifySubmitRequest } from '../common/modifySubmitRequest';
@@ -57,6 +59,11 @@ export const Modify = ({
             return modify(data);
         },
     });
+    const getModifyServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
+        modifyServiceRequest.data?.orderId ?? '',
+        modifyServiceRequest.isSuccess,
+        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+    );
 
     const hasVariableChanged: () => boolean = () => {
         const prevParamsString = JSON.stringify(getExistingServiceParameters(currentSelectedService));
@@ -175,9 +182,8 @@ export const Modify = ({
             </div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
-                    isSubmitFailed={modifyServiceRequest.isError}
-                    submitFailedResult={modifyServiceRequest.error}
-                    isSubmitInProgress={modifyServiceRequest.isPending}
+                    modifyServiceRequest={modifyServiceRequest}
+                    getScaleOrModifyServiceOrderStatusQuery={getModifyServiceOrderStatusQuery}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
                         orderableServiceDetailsQuery.isSuccess
