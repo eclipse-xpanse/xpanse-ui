@@ -206,7 +206,7 @@ function normalizeUrl(url) {
   try {
     return new URL(url).toString();
   } catch (error) {
-    console.error(`Failed to normalize url: ${url}`);
+    console.error(`Failed to normalize url: ${url}`, error);
     return url;
   }
 }
@@ -497,7 +497,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.24.1";
+const version = "7.25.0";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {
