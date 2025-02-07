@@ -774,12 +774,14 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Id',
             dataIndex: 'serviceId',
-            filters: serviceIdInQuery ? undefined : serviceIdFilters,
+            filters: serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.serviceId.startsWith(value.toString()),
-            filtered: !!serviceIdInQuery,
+            onFilter: (value: React.Key | boolean, record) => {
+                return record.serviceId.startsWith(value.toString());
+            },
             align: 'center',
+            filteredValue: serviceIdInQuery ? [serviceIdInQuery] : undefined,
         },
         {
             title: 'Name',
