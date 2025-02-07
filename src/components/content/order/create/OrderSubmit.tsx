@@ -104,10 +104,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     };
 
     const createServicePageUrl: string = createServicePageRoute
-        .concat('?catalog=', state.category)
-        .concat('&serviceName=', state.name)
+        .concat('?serviceName=', state.name)
         .concat('&latestVersion=', state.version)
-        .concat('&billingMode=', state.billingMode);
+        .concat('&billingMode=', state.billingMode)
+        .concat('#', state.category);
 
     const isBackDisabled = () => {
         if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {

@@ -54,7 +54,7 @@ export function SelectServiceForm({ services }: { services: UserOrderableService
     const navigate = useNavigate();
     const latestVersion = decodeURI(urlParams.get('latestVersion') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
-    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
+    const categoryName = location.hash.split('#')[1];
     const servicePageUrl = servicesSubPageRoute + categoryName;
     let serviceInfo: OrderSubmitProps | undefined;
     const versionToServicesMap = useMemo<Map<string, UserOrderableServiceVo[]>>(() => {
