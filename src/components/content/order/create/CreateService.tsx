@@ -14,8 +14,8 @@ import { SelectServiceForm } from './SelectServiceForm';
 
 function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
-    const categoryName = decodeURI(urlParams.get('catalog') ?? '');
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
+    const categoryName = location.hash.split('#')[1];
     const orderableServicesQuery = userOrderableServicesQuery(categoryName as category, serviceName);
 
     if (orderableServicesQuery.isSuccess) {
