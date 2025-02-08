@@ -7,4 +7,6 @@ export enum OperationType {
     Deploy,
     Destroy,
     Modify,
+    Recreate,
+    Port,
 }

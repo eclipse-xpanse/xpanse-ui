@@ -7,7 +7,6 @@ import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
-    DeployedServiceDetails,
     ErrorResponse,
     serviceHostingType,
     ServiceOrder,
@@ -15,23 +14,21 @@ import {
     ServicePortingRequest,
     ServiceProviderContactDetails,
     taskStatus,
-    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
+import { OrderProcessingStatus } from '../orderStatus/OrderProcessingStatus.tsx';
+import { OperationType } from '../types/OperationType.ts';
 import { PortServiceOrderSubmitResult } from './PortServiceOrderSubmitResult.tsx';
-import { PortServiceProcessingStatus } from './PortServiceProcessingStatus.tsx';
 
 function PortServiceStatusAlert({
     selectServiceHostingType,
     portServiceRequest,
-    deployedServiceDetails,
     getPortLatestServiceOrderStatusQuery,
     serviceProviderContactDetails,
 }: {
     selectServiceHostingType: serviceHostingType;
     portServiceRequest: UseMutationResult<ServiceOrder, Error, ServicePortingRequest>;
-    deployedServiceDetails: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined;
     getPortLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
@@ -52,36 +49,33 @@ function PortServiceStatusAlert({
                 ]);
             }
         } else if (portServiceRequest.isSuccess) {
-            if (getPortLatestServiceOrderStatusQuery.isSuccess) {
-                if (
-                    getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
-                ) {
-                    return <PortServiceProcessingStatus deployedResponse={deployedServiceDetails} />;
-                } else if (
-                    getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString() &&
-                    getPortLatestServiceOrderStatusQuery.data.error
-                ) {
-                    return getOrderSubmissionFailedDisplay(
-                        getPortLatestServiceOrderStatusQuery.data.error.errorType,
-                        getPortLatestServiceOrderStatusQuery.data.error.details
-                    );
-                } else if (
-                    getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.IN_PROGRESS.toString()
-                ) {
-                    return 'Service porting, Please wait...';
-                }
+            if (
+                getPortLatestServiceOrderStatusQuery.isSuccess &&
+                (getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
+                    getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+            ) {
+                return (
+                    <OrderProcessingStatus
+                        operationType={OperationType.Port}
+                        serviceOrderStatus={getPortLatestServiceOrderStatusQuery.data}
+                        serviceId={portServiceRequest.data.serviceId}
+                        selectedServiceHostingType={selectServiceHostingType}
+                    />
+                );
             } else if (getPortLatestServiceOrderStatusQuery.isError) {
                 if (selectServiceHostingType === serviceHostingType.SERVICE_VENDOR) {
                     return 'Service porting status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Service porting status polling failed. Please visit MyServices page to check the status of the request';
                 }
-            } else {
+            } else if (
+                getPortLatestServiceOrderStatusQuery.isPending ||
+                getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+            ) {
                 return 'Service porting, Please wait...';
             }
         }
-    }, [selectServiceHostingType, deployedServiceDetails, portServiceRequest, getPortLatestServiceOrderStatusQuery]);
+    }, [selectServiceHostingType, portServiceRequest, getPortLatestServiceOrderStatusQuery]);
 
     const alertType = useMemo(() => {
         if (portServiceRequest.isPending) {
@@ -121,7 +115,7 @@ function PortServiceStatusAlert({
     function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
             <div>
-                <span>{errorType.length > 0 ? errorType : 'Service deployment request failed.'}</span>
+                <span>{errorType.length > 0 ? errorType : 'Service port request failed.'}</span>
                 <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );

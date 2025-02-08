@@ -45,20 +45,31 @@ export function OrderEndPointDetails({
         if (endPointMap.size > 0) {
             return (
                 <>
-                    <span>
-                        {operationType === OperationType.Deploy ? 'Deployment Successful' : 'Modification Successful'}
-                    </span>
+                    <span>{getOperationResult(operationType)}</span>
                     <div className={submitResultStyles.resultContainer}>
                         {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
                     </div>
                 </>
             );
         } else {
-            return (
-                <span>
-                    {operationType === OperationType.Deploy ? 'Deployment Successful' : 'Modification Successful'}
-                </span>
-            );
+            return <span>{getOperationResult(operationType)}</span>;
+        }
+    }
+
+    function getOperationResult(type: OperationType): string {
+        switch (type) {
+            case OperationType.Deploy:
+                return 'Deployment Successful';
+            case OperationType.Destroy:
+                return 'Destroy Successful';
+            case OperationType.Modify:
+                return 'Modification Successful';
+            case OperationType.Recreate:
+                return 'Recreation Successful';
+            case OperationType.Port:
+                return 'Service ported successfully';
+            default:
+                return 'Deployment Successful';
         }
     }
     return <FallbackSkeleton />;

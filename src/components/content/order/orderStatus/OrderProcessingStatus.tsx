@@ -20,7 +20,11 @@ export const OrderProcessingStatus = ({
     selectedServiceHostingType: serviceHostingType;
 }): React.JSX.Element => {
     const errorMsg: string = 'Please contact service vendor for error details.';
-    if (operationType === OperationType.Deploy) {
+    if (
+        operationType === OperationType.Deploy ||
+        operationType === OperationType.Recreate ||
+        operationType === OperationType.Port
+    ) {
         if (serviceOrderStatus.taskStatus === 'successful') {
             return (
                 <OrderEndPointDetails

@@ -3,189 +3,151 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UseMutationResult } from '@tanstack/react-query';
-import { Alert } from 'antd';
-import React from 'react';
-import submitAlertStyles from '../../../../styles/submit-alert.module.css';
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import React, { useMemo } from 'react';
+import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
-    serviceDeploymentState,
+    serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
     taskStatus,
 } from '../../../../xpanse-api/generated';
+import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList.tsx';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
-import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import { OrderProcessingStatus } from '../orderStatus/OrderProcessingStatus.tsx';
+import { OperationType } from '../types/OperationType.ts';
+import { DestroyOrderSubmitResult } from './DestroyOrderSubmitResult.tsx';
 
 function DestroyServiceStatusAlert({
     deployedService,
     destroySubmitRequest,
-    serviceStateDestroyQueryError,
-    serviceStateDestroyQueryData,
+    getDestroyServiceOrderStatusQuery,
     closeDestroyResultAlert,
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
     destroySubmitRequest: UseMutationResult<ServiceOrder, Error, string>;
-    serviceStateDestroyQueryError: Error | null;
-    serviceStateDestroyQueryData: ServiceOrderStatusUpdate | undefined;
+    getDestroyServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
     closeDestroyResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getRecreateDeployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        destroySubmitRequest.data?.serviceId ?? '',
-        deployedService.serviceHostingType,
-        serviceStateDestroyQueryData?.taskStatus
-    );
-
-    if (
-        serviceStateDestroyQueryData?.isOrderCompleted &&
-        getRecreateDeployServiceDetailsQuery.isSuccess &&
-        [
-            serviceDeploymentState.DESTROY_FAILED.toString(),
-            serviceDeploymentState.DESTROY_SUCCESSFUL.toString(),
-        ].includes(getRecreateDeployServiceDetailsQuery.data.serviceDeploymentState)
-    ) {
-        deployedService.serviceDeploymentState = getRecreateDeployServiceDetailsQuery.data.serviceDeploymentState;
-        deployedService.serviceState = getRecreateDeployServiceDetailsQuery.data.serviceState;
-    }
+    const stopWatch = useStopwatch({
+        autoStart: true,
+    });
 
     const onClose = () => {
         closeDestroyResultAlert(true);
     };
 
-    if (destroySubmitRequest.isError) {
-        let errorMessage;
-        if (isHandleKnownErrorResponse(destroySubmitRequest.error)) {
-            const response: ErrorResponse = destroySubmitRequest.error.body;
-            errorMessage = response.details;
-        } else {
-            errorMessage = destroySubmitRequest.error.message;
+    const msg = useMemo(() => {
+        if (destroySubmitRequest.isPending) {
+            return 'Request submission in-progress';
+        } else if (destroySubmitRequest.isError) {
+            if (isHandleKnownErrorResponse(destroySubmitRequest.error)) {
+                const response: ErrorResponse = destroySubmitRequest.error.body;
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
+            } else {
+                return getOrderSubmissionFailedDisplay(destroySubmitRequest.error.name, [
+                    destroySubmitRequest.error.message,
+                ]);
+            }
+        } else if (destroySubmitRequest.isSuccess) {
+            if (
+                getDestroyServiceOrderStatusQuery.isSuccess &&
+                (getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
+                    getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+            ) {
+                return (
+                    <OrderProcessingStatus
+                        operationType={OperationType.Destroy}
+                        serviceOrderStatus={getDestroyServiceOrderStatusQuery.data}
+                        serviceId={deployedService.serviceId}
+                        selectedServiceHostingType={deployedService.serviceHostingType as serviceHostingType}
+                    />
+                );
+            } else if (getDestroyServiceOrderStatusQuery.isError) {
+                if (deployedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                    return 'Destroy status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
+                } else {
+                    return 'Destroy status polling failed. Please visit MyServices page to check the status of the request';
+                }
+            } else if (
+                getDestroyServiceOrderStatusQuery.isPending ||
+                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+            ) {
+                return 'Destroying, Please wait...';
+            }
         }
-        deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
+    }, [
+        destroySubmitRequest.isPending,
+        destroySubmitRequest.isError,
+        destroySubmitRequest.isSuccess,
+        destroySubmitRequest.error,
+        getDestroyServiceOrderStatusQuery.isSuccess,
+        getDestroyServiceOrderStatusQuery.isError,
+        getDestroyServiceOrderStatusQuery.isPending,
+        getDestroyServiceOrderStatusQuery.data,
+        deployedService.serviceId,
+        deployedService.serviceHostingType,
+    ]);
+
+    const alertType = useMemo(() => {
+        if (destroySubmitRequest.isPending) {
+            return 'success';
+        } else if (destroySubmitRequest.isError || getDestroyServiceOrderStatusQuery.isError) {
+            if (stopWatch.isRunning) {
+                stopWatch.pause();
+            }
+            return 'error';
+        } else if (destroySubmitRequest.isSuccess) {
+            if (
+                getDestroyServiceOrderStatusQuery.isSuccess &&
+                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+            ) {
+                if (stopWatch.isRunning) {
+                    stopWatch.pause();
+                }
+                return 'error';
+            } else if (
+                getDestroyServiceOrderStatusQuery.isSuccess &&
+                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+            ) {
+                if (stopWatch.isRunning) {
+                    stopWatch.pause();
+                }
+                return 'success';
+            } else if (
+                getDestroyServiceOrderStatusQuery.isPending ||
+                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+            ) {
+                return 'success';
+            }
+        }
+        return 'success';
+    }, [stopWatch, destroySubmitRequest, getDestroyServiceOrderStatusQuery]);
+
+    function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
-            <div className={submitAlertStyles.submitAlertTip}>
-                {' '}
-                <Alert
-                    message={errorMessage}
-                    description={
-                        <OrderSubmitResultDetails msg={'Destroy request failed'} uuid={deployedService.serviceId} />
-                    }
-                    showIcon
-                    closable={true}
-                    onClose={onClose}
-                    type={'error'}
-                    action={
-                        <>
-                            {serviceProviderContactDetails ? (
-                                <ContactDetailsText
-                                    serviceProviderContactDetails={serviceProviderContactDetails}
-                                    showFor={ContactDetailsShowType.Order}
-                                />
-                            ) : (
-                                <></>
-                            )}
-                        </>
-                    }
-                />{' '}
+            <div>
+                <span>{errorType.length > 0 ? errorType : 'Service destroy request failed.'}</span>
+                <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );
     }
 
-    if (serviceStateDestroyQueryError !== null) {
-        deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
-        if (isHandleKnownErrorResponse(serviceStateDestroyQueryError)) {
-            const response: ErrorResponse = serviceStateDestroyQueryError.body;
-            return (
-                <div className={submitAlertStyles.submitAlertTip}>
-                    {' '}
-                    <Alert
-                        message={response.details}
-                        description={
-                            <OrderSubmitResultDetails
-                                msg={'Polling Service Destroy Status Failed'}
-                                uuid={deployedService.serviceId}
-                            />
-                        }
-                        showIcon
-                        closable={true}
-                        onClose={onClose}
-                        type={'error'}
-                        action={
-                            <>
-                                {serviceProviderContactDetails ? (
-                                    <ContactDetailsText
-                                        serviceProviderContactDetails={serviceProviderContactDetails}
-                                        showFor={ContactDetailsShowType.Order}
-                                    />
-                                ) : (
-                                    <></>
-                                )}
-                            </>
-                        }
-                    />{' '}
-                </div>
-            );
-        }
-    }
-
-    if (serviceStateDestroyQueryData !== undefined) {
-        if (serviceStateDestroyQueryData.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
-            return (
-                <div className={submitAlertStyles.submitAlertTip}>
-                    {' '}
-                    <Alert
-                        message={'Processing Status'}
-                        description={
-                            <OrderSubmitResultDetails
-                                msg={'Service destroyed successfully'}
-                                uuid={deployedService.serviceId}
-                            />
-                        }
-                        showIcon
-                        closable={true}
-                        onClose={onClose}
-                        type={'success'}
-                    />{' '}
-                </div>
-            );
-        } else if (serviceStateDestroyQueryData.taskStatus.toString() === taskStatus.FAILED.toString()) {
-            return (
-                <div className={submitAlertStyles.submitAlertTip}>
-                    {' '}
-                    <Alert
-                        message={'Processing Status'}
-                        description={
-                            <OrderSubmitResultDetails msg={'Destroy failed'} uuid={deployedService.serviceId} />
-                        }
-                        showIcon
-                        closable={true}
-                        onClose={onClose}
-                        type={'error'}
-                        action={
-                            <>
-                                {serviceProviderContactDetails ? (
-                                    <ContactDetailsText
-                                        serviceProviderContactDetails={serviceProviderContactDetails}
-                                        showFor={ContactDetailsShowType.Order}
-                                    />
-                                ) : (
-                                    <></>
-                                )}
-                            </>
-                        }
-                    />{' '}
-                </div>
-            );
-        }
-    }
-
-    return <></>;
+    return (
+        <DestroyOrderSubmitResult
+            msg={msg ?? ''}
+            uuid={deployedService.serviceId}
+            type={alertType}
+            onClose={onClose}
+            stopWatch={stopWatch}
+            contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
+        />
+    );
 }
 
 export default DestroyServiceStatusAlert;

@@ -3,32 +3,30 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert } from 'antd';
-import React from 'react';
-import submitAlertStyles from '../../../../styles/submit-alert.module.css';
+import { UseMutationResult, UseQueryResult } from '@tanstack/react-query';
+import React, { useMemo } from 'react';
 import {
     DeployedService,
     ErrorResponse,
     errorType,
-    serviceDeploymentState,
+    ServiceOrder,
     ServiceProviderContactDetails,
+    VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList.tsx';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
-import { ContactDetailsText } from '../../common/ocl/ContactDetailsText';
-import OrderSubmitResultDetails from '../orderStatus/OrderSubmitResultDetails';
+import { PurgeOrderSubmitResult } from './PurgeOrderSubmitResult.tsx';
 
 export function PurgeServiceStatusAlert({
     deployedService,
-    purgeSubmitError,
-    statusPollingError,
+    purgeSubmitRequest,
+    getPurgeServiceDetailsQuery,
     closePurgeResultAlert,
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
-    purgeSubmitError: Error | null;
-    statusPollingError: Error | null;
+    purgeSubmitRequest: UseMutationResult<ServiceOrder, Error, string>;
+    getPurgeServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails>;
     closePurgeResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
@@ -36,109 +34,70 @@ export function PurgeServiceStatusAlert({
         closePurgeResultAlert(true);
     };
 
-    function getPurgeSubmissionFailedDisplay(reasons: string[]) {
+    const msg = useMemo(() => {
+        if (purgeSubmitRequest.isError) {
+            if (isHandleKnownErrorResponse(purgeSubmitRequest.error)) {
+                const response: ErrorResponse = purgeSubmitRequest.error.body;
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
+            } else {
+                return getOrderSubmissionFailedDisplay(purgeSubmitRequest.error.name, [
+                    purgeSubmitRequest.error.message,
+                ]);
+            }
+        }
+
+        if (deployedService.serviceId && getPurgeServiceDetailsQuery.isError) {
+            if (isHandleKnownErrorResponse(getPurgeServiceDetailsQuery.error)) {
+                const response: ErrorResponse = getPurgeServiceDetailsQuery.error.body;
+                if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                    return getOrderSubmissionFailedDisplay(response.errorType, response.details);
+                } else {
+                    return 'Service purged successfully';
+                }
+            }
+        }
+    }, [
+        purgeSubmitRequest.isError,
+        purgeSubmitRequest.error,
+        getPurgeServiceDetailsQuery.isError,
+        getPurgeServiceDetailsQuery.error,
+        deployedService.serviceId,
+    ]);
+
+    const alertType = useMemo(() => {
+        if (purgeSubmitRequest.isPending) {
+            return 'success';
+        } else if (purgeSubmitRequest.isError) {
+            return 'error';
+        } else if (purgeSubmitRequest.isSuccess) {
+            if (isHandleKnownErrorResponse(getPurgeServiceDetailsQuery.error)) {
+                const response: ErrorResponse = getPurgeServiceDetailsQuery.error.body;
+                if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                    return 'error';
+                } else {
+                    return 'success';
+                }
+            }
+        }
+        return 'success';
+    }, [purgeSubmitRequest, getPurgeServiceDetailsQuery]);
+
+    function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
             <div>
-                <span>{'Purge request failed.'}</span>
+                <span>{errorType.length > 0 ? errorType : 'Service destroy request failed.'}</span>
                 <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );
     }
 
-    if (purgeSubmitError) {
-        let errorMessage;
-        if (isHandleKnownErrorResponse(purgeSubmitError)) {
-            const response: ErrorResponse = purgeSubmitError.body;
-            errorMessage = getPurgeSubmissionFailedDisplay(response.details);
-        } else {
-            errorMessage = getPurgeSubmissionFailedDisplay([purgeSubmitError.message]);
-        }
-        deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
-        return (
-            <div className={submitAlertStyles.submitAlertTip}>
-                {' '}
-                <Alert
-                    message={'Processing Status'}
-                    description={<OrderSubmitResultDetails msg={errorMessage} uuid={deployedService.serviceId} />}
-                    showIcon
-                    closable={true}
-                    onClose={onClose}
-                    type={'error'}
-                    action={
-                        <>
-                            {serviceProviderContactDetails ? (
-                                <ContactDetailsText
-                                    serviceProviderContactDetails={serviceProviderContactDetails}
-                                    showFor={ContactDetailsShowType.Order}
-                                />
-                            ) : (
-                                <></>
-                            )}
-                        </>
-                    }
-                />{' '}
-            </div>
-        );
-    }
-
-    if (deployedService.serviceId && statusPollingError) {
-        if (isHandleKnownErrorResponse(statusPollingError)) {
-            const response: ErrorResponse = statusPollingError.body;
-            if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
-                deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_FAILED;
-                return (
-                    <div className={submitAlertStyles.submitAlertTip}>
-                        {' '}
-                        <Alert
-                            message={'Processing Status'}
-                            description={
-                                <OrderSubmitResultDetails
-                                    msg={getPurgeSubmissionFailedDisplay(response.details)}
-                                    uuid={deployedService.serviceId}
-                                />
-                            }
-                            showIcon
-                            closable={true}
-                            onClose={onClose}
-                            type={'error'}
-                            action={
-                                <>
-                                    {serviceProviderContactDetails ? (
-                                        <ContactDetailsText
-                                            serviceProviderContactDetails={serviceProviderContactDetails}
-                                            showFor={ContactDetailsShowType.Order}
-                                        />
-                                    ) : (
-                                        <></>
-                                    )}
-                                </>
-                            }
-                        />{' '}
-                    </div>
-                );
-            } else {
-                deployedService.serviceDeploymentState = serviceDeploymentState.DESTROY_SUCCESSFUL;
-                return (
-                    <div className={submitAlertStyles.submitAlertTip}>
-                        {' '}
-                        <Alert
-                            message={'Processing Status'}
-                            description={
-                                <OrderSubmitResultDetails
-                                    msg={`Service purged successfully`}
-                                    uuid={deployedService.serviceId}
-                                />
-                            }
-                            showIcon
-                            closable={true}
-                            onClose={onClose}
-                            type={'success'}
-                        />{' '}
-                    </div>
-                );
-            }
-        }
-    }
-
-    return <></>;
+    return (
+        <PurgeOrderSubmitResult
+            msg={msg ?? ''}
+            uuid={deployedService.serviceId}
+            type={alertType}
+            onClose={onClose}
+            contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
+        />
+    );
 }
