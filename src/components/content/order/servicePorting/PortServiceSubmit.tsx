@@ -23,7 +23,6 @@ import {
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
-import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import useGetOrderableServiceDetailsByServiceIdQuery from '../../deployedServices/myServices/query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
 import { FlavorSelection } from '../common/FlavorSelection.tsx';
 import { PortServiceSubmitAvailabilityZoneInfo } from '../common/PortServiceSubmitAvailabilityZoneInfo.tsx';
@@ -82,12 +81,6 @@ export const PortServiceSubmit = ({
         [taskStatus.SUCCESSFUL, taskStatus.FAILED]
     );
 
-    const deployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        portServiceRequest.data?.serviceId ?? '',
-        selectServiceHostingType,
-        getPortLatestServiceOrderStatusQuery.data?.taskStatus
-    );
-
     const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);
 
     const port = () => {
@@ -127,7 +120,6 @@ export const PortServiceSubmit = ({
                 <PortServiceStatusAlert
                     selectServiceHostingType={selectServiceHostingType}
                     portServiceRequest={portServiceRequest}
-                    deployedServiceDetails={deployServiceDetailsQuery.data}
                     getPortLatestServiceOrderStatusQuery={getPortLatestServiceOrderStatusQuery}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />

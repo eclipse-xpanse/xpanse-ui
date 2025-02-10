@@ -9,6 +9,7 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
+    serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -16,9 +17,9 @@ import {
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
-import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
+import { OrderProcessingStatus } from '../orderStatus/OrderProcessingStatus.tsx';
+import { OperationType } from '../types/OperationType.ts';
 import { RecreateOrderSubmitResult } from './RecreateOrderSubmitResult.tsx';
-import { RecreationProcessingStatus } from './RecreationProcessingStatus.tsx';
 
 function RecreateServiceStatusAlert({
     currentSelectedService,
@@ -33,12 +34,6 @@ function RecreateServiceStatusAlert({
     closeRecreateResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
-    const getRecreateDeployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
-        recreateRequest.data?.serviceId ?? '',
-        currentSelectedService.serviceHostingType,
-        recreateServiceOrderStatusPollingQuery.data?.taskStatus
-    );
-
     const stopWatch = useStopwatch({
         autoStart: true,
     });
@@ -49,36 +44,39 @@ function RecreateServiceStatusAlert({
         } else if (recreateRequest.isError) {
             if (isHandleKnownErrorResponse(recreateRequest.error)) {
                 const response: ErrorResponse = recreateRequest.error.body;
-                return getOrderSubmissionFailedDisplay(response.details);
+                return getOrderSubmissionFailedDisplay(response.errorType, response.details);
             } else {
-                return getOrderSubmissionFailedDisplay([recreateRequest.error.message]);
+                return getOrderSubmissionFailedDisplay(recreateRequest.error.name, [recreateRequest.error.message]);
             }
         } else if (recreateRequest.isSuccess) {
-            if (recreateServiceOrderStatusPollingQuery.isSuccess) {
-                if (
-                    recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() ===
-                    taskStatus.SUCCESSFUL.toString()
-                ) {
-                    return <RecreationProcessingStatus deployedResponse={getRecreateDeployServiceDetailsQuery.data} />;
-                } else if (
-                    recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() ===
-                        taskStatus.FAILED.toString() &&
-                    recreateServiceOrderStatusPollingQuery.data.error
-                ) {
-                    return getOrderSubmissionFailedDisplay(recreateServiceOrderStatusPollingQuery.data.error.details);
-                } else if (
-                    recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() ===
-                    taskStatus.IN_PROGRESS.toString()
-                ) {
-                    return 'Recreating, Please wait...';
-                }
+            if (
+                recreateServiceOrderStatusPollingQuery.isSuccess &&
+                (recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() ===
+                    taskStatus.SUCCESSFUL.toString() ||
+                    recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+            ) {
+                return (
+                    <OrderProcessingStatus
+                        operationType={OperationType.Recreate}
+                        serviceOrderStatus={recreateServiceOrderStatusPollingQuery.data}
+                        serviceId={currentSelectedService.serviceId}
+                        selectedServiceHostingType={currentSelectedService.serviceHostingType as serviceHostingType}
+                    />
+                );
             } else if (recreateServiceOrderStatusPollingQuery.isError) {
-                return 'Recreation status polling failed. Please visit MyServices page to check the status of the request';
-            } else {
+                if (currentSelectedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                    return 'Recreate status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
+                } else {
+                    return 'Recreate status polling failed. Please visit MyServices page to check the status of the request';
+                }
+            } else if (
+                recreateServiceOrderStatusPollingQuery.isPending ||
+                recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+            ) {
                 return 'Recreating, Please wait...';
             }
         }
-    }, [getRecreateDeployServiceDetailsQuery, recreateRequest, recreateServiceOrderStatusPollingQuery]);
+    }, [currentSelectedService, recreateRequest, recreateServiceOrderStatusPollingQuery]);
 
     const alertType = useMemo(() => {
         if (recreateRequest.isPending) {
@@ -115,10 +113,10 @@ function RecreateServiceStatusAlert({
         return 'success';
     }, [stopWatch, recreateRequest, recreateServiceOrderStatusPollingQuery]);
 
-    function getOrderSubmissionFailedDisplay(reasons: string[]) {
+    function getOrderSubmissionFailedDisplay(errorType: string, reasons: string[]) {
         return (
             <div>
-                <span>{'Service deployment request failed.'}</span>
+                <span>{errorType.length > 0 ? errorType : 'Service recreate request failed.'}</span>
                 <div>{convertStringArrayToUnorderedList(reasons)}</div>
             </div>
         );

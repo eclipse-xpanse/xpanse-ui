@@ -1266,8 +1266,7 @@ function MyServices(): React.JSX.Element {
                     key={`${activeRecord.serviceId}-destroy`}
                     deployedService={activeRecord}
                     destroySubmitRequest={serviceDestroyQuery}
-                    serviceStateDestroyQueryError={getDestroyServiceStatusPollingQuery.error}
-                    serviceStateDestroyQueryData={getDestroyServiceStatusPollingQuery.data}
+                    getDestroyServiceOrderStatusQuery={getDestroyServiceStatusPollingQuery}
                     closeDestroyResultAlert={closeDestroyResultAlert}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
@@ -1306,8 +1305,8 @@ function MyServices(): React.JSX.Element {
                 <PurgeServiceStatusAlert
                     key={`${activeRecord.serviceId}-purge`}
                     deployedService={activeRecord}
-                    purgeSubmitError={servicePurgeQuery.error}
-                    statusPollingError={getPurgeServiceDetailsQuery.error}
+                    purgeSubmitRequest={servicePurgeQuery}
+                    getPurgeServiceDetailsQuery={getPurgeServiceDetailsQuery}
                     closePurgeResultAlert={closePurgeResultAlert}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
                 />
