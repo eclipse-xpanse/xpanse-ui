@@ -59,7 +59,7 @@ import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubm
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import { CreateServiceActionForm } from '../../order/serviceActions/CreateServiceActionForm';
-import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
+import { ServiceConfiguration } from '../../order/serviceConfiguration/ServiceConfiguration.tsx';
 import { ServicePorting } from '../../order/servicePorting/ServicePorting.tsx';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
 import { useServiceStateRestartQuery } from '../../order/serviceState/restart/useServiceStateRestartQuery';
@@ -1358,12 +1358,12 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     title={'Service Configuration'}
-                    width={1600}
+                    width={680}
                     footer={null}
                     open={isMyServiceConfigurationModalOpen}
                     onCancel={handleMyServiceConfigurationModalClose}
                 >
-                    <CurrentServiceConfiguration
+                    <ServiceConfiguration
                         userOrderableServiceVo={getOrderableServiceDetails.data}
                         deployedService={activeRecord}
                     />
@@ -1372,7 +1372,7 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     title={'Service Actions'}
-                    width={1600}
+                    width={680}
                     footer={null}
                     open={isServiceActionsModalOpen}
                     onCancel={handleServiceActionsModalClose}

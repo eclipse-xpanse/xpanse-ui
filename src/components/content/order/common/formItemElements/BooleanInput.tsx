@@ -17,14 +17,10 @@ export function BooleanInput({ actionParameter }: { actionParameter: ServiceChan
                     key={actionParameter.name}
                     name={actionParameter.name}
                     label={
-                        <p
-                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                        >
-                            <Tooltip placement='rightTop' title={actionParameter.description}>
-                                {actionParameter.name}&nbsp;
-                                <QuestionCircleOutlined />
-                            </Tooltip>
-                        </p>
+                        <Tooltip placement='rightTop' title={actionParameter.description}>
+                            {actionParameter.name}&nbsp;
+                            <QuestionCircleOutlined />
+                        </Tooltip>
                     }
                     rules={[{ type: 'boolean' }, { required: true }]}
                     valuePropName='checked'
