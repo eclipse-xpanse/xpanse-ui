@@ -5,10 +5,10 @@
 
 import { Card, Col, Divider, Row, Statistic } from 'antd';
 import React from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
-import { DeployedService, category, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { catalogPageRoute, reportsRoute } from '../../../utils/constants';
+import { category, DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import { catalogPageRoute, IsvUserDashBoardPage, reportsRoute } from '../../../utils/constants';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
@@ -84,13 +84,13 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         });
     };
 
-    const getReportsRedirectionUrl = (serviceState: serviceDeploymentState[]) => {
-        void navigate({
-            pathname: reportsRoute,
-            search: createSearchParams({
-                serviceState: serviceState,
-            }).toString(),
-        });
+    const getReportsRedirectionUrl = (serviceDeploymentState: serviceDeploymentState[]) => {
+        void navigate(
+            {
+                pathname: reportsRoute,
+            },
+            { state: { from: IsvUserDashBoardPage, serviceDeploymentStates: serviceDeploymentState } }
+        );
     };
 
     return (

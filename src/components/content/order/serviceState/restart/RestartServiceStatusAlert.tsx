@@ -52,7 +52,10 @@ function RestartServiceStatusAlert({
                 <Alert
                     message={errorMessage}
                     description={
-                        <OrderSubmitResultDetails msg={'Restart request failed'} uuid={deployedService.serviceId} />
+                        <OrderSubmitResultDetails
+                            msg={'Restart request failed'}
+                            serviceId={deployedService.serviceId}
+                        />
                     }
                     showIcon
                     closable={true}
@@ -86,7 +89,7 @@ function RestartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service restart Status Failed'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -121,7 +124,7 @@ function RestartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service restarted successfully'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -145,7 +148,7 @@ function RestartServiceStatusAlert({
                                         ? getRestartServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Restart request failed'
                                 }
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon

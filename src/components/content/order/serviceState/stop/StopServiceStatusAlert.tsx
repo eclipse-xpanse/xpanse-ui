@@ -55,7 +55,7 @@ function StopServiceStatusAlert({
                     description={
                         <OrderSubmitResultDetails
                             msg={'Service stop request failed'}
-                            uuid={deployedService.serviceId}
+                            serviceId={deployedService.serviceId}
                         />
                     }
                     showIcon
@@ -90,7 +90,7 @@ function StopServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service Stop Status Failed'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -125,7 +125,7 @@ function StopServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service stopped successfully'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -149,7 +149,7 @@ function StopServiceStatusAlert({
                                         ? getStopServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Stop failed'
                                 }
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
