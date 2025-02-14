@@ -17,7 +17,6 @@ import {
     serviceState,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { serviceIdQuery, serviceStateQuery } from '../../../utils/constants.tsx';
 
 export interface DeployResourceDataType {
     key: React.Key;
@@ -410,40 +409,3 @@ export const isDisableRecreateBtn = (
     }
     return false;
 };
-
-export function getServiceDeploymentStateFromQuery(urlParams: URLSearchParams): serviceDeploymentState[] | undefined {
-    const serviceStateList: serviceDeploymentState[] = [];
-    if (urlParams.size > 0) {
-        urlParams.forEach((value, key) => {
-            if (
-                key === serviceStateQuery &&
-                Object.values(serviceDeploymentState).includes(value as serviceDeploymentState)
-            ) {
-                serviceStateList.push(value as serviceDeploymentState);
-            }
-        });
-        return serviceStateList;
-    }
-    return undefined;
-}
-
-export function getServiceStateFromQuery(urlParams: URLSearchParams): serviceState[] | undefined {
-    const serviceStateList: serviceState[] = [];
-    if (urlParams.size > 0) {
-        urlParams.forEach((value, key) => {
-            if (key === serviceStateQuery && Object.values(serviceState).includes(value as serviceState)) {
-                serviceStateList.push(value as serviceState);
-            }
-        });
-        return serviceStateList;
-    }
-    return undefined;
-}
-
-export function getServiceIdFormQuery(urlParams: URLSearchParams): string | undefined {
-    const queryInUri = decodeURI(urlParams.get(serviceIdQuery) ?? '');
-    if (queryInUri.length > 0) {
-        return queryInUri;
-    }
-    return undefined;
-}
