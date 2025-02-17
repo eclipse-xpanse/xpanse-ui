@@ -76,13 +76,34 @@ export const OrderProcessingStatus = ({
         if (serviceOrderStatus.taskStatus === 'successful') {
             return (
                 <div>
-                    <span>{'Destroyed Successfully'}</span>
+                    <span>{'Destroyed Successfully.'}</span>
                 </div>
             );
         } else if (serviceOrderStatus.taskStatus === 'failed') {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
+                    <div>
+                        {selectedServiceHostingType === serviceHostingType.SELF
+                            ? serviceOrderStatus.error?.details.join()
+                            : errorMsg}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    if (operationType === OperationType.UpdateConfig) {
+        if (serviceOrderStatus.taskStatus === 'successful') {
+            return (
+                <div>
+                    <span>{'Service configuration updated successfully.'}</span>
+                </div>
+            );
+        } else if (serviceOrderStatus.taskStatus === 'failed') {
+            return (
+                <div>
+                    <span>{'Service configuration updated failed.'}</span>
                     <div>
                         {selectedServiceHostingType === serviceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()

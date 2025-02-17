@@ -9,4 +9,5 @@ export enum OperationType {
     Modify,
     Recreate,
     Port,
+    UpdateConfig,
 }

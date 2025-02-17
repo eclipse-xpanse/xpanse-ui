@@ -574,3 +574,12 @@
 .service-order-api-doc-custom-button:hover {
     background-color: transparent !important;
 }
+
+.service-config-container {
+    padding: 8px;
+    display: grid;
+}
+
+.service-config-update {
+    text-align: left;
+}
