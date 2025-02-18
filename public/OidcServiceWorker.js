@@ -497,7 +497,7 @@ const extractConfigurationNameFromCodeVerifier = (chaine) => {
     return null;
   }
 };
-const version = "7.25.0";
+const version = "7.25.3";
 if (typeof trustedTypes !== "undefined" && typeof trustedTypes.createPolicy == "function") {
   trustedTypes.createPolicy("default", {
     createScriptURL: function(url) {
