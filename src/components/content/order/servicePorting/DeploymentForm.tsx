@@ -77,13 +77,13 @@ export const DeploymentForm = ({
             region: region,
             serviceName: deployParams.name,
             version: deployParams.version,
-            customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
+            customerServiceName: useOrderFormStore.getState().deployParams.Name,
             serviceHostingType: deployParams.serviceHostingType,
             availabilityZones: deployParams.availabilityZones,
             eulaAccepted: isEulaAccepted,
             billingMode: selectBillingMode,
         };
-        const serviceRequestProperties: Record<string, unknown> = {};
+        const serviceRequestProperties: Record<string, string> = {};
         for (const variable in useOrderFormStore.getState().deployParams) {
             if (
                 variable !== CUSTOMER_SERVICE_NAME_FIELD &&

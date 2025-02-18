@@ -66,7 +66,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             region: state.region,
             serviceName: state.name,
             version: state.version,
-            customerServiceName: useOrderFormStore.getState().deployParams.Name as string,
+            customerServiceName: useOrderFormStore.getState().deployParams.Name,
             serviceHostingType: state.serviceHostingType,
             availabilityZones: state.availabilityZones,
             eulaAccepted: isEulaAccepted,

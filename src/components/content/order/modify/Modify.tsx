@@ -80,7 +80,7 @@ export const Modify = ({
         const deployParamsCache = useOrderFormStore.getState().deployParams;
         const createRequest: ModifyRequest = {
             flavor: currentSelectedService.flavor,
-            customerServiceName: deployParamsCache[CUSTOMER_SERVICE_NAME_FIELD] as string,
+            customerServiceName: deployParamsCache[CUSTOMER_SERVICE_NAME_FIELD],
         };
         const serviceRequestProperties: Record<string, unknown> = {};
         for (const variable in deployParamsCache) {
@@ -240,8 +240,8 @@ export const Modify = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.deployRequest.csp as csp}
-                                region={currentSelectedService.deployRequest.region}
+                                csp={currentSelectedService.csp as csp}
+                                region={currentSelectedService.region}
                             />
                         ) : undefined
                     )}

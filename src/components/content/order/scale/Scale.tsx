@@ -51,7 +51,7 @@ export const Scale = ({
     let isDowngradeAllowed: boolean = true;
     let getParams: DeployParam[] = [];
     const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
-    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor ?? '');
+    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor);
     const [scaleWarning, setScaleWarning] = useState<string>('Are you sure to scale the service?');
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
@@ -87,9 +87,9 @@ export const Scale = ({
         const deployParamsCache = useOrderFormStore.getState().deployParams;
         const createRequest: ModifyRequest = {
             flavor: selectFlavor,
-            customerServiceName: deployParamsCache[CUSTOMER_SERVICE_NAME_FIELD] as string,
+            customerServiceName: deployParamsCache[CUSTOMER_SERVICE_NAME_FIELD],
         };
-        const serviceRequestProperties: Record<string, unknown> = {};
+        const serviceRequestProperties: Record<string, string> = {};
         for (const variable in deployParamsCache) {
             if (variable !== CUSTOMER_SERVICE_NAME_FIELD && deployParamsCache[variable] !== '') {
                 serviceRequestProperties[variable] = deployParamsCache[variable];
@@ -137,10 +137,10 @@ export const Scale = ({
     };
 
     const getServicePriceQuery = useGetServicePricesQuery(
-        currentSelectedService.serviceTemplateId ?? '',
-        currentSelectedService.deployRequest.region.name,
-        currentSelectedService.deployRequest.region.site,
-        currentSelectedService.deployRequest.billingMode,
+        currentSelectedService.serviceTemplateId,
+        currentSelectedService.region.name,
+        currentSelectedService.region.site,
+        currentSelectedService.billingMode,
         flavorList
     );
 
@@ -301,8 +301,8 @@ export const Scale = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.deployRequest.csp as csp}
-                                region={currentSelectedService.deployRequest.region}
+                                csp={currentSelectedService.csp as csp}
+                                region={currentSelectedService.region}
                             />
                         ) : undefined
                     )}

@@ -22,6 +22,13 @@ export const CurrentServiceConfigurationDetails = ({
         return param?.description ?? 'No description available';
     };
 
+    const formatValue = (value: unknown): string => {
+        if (typeof value === 'string') {
+            return value;
+        }
+        return String(value);
+    };
+
     return (
         <>
             {userOrderableServiceVo && serviceConfigurationDetails ? (
@@ -45,7 +52,7 @@ export const CurrentServiceConfigurationDetails = ({
                             ></Form.Item>
                         </Col>
                         <Col span={18}>
-                            <Input value={serviceConfigurationDetails.updatedTime} />
+                            <Input value={formatValue(serviceConfigurationDetails.updatedTime)} />
                         </Col>
                     </Row>
                     {serviceConfigurationDetails.configuration &&
@@ -68,7 +75,7 @@ export const CurrentServiceConfigurationDetails = ({
                                     ></Form.Item>
                                 </Col>
                                 <Col span={18}>
-                                    <Input value={String(value)} />
+                                    <Input value={formatValue(value)} />
                                 </Col>
                             </Row>
                         ))}
