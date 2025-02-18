@@ -7,7 +7,7 @@ import { shallow } from 'zustand/shallow';
 import { createWithEqualityFn } from 'zustand/traditional';
 
 interface OrderFormStore {
-    deployParams: Record<string, unknown>;
+    deployParams: Record<string, string>;
 }
 
 const initialState: OrderFormStore = {
@@ -15,14 +15,14 @@ const initialState: OrderFormStore = {
 };
 
 interface updateState {
-    addDeployVariable: (deployVariableName: string, deployVariableValue: unknown) => void;
+    addDeployVariable: (deployVariableName: string, deployVariableValue: string) => void;
     clearFormVariables: () => void;
 }
 
 export const useOrderFormStore = createWithEqualityFn<OrderFormStore & updateState>()(
     (set, getState) => ({
         ...initialState,
-        addDeployVariable: (deployVariableName: string, deployVariableValue: unknown) => {
+        addDeployVariable: (deployVariableName: string, deployVariableValue: string) => {
             if (
                 !deployVariableValue &&
                 Object.prototype.hasOwnProperty.call(getState().deployParams, deployVariableName)
