@@ -9,7 +9,7 @@ import dashboardStyles from '../../../../styles/dashboard.module.css';
 
 export function DashBoardSkeleton(): React.JSX.Element {
     return (
-        <Card title='Services Dashboard' bordered={true}>
+        <Card title='Services Dashboard' variant={'outlined'}>
             <Skeleton
                 avatar={false}
                 active={true}
