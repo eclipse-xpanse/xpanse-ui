@@ -6,12 +6,18 @@
 import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
 import { Typography } from 'antd';
 import React from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import submitResultStyles from '../../../../styles/submit-result.module.css';
-import { myServicesRoute } from '../../../utils/constants';
+import { myServicesRoute, orderPageRoute } from '../../../utils/constants';
 
-function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Element; uuid: string }): React.JSX.Element {
+function OrderSubmitResultDetails({
+    msg,
+    serviceId,
+}: {
+    msg: string | React.JSX.Element;
+    serviceId: string;
+}): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
     return (
@@ -21,7 +27,7 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
-                        text: String(uuid),
+                        text: String(serviceId),
                         icon: [
                             <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                             <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
@@ -30,16 +36,16 @@ function OrderSubmitResultDetails({ msg, uuid }: { msg: string | React.JSX.Eleme
                 >
                     <span
                         onClick={() => {
-                            void navigate({
-                                pathname: myServicesRoute,
-                                search: createSearchParams({
-                                    serviceId: uuid,
-                                }).toString(),
-                            });
+                            void navigate(
+                                {
+                                    pathname: myServicesRoute,
+                                },
+                                { state: { from: orderPageRoute, serviceIds: [String(serviceId)] } }
+                            );
                         }}
                         className={submitResultStyles.showDetailsTypographyCopyInfo}
                     >
-                        {uuid}
+                        {serviceId}
                     </span>
                 </Paragraph>
             </div>

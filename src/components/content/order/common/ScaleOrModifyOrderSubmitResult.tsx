@@ -31,7 +31,7 @@ export const ScaleOrModifyOrderSubmitResult = ({
             {' '}
             <Alert
                 message={`Processing Status`}
-                description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
+                description={<OrderSubmitResultDetails msg={msg} serviceId={uuid} />}
                 showIcon
                 closable={true}
                 type={type}

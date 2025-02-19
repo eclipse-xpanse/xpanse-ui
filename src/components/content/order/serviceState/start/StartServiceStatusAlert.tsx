@@ -52,7 +52,7 @@ function StartServiceStatusAlert({
                 <Alert
                     message={errorMessage}
                     description={
-                        <OrderSubmitResultDetails msg={'Start request failed'} uuid={deployedService.serviceId} />
+                        <OrderSubmitResultDetails msg={'Start request failed'} serviceId={deployedService.serviceId} />
                     }
                     showIcon
                     closable={true}
@@ -86,7 +86,7 @@ function StartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Polling Service start Status Failed'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -121,7 +121,7 @@ function StartServiceStatusAlert({
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service started successfully'}
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon
@@ -145,7 +145,7 @@ function StartServiceStatusAlert({
                                         ? getStartServiceDetailsQuery.data.error.details.join(', ')
                                         : 'Start failed'
                                 }
-                                uuid={deployedService.serviceId}
+                                serviceId={deployedService.serviceId}
                             />
                         }
                         showIcon

@@ -5,10 +5,10 @@
 
 import { Card, Col, Row, Statistic } from 'antd';
 import React from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { myServicesRoute } from '../../../utils/constants';
+import { EndUserDashBoardPage, myServicesRoute } from '../../../utils/constants';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
@@ -59,13 +59,13 @@ export function EndUserServicesDashboard(): React.JSX.Element {
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceState: serviceDeploymentState[]) => {
-        void navigate({
-            pathname: myServicesRoute,
-            search: createSearchParams({
-                serviceState: serviceState,
-            }).toString(),
-        });
+    const getMyServicesRedirectionUrl = (serviceDeploymentState: serviceDeploymentState[]) => {
+        void navigate(
+            {
+                pathname: myServicesRoute,
+            },
+            { state: { from: EndUserDashBoardPage, serviceDeploymentStates: serviceDeploymentState } }
+        );
     };
 
     return (

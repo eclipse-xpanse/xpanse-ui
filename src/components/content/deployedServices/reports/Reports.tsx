@@ -4,30 +4,24 @@
  */
 
 import { InfoCircleOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Image, Modal, Row, Space, Table, Tooltip } from 'antd';
+import { Button, Image, Modal, Row, Space, Table, TablePaginationConfig, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ColumnFilterItem } from 'antd/es/table/interface';
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { ColumnFilterItem, FilterValue, SorterResult } from 'antd/es/table/interface';
+import React, { useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import myServicesStyle from '../../../../styles/my-services.module.css';
 import tablesStyle from '../../../../styles/table.module.css';
 import {
-    DeployedService,
     category,
     csp,
+    DeployedService,
     name,
     serviceDeploymentState,
     serviceHostingType,
 } from '../../../../xpanse-api/generated';
+import { LocationStateType } from '../../../utils/LocationStateType.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
-import {
-    serviceCategoryQuery,
-    serviceCspQuery,
-    serviceIdQuery,
-    serviceNameKeyQuery,
-    serviceStateQuery,
-    serviceVersionKeyQuery,
-} from '../../../utils/constants';
+import { IsvUserDashBoardPage, ServiceDetailsPage } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
 import DeployedServicesError from '../common/DeployedServicesError';
@@ -37,13 +31,8 @@ import useListDeployedServicesByIsvQuery from '../myServices/query/useListDeploy
 import { ReportsServiceDetails } from './ReportsServiceDetails';
 
 function Reports(): React.JSX.Element {
-    const [urlParams] = useSearchParams();
-    const serviceIdInQuery = getServiceIdFormQuery();
-    const categoryNameInQuery = getCategoryNameFormQuery();
-    const cspNameInQuery = getCspNameFormQuery();
-    const serviceNameInQuery = getServiceNameFormQuery();
-    const serviceVersionInQuery = getServiceVersionFormQuery();
-    const serviceStateInQuery = getServiceStateFromQuery();
+    const location = useLocation();
+
     let deployedServiceList: DeployedService[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
@@ -58,60 +47,81 @@ function Reports(): React.JSX.Element {
     const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
+    // redirect from isv service details page
+    const serviceIdInQuery = useMemo(() => {
+        if (!location.state) {
+            return null;
+        }
+        const state = location.state as LocationStateType;
+
+        if (state.from === ServiceDetailsPage && state.serviceIds && state.serviceIds.length > 0) {
+            return state.serviceIds;
+        }
+        return null;
+    }, [location]);
+
+    // redirect from isv dashboard
+    const serviceDeploymentStateInQuery = useMemo(() => {
+        if (!location.state) {
+            return null;
+        }
+        const state = location.state as LocationStateType;
+
+        if (state.from === IsvUserDashBoardPage && state.serviceDeploymentStates) {
+            return state.serviceDeploymentStates;
+        }
+        return null;
+    }, [location]);
+
+    const [serviceDeploymentStateFilteredValue, setServiceDeploymentStateFilteredValue] = useState<FilterValue | null>(
+        serviceDeploymentStateInQuery
+    );
+    const [serviceIdFilteredValue, setServiceIdFilteredValue] = useState<FilterValue | null>(serviceIdInQuery);
+    const [customerServiceNameFilteredValue, setCustomerServiceNameFilteredValue] = useState<FilterValue | null>(null);
+    const [categoryFilteredValue, setCategoryFilteredValue] = useState<FilterValue | null>(null);
+    const [cspFilteredValue, setCspFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceNameFilteredValue, setServiceNameFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceVersionFilteredValue, setServiceVersionFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceHostingTypeFilteredValue, setServiceHostingTypeFilteredValue] = useState<FilterValue | null>(null);
+
+    const handleFilterChange = (
+        _pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        _sorter: SorterResult<DeployedService> | SorterResult<DeployedService>[]
+    ) => {
+        setServiceDeploymentStateFilteredValue(filters.serviceDeploymentState);
+        setServiceIdFilteredValue(filters.serviceId);
+        setCategoryFilteredValue(filters.category);
+        setCspFilteredValue(filters.csp);
+        setServiceNameFilteredValue(filters.name);
+        setServiceVersionFilteredValue(filters.version);
+        setCustomerServiceNameFilteredValue(filters.customerServiceName);
+        setServiceHostingTypeFilteredValue(filters.serviceHostingType);
+    };
+
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
 
-    if (listDeployedServicesByIsvQuery.isSuccess) {
-        const serviceList: DeployedService[] = [];
-        if (listDeployedServicesByIsvQuery.data.length > 0) {
-            if (serviceStateInQuery) {
-                deployedServiceList = listDeployedServicesByIsvQuery.data.filter((service: DeployedService) =>
-                    serviceStateInQuery.includes(service.serviceDeploymentState as serviceDeploymentState)
-                );
-            } else if (serviceIdInQuery) {
-                deployedServiceList = listDeployedServicesByIsvQuery.data.filter(
-                    (service: { serviceId: string }) => service.serviceId === serviceIdInQuery
-                );
-            } else {
-                deployedServiceList = listDeployedServicesByIsvQuery.data;
-            }
-            if (categoryNameInQuery) {
-                deployedServiceList = deployedServiceList.filter(
-                    (service) => service.category === (categoryNameInQuery as category)
-                );
-            }
-            if (cspNameInQuery) {
-                deployedServiceList = deployedServiceList.filter((service) => service.csp === (cspNameInQuery as csp));
-            }
-            if (serviceNameInQuery) {
-                deployedServiceList = deployedServiceList.filter((service) => service.name === serviceNameInQuery);
-            }
-            if (serviceVersionInQuery) {
-                deployedServiceList = deployedServiceList.filter(
-                    (service) => service.version === serviceVersionInQuery
-                );
-            }
-            updateServiceIdFilters(listDeployedServicesByIsvQuery.data);
-            updateVersionFilters(listDeployedServicesByIsvQuery.data);
-            updateNameFilters(listDeployedServicesByIsvQuery.data);
-            updateCategoryFilters();
-            updateCspFilters();
-            updateServiceStateFilters();
-            updateCustomerServiceNameFilters(listDeployedServicesByIsvQuery.data);
-            updateServiceHostingFilters();
-        } else {
-            deployedServiceList = serviceList;
-        }
+    if (listDeployedServicesByIsvQuery.isSuccess && listDeployedServicesByIsvQuery.data.length > 0) {
+        deployedServiceList = listDeployedServicesByIsvQuery.data;
+        updateServiceIdFilters(listDeployedServicesByIsvQuery.data);
+        updateVersionFilters(listDeployedServicesByIsvQuery.data);
+        updateNameFilters(listDeployedServicesByIsvQuery.data);
+        updateCategoryFilters();
+        updateCspFilters();
+        updateServiceStateFilters();
+        updateCustomerServiceNameFilters(listDeployedServicesByIsvQuery.data);
+        updateServiceHostingFilters();
     }
 
     const columns: ColumnsType<DeployedService> = [
         {
-            title: 'Id',
+            title: 'ServiceId',
             dataIndex: 'serviceId',
-            filters: serviceIdInQuery ? undefined : serviceIdFilters,
+            filters: serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceIdFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.serviceId.startsWith(value.toString()),
-            filtered: !!serviceIdInQuery,
             align: 'center',
         },
         {
@@ -120,6 +130,7 @@ function Reports(): React.JSX.Element {
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: customerServiceNameFilteredValue,
             onFilter: (value: React.Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
@@ -132,30 +143,30 @@ function Reports(): React.JSX.Element {
         {
             title: 'Category',
             dataIndex: 'category',
-            filters: categoryNameInQuery ? undefined : categoryFilters,
-            filtered: !!categoryNameInQuery,
+            filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: categoryFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
             align: 'center',
         },
         {
             title: 'Service',
             dataIndex: 'name',
-            filters: serviceNameInQuery ? undefined : nameFilters,
-            filtered: !!serviceNameInQuery,
+            filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceNameFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.name.startsWith(value.toString()),
             align: 'center',
         },
         {
             title: 'Version',
             dataIndex: 'version',
-            filters: serviceVersionInQuery ? undefined : versionFilters,
-            filtered: !!serviceVersionInQuery,
+            filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceVersionFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
             align: 'center',
@@ -166,6 +177,7 @@ function Reports(): React.JSX.Element {
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceHostingTypeFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
 
@@ -176,10 +188,10 @@ function Reports(): React.JSX.Element {
         {
             title: 'Csp',
             dataIndex: 'csp',
-            filters: cspNameInQuery ? undefined : cspFilters,
-            filtered: !!cspNameInQuery,
+            filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: cspFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: csp, _) => {
                 return (
@@ -207,15 +219,15 @@ function Reports(): React.JSX.Element {
             align: 'center',
         },
         {
-            title: 'ServiceState',
+            title: 'ServiceDeploymentState',
             dataIndex: 'serviceDeploymentState',
-            filters: serviceStateInQuery ? undefined : serviceStateFilters,
+            filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceDeploymentStateFilteredValue,
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: serviceDeploymentState) => DeployedServicesStatus(serviceState),
-            filtered: !!serviceStateInQuery,
             align: 'center',
         },
         {
@@ -380,62 +392,6 @@ function Reports(): React.JSX.Element {
         setIsMyServiceDetailsModalOpen(false);
     };
 
-    function getServiceStateFromQuery(): serviceDeploymentState[] | undefined {
-        const serviceStateList: serviceDeploymentState[] = [];
-        if (urlParams.size > 0) {
-            urlParams.forEach((value, key) => {
-                if (
-                    key === serviceStateQuery &&
-                    Object.values(serviceDeploymentState).includes(value as serviceDeploymentState)
-                ) {
-                    serviceStateList.push(value as serviceDeploymentState);
-                }
-            });
-            return serviceStateList;
-        }
-        return undefined;
-    }
-
-    function getServiceIdFormQuery(): string | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceIdQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return undefined;
-    }
-
-    function getCategoryNameFormQuery(): string | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceCategoryQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return undefined;
-    }
-
-    function getCspNameFormQuery(): string | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceCspQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return undefined;
-    }
-
-    function getServiceNameFormQuery(): string | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceNameKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return undefined;
-    }
-
-    function getServiceVersionFormQuery(): string | undefined {
-        const queryInUri = decodeURI(urlParams.get(serviceVersionKeyQuery) ?? '');
-        if (queryInUri.length > 0) {
-            return queryInUri;
-        }
-        return undefined;
-    }
-
     return (
         <div className={tablesStyle.genericTableContainer}>
             <Modal
@@ -469,6 +425,7 @@ function Reports(): React.JSX.Element {
                     <Table
                         columns={columns}
                         dataSource={deployedServiceList}
+                        onChange={handleFilterChange}
                         loading={
                             listDeployedServicesByIsvQuery.isPending || listDeployedServicesByIsvQuery.isRefetching
                         }

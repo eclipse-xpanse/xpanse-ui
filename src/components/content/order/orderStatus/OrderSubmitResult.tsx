@@ -38,7 +38,7 @@ export const OrderSubmitResult = ({
             {' '}
             <Alert
                 message={`Processing Status`}
-                description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
+                description={<OrderSubmitResultDetails msg={msg} serviceId={uuid} />}
                 showIcon
                 closable={true}
                 onClose={onClose}
