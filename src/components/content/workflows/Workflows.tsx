@@ -14,7 +14,7 @@ import {
     ErrorResponse,
     manageFailedOrder,
     type ManageFailedOrderData,
-    status,
+    status2,
     WorkFlowTask,
 } from '../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
@@ -132,8 +132,8 @@ function Workflows(): React.JSX.Element {
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (taskStatus: status) => {
-                if (taskStatus === status.FAILED) {
+            render: (taskStatus: status2) => {
+                if (taskStatus === status2.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
                             {taskStatus.valueOf()}

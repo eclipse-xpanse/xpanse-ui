@@ -8,21 +8,7 @@ import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import { ServiceOrderDetails } from '../../../../xpanse-api/generated';
 const { Text } = Typography;
 export const MyServiceHistoryDetails = ({ record }: { record: ServiceOrderDetails }) => {
-    const requestBodyContent =
-        Object.keys(record.requestBody).length > 0 ? (
-            <>
-                <ul className={serviceModifyStyles.modifyHistoryValueLi}>
-                    {Object.entries(record.requestBody).map(([key, value]) => (
-                        <li key={key}>
-                            <Text strong>{key}:</Text>
-                            <pre>{JSON.stringify(value, null, 2)}</pre>
-                        </li>
-                    ))}
-                </ul>
-            </>
-        ) : (
-            <Text>Empty Requests</Text>
-        );
+    const requestBodyContent = <pre>{JSON.stringify(record.requestBody, null, 2)}</pre>;
 
     const resultPropertiesContent =
         record.resultProperties && Object.keys(record.resultProperties).length > 0 ? (
