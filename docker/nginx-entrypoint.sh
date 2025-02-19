@@ -12,6 +12,7 @@ INJECT_FILE_PATH="${WWW_DIR}/inject.js"
 rm -f ${INJECT_FILE_PATH}
 echo "window.injectedEnv = {" >> "${INJECT_FILE_PATH}"
 for envrow in $(printenv); do
+  # This breaks if the value contains spaces. Ensure the values are without spaces.
   IFS='=' read -r key value <<< "${envrow}"
   if [[ $key == "${ENV_PREFIX}"* ]]; then
     echo "  ${key}: \"${value}\"," >> "${INJECT_FILE_PATH}"
