@@ -4,7 +4,7 @@ import { Rule } from 'rc-field-form/lib/interface';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
 import { ServiceChangeParameter } from '../../../../../xpanse-api/generated';
-import { DeployVariableSchema } from '../../types/DeployVariableSchema';
+import { DeployVariableSchema } from '../../types/DeployVariableSchema.ts';
 
 export function NumberInput({ actionParameter }: { actionParameter: ServiceChangeParameter }): React.JSX.Element {
     const ruleItems: Rule[] = [{ required: true }, { type: 'number' }];
@@ -39,14 +39,10 @@ export function NumberInput({ actionParameter }: { actionParameter: ServiceChang
                     key={actionParameter.name}
                     name={actionParameter.name}
                     label={
-                        <p
-                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                        >
-                            <Tooltip placement='rightTop' title={actionParameter.description}>
-                                {actionParameter.name}&nbsp;
-                                <QuestionCircleOutlined />
-                            </Tooltip>
-                        </p>
+                        <Tooltip placement='rightTop' title={actionParameter.description}>
+                            {actionParameter.name}&nbsp;
+                            <QuestionCircleOutlined />
+                        </Tooltip>
                     }
                     rules={ruleItems}
                     initialValue={Number(actionParameter.initialValue)}
