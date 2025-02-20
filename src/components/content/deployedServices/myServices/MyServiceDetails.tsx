@@ -12,7 +12,6 @@ import {
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
-import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 
 export const MyServiceDetails = ({
     deployedService,
@@ -20,8 +19,7 @@ export const MyServiceDetails = ({
     deployedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
 }): React.JSX.Element => {
     const endPointMap = new Map<string, string>();
-    const requestMap = new Map<string, unknown>();
-    let resultMessage = undefined;
+    const requestMap = new Map<string, string>();
     let deployResourceMap: DeployResource[] = [];
 
     if (deployedService.serviceHostingType.toString() === serviceHostingType.SELF.toString()) {
@@ -31,13 +29,10 @@ export const MyServiceDetails = ({
                 endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
             }
         }
-        if (serviceDetailVo.deployRequest.serviceRequestProperties) {
-            for (const key in serviceDetailVo.deployRequest.serviceRequestProperties) {
-                requestMap.set(key, serviceDetailVo.deployRequest.serviceRequestProperties[key]);
+        if (serviceDetailVo.inputProperties) {
+            for (const key in serviceDetailVo.inputProperties) {
+                requestMap.set(key, serviceDetailVo.inputProperties[key]);
             }
-        }
-        if (serviceDetailVo.resultMessage) {
-            resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
         }
         if (serviceDetailVo.deployResources) {
             deployResourceMap = serviceDetailVo.deployResources;
@@ -49,9 +44,9 @@ export const MyServiceDetails = ({
                 endPointMap.set(key, serviceDetailVo.deployedServiceProperties[key]);
             }
         }
-        if (serviceDetailVo.deployRequest.serviceRequestProperties) {
-            for (const key in serviceDetailVo.deployRequest.serviceRequestProperties) {
-                requestMap.set(key, serviceDetailVo.deployRequest.serviceRequestProperties[key]);
+        if (serviceDetailVo.inputProperties) {
+            for (const key in serviceDetailVo.inputProperties) {
+                requestMap.set(key, serviceDetailVo.inputProperties[key]);
             }
         }
     }
@@ -61,7 +56,6 @@ export const MyServiceDetails = ({
             <DeployedServicesDetailsContent
                 content={endPointMap}
                 requestParams={requestMap}
-                resultMessage={resultMessage}
                 deployResources={deployResourceMap}
                 serviceId={deployedService.serviceId}
             />

@@ -186,14 +186,7 @@ function isHasDeployedServiceProperties(details: VendorHostedDeployedServiceDeta
 }
 
 function isHasServiceRequestProperties(details: VendorHostedDeployedServiceDetails | DeployedServiceDetails): boolean {
-    return !!(
-        details.deployRequest.serviceRequestProperties &&
-        Object.keys(details.deployRequest.serviceRequestProperties).length !== 0
-    );
-}
-
-function isHasResultMessage(details: DeployedServiceDetails): boolean {
-    return !!details.resultMessage;
+    return !!(details.inputProperties && Object.keys(details.inputProperties).length !== 0);
 }
 
 function isHasDeployResources(details: DeployedServiceDetails): boolean {
@@ -211,7 +204,6 @@ export const isDisableDetails = (record: DeployedService) => {
         if (
             isHasDeployedServiceProperties(details) ||
             isHasServiceRequestProperties(details) ||
-            isHasResultMessage(details) ||
             isHasDeployResources(details)
         ) {
             return false;

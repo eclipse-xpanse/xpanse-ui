@@ -204,7 +204,7 @@ export type BackendSystemStatus = {
     backendSystemType:
         | 'Identity Provider'
         | 'Database'
-        | 'Terraform Boot'
+        | 'Terra Boot'
         | 'Tofu Maker'
         | 'Policy Man'
         | 'Cache Provider'
@@ -233,7 +233,7 @@ export type BackendSystemStatus = {
 export enum backendSystemType {
     IDENTITY_PROVIDER = 'Identity Provider',
     DATABASE = 'Database',
-    TERRAFORM_BOOT = 'Terraform Boot',
+    TERRA_BOOT = 'Terra Boot',
     TOFU_MAKER = 'Tofu Maker',
     POLICY_MAN = 'Policy Man',
     CACHE_PROVIDER = 'Cache Provider',
@@ -450,21 +450,37 @@ export type DeployedService = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -488,10 +504,6 @@ export type DeployedService = {
      * The run state of the service
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
-    /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
     /**
      * Time of register service.
      */
@@ -535,6 +547,14 @@ export enum category {
 }
 
 /**
+ * Defines which cloud service account is used for deploying cloud resources.
+ */
+export enum serviceHostingType {
+    SELF = 'self',
+    SERVICE_VENDOR = 'service-vendor',
+}
+
+/**
  * The billing mode of the managed service.
  */
 export enum billingMode {
@@ -569,14 +589,6 @@ export enum serviceState {
     STOPPING = 'stopping',
     STOPPED = 'stopped',
     RESTARTING = 'restarting',
-}
-
-/**
- * Defines which cloud service account is used for deploying cloud resources.
- */
-export enum serviceHostingType {
-    SELF = 'self',
-    SERVICE_VENDOR = 'service-vendor',
 }
 
 export type DeployedServiceDetails = {
@@ -624,21 +636,37 @@ export type DeployedServiceDetails = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -662,10 +690,6 @@ export type DeployedServiceDetails = {
      * The run state of the service
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
-    /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
     /**
      * Time of register service.
      */
@@ -691,10 +715,6 @@ export type DeployedServiceDetails = {
      */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
     /**
-     * The create request of the deployed service.
-     */
-    deployRequest: DeployRequest;
-    /**
      * The resource list of the deployed service.
      */
     deployResources?: Array<DeployResource>;
@@ -704,10 +724,6 @@ export type DeployedServiceDetails = {
     deployedServiceProperties?: {
         [key: string]: string;
     };
-    /**
-     * The result message of the deployed service.
-     */
-    resultMessage?: string;
 };
 
 export type DeployerTool = {
@@ -863,11 +879,11 @@ export type DeployRequest = {
 
 export type DeployResource = {
     /**
-     * The type of the group which configuration the deployed resource.
+     * The type of the resource as defined by the deployer used to deploy the service. Example, in case of terraform this will be the type of the resource defined by the terraform provider.
      */
     groupType: string;
     /**
-     * The name of the group which configuration the deployed resource.
+     * The group to which the resource belongs to. A service can have multiple types of resources. This defines the type of resource. The name of resource group is controlled in the service template.
      */
     groupName: string;
     /**
@@ -1093,7 +1109,7 @@ export type ErrorResponse = {
         | 'Access Denied'
         | 'Sensitive Field Encryption Or Decryption Failed Exception'
         | 'Unsupported Enum Value'
-        | 'Terraform Boot Request Failed'
+        | 'Terra Boot Request Failed'
         | 'Tofu Maker Request Failed'
         | 'Metrics Data Not Ready'
         | 'Variable Validation Failed'
@@ -1126,7 +1142,8 @@ export type ErrorResponse = {
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
-        | 'Service Action Invalid';
+        | 'Service Action Invalid'
+        | 'Service Change Request Failed';
     /**
      * Details of the errors occurred
      */
@@ -1172,7 +1189,7 @@ export enum errorType {
     ACCESS_DENIED = 'Access Denied',
     SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
     UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
-    TERRAFORM_BOOT_REQUEST_FAILED = 'Terraform Boot Request Failed',
+    TERRA_BOOT_REQUEST_FAILED = 'Terra Boot Request Failed',
     TOFU_MAKER_REQUEST_FAILED = 'Tofu Maker Request Failed',
     METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
     VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
@@ -1206,6 +1223,7 @@ export enum errorType {
     DEPLOYMENT_FAILED_EXCEPTION = 'Deployment Failed Exception',
     DESTROY_FAILED_EXCEPTION = 'Destroy Failed Exception',
     SERVICE_ACTION_INVALID = 'Service Action Invalid',
+    SERVICE_CHANGE_REQUEST_FAILED = 'Service Change Request Failed',
 }
 
 export type FlavorPriceResult = {
@@ -1499,7 +1517,7 @@ export type OrderFailedErrorResponse = {
         | 'Access Denied'
         | 'Sensitive Field Encryption Or Decryption Failed Exception'
         | 'Unsupported Enum Value'
-        | 'Terraform Boot Request Failed'
+        | 'Terra Boot Request Failed'
         | 'Tofu Maker Request Failed'
         | 'Metrics Data Not Ready'
         | 'Variable Validation Failed'
@@ -1532,7 +1550,8 @@ export type OrderFailedErrorResponse = {
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
-        | 'Service Action Invalid';
+        | 'Service Action Invalid'
+        | 'Service Change Request Failed';
     /**
      * Details of the errors occurred
      */
@@ -1761,6 +1780,37 @@ export type ServiceChangeManage = {
     configurationParameters?: Array<ServiceChangeParameter>;
 };
 
+export type ServiceChangeOrderDetails = {
+    /**
+     * The id of the order.
+     */
+    orderId: string;
+    /**
+     * Order status of service update request.
+     */
+    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
+    /**
+     * service change request properties.
+     */
+    serviceChangeRequestProperties: {
+        [key: string]: unknown;
+    };
+    /**
+     * Collection of service change details requests generated for the specific change order.
+     */
+    serviceChangeRequests: Array<ServiceChangeRequestDetails>;
+};
+
+/**
+ * Order status of service update request.
+ */
+export enum orderStatus {
+    CREATED = 'created',
+    IN_PROGRESS = 'in-progress',
+    SUCCESSFUL = 'successful',
+    FAILED = 'failed',
+}
+
 export type ServiceChangeParameter = {
     /**
      * The name of the service config parameter
@@ -1789,9 +1839,11 @@ export type ServiceChangeParameter = {
     /**
      * The init value of the service config parameter
      */
-    initialValue: string;
+    initialValue: {
+        [key: string]: unknown;
+    };
     /**
-     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
+     * valueSchema of the variable. The key can be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
      */
     valueSchema?: {
         [key: string]: unknown;
@@ -1816,13 +1868,61 @@ export type ServiceChangeParameter = {
 
 export type ServiceChangeRequest = {
     changeId?: string;
-    configParameters?: {
+    serviceChangeParameters?: {
         [key: string]: unknown;
     };
     ansibleScriptConfig?: AnsibleScriptConfig;
     ansibleInventory?: {
         [key: string]: unknown;
     };
+};
+
+export type ServiceChangeRequestDetails = {
+    /**
+     * ID of the change request created as part of the change order.
+     */
+    changeId: string;
+    /**
+     * name of the resource on which the change request is executed. Null means any one of the resources that is part of the service and is of type configManager can execute it and until now none of the resource have picked up this request.
+     */
+    resourceName?: string;
+    /**
+     * type of the resource in the service that must manage the change request.
+     */
+    changeHandler: string;
+    /**
+     * result of service change request
+     */
+    resultMessage?: string;
+    /**
+     * parameters sent to the agent.
+     */
+    properties: {
+        [key: string]: unknown;
+    };
+    /**
+     * status of service change request.
+     */
+    status: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+/**
+ * status of service change request.
+ */
+export enum status {
+    PENDING = 'pending',
+    PROCESSING = 'processing',
+    SUCCESSFUL = 'successful',
+    ERROR = 'error',
+}
+
+/**
+ * result of the service change request.
+ */
+export type ServiceChangeResult = {
+    isSuccessful?: boolean;
+    error?: string;
+    tasks?: Array<AnsibleTaskResult>;
 };
 
 export type ServiceChangeScript = {
@@ -1838,15 +1938,6 @@ export type ServiceChangeScript = {
      * Ansible script configuration details.
      */
     ansibleScriptConfig: AnsibleScriptConfig;
-};
-
-/**
- * result of the service change request.
- */
-export type ServiceConfigurationChangeResult = {
-    isSuccessful?: boolean;
-    error?: string;
-    tasks?: Array<AnsibleTaskResult>;
 };
 
 export type ServiceConfigurationDetails = {
@@ -2680,21 +2771,37 @@ export type VendorHostedDeployedServiceDetails = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -2719,10 +2826,6 @@ export type VendorHostedDeployedServiceDetails = {
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
     /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
-    /**
      * Time of register service.
      */
     createTime: string;
@@ -2746,10 +2849,6 @@ export type VendorHostedDeployedServiceDetails = {
      * Details of the service configuration.
      */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
-    /**
-     * The create request of the deployed service.
-     */
-    deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
      */
@@ -2804,7 +2903,7 @@ export type WorkFlowTask = {
 /**
  * The status of the Task
  */
-export enum status {
+export enum status2 {
     DONE = 'done',
     FAILED = 'failed',
 }
@@ -3170,12 +3269,12 @@ export type UpdateServiceChangeResultData = {
      * id of the update request.
      */
     changeId: string;
-    requestBody: ServiceConfigurationChangeResult;
+    requestBody: ServiceChangeResult;
 };
 
 export type UpdateServiceChangeResultResponse = void;
 
-export type ListDeployedServicesData = {
+export type GetAllDeployedServicesData = {
     /**
      * category of the service
      */
@@ -3228,7 +3327,7 @@ export type ListDeployedServicesData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesResponse = Array<DeployedService>;
+export type GetAllDeployedServicesResponse = Array<DeployedService>;
 
 export type DeployData = {
     requestBody: DeployRequest;
@@ -3313,14 +3412,14 @@ export type FetchData = {
 
 export type FetchResponse = ServiceTemplateRequestInfo;
 
-export type ListServicePoliciesData = {
+export type GetAllServicePoliciesData = {
     /**
      * The id of service template which the policy belongs to.
      */
     serviceTemplateId: string;
 };
 
-export type ListServicePoliciesResponse = Array<ServicePolicy>;
+export type GetAllServicePoliciesResponse = Array<ServicePolicy>;
 
 export type AddServicePolicyData = {
     requestBody: ServicePolicyCreateRequest;
@@ -3328,7 +3427,7 @@ export type AddServicePolicyData = {
 
 export type AddServicePolicyResponse = ServicePolicy;
 
-export type ListUserPoliciesData = {
+export type GetAllUserPoliciesData = {
     /**
      * Name of csp which the policy belongs to.
      */
@@ -3348,7 +3447,7 @@ export type ListUserPoliciesData = {
     enabled?: boolean;
 };
 
-export type ListUserPoliciesResponse = Array<UserPolicy>;
+export type GetAllUserPoliciesResponse = Array<UserPolicy>;
 
 export type AddUserPolicyData = {
     requestBody: UserPolicyCreateRequest;
@@ -3542,7 +3641,7 @@ export type GetServiceDetailsByIdForIsvData = {
 
 export type GetServiceDetailsByIdForIsvResponse = DeployedServiceDetails;
 
-export type ListDeployedServicesDetailsData = {
+export type GetAllDeployedServicesWithDetailsData = {
     /**
      * category of the service
      */
@@ -3595,7 +3694,7 @@ export type ListDeployedServicesDetailsData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesDetailsResponse = Array<DeployedService>;
+export type GetAllDeployedServicesWithDetailsResponse = Array<DeployedService>;
 
 export type GetVendorHostedServiceDetailsByIdData = {
     /**
@@ -3656,6 +3755,31 @@ export type GetAllDeployedServicesByCspData = {
 };
 
 export type GetAllDeployedServicesByCspResponse = Array<DeployedService>;
+
+export type GetServiceChangeRequestDetailsData = {
+    /**
+     * Manager of the service configuration parameter.
+     */
+    configManager?: string;
+    /**
+     * id of the service order
+     */
+    orderId?: string;
+    /**
+     * name of the service resource
+     */
+    resourceName?: string;
+    /**
+     * Id of the deployed service
+     */
+    serviceId: string;
+    /**
+     * Status of the service configuration
+     */
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export type GetServiceChangeRequestDetailsResponse = Array<ServiceChangeOrderDetails>;
 
 export type GetServiceTemplateRequestHistoryForIsvData = {
     /**
@@ -3803,7 +3927,7 @@ export type GetActiveCspsResponse = Array<
     | 'GoogleCloudPlatform'
 >;
 
-export type ListManagedServiceTemplatesData = {
+export type GetAllServiceTemplatesData = {
     /**
      * category of the service
      */
@@ -3844,7 +3968,7 @@ export type ListManagedServiceTemplatesData = {
     serviceVersion?: string;
 };
 
-export type ListManagedServiceTemplatesResponse = Array<ServiceTemplateDetailVo>;
+export type GetAllServiceTemplatesResponse = Array<ServiceTemplateDetailVo>;
 
 export type GetServiceTemplateDetailsData = {
     /**
@@ -4084,19 +4208,6 @@ export type OpenApiData = {
 
 export type OpenApiResponse = Link;
 
-export type GetPendingServiceChangeRequestData = {
-    /**
-     * The name of the resource of deployed service
-     */
-    resourceName: string;
-    /**
-     * The id of the deployed service
-     */
-    serviceId: string;
-};
-
-export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
-
 export type GetAccessTokenData = {
     /**
      * The authorization code.
@@ -4111,6 +4222,19 @@ export type GetAccessTokenData = {
 export type GetAccessTokenResponse = TokenResponse;
 
 export type AuthorizeResponse = unknown;
+
+export type GetPendingServiceChangeRequestData = {
+    /**
+     * The name of the resource of deployed service
+     */
+    resourceName: string;
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
 
 export type DestroyData = {
     /**

@@ -10,7 +10,6 @@ import { DeployResource, ErrorResponse } from '../../../../xpanse-api/generated'
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
-import { DeploymentResultMessage } from '../common/DeploymentResultMessage';
 import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByIdForIsvQuery';
 
 export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
@@ -18,24 +17,20 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
 
     if (getServiceDetailsByIdQuery.isSuccess) {
         const endPointMap = new Map<string, string>();
-        const requestMap = new Map<string, unknown>();
-        let resultMessage = undefined;
+        const requestMap = new Map<string, string>();
         let deployResourceMap: DeployResource[] = [];
         if (getServiceDetailsByIdQuery.data.deployedServiceProperties) {
             for (const key in getServiceDetailsByIdQuery.data.deployedServiceProperties) {
                 endPointMap.set(key, getServiceDetailsByIdQuery.data.deployedServiceProperties[key]);
             }
         }
-        if (getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
-            for (const key in getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties) {
-                requestMap.set(key, getServiceDetailsByIdQuery.data.deployRequest.serviceRequestProperties[key]);
+        if (getServiceDetailsByIdQuery.data.inputProperties) {
+            for (const key in getServiceDetailsByIdQuery.data.inputProperties) {
+                requestMap.set(key, getServiceDetailsByIdQuery.data.inputProperties[key]);
             }
         }
 
         const serviceDetailVo = getServiceDetailsByIdQuery.data;
-        if (serviceDetailVo.resultMessage) {
-            resultMessage = DeploymentResultMessage(serviceDetailVo.resultMessage);
-        }
         if (serviceDetailVo.deployResources) {
             deployResourceMap = serviceDetailVo.deployResources;
         }
@@ -45,7 +40,6 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
                 <DeployedServicesDetailsContent
                     content={endPointMap}
                     requestParams={requestMap}
-                    resultMessage={resultMessage}
                     deployResources={deployResourceMap}
                     serviceId={serviceId}
                 />

@@ -81,7 +81,7 @@ export const SelectPortingTarget = ({
             userOrderableServiceVoList
         );
         setRegionList(regionList);
-        setSelectRegion(regionList.length > 0 ? regionList[0].region : currentSelectedService.deployRequest.region);
+        setSelectRegion(regionList.length > 0 ? regionList[0].region : currentSelectedService.region);
         const billingModes: billingMode[] | undefined = getBillingModes(
             cspList[0],
             serviceHostTypes[0],
@@ -94,8 +94,7 @@ export const SelectPortingTarget = ({
             userOrderableServiceVoList
         );
         setSelectBillingMode(
-            defaultBillingMode ??
-                (billingModes ? billingModes[0] : (currentSelectedService.deployRequest.billingMode as billingMode))
+            defaultBillingMode ?? (billingModes ? billingModes[0] : (currentSelectedService.billingMode as billingMode))
         );
     };
 
@@ -117,7 +116,7 @@ export const SelectPortingTarget = ({
             regions = regionList;
         } else {
             regionList.forEach((region) => {
-                if (region.value !== currentSelectedService.deployRequest.region.name) {
+                if (region.value !== currentSelectedService.region.name) {
                     regions.push(region);
                 }
             });
