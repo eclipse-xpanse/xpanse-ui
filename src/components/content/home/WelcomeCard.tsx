@@ -10,7 +10,7 @@ import React from 'react';
 function WelcomeCard(): React.JSX.Element {
     return (
         <>
-            <Card title='Welcome to Xpanse' bordered={true}>
+            <Card title='Welcome to Xpanse' variant={'outlined'}>
                 <RocketOutlined />{' '}
                 <a href='https://eclipse.dev/xpanse' target='_blank' rel='noopener noreferrer'>
                     Getting started with Xpanse

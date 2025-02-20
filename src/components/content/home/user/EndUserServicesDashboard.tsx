@@ -70,7 +70,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
 
     return (
         <>
-            <Card title='Services Dashboard' bordered={true}>
+            <Card title='Services Dashboard' variant={'outlined'}>
                 <Row gutter={16} justify={'start'}>
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div

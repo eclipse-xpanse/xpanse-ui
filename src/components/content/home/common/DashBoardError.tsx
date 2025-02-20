@@ -20,7 +20,7 @@ export default function DashBoardError({
     if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
         return (
-            <Card title='Services Dashboard' bordered={true}>
+            <Card title='Services Dashboard' variant={'outlined'}>
                 <Alert
                     message={response.errorType.valueOf()}
                     description={convertStringArrayToUnorderedList(response.details)}
@@ -43,7 +43,7 @@ export default function DashBoardError({
         );
     } else {
         return (
-            <Card title='Services Dashboard' bordered={true}>
+            <Card title='Services Dashboard' variant={'outlined'}>
                 <Alert
                     message='Fetching Service Details Failed'
                     description={error?.message}
