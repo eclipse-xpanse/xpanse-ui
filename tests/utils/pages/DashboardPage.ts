@@ -15,13 +15,10 @@ export class DashboardPage {
         this.page = page;
         this.baseUrl = baseUrl ?? 'http://localhost:3000';
         this.serviceStaticLocator = page.locator('.ant-statistic-title');
-        this.successDeploymentRedirectUrl =
-            this.baseUrl + '/myServices?serviceState=deployment+successful&serviceState=modification+successful';
-        this.failedDeploymentsRedirectUrl =
-            this.baseUrl +
-            '/myServices?serviceState=deployment+failed&serviceState=modification+failed&serviceState=rollback+failed';
-        this.successDestroysRedirectUrl = this.baseUrl + '/myServices?serviceState=destroy+successful';
-        this.failedDestroysRedirectUrl = this.baseUrl + '/myServices?serviceState=destroy+failed';
+        this.successDeploymentRedirectUrl = this.baseUrl + '/myServices';
+        this.failedDeploymentsRedirectUrl = this.baseUrl + '/myServices';
+        this.successDestroysRedirectUrl = this.baseUrl + '/myServices';
+        this.failedDestroysRedirectUrl = this.baseUrl + '/myServices';
     }
 
     async getValueOfStatistics(position: number) {

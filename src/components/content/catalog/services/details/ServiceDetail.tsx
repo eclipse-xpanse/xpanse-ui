@@ -6,7 +6,7 @@
 import { GlobalOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Tag } from 'antd';
 import React from 'react';
-import { createSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
@@ -18,7 +18,7 @@ import {
     serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
-import { reportsRoute } from '../../../../utils/constants';
+import { reportsRoute, ServiceDetailsPage } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
@@ -36,6 +36,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
+    const serviceIdList: string[] = [];
     const listDeployedServicesByIsvQuery = useDeployedServicesQuery(
         serviceDetails.category as category,
         serviceDetails.csp as csp,
@@ -51,43 +52,28 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL ||
                 serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED
             ) {
+                serviceIdList.push(serviceItem.serviceId);
                 numberOfActiveServiceDeployments++;
             }
         });
     }
 
     const onClick = () => {
-        getReportsRedirectionUrl(
-            serviceDetails.category as category,
-            serviceDetails.csp as csp,
-            serviceDetails.name,
-            serviceDetails.version,
-            [
-                serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                serviceDeploymentState.DESTROY_FAILED,
-                serviceDeploymentState.MODIFICATION_SUCCESSFUL,
-                serviceDeploymentState.MODIFICATION_FAILED,
-            ]
-        );
+        getReportsRedirectionUrl(serviceIdList);
     };
 
-    const getReportsRedirectionUrl = (
-        categoryName: category,
-        csp: csp,
-        serviceName: string,
-        version: string,
-        serviceState: serviceDeploymentState[]
-    ) => {
-        void navigate({
-            pathname: reportsRoute,
-            search: createSearchParams({
-                serviceState: serviceState,
-                categoryName,
-                csp,
-                serviceName,
-                version,
-            }).toString(),
-        });
+    const getReportsRedirectionUrl = (serviceIdList: string[]) => {
+        void navigate(
+            {
+                pathname: reportsRoute,
+            },
+            {
+                state: {
+                    from: ServiceDetailsPage,
+                    serviceIds: serviceIdList,
+                },
+            }
+        );
     };
 
     return (

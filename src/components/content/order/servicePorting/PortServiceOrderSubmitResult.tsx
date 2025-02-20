@@ -32,7 +32,7 @@ export const PortServiceOrderSubmitResult = ({
             {' '}
             <Alert
                 message={`Processing Status`}
-                description={<OrderSubmitResultDetails msg={msg} uuid={uuid} />}
+                description={<OrderSubmitResultDetails msg={msg} serviceId={uuid} />}
                 showIcon
                 closable={false}
                 type={type}

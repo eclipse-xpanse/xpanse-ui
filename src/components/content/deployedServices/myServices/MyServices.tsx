@@ -21,11 +21,23 @@ import {
     SyncOutlined,
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
+import {
+    Button,
+    Dropdown,
+    Image,
+    MenuProps,
+    Modal,
+    Popconfirm,
+    Row,
+    Space,
+    Table,
+    TablePaginationConfig,
+    Tooltip,
+} from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { ColumnFilterItem } from 'antd/es/table/interface';
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { ColumnFilterItem, FilterValue, SorterResult } from 'antd/es/table/interface';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import myServicesStyles from '../../../../styles/my-services.module.css';
 import tableStyles from '../../../../styles/table.module.css';
@@ -42,6 +54,8 @@ import {
     taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
+import { EndUserDashBoardPage, orderPageRoute } from '../../../utils/constants.tsx';
+import { LocationStateType } from '../../../utils/LocationStateType.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
 import { cspMap } from '../../common/csp/CspLogo';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
@@ -80,9 +94,6 @@ import { LocksTitle } from './LocksTitle.tsx';
 import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
 import {
-    getServiceDeploymentStateFromQuery,
-    getServiceIdFormQuery,
-    getServiceStateFromQuery,
     isDisableDestroyBtn,
     isDisableDetails,
     isDisabledStopOrRestartBtn,
@@ -112,10 +123,66 @@ import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 function MyServices(): React.JSX.Element {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [urlParams] = useSearchParams();
-    const serviceIdInQuery = getServiceIdFormQuery(urlParams);
-    const serviceDeploymentStateInQuery = getServiceDeploymentStateFromQuery(urlParams);
-    const serviceStateInQuery = getServiceStateFromQuery(urlParams);
+
+    const location = useLocation();
+
+    // redirect from order page
+    const serviceIdInQuery = useMemo(() => {
+        if (!location.state) {
+            return null;
+        }
+        const state = location.state as LocationStateType;
+
+        if (state.from === orderPageRoute && state.serviceIds && state.serviceIds.length > 0) {
+            return state.serviceIds;
+        }
+        return null;
+    }, [location]);
+
+    // redirect from end user dashboard
+    const serviceDeploymentStateInQuery = useMemo(() => {
+        if (!location.state) {
+            return null;
+        }
+        const state = location.state as LocationStateType;
+
+        if (state.from === EndUserDashBoardPage && state.serviceDeploymentStates) {
+            return state.serviceDeploymentStates;
+        }
+        return null;
+    }, [location]);
+
+    const [serviceDeploymentStateFilteredValue, setServiceDeploymentStateFilteredValue] = useState<FilterValue | null>(
+        serviceDeploymentStateInQuery
+    );
+    const [serviceIdFilteredValue, setServiceIdFilteredValue] = useState<FilterValue | null>(serviceIdInQuery);
+    const [customerServiceNameFilteredValue, setCustomerServiceNameFilteredValue] = useState<FilterValue | null>(null);
+    const [categoryFilteredValue, setCategoryFilteredValue] = useState<FilterValue | null>(null);
+    const [cspFilteredValue, setCspFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceNameFilteredValue, setServiceNameFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceVersionFilteredValue, setServiceVersionFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceHostingTypeFilteredValue, setServiceHostingTypeFilteredValue] = useState<FilterValue | null>(null);
+    const [billingModeFilteredValue, setBillingModeFilteredValue] = useState<FilterValue | null>(null);
+    const [regionFilteredValue, setRegionFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceStateFilteredValue, setServiceStateFilteredValue] = useState<FilterValue | null>(null);
+
+    const handleFilterChange = (
+        _pagination: TablePaginationConfig,
+        filters: Record<string, FilterValue | null>,
+        _sorter: SorterResult<DeployedService> | SorterResult<DeployedService>[]
+    ) => {
+        setServiceDeploymentStateFilteredValue(filters.serviceDeploymentState);
+        setServiceIdFilteredValue(filters.serviceId);
+        setCustomerServiceNameFilteredValue(filters.customerServiceName);
+        setCategoryFilteredValue(filters.category);
+        setCspFilteredValue(filters.csp);
+        setServiceNameFilteredValue(filters.name);
+        setServiceVersionFilteredValue(filters.version);
+        setServiceHostingTypeFilteredValue(filters.serviceHostingType);
+        setBillingModeFilteredValue(filters.billingMode);
+        setRegionFilteredValue(filters.region);
+        setServiceStateFilteredValue(filters.serviceState);
+    };
 
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
@@ -242,21 +309,7 @@ function MyServices(): React.JSX.Element {
     ]);
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-        if (serviceDeploymentStateInQuery && serviceDeploymentStateInQuery.length > 0) {
-            serviceVoList = listDeployedServicesQuery.data.filter((serviceVo: DeployedService) =>
-                serviceDeploymentStateInQuery.includes(serviceVo.serviceDeploymentState as serviceDeploymentState)
-            );
-        } else if (serviceStateInQuery && serviceStateInQuery.length > 0) {
-            serviceVoList = listDeployedServicesQuery.data.filter((serviceVo: DeployedService) =>
-                serviceStateInQuery.includes(serviceVo.serviceState as serviceState)
-            );
-        } else if (serviceIdInQuery && serviceIdInQuery.length > 0) {
-            serviceVoList = listDeployedServicesQuery.data.filter(
-                (serviceVo: { serviceId: string }) => serviceVo.serviceId === serviceIdInQuery
-            );
-        } else {
-            serviceVoList = listDeployedServicesQuery.data;
-        }
+        serviceVoList = listDeployedServicesQuery.data;
         serviceIdFilters = updateServiceIdFilters(listDeployedServicesQuery.data);
         versionFilters = updateVersionFilters(listDeployedServicesQuery.data);
         nameFilters = updateNameFilters(listDeployedServicesQuery.data);
@@ -780,11 +833,11 @@ function MyServices(): React.JSX.Element {
             filters: serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceIdFilteredValue,
             onFilter: (value: React.Key | boolean, record) => {
                 return record.serviceId.startsWith(value.toString());
             },
             align: 'center',
-            filteredValue: serviceIdInQuery ? [serviceIdInQuery] : undefined,
         },
         {
             title: 'Name',
@@ -792,6 +845,7 @@ function MyServices(): React.JSX.Element {
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: customerServiceNameFilteredValue,
             onFilter: (value: React.Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
@@ -807,6 +861,7 @@ function MyServices(): React.JSX.Element {
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: categoryFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
             align: 'center',
         },
@@ -816,6 +871,7 @@ function MyServices(): React.JSX.Element {
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceNameFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.name.startsWith(value.toString()),
             align: 'center',
         },
@@ -825,6 +881,7 @@ function MyServices(): React.JSX.Element {
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceVersionFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
             align: 'center',
@@ -835,6 +892,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceHostingTypeFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (serviceHostingType: serviceHostingType) => (
@@ -847,6 +905,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceBillingModeFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: billingModeFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.billingMode.startsWith(value.toString()),
             align: 'center',
             render: (billingMode: billingMode) => <DeployedBillingMode currentBillingMode={billingMode} />,
@@ -857,6 +916,7 @@ function MyServices(): React.JSX.Element {
             filters: serviceRegionNameFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: regionFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.region.name.startsWith(value.toString()),
             align: 'center',
             render: (region: Region) => <DeployedRegion currentRegion={region} />,
@@ -867,6 +927,7 @@ function MyServices(): React.JSX.Element {
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: cspFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: csp, _) => {
                 return (
@@ -896,23 +957,23 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceDeploymentState',
             dataIndex: 'serviceDeploymentState',
-            filters: serviceDeploymentStateInQuery ? undefined : serviceDeploymentStateFilters,
+            filters: serviceDeploymentStateFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceDeploymentStateFilteredValue,
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: serviceDeploymentState) => DeployedServicesStatus(serviceState),
-            filtered: !!serviceDeploymentStateInQuery,
             align: 'center',
         },
         {
             title: 'ServiceState',
             dataIndex: 'serviceState',
             align: 'center',
-            filters: serviceStateInQuery ? undefined : serviceStateFilters,
-            filtered: !!serviceStateInQuery,
+            filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
+            filteredValue: serviceStateFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.serviceState.startsWith(value.toString()),
             render: (_text, record) => DeployedServicesRunningStatus(record),
         },
@@ -1498,6 +1559,7 @@ function MyServices(): React.JSX.Element {
                         dataSource={serviceVoList}
                         loading={listDeployedServicesQuery.isPending || listDeployedServicesQuery.isRefetching}
                         rowKey={'id'}
+                        onChange={handleFilterChange}
                     />
                 </div>
             </Row>

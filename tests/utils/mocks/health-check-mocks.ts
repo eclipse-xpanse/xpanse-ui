@@ -21,8 +21,8 @@ export const mockHealthCheckSuccessResponse = async (page: Page, timeToWaitForRe
                         details: null,
                     },
                     {
-                        backendSystemType: 'Terraform Boot',
-                        name: 'Terraform Boot',
+                        backendSystemType: 'Terra Boot',
+                        name: 'Terra Boot',
                         healthStatus: 'OK',
                         endpoint: 'http://localhost:9090',
                         details: null,

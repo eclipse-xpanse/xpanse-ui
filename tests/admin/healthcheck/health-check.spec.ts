@@ -35,10 +35,11 @@ test('filtering by backend name works', async ({ page, baseURL }) => {
     await layoutHeader.switchUserRole('admin');
     const healthCheckMenu = new HealthCheckPage(page);
     await healthCheckMenu.clickHealthCheckMenuItem();
-    await page.getByRole('columnheader', { name: 'Name filter' }).getByRole('button').click();
+    await page.waitForTimeout(5000);
+    await page.getByLabel('Name').getByRole('button', { name: 'filter' }).click();
     await page.locator('css=div:nth-child(2) > .ant-tree-checkbox > .ant-tree-checkbox-inner').click();
     await page.getByRole('button', { name: 'OK', exact: true }).click();
-    await expect(page.getByRole('cell', { name: 'Terraform Boot' }).first()).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Terra Boot' }).first()).toBeVisible();
     await expect(page.getByRole('button', { name: 'check-circle OK' })).toBeVisible();
 });
 
