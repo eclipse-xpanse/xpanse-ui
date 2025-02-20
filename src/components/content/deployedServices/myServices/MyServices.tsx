@@ -20,6 +20,7 @@ import {
     RiseOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button, Dropdown, Image, MenuProps, Modal, Popconfirm, Row, Space, Table, Tooltip } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
@@ -59,7 +60,8 @@ import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubm
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
 import { Scale } from '../../order/scale/Scale';
 import { CreateServiceActionForm } from '../../order/serviceActions/CreateServiceActionForm';
-import { CurrentServiceConfiguration } from '../../order/serviceConfiguration/CurrentServiceConfiguration';
+import { ServiceConfiguration } from '../../order/serviceConfiguration/ServiceConfiguration.tsx';
+import { getCurrentConfigurationQueryKey } from '../../order/serviceConfiguration/useGetConfigurationOfServiceQuery.ts';
 import { ServicePorting } from '../../order/servicePorting/ServicePorting.tsx';
 import RestartServiceStatusAlert from '../../order/serviceState/restart/RestartServiceStatusAlert';
 import { useServiceStateRestartQuery } from '../../order/serviceState/restart/useServiceStateRestartQuery';
@@ -108,6 +110,7 @@ import useListDeployedServicesDetailsQuery from './query/useListDeployedServices
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
+    const queryClient = useQueryClient();
     const navigate = useNavigate();
     const [urlParams] = useSearchParams();
     const serviceIdInQuery = getServiceIdFormQuery(urlParams);
@@ -1208,6 +1211,7 @@ function MyServices(): React.JSX.Element {
     const handleMyServiceConfigurationModalClose = () => {
         setActiveRecord(undefined);
         setIsMyServiceConfigurationModalOpen(false);
+        void queryClient.resetQueries({ queryKey: getCurrentConfigurationQueryKey(activeRecord?.serviceId ?? '') });
     };
 
     const handleServiceActionsOpenModal = (record: DeployedService) => {
@@ -1358,12 +1362,13 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     title={'Service Configuration'}
-                    width={1600}
+                    width={680}
                     footer={null}
                     open={isMyServiceConfigurationModalOpen}
+                    destroyOnClose={true}
                     onCancel={handleMyServiceConfigurationModalClose}
                 >
-                    <CurrentServiceConfiguration
+                    <ServiceConfiguration
                         userOrderableServiceVo={getOrderableServiceDetails.data}
                         deployedService={activeRecord}
                     />
@@ -1372,7 +1377,7 @@ function MyServices(): React.JSX.Element {
             {activeRecord ? (
                 <Modal
                     title={'Service Actions'}
-                    width={1600}
+                    width={680}
                     footer={null}
                     open={isServiceActionsModalOpen}
                     onCancel={handleServiceActionsModalClose}

@@ -4,7 +4,7 @@ import { Rule } from 'rc-field-form/lib/interface';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
 import { sensitiveScope, ServiceChangeParameter } from '../../../../../xpanse-api/generated';
-import { DeployVariableSchema } from '../../types/DeployVariableSchema';
+import { DeployVariableSchema } from '../../types/DeployVariableSchema.ts';
 
 export function TextInput({ actionParameter }: { actionParameter: ServiceChangeParameter }): React.JSX.Element {
     let regExp: RegExp;
@@ -34,14 +34,10 @@ export function TextInput({ actionParameter }: { actionParameter: ServiceChangeP
                     key={actionParameter.name}
                     name={actionParameter.name}
                     label={
-                        <p
-                            className={`${serviceOrderStyles.orderFormSelectionStyle} ${serviceOrderStyles.orderFormItemName}`}
-                        >
-                            <Tooltip placement='rightTop' title={actionParameter.description}>
-                                {actionParameter.name}&nbsp;
-                                <QuestionCircleOutlined />
-                            </Tooltip>
-                        </p>
+                        <Tooltip placement='rightTop' title={actionParameter.description}>
+                            {actionParameter.name}&nbsp;
+                            <QuestionCircleOutlined />
+                        </Tooltip>
                     }
                     rules={ruleItems}
                     initialValue={actionParameter.initialValue}

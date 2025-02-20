@@ -1,8 +1,8 @@
 import React from 'react';
 import { ServiceChangeParameter } from '../../../../xpanse-api/generated';
-import { BooleanInput } from './elements/BooleanInput';
-import { NumberInput } from './elements/NumberInput';
-import { TextInput } from './elements/TextInput';
+import { BooleanInput } from '../common/formItemElements/BooleanInput.tsx';
+import { NumberInput } from '../common/formItemElements/NumberInput.tsx';
+import { TextInput } from '../common/formItemElements/TextInput.tsx';
 
 export function ServiceActionParameterItem({
     actionParameter,
