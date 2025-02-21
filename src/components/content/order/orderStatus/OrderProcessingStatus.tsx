@@ -13,11 +13,13 @@ export const OrderProcessingStatus = ({
     serviceOrderStatus,
     serviceId,
     selectedServiceHostingType,
+    actionName,
 }: {
     operationType: OperationType;
     serviceOrderStatus: ServiceOrderStatusUpdate;
     serviceId: string;
     selectedServiceHostingType: serviceHostingType;
+    actionName?: string;
 }): React.JSX.Element => {
     const errorMsg: string = 'Please contact service vendor for error details.';
     if (
@@ -104,6 +106,33 @@ export const OrderProcessingStatus = ({
             return (
                 <div>
                     <span>{'Service configuration updated failed.'}</span>
+                    <div>
+                        {selectedServiceHostingType === serviceHostingType.SELF
+                            ? serviceOrderStatus.error?.details.join()
+                            : errorMsg}
+                    </div>
+                </div>
+            );
+        }
+    }
+
+    if (operationType === OperationType.Action) {
+        if (serviceOrderStatus.taskStatus === 'successful') {
+            return (
+                <div>
+                    <span>
+                        <b>{actionName}</b>
+                        {` request submitted successfully.`}
+                    </span>
+                </div>
+            );
+        } else if (serviceOrderStatus.taskStatus === 'failed') {
+            return (
+                <div>
+                    <span>
+                        <b>{actionName}</b>
+                        {` request failed.`}
+                    </span>
                     <div>
                         {selectedServiceHostingType === serviceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()

@@ -9,7 +9,7 @@ import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import submitResultStyles from '../../../../styles/submit-result.module.css';
 
-function ConfigSubmitResultDetails({
+function ServiceChangeResultDetails({
     msg,
     orderId,
 }: {
@@ -39,4 +39,4 @@ function ConfigSubmitResultDetails({
     );
 }
 
-export default ConfigSubmitResultDetails;
+export default ServiceChangeResultDetails;

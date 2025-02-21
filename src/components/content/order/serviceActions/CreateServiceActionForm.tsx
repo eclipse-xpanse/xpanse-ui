@@ -3,16 +3,15 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Alert, Card, Empty, Tabs } from 'antd';
+import { Card, Empty, Skeleton, Tabs } from 'antd';
 import React, { useState } from 'react';
 import '../../../../styles/app.module.css';
-import serviceActionStyles from '../../../../styles/service-action.module.css';
 import {
     DeployedServiceDetails,
+    serviceHostingType,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse';
 import { ServiceActionParameter } from './ServiceActionParameter';
 import { useCreateServiceActionRequest } from './useCreateServiceActionRequest';
 
@@ -34,9 +33,11 @@ export const CreateServiceActionForm = ({
             return {
                 key: serviceAction.name,
                 label: serviceAction.name,
+                disabled: createServiceActionRequest.isPending || createServiceActionRequest.isSuccess,
                 children: (
                     <ServiceActionParameter
                         serviceId={deployedService.serviceId}
+                        serviceHostType={deployedService.serviceHostingType as serviceHostingType}
                         actionName={serviceAction.name}
                         actionParameters={serviceAction.actionParameters ?? []}
                         createServiceActionRequest={createServiceActionRequest}
@@ -45,58 +46,25 @@ export const CreateServiceActionForm = ({
             };
         }) ?? [];
 
+    if (!userOrderableServiceVo) {
+        return <Skeleton active />;
+    }
+
+    if (!userOrderableServiceVo.serviceActions || userOrderableServiceVo.serviceActions.length === 0) {
+        return <Empty description={'No actions defined for this service.'} />;
+    }
+
     return (
         <>
-            {createServiceActionRequest.isSuccess ? (
-                <Alert
-                    className={serviceActionStyles.serviceActionAlert}
-                    message={'service action request submitted successfully'}
-                    description={
-                        <>
-                            use the orders page in MyServices to see the status of the order, orderId{' '}
-                            <strong>{createServiceActionRequest.data.orderId}</strong>.
-                        </>
-                    }
-                    showIcon
-                    type={'success'}
-                    closable={true}
+            <Card>
+                <Tabs
+                    defaultActiveKey={userOrderableServiceVo.serviceActions[0].name}
+                    items={items}
+                    activeKey={actionName}
+                    onChange={onChange}
+                    destroyInactiveTabPane={true}
                 />
-            ) : createServiceActionRequest.isError ? (
-                <div>
-                    {isHandleKnownErrorResponse(createServiceActionRequest.error) ? (
-                        <Alert
-                            className={serviceActionStyles.serviceActionAlert}
-                            message={<>{actionName} service action request failed.</>}
-                            description={String(createServiceActionRequest.error.body.details)}
-                            showIcon
-                            type={'error'}
-                            closable={true}
-                        />
-                    ) : (
-                        <Alert
-                            className={serviceActionStyles.serviceActionAlert}
-                            message={<>{actionName} service action request failed.</>}
-                            description={createServiceActionRequest.error.message}
-                            showIcon
-                            type={'error'}
-                            closable={true}
-                        />
-                    )}
-                </div>
-            ) : (
-                <></>
-            )}
-            {userOrderableServiceVo?.serviceActions ? (
-                <Card>
-                    <Tabs
-                        defaultActiveKey={userOrderableServiceVo.serviceActions[0].name}
-                        items={items}
-                        onChange={onChange}
-                    />
-                </Card>
-            ) : (
-                <Empty description={'No actions defined for this service'} />
-            )}
+            </Card>
         </>
     );
 };

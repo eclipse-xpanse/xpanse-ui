@@ -7,9 +7,9 @@ import { Alert } from 'antd';
 
 import React from 'react';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
-import ConfigSubmitResultDetails from './ConfigSubmitResultDetails.tsx';
+import ServiceChangeResultDetails from '../common/ServiceChangeResultDetails.tsx';
 
-export const UpdateConfigResult = ({
+export const ServiceChangeSubmitResult = ({
     msg,
     orderId,
     type,
@@ -23,7 +23,7 @@ export const UpdateConfigResult = ({
             {' '}
             <Alert
                 message={`Processing Status`}
-                description={<ConfigSubmitResultDetails msg={msg} orderId={orderId} />}
+                description={<ServiceChangeResultDetails msg={msg} orderId={orderId} />}
                 showIcon
                 closable={true}
                 type={type}
