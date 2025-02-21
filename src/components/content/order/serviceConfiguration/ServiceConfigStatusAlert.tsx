@@ -15,9 +15,9 @@ import {
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
+import { ServiceChangeSubmitResult } from '../common/ServiceChangeSubmitResult.tsx';
 import { OrderProcessingStatus } from '../orderStatus/OrderProcessingStatus.tsx';
 import { OperationType } from '../types/OperationType';
-import { UpdateConfigResult } from './UpdateConfigResult.tsx';
 
 function ServiceConfigStatusAlert({
     serviceId,
@@ -129,7 +129,7 @@ function ServiceConfigStatusAlert({
         }
     };
 
-    return <UpdateConfigResult msg={msg ?? ''} orderId={getOrderId()} type={alertType} />;
+    return <ServiceChangeSubmitResult msg={msg ?? ''} orderId={getOrderId()} type={alertType} />;
 }
 
 export default ServiceConfigStatusAlert;
