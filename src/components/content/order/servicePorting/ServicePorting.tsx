@@ -50,22 +50,36 @@ export const ServicePorting = ({
     );
 
     const [areaList, setAreaList] = useState<Tab[]>([]);
-    const [selectArea, setSelectArea] = useState<string>(currentSelectedService.deployRequest.region.area);
+    const [selectArea, setSelectArea] = useState<string>(currentSelectedService.region.area);
 
     const [regionList, setRegionList] = useState<RegionDropDownInfo[]>([]);
-    const [selectRegion, setSelectRegion] = useState<Region>(currentSelectedService.deployRequest.region);
+    const [selectRegion, setSelectRegion] = useState<Region>(currentSelectedService.region);
 
     const [selectAvailabilityZones, setSelectAvailabilityZones] = useState<Record<string, string>>(
-        currentSelectedService.deployRequest.availabilityZones ?? {}
+        currentSelectedService.availabilityZones ?? {}
     );
-    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.deployRequest.flavor);
+    const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor);
 
     const [billingModes, setBillingModes] = useState<billingMode[] | undefined>(undefined);
     const [selectBillingMode, setSelectBillingMode] = useState<billingMode>(
-        currentSelectedService.deployRequest.billingMode.toString() as billingMode
+        currentSelectedService.billingMode.toString() as billingMode
     );
 
-    const [deployParams, setDeployParams] = useState<DeployRequest>(currentSelectedService.deployRequest);
+    const deployRequest: DeployRequest = {
+        category: currentSelectedService.category,
+        serviceName: currentSelectedService.name,
+        version: currentSelectedService.version,
+        serviceHostingType: currentSelectedService.serviceHostingType,
+        csp: currentSelectedService.csp,
+        customerServiceName: currentSelectedService.customerServiceName,
+        region: currentSelectedService.region,
+        availabilityZones: currentSelectedService.availabilityZones,
+        flavor: currentSelectedService.flavor,
+        billingMode: currentSelectedService.billingMode,
+        serviceRequestProperties: currentSelectedService.inputProperties,
+    };
+
+    const [deployParams, setDeployParams] = useState<DeployRequest>(deployRequest);
 
     const getOrderableServicesQuery = useQuery({
         queryKey: [
@@ -117,7 +131,7 @@ export const ServicePorting = ({
     };
 
     const getServicePriceQuery = useGetServicePricesQuery(
-        currentSelectedService.serviceTemplateId ?? '',
+        currentSelectedService.serviceTemplateId,
         selectRegion.name,
         selectRegion.site,
         selectBillingMode,

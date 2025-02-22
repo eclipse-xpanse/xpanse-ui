@@ -240,8 +240,8 @@ export const Modify = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.deployRequest.csp as csp}
-                                region={currentSelectedService.deployRequest.region}
+                                csp={currentSelectedService.csp as csp}
+                                region={currentSelectedService.region}
                             />
                         ) : undefined
                     )}
