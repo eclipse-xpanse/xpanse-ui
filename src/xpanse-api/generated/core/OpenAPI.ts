@@ -1,8 +1,3 @@
-/*
- * SPDX-License-Identifier: Apache-2.0
- * SPDX-FileCopyrightText: Huawei Inc.
- */
-
 import type { ApiRequestOptions } from './ApiRequestOptions';
 
 type Headers = Record<string, string>;
@@ -52,7 +47,7 @@ export const OpenAPI: OpenAPIConfig = {
     PASSWORD: undefined,
     TOKEN: undefined,
     USERNAME: undefined,
-    VERSION: '1.0.24-SNAPSHOT',
+    VERSION: '1.0.25-SNAPSHOT',
     WITH_CREDENTIALS: false,
     interceptors: {
         request: new Interceptors(),
