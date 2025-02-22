@@ -2,7 +2,6 @@
  * SPDX-License-Identifier: Apache-2.0
  * SPDX-FileCopyrightText: Huawei Inc.
  */
-
 export type ApiRequestOptions<T = unknown> = {
     readonly body?: any;
     readonly cookies?: Record<string, unknown>;

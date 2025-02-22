@@ -13,3 +13,4 @@ export function useHealthCheckStatusQuery() {
         staleTime: 60000,
     });
 }
+
