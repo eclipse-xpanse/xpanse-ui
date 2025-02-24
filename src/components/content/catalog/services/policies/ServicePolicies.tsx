@@ -87,9 +87,9 @@ export const ServicePolicies = ({
         },
         {
             title: 'CreatedAt',
-            dataIndex: 'createTime',
+            dataIndex: 'createdTime',
             defaultSortOrder: 'descend',
-            sorter: (a, b) => a.createTime.length - b.createTime.length,
+            sorter: (a, b) => a.createdTime.length - b.createdTime.length,
             sortDirections: ['descend'],
         },
         {

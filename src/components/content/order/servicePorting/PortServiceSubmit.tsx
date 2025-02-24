@@ -15,11 +15,11 @@ import {
     csp,
     DeployedService,
     DeployRequest,
+    orderStatus,
     Region,
     ServiceFlavor,
     serviceHostingType,
     ServicePortingRequest,
-    taskStatus,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
@@ -78,7 +78,7 @@ export const PortServiceSubmit = ({
     const getPortLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         portServiceRequest.data?.orderId ?? '',
         portServiceRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);
@@ -104,9 +104,9 @@ export const PortServiceSubmit = ({
         stepItem.status = 'process';
     } else {
         if (getPortLatestServiceOrderStatusQuery.data) {
-            if (getPortLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.SUCCESSFUL) {
+            if (getPortLatestServiceOrderStatusQuery.data.orderStatus === orderStatus.SUCCESSFUL) {
                 stepItem.status = 'finish';
-            } else if (getPortLatestServiceOrderStatusQuery.data.taskStatus === taskStatus.FAILED) {
+            } else if (getPortLatestServiceOrderStatusQuery.data.orderStatus === orderStatus.FAILED) {
                 stepItem.status = 'error';
             } else {
                 stepItem.status = 'process';

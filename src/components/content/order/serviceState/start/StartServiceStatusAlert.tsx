@@ -10,11 +10,11 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     DeployedService,
     ErrorResponse,
+    orderStatus,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
     serviceState,
-    taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
@@ -112,12 +112,12 @@ function StartServiceStatusAlert({
     }
 
     if (getStartServiceDetailsQuery.isSuccess) {
-        if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
+        if (getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getStartServiceDetailsQuery.data.taskStatus}
+                        message={getStartServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service started successfully'}
@@ -131,12 +131,12 @@ function StartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
+        } else if (getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getStartServiceDetailsQuery.data.taskStatus}
+                        message={getStartServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
@@ -167,7 +167,7 @@ function StartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getStartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
+        } else if (getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.STARTING;
         }
     }

@@ -9,8 +9,8 @@ import {
     GetSelfHostedServiceDetailsByIdData,
     getVendorHostedServiceDetailsById,
     GetVendorHostedServiceDetailsByIdData,
+    orderStatus,
     serviceHostingType,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 
 const GET_SERVICE_DETAILS_QUERY_ID = 'getServiceDetailsById';
@@ -18,7 +18,7 @@ const GET_SERVICE_DETAILS_QUERY_ID = 'getServiceDetailsById';
 export function useServiceDetailsByServiceIdQuery(
     serviceId: string | undefined,
     currentServiceHostingType: string,
-    currentServiceOrderTaskStatus: string | undefined
+    currentServiceOrderOrderStatus: string | undefined
 ) {
     return useQuery({
         queryKey: [GET_SERVICE_DETAILS_QUERY_ID, serviceId, currentServiceHostingType],
@@ -37,8 +37,8 @@ export function useServiceDetailsByServiceIdQuery(
         },
         enabled:
             serviceId !== undefined &&
-            (currentServiceOrderTaskStatus === taskStatus.SUCCESSFUL ||
-                currentServiceOrderTaskStatus === taskStatus.FAILED),
+            (currentServiceOrderOrderStatus === orderStatus.SUCCESSFUL ||
+                currentServiceOrderOrderStatus === orderStatus.FAILED),
         staleTime: Infinity,
         gcTime: Infinity,
     });

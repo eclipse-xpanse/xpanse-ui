@@ -9,11 +9,11 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployRequest,
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -69,9 +69,10 @@ function OrderSubmitStatusAlert({
         } else if (submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess) {
             if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                (getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.SUCCESSFUL.toString() ||
-                    getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString() ||
+                    getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                        orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -89,7 +90,8 @@ function OrderSubmitStatusAlert({
                 }
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'Deploying, Please wait...';
             }
@@ -126,7 +128,7 @@ function OrderSubmitStatusAlert({
         } else if (submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess) {
             if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -134,7 +136,7 @@ function OrderSubmitStatusAlert({
                 return 'error';
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -142,7 +144,8 @@ function OrderSubmitStatusAlert({
                 return 'success';
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

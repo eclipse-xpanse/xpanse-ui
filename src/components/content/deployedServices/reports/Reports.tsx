@@ -209,11 +209,11 @@ function Reports(): React.JSX.Element {
         },
         {
             title: 'Created On',
-            dataIndex: 'createTime',
+            dataIndex: 'createdTime',
             defaultSortOrder: 'descend',
             sorter: (deployedServiceA, deployedServiceB) => {
-                const dateA = new Date(deployedServiceA.createTime);
-                const dateB = new Date(deployedServiceB.createTime);
+                const dateA = new Date(deployedServiceA.createdTime);
+                const dateB = new Date(deployedServiceB.createdTime);
                 return dateA.getTime() - dateB.getTime();
             },
             align: 'center',

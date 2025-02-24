@@ -7,14 +7,14 @@ import { useQuery } from '@tanstack/react-query';
 import {
     getLatestServiceOrderStatus,
     GetLatestServiceOrderStatusData,
-    taskStatus,
+    orderStatus,
 } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants.tsx';
 
 export function useLatestServiceOrderStatusQuery(
     orderId: string | undefined,
     isStartPolling: boolean,
-    refetchUntilStates: taskStatus[]
+    refetchUntilStates: orderStatus[]
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', orderId],
@@ -26,7 +26,7 @@ export function useLatestServiceOrderStatusQuery(
             return getLatestServiceOrderStatus(data);
         },
         refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.taskStatus as taskStatus)
+            query.state.data && refetchUntilStates.includes(query.state.data.orderStatus as orderStatus)
                 ? false
                 : deploymentStatusPollingInterval,
         refetchIntervalInBackground: true,

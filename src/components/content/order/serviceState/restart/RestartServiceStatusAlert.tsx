@@ -10,11 +10,11 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     DeployedService,
     ErrorResponse,
+    orderStatus,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
     serviceState,
-    taskStatus,
 } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import { ContactDetailsShowType } from '../../../common/ocl/ContactDetailsShowType';
@@ -115,12 +115,12 @@ function RestartServiceStatusAlert({
     }
 
     if (getRestartServiceDetailsQuery.isSuccess) {
-        if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
+        if (getRestartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getRestartServiceDetailsQuery.data.taskStatus}
+                        message={getRestartServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service restarted successfully'}
@@ -134,12 +134,12 @@ function RestartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
+        } else if (getRestartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getRestartServiceDetailsQuery.data.taskStatus}
+                        message={getRestartServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
@@ -170,7 +170,7 @@ function RestartServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getRestartServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
+        } else if (getRestartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.RESTARTING;
         }
     }

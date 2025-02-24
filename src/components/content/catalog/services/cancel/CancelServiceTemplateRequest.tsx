@@ -28,7 +28,7 @@ function CancelServiceTemplateRequest({
     let requestId: string | undefined = undefined;
     if (serviceTemplateHistoryQuery.isSuccess && serviceTemplateHistoryQuery.data.length > 0) {
         requestId = serviceTemplateHistoryQuery.data.reduce((latest, current) => {
-            return new Date(current.createTime) > new Date(latest.createTime) ? current : latest;
+            return new Date(current.createdTime) > new Date(latest.createdTime) ? current : latest;
         }).requestId;
     }
 

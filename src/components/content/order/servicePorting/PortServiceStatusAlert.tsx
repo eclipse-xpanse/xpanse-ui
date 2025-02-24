@@ -8,12 +8,12 @@ import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServicePortingRequest,
     ServiceProviderContactDetails,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -51,8 +51,9 @@ function PortServiceStatusAlert({
         } else if (portServiceRequest.isSuccess) {
             if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                (getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
-                    getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString() ||
+                    getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -70,7 +71,7 @@ function PortServiceStatusAlert({
                 }
             } else if (
                 getPortLatestServiceOrderStatusQuery.isPending ||
-                getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'Service porting, Please wait...';
             }
@@ -88,7 +89,7 @@ function PortServiceStatusAlert({
         } else if (portServiceRequest.isSuccess) {
             if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -96,7 +97,7 @@ function PortServiceStatusAlert({
                 return 'error';
             } else if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -104,7 +105,7 @@ function PortServiceStatusAlert({
                 return 'success';
             } else if (
                 getPortLatestServiceOrderStatusQuery.isPending ||
-                getPortLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

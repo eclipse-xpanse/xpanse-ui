@@ -8,10 +8,10 @@ import React, { useMemo } from 'react';
 import {
     ChangeServiceConfigurationData,
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -45,8 +45,8 @@ function ServiceConfigStatusAlert({
         } else if (updateConfigRequest.isSuccess) {
             if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                (getUpdateConfigStatusPollingQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
-                    getUpdateConfigStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
+                    getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -90,17 +90,17 @@ function ServiceConfigStatusAlert({
         } else if (updateConfigRequest.isSuccess) {
             if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                getUpdateConfigStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 return 'error';
             } else if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                getUpdateConfigStatusPollingQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 return 'success';
             } else if (
                 getUpdateConfigStatusPollingQuery.isPending ||
-                getUpdateConfigStatusPollingQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

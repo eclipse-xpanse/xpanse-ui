@@ -47,11 +47,11 @@ import {
     DeployedService,
     DeployedServiceDetails,
     name,
+    orderStatus,
     Region,
     serviceDeploymentState,
     serviceHostingType,
     serviceState,
-    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { EndUserDashBoardPage, orderPageRoute } from '../../../utils/constants.tsx';
@@ -242,37 +242,37 @@ function MyServices(): React.JSX.Element {
     const getStartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateStartQuery.data?.orderId ?? '',
         serviceStateStartQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getStopServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateStopQuery.data?.orderId ?? '',
         serviceStateStopQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getRestartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateRestartQuery.data?.orderId ?? '',
         serviceStateRestartQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getDestroyServiceStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceDestroyQuery.data?.orderId ?? '',
         serviceDestroyQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getReDeployLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         redeployFailedDeploymentQuery.data?.orderId ?? '',
         redeployFailedDeploymentQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getRecreateServiceOrderStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceRecreateRequest.data?.orderId,
         serviceRecreateRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
@@ -945,11 +945,11 @@ function MyServices(): React.JSX.Element {
         },
         {
             title: 'Created On',
-            dataIndex: 'createTime',
+            dataIndex: 'createdTime',
             defaultSortOrder: 'descend',
             sorter: (serviceVoA, serviceVoB) => {
-                const dateA = new Date(serviceVoA.createTime);
-                const dateB = new Date(serviceVoB.createTime);
+                const dateA = new Date(serviceVoA.createdTime);
+                const dateB = new Date(serviceVoB.createdTime);
                 return dateA.getTime() - dateB.getTime();
             },
             align: 'center',

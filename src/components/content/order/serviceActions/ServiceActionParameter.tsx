@@ -9,11 +9,11 @@ import React, { useState } from 'react';
 import '../../../../styles/app.module.css';
 import {
     CreateServiceActionData,
+    orderStatus,
     ServiceActionRequest,
     ServiceChangeParameter,
     serviceHostingType,
     ServiceOrder,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { ServiceActionParameterItem } from './ServiceActionParameterItem';
@@ -38,7 +38,7 @@ export const ServiceActionParameter = ({
     const getServiceActionsStatusPollingQuery = useLatestServiceOrderStatusQuery(
         createServiceActionRequest.data?.orderId ?? '',
         createServiceActionRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
     const onSubmit = () => {
         setIsShowActionSubmitResult(true);

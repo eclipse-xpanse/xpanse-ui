@@ -40,7 +40,7 @@ export function TextInput({ actionParameter }: { actionParameter: ServiceChangeP
                         </Tooltip>
                     }
                     rules={ruleItems}
-                    initialValue={actionParameter.initialValue.toString()}
+                    initialValue={actionParameter.initialValue}
                 >
                     {actionParameter.sensitiveScope === sensitiveScope.ALWAYS.toString() ||
                     actionParameter.sensitiveScope === sensitiveScope.ONCE.toString() ? (

@@ -9,11 +9,11 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList.tsx';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -57,8 +57,8 @@ function DestroyServiceStatusAlert({
         } else if (destroySubmitRequest.isSuccess) {
             if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                (getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
-                    getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
+                    getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -76,7 +76,7 @@ function DestroyServiceStatusAlert({
                 }
             } else if (
                 getDestroyServiceOrderStatusQuery.isPending ||
-                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'Destroying, Please wait...';
             }
@@ -105,7 +105,7 @@ function DestroyServiceStatusAlert({
         } else if (destroySubmitRequest.isSuccess) {
             if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -113,7 +113,7 @@ function DestroyServiceStatusAlert({
                 return 'error';
             } else if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -121,7 +121,7 @@ function DestroyServiceStatusAlert({
                 return 'success';
             } else if (
                 getDestroyServiceOrderStatusQuery.isPending ||
-                getDestroyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

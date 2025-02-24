@@ -11,9 +11,9 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     type ChangeServiceConfigurationData,
     DeployedServiceDetails,
+    orderStatus,
     ServiceConfigurationUpdate,
     serviceHostingType,
-    taskStatus,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -41,7 +41,7 @@ export const ServiceConfigurationDetails = ({
     const getUpdateConfigStatusPollingQuery = useLatestServiceOrderStatusQuery(
         updateConfigRequest.data?.orderId ?? '',
         updateConfigRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const updateConfig = (values: ServiceConfigurationUpdate) => {
