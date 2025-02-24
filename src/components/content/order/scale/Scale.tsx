@@ -17,9 +17,9 @@ import {
     modify,
     type ModifyData,
     ModifyRequest,
+    orderStatus,
     serviceDeploymentState,
     ServiceFlavor,
-    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
@@ -70,7 +70,7 @@ export const Scale = ({
     const getScaleServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     if (orderableServiceDetailsQuery.isSuccess) {

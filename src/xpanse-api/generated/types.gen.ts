@@ -136,8 +136,17 @@ export type AnsibleScriptConfig = {
 };
 
 export type AnsibleTaskResult = {
-    name?: string;
-    isSuccessful?: boolean;
+    /**
+     * name of the Ansible task
+     */
+    name: string;
+    /**
+     * Depicts if the task is successful
+     */
+    isSuccessful: boolean;
+    /**
+     * Data from the task. Will be returned both for successful and failure cases.
+     */
     message?: string;
 };
 
@@ -204,7 +213,7 @@ export type BackendSystemStatus = {
     backendSystemType:
         | 'Identity Provider'
         | 'Database'
-        | 'Terraform Boot'
+        | 'Terra Boot'
         | 'Tofu Maker'
         | 'Policy Man'
         | 'Cache Provider'
@@ -233,7 +242,7 @@ export type BackendSystemStatus = {
 export enum backendSystemType {
     IDENTITY_PROVIDER = 'Identity Provider',
     DATABASE = 'Database',
-    TERRAFORM_BOOT = 'Terraform Boot',
+    TERRA_BOOT = 'Terra Boot',
     TOFU_MAKER = 'Tofu Maker',
     POLICY_MAN = 'Policy Man',
     CACHE_PROVIDER = 'Cache Provider',
@@ -495,7 +504,7 @@ export type DeployedService = {
     /**
      * Time of register service.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Time of update service.
      */
@@ -669,7 +678,7 @@ export type DeployedServiceDetails = {
     /**
      * Time of register service.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Time of update service.
      */
@@ -863,11 +872,11 @@ export type DeployRequest = {
 
 export type DeployResource = {
     /**
-     * The type of the group which configuration the deployed resource.
+     * The type of the resource as defined by the deployer used to deploy the service. Example, in case of terraform this will be the type of the resource defined by the terraform provider.
      */
     groupType: string;
     /**
-     * The name of the group which configuration the deployed resource.
+     * The group to which the resource belongs to. A service can have multiple types of resources. This defines the type of resource. The name of resource group is controlled in the service template.
      */
     groupName: string;
     /**
@@ -1093,7 +1102,7 @@ export type ErrorResponse = {
         | 'Access Denied'
         | 'Sensitive Field Encryption Or Decryption Failed Exception'
         | 'Unsupported Enum Value'
-        | 'Terraform Boot Request Failed'
+        | 'Terra Boot Request Failed'
         | 'Tofu Maker Request Failed'
         | 'Metrics Data Not Ready'
         | 'Variable Validation Failed'
@@ -1126,7 +1135,8 @@ export type ErrorResponse = {
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
-        | 'Service Action Invalid';
+        | 'Service Action Invalid'
+        | 'Service Change Request Failed';
     /**
      * Details of the errors occurred
      */
@@ -1172,7 +1182,7 @@ export enum errorType {
     ACCESS_DENIED = 'Access Denied',
     SENSITIVE_FIELD_ENCRYPTION_OR_DECRYPTION_FAILED_EXCEPTION = 'Sensitive Field Encryption Or Decryption Failed Exception',
     UNSUPPORTED_ENUM_VALUE = 'Unsupported Enum Value',
-    TERRAFORM_BOOT_REQUEST_FAILED = 'Terraform Boot Request Failed',
+    TERRA_BOOT_REQUEST_FAILED = 'Terra Boot Request Failed',
     TOFU_MAKER_REQUEST_FAILED = 'Tofu Maker Request Failed',
     METRICS_DATA_NOT_READY = 'Metrics Data Not Ready',
     VARIABLE_VALIDATION_FAILED = 'Variable Validation Failed',
@@ -1206,6 +1216,7 @@ export enum errorType {
     DEPLOYMENT_FAILED_EXCEPTION = 'Deployment Failed Exception',
     DESTROY_FAILED_EXCEPTION = 'Destroy Failed Exception',
     SERVICE_ACTION_INVALID = 'Service Action Invalid',
+    SERVICE_CHANGE_REQUEST_FAILED = 'Service Change Request Failed',
 }
 
 export type FlavorPriceResult = {
@@ -1499,7 +1510,7 @@ export type OrderFailedErrorResponse = {
         | 'Access Denied'
         | 'Sensitive Field Encryption Or Decryption Failed Exception'
         | 'Unsupported Enum Value'
-        | 'Terraform Boot Request Failed'
+        | 'Terra Boot Request Failed'
         | 'Tofu Maker Request Failed'
         | 'Metrics Data Not Ready'
         | 'Variable Validation Failed'
@@ -1532,7 +1543,8 @@ export type OrderFailedErrorResponse = {
         | 'Async Restart Service Error'
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
-        | 'Service Action Invalid';
+        | 'Service Action Invalid'
+        | 'Service Change Request Failed';
     /**
      * Details of the errors occurred
      */
@@ -1761,6 +1773,37 @@ export type ServiceChangeManage = {
     configurationParameters?: Array<ServiceChangeParameter>;
 };
 
+export type ServiceChangeOrderDetails = {
+    /**
+     * The id of the order.
+     */
+    orderId: string;
+    /**
+     * Order status of service update request.
+     */
+    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
+    /**
+     * service change request properties.
+     */
+    serviceChangeRequestProperties: {
+        [key: string]: unknown;
+    };
+    /**
+     * Collection of service change details requests generated for the specific change order.
+     */
+    serviceChangeRequests: Array<ServiceChangeRequestDetails>;
+};
+
+/**
+ * Order status of service update request.
+ */
+export enum orderStatus {
+    CREATED = 'created',
+    IN_PROGRESS = 'in-progress',
+    SUCCESSFUL = 'successful',
+    FAILED = 'failed',
+}
+
 export type ServiceChangeParameter = {
     /**
      * The name of the service config parameter
@@ -1789,9 +1832,11 @@ export type ServiceChangeParameter = {
     /**
      * The init value of the service config parameter
      */
-    initialValue: string;
+    initialValue: {
+        [key: string]: unknown;
+    };
     /**
-     * valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
+     * valueSchema of the variable. The key can be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly.
      */
     valueSchema?: {
         [key: string]: unknown;
@@ -1815,14 +1860,83 @@ export type ServiceChangeParameter = {
 };
 
 export type ServiceChangeRequest = {
-    changeId?: string;
-    configParameters?: {
+    /**
+     * Id of the change request
+     */
+    changeId: string;
+    /**
+     * request parameters to be used to execute the change scripts. In case of Ansible, this will be used as extra vars.
+     */
+    serviceChangeParameters: {
         [key: string]: unknown;
     };
+    /**
+     * defines the ansible script information.
+     */
     ansibleScriptConfig?: AnsibleScriptConfig;
+    /**
+     * Inventory information for Ansible script.
+     */
     ansibleInventory?: {
         [key: string]: unknown;
     };
+};
+
+export type ServiceChangeRequestDetails = {
+    /**
+     * ID of the change request created as part of the change order.
+     */
+    changeId: string;
+    /**
+     * name of the resource on which the change request is executed. Null means any one of the resources that is part of the service and is of type configManager can execute it and until now none of the resource have picked up this request.
+     */
+    resourceName?: string;
+    /**
+     * type of the resource in the service that must manage the change request.
+     */
+    changeHandler: string;
+    /**
+     * result of service change request
+     */
+    resultMessage?: string;
+    /**
+     * parameters sent to the agent.
+     */
+    properties: {
+        [key: string]: unknown;
+    };
+    /**
+     * status of service change request.
+     */
+    status: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+/**
+ * status of service change request.
+ */
+export enum status {
+    PENDING = 'pending',
+    PROCESSING = 'processing',
+    SUCCESSFUL = 'successful',
+    ERROR = 'error',
+}
+
+/**
+ * result of the service change request.
+ */
+export type ServiceChangeResult = {
+    /**
+     * describes if the change is successfully executed.
+     */
+    isSuccessful: boolean;
+    /**
+     * error description if the task failed.
+     */
+    error?: string;
+    /**
+     * describes result of each Ansible task executed by the agent.
+     */
+    tasks?: Array<AnsibleTaskResult>;
 };
 
 export type ServiceChangeScript = {
@@ -1840,20 +1954,20 @@ export type ServiceChangeScript = {
     ansibleScriptConfig: AnsibleScriptConfig;
 };
 
-/**
- * result of the service change request.
- */
-export type ServiceConfigurationChangeResult = {
-    isSuccessful?: boolean;
-    error?: string;
-    tasks?: Array<AnsibleTaskResult>;
-};
-
 export type ServiceConfigurationDetails = {
+    /**
+     * Defines the current configuration of the service.
+     */
     configuration?: {
         [key: string]: unknown;
     };
+    /**
+     * Timestamp when the configuration was first created.
+     */
     createdTime?: string;
+    /**
+     * Timestamp when the configuration was last updated.
+     */
     updatedTime?: string;
 };
 
@@ -1958,7 +2072,7 @@ export type ServiceOrderDetails = {
     /**
      * The task status of the service order.
      */
-    taskStatus: 'created' | 'in-progress' | 'successful' | 'failed';
+    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * The id of the original service.
      */
@@ -2021,21 +2135,11 @@ export enum taskType {
     SERVICE_RESTART = 'serviceRestart',
 }
 
-/**
- * The task status of the service order.
- */
-export enum taskStatus {
-    CREATED = 'created',
-    IN_PROGRESS = 'in-progress',
-    SUCCESSFUL = 'successful',
-    FAILED = 'failed',
-}
-
 export type ServiceOrderStatusUpdate = {
     /**
      * Current task status of the service order.
      */
-    taskStatus: 'created' | 'in-progress' | 'successful' | 'failed';
+    orderStatus: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * Describes if the service order is now completed.
      */
@@ -2070,7 +2174,7 @@ export type ServicePolicy = {
     /**
      * Time of the policy created.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Time of the policy updated.
      */
@@ -2282,9 +2386,9 @@ export type ServiceTemplateDetailVo = {
      */
     serviceHostingType: 'self' | 'service-vendor';
     /**
-     * createTime of the registered service.
+     * createdTime of the registered service.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Last updateTime of the registered service.
      */
@@ -2354,7 +2458,7 @@ export type ServiceTemplateRequestHistory = {
     /**
      * Create time of the service template request.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Last update time of the service template request.
      */
@@ -2414,7 +2518,7 @@ export type ServiceTemplateRequestToReview = {
     /**
      * Create time of the service template request.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Last update time of the service template request.
      */
@@ -2580,7 +2684,7 @@ export type UserPolicy = {
     /**
      * Time of the policy created.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Time of the policy updated.
      */
@@ -2725,7 +2829,7 @@ export type VendorHostedDeployedServiceDetails = {
     /**
      * Time of register service.
      */
-    createTime: string;
+    createdTime: string;
     /**
      * Time of update service.
      */
@@ -2794,17 +2898,17 @@ export type WorkFlowTask = {
     /**
      * The status of the Task
      */
-    status: 'done' | 'failed';
+    taskStatus: 'done' | 'failed';
     /**
      * The create time of the task
      */
-    createTime: string;
+    createdTime: string;
 };
 
 /**
  * The status of the Task
  */
-export enum status {
+export enum taskStatus {
     DONE = 'done',
     FAILED = 'failed',
 }
@@ -2824,7 +2928,9 @@ export type ManageFailedOrderResponse = unknown;
 
 export type CompleteTaskData = {
     requestBody: {
-        [key: string]: unknown;
+        [key: string]: {
+            [key: string]: unknown;
+        };
     };
     /**
      * ID of the workflow task that needs to be handled
@@ -3170,12 +3276,12 @@ export type UpdateServiceChangeResultData = {
      * id of the update request.
      */
     changeId: string;
-    requestBody: ServiceConfigurationChangeResult;
+    requestBody: ServiceChangeResult;
 };
 
 export type UpdateServiceChangeResultResponse = void;
 
-export type ListDeployedServicesData = {
+export type GetAllDeployedServicesData = {
     /**
      * category of the service
      */
@@ -3228,7 +3334,7 @@ export type ListDeployedServicesData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesResponse = Array<DeployedService>;
+export type GetAllDeployedServicesResponse = Array<DeployedService>;
 
 export type DeployData = {
     requestBody: DeployRequest;
@@ -3313,14 +3419,14 @@ export type FetchData = {
 
 export type FetchResponse = ServiceTemplateRequestInfo;
 
-export type ListServicePoliciesData = {
+export type GetAllServicePoliciesData = {
     /**
      * The id of service template which the policy belongs to.
      */
     serviceTemplateId: string;
 };
 
-export type ListServicePoliciesResponse = Array<ServicePolicy>;
+export type GetAllServicePoliciesResponse = Array<ServicePolicy>;
 
 export type AddServicePolicyData = {
     requestBody: ServicePolicyCreateRequest;
@@ -3328,7 +3434,7 @@ export type AddServicePolicyData = {
 
 export type AddServicePolicyResponse = ServicePolicy;
 
-export type ListUserPoliciesData = {
+export type GetAllUserPoliciesData = {
     /**
      * Name of csp which the policy belongs to.
      */
@@ -3348,7 +3454,7 @@ export type ListUserPoliciesData = {
     enabled?: boolean;
 };
 
-export type ListUserPoliciesResponse = Array<UserPolicy>;
+export type GetAllUserPoliciesResponse = Array<UserPolicy>;
 
 export type AddUserPolicyData = {
     requestBody: UserPolicyCreateRequest;
@@ -3385,13 +3491,13 @@ export type GetComputeResourceInventoryOfServiceResponse = Array<DeployResource>
 
 export type GetAllOrdersByServiceIdData = {
     /**
+     * Task status of the service order
+     */
+    orderStatus?: 'created' | 'in-progress' | 'successful' | 'failed';
+    /**
      * Id of the service
      */
     serviceId: string;
-    /**
-     * Task status of the service order
-     */
-    taskStatus?: 'created' | 'in-progress' | 'successful' | 'failed';
     /**
      * Task type of the service order.
      */
@@ -3542,7 +3648,7 @@ export type GetServiceDetailsByIdForIsvData = {
 
 export type GetServiceDetailsByIdForIsvResponse = DeployedServiceDetails;
 
-export type ListDeployedServicesDetailsData = {
+export type GetAllDeployedServicesWithDetailsData = {
     /**
      * category of the service
      */
@@ -3595,7 +3701,7 @@ export type ListDeployedServicesDetailsData = {
     serviceVersion?: string;
 };
 
-export type ListDeployedServicesDetailsResponse = Array<DeployedService>;
+export type GetAllDeployedServicesWithDetailsResponse = Array<DeployedService>;
 
 export type GetVendorHostedServiceDetailsByIdData = {
     /**
@@ -3656,6 +3762,31 @@ export type GetAllDeployedServicesByCspData = {
 };
 
 export type GetAllDeployedServicesByCspResponse = Array<DeployedService>;
+
+export type GetServiceChangeRequestDetailsData = {
+    /**
+     * Manager of the service configuration parameter.
+     */
+    configManager?: string;
+    /**
+     * id of the service order
+     */
+    orderId?: string;
+    /**
+     * name of the service resource
+     */
+    resourceName?: string;
+    /**
+     * Id of the deployed service
+     */
+    serviceId: string;
+    /**
+     * Status of the service configuration
+     */
+    status?: 'pending' | 'processing' | 'successful' | 'error';
+};
+
+export type GetServiceChangeRequestDetailsResponse = Array<ServiceChangeOrderDetails>;
 
 export type GetServiceTemplateRequestHistoryForIsvData = {
     /**
@@ -3803,7 +3934,7 @@ export type GetActiveCspsResponse = Array<
     | 'GoogleCloudPlatform'
 >;
 
-export type ListManagedServiceTemplatesData = {
+export type GetAllServiceTemplatesData = {
     /**
      * category of the service
      */
@@ -3844,7 +3975,7 @@ export type ListManagedServiceTemplatesData = {
     serviceVersion?: string;
 };
 
-export type ListManagedServiceTemplatesResponse = Array<ServiceTemplateDetailVo>;
+export type GetAllServiceTemplatesResponse = Array<ServiceTemplateDetailVo>;
 
 export type GetServiceTemplateDetailsData = {
     /**
@@ -4084,19 +4215,6 @@ export type OpenApiData = {
 
 export type OpenApiResponse = Link;
 
-export type GetPendingServiceChangeRequestData = {
-    /**
-     * The name of the resource of deployed service
-     */
-    resourceName: string;
-    /**
-     * The id of the deployed service
-     */
-    serviceId: string;
-};
-
-export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
-
 export type GetAccessTokenData = {
     /**
      * The authorization code.
@@ -4111,6 +4229,19 @@ export type GetAccessTokenData = {
 export type GetAccessTokenResponse = TokenResponse;
 
 export type AuthorizeResponse = unknown;
+
+export type GetPendingServiceChangeRequestData = {
+    /**
+     * The name of the resource of deployed service
+     */
+    resourceName: string;
+    /**
+     * The id of the deployed service
+     */
+    serviceId: string;
+};
+
+export type GetPendingServiceChangeRequestResponse = ServiceChangeRequest | void;
 
 export type DestroyData = {
     /**

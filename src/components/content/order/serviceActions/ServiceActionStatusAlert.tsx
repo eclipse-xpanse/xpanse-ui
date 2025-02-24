@@ -8,10 +8,10 @@ import React, { useMemo } from 'react';
 import {
     CreateServiceActionData,
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -47,8 +47,8 @@ function ServiceActionStatusAlert({
         } else if (createServiceActionRequest.isSuccess) {
             if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                (getServiceActionStatusPollingQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString() ||
-                    getServiceActionStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
+                    getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -95,17 +95,17 @@ function ServiceActionStatusAlert({
         } else if (createServiceActionRequest.isSuccess) {
             if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                getServiceActionStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 return 'error';
             } else if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                getServiceActionStatusPollingQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 return 'success';
             } else if (
                 getServiceActionStatusPollingQuery.isPending ||
-                getServiceActionStatusPollingQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

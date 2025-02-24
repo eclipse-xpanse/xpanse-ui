@@ -10,7 +10,7 @@ import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, taskStatus } from '../../../../xpanse-api/generated';
+import { DeployRequest, orderStatus } from '../../../../xpanse-api/generated';
 import {
     createServicePageRoute,
     CUSTOMER_SERVICE_NAME_FIELD,
@@ -42,7 +42,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             ? redeployFailedDeploymentQuery.data.orderId
             : (submitDeploymentRequest.data?.orderId ?? ''),
         submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const orderableServicesQuery = userOrderableServicesQuery(state.category, state.name);
@@ -123,9 +123,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         if (
             submitDeploymentRequest.isSuccess &&
             (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.IN_PROGRESS.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString())
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString())
         ) {
             return true;
         }
@@ -147,11 +148,11 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         if (
             submitDeploymentRequest.isSuccess &&
             (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.IN_PROGRESS.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.SUCCESSFUL.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString() ||
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
         ) {
             return true;
         }
@@ -172,7 +173,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         if (
             submitDeploymentRequest.isSuccess &&
             (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString())
+                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString())
         ) {
             return true;
         }
@@ -241,8 +243,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             </Form.Item>
                             <div
                                 className={
-                                    getSubmitLatestServiceOrderStatusQuery.data?.taskStatus.toString() ===
-                                    taskStatus.IN_PROGRESS.toString()
+                                    getSubmitLatestServiceOrderStatusQuery.data?.orderStatus.toString() ===
+                                    orderStatus.IN_PROGRESS.toString()
                                         ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                                         : ''
                                 }

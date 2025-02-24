@@ -10,6 +10,7 @@ import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
     DeployedService,
     ErrorResponse,
+    orderStatus,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -116,12 +117,12 @@ function StopServiceStatusAlert({
     }
 
     if (getStopServiceDetailsQuery.isSuccess) {
-        if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()) {
+        if (getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getStopServiceDetailsQuery.data.taskStatus}
+                        message={getStopServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={'Service stopped successfully'}
@@ -135,12 +136,12 @@ function StopServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()) {
+        } else if (getStopServiceDetailsQuery.data.orderStatus.toString() === taskStatus.FAILED.toString()) {
             return (
                 <div className={submitAlertStyles.submitAlertTip}>
                     {' '}
                     <Alert
-                        message={getStopServiceDetailsQuery.data.taskStatus}
+                        message={getStopServiceDetailsQuery.data.orderStatus}
                         description={
                             <OrderSubmitResultDetails
                                 msg={
@@ -171,7 +172,7 @@ function StopServiceStatusAlert({
                     />{' '}
                 </div>
             );
-        } else if (getStopServiceDetailsQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()) {
+        } else if (getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()) {
             deployedService.serviceState = serviceState.STOPPING;
         }
     }

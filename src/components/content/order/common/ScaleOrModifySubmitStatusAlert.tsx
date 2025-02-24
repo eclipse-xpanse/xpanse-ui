@@ -9,12 +9,12 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedServiceDetails,
     ErrorResponse,
+    orderStatus,
     serviceDeploymentState,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
-    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
@@ -56,9 +56,10 @@ function ScaleOrModifySubmitStatusAlert({
         } else if (modifyServiceRequest.isSuccess) {
             if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                (getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() ===
-                    taskStatus.SUCCESSFUL.toString() ||
-                    getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString() ||
+                    getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
+                        orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -76,7 +77,8 @@ function ScaleOrModifySubmitStatusAlert({
                 }
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isPending ||
-                getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'Modifying, Please wait...';
             }
@@ -106,7 +108,7 @@ function ScaleOrModifySubmitStatusAlert({
         } else if (modifyServiceRequest.isSuccess) {
             if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -115,7 +117,8 @@ function ScaleOrModifySubmitStatusAlert({
                 return 'error';
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -124,7 +127,8 @@ function ScaleOrModifySubmitStatusAlert({
                 return 'success';
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isPending ||
-                getScaleOrModifyServiceOrderStatusQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

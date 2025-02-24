@@ -105,7 +105,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Description' styles={{ label: { width: '230px' } }}>
                     {serviceDetails.description}
                 </Descriptions.Item>
-                <Descriptions.Item label='Register Time'>{serviceDetails.createTime}</Descriptions.Item>
+                <Descriptions.Item label='Register Time'>{serviceDetails.createdTime}</Descriptions.Item>
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Registration Status'>
                     <ServiceTemplateRegisterStatus

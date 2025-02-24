@@ -9,11 +9,11 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
+    orderStatus,
     serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
-    taskStatus,
 } from '../../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../../utils/generateUnorderedList';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
@@ -51,9 +51,10 @@ function RecreateServiceStatusAlert({
         } else if (recreateRequest.isSuccess) {
             if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                (recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() ===
-                    taskStatus.SUCCESSFUL.toString() ||
-                    recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString())
+                (recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
+                    orderStatus.SUCCESSFUL.toString() ||
+                    recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
+                        orderStatus.FAILED.toString())
             ) {
                 return (
                     <OrderProcessingStatus
@@ -71,7 +72,8 @@ function RecreateServiceStatusAlert({
                 }
             } else if (
                 recreateServiceOrderStatusPollingQuery.isPending ||
-                recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'Recreating, Please wait...';
             }
@@ -89,7 +91,7 @@ function RecreateServiceStatusAlert({
         } else if (recreateRequest.isSuccess) {
             if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.FAILED.toString()
+                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -97,7 +99,7 @@ function RecreateServiceStatusAlert({
                 return 'error';
             } else if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.SUCCESSFUL.toString()
+                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -105,7 +107,8 @@ function RecreateServiceStatusAlert({
                 return 'success';
             } else if (
                 recreateServiceOrderStatusPollingQuery.isPending ||
-                recreateServiceOrderStatusPollingQuery.data.taskStatus.toString() === taskStatus.IN_PROGRESS.toString()
+                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
+                    orderStatus.IN_PROGRESS.toString()
             ) {
                 return 'success';
             }

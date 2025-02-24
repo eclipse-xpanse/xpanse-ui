@@ -12,8 +12,8 @@ import serviceModifyStyles from '../../../../styles/service-modify.module.css';
 import {
     DeployedServiceDetails,
     ErrorResponse,
+    orderStatus,
     ServiceOrderDetails,
-    taskStatus,
     taskType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -29,7 +29,7 @@ export const MyServiceHistory = ({
 }): React.JSX.Element => {
     let orderIdFilters: ColumnFilterItem[] = [];
     let taskTypeFilters: ColumnFilterItem[] = [];
-    let taskStatusFilters: ColumnFilterItem[] = [];
+    let orderStatusFilters: ColumnFilterItem[] = [];
     let serviceOrdersHistoryList: ServiceOrderDetails[] = [];
     const listServiceOrdersHistoryQuery = useListServiceOrdersHistoryQuery(deployedService.serviceId);
 
@@ -37,7 +37,7 @@ export const MyServiceHistory = ({
         serviceOrdersHistoryList = listServiceOrdersHistoryQuery.data;
         updateOrderIdFilters(listServiceOrdersHistoryQuery.data);
         updateTaskTypeFilters();
-        updateTaskStatusFilters();
+        updateorderStatusFilters();
     }
 
     function updateOrderIdFilters(resp: ServiceOrderDetails[]): void {
@@ -64,16 +64,16 @@ export const MyServiceHistory = ({
         taskTypeFilters = filters;
     }
 
-    function updateTaskStatusFilters(): void {
+    function updateorderStatusFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(taskStatus).forEach((taskStatusItem) => {
+        Object.values(orderStatus).forEach((orderStatusItem) => {
             const filter = {
-                text: taskStatusItem,
-                value: taskStatusItem,
+                text: orderStatusItem,
+                value: orderStatusItem,
             };
             filters.push(filter);
         });
-        taskStatusFilters = filters;
+        orderStatusFilters = filters;
     }
 
     const columns: ColumnsType<ServiceOrderDetails> = [
@@ -163,28 +163,28 @@ export const MyServiceHistory = ({
             },
         },
         {
-            title: 'TaskStatus',
-            dataIndex: 'taskStatus',
+            title: 'orderStatus',
+            dataIndex: 'orderStatus',
             align: 'center',
             width: 50,
-            filters: taskStatusFilters,
+            filters: orderStatusFilters,
             filterMode: 'tree',
             filterSearch: true,
-            onFilter: (value: React.Key | boolean, record) => record.taskStatus.startsWith(value.toString()),
+            onFilter: (value: React.Key | boolean, record) => record.orderStatus.startsWith(value.toString()),
             render: (value) => {
-                if (value === taskStatus.FAILED) {
+                if (value === orderStatus.FAILED) {
                     return (
                         <Tag icon={<CloseCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === taskStatus.SUCCESSFUL) {
+                } else if (value === orderStatus.SUCCESSFUL) {
                     return (
                         <Tag icon={<CheckCircleOutlined />} color={'success'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === taskStatus.IN_PROGRESS) {
+                } else if (value === orderStatus.IN_PROGRESS) {
                     return (
                         <Tag icon={<SyncOutlined />} color={'orange'}>
                             {value}

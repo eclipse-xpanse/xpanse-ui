@@ -17,8 +17,8 @@ import {
     modify,
     type ModifyData,
     ModifyRequest,
+    orderStatus,
     serviceDeploymentState,
-    taskStatus,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
@@ -62,7 +62,7 @@ export const Modify = ({
     const getModifyServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [taskStatus.SUCCESSFUL, taskStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
     );
 
     const hasVariableChanged: () => boolean = () => {

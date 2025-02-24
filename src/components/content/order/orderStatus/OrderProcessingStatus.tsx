@@ -27,7 +27,7 @@ export const OrderProcessingStatus = ({
         operationType === OperationType.Recreate ||
         operationType === OperationType.Port
     ) {
-        if (serviceOrderStatus.taskStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === 'successful') {
             return (
                 <OrderEndPointDetails
                     serviceOrderStatus={serviceOrderStatus}
@@ -36,7 +36,7 @@ export const OrderProcessingStatus = ({
                     operationType={operationType}
                 />
             );
-        } else if (serviceOrderStatus.taskStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === 'failed') {
             return (
                 <div>
                     <span>{serviceOrderStatus.error?.errorType.toString()}</span>
@@ -51,7 +51,7 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Modify) {
-        if (serviceOrderStatus.taskStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === 'successful') {
             return (
                 <OrderEndPointDetails
                     serviceOrderStatus={serviceOrderStatus}
@@ -60,7 +60,7 @@ export const OrderProcessingStatus = ({
                     operationType={operationType}
                 />
             );
-        } else if (serviceOrderStatus.taskStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === 'failed') {
             return (
                 <div>
                     <span>{'Modification Failed.'}</span>
@@ -75,13 +75,13 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Destroy) {
-        if (serviceOrderStatus.taskStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === 'successful') {
             return (
                 <div>
                     <span>{'Destroyed Successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.taskStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === 'failed') {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
@@ -96,13 +96,13 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.UpdateConfig) {
-        if (serviceOrderStatus.taskStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === 'successful') {
             return (
                 <div>
                     <span>{'Service configuration updated successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.taskStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === 'failed') {
             return (
                 <div>
                     <span>{'Service configuration updated failed.'}</span>
@@ -117,7 +117,7 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Action) {
-        if (serviceOrderStatus.taskStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === 'successful') {
             return (
                 <div>
                     <span>
@@ -126,7 +126,7 @@ export const OrderProcessingStatus = ({
                     </span>
                 </div>
             );
-        } else if (serviceOrderStatus.taskStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === 'failed') {
             return (
                 <div>
                     <span>

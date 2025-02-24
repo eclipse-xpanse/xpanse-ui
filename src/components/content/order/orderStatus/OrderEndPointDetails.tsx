@@ -27,7 +27,7 @@ export function OrderEndPointDetails({
     const deployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         serviceId,
         selectedServiceHostingType,
-        serviceOrderStatus.taskStatus
+        serviceOrderStatus.orderStatus
     );
     if (
         deployServiceDetailsQuery.isPending ||
