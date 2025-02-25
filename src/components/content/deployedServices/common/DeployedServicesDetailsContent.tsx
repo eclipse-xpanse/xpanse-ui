@@ -15,13 +15,11 @@ import { DeployedResources } from './DeployedResources';
 export function DeployedServicesDetailsContent({
     content,
     requestParams,
-    resultMessage,
     deployResources,
     serviceId,
 }: {
     content: Map<string, string>;
-    requestParams: Map<string, unknown>;
-    resultMessage: React.JSX.Element | undefined;
+    requestParams: Map<string, string>;
     deployResources: DeployResource[];
     serviceId: string;
 }): React.JSX.Element {
@@ -45,9 +43,6 @@ export function DeployedServicesDetailsContent({
     }
     if (requestParams.size > 0) {
         items.push(convertMapToDetailsList(requestParams, 'Request Parameters'));
-    }
-    if (resultMessage !== undefined) {
-        items.push(resultMessage);
     }
     if (deployResources.length > 0) {
         items.push(DeployedResources(deployResources, 'Deployed Resources'));
