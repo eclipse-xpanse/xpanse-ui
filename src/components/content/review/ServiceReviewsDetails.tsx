@@ -20,6 +20,7 @@ import { DeploymentText } from '../common/ocl/DeploymentText';
 import { FlavorsText } from '../common/ocl/FlavorsText';
 import { RegionText } from '../common/ocl/RegionText.tsx';
 import DeploymentManagement from '../deployment/DeploymentManagement';
+import { ServiceActionManagement } from '../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../serviceConfigurationManage/ServiceConfigManagement';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
@@ -197,6 +198,11 @@ export const ServiceReviewsDetails = ({
                     {currentServiceTemplateRequestToReview.ocl.serviceConfigurationManage ? (
                         <ServiceConfigManagement
                             configurationManage={currentServiceTemplateRequestToReview.ocl.serviceConfigurationManage}
+                        />
+                    ) : null}
+                    {currentServiceTemplateRequestToReview.ocl.serviceActions ? (
+                        <ServiceActionManagement
+                            serviceActions={currentServiceTemplateRequestToReview.ocl.serviceActions}
                         />
                     ) : null}
                     <>

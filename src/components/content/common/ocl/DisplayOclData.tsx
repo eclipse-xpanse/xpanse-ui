@@ -12,6 +12,7 @@ import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
 import DeploymentManagement from '../../deployment/DeploymentManagement';
+import { ServiceActionManagement } from '../../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../../serviceConfigurationManage/ServiceConfigManagement';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
@@ -121,6 +122,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                         {ocl.serviceConfigurationManage ? (
                             <ServiceConfigManagement configurationManage={ocl.serviceConfigurationManage} />
                         ) : null}
+                        {ocl.serviceActions ? <ServiceActionManagement serviceActions={ocl.serviceActions} /> : null}
                     </div>
                 </div>
             </>

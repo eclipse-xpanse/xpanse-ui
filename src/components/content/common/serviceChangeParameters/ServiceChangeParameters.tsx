@@ -6,11 +6,17 @@
 import { Button, Popover, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
-import catalogStyles from '../../../styles/catalog.module.css';
-import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { deployResourceKind, sensitiveScope, ServiceChangeParameter } from '../../../xpanse-api/generated';
+import catalogStyles from '../../../../styles/catalog.module.css';
+import deploymentVariablesStyles from '../../../../styles/deployment-variables.module.css';
+import { deployResourceKind, sensitiveScope, ServiceChangeParameter } from '../../../../xpanse-api/generated';
 
-function ServiceConfigurationParameters({ parameters }: { parameters: ServiceChangeParameter[] }): React.JSX.Element {
+function ServiceChangeParameters({
+    parameters,
+    tableName,
+}: {
+    parameters: ServiceChangeParameter[];
+    tableName: string;
+}): React.JSX.Element {
     const columns: ColumnsType<ServiceChangeParameter> = [
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Name</div>,
@@ -201,13 +207,13 @@ function ServiceConfigurationParameters({ parameters }: { parameters: ServiceCha
     return (
         <>
             <div className={`${catalogStyles.catalogDetailsH6} ${catalogStyles.managementVariable}`}>
-                &nbsp;Service Configuration Parameters
+                &nbsp;{tableName}
             </div>
             <div className={deploymentVariablesStyles.variablesTableContainer}>
-                <Table columns={columns} dataSource={parameters} rowKey={'name'} bordered pagination={false} />
+                <Table bordered columns={columns} dataSource={parameters} rowKey={'name'} pagination={false} />
             </div>
         </>
     );
 }
 
-export default ServiceConfigurationParameters;
+export default ServiceChangeParameters;

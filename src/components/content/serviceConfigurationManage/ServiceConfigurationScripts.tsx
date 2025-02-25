@@ -6,6 +6,7 @@
 import { Descriptions } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
+import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import { ServiceChangeManage } from '../../../xpanse-api/generated';
 import { ConfigurationManageScriptText } from './ConfigurationManageScriptText';
@@ -26,10 +27,11 @@ function ServiceConfigurationScripts({
                     <img
                         src={getServiceConfigurationToolIcon(configurationManage.type.valueOf())}
                         alt={configurationManage.type}
+                        className={deploymentVariablesStyles.ansibleKindContent}
                     />
                 </Descriptions.Item>
                 <Descriptions.Item label='Agent Version'>{configurationManage.agentVersion}</Descriptions.Item>
-                <Descriptions.Item label='ConfigManage Scripts'>
+                <Descriptions.Item label='Config Manage Scripts'>
                     <ConfigurationManageScriptText configManageScripts={configurationManage.configManageScripts} />
                 </Descriptions.Item>
             </Descriptions>
