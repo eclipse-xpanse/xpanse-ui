@@ -5,7 +5,7 @@
 export const getServiceConfigurationToolIcon = (type: string) => {
     switch (type) {
         case 'ansible':
-            return '/ansible_logo.png';
+            return '/ansible_logo.svg';
         default:
             return '';
     }

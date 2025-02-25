@@ -7,7 +7,7 @@ import { ControlOutlined } from '@ant-design/icons';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import { ServiceChangeManage } from '../../../xpanse-api/generated';
-import ServiceConfigurationParameters from './ServiceConfigurationParameters';
+import ServiceChangeParameters from '../common/serviceChangeParameters/ServiceChangeParameters.tsx';
 import ServiceConfigurationScripts from './ServiceConfigurationScripts';
 
 function ServiceConfigManagement({
@@ -25,7 +25,10 @@ function ServiceConfigManagement({
                 <ServiceConfigurationScripts configurationManage={configurationManage} />
             ) : null}
             {configurationManage.configurationParameters ? (
-                <ServiceConfigurationParameters parameters={configurationManage.configurationParameters} />
+                <ServiceChangeParameters
+                    parameters={configurationManage.configurationParameters}
+                    tableName={'Service Configuration Parameters'}
+                />
             ) : null}
         </>
     );

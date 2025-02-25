@@ -29,6 +29,7 @@ import { FlavorsText } from '../../../common/ocl/FlavorsText';
 import { RegionText } from '../../../common/ocl/RegionText.tsx';
 import useDeployedServicesQuery from '../../../deployedServices/myServices/query/useDeployedServiceQuery';
 import DeploymentManagement from '../../../deployment/DeploymentManagement';
+import { ServiceActionManagement } from '../../../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
 import { ShowIcon } from './ShowIcon';
 
@@ -150,6 +151,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
             <DeploymentManagement deployment={serviceDetails.deployment} />
             {serviceDetails.serviceConfigurationManage ? (
                 <ServiceConfigManagement configurationManage={serviceDetails.serviceConfigurationManage} />
+            ) : null}
+            {serviceDetails.serviceActions && serviceDetails.serviceActions.length > 0 ? (
+                <ServiceActionManagement serviceActions={serviceDetails.serviceActions} />
             ) : null}
         </>
     );
