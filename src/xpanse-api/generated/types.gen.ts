@@ -459,21 +459,37 @@ export type DeployedService = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -497,10 +513,6 @@ export type DeployedService = {
      * The run state of the service
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
-    /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
     /**
      * Time of register service.
      */
@@ -544,6 +556,14 @@ export enum category {
 }
 
 /**
+ * Defines which cloud service account is used for deploying cloud resources.
+ */
+export enum serviceHostingType {
+    SELF = 'self',
+    SERVICE_VENDOR = 'service-vendor',
+}
+
+/**
  * The billing mode of the managed service.
  */
 export enum billingMode {
@@ -578,14 +598,6 @@ export enum serviceState {
     STOPPING = 'stopping',
     STOPPED = 'stopped',
     RESTARTING = 'restarting',
-}
-
-/**
- * Defines which cloud service account is used for deploying cloud resources.
- */
-export enum serviceHostingType {
-    SELF = 'self',
-    SERVICE_VENDOR = 'service-vendor',
 }
 
 export type DeployedServiceDetails = {
@@ -633,21 +645,37 @@ export type DeployedServiceDetails = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -671,10 +699,6 @@ export type DeployedServiceDetails = {
      * The run state of the service
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
-    /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
     /**
      * Time of register service.
      */
@@ -700,10 +724,6 @@ export type DeployedServiceDetails = {
      */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
     /**
-     * The create request of the deployed service.
-     */
-    deployRequest: DeployRequest;
-    /**
      * The resource list of the deployed service.
      */
     deployResources?: Array<DeployResource>;
@@ -713,10 +733,6 @@ export type DeployedServiceDetails = {
     deployedServiceProperties?: {
         [key: string]: string;
     };
-    /**
-     * The result message of the deployed service.
-     */
-    resultMessage?: string;
 };
 
 export type DeployerTool = {
@@ -2104,7 +2120,7 @@ export type ServiceOrderDetails = {
     /**
      * The requests of the service order.
      */
-    requestBody: {
+    requestBody?: {
         [key: string]: unknown;
     };
     /**
@@ -2271,7 +2287,9 @@ export type ServicePortingRequest = {
      * The properties for the requested service
      */
     serviceRequestProperties?: {
-        [key: string]: unknown;
+        [key: string]: {
+            [key: string]: unknown;
+        };
     };
     /**
      * The availability zones to deploy the service instance.
@@ -2417,6 +2435,10 @@ export type ServiceTemplateDetailVo = {
      * manage service configuration.
      */
     serviceConfigurationManage?: ServiceChangeManage;
+    /**
+     * manage service action.
+     */
+    serviceActions?: Array<ServiceAction>;
     links?: Array<Link>;
 };
 
@@ -2784,21 +2806,37 @@ export type VendorHostedDeployedServiceDetails = {
         | 'azure'
         | 'GoogleCloudPlatform';
     /**
-     * The flavor of the service
+     * Defines which cloud service account is used for deploying cloud resources.
      */
-    flavor?: string;
-    /**
-     * The billing mode of the managed service.
-     */
-    billingMode: 'Fixed' | 'Pay per Use';
+    serviceHostingType: 'self' | 'service-vendor';
     /**
      * The region of the service.
      */
     region: Region;
     /**
+     * The availability zones of the service
+     */
+    availabilityZones?: {
+        [key: string]: string;
+    };
+    /**
+     * The flavor of the service
+     */
+    flavor: string;
+    /**
+     * The billing mode of the managed service.
+     */
+    billingMode: 'Fixed' | 'Pay per Use';
+    /**
+     * The input properties to deploy the service.
+     */
+    inputProperties?: {
+        [key: string]: string;
+    };
+    /**
      * The id of the Service Template
      */
-    serviceTemplateId?: string;
+    serviceTemplateId: string;
     /**
      * The id of the user who deployed the service.
      */
@@ -2823,10 +2861,6 @@ export type VendorHostedDeployedServiceDetails = {
      */
     serviceState: 'not running' | 'running' | 'starting' | 'stopping' | 'stopped' | 'restarting';
     /**
-     * Defines which cloud service account is used for deploying cloud resources.
-     */
-    serviceHostingType: 'self' | 'service-vendor';
-    /**
      * Time of register service.
      */
     createdTime: string;
@@ -2850,10 +2884,6 @@ export type VendorHostedDeployedServiceDetails = {
      * Details of the service configuration.
      */
     serviceConfigurationDetails?: ServiceConfigurationDetails;
-    /**
-     * The create request of the deployed service.
-     */
-    deployRequest: DeployRequest;
     /**
      * The properties of the deployed service.
      */

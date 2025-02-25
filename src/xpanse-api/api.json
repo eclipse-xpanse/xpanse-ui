@@ -11309,7 +11309,9 @@
                     },
                     "serviceRequestProperties": {
                         "type": "object",
-                        "additionalProperties": true,
+                        "additionalProperties": {
+                            "type": "object"
+                        },
                         "description": "The properties for the requested service"
                     },
                     "availabilityZones": {
@@ -11400,7 +11402,9 @@
                     },
                     "serviceRequestProperties": {
                         "type": "object",
-                        "additionalProperties": true,
+                        "additionalProperties": {
+                            "type": "object"
+                        },
                         "description": "The properties for the requested service"
                     },
                     "availabilityZones": {
@@ -11700,6 +11704,22 @@
                             "GoogleCloudPlatform"
                         ]
                     },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
+                    "region": {
+                        "$ref": "#/components/schemas/Region",
+                        "description": "The region of the service."
+                    },
+                    "availabilityZones": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The availability zones of the service"
+                    },
                     "flavor": {
                         "type": "string",
                         "description": "The flavor of the service"
@@ -11709,9 +11729,12 @@
                         "description": "The billing mode of the managed service.",
                         "enum": ["Fixed", "Pay per Use"]
                     },
-                    "region": {
-                        "$ref": "#/components/schemas/Region",
-                        "description": "The region of the service."
+                    "inputProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The input properties to deploy the service."
                     },
                     "serviceTemplateId": {
                         "type": "string",
@@ -11743,11 +11766,6 @@
                         "type": "string",
                         "description": "The run state of the service",
                         "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
-                    },
-                    "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
                     },
                     "createdTime": {
                         "type": "string",
@@ -11783,6 +11801,7 @@
                     "category",
                     "createdTime",
                     "csp",
+                    "flavor",
                     "lastModifiedTime",
                     "name",
                     "region",
@@ -11790,6 +11809,7 @@
                     "serviceHostingType",
                     "serviceId",
                     "serviceState",
+                    "serviceTemplateId",
                     "version"
                 ]
             },
@@ -12195,7 +12215,7 @@
                         "description": "The result properties of the service order."
                     }
                 },
-                "required": ["orderId", "orderStatus", "requestBody", "serviceId", "startedTime", "taskType"]
+                "required": ["orderId", "orderStatus", "serviceId", "startedTime", "taskType"]
             },
             "DeploymentStatusUpdate": {
                 "type": "object",
@@ -12294,6 +12314,22 @@
                             "GoogleCloudPlatform"
                         ]
                     },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
+                    "region": {
+                        "$ref": "#/components/schemas/Region",
+                        "description": "The region of the service."
+                    },
+                    "availabilityZones": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The availability zones of the service"
+                    },
                     "flavor": {
                         "type": "string",
                         "description": "The flavor of the service"
@@ -12303,9 +12339,12 @@
                         "description": "The billing mode of the managed service.",
                         "enum": ["Fixed", "Pay per Use"]
                     },
-                    "region": {
-                        "$ref": "#/components/schemas/Region",
-                        "description": "The region of the service."
+                    "inputProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The input properties to deploy the service."
                     },
                     "serviceTemplateId": {
                         "type": "string",
@@ -12338,11 +12377,6 @@
                         "description": "The run state of the service",
                         "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
                     },
-                    "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
-                    },
                     "createdTime": {
                         "type": "string",
                         "format": "date-time",
@@ -12371,10 +12405,6 @@
                         "$ref": "#/components/schemas/ServiceConfigurationDetails",
                         "description": "Details of the service configuration."
                     },
-                    "deployRequest": {
-                        "$ref": "#/components/schemas/DeployRequest",
-                        "description": "The create request of the deployed service."
-                    },
                     "deployResources": {
                         "type": "array",
                         "description": "The resource list of the deployed service.",
@@ -12388,10 +12418,6 @@
                             "type": "string"
                         },
                         "description": "The properties of the deployed service."
-                    },
-                    "resultMessage": {
-                        "type": "string",
-                        "description": "The result message of the deployed service."
                     }
                 },
                 "required": [
@@ -12399,7 +12425,7 @@
                     "category",
                     "createdTime",
                     "csp",
-                    "deployRequest",
+                    "flavor",
                     "lastModifiedTime",
                     "name",
                     "region",
@@ -12407,6 +12433,7 @@
                     "serviceHostingType",
                     "serviceId",
                     "serviceState",
+                    "serviceTemplateId",
                     "version"
                 ]
             },
@@ -12461,6 +12488,22 @@
                             "GoogleCloudPlatform"
                         ]
                     },
+                    "serviceHostingType": {
+                        "type": "string",
+                        "description": "Defines which cloud service account is used for deploying cloud resources.",
+                        "enum": ["self", "service-vendor"]
+                    },
+                    "region": {
+                        "$ref": "#/components/schemas/Region",
+                        "description": "The region of the service."
+                    },
+                    "availabilityZones": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The availability zones of the service"
+                    },
                     "flavor": {
                         "type": "string",
                         "description": "The flavor of the service"
@@ -12470,9 +12513,12 @@
                         "description": "The billing mode of the managed service.",
                         "enum": ["Fixed", "Pay per Use"]
                     },
-                    "region": {
-                        "$ref": "#/components/schemas/Region",
-                        "description": "The region of the service."
+                    "inputProperties": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        },
+                        "description": "The input properties to deploy the service."
                     },
                     "serviceTemplateId": {
                         "type": "string",
@@ -12505,11 +12551,6 @@
                         "description": "The run state of the service",
                         "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
                     },
-                    "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
-                    },
                     "createdTime": {
                         "type": "string",
                         "format": "date-time",
@@ -12538,10 +12579,6 @@
                         "$ref": "#/components/schemas/ServiceConfigurationDetails",
                         "description": "Details of the service configuration."
                     },
-                    "deployRequest": {
-                        "$ref": "#/components/schemas/DeployRequest",
-                        "description": "The create request of the deployed service."
-                    },
                     "deployedServiceProperties": {
                         "type": "object",
                         "additionalProperties": {
@@ -12555,7 +12592,7 @@
                     "category",
                     "createdTime",
                     "csp",
-                    "deployRequest",
+                    "flavor",
                     "lastModifiedTime",
                     "name",
                     "region",
@@ -12563,6 +12600,7 @@
                     "serviceHostingType",
                     "serviceId",
                     "serviceState",
+                    "serviceTemplateId",
                     "version"
                 ]
             },
@@ -12751,6 +12789,13 @@
                     "serviceConfigurationManage": {
                         "$ref": "#/components/schemas/ServiceChangeManage",
                         "description": "manage service configuration."
+                    },
+                    "serviceActions": {
+                        "type": "array",
+                        "description": "manage service action.",
+                        "items": {
+                            "$ref": "#/components/schemas/ServiceAction"
+                        }
                     },
                     "links": {
                         "type": "array",
