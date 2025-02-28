@@ -1152,7 +1152,9 @@ export type ErrorResponse = {
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
         | 'Service Action Invalid'
-        | 'Service Change Request Failed';
+        | 'Service Change Request Failed'
+        | 'Service Configuration Change Order Already Exists'
+        | 'Service Action Change Order Already Exists';
     /**
      * Details of the errors occurred
      */
@@ -1233,6 +1235,8 @@ export enum errorType {
     DESTROY_FAILED_EXCEPTION = 'Destroy Failed Exception',
     SERVICE_ACTION_INVALID = 'Service Action Invalid',
     SERVICE_CHANGE_REQUEST_FAILED = 'Service Change Request Failed',
+    SERVICE_CONFIGURATION_CHANGE_ORDER_ALREADY_EXISTS = 'Service Configuration Change Order Already Exists',
+    SERVICE_ACTION_CHANGE_ORDER_ALREADY_EXISTS = 'Service Action Change Order Already Exists',
 }
 
 export type FlavorPriceResult = {
@@ -1560,7 +1564,9 @@ export type OrderFailedErrorResponse = {
         | 'Deployment Failed Exception'
         | 'Destroy Failed Exception'
         | 'Service Action Invalid'
-        | 'Service Change Request Failed';
+        | 'Service Change Request Failed'
+        | 'Service Configuration Change Order Already Exists'
+        | 'Service Action Change Order Already Exists';
     /**
      * Details of the errors occurred
      */
