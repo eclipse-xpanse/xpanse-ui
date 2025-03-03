@@ -42,9 +42,7 @@ export default function ServicePolicyCreateResultStatus({
                     {' '}
                     <Alert
                         message={'Adding Policy Failed'}
-                        description={
-                            <ServicePolicySubmitResult msg={error?.message ? error.message : <></>} uuid={''} />
-                        }
+                        description={<ServicePolicySubmitResult msg={error?.message ?? <></>} uuid={''} />}
                         showIcon
                         closable={true}
                         type={'error'}

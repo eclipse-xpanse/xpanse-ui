@@ -49,9 +49,7 @@ export default function ServicePolicyDeleteStatus({
                     {' '}
                     <Alert
                         message={'Deleting Policy Failed'}
-                        description={
-                            <ServicePolicySubmitResult msg={error?.message ? error.message : <></>} uuid={id} />
-                        }
+                        description={<ServicePolicySubmitResult msg={error?.message ?? <></>} uuid={id} />}
                         showIcon
                         closable={true}
                         onClose={onClose}

@@ -42,9 +42,7 @@ export default function UserPolicyCreateResultStatus({
                     {' '}
                     <Alert
                         message={'Policy Process Status'}
-                        description={
-                            <UserPolicySubmitResultDetails msg={error?.message ? error.message : <></>} uuid={''} />
-                        }
+                        description={<UserPolicySubmitResultDetails msg={error?.message ?? <></>} uuid={''} />}
                         showIcon
                         closable={true}
                         type={'error'}
