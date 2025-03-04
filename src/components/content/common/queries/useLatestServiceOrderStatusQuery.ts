@@ -25,10 +25,16 @@ export function useLatestServiceOrderStatusQuery(
             };
             return getLatestServiceOrderStatus(data);
         },
-        refetchInterval: (query) =>
-            query.state.data && refetchUntilStates.includes(query.state.data.orderStatus as orderStatus)
-                ? false
-                : deploymentStatusPollingInterval,
+        refetchInterval: (query) => {
+            if (
+                !query.state.data ||
+                query.state.error ||
+                refetchUntilStates.includes(query.state.data.orderStatus as orderStatus)
+            ) {
+                return false;
+            }
+            return deploymentStatusPollingInterval;
+        },
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
         enabled: orderId !== undefined && isStartPolling,
