@@ -218,6 +218,10 @@ function OrderSubmitStatusAlert({
         ) {
             return true;
         }
+
+        if (getSubmitLatestServiceOrderStatusQuery.isError) {
+            return true;
+        }
         return false;
     };
 
