@@ -56,7 +56,7 @@ export const getDeployParams = (
     };
 
     if (service !== undefined) {
-        for (const param of service.variables) {
+        for (const param of service.inputVariables) {
             props.params.push({
                 name: param.name,
                 kind: param.kind,

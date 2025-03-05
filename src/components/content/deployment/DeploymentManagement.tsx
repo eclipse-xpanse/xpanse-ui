@@ -18,7 +18,7 @@ function DeploymentManagement({ deployment }: { deployment: Deployment }): React
                 &nbsp;Service Deployment Management
             </h3>
             <DeploymentInfomation deployment={deployment} />
-            <DeploymentVariables variables={deployment.variables} />
+            <DeploymentVariables variables={deployment.inputVariables} />
         </>
     );
 }

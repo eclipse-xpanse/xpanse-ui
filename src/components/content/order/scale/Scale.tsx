@@ -80,7 +80,7 @@ export const Scale = ({
             );
             isDowngradeAllowed = orderableServiceDetailsQuery.data.flavors.isDowngradeAllowed;
         }
-        getParams = getModifyParams(orderableServiceDetailsQuery.data.variables);
+        getParams = getModifyParams(orderableServiceDetailsQuery.data.inputVariables);
     }
 
     const onFinish = () => {

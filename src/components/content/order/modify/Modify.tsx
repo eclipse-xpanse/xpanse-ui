@@ -13,7 +13,7 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     csp,
     DeployedServiceDetails,
-    DeployVariable,
+    InputVariable,
     modify,
     type ModifyData,
     ModifyRequest,
@@ -40,14 +40,14 @@ export const Modify = ({
     const [form] = Form.useForm();
     const { Paragraph } = Typography;
     let getParams: DeployParam[] = [];
-    let getVariables: DeployVariable[] = [];
+    let getVariables: InputVariable[] = [];
 
     const [modifyWarning, setModifyWarning] = useState<React.JSX.Element[]>([]);
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
     const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
-    const [storedDeployVariables] = useOrderFormStore((state) => [state.deployParams]);
+    const [storedInputVariables] = useOrderFormStore((state) => [state.deployParams]);
 
     const orderableServiceDetailsQuery = useGetOrderableServiceDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
@@ -67,13 +67,13 @@ export const Modify = ({
 
     const hasVariableChanged: () => boolean = () => {
         const prevParamsString = JSON.stringify(getExistingServiceParameters(currentSelectedService));
-        const newParamsString = JSON.stringify(storedDeployVariables);
+        const newParamsString = JSON.stringify(storedInputVariables);
         return prevParamsString !== newParamsString;
     };
 
     if (orderableServiceDetailsQuery.isSuccess) {
-        getParams = getModifyParams(orderableServiceDetailsQuery.data.variables);
-        getVariables = orderableServiceDetailsQuery.data.variables;
+        getParams = getModifyParams(orderableServiceDetailsQuery.data.inputVariables);
+        getVariables = orderableServiceDetailsQuery.data.inputVariables;
     }
 
     const onFinish = () => {
@@ -124,7 +124,7 @@ export const Modify = ({
     const onClickModify = () => {
         const modifiedKeys = getModifiedProperties(
             getExistingServiceParameters(currentSelectedService),
-            storedDeployVariables
+            storedInputVariables
         );
         if (modifiedKeys.length > 0) {
             const warnings: React.JSX.Element[] = [];
