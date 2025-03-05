@@ -56,7 +56,7 @@ function OrderSubmitResultDetails({
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
-                        text: String(serviceId),
+                        text: String(orderId),
                         icon: [
                             <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                             <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
