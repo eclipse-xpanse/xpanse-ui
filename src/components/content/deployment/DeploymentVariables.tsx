@@ -8,10 +8,10 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { deployResourceKind, DeployVariable, sensitiveScope } from '../../../xpanse-api/generated';
+import { deployResourceKind, InputVariable, sensitiveScope } from '../../../xpanse-api/generated';
 
-function DeploymentVariables({ variables }: { variables: DeployVariable[] }): React.JSX.Element {
-    const columns: ColumnsType<DeployVariable> = [
+function DeploymentVariables({ variables }: { variables: InputVariable[] }): React.JSX.Element {
+    const columns: ColumnsType<InputVariable> = [
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Name</div>,
             dataIndex: 'name',
@@ -43,7 +43,7 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Description</div>,
             dataIndex: 'description',
-            render: (_text: string, record: DeployVariable) => {
+            render: (_text: string, record: InputVariable) => {
                 return (
                     <Popover
                         content={
@@ -88,7 +88,7 @@ function DeploymentVariables({ variables }: { variables: DeployVariable[] }): Re
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>ValueSchema</div>,
             dataIndex: 'valueSchema',
-            render: (_text: string, record: DeployVariable) => {
+            render: (_text: string, record: InputVariable) => {
                 if (!record.valueSchema) {
                     return '';
                 }
