@@ -54,10 +54,11 @@ import {
     serviceState,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { EndUserDashBoardPage, orderPageRoute } from '../../../utils/constants.tsx';
+import { EndUserDashBoardPage, orderPageRoute, serviceDetailsErrorText } from '../../../utils/constants.tsx';
 import { LocationStateType } from '../../../utils/LocationStateType.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
 import { cspMap } from '../../common/csp/CspLogo';
+import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { ServiceTitle } from '../../order/common/ServiceTitle.tsx';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
@@ -86,7 +87,6 @@ import { useServiceStateStopQuery } from '../../order/serviceState/stop/useServi
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
 import { DeployedBillingMode } from '../common/DeployedBillingMode.tsx';
 import { DeployedRegion } from '../common/DeployedRegion.tsx';
-import DeployedServicesError from '../common/DeployedServicesError';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { DeployedServicesRunningStatus } from '../common/DeployedServicesRunningStatus';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
@@ -117,7 +117,9 @@ import {
     updateVersionFilters,
 } from './myServiceProps.tsx';
 import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderableServiceDetailsByServiceIdQuery.ts';
-import useListDeployedServicesDetailsQuery from './query/useListDeployedServicesDetailsQuery';
+import useListDeployedServicesDetailsQuery, {
+    getListDeployedServicesDetailsQueryKey,
+} from './query/useListDeployedServicesDetailsQuery';
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
@@ -1319,6 +1321,12 @@ function MyServices(): React.JSX.Element {
         }
     };
 
+    const retryRequestForMyServicesTable = () => {
+        void queryClient.refetchQueries({
+            queryKey: getListDeployedServicesDetailsQueryKey(),
+        });
+    };
+
     return (
         <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
@@ -1541,7 +1549,11 @@ function MyServices(): React.JSX.Element {
             </div>
             {listDeployedServicesQuery.isError ? (
                 <>
-                    <DeployedServicesError error={listDeployedServicesQuery.error} />
+                    <RetryPrompt
+                        error={listDeployedServicesQuery.error}
+                        retryRequest={retryRequestForMyServicesTable}
+                        errorMessage={serviceDetailsErrorText}
+                    />
                 </>
             ) : (
                 <></>

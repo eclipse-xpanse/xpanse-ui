@@ -8,9 +8,14 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { category, DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { catalogPageRoute, IsvUserDashBoardPage, reportsRoute } from '../../../utils/constants';
+import {
+    catalogPageRoute,
+    IsvUserDashBoardPage,
+    reportsRoute,
+    serviceDetailsErrorText,
+} from '../../../utils/constants';
+import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
-import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
 
@@ -60,12 +65,24 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         registeredServicesCount = listRegisteredServicesByIsvQuery.data.length;
     }
 
-    if (listDeployedServicesByIsvQuery.isError || listRegisteredServicesByIsvQuery.isError) {
-        const errorToDisplay = listDeployedServicesByIsvQuery.isError
-            ? listDeployedServicesByIsvQuery.error
-            : listRegisteredServicesByIsvQuery.error;
+    if (listDeployedServicesByIsvQuery.isError) {
+        return (
+            <RetryPrompt
+                error={listDeployedServicesByIsvQuery.error}
+                retryRequest={retryRequest}
+                errorMessage={serviceDetailsErrorText}
+            />
+        );
+    }
 
-        return <DashBoardError error={errorToDisplay} retryRequest={retryRequest} />;
+    if (listRegisteredServicesByIsvQuery.isError) {
+        return (
+            <RetryPrompt
+                error={listRegisteredServicesByIsvQuery.error}
+                retryRequest={retryRequest}
+                errorMessage={serviceDetailsErrorText}
+            />
+        );
     }
 
     if (

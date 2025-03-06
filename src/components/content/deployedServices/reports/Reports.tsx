@@ -21,10 +21,10 @@ import {
 } from '../../../../xpanse-api/generated';
 import { LocationStateType } from '../../../utils/LocationStateType.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
-import { IsvUserDashBoardPage, ServiceDetailsPage } from '../../../utils/constants';
+import { IsvUserDashBoardPage, serviceDetailsErrorText, ServiceDetailsPage } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
+import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
-import DeployedServicesError from '../common/DeployedServicesError';
 import { DeployedServicesHostingType } from '../common/DeployedServicesHostingType';
 import { DeployedServicesStatus } from '../common/DeployedServicesStatus';
 import useListDeployedServicesByIsvQuery from '../myServices/query/useListDeployedServiceByIsvQuery';
@@ -416,7 +416,11 @@ function Reports(): React.JSX.Element {
                 </Button>
             </div>
             {listDeployedServicesByIsvQuery.isError ? (
-                <DeployedServicesError error={listDeployedServicesByIsvQuery.error} />
+                <RetryPrompt
+                    error={listDeployedServicesByIsvQuery.error}
+                    retryRequest={refreshData}
+                    errorMessage={serviceDetailsErrorText}
+                />
             ) : (
                 <></>
             )}

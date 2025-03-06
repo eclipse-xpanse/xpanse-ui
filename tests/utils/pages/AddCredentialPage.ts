@@ -41,7 +41,7 @@ export class AddCredentialPage {
     }
 
     get successAlert() {
-        return this.page.getByText('Adding Credential Successful.');
+        return this.page.getByText('Credential Added Successfully.');
     }
 
     get backendErrorAlert() {

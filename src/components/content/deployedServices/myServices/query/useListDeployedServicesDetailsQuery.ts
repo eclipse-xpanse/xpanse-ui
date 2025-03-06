@@ -11,7 +11,7 @@ import {
 
 export default function useListDeployedServicesDetailsQuery() {
     return useQuery({
-        queryKey: ['listDeployedServicesDetails'],
+        queryKey: getListDeployedServicesDetailsQueryKey(),
         queryFn: () => {
             const data: GetAllDeployedServicesWithDetailsData = {
                 categoryName: undefined,
@@ -24,4 +24,8 @@ export default function useListDeployedServicesDetailsQuery() {
         },
         refetchOnWindowFocus: false,
     });
+}
+
+export function getListDeployedServicesDetailsQueryKey(): string[] {
+    return ['listDeployedServicesDetails'];
 }

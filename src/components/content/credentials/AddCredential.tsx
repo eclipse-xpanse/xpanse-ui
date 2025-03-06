@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
@@ -21,13 +21,6 @@ import {
     CredentialVariable,
     CredentialVariables,
     csp,
-    getActiveCsps,
-    getCredentialCapabilities,
-    type GetCredentialCapabilitiesData,
-    getCredentialTypes,
-    type GetCredentialTypesData,
-    getSitesOfCsp,
-    GetSitesOfCspData,
     name,
     type,
 } from '../../../xpanse-api/generated';
@@ -36,6 +29,10 @@ import { CredentialApiDoc } from './CredentialApiDoc';
 import CredentialListStatus from './CredentialListStatus.tsx';
 import CredentialProcessStatus from './CredentialProcessStatus.tsx';
 import useCredentialsListQuery from './query/queryCredentialsList';
+import { useActiveCspsQuery } from './query/useActiveCspsQuery.ts';
+import { useCredentialCapabilitiesQuery } from './query/useCredentialCapabilitiesQuery.ts';
+import { useCredentialTypesQuery } from './query/useCredentialTypesQuery.ts';
+import { useSitesOfCspQuery } from './query/useSitesOfCspQuery.tsx';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const [form] = Form.useForm();
@@ -53,62 +50,25 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const credentialsQuery = useCredentialsListQuery();
 
-    const getActiveCspsQuery = useQuery({
-        queryKey: ['getActiveCspsQuery'],
-        queryFn: () => {
-            return getActiveCsps();
-        },
-        staleTime: 60000,
-    });
+    const getActiveCspsQuery = useActiveCspsQuery();
 
-    const sitesQuery = useQuery({
-        queryKey: ['sitesQuery', currentCsp],
-        queryFn: () => {
-            const data: GetSitesOfCspData = {
-                cspName: currentCsp ?? csp.OPENSTACK_TESTLAB,
-            };
-            return getSitesOfCsp(data);
-        },
-        staleTime: 60000,
-        enabled: currentCsp !== undefined,
-    });
+    const getSitesQuery = useSitesOfCspQuery(currentCsp);
 
-    const credentialTypesQuery = useQuery({
-        queryKey: ['credentialTypesQuery', currentCsp],
-        queryFn: () => {
-            const data: GetCredentialTypesData = {
-                cspName: currentCsp,
-            };
-            return getCredentialTypes(data);
-        },
-        staleTime: 60000,
-        enabled: currentCsp !== undefined,
-    });
+    const getCredentialTypesQuery = useCredentialTypesQuery(currentCsp);
 
-    if (sitesQuery.isSuccess) {
-        siteList.current = sitesQuery.data as string[];
+    if (getSitesQuery.isSuccess) {
+        siteList.current = getSitesQuery.data as string[];
     }
 
-    if (credentialTypesQuery.isSuccess) {
-        credentialTypeList.current = credentialTypesQuery.data as type[];
+    if (getCredentialTypesQuery.isSuccess) {
+        credentialTypeList.current = getCredentialTypesQuery.data as type[];
     }
 
     if (getActiveCspsQuery.isSuccess) {
         activeCspList.current = getActiveCspsQuery.data as csp[];
     }
 
-    const credentialCapabilitiesQuery = useQuery({
-        queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        queryFn: () => {
-            const data: GetCredentialCapabilitiesData = {
-                cspName: currentCsp ?? csp.OPENSTACK_TESTLAB,
-                type: currentType,
-            };
-            return getCredentialCapabilities(data);
-        },
-        staleTime: 60000,
-        enabled: currentType !== undefined,
-    });
+    const credentialCapabilitiesQuery = useCredentialCapabilitiesQuery(currentCsp, currentType);
 
     if (credentialCapabilitiesQuery.isSuccess) {
         const credentials = credentialCapabilitiesQuery.data;
@@ -386,7 +346,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 <CredentialProcessStatus
                     isError={addCredentialRequest.isError}
                     isSuccess={addCredentialRequest.isSuccess}
-                    successMsg={'Adding Credential Successful.'}
+                    successMsg={'Credential Added Successfully.'}
                     error={addCredentialRequest.error}
                     getCloseStatus={getCloseStatus}
                 />
@@ -424,7 +384,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     >
                         <Select
                             loading={
-                                (sitesQuery.isLoading || sitesQuery.isRefetching) && sitesQuery.fetchStatus !== 'idle'
+                                (getSitesQuery.isLoading || getSitesQuery.isRefetching) &&
+                                getSitesQuery.fetchStatus !== 'idle'
                             }
                             disabled={siteDisabled}
                             onSelect={handleSiteSelect}
@@ -445,8 +406,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     >
                         <Select
                             loading={
-                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
-                                credentialTypesQuery.fetchStatus !== 'idle'
+                                (getCredentialTypesQuery.isLoading || getCredentialTypesQuery.isRefetching) &&
+                                getCredentialTypesQuery.fetchStatus !== 'idle'
                             }
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
@@ -467,8 +428,8 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     >
                         <Select
                             loading={
-                                (credentialTypesQuery.isLoading || credentialTypesQuery.isRefetching) &&
-                                credentialTypesQuery.fetchStatus !== 'idle'
+                                (getCredentialTypesQuery.isLoading || getCredentialTypesQuery.isRefetching) &&
+                                getCredentialTypesQuery.fetchStatus !== 'idle'
                             }
                             disabled={nameDisable}
                             onSelect={handleCredentialNameSelect}

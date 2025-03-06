@@ -27,7 +27,7 @@ export class UpdateCredentialPage {
     }
 
     get successAlert() {
-        return this.page.getByText('Updating Credential Successful.');
+        return this.page.getByText('Credential Updated Successfully.');
     }
 
     get backendErrorAlert() {

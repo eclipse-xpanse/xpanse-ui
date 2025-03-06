@@ -218,7 +218,7 @@ function UpdateCredential({
                 <CredentialProcessStatus
                     isError={updateCredentialRequest.isError}
                     isSuccess={updateCredentialRequest.isSuccess}
-                    successMsg={'Updating Credential Successful.'}
+                    successMsg={'Credential Updated Successfully.'}
                     error={updateCredentialRequest.error}
                     getCloseStatus={getCloseStatus}
                 />

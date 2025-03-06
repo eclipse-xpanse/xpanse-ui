@@ -23,7 +23,7 @@ export const WorkflowsTip = ({
     return (
         <div className={workflowStyles.workflowTip}>
             {' '}
-            <Alert description={msg} type={type} onClose={onRemove} closable={true} />{' '}
+            <Alert description={msg} type={type} onClose={onRemove} closable={true} showIcon={true} />{' '}
         </div>
     );
 };
