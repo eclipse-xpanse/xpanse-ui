@@ -8,3 +8,4 @@ export const credentialsCapabilitiesUrl =
     'http://localhost:8080/xpanse/credentials/capabilities?cspName=HuaweiCloud&type=variables';
 export const credentialsDeleteUrl =
     'http://localhost:8080/xpanse/isv/credentials?cspName=HuaweiCloud&siteName=International&type=variables&name=AK_SK';
+export const stackCheckUrl = 'http://localhost:8080/xpanse/stack/health';
