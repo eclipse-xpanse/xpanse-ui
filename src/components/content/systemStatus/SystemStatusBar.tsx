@@ -8,10 +8,10 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import { healthStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
-import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import { useStackCheckStatusQuery } from './useStackStatusCheckQuery';
 
 function SystemStatusBar(): React.JSX.Element {
-    const healthCheckQuery = useHealthCheckStatusQuery();
+    const healthCheckQuery = useStackCheckStatusQuery();
 
     return (
         <>

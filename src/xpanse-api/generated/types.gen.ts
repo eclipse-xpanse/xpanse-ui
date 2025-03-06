@@ -2042,8 +2042,8 @@ export type ServiceFlavorWithPrice = {
 };
 
 export type ServiceLockConfig = {
-    modifyLocked?: boolean;
     destroyLocked?: boolean;
+    modifyLocked?: boolean;
 };
 
 export type ServiceOrder = {
@@ -2286,9 +2286,7 @@ export type ServicePortingRequest = {
      * The properties for the requested service
      */
     serviceRequestProperties?: {
-        [key: string]: {
-            [key: string]: unknown;
-        };
+        [key: string]: unknown;
     };
     /**
      * The availability zones to deploy the service instance.
@@ -2551,15 +2549,22 @@ export type ServiceTemplateRequestToReview = {
     requestSubmittedForReview?: boolean;
 };
 
+export type StackStatus = {
+    /**
+     * The health status of Xpanse service.
+     */
+    healthStatus: 'OK' | 'NOK';
+    /**
+     * The health status of the entire xpanse stack. This contains all components that are connected to xpanse.
+     */
+    backendSystemStatuses: Array<BackendSystemStatus>;
+};
+
 export type SystemStatus = {
     /**
      * The health status of Xpanse api service.
      */
     healthStatus: 'OK' | 'NOK';
-    /**
-     * The health status of backend systems. This list contains status of identity provider and status of database.The status of identity provider will return when authorization is enabled.
-     */
-    backendSystemStatuses: Array<BackendSystemStatus>;
 };
 
 export type TokenResponse = {
@@ -3543,6 +3548,8 @@ export type QueryTasksData = {
 };
 
 export type QueryTasksResponse = Array<WorkFlowTask>;
+
+export type StackHealthStatusResponse = StackStatus;
 
 export type GetOrderableServiceDetailsByServiceIdData = {
     /**

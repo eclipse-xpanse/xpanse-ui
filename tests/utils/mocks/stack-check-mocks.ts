@@ -1,8 +1,8 @@
 import { Page } from 'playwright-core';
-import { healthCheckUrl } from './endpoints.ts';
+import { stackCheckUrl } from './endpoints.ts';
 
-export const mockHealthCheckSuccessResponse = async (page: Page, timeToWaitForResponse: number) => {
-    await page.route(healthCheckUrl, async (route) => {
+export const mockStackCheckSuccessResponse = async (page: Page, timeToWaitForResponse: number) => {
+    await page.route(stackCheckUrl, async (route) => {
         await new Promise((resolve) => {
             setTimeout(resolve, timeToWaitForResponse);
         });

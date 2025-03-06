@@ -11,11 +11,11 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { BackendSystemStatus, backendSystemType, healthStatus, SystemStatus } from '../../../xpanse-api/generated';
+import { BackendSystemStatus, backendSystemType, healthStatus, StackStatus } from '../../../xpanse-api/generated';
 import { healthCheckStatusErrorText } from '../../utils/constants.tsx';
 import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import SystemStatusIcon from './SystemStatusIcon';
-import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
+import { useStackCheckStatusQuery } from './useStackStatusCheckQuery.ts';
 
 interface DataType {
     key: React.Key;
@@ -95,13 +95,13 @@ export default function HealthCheckStatus(): React.JSX.Element {
         });
         healthStatusFilters = filters;
     };
-    const healthCheckQuery = useHealthCheckStatusQuery();
+    const healthCheckQuery = useStackCheckStatusQuery();
     const refreshData = () => {
         void healthCheckQuery.refetch();
     };
 
     if (healthCheckQuery.isSuccess) {
-        const rsp: SystemStatus | undefined = healthCheckQuery.data;
+        const rsp: StackStatus | undefined = healthCheckQuery.data;
         updateBackendSystemStatusList(rsp.backendSystemStatuses);
         updateNameFilters(rsp.backendSystemStatuses);
         updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
