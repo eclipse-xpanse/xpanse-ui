@@ -4,7 +4,7 @@
  */
 
 import { CheckCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
@@ -17,17 +17,26 @@ import {
     taskStatus,
     WorkFlowTask,
 } from '../../../xpanse-api/generated';
+import { workflowTasksErrorText } from '../../utils/constants.tsx';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { WorkflowsTip } from './WorkflowsTip';
-import useAllTasksQuery from './query/useAllTasksQuery';
+import useAllTasksQuery, { getAllTasksQueryKey } from './query/useAllTasksQuery';
 
 function Workflows(): React.JSX.Element {
+    const queryClient = useQueryClient();
     const [tipMessage, setTipMessage] = useState<string>('');
     const [tipType, setTipType] = useState<'error' | 'success' | undefined>(undefined);
     const [isRefresh, setIsRefresh] = useState(false);
     let todoTasks: WorkFlowTask[] = [];
 
     const tasksQuery = useAllTasksQuery(undefined);
+
+    const retryRequest = () => {
+        void queryClient.refetchQueries({
+            queryKey: getAllTasksQueryKey(undefined),
+        });
+    };
 
     if (tasksQuery.isSuccess) {
         todoTasks = tasksQuery.data;
@@ -37,16 +46,6 @@ function Workflows(): React.JSX.Element {
         setTipType(tipType);
         setTipMessage(tipMessage);
     };
-
-    if (tasksQuery.error) {
-        if (isHandleKnownErrorResponse(tasksQuery.error)) {
-            const response: ErrorResponse = tasksQuery.error.body;
-            getTipInfo('error', response.details.join());
-        } else {
-            getTipInfo('error', tasksQuery.error.message);
-        }
-        setIsRefresh(false);
-    }
 
     const completeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => {
@@ -131,7 +130,7 @@ function Workflows(): React.JSX.Element {
         },
         {
             title: 'Status',
-            dataIndex: 'status',
+            dataIndex: 'taskStatus',
             render: (workflowStatus: taskStatus) => {
                 if (workflowStatus === taskStatus.FAILED) {
                     return (
@@ -150,7 +149,7 @@ function Workflows(): React.JSX.Element {
         },
         {
             title: 'CreateTime',
-            dataIndex: 'createTime',
+            dataIndex: 'createdTime',
         },
         {
             title: 'Operation',
@@ -187,7 +186,6 @@ function Workflows(): React.JSX.Element {
 
     return (
         <div className={tableStyles.genericTableContainer}>
-            <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>
             <div className={tableButtonStyles.tableManageButtons}>
                 <Button
                     type='primary'
@@ -200,6 +198,16 @@ function Workflows(): React.JSX.Element {
                     refresh
                 </Button>
             </div>
+            <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>
+            {tasksQuery.isError ? (
+                <RetryPrompt
+                    error={tasksQuery.error}
+                    retryRequest={retryRequest}
+                    errorMessage={workflowTasksErrorText}
+                />
+            ) : (
+                <></>
+            )}
 
             <Table
                 columns={columns}

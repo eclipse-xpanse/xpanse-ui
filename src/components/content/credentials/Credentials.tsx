@@ -10,7 +10,7 @@ import {
     PlusCircleOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Image, Modal, Popconfirm, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
@@ -27,13 +27,14 @@ import {
     name,
 } from '../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
+import { credentialsErrorText } from '../../utils/constants.tsx';
 import { cspMap } from '../common/csp/CspLogo';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import AddCredential from './AddCredential';
 import CredentialDetails from './CredentialDetails';
-import CredentialListStatus from './CredentialListStatus.tsx';
 import CredentialProcessStatus from './CredentialProcessStatus.tsx';
 import UpdateCredential from './UpdateCredential';
-import useCredentialsListQuery from './query/queryCredentialsList';
+import useCredentialsListQuery, { getCredentialsListQueryKey } from './query/queryCredentialsList';
 
 function Credentials(): React.JSX.Element {
     const [isAddOpen, setIsAddOpen] = useState(false);
@@ -44,7 +45,15 @@ function Credentials(): React.JSX.Element {
     const [activeCredential, setActiveCredential] = useState<CredentialVariables | undefined>(undefined);
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
 
+    const queryClient = useQueryClient();
+
     const credentialsQuery = useCredentialsListQuery();
+
+    const retryRequest = () => {
+        void queryClient.refetchQueries({
+            queryKey: getCredentialsListQueryKey(currentRole),
+        });
+    };
 
     if (credentialsQuery.isSuccess) {
         const credentials: AbstractCredentialInfo[] = credentialsQuery.data;
@@ -199,15 +208,6 @@ function Credentials(): React.JSX.Element {
 
     return (
         <div className={tableStyles.genericTableContainer}>
-            {deleteCredentialRequest.isSuccess || deleteCredentialRequest.isError ? (
-                <CredentialProcessStatus
-                    isError={deleteCredentialRequest.isError}
-                    isSuccess={deleteCredentialRequest.isSuccess}
-                    successMsg={'Deleting Credentials Successful.'}
-                    error={deleteCredentialRequest.error}
-                    getCloseStatus={getCloseStatus}
-                />
-            ) : null}
             <div>
                 {/* this condition will unmount and mount the modal completely. So that the old values are not retained. */}
                 {isAddOpen ? (
@@ -256,7 +256,6 @@ function Credentials(): React.JSX.Element {
                     ) : null}
                 </Modal>
             </div>
-            {credentialsQuery.isError ? <CredentialListStatus error={credentialsQuery.error} /> : <></>}
             <div>
                 <div className={tableButtonStyles.tableManageButtons}>
                     <Button
@@ -279,6 +278,24 @@ function Credentials(): React.JSX.Element {
                         Add
                     </Button>
                 </div>
+                {credentialsQuery.isError ? (
+                    <RetryPrompt
+                        error={credentialsQuery.error}
+                        retryRequest={retryRequest}
+                        errorMessage={credentialsErrorText}
+                    />
+                ) : (
+                    <></>
+                )}
+                {deleteCredentialRequest.isSuccess || deleteCredentialRequest.isError ? (
+                    <CredentialProcessStatus
+                        isError={deleteCredentialRequest.isError}
+                        isSuccess={deleteCredentialRequest.isSuccess}
+                        successMsg={'Credentials Deleted Successfully.'}
+                        error={deleteCredentialRequest.error}
+                        getCloseStatus={getCloseStatus}
+                    />
+                ) : null}
                 <Table
                     columns={columns}
                     loading={credentialsQuery.isLoading || credentialsQuery.isRefetching}

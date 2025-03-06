@@ -11,8 +11,9 @@ import React, { useState } from 'react';
 import policyStyles from '../../../../../styles/policies.module.css';
 import servicePolicyStyles from '../../../../../styles/service-policies.module.css';
 import { ServicePolicy, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { serviceUserPoliciesErrorText } from '../../../../utils/constants.tsx';
+import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { AddOrUpdateServicePolicy } from './AddOrUpdateServicePolicy';
-import ServicePolicyListError from './ServicePolicyListError';
 import ServicePolicyDeleteStatus from './deletePolicy/ServicePolicyDeleteStatus';
 import { useDeleteServicePolicy } from './deletePolicy/useDeleteServicePolicy';
 import { useGetServicePolicyList } from './policyList/useGetServicePolicyList';
@@ -240,7 +241,15 @@ export const ServicePolicies = ({
                     Add
                 </Button>
             </div>
-            {servicePolicyListQuery.isError ? <ServicePolicyListError error={servicePolicyListQuery.error} /> : <></>}
+            {servicePolicyListQuery.isError ? (
+                <RetryPrompt
+                    error={servicePolicyListQuery.error}
+                    retryRequest={refreshServicePoliciesList}
+                    errorMessage={serviceUserPoliciesErrorText}
+                />
+            ) : (
+                <></>
+            )}
             <Modal
                 title={currentServicePolicy === undefined ? 'Add service policy' : 'Update service policy'}
                 width={1000}

@@ -4,14 +4,14 @@
  */
 
 import { CloudServerOutlined, GroupOutlined, TagOutlined } from '@ant-design/icons';
-import { Alert, Empty, Skeleton } from 'antd';
+import { Empty, Skeleton } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../styles/services-empty.module.css';
-import { ErrorResponse, ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList.tsx';
-import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
+import { ServiceTemplateDetailVo } from '../../../xpanse-api/generated';
+import { serviceDetailsErrorText } from '../../utils/constants.tsx';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import {
     groupRegisteredServicesByVersionForSpecificServiceName,
     groupServicesByCategoryForSpecificServiceVendor,
@@ -92,28 +92,15 @@ export default function RegisteredServices(): React.JSX.Element {
     }
 
     if (availableServiceTemplatesQuery.isError) {
-        if (isHandleKnownErrorResponse(availableServiceTemplatesQuery.error)) {
-            const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
-            return (
-                <Alert
-                    message={response.errorType.valueOf()}
-                    description={convertStringArrayToUnorderedList(response.details)}
-                    type={'error'}
-                    closable={true}
-                    className={catalogStyles.catalogSkeleton}
-                />
-            );
-        } else {
-            return (
-                <Alert
-                    message='Fetching Service Details Failed'
-                    description={availableServiceTemplatesQuery.error.message}
-                    type={'error'}
-                    closable={true}
-                    className={catalogStyles.catalogSkeleton}
-                />
-            );
-        }
+        return (
+            <RetryPrompt
+                error={availableServiceTemplatesQuery.error}
+                retryRequest={() => {
+                    void availableServiceTemplatesQuery.refetch();
+                }}
+                errorMessage={serviceDetailsErrorText}
+            />
+        );
     }
 
     if (availableServiceTemplatesQuery.isLoading || availableServiceTemplatesQuery.isFetching) {

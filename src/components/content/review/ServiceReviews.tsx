@@ -17,9 +17,10 @@ import {
     serviceTemplateRegistrationState,
     ServiceTemplateRequestToReview,
 } from '../../../xpanse-api/generated';
+import { serviceTemplatesErrorText } from '../../utils/constants.tsx';
 import { ServiceTemplateRegisterStatus } from '../common/catalog/ServiceTemplateRegisterStatus.tsx';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import { DeployedServicesHostingType } from '../deployedServices/common/DeployedServicesHostingType';
-import GetServiceTemplatesListError from './GetServiceTemplatesListError';
 import { ServiceReviewsDetails } from './ServiceReviewsDetails';
 import useGetPendingServiceReviewRequestQuery from './query/useGetPendingServiceReviewRequestQuery';
 
@@ -342,7 +343,11 @@ export default function ServiceReviews(): React.JSX.Element {
                 </Button>
             </div>
             {pendingServiceReviewRequestQuery.isError ? (
-                <GetServiceTemplatesListError error={pendingServiceReviewRequestQuery.error} />
+                <RetryPrompt
+                    error={pendingServiceReviewRequestQuery.error}
+                    retryRequest={refreshData}
+                    errorMessage={serviceTemplatesErrorText}
+                />
             ) : (
                 <></>
             )}

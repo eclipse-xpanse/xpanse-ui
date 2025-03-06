@@ -4,22 +4,16 @@
  */
 
 import { SyncOutlined } from '@ant-design/icons';
-import { Alert, Button, Space, Table } from 'antd';
+import { Button, Space, Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import {
-    BackendSystemStatus,
-    backendSystemType,
-    ErrorResponse,
-    healthStatus,
-    SystemStatus,
-} from '../../../xpanse-api/generated';
-import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
-import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
+import { BackendSystemStatus, backendSystemType, healthStatus, SystemStatus } from '../../../xpanse-api/generated';
+import { healthCheckStatusErrorText } from '../../utils/constants.tsx';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
@@ -36,7 +30,6 @@ export default function HealthCheckStatus(): React.JSX.Element {
     let nameFilters: ColumnFilterItem[] = [];
     let backendSystemTypeFilters: ColumnFilterItem[] = [];
     let healthStatusFilters: ColumnFilterItem[] = [];
-    let healthCheckError: React.JSX.Element = <></>;
     let backendSystemStatusFilters: DataType[] = [];
 
     const updateBackendSystemStatusList = (backendSystemStatusList: BackendSystemStatus[]): void => {
@@ -103,6 +96,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         healthStatusFilters = filters;
     };
     const healthCheckQuery = useHealthCheckStatusQuery();
+    const refreshData = () => {
+        void healthCheckQuery.refetch();
+    };
 
     if (healthCheckQuery.isSuccess) {
         const rsp: SystemStatus | undefined = healthCheckQuery.data;
@@ -110,34 +106,6 @@ export default function HealthCheckStatus(): React.JSX.Element {
         updateNameFilters(rsp.backendSystemStatuses);
         updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
         updateHealthStatusFilters(rsp.backendSystemStatuses);
-    }
-
-    if (healthCheckQuery.isError) {
-        backendSystemStatusFilters = [];
-        if (isHandleKnownErrorResponse(healthCheckQuery.error)) {
-            const response: ErrorResponse = healthCheckQuery.error.body;
-            healthCheckError = (
-                <div className={healthStatusStyles.healthRefreshAlertTip}>
-                    <Alert
-                        message={response.errorType.valueOf()}
-                        description={convertStringArrayToUnorderedList(response.details)}
-                        type={'error'}
-                        closable={false}
-                    />
-                </div>
-            );
-        } else {
-            healthCheckError = (
-                <div className={healthStatusStyles.healthRefreshAlertTip}>
-                    <Alert
-                        message='Fetching Health Check Status Failed'
-                        description={healthCheckQuery.error.message}
-                        type={'error'}
-                        closable={false}
-                    />
-                </div>
-            );
-        }
     }
 
     const columns: ColumnsType<DataType> = [
@@ -206,15 +174,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         },
     ];
 
-    const refreshData = () => {
-        healthCheckError = <></>;
-        void healthCheckQuery.refetch();
-    };
-
     return (
         <>
             <div className={tableStyles.genericTableContainer}>
-                {healthCheckQuery.isError ? healthCheckError : undefined}
                 <div className={healthStatusStyles.healthStatusRefresh}>
                     <Button
                         type='primary'
@@ -226,6 +188,15 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         refresh
                     </Button>
                 </div>
+                {healthCheckQuery.isError ? (
+                    <RetryPrompt
+                        error={healthCheckQuery.error}
+                        retryRequest={refreshData}
+                        errorMessage={healthCheckStatusErrorText}
+                    />
+                ) : (
+                    <></>
+                )}
                 <Table columns={columns} dataSource={backendSystemStatusFilters} loading={healthCheckQuery.isLoading} />
             </div>
         </>

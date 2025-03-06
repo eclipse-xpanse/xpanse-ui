@@ -8,9 +8,9 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { EndUserDashBoardPage, myServicesRoute } from '../../../utils/constants';
+import { EndUserDashBoardPage, myServicesRoute, serviceDetailsErrorText } from '../../../utils/constants';
+import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
-import DashBoardError from '../common/DashBoardError';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
 
 export function EndUserServicesDashboard(): React.JSX.Element {
@@ -28,7 +28,13 @@ export function EndUserServicesDashboard(): React.JSX.Element {
     };
 
     if (listDeployedServicesQuery.isError) {
-        return <DashBoardError error={listDeployedServicesQuery.error} retryRequest={retryRequest} />;
+        return (
+            <RetryPrompt
+                error={listDeployedServicesQuery.error}
+                retryRequest={retryRequest}
+                errorMessage={serviceDetailsErrorText}
+            />
+        );
     }
 
     if (listDeployedServicesQuery.isPending || listDeployedServicesQuery.isFetching) {

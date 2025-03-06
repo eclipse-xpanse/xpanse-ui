@@ -47,7 +47,7 @@ export class CredentialsPage {
     }
 
     get successAlert() {
-        return this.page.getByText('Deleting Credentials Successful.');
+        return this.page.getByText('Credentials Deleted Successfully.');
     }
 
     async isElementFullyVisibleInsideViewport(element: Locator): Promise<boolean> {

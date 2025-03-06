@@ -4,18 +4,18 @@
  */
 
 import { TagOutlined } from '@ant-design/icons';
-import { Alert, Empty, Skeleton } from 'antd';
+import { Empty, Skeleton } from 'antd';
 import { DataNode } from 'antd/es/tree';
 import React, { useMemo, useState } from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
-import { category, ErrorResponse, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
-import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
+import { category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { serviceDetailsErrorText } from '../../../../utils/constants.tsx';
 import {
     groupServicesByVersionForSpecificServiceName,
     groupServiceTemplatesByName,
 } from '../../../common/catalog/catalogProps';
-import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
+import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
@@ -62,28 +62,15 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
 
     // Handle errors
     if (availableServiceTemplatesQuery.isError) {
-        if (isHandleKnownErrorResponse(availableServiceTemplatesQuery.error)) {
-            const response: ErrorResponse = availableServiceTemplatesQuery.error.body;
-            return (
-                <Alert
-                    message={response.errorType}
-                    description={convertStringArrayToUnorderedList(response.details)}
-                    type={'error'}
-                    closable={true}
-                    className={catalogStyles.catalogSkeleton}
-                />
-            );
-        } else {
-            return (
-                <Alert
-                    message='Fetching Service Details Failed'
-                    description={availableServiceTemplatesQuery.error.message}
-                    type={'error'}
-                    closable={true}
-                    className={catalogStyles.catalogSkeleton}
-                />
-            );
-        }
+        return (
+            <RetryPrompt
+                error={availableServiceTemplatesQuery.error}
+                retryRequest={() => {
+                    void availableServiceTemplatesQuery.refetch();
+                }}
+                errorMessage={serviceDetailsErrorText}
+            />
+        );
     }
 
     // Handle loading state

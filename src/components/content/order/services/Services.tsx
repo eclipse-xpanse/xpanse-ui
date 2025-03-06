@@ -4,6 +4,7 @@
  */
 
 import { FormOutlined } from '@ant-design/icons';
+import { useQueryClient } from '@tanstack/react-query';
 import { Badge, Col, Empty, Row, Space, Tooltip, Typography } from 'antd';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -12,11 +13,11 @@ import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import { category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
-import { createServicePageRoute } from '../../../utils/constants';
+import { createServicePageRoute, serviceAvailableErrorText } from '../../../utils/constants';
+import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
 import { groupServicesByLatestVersion } from '../common/utils/groupServicesByLatestVersion.ts';
-import ServicesLoadingError from '../query/ServicesLoadingError';
-import userOrderableServicesQuery from '../query/userOrderableServicesQuery';
+import userOrderableServicesQuery, { getOrderableServicesQueryKey } from '../query/userOrderableServicesQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import ServicesSkeleton from './ServicesSkeleton';
 import { UserServiceLatestVersionDisplayType } from './UserServiceLatestVersionDisplayType.ts';
@@ -42,8 +43,22 @@ function Services(): React.JSX.Element {
 
     const orderableServicesQuery = userOrderableServicesQuery(location.hash.split('#')[1] as category, undefined);
 
+    const queryClient = useQueryClient();
+
+    const retryRequest = () => {
+        void queryClient.refetchQueries({
+            queryKey: getOrderableServicesQueryKey(location.hash.split('#')[1] as category, undefined),
+        });
+    };
+
     if (orderableServicesQuery.isError) {
-        return <ServicesLoadingError error={orderableServicesQuery.error} />;
+        return (
+            <RetryPrompt
+                error={orderableServicesQuery.error}
+                retryRequest={retryRequest}
+                errorMessage={serviceAvailableErrorText}
+            />
+        );
     }
 
     if (orderableServicesQuery.isLoading || orderableServicesQuery.isFetching) {

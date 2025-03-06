@@ -12,9 +12,10 @@ import policyStyles from '../../../styles/policies.module.css';
 import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import { UserPolicy, csp, name } from '../../../xpanse-api/generated';
+import { userPoliciesManagementErrorText } from '../../utils/constants.tsx';
 import { cspMap } from '../common/csp/CspLogo';
+import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import { AddOrUpdateUserPolicy } from './AddOrUpdateUserPolicy.tsx';
-import UserPoliciesManagementServiceListError from './UserPoliciesManagementServiceListError.tsx';
 import UserPolicyDeleteResultStatus from './delete/UserPolicyDeleteResultStatus.tsx';
 import { useDeleteUserPolicyRequest } from './delete/useDeleteUserPolicyRequest';
 import useListUserPoliciesManagementServiceQuery from './useListUserPoliciesManagementServiceQuery.ts';
@@ -238,7 +239,11 @@ function UserPolicies(): React.JSX.Element {
                     </div>
                 </div>
                 {listPoliciesManagementServiceQuery.isError ? (
-                    <UserPoliciesManagementServiceListError error={listPoliciesManagementServiceQuery.error} />
+                    <RetryPrompt
+                        error={listPoliciesManagementServiceQuery.error}
+                        retryRequest={refreshPoliciesManagementServiceList}
+                        errorMessage={userPoliciesManagementErrorText}
+                    />
                 ) : (
                     <></>
                 )}

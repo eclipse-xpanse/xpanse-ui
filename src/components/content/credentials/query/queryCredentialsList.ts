@@ -10,7 +10,7 @@ import { useCurrentUserRoleStore } from '../../../layouts/header/useCurrentRoleS
 export default function useCredentialsListQuery() {
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
     return useQuery({
-        queryKey: ['credentialsQuery', currentRole],
+        queryKey: getCredentialsListQueryKey(currentRole),
         queryFn: () => {
             if (currentRole === 'user') {
                 return getUserCloudCredentials();
@@ -20,4 +20,8 @@ export default function useCredentialsListQuery() {
         },
         staleTime: 60000,
     });
+}
+
+export function getCredentialsListQueryKey(currentRole: string | undefined): (string | undefined)[] {
+    return ['credentialsQuery', currentRole];
 }
