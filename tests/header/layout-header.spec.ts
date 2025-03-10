@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { loadConnectionRefusedMock } from '../utils/mocks/common-errors-mock.ts';
-import { healthCheckUrl } from '../utils/mocks/endpoints.ts';
-import { mockHealthCheckSuccessResponse } from '../utils/mocks/health-check-mocks.ts';
+import { stackCheckUrl } from '../utils/mocks/endpoints.ts';
+import { mockStackCheckSuccessResponse } from '../utils/mocks/stack-check-mocks.ts';
 import { HomePage } from '../utils/pages/HomePage.ts';
 import { LayoutHeaderPage } from '../utils/pages/LayoutHeaderPage.ts';
 
@@ -10,12 +10,12 @@ test('System Status - show error icon when backend not reachable', async ({ page
 
     // Intercept requests
     page.on('request', (request) => {
-        if (request.url() === healthCheckUrl) {
+        if (request.url() === stackCheckUrl) {
             callCount++;
         }
     });
 
-    await loadConnectionRefusedMock(page, healthCheckUrl);
+    await loadConnectionRefusedMock(page, stackCheckUrl);
     const home = new HomePage(page, baseURL);
     await home.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
@@ -31,7 +31,7 @@ test('System Status - show error icon when backend not reachable', async ({ page
 });
 
 test('System Status - show success icon when backend is reachable', async ({ page, baseURL }) => {
-    await mockHealthCheckSuccessResponse(page, 3000);
+    await mockStackCheckSuccessResponse(page, 3000);
     const home = new HomePage(page, baseURL);
     await home.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
@@ -67,11 +67,11 @@ test('click on system status refreshes health check data', async ({ page, baseUR
 
     // Intercept requests
     page.on('request', (request) => {
-        if (request.url() === healthCheckUrl) {
+        if (request.url() === stackCheckUrl) {
             callCount++;
         }
     });
-    await mockHealthCheckSuccessResponse(page, 0);
+    await mockStackCheckSuccessResponse(page, 0);
     const home = new HomePage(page, baseURL);
     await home.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
