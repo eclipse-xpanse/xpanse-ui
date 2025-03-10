@@ -114,3 +114,36 @@
     align-items: center;
     font-size: 12px;
 }
+
+.select-columns {
+    width: 100%;
+}
+
+.select-column-button {
+    margin-bottom: 100px;
+}
+
+.columns-container {
+    margin-top: 10px;
+}
+
+.refresh-btn-class {
+    width: 90px;
+}
+
+.select-columns-class {
+    width: 140px;
+}
+
+.refresh-btn-container {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+@media screen and (max-width: 768px) {
+    .refresh-btn-container {
+        flex-direction: column;
+        gap: 12px;
+    }
+}

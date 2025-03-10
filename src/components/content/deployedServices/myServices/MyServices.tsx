@@ -18,6 +18,7 @@ import {
     PoweroffOutlined,
     RedoOutlined,
     RiseOutlined,
+    SettingOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -34,9 +35,10 @@ import {
     TablePaginationConfig,
     Tooltip,
 } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import type { ColumnsType, ColumnType } from 'antd/es/table';
 import { ColumnFilterItem, FilterValue, SorterResult } from 'antd/es/table/interface';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import myServicesStyles from '../../../../styles/my-services.module.css';
@@ -94,6 +96,7 @@ import { LocksTitle } from './LocksTitle.tsx';
 import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
 import {
+    getDefaultColumns,
     isDisableDestroyBtn,
     isDisableDetails,
     isDisabledStopOrRestartBtn,
@@ -104,6 +107,9 @@ import {
     isDisableServiceConfigBtn,
     isDisableServicePortingBtn,
     isDisableStartBtn,
+    Option,
+    showForMediumScreenColumn,
+    showForSmallScreenColumn,
     updateBillingModeFilters,
     updateCategoryFilters,
     updateCspFilters,
@@ -120,6 +126,7 @@ import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderab
 import useListDeployedServicesDetailsQuery, {
     getListDeployedServicesDetailsQueryKey,
 } from './query/useListDeployedServicesDetailsQuery';
+import { SelectMyServicesColumns } from './SelectMyServicesColumns.tsx';
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
@@ -226,6 +233,9 @@ function MyServices(): React.JSX.Element {
     const [isLocksModalOpen, setIsLocksModalOpen] = useState<boolean>(false);
 
     const [uniqueRequestId, setUniqueRequestId] = useState<string>(v4());
+    const [isColumnSelectorVisible, setIsColumnSelectorVisible] = useState(false);
+    const isLargeScreen = useMediaQuery({ minWidth: 1200 });
+    const isMediumScreen = useMediaQuery({ minWidth: 768, maxWidth: 1199 });
 
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
@@ -1027,6 +1037,8 @@ function MyServices(): React.JSX.Element {
         },
     ];
 
+    const [selectedColumns, setSelectedColumns] = useState<ColumnsType<DeployedService>>(columns);
+    const [checkedValues, setCheckedValues] = useState<string[]>(getDefaultColumns(selectedColumns));
     const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
             setActiveRecord(undefined);
@@ -1327,6 +1339,61 @@ function MyServices(): React.JSX.Element {
         });
     };
 
+    const handleColumnsSelectAll = () => {
+        setCheckedValues(columnOptions.map((option) => option.value));
+    };
+
+    const handleColumnsSelectNone = () => {
+        setCheckedValues([]);
+    };
+
+    const columnOptions: Option[] = columns.map((column) => ({
+        label: column.title as string,
+        value: (column as ColumnType<DeployedService>).dataIndex as string,
+    }));
+
+    const handleColumnChange = (checkedValues: string[]) => {
+        setCheckedValues(checkedValues);
+    };
+
+    const handleColumnSelectorOpen = () => {
+        setIsColumnSelectorVisible(true);
+    };
+
+    const handleColumnSelectorSubmit = () => {
+        setIsColumnSelectorVisible(false);
+        if (checkedValues.length > 0) {
+            const selectedColumns = columns.filter((column) =>
+                checkedValues.includes((column as ColumnType<DeployedService>).dataIndex as string)
+            );
+            setSelectedColumns(selectedColumns);
+        }
+    };
+
+    const handleColumnSelectorClose = () => {
+        setIsColumnSelectorVisible(false);
+    };
+
+    useEffect(() => {
+        let defaultColumns;
+
+        if (isLargeScreen) {
+            defaultColumns = columns;
+        } else if (isMediumScreen) {
+            defaultColumns = columns.filter((col) =>
+                showForMediumScreenColumn.includes((col as ColumnType<DeployedService>).dataIndex as string)
+            );
+        } else {
+            defaultColumns = columns.filter((col) =>
+                showForSmallScreenColumn.includes((col as ColumnType<DeployedService>).dataIndex as string)
+            );
+        }
+        setSelectedColumns(defaultColumns);
+        setCheckedValues(getDefaultColumns(defaultColumns));
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isLargeScreen, isMediumScreen]);
+
     return (
         <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
@@ -1535,7 +1602,24 @@ function MyServices(): React.JSX.Element {
                 </Modal>
             ) : null}
 
-            <div>
+            <Modal
+                title={'Select Columns'}
+                open={isColumnSelectorVisible}
+                onCancel={handleColumnSelectorClose}
+                onOk={handleColumnSelectorSubmit}
+                width={800}
+                destroyOnClose={true}
+            >
+                <SelectMyServicesColumns
+                    checkedValues={checkedValues}
+                    columnOptions={columnOptions}
+                    handleColumnChange={handleColumnChange}
+                    handleColumnsSelectAll={handleColumnsSelectAll}
+                    handleColumnsSelectNone={handleColumnsSelectNone}
+                />
+            </Modal>
+
+            <div className={myServicesStyles.refreshBtnContainer}>
                 <Button
                     disabled={activeRecord !== undefined}
                     type='primary'
@@ -1543,8 +1627,19 @@ function MyServices(): React.JSX.Element {
                     onClick={() => {
                         refreshData();
                     }}
+                    block={false}
+                    className={myServicesStyles.refreshBtnClass}
                 >
                     refresh
+                </Button>
+                <Button
+                    type='primary'
+                    icon={<SettingOutlined />}
+                    onClick={handleColumnSelectorOpen}
+                    block={false}
+                    className={myServicesStyles.selectColumnsClass}
+                >
+                    Select Columns
                 </Button>
             </div>
             {listDeployedServicesQuery.isError ? (
@@ -1562,7 +1657,7 @@ function MyServices(): React.JSX.Element {
             <Row>
                 <div className={myServicesStyles.serviceInstanceList}>
                     <Table
-                        columns={columns}
+                        columns={selectedColumns}
                         dataSource={serviceVoList}
                         loading={listDeployedServicesQuery.isPending || listDeployedServicesQuery.isRefetching}
                         rowKey={'id'}

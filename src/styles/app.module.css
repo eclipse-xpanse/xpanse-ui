@@ -64,6 +64,24 @@
     border: none !important;
 }
 
+.header-menu-button .search-text {
+    display: inline;
+}
+
+.header-menu-button .services-text {
+    display: inline;
+}
+
+@media screen and (max-width: 768px) {
+    .header-menu-button .search-text {
+        display: inline;
+    }
+
+    .header-menu-button .services-text {
+        display: none;
+    }
+}
+
 .home-data-display {
     padding: 24px;
 }
