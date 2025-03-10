@@ -15,6 +15,7 @@
         "rc-tabs": "^15.5.1",
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
+        "react-responsive": "^10.0.1",
         "react-router-dom": "^7.2.0",
         "react-timer-hook": "^3.0.8",
         "yaml": "^2.6.1",
