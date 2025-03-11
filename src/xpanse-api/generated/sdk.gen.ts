@@ -160,6 +160,7 @@ import type {
     RestartServiceResponse,
     ReviewServiceTemplateRequestData,
     ReviewServiceTemplateRequestResponse,
+    StackHealthStatusResponse,
     StartServiceData,
     StartServiceResponse,
     StopServiceData,
@@ -1470,6 +1471,27 @@ export const queryTasks = (data: QueryTasksData = {}): CancelablePromise<QueryTa
 };
 
 /**
+ * Check health of API service and backend systems.<br> Required role: <b>admin</b> </br>
+ * @returns StackStatus OK
+ * @throws ApiError
+ */
+export const stackHealthStatus = (): CancelablePromise<StackHealthStatusResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/stack/health',
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * Get service template details by service id.<br> Required role: <b>admin</b> or <b>isv</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId The id of deployed service.
@@ -2130,7 +2152,7 @@ export const getMetrics = (data: GetMetricsData): CancelablePromise<GetMetricsRe
 };
 
 /**
- * Check health of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
+ * Check only health status of API service and backend systems.<br> Required role: <b>admin</b> or <b>csp</b> or <b>isv</b> or <b>user</b> </br>
  * @returns SystemStatus OK
  * @throws ApiError
  */

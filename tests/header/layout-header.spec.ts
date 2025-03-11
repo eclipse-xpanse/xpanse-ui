@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { loadConnectionRefusedMock } from '../utils/mocks/common-errors-mock.ts';
 import { healthCheckUrl } from '../utils/mocks/endpoints.ts';
-import { mockHealthCheckSuccessResponse } from '../utils/mocks/health-check-mocks.ts';
+import { mockHealthCheckSuccessResponse } from '../utils/mocks/health-check-mock.ts';
 import { HomePage } from '../utils/pages/HomePage.ts';
 import { LayoutHeaderPage } from '../utils/pages/LayoutHeaderPage.ts';
 

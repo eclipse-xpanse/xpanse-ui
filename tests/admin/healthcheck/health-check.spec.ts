@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 import { isElementFullyVisibleInsideViewport } from '../../utils/common/view-port-validation.ts';
 import { loadConnectionRefusedMock } from '../../utils/mocks/common-errors-mock.ts';
-import { healthCheckUrl } from '../../utils/mocks/endpoints.ts';
-import { mockHealthCheckSuccessResponse } from '../../utils/mocks/health-check-mocks.ts';
+import { stackCheckUrl } from '../../utils/mocks/endpoints.ts';
+import { mockStackCheckSuccessResponse } from '../../utils/mocks/stack-check-mocks.ts';
 import { HealthCheckPage } from '../../utils/pages/HealthCheckPage.ts';
 import { HomePage } from '../../utils/pages/HomePage.ts';
 import { LayoutHeaderPage } from '../../utils/pages/LayoutHeaderPage.ts';
@@ -12,10 +12,10 @@ test('Refresh button should reload healthcheck data', async ({ page, baseURL }) 
     await homePage.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
     await layoutHeader.switchUserRole('admin');
-    await mockHealthCheckSuccessResponse(page, 0);
+    await mockStackCheckSuccessResponse(page, 0);
     let apiCallCount = 0;
     page.on('request', (request) => {
-        if (request.url().includes(healthCheckUrl)) {
+        if (request.url().includes(stackCheckUrl)) {
             apiCallCount++;
         }
     });
@@ -28,7 +28,7 @@ test('Refresh button should reload healthcheck data', async ({ page, baseURL }) 
 });
 
 test('filtering by backend name works', async ({ page, baseURL }) => {
-    await mockHealthCheckSuccessResponse(page, 0);
+    await mockStackCheckSuccessResponse(page, 0);
     const homePage = new HomePage(page, baseURL);
     await homePage.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
@@ -48,7 +48,7 @@ test('show error alert when backend is not reachable', async ({ page, baseURL })
     await homePage.openHomePage();
     const layoutHeader = new LayoutHeaderPage(page);
     await layoutHeader.switchUserRole('admin');
-    await loadConnectionRefusedMock(page, healthCheckUrl);
+    await loadConnectionRefusedMock(page, stackCheckUrl);
     const healthCheckMenu = new HealthCheckPage(page);
     await healthCheckMenu.clickHealthCheckMenuItem();
     await page.waitForTimeout(3000);
@@ -58,7 +58,7 @@ test('show error alert when backend is not reachable', async ({ page, baseURL })
     expect(await isElementFullyVisibleInsideViewport(page, errorAlert), 'Error alert must be fully visible.').toBe(
         true
     );
-    await mockHealthCheckSuccessResponse(page, 2000);
+    await mockStackCheckSuccessResponse(page, 2000);
     await healthCheckMenu.clickRefreshHealthCheckButton();
     await expect(errorAlert, 'Alert should be removed during and after successful reload').not.toBeVisible();
 });
