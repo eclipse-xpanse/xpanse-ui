@@ -3,16 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-.modify-select-class {
+.service-select-class {
     height: 80%;
 }
 
-.modify-select-flavor-billing {
-    width: 100%;
-    margin-bottom: 20px;
-}
-
-.modify-title-class {
+.service-title-class {
     margin-left: 24px;
     margin-bottom: 8px;
 }
@@ -64,27 +59,17 @@
     align-items: center;
 }
 
-.modify-container {
+.order-operation-container {
     margin-left: 5px;
     max-width: 1600px;
 }
 
-.modify-history-value {
-    white-space: normal;
-    word-break: break-word;
-    vertical-align: top;
+.order-history-request-content {
+    text-align: left;
+    margin-left: 30px;
 }
 
-.modify-history-error-msg-value {
-    display: inline-block;
-    max-width: 145px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    vertical-align: middle;
-}
-
-.modify-history-value-li {
+.order-history-value-li {
     text-align: left;
 }
 
@@ -98,7 +83,7 @@
     left: 70%;
 }
 
-.service-modify-submit-reset-container {
+.service-update-submit-reset-container {
     display: flex;
     gap: 20px;
     flex-direction: row;
@@ -107,7 +92,7 @@
     width: 600px;
 }
 
-.service-modify-submit-class {
+.service-update-submit-class {
     display: flex;
     flex-direction: row;
     text-align: right;

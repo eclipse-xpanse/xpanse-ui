@@ -4,16 +4,25 @@
  */
 
 import { Typography } from 'antd';
-import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import { ServiceOrderDetails } from '../../../../xpanse-api/generated';
 const { Text } = Typography;
 export const MyServiceHistoryDetails = ({ record }: { record: ServiceOrderDetails }) => {
-    const requestBodyContent = <pre>{JSON.stringify(record.requestBody, null, 2)}</pre>;
+    const requestBodyContent =
+        record.requestBody && Object.keys(record.requestBody).length > 0 ? (
+            <>
+                <div className={serviceOperationStyles.orderHistoryRequestContent}>
+                    <pre>{JSON.stringify(record.requestBody, null, 2)}</pre>
+                </div>
+            </>
+        ) : (
+            <Text>Empty Requests</Text>
+        );
 
     const resultPropertiesContent =
         record.resultProperties && Object.keys(record.resultProperties).length > 0 ? (
             <>
-                <ul className={serviceModifyStyles.modifyHistoryValueLi}>
+                <ul className={serviceOperationStyles.orderHistoryValueLi}>
                     {Object.entries(record.resultProperties).map(([key, value]) => (
                         <li key={key}>
                             <Text strong>{key}:</Text>

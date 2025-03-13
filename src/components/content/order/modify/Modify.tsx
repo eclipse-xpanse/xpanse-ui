@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Input, Popconfirm, PopconfirmProps, Tooltip, Typography } from 'antd';
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
-import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     csp,
@@ -176,8 +176,8 @@ export const Modify = ({
     };
 
     return (
-        <div className={serviceModifyStyles.modifySelectClass}>
-            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>
+        <div className={serviceOperationStyles.serviceSelectClass}>
+            <div className={`${serviceOperationStyles.serviceTitleClass} ${appStyles.contentTitle}`}>
                 Modify Parameters:
             </div>
             {isShowModifyingResult ? (
@@ -199,7 +199,7 @@ export const Modify = ({
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={serviceModifyStyles.modifyContainer}
+                className={serviceOperationStyles.orderOperationContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={modifyServiceRequest.isPending || modifyServiceRequest.isSuccess}
@@ -247,13 +247,13 @@ export const Modify = ({
                     )}
                 </div>
                 <div className={serviceOrderStyles.orderParamItemLeft} />
-                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
-                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
+                <div className={serviceOperationStyles.serviceUpdateSubmitResetContainer}>
+                    <div className={serviceOperationStyles.serviceUpdateSubmitClass}>
                         <Popconfirm
                             placement='top'
                             title='Modify parameters'
                             description={
-                                <div className={serviceModifyStyles.serviceModifyWarningsContent}>
+                                <div className={serviceOperationStyles.serviceModifyWarningsContent}>
                                     <Paragraph>{modifyWarning}</Paragraph>
                                 </div>
                             }

@@ -6,7 +6,7 @@
 import { Tag, Typography } from 'antd';
 import React from 'react';
 import flavorStyles from '../../../../styles/flavor.module.css';
-import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import { ServiceFlavor } from '../../../../xpanse-api/generated';
 import { convertToFlavorMap, getMappedPeriod } from '../formDataHelpers/flavorHelper.ts';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice.ts';
@@ -36,7 +36,7 @@ export const FlavorPrice = ({
                     {flavor.name && flavorMap[flavor.name].price.successful ? (
                         <>
                             {flavorMap[flavor.name].price.recurringPrice ? (
-                                <Tag color={'blue'} className={serviceModifyStyles.flavorPriceContent}>
+                                <Tag color={'blue'} className={serviceOperationStyles.flavorPriceContent}>
                                     {flavorMap[flavor.name].price.recurringPrice?.cost
                                         .toString()
                                         .concat(' ')
