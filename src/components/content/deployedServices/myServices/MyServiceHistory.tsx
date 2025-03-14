@@ -8,7 +8,7 @@ import { Button, Popover, Table, Tag, Typography } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
-import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import {
     DeployedServiceDetails,
     ErrorResponse,
@@ -88,9 +88,9 @@ export const MyServiceHistory = ({
             onFilter: (value: React.Key | boolean, record) => record.orderId.startsWith(value.toString()),
             render: (value: string) => {
                 return (
-                    <div className={serviceModifyStyles.serviceHistoryValue}>
+                    <div className={serviceOperationStyles.serviceHistoryValue}>
                         <Paragraph
-                            className={serviceModifyStyles.serviceHistoryOrderIdClass}
+                            className={serviceOperationStyles.serviceHistoryOrderIdClass}
                             ellipsis={true}
                             copyable={{ tooltips: value }}
                         >
@@ -123,7 +123,7 @@ export const MyServiceHistory = ({
                             title={'Details'}
                             trigger='hover'
                         >
-                            <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
+                            <Button className={serviceOperationStyles.serviceOrderErrorDataHover} type={'link'}>
                                 {'details'}
                             </Button>
                         </Popover>
@@ -208,11 +208,13 @@ export const MyServiceHistory = ({
                 if (value) {
                     return (
                         <Popover
-                            content={<pre className={serviceModifyStyles.serviceOrderErrorText}>{value.details}</pre>}
+                            content={
+                                <pre className={serviceOperationStyles.serviceOrderErrorText}>{value.details}</pre>
+                            }
                             title={value.errorType}
                             trigger='hover'
                         >
-                            <Button className={serviceModifyStyles.serviceOrderErrorDataHover} type={'link'}>
+                            <Button className={serviceOperationStyles.serviceOrderErrorDataHover} type={'link'}>
                                 {'failure reason'}
                             </Button>
                         </Popover>
@@ -223,7 +225,7 @@ export const MyServiceHistory = ({
     ];
 
     return (
-        <div className={serviceModifyStyles.modifyContainer}>
+        <div className={serviceOperationStyles.orderOperationContainer}>
             <Table
                 columns={columns}
                 dataSource={serviceOrdersHistoryList}

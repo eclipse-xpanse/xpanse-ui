@@ -9,7 +9,7 @@ import { Badge, Button, Flex, Form, Input, Popconfirm, PopconfirmProps, Radio, S
 import React, { useState } from 'react';
 import appStyles from '../../../../styles/app.module.css';
 import flavorStyles from '../../../../styles/flavor.module.css';
-import serviceModifyStyles from '../../../../styles/service-modify.module.css';
+import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     csp,
@@ -151,8 +151,10 @@ export const Scale = ({
     };
 
     return (
-        <div className={serviceModifyStyles.modifySelectClass}>
-            <div className={`${serviceModifyStyles.modifyTitleClass} ${appStyles.contentTitle}`}>Change Flavor:</div>
+        <div className={serviceOperationStyles.serviceSelectClass}>
+            <div className={`${serviceOperationStyles.serviceTitleClass} ${appStyles.contentTitle}`}>
+                Change Flavor:
+            </div>
             {isShowModifyingResult ? (
                 <ScaleOrModifySubmitStatusAlert
                     modifyServiceRequest={modifyServiceRequest}
@@ -173,7 +175,7 @@ export const Scale = ({
                 autoComplete='off'
                 initialValues={useOrderFormStore.getState().deployParams}
                 onFinish={onFinish}
-                className={serviceModifyStyles.modifyContainer}
+                className={serviceOperationStyles.orderOperationContainer}
                 validateTrigger={['onSubmit', 'onBlur', 'onChange']}
                 key='scale'
                 disabled={
@@ -248,7 +250,7 @@ export const Scale = ({
                                                     <div className={flavorStyles.ribbonContainer}>
                                                         <Badge.Ribbon
                                                             text='current'
-                                                            className={serviceModifyStyles.flavorCardCustomRibbon}
+                                                            className={serviceOperationStyles.flavorCardCustomRibbon}
                                                             color={'#b5b5b5'}
                                                         >
                                                             {radioButton}
@@ -308,8 +310,8 @@ export const Scale = ({
                     )}
                 </div>
                 <div className={serviceOrderStyles.orderParamItemLeft} />
-                <div className={serviceModifyStyles.serviceModifySubmitResetContainer}>
-                    <div className={serviceModifyStyles.serviceModifySubmitClass}>
+                <div className={serviceOperationStyles.serviceUpdateSubmitResetContainer}>
+                    <div className={serviceOperationStyles.serviceUpdateSubmitClass}>
                         <Popconfirm
                             placement='top'
                             title='Scale'
