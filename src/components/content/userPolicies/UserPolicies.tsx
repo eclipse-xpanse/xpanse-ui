@@ -218,7 +218,7 @@ function UserPolicies(): React.JSX.Element {
                                     deletePoliciesManagementServiceRequest.isError)
                             }
                         >
-                            refresh
+                            Refresh
                         </Button>
                     </div>
 

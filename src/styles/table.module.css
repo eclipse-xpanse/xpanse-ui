@@ -11,3 +11,15 @@
 .table-load-failure-alert {
     margin: 30px;
 }
+
+@media screen and (max-width: 768px) {
+    .generic-table-container {
+        padding: 8px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .generic-table-container {
+        padding: 4px;
+    }
+}
