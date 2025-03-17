@@ -4,10 +4,33 @@
  */
 
 .user-info-spacing {
-    margin-left: 15px;
+    margin-left: 8px;
+    align-items: baseline;
+}
+
+@media screen and (min-width: 768px) {
+    .user-info-spacing {
+        margin-left: 12px;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .user-info-spacing {
+        margin-left: 15px;
+    }
+}
+
+.user-name-container {
+    display: inline-flex;
+    align-items: baseline;
 }
 
 .layout-header {
     width: 100%;
     background: #ffffff;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    box-sizing: border-box;
+    padding: 0 16px;
 }

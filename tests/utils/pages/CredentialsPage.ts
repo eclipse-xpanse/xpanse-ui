@@ -14,7 +14,7 @@ export class CredentialsPage {
     constructor(page: Page) {
         this.page = page;
         this.credentialsMenuItem = this.page.getByRole('link', { name: 'Credentials' });
-        this.refreshCredentialsButton = this.page.getByRole('button', { name: 'sync refresh' });
+        this.refreshCredentialsButton = this.page.getByRole('button', { name: 'sync Refresh' });
         this.addCredentialsButton = this.page.getByRole('button', { name: 'plus-circle Add' });
         this.detailsCredentialsButton = this.page.getByRole('button', { name: 'fullscreen Details' });
         this.updateCredentialsButton = this.page.getByRole('button', { name: 'info-circle Update' });

@@ -121,7 +121,8 @@ export function SearchServices() {
                     setIsSearchClicked(true);
                 }}
             >
-                Search Services
+                <span className={appStyles.searchText}>Search</span>
+                <span className={appStyles.servicesText}> Services</span>
             </Button>
         </>
     );

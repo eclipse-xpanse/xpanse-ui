@@ -64,6 +64,36 @@
     border: none !important;
 }
 
+.header-menu-button .search-text {
+    display: inline;
+}
+
+.header-menu-button .services-text {
+    display: inline;
+}
+
+@media screen and (max-width: 768px) {
+    .header-menu-button .search-text {
+        display: inline;
+    }
+
+    .header-menu-button .services-text {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .header-menu-button .search-text,
+    .header-menu-button .services-text {
+        display: none;
+    }
+
+    .header-menu-button .search-box {
+        display: block;
+        width: 100%;
+    }
+}
+
 .home-data-display {
     padding: 24px;
 }

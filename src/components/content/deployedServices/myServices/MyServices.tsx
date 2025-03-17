@@ -18,6 +18,7 @@ import {
     PoweroffOutlined,
     RedoOutlined,
     RiseOutlined,
+    SettingOutlined,
     SyncOutlined,
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
@@ -34,7 +35,8 @@ import {
     TablePaginationConfig,
     Tooltip,
 } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
+import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint';
+import type { ColumnsType, ColumnType } from 'antd/es/table';
 import { ColumnFilterItem, FilterValue, SorterResult } from 'antd/es/table/interface';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -61,6 +63,7 @@ import { cspMap } from '../../common/csp/CspLogo';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { ServiceTitle } from '../../order/common/ServiceTitle.tsx';
+import { ShowId } from '../../order/common/ShowId.tsx';
 import { getExistingServiceParameters } from '../../order/common/utils/existingServiceParameters';
 import DestroyServiceStatusAlert from '../../order/destroy/DestroyServiceStatusAlert';
 import { useDestroyRequestSubmitQuery } from '../../order/destroy/useDestroyRequestSubmitQuery';
@@ -94,6 +97,7 @@ import { LocksTitle } from './LocksTitle.tsx';
 import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
 import {
+    getDefaultColumns,
     isDisableDestroyBtn,
     isDisableDetails,
     isDisabledStopOrRestartBtn,
@@ -104,6 +108,10 @@ import {
     isDisableServiceConfigBtn,
     isDisableServicePortingBtn,
     isDisableStartBtn,
+    Option,
+    showForExtraLargeScreenColumn,
+    showForExtraSmallScreenColumn,
+    showForLargeScreenColumn,
     updateBillingModeFilters,
     updateCategoryFilters,
     updateCspFilters,
@@ -120,6 +128,7 @@ import useGetOrderableServiceDetailsByServiceIdQuery from './query/useGetOrderab
 import useListDeployedServicesDetailsQuery, {
     getListDeployedServicesDetailsQueryKey,
 } from './query/useListDeployedServicesDetailsQuery';
+import { SelectMyServicesColumns } from './SelectMyServicesColumns.tsx';
 import { TooltipWhenDetailsDisabled } from './TooltipWhenDetailsDisabled.tsx';
 
 function MyServices(): React.JSX.Element {
@@ -154,36 +163,26 @@ function MyServices(): React.JSX.Element {
         return null;
     }, [location]);
 
-    const [serviceDeploymentStateFilteredValue, setServiceDeploymentStateFilteredValue] = useState<FilterValue | null>(
-        serviceDeploymentStateInQuery
-    );
-    const [serviceIdFilteredValue, setServiceIdFilteredValue] = useState<FilterValue | null>(serviceIdInQuery);
-    const [customerServiceNameFilteredValue, setCustomerServiceNameFilteredValue] = useState<FilterValue | null>(null);
-    const [categoryFilteredValue, setCategoryFilteredValue] = useState<FilterValue | null>(null);
-    const [cspFilteredValue, setCspFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceNameFilteredValue, setServiceNameFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceVersionFilteredValue, setServiceVersionFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceHostingTypeFilteredValue, setServiceHostingTypeFilteredValue] = useState<FilterValue | null>(null);
-    const [billingModeFilteredValue, setBillingModeFilteredValue] = useState<FilterValue | null>(null);
-    const [regionFilteredValue, setRegionFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceStateFilteredValue, setServiceStateFilteredValue] = useState<FilterValue | null>(null);
+    const [filters, setFilters] = useState<Record<string, FilterValue | null>>({
+        serviceId: serviceIdInQuery,
+        customerServiceName: null,
+        category: null,
+        csp: null,
+        name: null,
+        version: null,
+        serviceHostingType: null,
+        billingMode: null,
+        region: null,
+        serviceDeploymentState: serviceDeploymentStateInQuery,
+        serviceState: null,
+    });
 
     const handleFilterChange = (
         _pagination: TablePaginationConfig,
         filters: Record<string, FilterValue | null>,
         _sorter: SorterResult<DeployedService> | SorterResult<DeployedService>[]
     ) => {
-        setServiceDeploymentStateFilteredValue(filters.serviceDeploymentState);
-        setServiceIdFilteredValue(filters.serviceId);
-        setCustomerServiceNameFilteredValue(filters.customerServiceName);
-        setCategoryFilteredValue(filters.category);
-        setCspFilteredValue(filters.csp);
-        setServiceNameFilteredValue(filters.name);
-        setServiceVersionFilteredValue(filters.version);
-        setServiceHostingTypeFilteredValue(filters.serviceHostingType);
-        setBillingModeFilteredValue(filters.billingMode);
-        setRegionFilteredValue(filters.region);
-        setServiceStateFilteredValue(filters.serviceState);
+        setFilters(filters);
     };
 
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
@@ -226,6 +225,7 @@ function MyServices(): React.JSX.Element {
     const [isLocksModalOpen, setIsLocksModalOpen] = useState<boolean>(false);
 
     const [uniqueRequestId, setUniqueRequestId] = useState<string>(v4());
+    const [isColumnSelectorVisible, setIsColumnSelectorVisible] = useState(false);
 
     const serviceDestroyQuery = useDestroyRequestSubmitQuery();
     const servicePurgeQuery = usePurgeRequestSubmitQuery();
@@ -827,22 +827,29 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Id',
             dataIndex: 'serviceId',
+            key: 'serviceId',
             filters: serviceIdFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceIdFilteredValue,
+            filteredValue: filters.serviceId ?? [],
             onFilter: (value: React.Key | boolean, record) => {
                 return record.serviceId.startsWith(value.toString());
             },
+            width: 100,
             align: 'center',
+            render: (value: string) => {
+                return <ShowId id={value} />;
+            },
         },
         {
             title: 'Name',
             dataIndex: 'customerServiceName',
+            key: 'customerServiceName',
+            align: 'center',
             filters: customerServiceNameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: customerServiceNameFilteredValue,
+            filteredValue: filters.customerServiceName ?? [],
             onFilter: (value: React.Key | boolean, record) => {
                 if (record.customerServiceName !== undefined) {
                     const customerServiceName = record.customerServiceName;
@@ -850,35 +857,39 @@ function MyServices(): React.JSX.Element {
                 }
                 return false;
             },
-            align: 'center',
+            width: 100,
+            render: (text) => <div className={myServicesStyles.columnsWidth}>{text}</div>,
         },
         {
             title: 'Category',
             dataIndex: 'category',
+            key: 'category',
             filters: categoryFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: categoryFilteredValue,
+            filteredValue: filters.category ?? [],
             onFilter: (value: React.Key | boolean, record) => record.category.startsWith(value.toString()),
             align: 'center',
         },
         {
             title: 'Service',
             dataIndex: 'name',
+            key: 'name',
             filters: nameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceNameFilteredValue,
+            filteredValue: filters.name ?? [],
             onFilter: (value: React.Key | boolean, record) => record.name.startsWith(value.toString()),
             align: 'center',
         },
         {
             title: 'Version',
             dataIndex: 'version',
+            key: 'version',
             filters: versionFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceVersionFilteredValue,
+            filteredValue: filters.version ?? [],
             onFilter: (value: React.Key | boolean, record) => record.version.startsWith(value.toString()),
             sorter: (service1, service2) => sortVersionNum(service1.version, service2.version),
             align: 'center',
@@ -886,10 +897,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceHostedBy',
             dataIndex: 'serviceHostingType',
+            key: 'serviceHostingType',
             filters: serviceHostingTypeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceHostingTypeFilteredValue,
+            filteredValue: filters.serviceHostingType ?? [],
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (serviceHostingType: serviceHostingType) => (
@@ -899,10 +911,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'BillingMode',
             dataIndex: 'billingMode',
+            key: 'billingMode',
             filters: serviceBillingModeFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: billingModeFilteredValue,
+            filteredValue: filters.billingMode ?? [],
             onFilter: (value: React.Key | boolean, record) => record.billingMode.startsWith(value.toString()),
             align: 'center',
             render: (billingMode: billingMode) => <DeployedBillingMode currentBillingMode={billingMode} />,
@@ -910,10 +923,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Region',
             dataIndex: 'region',
+            key: 'region',
             filters: serviceRegionNameFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: regionFilteredValue,
+            filteredValue: filters.region ?? [],
             onFilter: (value: React.Key | boolean, record) => record.region.name.startsWith(value.toString()),
             align: 'center',
             render: (region: Region) => <DeployedRegion currentRegion={region} />,
@@ -921,10 +935,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Csp',
             dataIndex: 'csp',
+            key: 'csp',
             filters: cspFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: cspFilteredValue,
+            filteredValue: filters.csp ?? [],
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
             render: (csp: csp, _) => {
                 return (
@@ -938,11 +953,15 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Flavor',
             dataIndex: 'flavor',
+            key: 'flavor',
             align: 'center',
+            width: 150,
+            render: (text) => <div className={myServicesStyles.columnsWidth}>{text}</div>,
         },
         {
             title: 'Created On',
             dataIndex: 'createdTime',
+            key: 'createdTime',
             defaultSortOrder: 'descend',
             sorter: (serviceVoA, serviceVoB) => {
                 const dateA = new Date(serviceVoA.createdTime);
@@ -954,10 +973,11 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceDeploymentState',
             dataIndex: 'serviceDeploymentState',
+            key: 'serviceDeploymentState',
             filters: serviceDeploymentStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceDeploymentStateFilteredValue,
+            filteredValue: filters.serviceDeploymentState ?? [],
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
             render: (serviceState: serviceDeploymentState) => DeployedServicesStatus(serviceState),
@@ -966,17 +986,19 @@ function MyServices(): React.JSX.Element {
         {
             title: 'ServiceState',
             dataIndex: 'serviceState',
+            key: 'serviceState',
             align: 'center',
             filters: serviceStateFilters,
             filterMode: 'tree',
             filterSearch: true,
-            filteredValue: serviceStateFilteredValue,
+            filteredValue: filters.serviceState ?? [],
             onFilter: (value: React.Key | boolean, record) => record.serviceState.startsWith(value.toString()),
             render: (_text, record) => DeployedServicesRunningStatus(record),
         },
         {
             title: 'Monitor',
             dataIndex: 'monitor',
+            key: 'monitor',
             align: 'center',
             render: (_, record) => {
                 return (
@@ -1002,6 +1024,7 @@ function MyServices(): React.JSX.Element {
         {
             title: 'Operation',
             dataIndex: 'operation',
+            key: 'operation',
             render: (_text: string, record: DeployedService) => {
                 return (
                     <>
@@ -1026,6 +1049,58 @@ function MyServices(): React.JSX.Element {
             align: 'center',
         },
     ];
+
+    // show for different screen size
+    const screens = useBreakpoint(true, null);
+    const getDefaultCols = () => {
+        if (!screens) {
+            return columns;
+        }
+
+        if (screens.xs) {
+            return columns
+                .filter((col) =>
+                    showForExtraSmallScreenColumn.includes((col as ColumnType<DeployedService>).dataIndex as string)
+                )
+                .map((col) => ({
+                    ...col,
+                    filteredValue: filters[(col as ColumnType<DeployedService>).dataIndex as string] ?? [],
+                }));
+        } else if (screens.sm || screens.md || screens.lg) {
+            return columns
+                .filter((col) =>
+                    showForLargeScreenColumn.includes((col as ColumnType<DeployedService>).dataIndex as string)
+                )
+                .map((col) => ({
+                    ...col,
+                    filteredValue: filters[(col as ColumnType<DeployedService>).dataIndex as string] ?? [],
+                }));
+        } else if (screens.xl) {
+            return columns
+                .filter((col) =>
+                    showForExtraLargeScreenColumn.includes((col as ColumnType<DeployedService>).dataIndex as string)
+                )
+                .map((col) => ({
+                    ...col,
+                    filteredValue: filters[(col as ColumnType<DeployedService>).dataIndex as string] ?? [],
+                }));
+        } else {
+            return columns.map((col) => ({
+                ...col,
+                filteredValue: filters[(col as ColumnType<DeployedService>).dataIndex as string] ?? [],
+            }));
+        }
+    };
+
+    const [selectedColumns, setSelectedColumns] = useState<ColumnsType<DeployedService>>([]);
+    const [checkedValues, setCheckedValues] = useState<string[]>([]);
+
+    useMemo(() => {
+        const defaultCols = getDefaultCols();
+        setSelectedColumns(defaultCols);
+        setCheckedValues(getDefaultColumns(defaultCols));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [screens, filters]);
 
     const closeDestroyResultAlert = (isClose: boolean) => {
         if (isClose) {
@@ -1327,6 +1402,46 @@ function MyServices(): React.JSX.Element {
         });
     };
 
+    const handleColumnsSelectAll = () => {
+        setCheckedValues(columnOptions.map((option) => option.value));
+    };
+
+    const handleColumnsSelectNone = () => {
+        setCheckedValues([]);
+    };
+
+    const columnOptions: Option[] = columns.map((column) => ({
+        label: column.title as string,
+        value: (column as ColumnType<DeployedService>).dataIndex as string,
+    }));
+
+    const handleColumnChange = (checkedValues: string[]) => {
+        setCheckedValues(checkedValues);
+    };
+
+    const handleColumnSelectorOpen = () => {
+        setCheckedValues(getDefaultColumns(selectedColumns));
+        setIsColumnSelectorVisible(true);
+    };
+
+    const handleColumnSelectorSubmit = () => {
+        setIsColumnSelectorVisible(false);
+        if (checkedValues.length > 0) {
+            const selectedColumns = columns
+                .filter((column) => checkedValues.includes((column as ColumnType<DeployedService>).dataIndex as string))
+                .map((col) => ({
+                    ...col,
+                    filteredValue: filters[(col as ColumnType<DeployedService>).dataIndex as string] ?? [],
+                }));
+
+            setSelectedColumns(selectedColumns);
+        }
+    };
+
+    const handleColumnSelectorClose = () => {
+        setIsColumnSelectorVisible(false);
+    };
+
     return (
         <div className={tableStyles.genericTableContainer}>
             {isDestroyRequestSubmitted && activeRecord ? (
@@ -1535,17 +1650,44 @@ function MyServices(): React.JSX.Element {
                 </Modal>
             ) : null}
 
-            <div>
-                <Button
-                    disabled={activeRecord !== undefined}
-                    type='primary'
-                    icon={<SyncOutlined />}
-                    onClick={() => {
-                        refreshData();
-                    }}
-                >
-                    refresh
-                </Button>
+            <Modal
+                title={'Select Columns'}
+                open={isColumnSelectorVisible}
+                onCancel={handleColumnSelectorClose}
+                onOk={handleColumnSelectorSubmit}
+                width={800}
+                destroyOnClose={true}
+                okButtonProps={{ disabled: checkedValues.length === 0 }}
+            >
+                <SelectMyServicesColumns
+                    checkedValues={checkedValues}
+                    columnOptions={columnOptions}
+                    handleColumnChange={handleColumnChange}
+                    handleColumnsSelectAll={handleColumnsSelectAll}
+                    handleColumnsSelectNone={handleColumnsSelectNone}
+                />
+            </Modal>
+
+            <div className={myServicesStyles.refreshBtnContainer}>
+                <div className={myServicesStyles.refreshBtnClass}>
+                    <Button
+                        disabled={activeRecord !== undefined}
+                        type='primary'
+                        icon={<SyncOutlined />}
+                        onClick={() => {
+                            refreshData();
+                        }}
+                        block={false}
+                    >
+                        Refresh
+                    </Button>
+                </div>
+                <div className={myServicesStyles.selectColumnsClass}>
+                    {' '}
+                    <Button type='primary' icon={<SettingOutlined />} onClick={handleColumnSelectorOpen} block={false}>
+                        Select Columns
+                    </Button>
+                </div>
             </div>
             {listDeployedServicesQuery.isError ? (
                 <>
@@ -1562,11 +1704,12 @@ function MyServices(): React.JSX.Element {
             <Row>
                 <div className={myServicesStyles.serviceInstanceList}>
                     <Table
-                        columns={columns}
+                        columns={selectedColumns}
                         dataSource={serviceVoList}
                         loading={listDeployedServicesQuery.isPending || listDeployedServicesQuery.isRefetching}
                         rowKey={'id'}
                         onChange={handleFilterChange}
+                        scroll={{ x: 'max-content' }}
                     />
                 </div>
             </Row>

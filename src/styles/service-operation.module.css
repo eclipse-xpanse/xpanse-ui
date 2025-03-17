@@ -119,14 +119,3 @@
 .ant-table-cell {
     height: 100%;
 }
-
-.service-history-value {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-.service-history-order-id-class {
-    margin-bottom: 0 !important;
-}
