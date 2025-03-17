@@ -4,7 +4,7 @@
  */
 
 import { CheckCircleOutlined, ClockCircleOutlined, CloseCircleOutlined, SyncOutlined } from '@ant-design/icons';
-import { Button, Popover, Table, Tag, Typography } from 'antd';
+import { Button, Popover, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
@@ -17,10 +17,9 @@ import {
     taskType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
+import { ShowId } from '../../order/common/ShowId.tsx';
 import { MyServiceHistoryDetails } from './MyServiceHistoryDetails.tsx';
 import useListServiceOrdersHistoryQuery from './query/useListServiceModifyHistoryQuery.ts';
-
-const { Paragraph } = Typography;
 
 export const MyServiceHistory = ({
     deployedService,
@@ -87,17 +86,7 @@ export const MyServiceHistory = ({
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.orderId.startsWith(value.toString()),
             render: (value: string) => {
-                return (
-                    <div className={serviceOperationStyles.serviceHistoryValue}>
-                        <Paragraph
-                            className={serviceOperationStyles.serviceHistoryOrderIdClass}
-                            ellipsis={true}
-                            copyable={{ tooltips: value }}
-                        >
-                            {value}
-                        </Paragraph>
-                    </div>
-                );
+                return <ShowId id={value} />;
             },
         },
         {

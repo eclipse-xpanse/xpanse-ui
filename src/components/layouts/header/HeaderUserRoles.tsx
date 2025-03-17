@@ -88,7 +88,7 @@ const HeaderUserRoles = memo(({ userName, roles }: { userName: string; roles: st
     };
 
     return (
-        <Space align='baseline' className={headerStyles.userInfoSpacing}>
+        <div className={headerStyles.userInfoSpacing}>
             <Dropdown
                 menu={menuProps}
                 dropdownRender={(menu) => (
@@ -110,13 +110,14 @@ const HeaderUserRoles = memo(({ userName, roles }: { userName: string; roles: st
                         e.preventDefault();
                     }}
                 >
-                    <Space>
+                    <div className={headerStyles.userNameContainer}>
                         <UserOutlined />
-                        {userName} &nbsp;
-                    </Space>
+                        &nbsp;
+                        {userName}
+                    </div>
                 </a>
             </Dropdown>
-        </Space>
+        </div>
     );
 });
 

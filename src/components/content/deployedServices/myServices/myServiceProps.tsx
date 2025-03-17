@@ -3,6 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import type { ColumnsType, ColumnType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
 import {
@@ -400,4 +401,47 @@ export const isDisableRecreateBtn = (
         return true;
     }
     return false;
+};
+
+export interface Option {
+    label: string;
+    value: string;
+    disabled?: boolean;
+}
+
+export const showForExtraLargeScreenColumn = [
+    'serviceId',
+    'customerServiceName',
+    'name',
+    'version',
+    'serviceHostingType',
+    'billingMode',
+    'region',
+    'csp',
+    'flavor',
+    'createdTime',
+    'serviceDeploymentState',
+    'serviceState',
+    'monitor',
+    'operation',
+];
+
+export const showForLargeScreenColumn = [
+    'serviceId',
+    'customerServiceName',
+    'name',
+    'serviceHostingType',
+    'billingMode',
+    'region',
+    'csp',
+    'flavor',
+    'serviceDeploymentState',
+    'serviceState',
+    'monitor',
+    'operation',
+];
+export const showForExtraSmallScreenColumn = ['serviceId', 'customerServiceName', 'name', 'monitor', 'operation'];
+
+export const getDefaultColumns = (columns: ColumnsType<DeployedService>): string[] => {
+    return columns.map((column) => (column as ColumnType<DeployedService>).dataIndex as string);
 };

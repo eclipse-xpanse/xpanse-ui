@@ -195,7 +195,7 @@ function Workflows(): React.JSX.Element {
                         refresh();
                     }}
                 >
-                    refresh
+                    Refresh
                 </Button>
             </div>
             <WorkflowsTip type={tipType} msg={tipMessage} onRemove={onRemove}></WorkflowsTip>

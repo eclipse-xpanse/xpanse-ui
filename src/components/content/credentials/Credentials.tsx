@@ -266,7 +266,7 @@ function Credentials(): React.JSX.Element {
                             refresh();
                         }}
                     >
-                        refresh
+                        Refresh
                     </Button>
                     <Button
                         type='primary'
