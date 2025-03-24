@@ -37,8 +37,6 @@ export const AddOrUpdateUserPolicy = ({
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const policyContent = useRef<string>(currentPolicyService?.policy ?? '');
-    const [createPolicyRequest, setCreatePolicyRequest] = useState<UserPolicyCreateRequest | undefined>(undefined);
-    const [updatePolicyRequest, setUpdatePolicyRequest] = useState<UserPolicyUpdateRequest | undefined>(undefined);
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
     const files = useRef<UploadFile[]>([]);
@@ -65,7 +63,6 @@ export const AddOrUpdateUserPolicy = ({
             policyCreateRequest.csp = policyRequest.csp;
             policyCreateRequest.enabled = policyRequest.enabled;
             policyCreateRequest.policy = policyRequest.policy;
-            setCreatePolicyRequest(policyCreateRequest);
             createPoliciesManagementServiceRequest.mutate(policyCreateRequest);
         } else if (currentPolicyService.userPolicyId.length > 0) {
             if (comparePolicyUpdateRequestResult(policyRequest)) {
@@ -76,7 +73,6 @@ export const AddOrUpdateUserPolicy = ({
             policyUpdateRequest.csp = policyRequest.csp;
             policyUpdateRequest.enabled = policyRequest.enabled;
             policyUpdateRequest.policy = policyRequest.policy;
-            setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
                 userPolicyId: currentPolicyService.userPolicyId,
                 requestBody: policyUpdateRequest,
@@ -102,8 +98,6 @@ export const AddOrUpdateUserPolicy = ({
         form.resetFields();
         policyContent.current = '';
         setRegoFileUploadStatus('notStarted');
-        setCreatePolicyRequest(undefined);
-        setUpdatePolicyRequest(undefined);
         updatePoliciesManagementServiceRequest.reset();
         createPoliciesManagementServiceRequest.reset();
     };
@@ -196,15 +190,13 @@ export const AddOrUpdateUserPolicy = ({
         policyContent.current = '';
         setIsUpdated(false);
         setRegoFileUploadStatus('notStarted');
-        setCreatePolicyRequest(undefined);
-        setUpdatePolicyRequest(undefined);
         updatePoliciesManagementServiceRequest.reset();
         createPoliciesManagementServiceRequest.reset();
     };
 
     return (
         <>
-            {createPolicyRequest !== undefined && createPolicyRequest.policy.length > 0 ? (
+            {createPoliciesManagementServiceRequest.isSuccess || createPoliciesManagementServiceRequest.isError ? (
                 <UserPolicyCreateResultStatus
                     isError={createPoliciesManagementServiceRequest.isError}
                     isSuccess={createPoliciesManagementServiceRequest.isSuccess}
@@ -212,7 +204,7 @@ export const AddOrUpdateUserPolicy = ({
                     currentPolicyService={createPoliciesManagementServiceRequest.data}
                 />
             ) : null}
-            {updatePolicyRequest !== undefined ? (
+            {updatePoliciesManagementServiceRequest.isSuccess || updatePoliciesManagementServiceRequest.isError ? (
                 <UserPolicyUpdateResultStatus
                     isError={updatePoliciesManagementServiceRequest.isError}
                     isSuccess={updatePoliciesManagementServiceRequest.isSuccess}

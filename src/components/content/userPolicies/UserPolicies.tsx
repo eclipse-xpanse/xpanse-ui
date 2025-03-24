@@ -196,7 +196,7 @@ function UserPolicies(): React.JSX.Element {
     return (
         <>
             <div className={tableStyles.genericTableContainer}>
-                {deletePoliciesManagementServiceRequest.isSuccess && id.length > 0 ? (
+                {deletePoliciesManagementServiceRequest.isSuccess || deletePoliciesManagementServiceRequest.isError ? (
                     <UserPolicyDeleteResultStatus
                         id={id}
                         isError={deletePoliciesManagementServiceRequest.isError}

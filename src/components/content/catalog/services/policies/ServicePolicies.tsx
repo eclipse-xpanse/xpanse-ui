@@ -197,7 +197,7 @@ export const ServicePolicies = ({
                 <SafetyOutlined />
                 &nbsp;Service Policies
             </h3>
-            {deleteServicePolicyRequest.isSuccess && currentPolicyId.length > 0 ? (
+            {deleteServicePolicyRequest.isSuccess || deleteServicePolicyRequest.isError ? (
                 <ServicePolicyDeleteStatus
                     id={currentPolicyId}
                     isError={deleteServicePolicyRequest.isError}

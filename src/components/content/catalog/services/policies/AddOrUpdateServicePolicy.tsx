@@ -42,8 +42,6 @@ export const AddOrUpdateServicePolicy = ({
     const [form] = Form.useForm();
     const policyContent = useRef<string>(currentServicePolicy?.policy ?? '');
     const flavorList = useRef<string[]>(flavorNameList(serviceDetails));
-    const [createPolicyRequest, setCreatePolicyRequest] = useState<ServicePolicyCreateRequest | undefined>(undefined);
-    const [updatePolicyRequest, setUpdatePolicyRequest] = useState<ServicePolicyUpdateRequest | undefined>(undefined);
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
     const files = useRef<UploadFile[]>([]);
@@ -59,7 +57,6 @@ export const AddOrUpdateServicePolicy = ({
                 policy: policyRequest.policy,
                 serviceTemplateId: serviceTemplateId,
             };
-            setCreatePolicyRequest(policyCreateRequest);
             createServicePoliciesRequest.mutate(policyCreateRequest);
         } else if (currentServicePolicy.servicePolicyId.length > 0) {
             // Check whether the modified data has changed
@@ -73,7 +70,6 @@ export const AddOrUpdateServicePolicy = ({
                 policy: policyRequest.policy,
                 flavorNames: policyRequest.flavors,
             };
-            setUpdatePolicyRequest(policyUpdateRequest);
             updatePoliciesManagementServiceRequest.mutate({
                 servicePolicyId: currentServicePolicy.servicePolicyId,
                 servicePolicyUpdateRequest: policyUpdateRequest,
@@ -86,8 +82,6 @@ export const AddOrUpdateServicePolicy = ({
         form.resetFields();
         policyContent.current = '';
         setRegoFileUploadStatus('notStarted');
-        setCreatePolicyRequest(undefined);
-        setUpdatePolicyRequest(undefined);
         updatePoliciesManagementServiceRequest.reset();
         createServicePoliciesRequest.reset();
     };
@@ -169,8 +163,6 @@ export const AddOrUpdateServicePolicy = ({
         policyContent.current = '';
         setIsUpdated(false);
         setRegoFileUploadStatus('notStarted');
-        setCreatePolicyRequest(undefined);
-        setUpdatePolicyRequest(undefined);
         updatePoliciesManagementServiceRequest.reset();
         createServicePoliciesRequest.reset();
     };
@@ -182,7 +174,7 @@ export const AddOrUpdateServicePolicy = ({
 
     return (
         <>
-            {createPolicyRequest !== undefined && createPolicyRequest.policy.length > 0 ? (
+            {createServicePoliciesRequest.isSuccess || createServicePoliciesRequest.isError ? (
                 <ServicePolicyCreateResultStatus
                     isError={createServicePoliciesRequest.isError}
                     isSuccess={createServicePoliciesRequest.isSuccess}
@@ -190,7 +182,7 @@ export const AddOrUpdateServicePolicy = ({
                     currentServicePolicy={createServicePoliciesRequest.data}
                 />
             ) : null}
-            {updatePolicyRequest !== undefined ? (
+            {updatePoliciesManagementServiceRequest.isSuccess || updatePoliciesManagementServiceRequest.isError ? (
                 <ServicePolicyUpdateResultStatus
                     isError={updatePoliciesManagementServiceRequest.isError}
                     isSuccess={updatePoliciesManagementServiceRequest.isSuccess}
