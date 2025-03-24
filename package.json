@@ -48,7 +48,7 @@
         "@eslint/eslintrc": "^3.2.0",
         "@eslint/js": "^9.22.0",
         "@hey-api/openapi-ts": "^0.64.9",
-        "@playwright/test": "^1.51.0",
+        "@playwright/test": "^1.51.1",
         "@tanstack/eslint-plugin-query": "^5.68.0",
         "@types/react": "^19.0.10",
         "@types/react-dom": "^19.0.4",
