@@ -5,7 +5,7 @@
 
 import { Alert } from 'antd';
 import React from 'react';
-import { StopwatchResult } from 'react-timer-hook';
+import { useStopwatchResultType } from 'react-timer-hook/dist/types/src/useStopwatch';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
 import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType';
@@ -27,7 +27,7 @@ export const DestroyOrderSubmitResult = ({
     orderId: string;
     type: 'success' | 'error';
     onClose: () => void;
-    stopWatch: StopwatchResult;
+    stopWatch: useStopwatchResultType;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element => {
     return (
