@@ -5,7 +5,7 @@
 
 import { Alert, Button, Row } from 'antd';
 import React from 'react';
-import { StopwatchResult } from 'react-timer-hook';
+import { useStopwatchResultType } from 'react-timer-hook/dist/types/src/useStopwatch';
 import errorAlertStyles from '../../../../styles/error-alert.module.css';
 import submitAlertStyles from '../../../../styles/submit-alert.module.css';
 import { ServiceProviderContactDetails } from '../../../../xpanse-api/generated';
@@ -29,7 +29,7 @@ export const OrderSubmitResult = ({
     serviceId: string;
     orderId: string;
     type: 'success' | 'error';
-    stopWatch: StopwatchResult;
+    stopWatch: useStopwatchResultType;
     isDeployRequestError: boolean;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     retryRequest: () => void;
