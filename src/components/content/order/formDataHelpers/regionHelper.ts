@@ -72,12 +72,8 @@ export function parseRegionInfo(formatRegionStr: string): Region {
                     areaName = part.substring(6);
                 }
             }
-            if (!siteName) {
-                siteName = '';
-            }
-            if (!areaName) {
-                areaName = '';
-            }
+            siteName ??= '';
+            areaName ??= '';
             return { name: namePart, site: siteName, area: areaName };
         }
         return { area: '', name: '', site: '' };
