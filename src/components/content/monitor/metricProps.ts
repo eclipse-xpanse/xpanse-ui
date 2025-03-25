@@ -81,9 +81,7 @@ export const groupMetricsByResourceIds = (metricProps: MetricProps[]): Map<strin
 export const getOptionData = (metricProps: MetricProps[], currentTime: Date | undefined, timePeriod: number) => {
     const dataNew: [number, number][] = [];
     if (timePeriod === lastMinuteRadioButtonKeyId) {
-        if (currentTime === undefined) {
-            currentTime = new Date();
-        }
+        currentTime ??= new Date();
         const totalSeconds: number = getTotalSecondsOfTimePeriod(timePeriod);
 
         const newCurrentTime = currentTime;
