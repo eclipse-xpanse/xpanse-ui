@@ -13,9 +13,9 @@
         "rc-field-form": "^2.6.0",
         "rc-menu": "^9.16.0",
         "rc-tabs": "^15.5.1",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
-        "react-router-dom": "^7.4.0",
+        "react": "^19.1.0",
+        "react-dom": "^19.1.0",
+        "react-router-dom": "^7.4.1",
         "react-timer-hook": "^4.0.5",
         "yaml": "^2.6.1",
         "zustand": "^5.0.3"
