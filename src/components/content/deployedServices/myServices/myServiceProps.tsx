@@ -350,10 +350,7 @@ export const isDisabledStopOrRestartBtn = (
 };
 
 export const isDisableRetryDeploymentBtn = (record: DeployedService) => {
-    if (record.serviceDeploymentState === serviceDeploymentState.DEPLOYING) {
-        return true;
-    }
-    return false;
+    return record.serviceDeploymentState === serviceDeploymentState.DEPLOYING;
 };
 
 export const isDisableServiceConfigBtn = (record: DeployedService) => {
@@ -367,6 +364,14 @@ export const isDisableServiceConfigBtn = (record: DeployedService) => {
         }
     }
     return true;
+};
+
+export const isDisableServiceActionBtn = (record: DeployedService) => {
+    return !(
+        record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+        record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
+        record.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+    );
 };
 
 export const isDisableRecreateBtn = (
@@ -393,14 +398,11 @@ export const isDisableRecreateBtn = (
         return true;
     }
 
-    if (
+    return (
         record.serviceState === serviceState.STARTING ||
         record.serviceState === serviceState.STOPPING ||
         record.serviceState === serviceState.RESTARTING
-    ) {
-        return true;
-    }
-    return false;
+    );
 };
 
 export interface Option {
