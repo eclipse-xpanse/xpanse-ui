@@ -105,6 +105,7 @@ import {
     isDisableModifyBtn,
     isDisableRecreateBtn,
     isDisableRetryDeploymentBtn,
+    isDisableServiceActionBtn,
     isDisableServiceConfigBtn,
     isDisableServicePortingBtn,
     isDisableStartBtn,
@@ -813,6 +814,7 @@ function MyServices(): React.JSX.Element {
                             handleServiceActionsOpenModal(record);
                         }}
                         className={myServicesStyles.buttonAsLink}
+                        disabled={isDisableServiceActionBtn(record)}
                         icon={<FileTextOutlined />}
                         type={'link'}
                     >
