@@ -28,3 +28,9 @@ export const myServicesDetailsUrl = 'http://localhost:8080/xpanse/services/detai
 export const vmResourceUrl =
     'http://localhost:8080/xpanse/csp/resources/vm?csp=HuaweiCloud&siteName=Chinese%20Mainland&regionName=cn-southwest-2';
 export const retryDeployUrl = 'http://localhost:8080/xpanse/services/deploy/retry/868326e9-3611-43d6-ad88-c15d514f3f57';
+export const serviceTemplateUrl = 'http://localhost:8080/xpanse/service_templates';
+export const serviceTemplateDetailUrl =
+    'http://localhost:8080/xpanse/service_templates/662618ea-cef4-4220-9fa4-73afb5d5a20b';
+export const serviceTemplatesUrl = 'http://localhost:8080/xpanse/service_templates?categoryName=compute';
+export const computeYmlUrl =
+    'https://raw.githubusercontent.com/eclipse-xpanse/xpanse-samples/main/compute/HuaweiCloud-Compute-terraform-dev.yml';
