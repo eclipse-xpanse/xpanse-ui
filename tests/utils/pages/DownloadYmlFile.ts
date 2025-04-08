@@ -7,11 +7,11 @@ const __dirname = path.dirname(__filename);
 
 export const targetDir = path.join(__dirname, '../common/register');
 
-if (!fs.existsSync(targetDir)) {
-    fs.mkdirSync(targetDir, { recursive: true });
-}
-
 export async function downloadFile(url: string, filePath: string): Promise<void> {
+    if (fs.existsSync(filePath)) {
+        return;
+    }
+
     if (!fs.existsSync(targetDir)) {
         fs.mkdirSync(targetDir, { recursive: true });
     }

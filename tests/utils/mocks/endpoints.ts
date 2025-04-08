@@ -34,3 +34,24 @@ export const serviceTemplateDetailUrl =
 export const serviceTemplatesUrl = 'http://localhost:8080/xpanse/service_templates?categoryName=compute';
 export const computeYmlUrl =
     'https://raw.githubusercontent.com/eclipse-xpanse/xpanse-samples/main/compute/HuaweiCloud-Compute-terraform-dev.yml';
+export const middlewareYmlUrl =
+    'https://raw.githubusercontent.com/eclipse-xpanse/xpanse-samples/main/middleware/HuaweiCloud-Kafka.yml';
+export const middlewareServiceTemplatesUrl = 'http://localhost:8080/xpanse/service_templates?categoryName=middleware';
+export const middlewareRequestsUrl =
+    'http://localhost:8080/xpanse/service_templates/21597cd5-748e-4f0e-9768-baaa5275b2bd/requests';
+export const middlewareRequestsReviewUrl =
+    'http://localhost:8080/xpanse/service_templates/21597cd5-748e-4f0e-9768-baaa5275b2bd/requests?requestStatus=in-review';
+export const middlewareServiceDetailUrl =
+    'http://localhost:8080/xpanse/services/isv?categoryName=middleware&cspName=HuaweiCloud&serviceName=kafka-cluster&serviceVersion=1.0.0';
+export const middlewareServicePoliciesUrl =
+    'http://localhost:8080/xpanse/service/policies?serviceTemplateId=21597cd5-748e-4f0e-9768-baaa5275b2bd';
+export const isvServicesUrl = 'http://localhost:8080/xpanse/services/isv';
+export const updateServiceTemplateUrl =
+    'http://localhost:8080/xpanse/service_templates/21597cd5-748e-4f0e-9768-baaa5275b2bd?isUnpublishUntilApproved=false';
+export const unpublishServiceUrl =
+    'http://localhost:8080/xpanse/service_templates/unpublish/21597cd5-748e-4f0e-9768-baaa5275b2bd';
+export const republishServiceUrl =
+    'http://localhost:8080/xpanse/service_templates/republish/21597cd5-748e-4f0e-9768-baaa5275b2bd';
+export const cancelRequestUrl =
+    'http://localhost:8080/xpanse/service_templates/requests/cancel/ba871537-10b8-4456-a90c-76e4bd8d73b2';
+export const deleteServiceUrl = 'http://localhost:8080/xpanse/service_templates/21597cd5-748e-4f0e-9768-baaa5275b2bd';

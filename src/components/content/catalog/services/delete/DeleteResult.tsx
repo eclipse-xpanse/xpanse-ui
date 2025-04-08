@@ -8,8 +8,8 @@ import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { category } from '../../../../../xpanse-api/generated';
-import { catalogPageRoute } from '../../../../utils/constants.tsx';
-import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
+import { catalogPageRoute, deleteServiceTemplateErrorText } from '../../../../utils/constants.tsx';
+import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 import { useGetDeleteMutationState } from './DeleteServiceMutation';
 
@@ -35,6 +35,10 @@ export function DeleteResult({
         });
     };
 
+    const deleteRequest = () => {
+        deleteServiceRequest.mutate();
+    };
+
     if (deleteRequestState[0]) {
         if (deleteRequestState[0].status === 'success') {
             return (
@@ -52,27 +56,12 @@ export function DeleteResult({
         if (deleteRequestState[0].status === 'error') {
             if (deleteRequestState[0].error) {
                 return (
-                    <div>
-                        {isHandleKnownErrorResponse(deleteRequestState[0].error) ? (
-                            <Alert
-                                message='Delete Request Failed'
-                                description={String(deleteRequestState[0].error.body.details)}
-                                showIcon
-                                type={'error'}
-                                closable={true}
-                                onClose={onRemove}
-                            />
-                        ) : (
-                            <Alert
-                                message='Delete Request Failed'
-                                description={deleteRequestState[0].error.message}
-                                showIcon
-                                type={'error'}
-                                closable={true}
-                                onClose={onRemove}
-                            />
-                        )}
-                    </div>
+                    <RetryPrompt
+                        error={deleteRequestState[0].error}
+                        retryRequest={deleteRequest}
+                        errorMessage={deleteServiceTemplateErrorText}
+                        onClose={onRemove}
+                    />
                 );
             }
         }

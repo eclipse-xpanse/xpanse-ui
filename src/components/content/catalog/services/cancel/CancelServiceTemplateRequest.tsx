@@ -61,7 +61,7 @@ function CancelServiceTemplateRequest({
                     disabled={isDisabledCancel(serviceDetail)}
                     className={catalogStyles.catalogManageBtnClass}
                 >
-                    cancel
+                    Cancel
                 </Button>
             </Popconfirm>
         </div>

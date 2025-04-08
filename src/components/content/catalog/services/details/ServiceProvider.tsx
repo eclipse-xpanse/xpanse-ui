@@ -203,6 +203,7 @@ function ServiceProvider({
                 deleteServiceRequest={deleteServiceRequest}
             />
             <CancelServiceTemplateRequestResult
+                serviceDetail={activeServiceDetail}
                 category={category}
                 isShowCancelRequestAlert={isShowCancelRequestAlert}
                 setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}

@@ -7,7 +7,8 @@ import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
-import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
+import { unpublishServiceTemplateErrorText } from '../../../../utils/constants.tsx';
+import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 export function UnpublishResult({
@@ -45,29 +46,18 @@ export function UnpublishResult({
         );
     }
 
+    const unpublishRequestRetry = () => {
+        unPublishRequest.mutate();
+    };
+
     if (unPublishRequest.isError) {
         return (
-            <div>
-                {isHandleKnownErrorResponse(unPublishRequest.error) ? (
-                    <Alert
-                        message='Unpublish Request Failed'
-                        description={String(unPublishRequest.error.body.details)}
-                        showIcon
-                        type={'error'}
-                        closable={true}
-                        onClose={onRemove}
-                    />
-                ) : (
-                    <Alert
-                        message='Unpublish Request Failed'
-                        description={unPublishRequest.error.message}
-                        showIcon
-                        type={'error'}
-                        closable={true}
-                        onClose={onRemove}
-                    />
-                )}
-            </div>
+            <RetryPrompt
+                error={unPublishRequest.error}
+                retryRequest={unpublishRequestRetry}
+                errorMessage={unpublishServiceTemplateErrorText}
+                onClose={onRemove}
+            />
         );
     }
 }
