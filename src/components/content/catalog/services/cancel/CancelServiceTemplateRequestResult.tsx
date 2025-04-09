@@ -6,22 +6,43 @@
 import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
-import { category } from '../../../../../xpanse-api/generated';
-import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
+import {
+    category,
+    ServiceTemplateDetailVo,
+    serviceTemplateRegistrationState,
+} from '../../../../../xpanse-api/generated';
+import { cancelServiceTemplateReviewErrorText } from '../../../../utils/constants.tsx';
+import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
+import useServiceTemplateHistoryQuery from '../history/useServiceTemplateHistoryQuery.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 export function CancelServiceTemplateRequestResult({
+    serviceDetail,
     category,
     isShowCancelRequestAlert,
     setIsShowCancelRequestAlert,
     cancelServiceTemplateRequest,
 }: {
+    serviceDetail: ServiceTemplateDetailVo;
     category: category;
     isShowCancelRequestAlert: boolean;
     setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
     cancelServiceTemplateRequest: UseMutationResult<void, Error, string>;
 }): React.JSX.Element | undefined {
     const queryClient = useQueryClient();
+
+    const serviceTemplateHistoryQuery = useServiceTemplateHistoryQuery(
+        serviceDetail.serviceTemplateId,
+        serviceTemplateRegistrationState.IN_REVIEW,
+        undefined
+    );
+
+    let requestId: string | undefined = undefined;
+    if (serviceTemplateHistoryQuery.isSuccess && serviceTemplateHistoryQuery.data.length > 0) {
+        requestId = serviceTemplateHistoryQuery.data.reduce((latest, current) => {
+            return new Date(current.createdTime) > new Date(latest.createdTime) ? current : latest;
+        }).requestId;
+    }
 
     const onRemove = () => {
         setIsShowCancelRequestAlert(false);
@@ -45,29 +66,18 @@ export function CancelServiceTemplateRequestResult({
         );
     }
 
+    const cancelRequestRetry = () => {
+        cancelServiceTemplateRequest.mutate(requestId ?? '');
+    };
+
     if (cancelServiceTemplateRequest.isError) {
         return (
-            <div>
-                {isHandleKnownErrorResponse(cancelServiceTemplateRequest.error) ? (
-                    <Alert
-                        message='Cancellation failed'
-                        description={String(cancelServiceTemplateRequest.error.body.details)}
-                        showIcon
-                        type={'error'}
-                        closable={true}
-                        onClose={onRemove}
-                    />
-                ) : (
-                    <Alert
-                        message='Cancellation failed'
-                        description={cancelServiceTemplateRequest.error.message}
-                        showIcon
-                        type={'error'}
-                        closable={true}
-                        onClose={onRemove}
-                    />
-                )}
-            </div>
+            <RetryPrompt
+                error={cancelServiceTemplateRequest.error}
+                retryRequest={cancelRequestRetry}
+                errorMessage={cancelServiceTemplateReviewErrorText}
+                onClose={onRemove}
+            />
         );
     }
 }

@@ -15,10 +15,12 @@ export default function RetryPrompt({
     error,
     retryRequest,
     errorMessage,
+    onClose,
 }: {
     error: Error;
     retryRequest: () => void;
     errorMessage: string;
+    onClose?: () => void;
 }): React.JSX.Element {
     if (isHandleKnownErrorResponse(error)) {
         const response: ErrorResponse = error.body;
@@ -30,6 +32,7 @@ export default function RetryPrompt({
                     description={convertStringArrayToUnorderedList(response.details)}
                     type={'error'}
                     closable={true}
+                    onClose={onClose}
                     className={tableStyles.tableLoadFailureAlert}
                     action={
                         <>
@@ -58,6 +61,7 @@ export default function RetryPrompt({
                     description={error.message}
                     type={'error'}
                     closable={true}
+                    onClose={onClose}
                     className={tableStyles.tableLoadFailureAlert}
                     action={
                         <>

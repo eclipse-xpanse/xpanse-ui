@@ -62,6 +62,10 @@ export const workflowTasksErrorText: string = 'Fetching Tasks Failed.';
 export const serviceDetailsErrorText: string = 'Fetching Service Details Failed.';
 export const serviceTemplatesErrorText: string = 'Fetching Service Templates Failed.';
 export const healthCheckStatusErrorText: string = 'Fetching Health Check Status Failed.';
+export const deleteServiceTemplateErrorText: string = 'Delete Request Failed';
+export const republishServiceTemplateErrorText: string = 'Republish Request Failed';
+export const unpublishServiceTemplateErrorText: string = 'Unpublish Request Failed';
+export const cancelServiceTemplateReviewErrorText: string = 'Cancellation failed';
 
 export const numberOfRetries: number = 2; // this will retry 3 times. Count starts from 0.
 
