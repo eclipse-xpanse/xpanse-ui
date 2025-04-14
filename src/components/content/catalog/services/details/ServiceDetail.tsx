@@ -31,6 +31,7 @@ import useDeployedServicesQuery from '../../../deployedServices/myServices/query
 import DeploymentManagement from '../../../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../../../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
+import { ServiceObjectsManagement } from '../../../serviceObjectsManage/ServiceObjectsManagement.tsx';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -154,6 +155,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
             ) : null}
             {serviceDetails.serviceActions && serviceDetails.serviceActions.length > 0 ? (
                 <ServiceActionManagement serviceActions={serviceDetails.serviceActions} />
+            ) : null}
+            {serviceDetails.serviceObjects && serviceDetails.serviceObjects.length > 0 ? (
+                <ServiceObjectsManagement serviceObjects={serviceDetails.serviceObjects} />
             ) : null}
         </>
     );
