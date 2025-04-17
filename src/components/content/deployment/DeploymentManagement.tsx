@@ -7,7 +7,7 @@ import { DeploymentUnitOutlined } from '@ant-design/icons';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import { Deployment } from '../../../xpanse-api/generated';
-import DeploymentInfomation from './DeploymentInfomation';
+import DeploymentInformation from './DeploymentInformation.tsx';
 import DeploymentVariables from './DeploymentVariables';
 
 function DeploymentManagement({ deployment }: { deployment: Deployment }): React.JSX.Element {
@@ -17,8 +17,10 @@ function DeploymentManagement({ deployment }: { deployment: Deployment }): React
                 <DeploymentUnitOutlined />
                 &nbsp;Service Deployment Management
             </h3>
-            <DeploymentInfomation deployment={deployment} />
-            <DeploymentVariables variables={deployment.inputVariables} />
+            <DeploymentInformation deployment={deployment} />
+            <DeploymentVariables
+                variables={deployment.terraformDeployment?.inputVariables ?? deployment.helmDeployment?.inputVariables}
+            />
         </>
     );
 }

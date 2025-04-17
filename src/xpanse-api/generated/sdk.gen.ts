@@ -28,12 +28,16 @@ import type {
     CompleteTaskResponse,
     CreateServiceActionData,
     CreateServiceActionResponse,
+    CreateServiceObjectData,
+    CreateServiceObjectResponse,
     DeleteIsvCloudCredentialData,
     DeleteIsvCloudCredentialResponse,
     DeleteOrderByOrderIdData,
     DeleteOrderByOrderIdResponse,
     DeleteOrdersByServiceIdData,
     DeleteOrdersByServiceIdResponse,
+    DeleteServiceObjectData,
+    DeleteServiceObjectResponse,
     DeleteServicePolicyData,
     DeleteServicePolicyResponse,
     DeleteServiceTemplateData,
@@ -93,6 +97,8 @@ import type {
     GetLatestServiceOrderStatusResponse,
     GetMetricsData,
     GetMetricsResponse,
+    GetObjectsByServiceIdData,
+    GetObjectsByServiceIdResponse,
     GetOrderableServiceDetailsByIdData,
     GetOrderableServiceDetailsByIdResponse,
     GetOrderableServiceDetailsByServiceIdData,
@@ -173,6 +179,8 @@ import type {
     UpdateResponse,
     UpdateServiceChangeResultData,
     UpdateServiceChangeResultResponse,
+    UpdateServiceObjectData,
+    UpdateServiceObjectResponse,
     UpdateServicePolicyData,
     UpdateServicePolicyResponse,
     UpdateUserCloudCredentialData,
@@ -463,6 +471,65 @@ export const recreateService = (data: RecreateServiceData): CancelablePromise<Re
 };
 
 /**
+ * Create an order to update service object using object id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service.
+ * @param data.objectId The id of the service object.
+ * @param data.requestBody
+ * @returns ServiceOrder Accepted
+ * @throws ApiError
+ */
+export const updateServiceObject = (data: UpdateServiceObjectData): CancelablePromise<UpdateServiceObjectResponse> => {
+    return __request(OpenAPI, {
+        method: 'PUT',
+        url: '/xpanse/services/object/{serviceId}/{objectId}',
+        path: {
+            serviceId: data.serviceId,
+            objectId: data.objectId,
+        },
+        body: data.requestBody,
+        mediaType: 'application/json',
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Create an order to update service object using object id.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service.
+ * @param data.objectId The id of the service object.
+ * @returns ServiceOrder Accepted
+ * @throws ApiError
+ */
+export const deleteServiceObject = (data: DeleteServiceObjectData): CancelablePromise<DeleteServiceObjectResponse> => {
+    return __request(OpenAPI, {
+        method: 'DELETE',
+        url: '/xpanse/services/object/{serviceId}/{objectId}',
+        path: {
+            serviceId: data.serviceId,
+            objectId: data.objectId,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * Create an order task to modify the deployed service.<br> Required role: <b>admin</b> or <b>user</b> </br>
  * @param data The data for the request.
  * @param data.serviceId Id of the service
@@ -524,7 +591,7 @@ export const redeployFailedDeployment = (
  * @param data The data for the request.
  * @param data.serviceId The id of the deployed service
  * @param data.requestBody
- * @returns ServiceOrder OK
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const changeServiceConfiguration = (
@@ -586,7 +653,7 @@ export const changeServiceLockConfig = (
  * @param data The data for the request.
  * @param data.serviceId The id of the deployed service
  * @param data.requestBody
- * @returns ServiceOrder OK
+ * @returns ServiceOrder Accepted
  * @throws ApiError
  */
 export const createServiceAction = (data: CreateServiceActionData): CancelablePromise<CreateServiceActionResponse> => {
@@ -1243,6 +1310,37 @@ export const port = (data: PortData): CancelablePromise<PortResponse> => {
 };
 
 /**
+ * Create an order to create object for the service.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId The id of the deployed service.
+ * @param data.objectType The action type to the service object.
+ * @param data.requestBody
+ * @returns ServiceOrder Accepted
+ * @throws ApiError
+ */
+export const createServiceObject = (data: CreateServiceObjectData): CancelablePromise<CreateServiceObjectResponse> => {
+    return __request(OpenAPI, {
+        method: 'POST',
+        url: '/xpanse/services/object/{serviceId}/{objectType}',
+        path: {
+            serviceId: data.serviceId,
+            objectType: data.objectType,
+        },
+        body: data.requestBody,
+        mediaType: 'application/json',
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
  * List service templates with query params.<br> Required role: <b>admin</b> or <b>isv</b> </br>
  * @param data The data for the request.
  * @param data.categoryName category of the service
@@ -1716,6 +1814,34 @@ export const getLatestServiceOrderStatus = (
         },
         query: {
             lastKnownServiceDeploymentState: data.lastKnownServiceDeploymentState,
+        },
+        errors: {
+            400: 'Bad Request',
+            401: 'Unauthorized',
+            403: 'Forbidden',
+            408: 'Request Timeout',
+            422: 'Unprocessable Entity',
+            500: 'Internal Server Error',
+            502: 'Bad Gateway',
+        },
+    });
+};
+
+/**
+ * Get all objects of the service grouped by type.<br> Required role: <b>admin</b> or <b>user</b> </br>
+ * @param data The data for the request.
+ * @param data.serviceId Id of the service
+ * @returns ServiceObjectDetails OK
+ * @throws ApiError
+ */
+export const getObjectsByServiceId = (
+    data: GetObjectsByServiceIdData
+): CancelablePromise<GetObjectsByServiceIdResponse> => {
+    return __request(OpenAPI, {
+        method: 'GET',
+        url: '/xpanse/services/objects/{serviceId}',
+        path: {
+            serviceId: data.serviceId,
         },
         errors: {
             400: 'Bad Request',
