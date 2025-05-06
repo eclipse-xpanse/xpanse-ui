@@ -156,6 +156,7 @@ export type AutoFill = {
      */
     deployResourceKind:
         | 'vm'
+        | 'rds'
         | 'container'
         | 'publicIP'
         | 'vpc'
@@ -176,6 +177,7 @@ export type AutoFill = {
  */
 export enum deployResourceKind {
     VM = 'vm',
+    RDS = 'rds',
     CONTAINER = 'container',
     PUBLIC_IP = 'publicIP',
     VPC = 'vpc',
@@ -918,6 +920,7 @@ export type DeployResource = {
      */
     resourceKind:
         | 'vm'
+        | 'rds'
         | 'container'
         | 'publicIP'
         | 'vpc'
@@ -940,6 +943,7 @@ export type DeployResource = {
  */
 export enum resourceKind {
     VM = 'vm',
+    RDS = 'rds',
     CONTAINER = 'container',
     PUBLIC_IP = 'publicIP',
     VPC = 'vpc',
@@ -1005,6 +1009,7 @@ export type ErrorResponse = {
         | 'Deployer Not Found'
         | 'No Credential Definition Available'
         | 'Invalid Service State'
+        | 'Invalid Service Deployment State'
         | 'Resource Invalid For Monitoring'
         | 'Unhandled Exception'
         | 'Icon Processing Failed'
@@ -1061,7 +1066,10 @@ export type ErrorResponse = {
         | 'Service Action Invalid'
         | 'Service Change Request Failed'
         | 'Service Configuration Change Order Already Exists'
-        | 'Service Action Change Order Already Exists';
+        | 'Service Action Change Order Already Exists'
+        | 'Invalid Service Object Request'
+        | 'Service Object Not Found'
+        | 'Service Object Change Order Already Exists';
     /**
      * Details of the errors occurred
      */
@@ -1087,6 +1095,7 @@ export enum errorType {
     DEPLOYER_NOT_FOUND = 'Deployer Not Found',
     NO_CREDENTIAL_DEFINITION_AVAILABLE = 'No Credential Definition Available',
     INVALID_SERVICE_STATE = 'Invalid Service State',
+    INVALID_SERVICE_DEPLOYMENT_STATE = 'Invalid Service Deployment State',
     RESOURCE_INVALID_FOR_MONITORING = 'Resource Invalid For Monitoring',
     UNHANDLED_EXCEPTION = 'Unhandled Exception',
     ICON_PROCESSING_FAILED = 'Icon Processing Failed',
@@ -1144,6 +1153,9 @@ export enum errorType {
     SERVICE_CHANGE_REQUEST_FAILED = 'Service Change Request Failed',
     SERVICE_CONFIGURATION_CHANGE_ORDER_ALREADY_EXISTS = 'Service Configuration Change Order Already Exists',
     SERVICE_ACTION_CHANGE_ORDER_ALREADY_EXISTS = 'Service Action Change Order Already Exists',
+    INVALID_SERVICE_OBJECT_REQUEST = 'Invalid Service Object Request',
+    SERVICE_OBJECT_NOT_FOUND = 'Service Object Not Found',
+    SERVICE_OBJECT_CHANGE_ORDER_ALREADY_EXISTS = 'Service Object Change Order Already Exists',
 }
 
 export type FlavorPriceResult = {
@@ -1198,7 +1210,7 @@ export type InputVariable = {
     /**
      * The type of the deploy variable
      */
-    dataType: 'string' | 'number' | 'boolean';
+    dataType: 'string' | 'number' | 'boolean' | 'array';
     /**
      * The example value of the deploy variable
      */
@@ -1242,6 +1254,7 @@ export enum dataType {
     STRING = 'string',
     NUMBER = 'number',
     BOOLEAN = 'boolean',
+    ARRAY = 'array',
 }
 
 /**
@@ -1387,6 +1400,86 @@ export type ModifyRequest = {
     };
 };
 
+export type ObjectIdentifier = {
+    /**
+     * the name of service object identifier.
+     */
+    name: string;
+    /**
+     * the value schema of service object identifier.
+     */
+    valueSchema: string;
+};
+
+export type ObjectManage = {
+    /**
+     * the type of service object action.
+     */
+    objectActionType: 'create' | 'update' | 'delete';
+    /**
+     * the modificationImpact of service object manage.
+     */
+    modificationImpact: ModificationImpact;
+    /**
+     * the handler script of service object manage.
+     */
+    objectHandlerScript: ServiceChangeScript;
+    /**
+     * The service object parameters of service .The list elements must be unique. All parameters are put together to build a JSON 'object' with each parameter as a property of this object.
+     */
+    objectParameters?: Array<ObjectParameter>;
+};
+
+/**
+ * the type of service object action.
+ */
+export enum objectActionType {
+    CREATE = 'create',
+    UPDATE = 'update',
+    DELETE = 'delete',
+}
+
+export type ObjectParameter = {
+    /**
+     * The name of the service object parameter
+     */
+    name: string;
+    /**
+     * The type of the service object  parameter
+     */
+    dataType: 'string' | 'number' | 'boolean' | 'array';
+    /**
+     * The description of the service object parameter
+     */
+    description: string;
+    /**
+     * The example value of the service object  parameter
+     */
+    example?: {
+        [key: string]: unknown;
+    };
+    /**
+     * valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema
+     */
+    valueSchema?: {
+        [key: string]: {
+            [key: string]: unknown;
+        };
+    };
+    /**
+     * Sensitive scope of service config parameter storage
+     */
+    sensitiveScope?: 'none' | 'once' | 'always';
+    /**
+     * idicates whether the object parameter is mandatory.
+     */
+    isMandatory?: boolean;
+    /**
+     * the type of the linkedObject.
+     */
+    linkedObjectType?: string;
+};
+
 export type Ocl = {
     /**
      * The catalog of the service
@@ -1462,6 +1555,10 @@ export type Ocl = {
      * manage service action.
      */
     serviceActions?: Array<ServiceAction>;
+    /**
+     * manage service object.
+     */
+    serviceObjects?: Array<ServiceObject>;
 };
 
 export type OrderFailedErrorResponse = {
@@ -1484,6 +1581,7 @@ export type OrderFailedErrorResponse = {
         | 'Deployer Not Found'
         | 'No Credential Definition Available'
         | 'Invalid Service State'
+        | 'Invalid Service Deployment State'
         | 'Resource Invalid For Monitoring'
         | 'Unhandled Exception'
         | 'Icon Processing Failed'
@@ -1540,7 +1638,10 @@ export type OrderFailedErrorResponse = {
         | 'Service Action Invalid'
         | 'Service Change Request Failed'
         | 'Service Configuration Change Order Already Exists'
-        | 'Service Action Change Order Already Exists';
+        | 'Service Action Change Order Already Exists'
+        | 'Invalid Service Object Request'
+        | 'Service Object Not Found'
+        | 'Service Object Change Order Already Exists';
     /**
      * Details of the errors occurred
      */
@@ -1563,7 +1664,7 @@ export type OutputVariable = {
     /**
      * The type of the output variable
      */
-    dataType: 'string' | 'number' | 'boolean';
+    dataType: 'string' | 'number' | 'boolean' | 'array';
     /**
      * The description of the output variable
      */
@@ -1664,6 +1765,7 @@ export type Resource = {
      */
     deployResourceKind:
         | 'vm'
+        | 'rds'
         | 'container'
         | 'publicIP'
         | 'vpc'
@@ -1831,7 +1933,7 @@ export type ServiceChangeParameter = {
     /**
      * The type of the service config parameter
      */
-    dataType: 'string' | 'number' | 'boolean';
+    dataType: 'string' | 'number' | 'boolean' | 'array';
     /**
      * The example value of the service config parameter
      */
@@ -2042,8 +2144,88 @@ export type ServiceFlavorWithPrice = {
 };
 
 export type ServiceLockConfig = {
-    destroyLocked?: boolean;
     modifyLocked?: boolean;
+    destroyLocked?: boolean;
+};
+
+export type ServiceObject = {
+    /**
+     * the type of service object.
+     */
+    type: string;
+    /**
+     * the identifier of service object.
+     */
+    objectIdentifier: ObjectIdentifier;
+    /**
+     * the tool used to manage the service object.
+     */
+    handlerType: 'ansible';
+    /**
+     * The collection of the service object manage.
+     */
+    objectsManage?: Array<ObjectManage>;
+};
+
+/**
+ * the tool used to manage the service object.
+ */
+export enum handlerType {
+    ANSIBLE = 'ansible',
+}
+
+export type ServiceObjectDetails = {
+    /**
+     * The id of the service object.
+     */
+    objectId: string;
+    /**
+     * The id of the service deployment.
+     */
+    serviceId: string;
+    /**
+     * The type of service object.
+     */
+    objectType: string;
+    /**
+     * The name of service object identifier.
+     */
+    objectIdentifierName: string;
+    /**
+     * The collection of dependent object IDs.
+     */
+    dependentObjectIds?: Array<string>;
+    /**
+     * The collection of service object parameter.
+     */
+    parameters: {
+        [key: string]: {
+            [key: string]: unknown;
+        };
+    };
+    /**
+     * The collection of ids of the service orders result in the object.
+     */
+    objectOrderHistory: Array<ServiceOrderDetails>;
+};
+
+export type ServiceObjectRequest = {
+    /**
+     * The name of service object identifier.
+     */
+    objectIdentifier: string;
+    /**
+     * The collection of dependent object IDs.
+     */
+    linkedObjects?: Array<string>;
+    /**
+     * The collection of service object parameter.
+     */
+    serviceObjectParameters: {
+        [key: string]: {
+            [key: string]: unknown;
+        };
+    };
 };
 
 export type ServiceOrder = {
@@ -2079,11 +2261,14 @@ export type ServiceOrderDetails = {
         | 'recreate'
         | 'lockChange'
         | 'configChange'
-        | 'service_action'
+        | 'serviceAction'
         | 'purge'
         | 'serviceStart'
         | 'serviceStop'
-        | 'serviceRestart';
+        | 'serviceRestart'
+        | 'objectCreate'
+        | 'objectModify'
+        | 'objectDelete';
     /**
      * The task status of the service order.
      */
@@ -2143,11 +2328,14 @@ export enum taskType {
     RECREATE = 'recreate',
     LOCK_CHANGE = 'lockChange',
     CONFIG_CHANGE = 'configChange',
-    SERVICE_ACTION = 'service_action',
+    SERVICE_ACTION = 'serviceAction',
     PURGE = 'purge',
     SERVICE_START = 'serviceStart',
     SERVICE_STOP = 'serviceStop',
     SERVICE_RESTART = 'serviceRestart',
+    OBJECT_CREATE = 'objectCreate',
+    OBJECT_MODIFY = 'objectModify',
+    OBJECT_DELETE = 'objectDelete',
 }
 
 export type ServiceOrderStatusUpdate = {
@@ -2440,6 +2628,10 @@ export type ServiceTemplateDetailVo = {
      * manage service action.
      */
     serviceActions?: Array<ServiceAction>;
+    /**
+     * manage service object.
+     */
+    serviceObjects?: Array<ServiceObject>;
     links?: Array<Link>;
 };
 
@@ -2686,6 +2878,10 @@ export type UserOrderableServiceVo = {
      * manage service action.
      */
     serviceActions?: Array<ServiceAction>;
+    /**
+     * manage service object.
+     */
+    serviceObjects?: Array<ServiceObject>;
     links?: Array<Link>;
 };
 
@@ -3106,6 +3302,33 @@ export type RecreateServiceData = {
 
 export type RecreateServiceResponse = ServiceOrder;
 
+export type UpdateServiceObjectData = {
+    /**
+     * The id of the service object.
+     */
+    objectId: string;
+    requestBody: ServiceObjectRequest;
+    /**
+     * The id of the deployed service.
+     */
+    serviceId: string;
+};
+
+export type UpdateServiceObjectResponse = ServiceOrder;
+
+export type DeleteServiceObjectData = {
+    /**
+     * The id of the service object.
+     */
+    objectId: string;
+    /**
+     * The id of the deployed service.
+     */
+    serviceId: string;
+};
+
+export type DeleteServiceObjectResponse = ServiceOrder;
+
 export type ModifyData = {
     requestBody: ModifyRequest;
     /**
@@ -3426,6 +3649,20 @@ export type PortData = {
 
 export type PortResponse = ServiceOrder;
 
+export type CreateServiceObjectData = {
+    /**
+     * The action type to the service object.
+     */
+    objectType: string;
+    requestBody: ServiceObjectRequest;
+    /**
+     * The id of the deployed service.
+     */
+    serviceId: string;
+};
+
+export type CreateServiceObjectResponse = ServiceOrder;
+
 export type GetAllServiceTemplatesByIsvData = {
     /**
      * category of the service
@@ -3591,11 +3828,14 @@ export type GetAllOrdersByServiceIdData = {
         | 'recreate'
         | 'lockChange'
         | 'configChange'
-        | 'service_action'
+        | 'serviceAction'
         | 'purge'
         | 'serviceStart'
         | 'serviceStop'
-        | 'serviceRestart';
+        | 'serviceRestart'
+        | 'objectCreate'
+        | 'objectModify'
+        | 'objectDelete';
 };
 
 export type GetAllOrdersByServiceIdResponse = Array<ServiceOrderDetails>;
@@ -3663,6 +3903,17 @@ export type GetLatestServiceOrderStatusData = {
 };
 
 export type GetLatestServiceOrderStatusResponse = ServiceOrderStatusUpdate;
+
+export type GetObjectsByServiceIdData = {
+    /**
+     * Id of the service
+     */
+    serviceId: string;
+};
+
+export type GetObjectsByServiceIdResponse = {
+    [key: string]: Array<ServiceObjectDetails>;
+};
 
 export type GetAllDeployedServicesByIsvData = {
     /**
@@ -4111,6 +4362,7 @@ export type GetExistingResourceNamesWithKindData = {
      */
     deployResourceKind:
         | 'vm'
+        | 'rds'
         | 'container'
         | 'publicIP'
         | 'vpc'
