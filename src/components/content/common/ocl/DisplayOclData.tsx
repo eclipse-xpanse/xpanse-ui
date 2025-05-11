@@ -14,6 +14,7 @@ import { DeployedServicesHostingType } from '../../deployedServices/common/Deplo
 import DeploymentManagement from '../../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../../serviceConfigurationManage/ServiceConfigManagement';
+import { ServiceObjectsManagement } from '../../serviceObjectsManage/ServiceObjectsManagement.tsx';
 import { cspMap } from '../csp/CspLogo';
 import { AgreementText } from './AgreementText';
 import { BillingText } from './BillingText';
@@ -123,6 +124,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                             <ServiceConfigManagement configurationManage={ocl.serviceConfigurationManage} />
                         ) : null}
                         {ocl.serviceActions ? <ServiceActionManagement serviceActions={ocl.serviceActions} /> : null}
+                        {ocl.serviceObjects ? <ServiceObjectsManagement serviceObjects={ocl.serviceObjects} /> : null}
                     </div>
                 </div>
             </>

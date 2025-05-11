@@ -22,6 +22,7 @@ import { RegionText } from '../common/ocl/RegionText.tsx';
 import DeploymentManagement from '../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../serviceConfigurationManage/ServiceConfigManagement';
+import { ServiceObjectsManagement } from '../serviceObjectsManage/ServiceObjectsManagement.tsx';
 import { ApproveOrRejectServiceTemplate } from './ApproveOrRejectServiceTemplate';
 import useApproveOrRejectRequest from './query/useApproveOrRejectRequest';
 
@@ -203,6 +204,12 @@ export const ServiceReviewsDetails = ({
                     {currentServiceTemplateRequestToReview.ocl.serviceActions ? (
                         <ServiceActionManagement
                             serviceActions={currentServiceTemplateRequestToReview.ocl.serviceActions}
+                        />
+                    ) : null}
+                    {currentServiceTemplateRequestToReview.ocl.serviceObjects &&
+                    currentServiceTemplateRequestToReview.ocl.serviceObjects.length > 0 ? (
+                        <ServiceObjectsManagement
+                            serviceObjects={currentServiceTemplateRequestToReview.ocl.serviceObjects}
                         />
                     ) : null}
                     <>
