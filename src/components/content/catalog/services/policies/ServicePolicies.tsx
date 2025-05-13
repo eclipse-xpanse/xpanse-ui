@@ -255,7 +255,7 @@ export const ServicePolicies = ({
                 width={1000}
                 footer={null}
                 open={isOpenAddOrUpdatePolicyModal}
-                destroyOnClose={true}
+                destroyOnHidden={true}
                 onCancel={closeAddOrUpdateServicePolicyModal}
             >
                 <AddOrUpdateServicePolicy

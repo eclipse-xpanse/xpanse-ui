@@ -25,7 +25,7 @@ export const ServiceObjectItems = ({ serviceObject }: { serviceObject: ServiceOb
 
     return (
         <>
-            <Tabs items={items} activeKey={objectManageActionType} onChange={onChange} destroyInactiveTabPane={true} />
+            <Tabs items={items} activeKey={objectManageActionType} onChange={onChange} destroyOnHidden={true} />
         </>
     );
 };

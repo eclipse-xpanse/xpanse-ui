@@ -217,7 +217,7 @@ function Credentials(): React.JSX.Element {
                         open={isAddOpen}
                         onCancel={onCancel}
                         maskClosable={false}
-                        destroyOnClose={true}
+                        destroyOnHidden={true}
                         footer={[]}
                         forceRender={true}
                     >
@@ -230,7 +230,7 @@ function Credentials(): React.JSX.Element {
                     open={isUpdateOpen}
                     onCancel={onUpdateCancel}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={[]}
                 >
                     {activeCredential ? (
@@ -248,7 +248,7 @@ function Credentials(): React.JSX.Element {
                     open={isDetailsOpen}
                     onCancel={onDetailsCancel}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={[]}
                 >
                     {activeCredential ? (

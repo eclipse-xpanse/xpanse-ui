@@ -62,7 +62,7 @@ export const CreateServiceActionForm = ({
                     items={items}
                     activeKey={actionName}
                     onChange={onChange}
-                    destroyInactiveTabPane={true}
+                    destroyOnHidden={true}
                 />
             </Card>
         </>

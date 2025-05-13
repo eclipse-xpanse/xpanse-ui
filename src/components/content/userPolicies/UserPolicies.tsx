@@ -253,7 +253,7 @@ function UserPolicies(): React.JSX.Element {
                     width={1000}
                     footer={null}
                     open={isOpenAddOrUpdatePolicyModal}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     onCancel={closeAddOrUpdatePoliciesManagementServiceModal}
                 >
                     <AddOrUpdateUserPolicy
