@@ -91,7 +91,7 @@ const HeaderUserRoles = memo(({ userName, roles }: { userName: string; roles: st
         <div className={headerStyles.userInfoSpacing}>
             <Dropdown
                 menu={menuProps}
-                dropdownRender={(menu) => (
+                popupRender={(menu) => (
                     <div style={contentStyle}>
                         {menu}
                         <Divider style={{ margin: 0 }} />

@@ -108,7 +108,7 @@ export const ApproveOrRejectServiceTemplate = ({
             <Modal
                 title={isApproved !== undefined && isApproved ? 'Approve' : 'Reject'}
                 open={isModalOpen}
-                destroyOnClose={true}
+                destroyOnHidden={true}
                 onOk={handleOk}
                 onCancel={handleCancel}
             >

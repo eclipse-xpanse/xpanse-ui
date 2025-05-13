@@ -320,7 +320,7 @@ export default function ServiceReviews(): React.JSX.Element {
                     title={'Service Details'}
                     width={'80%'}
                     footer={null}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     open={isServiceTemplateDetailsModalOpen}
                     onCancel={handleServiceTemplateDetailsModalClose}
                 >

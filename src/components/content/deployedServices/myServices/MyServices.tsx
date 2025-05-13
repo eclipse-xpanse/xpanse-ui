@@ -1546,7 +1546,7 @@ function MyServices(): React.JSX.Element {
                     width={680}
                     footer={null}
                     open={isMyServiceConfigurationModalOpen}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     onCancel={handleMyServiceConfigurationModalClose}
                 >
                     <ServiceConfiguration
@@ -1582,7 +1582,7 @@ function MyServices(): React.JSX.Element {
                     }
                     closable={true}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={null}
                     onCancel={handleCancelServicePortingModel}
                     width={1600}
@@ -1598,7 +1598,7 @@ function MyServices(): React.JSX.Element {
                     title={<LocksTitle />}
                     closable={true}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={null}
                     onCancel={handleCancelLocksModel}
                     width={400}
@@ -1620,7 +1620,7 @@ function MyServices(): React.JSX.Element {
                     }
                     closable={true}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={null}
                     onCancel={handleCancelScaleModel}
                     width={1400}
@@ -1642,7 +1642,7 @@ function MyServices(): React.JSX.Element {
                     }
                     closable={true}
                     maskClosable={false}
-                    destroyOnClose={true}
+                    destroyOnHidden={true}
                     footer={null}
                     onCancel={handleCancelModifyModel}
                     width={1400}
@@ -1658,7 +1658,7 @@ function MyServices(): React.JSX.Element {
                 onCancel={handleColumnSelectorClose}
                 onOk={handleColumnSelectorSubmit}
                 width={800}
-                destroyOnClose={true}
+                destroyOnHidden={true}
                 okButtonProps={{ disabled: checkedValues.length === 0 }}
             >
                 <SelectMyServicesColumns

@@ -36,7 +36,7 @@ export const ServiceActionManagement = ({ serviceActions }: { serviceActions: Se
                     items={items}
                     activeKey={actionName}
                     onChange={onChange}
-                    destroyInactiveTabPane={true}
+                    destroyOnHidden={true}
                 />
             </Card>
         </>
