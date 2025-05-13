@@ -10,7 +10,7 @@ import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
 import { deployResourceKind, InputVariable, sensitiveScope } from '../../../xpanse-api/generated';
 
-function DeploymentVariables({ variables }: { variables: InputVariable[] }): React.JSX.Element {
+function DeploymentVariables({ variables }: { variables: InputVariable[] | undefined }): React.JSX.Element {
     const columns: ColumnsType<InputVariable> = [
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>Name</div>,

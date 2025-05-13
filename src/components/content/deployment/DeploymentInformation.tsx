@@ -12,7 +12,7 @@ import { DeploymentScriptText } from '../common/ocl/DeploymentScript';
 import { DeploymentText } from '../common/ocl/DeploymentText';
 import { getDeployerToolIcon } from '../common/ocl/getDeployerToolIcon';
 
-function DeploymentInfomation({ deployment }: { deployment: Deployment }): React.JSX.Element {
+function DeploymentInformation({ deployment }: { deployment: Deployment }): React.JSX.Element {
     return (
         <>
             <div className={`${catalogStyles.catalogDetailsH6} ${catalogStyles.managementInfo}`}>
@@ -40,4 +40,4 @@ function DeploymentInfomation({ deployment }: { deployment: Deployment }): React
     );
 }
 
-export default DeploymentInfomation;
+export default DeploymentInformation;
