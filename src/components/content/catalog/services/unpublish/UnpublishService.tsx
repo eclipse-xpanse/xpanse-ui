@@ -9,25 +9,27 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
-    category,
     ServiceTemplateDetailVo,
     serviceTemplateRegistrationState,
     ServiceTemplateRequestInfo,
 } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 
 function UnpublishService({
     serviceDetail,
     setIsViewDisabled,
     unPublishRequest,
+    setServiceTemplateAction,
 }: {
-    category: category;
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const unpublish = () => {
         setIsViewDisabled(true);
         unPublishRequest.mutate();
+        setServiceTemplateAction(ServiceTemplateAction.UNPUBLISH);
     };
 
     return (

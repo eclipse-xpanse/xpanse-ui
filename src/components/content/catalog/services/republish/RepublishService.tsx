@@ -15,22 +15,27 @@ import {
 
 import { UseMutationResult } from '@tanstack/react-query';
 import { useGetDeleteMutationState } from '../delete/DeleteServiceMutation';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 
 function RepublishService({
     serviceDetail,
     setIsViewDisabled,
     republishRequest,
+    setServiceTemplateAction,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const deleteState = useGetDeleteMutationState(serviceDetail.serviceTemplateId);
 
     const republish = () => {
         setIsViewDisabled(true);
         republishRequest.mutate();
+        setServiceTemplateAction(ServiceTemplateAction.REPUBLISH);
     };
+
     return (
         <div className={catalogStyles.updateUnpublishBtnClass}>
             <Popconfirm

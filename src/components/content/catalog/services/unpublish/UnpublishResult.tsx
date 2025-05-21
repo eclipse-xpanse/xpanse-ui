@@ -9,53 +9,56 @@ import React from 'react';
 import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { unpublishServiceTemplateErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 export function UnpublishResult({
     category,
-    isShowUnpublishAlert,
-    setIsShowUnpublishAlert,
     unPublishRequest,
+    onClose,
+    serviceTemplateAction,
+    setServiceTemplateAction,
 }: {
     category: category;
-    isShowUnpublishAlert: boolean;
-    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
     unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    onClose: () => void;
+    serviceTemplateAction: ServiceTemplateAction;
+    setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element | undefined {
     const queryClient = useQueryClient();
 
     const onRemove = () => {
-        setIsShowUnpublishAlert(false);
+        onClose();
     };
 
     if (unPublishRequest.isSuccess) {
-        setIsShowUnpublishAlert(true);
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-    }
-
-    if (isShowUnpublishAlert) {
-        return (
-            <Alert
-                message='Service Unpublished Successfully'
-                description={'Service removed from the catalog.'}
-                showIcon
-                type={'success'}
-                closable={true}
-                onClose={onRemove}
-            />
-        );
     }
 
     const unpublishRequestRetry = () => {
         unPublishRequest.mutate();
+        setServiceTemplateAction(ServiceTemplateAction.UNPUBLISH);
     };
 
-    if (unPublishRequest.isError) {
+    if (serviceTemplateAction === ServiceTemplateAction.UNPUBLISH && unPublishRequest.isError) {
         return (
             <RetryPrompt
                 error={unPublishRequest.error}
                 retryRequest={unpublishRequestRetry}
                 errorMessage={unpublishServiceTemplateErrorText}
+                onClose={onRemove}
+            />
+        );
+    }
+
+    if (serviceTemplateAction === ServiceTemplateAction.UNPUBLISH) {
+        return (
+            <Alert
+                message='Service unpublished successfully'
+                description={'Service removed from the catalog.'}
+                showIcon
+                type={'success'}
+                closable={true}
                 onClose={onRemove}
             />
         );

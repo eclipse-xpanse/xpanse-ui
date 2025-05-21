@@ -8,19 +8,23 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { useDeleteRequest } from './DeleteServiceMutation';
 
 function DeleteService({
     serviceDetail,
     setIsViewDisabled,
+    setServiceTemplateAction,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
+    setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const deleteRequest = useDeleteRequest(serviceDetail.serviceTemplateId);
     const deleteService = () => {
         setIsViewDisabled(true);
         deleteRequest.mutate();
+        setServiceTemplateAction(ServiceTemplateAction.DELETE);
     };
 
     return (

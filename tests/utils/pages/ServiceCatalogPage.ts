@@ -160,7 +160,7 @@ export class ServiceCatalogPage {
     }
 
     get republishSuccessAlert() {
-        return this.page.getByText('Service template updated in catalog successfully');
+        return this.page.getByText('Service republish request submitted successfully');
     }
 
     get cancelSuccessAlert() {

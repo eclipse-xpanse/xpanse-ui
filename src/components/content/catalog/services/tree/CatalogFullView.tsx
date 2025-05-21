@@ -19,28 +19,21 @@ import {
 import { getAllKeysFromCatalogTree } from '../../../common/catalog/catalogProps';
 import { filterNodes } from '../../../common/tree/filterTreeData';
 import ServiceProvider from '../details/ServiceProvider';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { ServiceTree } from './ServiceTree';
 
 export function CatalogFullView({
     treeData,
     categoryOclData,
     category,
-    isShowUnpublishAlert,
-    setIsShowUnpublishAlert,
-    isShowRepublishAlert,
-    setIsShowRepublishAlert,
-    isShowCancelRequestAlert,
-    setIsShowCancelRequestAlert,
+    serviceTemplateAction,
+    setServiceTemplateAction,
 }: {
     treeData: DataNode[];
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     category: category;
-    isShowUnpublishAlert: boolean;
-    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
-    isShowRepublishAlert: boolean;
-    setIsShowRepublishAlert: (isShowRepublishAlert: boolean) => void;
-    isShowCancelRequestAlert: boolean;
-    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
+    serviceTemplateAction: ServiceTemplateAction;
+    setServiceTemplateAction: (serviceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const [searchValue, setSearchValue] = useState('');
@@ -66,16 +59,16 @@ export function CatalogFullView({
 
     const [selectKey, setSelectKey] = useState<React.Key>(getDefaultSelectedKey());
     const [isViewDisabled, setIsViewDisabled] = useState<boolean>(false);
-    // necessary to store previous selected key to check and reuse previous values where possible.
+    // necessary to store a previous selected key to check and reuse previous values where possible.
     const previousSelectedKey = useRef<React.Key>(getDefaultSelectedKey());
 
     function getDefaultSelectedKey() {
-        //if user directly opens an url.
+        //if a user directly opens a specific service url.
         if (serviceNameInQuery && serviceVersionInQuery) {
             if (allKeysInTree.includes(serviceNameInQuery + '@' + serviceVersionInQuery)) {
                 return serviceNameInQuery + '@' + serviceVersionInQuery;
             } else {
-                // if service name is not found in tree, then use first service template of that service name.
+                // if the service name is not found in a tree, then use the first service template of that service name.
                 const serviceTemplates = categoryOclData.get(serviceNameInQuery);
                 if (serviceTemplates) {
                     return serviceTemplates[0].name + '@' + serviceTemplates[0].version;
@@ -172,12 +165,8 @@ export function CatalogFullView({
                     category={category}
                     isViewDisabled={isViewDisabled}
                     setIsViewDisabled={setIsViewDisabled}
-                    isShowUnpublishAlert={isShowUnpublishAlert}
-                    setIsShowUnpublishAlert={setIsShowUnpublishAlert}
-                    isShowRepublishAlert={isShowRepublishAlert}
-                    setIsShowRepublishAlert={setIsShowRepublishAlert}
-                    isShowCancelRequestAlert={isShowCancelRequestAlert}
-                    setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
                 />
             </div>
         </>

@@ -16,15 +16,15 @@ import {
     groupServiceTemplatesByName,
 } from '../../../common/catalog/catalogProps';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
 function CategoryCatalog({ category }: { category: category }): React.JSX.Element {
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
-
-    const [isShowUnpublishAlert, setIsShowUnpublishAlert] = useState(false);
-    const [isShowRepublishAlert, setIsShowRepublishAlert] = useState(false);
-    const [isShowCancelRequestAlert, setIsShowCancelRequestAlert] = useState(false);
+    const [serviceTemplateAction, setServiceTemplateAction] = useState<ServiceTemplateAction>(
+        ServiceTemplateAction.NOOP
+    );
 
     // Process data conditionally, but don't return yet
     const categoryOclData: Map<string, ServiceTemplateDetailVo[]> = useMemo(() => {
@@ -103,12 +103,8 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
                     treeData={treeData}
                     categoryOclData={categoryOclData}
                     category={category}
-                    isShowUnpublishAlert={isShowUnpublishAlert}
-                    setIsShowUnpublishAlert={setIsShowUnpublishAlert}
-                    isShowRepublishAlert={isShowRepublishAlert}
-                    setIsShowRepublishAlert={setIsShowRepublishAlert}
-                    isShowCancelRequestAlert={isShowCancelRequestAlert}
-                    setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
                 />
             </div>
         </div>
