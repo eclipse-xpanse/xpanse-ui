@@ -13,21 +13,24 @@ import {
 } from '../../../../../xpanse-api/generated';
 import { cancelServiceTemplateReviewErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import useServiceTemplateHistoryQuery from '../history/useServiceTemplateHistoryQuery.ts';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 export function CancelServiceTemplateRequestResult({
     serviceDetail,
     category,
-    isShowCancelRequestAlert,
-    setIsShowCancelRequestAlert,
     cancelServiceTemplateRequest,
+    onClose,
+    serviceTemplateAction,
+    setServiceTemplateAction,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     category: category;
-    isShowCancelRequestAlert: boolean;
-    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
     cancelServiceTemplateRequest: UseMutationResult<void, Error, string>;
+    onClose: () => void;
+    serviceTemplateAction: ServiceTemplateAction;
+    setServiceTemplateAction: (componentName: ServiceTemplateAction) => void;
 }): React.JSX.Element | undefined {
     const queryClient = useQueryClient();
 
@@ -45,15 +48,30 @@ export function CancelServiceTemplateRequestResult({
     }
 
     const onRemove = () => {
-        setIsShowCancelRequestAlert(false);
+        onClose();
     };
 
     if (cancelServiceTemplateRequest.isSuccess) {
-        setIsShowCancelRequestAlert(true);
         void queryClient.invalidateQueries({ queryKey: getQueryKey(category) });
     }
 
-    if (isShowCancelRequestAlert) {
+    const cancelRequestRetry = () => {
+        cancelServiceTemplateRequest.mutate(requestId ?? '');
+        setServiceTemplateAction(ServiceTemplateAction.CANCEL);
+    };
+
+    if (serviceTemplateAction === ServiceTemplateAction.CANCEL && cancelServiceTemplateRequest.isError) {
+        return (
+            <RetryPrompt
+                error={cancelServiceTemplateRequest.error}
+                retryRequest={cancelRequestRetry}
+                errorMessage={cancelServiceTemplateReviewErrorText}
+                onClose={onRemove}
+            />
+        );
+    }
+
+    if (serviceTemplateAction === ServiceTemplateAction.CANCEL) {
         return (
             <Alert
                 message='Request cancelled'
@@ -61,21 +79,6 @@ export function CancelServiceTemplateRequestResult({
                 showIcon
                 type={'success'}
                 closable={true}
-                onClose={onRemove}
-            />
-        );
-    }
-
-    const cancelRequestRetry = () => {
-        cancelServiceTemplateRequest.mutate(requestId ?? '');
-    };
-
-    if (cancelServiceTemplateRequest.isError) {
-        return (
-            <RetryPrompt
-                error={cancelServiceTemplateRequest.error}
-                retryRequest={cancelRequestRetry}
-                errorMessage={cancelServiceTemplateReviewErrorText}
                 onClose={onRemove}
             />
         );

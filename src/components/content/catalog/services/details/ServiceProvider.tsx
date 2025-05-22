@@ -36,6 +36,7 @@ import { UnpublishResult } from '../unpublish/UnpublishResult.tsx';
 import UnpublishService from '../unpublish/UnpublishService.tsx';
 import UpdateService from '../update/UpdateService';
 import { ServiceProviderSkeleton } from './ServiceProviderSkeleton';
+import { ServiceTemplateAction } from './serviceTemplateAction.tsx';
 import ServiceTemplateDetails from './serviceTemplateDetails';
 
 function ServiceProvider({
@@ -45,12 +46,8 @@ function ServiceProvider({
     category,
     isViewDisabled,
     setIsViewDisabled,
-    isShowUnpublishAlert,
-    setIsShowUnpublishAlert,
-    isShowRepublishAlert,
-    setIsShowRepublishAlert,
-    isShowCancelRequestAlert,
-    setIsShowCancelRequestAlert,
+    serviceTemplateAction,
+    setServiceTemplateAction,
 }: {
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
@@ -58,12 +55,8 @@ function ServiceProvider({
     category: category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    isShowUnpublishAlert: boolean;
-    setIsShowUnpublishAlert: (isShowUnpublishAlert: boolean) => void;
-    isShowRepublishAlert: boolean;
-    setIsShowRepublishAlert: (isShowRepublishAlert: boolean) => void;
-    isShowCancelRequestAlert: boolean;
-    setIsShowCancelRequestAlert: (isShowCancelRequestAlert: boolean) => void;
+    serviceTemplateAction: ServiceTemplateAction;
+    setServiceTemplateAction: (serviceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const navigate = useNavigate();
@@ -185,30 +178,52 @@ function ServiceProvider({
 
     return (
         <>
-            <UnpublishResult
-                category={category}
-                isShowUnpublishAlert={isShowUnpublishAlert}
-                setIsShowUnpublishAlert={setIsShowUnpublishAlert}
-                unPublishRequest={unPublishRequest}
-            />
-            <RepublishResult
-                category={category}
-                isShowRepublishAlert={isShowRepublishAlert}
-                setIsShowRepublishAlert={setIsShowRepublishAlert}
-                republishRequest={republishRequest}
-            />
-            <DeleteResult
-                id={activeServiceDetail.serviceTemplateId}
-                category={category}
-                deleteServiceRequest={deleteServiceRequest}
-            />
-            <CancelServiceTemplateRequestResult
-                serviceDetail={activeServiceDetail}
-                category={category}
-                isShowCancelRequestAlert={isShowCancelRequestAlert}
-                setIsShowCancelRequestAlert={setIsShowCancelRequestAlert}
-                cancelServiceTemplateRequest={cancelServiceTemplateRequest}
-            />
+            {serviceTemplateAction === ServiceTemplateAction.UNPUBLISH && (
+                <UnpublishResult
+                    category={category}
+                    unPublishRequest={unPublishRequest}
+                    onClose={() => {
+                        setServiceTemplateAction(ServiceTemplateAction.NOOP);
+                    }}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
+                />
+            )}
+            {serviceTemplateAction === ServiceTemplateAction.REPUBLISH && (
+                <RepublishResult
+                    category={category}
+                    republishRequest={republishRequest}
+                    onClose={() => {
+                        setServiceTemplateAction(ServiceTemplateAction.NOOP);
+                    }}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
+                />
+            )}
+            {serviceTemplateAction === ServiceTemplateAction.DELETE && (
+                <DeleteResult
+                    id={activeServiceDetail.serviceTemplateId}
+                    category={category}
+                    deleteServiceRequest={deleteServiceRequest}
+                    onClose={() => {
+                        setServiceTemplateAction(ServiceTemplateAction.NOOP);
+                    }}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
+                />
+            )}
+            {serviceTemplateAction === ServiceTemplateAction.CANCEL && (
+                <CancelServiceTemplateRequestResult
+                    serviceDetail={activeServiceDetail}
+                    category={category}
+                    cancelServiceTemplateRequest={cancelServiceTemplateRequest}
+                    onClose={() => {
+                        setServiceTemplateAction(ServiceTemplateAction.NOOP);
+                    }}
+                    serviceTemplateAction={serviceTemplateAction}
+                    setServiceTemplateAction={setServiceTemplateAction}
+                />
+            )}
             <Tabs
                 items={items}
                 onChange={onChangeCsp}
@@ -222,22 +237,28 @@ function ServiceProvider({
                     isViewDisabled={isViewDisabled}
                 />
                 <UnpublishService
-                    category={category}
                     serviceDetail={activeServiceDetail}
                     setIsViewDisabled={setIsViewDisabled}
                     unPublishRequest={unPublishRequest}
+                    setServiceTemplateAction={setServiceTemplateAction}
                 />
                 <RepublishService
                     serviceDetail={activeServiceDetail}
                     setIsViewDisabled={setIsViewDisabled}
                     republishRequest={republishRequest}
+                    setServiceTemplateAction={setServiceTemplateAction}
                 />
-                <DeleteService serviceDetail={activeServiceDetail} setIsViewDisabled={setIsViewDisabled} />
+                <DeleteService
+                    serviceDetail={activeServiceDetail}
+                    setIsViewDisabled={setIsViewDisabled}
+                    setServiceTemplateAction={setServiceTemplateAction}
+                />
                 <ServiceTemplateHistory serviceTemplateDetailVo={activeServiceDetail} />
                 <CancelServiceTemplateRequest
                     serviceDetail={activeServiceDetail}
                     setIsViewDisabled={setIsViewDisabled}
                     cancelServiceTemplateRequest={cancelServiceTemplateRequest}
+                    setServiceTemplateAction={setServiceTemplateAction}
                 />
             </div>
             <ServiceTemplateDetails

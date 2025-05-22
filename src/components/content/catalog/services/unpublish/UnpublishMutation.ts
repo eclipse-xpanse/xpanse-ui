@@ -18,7 +18,7 @@ export function useUnpublishRequest(id: string) {
             return unpublish(data);
         },
         // necessary to clear the mutationCache immediately.
-        // Otherwise, the mutation state is cached and with retries, it is not possible to get state of the
+        // Otherwise, the mutation state is cached and with retries, it is not possible to get the state of the
         // latest request using useMutationState method.
         gcTime: 0,
     });

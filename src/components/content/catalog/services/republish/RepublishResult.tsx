@@ -9,57 +9,60 @@ import React from 'react';
 import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { republishServiceTemplateErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { getQueryKey } from '../query/useAvailableServiceTemplatesQuery';
 
 export function RepublishResult({
     category,
-    isShowRepublishAlert,
-    setIsShowRepublishAlert,
     republishRequest,
+    onClose,
+    serviceTemplateAction,
+    setServiceTemplateAction,
 }: {
     category: category;
-    isShowRepublishAlert: boolean;
-    setIsShowRepublishAlert: (isShowRepublishAlert: boolean) => void;
     republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    onClose: () => void;
+    serviceTemplateAction: ServiceTemplateAction;
+    setServiceTemplateAction: (componentName: ServiceTemplateAction) => void;
 }): React.JSX.Element | undefined {
     //const useRepublishRequestState = useGetRepublishMutationState(id);
     const queryClient = useQueryClient();
     const onRemove = () => {
-        setIsShowRepublishAlert(false);
+        onClose();
     };
 
     if (republishRequest.isSuccess) {
-        setIsShowRepublishAlert(true);
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-    }
-
-    if (isShowRepublishAlert) {
-        return (
-            <Alert
-                message={
-                    republishRequest.data?.requestSubmittedForReview
-                        ? 'service template update request submitted to review'
-                        : 'Service template updated in catalog successfully'
-                }
-                description={'Service submitted for review of cloud provider.'}
-                showIcon
-                type={'success'}
-                closable={true}
-                onClose={onRemove}
-            />
-        );
     }
 
     const republishRequestRetry = () => {
         republishRequest.mutate();
+        setServiceTemplateAction(ServiceTemplateAction.REPUBLISH);
     };
 
-    if (republishRequest.error) {
+    if (serviceTemplateAction === ServiceTemplateAction.REPUBLISH && republishRequest.isError) {
         return (
             <RetryPrompt
                 error={republishRequest.error}
                 retryRequest={republishRequestRetry}
                 errorMessage={republishServiceTemplateErrorText}
+                onClose={onRemove}
+            />
+        );
+    }
+
+    if (serviceTemplateAction === ServiceTemplateAction.REPUBLISH) {
+        return (
+            <Alert
+                message='Service republish request submitted successfully'
+                description={
+                    republishRequest.data?.requestSubmittedForReview
+                        ? 'service template update request submitted to review'
+                        : 'Service template added to the catalog again.'
+                }
+                showIcon
+                type={'success'}
+                closable={true}
                 onClose={onRemove}
             />
         );

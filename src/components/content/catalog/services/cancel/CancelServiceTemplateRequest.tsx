@@ -9,15 +9,18 @@ import { Button, Popconfirm } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import { ServiceTemplateDetailVo, serviceTemplateRegistrationState } from '../../../../../xpanse-api/generated';
+import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import useServiceTemplateHistoryQuery from '../history/useServiceTemplateHistoryQuery';
 function CancelServiceTemplateRequest({
     serviceDetail,
     setIsViewDisabled,
     cancelServiceTemplateRequest,
+    setServiceTemplateAction,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     cancelServiceTemplateRequest: UseMutationResult<void, Error, string>;
+    setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const serviceTemplateHistoryQuery = useServiceTemplateHistoryQuery(
         serviceDetail.serviceTemplateId,
@@ -35,13 +38,11 @@ function CancelServiceTemplateRequest({
     const cancel = () => {
         setIsViewDisabled(true);
         cancelServiceTemplateRequest.mutate(requestId ?? '');
+        setServiceTemplateAction(ServiceTemplateAction.CANCEL);
     };
 
-    const isDisabledCancel = (serviceDetail: ServiceTemplateDetailVo) => {
-        if (serviceDetail.serviceTemplateRegistrationState === 'in-review' || serviceDetail.isReviewInProgress) {
-            return false;
-        }
-        return true;
+    const isDisableCancel = (serviceDetail: ServiceTemplateDetailVo) => {
+        return !(serviceDetail.serviceTemplateRegistrationState === 'in-review' || serviceDetail.isReviewInProgress);
     };
 
     return (
@@ -58,7 +59,7 @@ function CancelServiceTemplateRequest({
                 <Button
                     type='primary'
                     icon={<CloseCircleOutlined />}
-                    disabled={isDisabledCancel(serviceDetail)}
+                    disabled={isDisableCancel(serviceDetail)}
                     className={catalogStyles.catalogManageBtnClass}
                 >
                     Cancel
