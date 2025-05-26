@@ -14,9 +14,7 @@ import NoAuthLayoutHeader from './header/NoAuthLayoutHeader.tsx';
 import LayoutSider from './sider/LayoutSider.tsx';
 
 export default function AppLayout({ children }: { children: React.JSX.Element }): React.JSX.Element {
-    if (env.VITE_APP_AUTH_DISABLED !== 'true') {
-        updateApiConfig();
-    }
+    updateApiConfig();
     return (
         <Layout className={appStyles.layout} hasSider={true}>
             <LayoutSider />
