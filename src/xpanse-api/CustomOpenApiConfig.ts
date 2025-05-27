@@ -9,5 +9,8 @@ import { OpenAPI } from './generated';
 export const updateApiConfig = (): void => {
     OpenAPI.BASE = env.VITE_APP_XPANSE_API_URL ?? '';
     // when service worker enabled, the access token is automatically injected by the oidc-react library.
-    OpenAPI.TOKEN = env.VITE_APP_AUTH_USE_SERVICE_WORKER_ONLY !== 'true' ? useOidcAccessToken().accessToken : undefined;
+    if (env.VITE_APP_AUTH_DISABLED !== 'true') {
+        OpenAPI.TOKEN =
+            env.VITE_APP_AUTH_USE_SERVICE_WORKER_ONLY !== 'true' ? useOidcAccessToken().accessToken : undefined;
+    }
 };
