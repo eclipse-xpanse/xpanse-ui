@@ -55,7 +55,6 @@ export const mockCredentialsDeleteSuccessResponse = async (page: Page, timeToWai
         });
         await route.fulfill({
             status: 204,
-            contentType: 'application/json',
         });
     });
 };

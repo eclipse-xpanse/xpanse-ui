@@ -4,11 +4,13 @@
  */
 
 export const timezoneInterceptor = async (response: Response): Promise<Response> => {
-    if (!response.ok) {
+    if (
+        !response.ok ||
+        response.headers.get('content-length') === '0' ||
+        response.headers.get('Content-Type') !== 'application/json'
+    ) {
         return response;
     }
-    console.log('Intercepted response:', response);
-
     // Clone the response to read it as JSON and modify it
     const responseData = await response.clone().json();
 

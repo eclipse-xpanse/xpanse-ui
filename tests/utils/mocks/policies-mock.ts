@@ -36,7 +36,6 @@ export const mockPolicyDeleteSuccessResponse = async (page: Page, timeToWaitForR
         });
         await route.fulfill({
             status: 204,
-            contentType: 'application/json',
         });
     });
 };
