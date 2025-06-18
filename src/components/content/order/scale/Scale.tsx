@@ -70,7 +70,8 @@ export const Scale = ({
     const getScaleServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        true
     );
 
     if (orderableServiceDetailsQuery.isSuccess) {

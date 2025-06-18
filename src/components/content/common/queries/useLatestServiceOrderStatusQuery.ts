@@ -14,7 +14,8 @@ import { deploymentStatusPollingInterval } from '../../../utils/constants.tsx';
 export function useLatestServiceOrderStatusQuery(
     orderId: string | undefined,
     isStartPolling: boolean,
-    refetchUntilStates: orderStatus[]
+    refetchUntilStates: orderStatus[],
+    isDeployRequestSubmitted: boolean // necessary to stop fetching if
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', orderId],
@@ -37,7 +38,7 @@ export function useLatestServiceOrderStatusQuery(
         },
         refetchIntervalInBackground: true,
         refetchOnWindowFocus: false,
-        enabled: orderId !== undefined && isStartPolling,
+        enabled: orderId !== undefined && isStartPolling && isDeployRequestSubmitted,
         gcTime: 0,
     });
 }

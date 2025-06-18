@@ -41,7 +41,8 @@ export const ServiceConfigurationDetails = ({
     const getUpdateConfigStatusPollingQuery = useLatestServiceOrderStatusQuery(
         updateConfigRequest.data?.orderId ?? '',
         updateConfigRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        true
     );
 
     const updateConfig = (values: ServiceConfigurationUpdate) => {

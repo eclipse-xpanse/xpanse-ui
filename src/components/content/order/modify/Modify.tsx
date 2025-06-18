@@ -62,7 +62,8 @@ export const Modify = ({
     const getModifyServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isShowModifyingResult
     );
 
     const hasVariableChanged: () => boolean = () => {

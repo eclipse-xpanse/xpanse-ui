@@ -38,7 +38,7 @@ import {
 import useBreakpoint from 'antd/es/grid/hooks/useBreakpoint';
 import type { ColumnsType, ColumnType } from 'antd/es/table';
 import { ColumnFilterItem, FilterValue, SorterResult } from 'antd/es/table/interface';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import myServicesStyles from '../../../../styles/my-services.module.css';
@@ -76,7 +76,7 @@ import RecreateServiceStatusAlert from '../../order/recreate/RecreateServiceStat
 import useRecreateRequest from '../../order/recreate/useRecreateRequest.ts';
 import { RetryServiceSubmit } from '../../order/retryDeployment/RetryServiceSubmit.tsx';
 import useRedeployFailedDeploymentQuery from '../../order/retryDeployment/useRedeployFailedDeploymentQuery';
-import { Scale } from '../../order/scale/Scale';
+import { ScaleModal } from '../../order/scale/ScaleModal.tsx';
 import { CreateServiceActionForm } from '../../order/serviceActions/CreateServiceActionForm';
 import { ServiceConfiguration } from '../../order/serviceConfiguration/ServiceConfiguration.tsx';
 import { getCurrentConfigurationQueryKey } from '../../order/serviceConfiguration/useGetConfigurationOfServiceQuery.ts';
@@ -98,17 +98,17 @@ import { MyServiceDetails } from './MyServiceDetails';
 import { MyServiceHistory } from './MyServiceHistory';
 import {
     getDefaultColumns,
-    isDisableDestroyBtn,
+    isDisableDestroyButton,
     isDisableDetails,
-    isDisabledStopOrRestartBtn,
-    isDisableLocksBtn,
-    isDisableModifyBtn,
-    isDisableRecreateBtn,
-    isDisableRetryDeploymentBtn,
-    isDisableServiceActionBtn,
+    isDisabledStopOrRestartButton,
+    isDisableModifyButton,
+    isDisableRecreateButton,
+    isDisableRetryDeploymentButton,
+    isDisableScaleButton,
+    isDisableServiceActionButton,
     isDisableServiceConfigBtn,
-    isDisableServicePortingBtn,
-    isDisableStartBtn,
+    isDisableServicePortingButton,
+    isDisableStartButton,
     Option,
     showForExtraLargeScreenColumn,
     showForExtraSmallScreenColumn,
@@ -245,37 +245,43 @@ function MyServices(): React.JSX.Element {
     const getStartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateStartQuery.data?.orderId ?? '',
         serviceStateStartQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isStartRequestSubmitted
     );
 
     const getStopServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateStopQuery.data?.orderId ?? '',
         serviceStateStopQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isStopRequestSubmitted
     );
 
     const getRestartServiceDetailsQuery = useLatestServiceOrderStatusQuery(
         serviceStateRestartQuery.data?.orderId ?? '',
         serviceStateRestartQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isRestartRequestSubmitted
     );
 
     const getDestroyServiceStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceDestroyQuery.data?.orderId ?? '',
         serviceDestroyQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isDestroyRequestSubmitted
     );
 
     const getReDeployLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         redeployFailedDeploymentQuery.data?.orderId ?? '',
         redeployFailedDeploymentQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isRetryDeployRequestSubmitted
     );
 
     const getRecreateServiceOrderStatusPollingQuery = useLatestServiceOrderStatusQuery(
         serviceRecreateRequest.data?.orderId,
         serviceRecreateRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isRecreateRequestSubmitted
     );
 
     const getPurgeServiceDetailsQuery = usePurgeRequestStatusQuery(
@@ -320,6 +326,16 @@ function MyServices(): React.JSX.Element {
         serviceBillingModeFilters = updateBillingModeFilters();
         serviceRegionNameFilters = updateRegionFilters(listDeployedServicesQuery.data);
     }
+
+    const resetAllRequestStates = useCallback(() => {
+        setIsStartRequestSubmitted(false);
+        setIsStopRequestSubmitted(false);
+        setIsRestartRequestSubmitted(false);
+        setIsDestroyRequestSubmitted(false);
+        setIsPurgeRequestSubmitted(false);
+        setIsRetryDeployRequestSubmitted(false);
+        setIsRecreateRequestSubmitted(false);
+    }, []);
 
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
@@ -372,7 +388,7 @@ function MyServices(): React.JSX.Element {
                         }}
                         className={myServicesStyles.buttonAsLink}
                         icon={<LockOutlined />}
-                        disabled={isDisableLocksBtn(record, activeRecord)}
+                        disabled={false} //enabled always irrespective of the state.
                         type={'link'}
                     >
                         locks
@@ -395,7 +411,7 @@ function MyServices(): React.JSX.Element {
                                     disabled={true}
                                     type={'link'}
                                 >
-                                    modify parameters
+                                    scale
                                 </Button>
                                 <LockOutlined />
                             </Tooltip>
@@ -406,7 +422,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 className={myServicesStyles.buttonAsLink}
                                 icon={<RiseOutlined />}
-                                disabled={isDisableLocksBtn(record, activeRecord)}
+                                disabled={isDisableScaleButton(record, activeRecord)}
                                 type={'link'}
                             >
                                 scale
@@ -442,7 +458,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 className={myServicesStyles.buttonAsLink}
                                 icon={<EditOutlined />}
-                                disabled={isDisableModifyBtn(record, activeRecord)}
+                                disabled={isDisableModifyButton(record, activeRecord)}
                                 type={'link'}
                             >
                                 modify parameters
@@ -478,7 +494,7 @@ function MyServices(): React.JSX.Element {
                                 }}
                                 className={myServicesStyles.buttonAsLink}
                                 icon={<CopyOutlined />}
-                                disabled={isDisableServicePortingBtn(record, activeRecord)}
+                                disabled={isDisableServicePortingButton(record, activeRecord)}
                                 type={'link'}
                             >
                                 port service
@@ -503,7 +519,7 @@ function MyServices(): React.JSX.Element {
                               <Button
                                   className={myServicesStyles.buttonAsLink}
                                   icon={<PlayCircleOutlined />}
-                                  disabled={isDisableRetryDeploymentBtn(record)}
+                                  disabled={isDisableRetryDeploymentButton(record)}
                                   type={'link'}
                               >
                                   retry deployment
@@ -545,7 +561,7 @@ function MyServices(): React.JSX.Element {
                                 <Button
                                     className={myServicesStyles.buttonAsLink}
                                     icon={<RedoOutlined />}
-                                    disabled={isDisableRecreateBtn(
+                                    disabled={isDisableRecreateButton(
                                         record,
                                         activeRecord,
                                         serviceStateStartQuery.isPending,
@@ -644,7 +660,7 @@ function MyServices(): React.JSX.Element {
                                 >
                                     <Button
                                         icon={<CloseCircleOutlined />}
-                                        disabled={isDisableDestroyBtn(record, activeRecord)}
+                                        disabled={isDisableDestroyButton(record, activeRecord)}
                                         className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
@@ -664,7 +680,7 @@ function MyServices(): React.JSX.Element {
                         }}
                         className={myServicesStyles.buttonAsLink}
                         icon={<PlayCircleOutlined />}
-                        disabled={isDisableStartBtn(
+                        disabled={isDisableStartButton(
                             record,
                             activeRecord,
                             serviceStateStartQuery.isPending,
@@ -710,7 +726,7 @@ function MyServices(): React.JSX.Element {
                                 <Button
                                     className={myServicesStyles.buttonAsLink}
                                     icon={<PoweroffOutlined />}
-                                    disabled={isDisabledStopOrRestartBtn(
+                                    disabled={isDisabledStopOrRestartButton(
                                         record,
                                         activeRecord,
                                         serviceStateStartQuery.isPending,
@@ -759,7 +775,7 @@ function MyServices(): React.JSX.Element {
                                 <Button
                                     className={myServicesStyles.buttonAsLink}
                                     icon={<SyncOutlined />}
-                                    disabled={isDisabledStopOrRestartBtn(
+                                    disabled={isDisabledStopOrRestartButton(
                                         record,
                                         activeRecord,
                                         serviceStateStartQuery.isPending,
@@ -814,7 +830,7 @@ function MyServices(): React.JSX.Element {
                             handleServiceActionsOpenModal(record);
                         }}
                         className={myServicesStyles.buttonAsLink}
-                        disabled={isDisableServiceActionBtn(record)}
+                        disabled={isDisableServiceActionButton(record)}
                         icon={<FileTextOutlined />}
                         type={'link'}
                     >
@@ -1231,6 +1247,7 @@ function MyServices(): React.JSX.Element {
                 : (record as VendorHostedDeployedServiceDetails)
         );
         setIsServicePortingModalOpen(true);
+        resetAllRequestStates();
     }
 
     function modify(record: DeployedService): void {
@@ -1244,6 +1261,7 @@ function MyServices(): React.JSX.Element {
             cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
         }
         setIsModifyModalOpen(true);
+        resetAllRequestStates();
     }
 
     function scale(record: DeployedService): void {
@@ -1256,6 +1274,7 @@ function MyServices(): React.JSX.Element {
         for (const existingServiceParametersKey in existingParameters) {
             cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
         }
+        resetAllRequestStates();
         setIsScaleModalOpen(true);
     }
 
@@ -1269,6 +1288,7 @@ function MyServices(): React.JSX.Element {
         for (const existingServiceParametersKey in existingParameters) {
             cacheFormVariable(existingServiceParametersKey, existingParameters[existingServiceParametersKey]);
         }
+        resetAllRequestStates();
         setIsLocksModalOpen(true);
     }
 
@@ -1312,6 +1332,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
+        resetAllRequestStates();
         setIsMyServiceDetailsModalOpen(true);
     };
 
@@ -1326,6 +1347,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
+        resetAllRequestStates();
         setIsMyServiceHistoryModalOpen(true);
     };
 
@@ -1340,6 +1362,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
+        resetAllRequestStates();
         setIsMyServiceConfigurationModalOpen(true);
     };
 
@@ -1355,6 +1378,7 @@ function MyServices(): React.JSX.Element {
                 ? (record as DeployedServiceDetails)
                 : (record as VendorHostedDeployedServiceDetails)
         );
+        resetAllRequestStates();
         setIsServiceActionsModalOpen(true);
     };
 
@@ -1609,25 +1633,12 @@ function MyServices(): React.JSX.Element {
             ) : null}
 
             {activeRecord ? (
-                <Modal
-                    open={isScaleModalOpen}
-                    title={
-                        <ServiceTitle
-                            title={activeRecord.name}
-                            version={activeRecord.version}
-                            icon={getOrderableServiceDetails.data?.icon ?? ''}
-                        />
-                    }
-                    closable={true}
-                    maskClosable={false}
-                    destroyOnHidden={true}
-                    footer={null}
-                    onCancel={handleCancelScaleModel}
-                    width={1400}
-                    mask={true}
-                >
-                    <Scale currentSelectedService={activeRecord} />
-                </Modal>
+                <ScaleModal
+                    handleCancelScaleModel={handleCancelScaleModel}
+                    isScaleModalOpen={isScaleModalOpen}
+                    activeRecord={activeRecord}
+                    icon={getOrderableServiceDetails.data?.icon ?? ''}
+                />
             ) : null}
 
             {activeRecord ? (

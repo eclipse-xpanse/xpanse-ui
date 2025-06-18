@@ -38,7 +38,8 @@ export const ServiceActionParameter = ({
     const getServiceActionsStatusPollingQuery = useLatestServiceOrderStatusQuery(
         createServiceActionRequest.data?.orderId ?? '',
         createServiceActionRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isShowActionSubmitResult
     );
     const onSubmit = () => {
         setIsShowActionSubmitResult(true);
