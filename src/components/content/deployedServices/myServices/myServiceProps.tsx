@@ -194,6 +194,15 @@ function isHasDeployResources(details: DeployedServiceDetails): boolean {
     return !!details.deployResources && details.deployResources.length > 0;
 }
 
+/**
+ * Whether the "Details" button should be disabled for the given deployed service record.
+ *
+ * The button is disabled if and only if the record does not have any deployed service properties,
+ * service request properties, or deploy resources.
+ *
+ * @param record the deployed service record
+ * @returns whether the button should be disabled
+ */
 export const isDisableDetails = (record: DeployedService) => {
     if (record.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
         const details = record as VendorHostedDeployedServiceDetails;
@@ -213,12 +222,12 @@ export const isDisableDetails = (record: DeployedService) => {
     return true;
 };
 
-export const isDisableLocksBtn = (
+export const isDisableScaleButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {
     if (
-        activeRecord ||
+        activeRecord?.serviceId === record.serviceId ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFYING.toString() ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
@@ -230,12 +239,12 @@ export const isDisableLocksBtn = (
     return false;
 };
 
-export const isDisableModifyBtn = (
+export const isDisableModifyButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {
     if (
-        activeRecord ||
+        activeRecord?.serviceId === record.serviceId ||
         (record.lockConfig?.modifyLocked !== undefined && record.lockConfig.modifyLocked) ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFYING.toString() ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
@@ -248,12 +257,12 @@ export const isDisableModifyBtn = (
     return false;
 };
 
-export const isDisableServicePortingBtn = (
+export const isDisableServicePortingButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {
     if (
-        activeRecord ||
+        activeRecord?.serviceId === record.serviceId ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFICATION_FAILED.toString() ||
         record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
@@ -265,7 +274,7 @@ export const isDisableServicePortingBtn = (
     return false;
 };
 
-export const isDisableDestroyBtn = (
+export const isDisableDestroyButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {
@@ -274,14 +283,14 @@ export const isDisableDestroyBtn = (
             record.serviceDeploymentState.toString() !== serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
             record.serviceDeploymentState.toString() !== serviceDeploymentState.MODIFICATION_FAILED.toString() &&
             record.serviceDeploymentState.toString() !== serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
-        activeRecord !== undefined
+        activeRecord?.serviceId === record.serviceId
     ) {
         return true;
     }
     return false;
 };
 
-export const isDisableStartBtn = (
+export const isDisableStartButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined,
     serviceStateStartQueryIsPending: boolean,
@@ -315,7 +324,7 @@ export const isDisableStartBtn = (
     return record.serviceState === serviceState.RUNNING;
 };
 
-export const isDisabledStopOrRestartBtn = (
+export const isDisabledStopOrRestartButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined,
     serviceStateStartQueryIsPending: boolean,
@@ -349,7 +358,7 @@ export const isDisabledStopOrRestartBtn = (
     return record.serviceState === serviceState.STOPPED;
 };
 
-export const isDisableRetryDeploymentBtn = (record: DeployedService) => {
+export const isDisableRetryDeploymentButton = (record: DeployedService) => {
     return record.serviceDeploymentState === serviceDeploymentState.DEPLOYING;
 };
 
@@ -366,7 +375,7 @@ export const isDisableServiceConfigBtn = (record: DeployedService) => {
     return true;
 };
 
-export const isDisableServiceActionBtn = (record: DeployedService) => {
+export const isDisableServiceActionButton = (record: DeployedService) => {
     return !(
         record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
         record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
@@ -374,7 +383,7 @@ export const isDisableServiceActionBtn = (record: DeployedService) => {
     );
 };
 
-export const isDisableRecreateBtn = (
+export const isDisableRecreateButton = (
     record: DeployedService,
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined,
     serviceStateStartQueryIsPending: boolean,

@@ -78,7 +78,8 @@ export const PortServiceSubmit = ({
     const getPortLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         portServiceRequest.data?.orderId ?? '',
         portServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isShowDeploymentResult
     );
 
     const getOrderableServiceDetails = useGetOrderableServiceDetailsByServiceIdQuery(currentSelectedService.serviceId);

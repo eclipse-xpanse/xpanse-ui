@@ -42,7 +42,8 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             ? redeployFailedDeploymentQuery.data.orderId
             : (submitDeploymentRequest.data?.orderId ?? ''),
         submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED]
+        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        isShowDeploymentResult
     );
 
     const orderableServicesQuery = userOrderableServicesQuery(state.category, state.name);
