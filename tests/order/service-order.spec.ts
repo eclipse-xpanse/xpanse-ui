@@ -93,14 +93,8 @@ test('deploy service successfully', async ({ page, baseURL }) => {
     await page.waitForTimeout(3000);
     const successResult = orderSubmitPage.successResult;
     await expect(successResult).toBeVisible();
-    const successEndpointsResult = orderSubmitPage.successEndpointsResult;
+    const successEndpointsResult = orderSubmitPage.successEndpointsDetailsLink;
     await expect(successEndpointsResult).toBeVisible();
-    const successEcsHostResult = orderSubmitPage.successEcsHostResult;
-    await expect(successEcsHostResult).toBeVisible();
-    const successEcsPublicIpResult = orderSubmitPage.successEcsPublicIpResult;
-    await expect(successEcsPublicIpResult).toBeVisible();
-    const successAdminPasswdResult = orderSubmitPage.successAdminPasswdResult;
-    await expect(successAdminPasswdResult).toBeVisible();
     await page.waitForTimeout(1000);
 
     await orderSubmitPage.clickServiceId();

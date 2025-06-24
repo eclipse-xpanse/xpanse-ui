@@ -19,9 +19,8 @@ import {
     serviceDeploymentState,
     serviceHostingType,
 } from '../../../../xpanse-api/generated';
-import { LocationStateType } from '../../../utils/LocationStateType.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
-import { IsvUserDashBoardPage, serviceDetailsErrorText, ServiceDetailsPage } from '../../../utils/constants';
+import { serviceDetailsErrorText } from '../../../utils/constants';
 import { cspMap } from '../../common/csp/CspLogo';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { useOrderFormStore } from '../../order/store/OrderFormStore';
@@ -32,7 +31,7 @@ import { ReportsServiceDetails } from './ReportsServiceDetails';
 
 function Reports(): React.JSX.Element {
     const location = useLocation();
-
+    const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
     let deployedServiceList: DeployedService[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
@@ -48,40 +47,33 @@ function Reports(): React.JSX.Element {
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
     // redirect from isv service details page
-    const serviceIdInQuery = useMemo(() => {
-        if (!location.state) {
-            return null;
-        }
-        const state = location.state as LocationStateType;
+    const serviceNameInQuery = useMemo(() => {
+        const serviceName = searchParams.get('serviceName');
+        return serviceName ? [serviceName] : null;
+    }, [searchParams]);
 
-        if (state.from === ServiceDetailsPage && state.serviceIds && state.serviceIds.length > 0) {
-            return state.serviceIds;
-        }
-        return null;
-    }, [location]);
+    const serviceVersionInQuery = useMemo(() => {
+        const serviceVersion = searchParams.get('serviceVersion');
+        return serviceVersion ? [serviceVersion] : null;
+    }, [searchParams]);
 
     // redirect from isv dashboard
     const serviceDeploymentStateInQuery = useMemo(() => {
-        if (!location.state) {
-            return null;
-        }
-        const state = location.state as LocationStateType;
-
-        if (state.from === IsvUserDashBoardPage && state.serviceDeploymentStates) {
-            return state.serviceDeploymentStates;
-        }
-        return null;
-    }, [location]);
+        const states = searchParams.getAll('serviceDeploymentState');
+        return states.length > 0 ? states : null;
+    }, [searchParams]);
 
     const [serviceDeploymentStateFilteredValue, setServiceDeploymentStateFilteredValue] = useState<FilterValue | null>(
         serviceDeploymentStateInQuery
     );
-    const [serviceIdFilteredValue, setServiceIdFilteredValue] = useState<FilterValue | null>(serviceIdInQuery);
+    const [serviceIdFilteredValue, setServiceIdFilteredValue] = useState<FilterValue | null>(null);
     const [customerServiceNameFilteredValue, setCustomerServiceNameFilteredValue] = useState<FilterValue | null>(null);
     const [categoryFilteredValue, setCategoryFilteredValue] = useState<FilterValue | null>(null);
     const [cspFilteredValue, setCspFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceNameFilteredValue, setServiceNameFilteredValue] = useState<FilterValue | null>(null);
-    const [serviceVersionFilteredValue, setServiceVersionFilteredValue] = useState<FilterValue | null>(null);
+    const [serviceNameFilteredValue, setServiceNameFilteredValue] = useState<FilterValue | null>(serviceNameInQuery);
+    const [serviceVersionFilteredValue, setServiceVersionFilteredValue] = useState<FilterValue | null>(
+        serviceVersionInQuery
+    );
     const [serviceHostingTypeFilteredValue, setServiceHostingTypeFilteredValue] = useState<FilterValue | null>(null);
 
     const handleFilterChange = (

@@ -10,7 +10,7 @@ import { DeployResource, deployResourceKind } from '../../../../xpanse-api/gener
 import { DeployResourceDataType } from '../myServices/myServiceProps';
 import DeployedResourceProperties from './DeployedResourceProperties';
 
-export function DeployedResources(content: DeployResource[], title: string): React.JSX.Element {
+export function DeployedResources({ content, title }: { content: DeployResource[]; title: string }): React.JSX.Element {
     let columns: ColumnsType<DeployResourceDataType> = [];
     const deployResourceList: DeployResourceDataType[] = [];
     if (content.length > 0) {

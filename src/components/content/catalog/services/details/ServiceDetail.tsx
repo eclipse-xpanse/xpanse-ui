@@ -6,7 +6,7 @@
 import { GlobalOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Descriptions, Tag } from 'antd';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
@@ -18,7 +18,7 @@ import {
     serviceTemplateRegistrationState,
 } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
-import { reportsRoute, ServiceDetailsPage } from '../../../../utils/constants';
+import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
 import { ApiDoc } from '../../../common/doc/ApiDoc';
 import { AgreementText } from '../../../common/ocl/AgreementText';
@@ -38,7 +38,6 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     const currentRole = useCurrentUserRoleStore((state) => state.currentUserRole);
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
-    const serviceIdList: string[] = [];
     const listDeployedServicesByIsvQuery = useDeployedServicesQuery(
         serviceDetails.category as category,
         serviceDetails.csp as csp,
@@ -54,28 +53,22 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL ||
                 serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED
             ) {
-                serviceIdList.push(serviceItem.serviceId);
                 numberOfActiveServiceDeployments++;
             }
         });
     }
 
     const onClick = () => {
-        getReportsRedirectionUrl(serviceIdList);
-    };
-
-    const getReportsRedirectionUrl = (serviceIdList: string[]) => {
-        void navigate(
-            {
-                pathname: reportsRoute,
-            },
-            {
-                state: {
-                    from: ServiceDetailsPage,
-                    serviceIds: serviceIdList,
-                },
-            }
-        );
+        const searchParams = new URLSearchParams();
+        searchParams.append('serviceName', serviceDetails.name);
+        searchParams.append('serviceVersion', serviceDetails.version);
+        void navigate({
+            pathname: reportsRoute,
+            search: createSearchParams({
+                serviceName: serviceDetails.name,
+                serviceVersion: serviceDetails.version,
+            }).toString(),
+        });
     };
 
     return (

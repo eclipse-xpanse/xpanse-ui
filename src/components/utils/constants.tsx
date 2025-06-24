@@ -43,9 +43,6 @@ export const serviceVersionKeyQuery: string = 'version';
 export const serviceHostingTypeQuery: string = 'hostingType';
 export const serviceVendorQuery: string = 'serviceVendor';
 export const serviceCategoryQuery: string = 'category';
-export const EndUserDashBoardPage: string = 'EndUserDashBoardPage';
-export const IsvUserDashBoardPage: string = 'IsvUserDashBoardPage';
-export const ServiceDetailsPage: string = 'ServiceDetailsPage';
 
 export const workflowsPageRoute: string = '/workflows';
 export const workflowsLabelName: string = 'Workflows';

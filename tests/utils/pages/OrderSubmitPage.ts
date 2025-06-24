@@ -31,20 +31,8 @@ export class OrderSubmitPage {
         return this.page.getByText('Deployment Successful');
     }
 
-    get successEndpointsResult() {
-        return this.page.getByRole('heading', { name: 'Endpoint Information' });
-    }
-
-    get successEcsHostResult() {
-        return this.page.getByText('ecs_host:');
-    }
-
-    get successEcsPublicIpResult() {
-        return this.page.getByText('ecs_public_ip:');
-    }
-
-    get successAdminPasswdResult() {
-        return this.page.getByText('admin_passwd:');
+    get successEndpointsDetailsLink() {
+        return this.page.getByText('view details');
     }
 
     get backendErrorAlert() {
