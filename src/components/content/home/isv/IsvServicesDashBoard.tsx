@@ -8,12 +8,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { category, DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import {
-    catalogPageRoute,
-    IsvUserDashBoardPage,
-    reportsRoute,
-    serviceDetailsErrorText,
-} from '../../../utils/constants';
+import { catalogPageRoute, reportsRoute, serviceDetailsErrorText } from '../../../utils/constants';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
@@ -101,13 +96,12 @@ export function IsvServicesDashBoard(): React.JSX.Element {
         });
     };
 
-    const getReportsRedirectionUrl = (serviceDeploymentState: serviceDeploymentState[]) => {
-        void navigate(
-            {
-                pathname: reportsRoute,
-            },
-            { state: { from: IsvUserDashBoardPage, serviceDeploymentStates: serviceDeploymentState } }
-        );
+    const getReportsRedirectionUrl = (serviceDeploymentStates: serviceDeploymentState[]) => {
+        const params = new URLSearchParams();
+        serviceDeploymentStates.forEach((state) => {
+            params.append('serviceDeploymentState', state);
+        });
+        void navigate(`${reportsRoute}?${params.toString()}`);
     };
 
     return (

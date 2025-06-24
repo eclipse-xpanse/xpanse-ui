@@ -56,11 +56,12 @@ import {
     serviceState,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
-import { EndUserDashBoardPage, orderPageRoute, serviceDetailsErrorText } from '../../../utils/constants.tsx';
-import { LocationStateType } from '../../../utils/LocationStateType.tsx';
+import { serviceDetailsErrorText } from '../../../utils/constants.tsx';
 import { sortVersionNum } from '../../../utils/Sort';
 import { cspMap } from '../../common/csp/CspLogo';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
+import { ContactDetailsShowType } from '../../common/ocl/ContactDetailsShowType.ts';
+import { ContactDetailsText } from '../../common/ocl/ContactDetailsText.tsx';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
 import { ServiceTitle } from '../../order/common/ServiceTitle.tsx';
 import { ShowId } from '../../order/common/ShowId.tsx';
@@ -138,34 +139,24 @@ function MyServices(): React.JSX.Element {
 
     const location = useLocation();
 
+    // Read URL search parameters
+    const searchParams = useMemo(() => new URLSearchParams(location.search), [location.search]);
+    const detailsParam = searchParams.get('details') === 'true';
+
     // redirect from order page
     const serviceIdInQuery = useMemo(() => {
-        if (!location.state) {
-            return null;
-        }
-        const state = location.state as LocationStateType;
-
-        if (state.from === orderPageRoute && state.serviceIds && state.serviceIds.length > 0) {
-            return state.serviceIds;
-        }
-        return null;
-    }, [location]);
+        const serviceId = searchParams.get('serviceId');
+        return serviceId ?? null;
+    }, [searchParams]);
 
     // redirect from end user dashboard
     const serviceDeploymentStateInQuery = useMemo(() => {
-        if (!location.state) {
-            return null;
-        }
-        const state = location.state as LocationStateType;
-
-        if (state.from === EndUserDashBoardPage && state.serviceDeploymentStates) {
-            return state.serviceDeploymentStates;
-        }
-        return null;
-    }, [location]);
+        const states = searchParams.getAll('serviceDeploymentState');
+        return states.length > 0 ? states : null;
+    }, [searchParams]);
 
     const [filters, setFilters] = useState<Record<string, FilterValue | null>>({
-        serviceId: serviceIdInQuery,
+        serviceId: serviceIdInQuery ? [serviceIdInQuery] : null,
         customerServiceName: null,
         category: null,
         csp: null,
@@ -189,7 +180,6 @@ function MyServices(): React.JSX.Element {
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const [clearFormVariables] = useOrderFormStore((state) => [state.clearFormVariables]);
 
-    let serviceVoList: DeployedService[] = [];
     let versionFilters: ColumnFilterItem[] = [];
     let serviceHostingTypeFilters: ColumnFilterItem[] = [];
     let serviceBillingModeFilters: ColumnFilterItem[] = [];
@@ -215,10 +205,10 @@ function MyServices(): React.JSX.Element {
     const [isRetryDeployRequestSubmitted, setIsRetryDeployRequestSubmitted] = useState<boolean>(false);
     const [isRecreateRequestSubmitted, setIsRecreateRequestSubmitted] = useState<boolean>(false);
 
-    const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState(false);
-    const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState(false);
-    const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState(false);
-    const [isServiceActionsModalOpen, setIsServiceActionsModalOpen] = useState(false);
+    const [isMyServiceDetailsModalOpen, setIsMyServiceDetailsModalOpen] = useState<boolean>(false);
+    const [isMyServiceHistoryModalOpen, setIsMyServiceHistoryModalOpen] = useState<boolean>(false);
+    const [isMyServiceConfigurationModalOpen, setIsMyServiceConfigurationModalOpen] = useState<boolean>(false);
+    const [isServiceActionsModalOpen, setIsServiceActionsModalOpen] = useState<boolean>(false);
 
     const [isServicePortingModalOpen, setIsServicePortingModalOpen] = useState<boolean>(false);
     const [isModifyModalOpen, setIsModifyModalOpen] = useState<boolean>(false);
@@ -291,6 +281,29 @@ function MyServices(): React.JSX.Element {
         isPurgeRequestSubmitted
     );
 
+    const resetAllRequestStates = useCallback(() => {
+        setIsStartRequestSubmitted(false);
+        setIsStopRequestSubmitted(false);
+        setIsRestartRequestSubmitted(false);
+        setIsDestroyRequestSubmitted(false);
+        setIsPurgeRequestSubmitted(false);
+        setIsRetryDeployRequestSubmitted(false);
+        setIsRecreateRequestSubmitted(false);
+    }, []);
+
+    const handleMyServiceDetailsOpenModal = useCallback(
+        (record: DeployedService) => {
+            setActiveRecord(
+                record.serviceHostingType === serviceHostingType.SELF
+                    ? (record as DeployedServiceDetails)
+                    : (record as VendorHostedDeployedServiceDetails)
+            );
+            resetAllRequestStates();
+            setIsMyServiceDetailsModalOpen(true);
+        },
+        [resetAllRequestStates]
+    );
+
     useEffect(() => {
         void listDeployedServicesQuery.refetch();
 
@@ -313,7 +326,6 @@ function MyServices(): React.JSX.Element {
     ]);
 
     if (listDeployedServicesQuery.isSuccess && listDeployedServicesQuery.data.length > 0) {
-        serviceVoList = listDeployedServicesQuery.data;
         serviceIdFilters = updateServiceIdFilters(listDeployedServicesQuery.data);
         versionFilters = updateVersionFilters(listDeployedServicesQuery.data);
         nameFilters = updateNameFilters(listDeployedServicesQuery.data);
@@ -327,15 +339,29 @@ function MyServices(): React.JSX.Element {
         serviceRegionNameFilters = updateRegionFilters(listDeployedServicesQuery.data);
     }
 
-    const resetAllRequestStates = useCallback(() => {
-        setIsStartRequestSubmitted(false);
-        setIsStopRequestSubmitted(false);
-        setIsRestartRequestSubmitted(false);
-        setIsDestroyRequestSubmitted(false);
-        setIsPurgeRequestSubmitted(false);
-        setIsRetryDeployRequestSubmitted(false);
-        setIsRecreateRequestSubmitted(false);
-    }, []);
+    useEffect(() => {
+        // If details param is true, and we have a serviceId in the URL
+        if (
+            detailsParam &&
+            serviceIdInQuery &&
+            listDeployedServicesQuery.isSuccess &&
+            listDeployedServicesQuery.data.length > 0
+        ) {
+            // Find the service with the matching ID
+            const serviceId = serviceIdInQuery;
+            const service = listDeployedServicesQuery.data.find((svc) => svc.serviceId === serviceId);
+            // If found, open the details modal
+            if (service) {
+                handleMyServiceDetailsOpenModal(service);
+            }
+        }
+    }, [
+        detailsParam,
+        handleMyServiceDetailsOpenModal,
+        serviceIdInQuery,
+        listDeployedServicesQuery.isSuccess,
+        listDeployedServicesQuery.data,
+    ]);
 
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
@@ -1326,19 +1352,25 @@ function MyServices(): React.JSX.Element {
         void listDeployedServicesQuery.refetch();
     }
 
-    const handleMyServiceDetailsOpenModal = (record: DeployedService) => {
-        setActiveRecord(
-            record.serviceHostingType === serviceHostingType.SELF
-                ? (record as DeployedServiceDetails)
-                : (record as VendorHostedDeployedServiceDetails)
-        );
-        resetAllRequestStates();
-        setIsMyServiceDetailsModalOpen(true);
-    };
-
     const handleMyServiceDetailsModalClose = () => {
         setActiveRecord(undefined);
         setIsMyServiceDetailsModalOpen(false);
+        const newSearchParams = new URLSearchParams(searchParams);
+        newSearchParams.delete('details');
+        const result = navigate(
+            {
+                search: newSearchParams.toString(),
+            },
+            { replace: true }
+        );
+
+        // If navigate returns a Promise, handle potential errors
+        if (result instanceof Promise) {
+            result.catch((error: unknown) => {
+                // eslint-disable-next-line no-console
+                console.error(error);
+            });
+        }
     };
 
     const handleMyServiceHistoryOpenModal = (record: DeployedService) => {
@@ -1544,7 +1576,23 @@ function MyServices(): React.JSX.Element {
             ) : null}
             {activeRecord ? (
                 <Modal
-                    title={'Service Details'}
+                    title={
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <ServiceTitle
+                                title={activeRecord.name}
+                                version={activeRecord.version}
+                                icon={getOrderableServiceDetails.data?.icon ?? undefined}
+                            />
+                            {getOrderableServiceDetails.data ? (
+                                <ContactDetailsText
+                                    serviceProviderContactDetails={
+                                        getOrderableServiceDetails.data.serviceProviderContactDetails
+                                    }
+                                    showFor={ContactDetailsShowType.Order}
+                                />
+                            ) : null}
+                        </div>
+                    }
                     width={1000}
                     footer={null}
                     open={isMyServiceDetailsModalOpen}
@@ -1601,7 +1649,7 @@ function MyServices(): React.JSX.Element {
                         <ServiceTitle
                             title={activeRecord.name}
                             version={activeRecord.version}
-                            icon={getOrderableServiceDetails.data?.icon ?? ''}
+                            icon={getOrderableServiceDetails.data?.icon ?? undefined}
                         />
                     }
                     closable={true}
@@ -1648,7 +1696,7 @@ function MyServices(): React.JSX.Element {
                         <ServiceTitle
                             title={activeRecord.name}
                             version={activeRecord.version}
-                            icon={getOrderableServiceDetails.data?.icon ?? ''}
+                            icon={getOrderableServiceDetails.data?.icon ?? undefined}
                         />
                     }
                     closable={true}
@@ -1718,9 +1766,9 @@ function MyServices(): React.JSX.Element {
                 <div className={myServicesStyles.serviceInstanceList}>
                     <Table
                         columns={selectedColumns}
-                        dataSource={serviceVoList}
+                        dataSource={listDeployedServicesQuery.data}
                         loading={listDeployedServicesQuery.isPending || listDeployedServicesQuery.isRefetching}
-                        rowKey={'id'}
+                        rowKey={'serviceId'}
                         onChange={handleFilterChange}
                         scroll={{ x: 'max-content' }}
                     />

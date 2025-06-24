@@ -3,11 +3,12 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Skeleton } from 'antd';
+import { LinkOutlined } from '@ant-design/icons';
+import { Button, Skeleton } from 'antd';
 import React from 'react';
-import submitResultStyles from '../../../../styles/submit-result.module.css';
+import { useNavigate } from 'react-router-dom';
 import { serviceHostingType, ServiceOrderStatusUpdate } from '../../../../xpanse-api/generated';
-import { convertMapToDetailsList } from '../../../utils/convertMapToDetailsList.tsx';
+import { myServicesRoute } from '../../../utils/constants.tsx';
 import FallbackSkeleton from '../../common/lazy/FallBackSkeleton.tsx';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 import { OperationType } from '../types/OperationType.ts';
@@ -24,11 +25,18 @@ export function OrderEndPointDetails({
     operationType: OperationType;
 }): React.JSX.Element {
     const endPointMap = new Map<string, string>();
+    const navigate = useNavigate();
     const deployServiceDetailsQuery = useServiceDetailsByServiceIdQuery(
         serviceId,
         selectedServiceHostingType,
         serviceOrderStatus.orderStatus
     );
+    const getServiceDeploymentDetails = () => {
+        void navigate({
+            pathname: myServicesRoute,
+            search: `?serviceId=${serviceId}&details=true`,
+        });
+    };
     if (
         deployServiceDetailsQuery.isPending ||
         deployServiceDetailsQuery.isFetching ||
@@ -45,10 +53,20 @@ export function OrderEndPointDetails({
         if (endPointMap.size > 0) {
             return (
                 <>
-                    <span>{getOperationResult(operationType)}</span>
-                    <div className={submitResultStyles.resultContainer}>
-                        {convertMapToDetailsList(endPointMap, 'Endpoint Information')}
-                    </div>
+                    <span>
+                        {getOperationResult(operationType)}.
+                        <Button
+                            size='small'
+                            color='blue'
+                            variant='link'
+                            onClick={() => {
+                                getServiceDeploymentDetails();
+                            }}
+                        >
+                            view details
+                            <LinkOutlined />
+                        </Button>
+                    </span>
                 </>
             );
         } else {

@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { CheckOutlined, CopyOutlined } from '@ant-design/icons';
+import { CheckOutlined, CopyOutlined, LinkOutlined, TagFilled } from '@ant-design/icons';
 import { Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import submitResultStyles from '../../../../styles/submit-result.module.css';
-import { myServicesRoute, orderPageRoute } from '../../../utils/constants';
+import { myServicesRoute } from '../../../utils/constants';
 
 function OrderSubmitResultDetails({
     msg,
@@ -25,7 +25,7 @@ function OrderSubmitResultDetails({
     return (
         <div>
             <div className={submitResultStyles.resultContainer}>
-                Service ID:&nbsp;
+                <TagFilled /> &nbsp; Service ID: <LinkOutlined /> &nbsp;
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
@@ -38,12 +38,7 @@ function OrderSubmitResultDetails({
                 >
                     <span
                         onClick={() => {
-                            void navigate(
-                                {
-                                    pathname: myServicesRoute,
-                                },
-                                { state: { from: orderPageRoute, serviceIds: [String(serviceId)] } }
-                            );
+                            void navigate(`${myServicesRoute}?serviceId=${encodeURIComponent(serviceId)}`);
                         }}
                         className={submitResultStyles.showDetailsTypographyCopyInfo}
                     >
@@ -52,7 +47,7 @@ function OrderSubmitResultDetails({
                 </Paragraph>
             </div>
             <div className={submitResultStyles.resultContainer}>
-                Order ID:&nbsp;
+                <TagFilled /> &nbsp; Order ID:&nbsp;
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
@@ -63,7 +58,7 @@ function OrderSubmitResultDetails({
                         ],
                     }}
                 >
-                    <span className={submitResultStyles.showDetailsTypographyCopyInfo}>{orderId}</span>
+                    <span className={submitResultStyles.showDetailsTypographyCopyInfoNoLink}>{orderId}</span>
                 </Paragraph>
             </div>
             {msg}

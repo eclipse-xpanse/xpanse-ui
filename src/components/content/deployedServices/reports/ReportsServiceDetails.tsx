@@ -41,7 +41,6 @@ export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): Rea
                     content={endPointMap}
                     requestParams={requestMap}
                     deployResources={deployResourceMap}
-                    serviceId={serviceId}
                 />
             </>
         );

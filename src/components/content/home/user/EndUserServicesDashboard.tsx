@@ -8,7 +8,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
 import { DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
-import { EndUserDashBoardPage, myServicesRoute, serviceDetailsErrorText } from '../../../utils/constants';
+import { myServicesRoute, serviceDetailsErrorText } from '../../../utils/constants';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
@@ -65,13 +65,12 @@ export function EndUserServicesDashboard(): React.JSX.Element {
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceDeploymentState: serviceDeploymentState[]) => {
-        void navigate(
-            {
-                pathname: myServicesRoute,
-            },
-            { state: { from: EndUserDashBoardPage, serviceDeploymentStates: serviceDeploymentState } }
-        );
+    const getMyServicesRedirectionUrl = (serviceDeploymentStates: serviceDeploymentState[]) => {
+        const params = new URLSearchParams();
+        serviceDeploymentStates.forEach((state) => {
+            params.append('serviceDeploymentState', state);
+        });
+        void navigate(`${myServicesRoute}?${params.toString()}`);
     };
 
     return (

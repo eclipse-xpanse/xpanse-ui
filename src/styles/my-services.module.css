@@ -171,3 +171,12 @@
     word-wrap: break-word;
     word-break: break-all;
 }
+
+.group-value-hide-copy-items {
+    display: flex;
+    align-items: center;
+}
+
+.position-copy-icon {
+    margin: 0 !important;
+}

@@ -57,7 +57,6 @@ export const MyServiceDetails = ({
                 content={endPointMap}
                 requestParams={requestMap}
                 deployResources={deployResourceMap}
-                serviceId={deployedService.serviceId}
             />
         </>
     );

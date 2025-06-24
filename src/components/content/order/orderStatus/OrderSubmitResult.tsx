@@ -39,7 +39,7 @@ export const OrderSubmitResult = ({
         <div className={submitAlertStyles.submitAlertTip}>
             {' '}
             <Alert
-                message={`Processing Status`}
+                message={`Deployment Status`}
                 description={<OrderSubmitResultDetails msg={msg} serviceId={serviceId} orderId={orderId} />}
                 showIcon
                 closable={true}
