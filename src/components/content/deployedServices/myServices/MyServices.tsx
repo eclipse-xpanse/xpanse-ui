@@ -670,7 +670,7 @@ function MyServices(): React.JSX.Element {
                                         className={myServicesStyles.buttonAsLink}
                                         type={'link'}
                                     >
-                                        purge
+                                        destroy
                                     </Button>
                                     <LockOutlined />
                                 </Tooltip>
