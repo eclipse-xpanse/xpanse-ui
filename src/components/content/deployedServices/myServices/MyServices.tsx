@@ -5,11 +5,11 @@
 
 import {
     CaretDownOutlined,
+    CaretRightOutlined,
     CloseCircleOutlined,
     CopyOutlined,
     DeleteOutlined,
     EditOutlined,
-    FileTextOutlined,
     FundOutlined,
     HistoryOutlined,
     InfoCircleOutlined,
@@ -20,6 +20,7 @@ import {
     RiseOutlined,
     SettingOutlined,
     SyncOutlined,
+    ToolOutlined,
 } from '@ant-design/icons';
 import { useQueryClient } from '@tanstack/react-query';
 import {
@@ -368,21 +369,7 @@ function MyServices(): React.JSX.Element {
             {
                 key: 'details',
                 label: isDisableDetails(record) ? (
-                    <Tooltip
-                        placement={'left'}
-                        style={{ maxWidth: '100%' }}
-                        title={
-                            getOrderableServiceDetails.isSuccess ? (
-                                <TooltipWhenDetailsDisabled
-                                    serviceProviderContactDetails={
-                                        getOrderableServiceDetails.data.serviceProviderContactDetails
-                                    }
-                                />
-                            ) : (
-                                <></>
-                            )
-                        }
-                    >
+                    <Tooltip placement={'left'} style={{ maxWidth: '100%' }} title={<TooltipWhenDetailsDisabled />}>
                         <Button
                             disabled={true}
                             className={myServicesStyles.buttonAsLink}
@@ -544,7 +531,7 @@ function MyServices(): React.JSX.Element {
                           >
                               <Button
                                   className={myServicesStyles.buttonAsLink}
-                                  icon={<PlayCircleOutlined />}
+                                  icon={<CaretRightOutlined />}
                                   disabled={isDisableRetryDeploymentButton(record)}
                                   type={'link'}
                               >
@@ -841,7 +828,7 @@ function MyServices(): React.JSX.Element {
                         }}
                         className={myServicesStyles.buttonAsLink}
                         disabled={isDisableServiceConfigBtn(record)}
-                        icon={<FileTextOutlined />}
+                        icon={<SettingOutlined />}
                         type={'link'}
                     >
                         configuration
@@ -857,7 +844,7 @@ function MyServices(): React.JSX.Element {
                         }}
                         className={myServicesStyles.buttonAsLink}
                         disabled={isDisableServiceActionButton(record)}
-                        icon={<FileTextOutlined />}
+                        icon={<ToolOutlined />}
                         type={'link'}
                     >
                         actions
