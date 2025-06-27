@@ -27,7 +27,7 @@ test('Show service statistics when backend is reachable', async ({ page, baseURL
     const failedDeployments = dashboard.getStaticsElementAtPosition(1);
     await expect(failedDeployments).toBeVisible();
     await expect(failedDeployments).toHaveText('Failed Deployments');
-    expect(await dashboard.getValueOfStatistics(1)).toBe('1');
+    expect(await dashboard.getValueOfStatistics(1)).toBe('2');
     const failedDeploymentValue = dashboard.getLocationOfStatisticElementAtPosition(1);
     await expect(await failedDeploymentValue).toHaveCSS('color', dashboard.failureStaticColor, { timeout: 10000 });
     await failedDeployments.click();
