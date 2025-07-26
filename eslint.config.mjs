@@ -28,6 +28,7 @@ export default [
             '**/node_modules',
             'public/OidcTrustedDomains.js',
             'eslint.config.mjs',
+            '**/playwright-report',
         ],
     },
     {

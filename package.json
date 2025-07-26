@@ -25,8 +25,9 @@
         "build": "vite build",
         "serve": "vite preview --port 3000 --host 0.0.0.0",
         "start-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite --port 3000 --host 0.0.0.0",
+        "start-with-zitadel-demo": "env-cmd -f .env.zitadel-eclipse-demo vite --port 3000 --host 0.0.0.0",
         "start-with-zitadel-local": "env-cmd -f .env.zitadel-local vite --port 3000 --host 0.0.0.0",
-        "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build --host 0.0.0.0",
+        "build-with-zitadel-testbed": "env-cmd -f .env.zitadel-testbed vite build",
         "update-service-worker-file": "node ./node_modules/@axa-fr/oidc-client/bin/copy-service-worker-files.mjs public"
     },
     "browserslist": {
