@@ -5,6 +5,7 @@
 
 import { OidcConfiguration } from '@axa-fr/react-oidc';
 import { env } from '../../config/config';
+import { getCorrectedCustomBaseUrl } from '../utils/customBaseUrl.ts';
 import { defaultRole, grantedRolesKey, usernameKey } from './OidcUserInfo';
 
 export const allowRoleList: string[] = ['isv', 'user', 'admin', 'csp'];
@@ -15,7 +16,7 @@ export const OidcConfig: OidcConfiguration = {
     redirect_uri: window.location.origin + (env.VITE_APP_ZITADEL_REDIRECT_URI ?? ''),
     silent_redirect_uri: window.location.origin + (env.VITE_APP_ZITADEL_SILENT_REDIRECT_URI ?? ''),
     scope: env.VITE_APP_ZITADEL_SCOPE ?? '',
-    service_worker_relative_url: '/OidcServiceWorker.js',
+    service_worker_relative_url: getCorrectedCustomBaseUrl() + 'OidcServiceWorker.js',
     service_worker_only: env.VITE_APP_AUTH_USE_SERVICE_WORKER_ONLY === 'true',
     service_worker_activate: () => env.VITE_APP_AUTH_USE_SERVICE_WORKER_ONLY === 'true',
 };
