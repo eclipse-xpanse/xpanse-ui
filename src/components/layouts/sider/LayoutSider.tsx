@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import appStyles from '../../../styles/app.module.css';
 import { catalogPageRoute, homePageRoute, servicesPageRoute } from '../../utils/constants';
+import { getCorrectedCustomBaseUrl } from '../../utils/customBaseUrl.ts';
 import { useCurrentUserRoleStore } from '../header/useCurrentRoleStore.ts';
 import { getMenuItems } from './menuItems';
 
@@ -61,7 +62,11 @@ function LayoutSider(): React.JSX.Element {
                 <Link to={homePageRoute}>
                     <Image
                         width={collapsed ? 30 : 150}
-                        src={collapsed ? '/xpanse-black-logo-only.png' : '/xpanse-black.png'}
+                        src={
+                            collapsed
+                                ? getCorrectedCustomBaseUrl() + 'xpanse-black-logo-only.png'
+                                : getCorrectedCustomBaseUrl() + 'xpanse-black.png'
+                        }
                         preview={false}
                     />
                 </Link>

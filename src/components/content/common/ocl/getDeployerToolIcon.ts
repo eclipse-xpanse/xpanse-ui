@@ -3,12 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
+import { getCorrectedCustomBaseUrl } from '../../../utils/customBaseUrl.ts';
+
 export const getDeployerToolIcon = (kind: string) => {
     switch (kind) {
         case 'terraform':
-            return '/terraform.svg';
+            return getCorrectedCustomBaseUrl() + 'terraform.svg';
         case 'opentofu':
-            return '/openTofu.png';
+            return getCorrectedCustomBaseUrl() + 'openTofu.png';
         default:
             return '';
     }
