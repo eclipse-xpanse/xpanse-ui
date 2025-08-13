@@ -51,6 +51,10 @@ updates:
               patterns:
                   - 'react*'
                   - '@types/react*'
+          echarts:
+              applies-to: version-updates
+              patterns:
+                  - 'echarts*'
     - package-ecosystem: docker
       directory: /docker
       schedule:
