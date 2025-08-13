@@ -23,7 +23,7 @@ jobs:
                   java-version: 21
                   distribution: 'temurin'
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v5
             - name: Install all required NPM packages
               working-directory: ./
               run: npm install
