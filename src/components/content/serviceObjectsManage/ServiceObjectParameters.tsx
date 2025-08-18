@@ -8,7 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { ObjectParameter, sensitiveScope } from '../../../xpanse-api/generated';
+import { ObjectParameter, SensitiveScope } from '../../../xpanse-api/generated';
 
 function ServiceObjectParameters({
     parameters,
@@ -73,7 +73,7 @@ function ServiceObjectParameters({
                 }
 
                 const formattedValueSchema = Object.entries(record.valueSchema)
-                    .map(([key, value]) => `${key}: ${value as unknown as string}`)
+                    .map(([key, value]) => `${key}: ${value as string}`)
                     .join('\n');
 
                 return (
@@ -100,7 +100,7 @@ function ServiceObjectParameters({
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>SensitiveScope</div>,
             dataIndex: 'sensitiveScope',
-            render: (text: sensitiveScope) => {
+            render: (text: SensitiveScope) => {
                 return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
             },
         },

@@ -7,7 +7,7 @@ import { Alert, Button } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../../../styles/error-alert.module.css';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
-import { ApiError } from '../../../../../xpanse-api/generated';
+import { ApiError } from '../../../../../xpanse-api/error.ts';
 import { convertStringArrayToUnorderedList } from '../../../../utils/generateUnorderedList';
 
 export function AvailabilityZoneError({

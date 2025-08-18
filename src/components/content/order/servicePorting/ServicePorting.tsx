@@ -9,15 +9,16 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo, useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
+    BillingMode,
+    Csp,
     DeployRequest,
     DeployedServiceDetails,
     GetOrderableServicesData,
+    Options,
     Region,
+    ServiceHostingType,
     VendorHostedDeployedServiceDetails,
-    billingMode,
-    csp,
     getOrderableServices,
-    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import useGetServicePricesQuery from '../common/useGetServicePricesQuery';
 import { getServiceFlavorList } from '../formDataHelpers/flavorHelper';
@@ -41,12 +42,12 @@ export const ServicePorting = ({
 
     const [target, setTarget] = useState<string | undefined>(undefined);
 
-    const [cspList, setCspList] = useState<csp[]>([]);
-    const [selectCsp, setSelectCsp] = useState<csp>(currentSelectedService.csp as csp);
+    const [cspList, setCspList] = useState<Csp[]>([]);
+    const [selectCsp, setSelectCsp] = useState<Csp>(currentSelectedService.csp);
 
-    const [serviceHostTypes, setServiceHostTypes] = useState<serviceHostingType[]>([]);
-    const [selectServiceHostingType, setSelectServiceHostingType] = useState<serviceHostingType>(
-        currentSelectedService.serviceHostingType as serviceHostingType
+    const [serviceHostTypes, setServiceHostTypes] = useState<ServiceHostingType[]>([]);
+    const [selectServiceHostingType, setSelectServiceHostingType] = useState<ServiceHostingType>(
+        currentSelectedService.serviceHostingType
     );
 
     const [areaList, setAreaList] = useState<Tab[]>([]);
@@ -60,10 +61,8 @@ export const ServicePorting = ({
     );
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor);
 
-    const [billingModes, setBillingModes] = useState<billingMode[] | undefined>(undefined);
-    const [selectBillingMode, setSelectBillingMode] = useState<billingMode>(
-        currentSelectedService.billingMode.toString() as billingMode
-    );
+    const [billingModes, setBillingModes] = useState<BillingMode[] | undefined>(undefined);
+    const [selectBillingMode, setSelectBillingMode] = useState<BillingMode>(currentSelectedService.billingMode);
 
     const deployRequest: DeployRequest = {
         category: currentSelectedService.category,
@@ -88,15 +87,18 @@ export const ServicePorting = ({
             currentSelectedService.name,
             currentSelectedService.version,
         ],
-        queryFn: () => {
-            const data: GetOrderableServicesData = {
-                categoryName: currentSelectedService.category,
-                cspName: undefined,
-                serviceName: currentSelectedService.name,
-                serviceVersion: currentSelectedService.version,
-                serviceHostingType: undefined,
+        queryFn: async () => {
+            const request: Options<GetOrderableServicesData> = {
+                query: {
+                    categoryName: currentSelectedService.category,
+                    cspName: undefined,
+                    serviceName: currentSelectedService.name,
+                    serviceVersion: currentSelectedService.version,
+                    serviceHostingType: undefined,
+                },
             };
-            return getOrderableServices(data);
+            const response = await getOrderableServices(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });
@@ -115,12 +117,12 @@ export const ServicePorting = ({
     };
 
     const updateSelectedParameters = (
-        selectedCsp: csp,
+        selectedCsp: Csp,
         selectAreaName: string,
         selectRegion: Region,
         selectAvailabilityZonesName: Record<string, string>,
         selectedFlavor: string,
-        selectedServiceHostingType: serviceHostingType
+        selectedServiceHostingType: ServiceHostingType
     ) => {
         setSelectCsp(selectedCsp);
         setSelectRegion(selectRegion);

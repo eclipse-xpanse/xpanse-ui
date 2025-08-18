@@ -5,24 +5,28 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    credentialType,
-    csp,
+    CredentialType,
+    Csp,
     getCredentialCapabilities,
-    type GetCredentialCapabilitiesData,
+    GetCredentialCapabilitiesData,
 } from '../../../../xpanse-api/generated';
+import { Options } from '../../../../xpanse-api/generated/client';
 
 export const useCredentialCapabilitiesQuery = (
-    currentCsp: csp | undefined,
-    currentType: credentialType | undefined
+    currentCsp: Csp | undefined,
+    currentType: CredentialType | undefined
 ) => {
     return useQuery({
         queryKey: ['credentialCapabilitiesQuery', currentCsp, currentType],
-        queryFn: () => {
-            const data: GetCredentialCapabilitiesData = {
-                cspName: currentCsp ?? csp.OPENSTACK_TESTLAB,
-                type: currentType,
+        queryFn: async () => {
+            const request: Options<GetCredentialCapabilitiesData> = {
+                query: {
+                    cspName: currentCsp ?? Csp.OPENSTACK_TESTLAB,
+                    type: currentType,
+                },
             };
-            return getCredentialCapabilities(data);
+            const response = await getCredentialCapabilities(request);
+            return response.data;
         },
         staleTime: 60000,
         enabled: currentType !== undefined,

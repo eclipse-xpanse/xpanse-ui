@@ -4,15 +4,18 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { startService, type StartServiceData } from '../../../../../xpanse-api/generated';
+import { Options, startService, type StartServiceData } from '../../../../../xpanse-api/generated';
 
 export function useServiceStateStartQuery() {
     return useMutation({
-        mutationFn: (serviceId: string) => {
-            const data: StartServiceData = {
-                serviceId: serviceId,
+        mutationFn: async (serviceId: string) => {
+            const request: Options<StartServiceData> = {
+                path: {
+                    serviceId: serviceId,
+                },
             };
-            return startService(data);
+            const response = await startService(request);
+            return response.data;
         },
     });
 }

@@ -4,7 +4,7 @@
  */
 
 import { ItemType } from 'antd/es/menu/interface';
-import { category } from '../../../xpanse-api/generated';
+import { Category } from '../../../xpanse-api/generated';
 import { catalogMenu } from '../../content/catalog/services/menu/catalogMenu';
 import registerPanelMenu from '../../content/register/registerPanelMenu';
 import {
@@ -21,7 +21,7 @@ import {
 } from './servicesMenu';
 
 export function getMenuItems(currentRole: string): ItemType[] {
-    const serviceCategories: string[] = Object.values(category).filter((v) => isNaN(Number(v)));
+    const serviceCategories: string[] = Object.values(Category).filter((v) => isNaN(Number(v)));
     if (currentRole === 'isv') {
         return [catalogMenu(serviceCategories), registerPanelMenu(), credentialMenu(), reportsMenu()];
     } else if (currentRole === 'admin') {

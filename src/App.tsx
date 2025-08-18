@@ -35,7 +35,7 @@ import {
     workflowsPageRoute,
 } from './components/utils/constants';
 import './styles/app.module.css';
-import { ApiError } from './xpanse-api/generated';
+import { ApiError } from './xpanse-api/error.ts';
 
 const queryClient = new QueryClient({
     defaultOptions: {

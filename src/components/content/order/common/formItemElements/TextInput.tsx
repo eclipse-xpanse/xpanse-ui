@@ -3,7 +3,7 @@ import { Form, Input, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
 import React from 'react';
 import serviceOrderStyles from '../../../../../styles/service-order.module.css';
-import { sensitiveScope, ServiceChangeParameter } from '../../../../../xpanse-api/generated';
+import { SensitiveScope, ServiceChangeParameter } from '../../../../../xpanse-api/generated';
 import { DeployVariableSchema } from '../../types/DeployVariableSchema.ts';
 
 export function TextInput({ actionParameter }: { actionParameter: ServiceChangeParameter }): React.JSX.Element {
@@ -42,8 +42,8 @@ export function TextInput({ actionParameter }: { actionParameter: ServiceChangeP
                     rules={ruleItems}
                     initialValue={actionParameter.initialValue}
                 >
-                    {actionParameter.sensitiveScope === sensitiveScope.ALWAYS.toString() ||
-                    actionParameter.sensitiveScope === sensitiveScope.ONCE.toString() ? (
+                    {actionParameter.sensitiveScope === SensitiveScope.ALWAYS ||
+                    actionParameter.sensitiveScope === SensitiveScope.ONCE ? (
                         <Input.Password
                             name={actionParameter.name}
                             iconRender={(visible) => (visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />)}

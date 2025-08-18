@@ -7,21 +7,21 @@ import type { ColumnsType, ColumnType } from 'antd/es/table';
 import { ColumnFilterItem } from 'antd/es/table/interface';
 import React from 'react';
 import {
-    billingMode,
-    category,
-    csp,
+    BillingMode,
+    Category,
+    Csp,
     DeployedService,
     DeployedServiceDetails,
-    deployResourceKind,
-    serviceDeploymentState,
-    serviceHostingType,
-    serviceState,
+    DeployResourceKind,
+    ServiceDeploymentState,
+    ServiceHostingType,
+    ServiceState,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 
 export interface DeployResourceDataType {
     key: React.Key;
-    resourceKind: deployResourceKind;
+    resourceKind: DeployResourceKind;
     resourceId: string;
     resourceName: React.JSX.Element;
 }
@@ -76,7 +76,7 @@ export function updateNameFilters(resp: DeployedService[]): ColumnFilterItem[] {
 
 export function updateCategoryFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(category).forEach((category) => {
+    Object.values(Category).forEach((category) => {
         const filter = {
             text: category,
             value: category,
@@ -88,7 +88,7 @@ export function updateCategoryFilters(): ColumnFilterItem[] {
 
 export function updateCspFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(csp).forEach((csp) => {
+    Object.values(Csp).forEach((csp) => {
         const filter = {
             text: csp,
             value: csp,
@@ -100,7 +100,7 @@ export function updateCspFilters(): ColumnFilterItem[] {
 
 export function updateServiceDeploymentStateFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(serviceDeploymentState).forEach((serviceStateItem) => {
+    Object.values(ServiceDeploymentState).forEach((serviceStateItem) => {
         const filter = {
             text: serviceStateItem,
             value: serviceStateItem,
@@ -112,7 +112,7 @@ export function updateServiceDeploymentStateFilters(): ColumnFilterItem[] {
 
 export function updateServiceStateFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(serviceState).forEach((serviceStateItem) => {
+    Object.values(ServiceState).forEach((serviceStateItem) => {
         const filter = {
             text: serviceStateItem,
             value: serviceStateItem,
@@ -142,7 +142,7 @@ export function updateCustomerServiceNameFilters(resp: DeployedService[]): Colum
 
 export function updateServiceHostingFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(serviceHostingType).forEach((serviceHostingType) => {
+    Object.values(ServiceHostingType).forEach((serviceHostingType) => {
         const filter = {
             text: serviceHostingType,
             value: serviceHostingType,
@@ -154,7 +154,7 @@ export function updateServiceHostingFilters(): ColumnFilterItem[] {
 
 export function updateBillingModeFilters(): ColumnFilterItem[] {
     const filters: ColumnFilterItem[] = [];
-    Object.values(billingMode).forEach((billingMode) => {
+    Object.values(BillingMode).forEach((billingMode) => {
         const filter = {
             text: billingMode,
             value: billingMode,
@@ -204,7 +204,7 @@ function isHasDeployResources(details: DeployedServiceDetails): boolean {
  * @returns whether the button should be disabled
  */
 export const isDisableDetails = (record: DeployedService) => {
-    if (record.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+    if (record.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
         const details = record as VendorHostedDeployedServiceDetails;
         if (isHasDeployedServiceProperties(details) || isHasServiceRequestProperties(details)) {
             return false;
@@ -228,11 +228,11 @@ export const isDisableScaleButton = (
 ): boolean => {
     if (
         activeRecord?.serviceId === record.serviceId ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFYING.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYING.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROYING.toString()
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROYING
     ) {
         return true;
     }
@@ -246,11 +246,11 @@ export const isDisableModifyButton = (
     if (
         activeRecord?.serviceId === record.serviceId ||
         (record.lockConfig?.modifyLocked !== undefined && record.lockConfig.modifyLocked) ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFYING.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYING.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROYING.toString()
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROYING
     ) {
         return true;
     }
@@ -263,11 +263,11 @@ export const isDisableServicePortingButton = (
 ): boolean => {
     if (
         activeRecord?.serviceId === record.serviceId ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYMENT_FAILED.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.MODIFICATION_FAILED.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROY_SUCCESSFUL.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DEPLOYING.toString() ||
-        record.serviceDeploymentState.toString() === serviceDeploymentState.DESTROYING.toString()
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROYING
     ) {
         return true;
     }
@@ -279,10 +279,10 @@ export const isDisableDestroyButton = (
     activeRecord: DeployedServiceDetails | VendorHostedDeployedServiceDetails | undefined
 ): boolean => {
     if (
-        (record.serviceDeploymentState.toString() !== serviceDeploymentState.DESTROY_FAILED.toString() &&
-            record.serviceDeploymentState.toString() !== serviceDeploymentState.DEPLOYMENT_SUCCESSFUL.toString() &&
-            record.serviceDeploymentState.toString() !== serviceDeploymentState.MODIFICATION_FAILED.toString() &&
-            record.serviceDeploymentState.toString() !== serviceDeploymentState.MODIFICATION_SUCCESSFUL.toString()) ||
+        (record.serviceDeploymentState !== ServiceDeploymentState.DESTROY_FAILED &&
+            record.serviceDeploymentState !== ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+            record.serviceDeploymentState !== ServiceDeploymentState.MODIFICATION_FAILED &&
+            record.serviceDeploymentState !== ServiceDeploymentState.MODIFICATION_SUCCESSFUL) ||
         activeRecord?.serviceId === record.serviceId
     ) {
         return true;
@@ -298,10 +298,10 @@ export const isDisableStartButton = (
     serviceStateRestartQueryIsPending: boolean
 ) => {
     if (
-        record.serviceDeploymentState !== serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
-        record.serviceDeploymentState !== serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        record.serviceDeploymentState !== ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+        record.serviceDeploymentState !== ServiceDeploymentState.MODIFICATION_SUCCESSFUL
     ) {
-        if (record.serviceDeploymentState !== serviceDeploymentState.DESTROY_FAILED) {
+        if (record.serviceDeploymentState !== ServiceDeploymentState.DESTROY_FAILED) {
             return true;
         }
     }
@@ -314,14 +314,14 @@ export const isDisableStartButton = (
     }
 
     if (
-        record.serviceState === serviceState.STARTING ||
-        record.serviceState === serviceState.STOPPING ||
-        record.serviceState === serviceState.RESTARTING
+        record.serviceState === ServiceState.STARTING ||
+        record.serviceState === ServiceState.STOPPING ||
+        record.serviceState === ServiceState.RESTARTING
     ) {
         return true;
     }
 
-    return record.serviceState === serviceState.RUNNING;
+    return record.serviceState === ServiceState.RUNNING;
 };
 
 export const isDisabledStopOrRestartButton = (
@@ -332,10 +332,10 @@ export const isDisabledStopOrRestartButton = (
     serviceStateRestartQueryIsPending: boolean
 ) => {
     if (
-        record.serviceDeploymentState !== serviceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
-        record.serviceDeploymentState !== serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        record.serviceDeploymentState !== ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL &&
+        record.serviceDeploymentState !== ServiceDeploymentState.MODIFICATION_SUCCESSFUL
     ) {
-        if (record.serviceDeploymentState !== serviceDeploymentState.DESTROY_FAILED) {
+        if (record.serviceDeploymentState !== ServiceDeploymentState.DESTROY_FAILED) {
             return true;
         }
     }
@@ -348,25 +348,25 @@ export const isDisabledStopOrRestartButton = (
     }
 
     if (
-        record.serviceState === serviceState.STARTING ||
-        record.serviceState === serviceState.STOPPING ||
-        record.serviceState === serviceState.RESTARTING
+        record.serviceState === ServiceState.STARTING ||
+        record.serviceState === ServiceState.STOPPING ||
+        record.serviceState === ServiceState.RESTARTING
     ) {
         return true;
     }
 
-    return record.serviceState === serviceState.STOPPED;
+    return record.serviceState === ServiceState.STOPPED;
 };
 
 export const isDisableRetryDeploymentButton = (record: DeployedService) => {
-    return record.serviceDeploymentState === serviceDeploymentState.DEPLOYING;
+    return record.serviceDeploymentState === ServiceDeploymentState.DEPLOYING;
 };
 
 export const isDisableServiceConfigBtn = (record: DeployedService) => {
     if (
-        record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-        record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
-        record.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_SUCCESSFUL
     ) {
         if (record.serviceConfigurationDetails) {
             return false;
@@ -377,9 +377,9 @@ export const isDisableServiceConfigBtn = (record: DeployedService) => {
 
 export const isDisableServiceActionButton = (record: DeployedService) => {
     return !(
-        record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-        record.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
-        record.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_SUCCESSFUL
     );
 };
 
@@ -391,11 +391,11 @@ export const isDisableRecreateButton = (
     serviceStateRestartQueryIsPending: boolean
 ) => {
     if (
-        record.serviceDeploymentState === serviceDeploymentState.DEPLOYING ||
-        record.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED ||
-        record.serviceDeploymentState === serviceDeploymentState.DESTROYING ||
-        record.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL ||
-        record.serviceDeploymentState === serviceDeploymentState.MODIFYING
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROYING ||
+        record.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL ||
+        record.serviceDeploymentState === ServiceDeploymentState.MODIFYING
     ) {
         return true;
     }
@@ -408,9 +408,9 @@ export const isDisableRecreateButton = (
     }
 
     return (
-        record.serviceState === serviceState.STARTING ||
-        record.serviceState === serviceState.STOPPING ||
-        record.serviceState === serviceState.RESTARTING
+        record.serviceState === ServiceState.STARTING ||
+        record.serviceState === ServiceState.STOPPING ||
+        record.serviceState === ServiceState.RESTARTING
     );
 };
 

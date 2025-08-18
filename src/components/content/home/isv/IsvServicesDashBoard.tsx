@@ -7,12 +7,12 @@ import { Card, Col, Divider, Row, Statistic } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
-import { category, DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import { Category, DeployedService, ServiceDeploymentState } from '../../../../xpanse-api/generated';
 import { catalogPageRoute, reportsRoute, serviceDetailsErrorText } from '../../../utils/constants';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesByIsvQuery from '../../deployedServices/myServices/query/useListDeployedServiceByIsvQuery';
 import { DashBoardSkeleton } from '../common/DashBoardSkeleton';
-import useListRegisteredServicesQuery from './useListRegisteredServicesQuery';
+import useListRegisteredServicesQuery from './useListRegisteredServicesQuery.tsx';
 
 export function IsvServicesDashBoard(): React.JSX.Element {
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
@@ -36,21 +36,21 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_SUCCESSFUL
             ) {
                 successfulDeploymentsCount++;
             }
             if (
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_FAILED
             ) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL) {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState === ServiceDeploymentState.DESTROY_FAILED) {
                 failedDestroysCount++;
             }
         });
@@ -92,11 +92,15 @@ export function IsvServicesDashBoard(): React.JSX.Element {
     const getCatalogRedirectionUrl = () => {
         void navigate({
             pathname: catalogPageRoute,
-            hash: '#' + (registeredServicesCount > 0 ? listRegisteredServicesByIsvQuery.data[0].category : category.AI),
+            hash:
+                '#' +
+                (registeredServicesCount > 0 && listRegisteredServicesByIsvQuery.data
+                    ? listRegisteredServicesByIsvQuery.data[0].category
+                    : Category.AI),
         });
     };
 
-    const getReportsRedirectionUrl = (serviceDeploymentStates: serviceDeploymentState[]) => {
+    const getReportsRedirectionUrl = (serviceDeploymentStates: ServiceDeploymentState[]) => {
         const params = new URLSearchParams();
         serviceDeploymentStates.forEach((state) => {
             params.append('serviceDeploymentState', state);
@@ -130,8 +134,8 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                                    serviceDeploymentState.MODIFICATION_SUCCESSFUL,
+                                    ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+                                    ServiceDeploymentState.MODIFICATION_SUCCESSFUL,
                                 ]);
                             }}
                         >
@@ -148,8 +152,8 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                         <div
                             onClick={() => {
                                 getReportsRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_FAILED,
-                                    serviceDeploymentState.MODIFICATION_FAILED,
+                                    ServiceDeploymentState.DEPLOYMENT_FAILED,
+                                    ServiceDeploymentState.MODIFICATION_FAILED,
                                 ]);
                             }}
                         >
@@ -165,7 +169,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([serviceDeploymentState.DESTROY_SUCCESSFUL]);
+                                getReportsRedirectionUrl([ServiceDeploymentState.DESTROY_SUCCESSFUL]);
                             }}
                         >
                             <Statistic
@@ -180,7 +184,7 @@ export function IsvServicesDashBoard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getReportsRedirectionUrl([serviceDeploymentState.DESTROY_FAILED]);
+                                getReportsRedirectionUrl([ServiceDeploymentState.DESTROY_FAILED]);
                             }}
                         >
                             <Statistic

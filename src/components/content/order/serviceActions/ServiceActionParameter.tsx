@@ -9,10 +9,11 @@ import React, { useState } from 'react';
 import '../../../../styles/app.module.css';
 import {
     CreateServiceActionData,
-    orderStatus,
+    Options,
+    OrderStatus,
     ServiceActionRequest,
     ServiceChangeParameter,
-    serviceHostingType,
+    ServiceHostingType,
     ServiceOrder,
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
@@ -27,10 +28,10 @@ export const ServiceActionParameter = ({
     createServiceActionRequest,
 }: {
     serviceId: string;
-    serviceHostType: serviceHostingType;
+    serviceHostType: ServiceHostingType;
     actionName: string;
     actionParameters: ServiceChangeParameter[] | undefined;
-    createServiceActionRequest: UseMutationResult<ServiceOrder, Error, CreateServiceActionData>;
+    createServiceActionRequest: UseMutationResult<ServiceOrder | undefined, Error, Options<CreateServiceActionData>>;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const [isShowActionSubmitResult, setIsShowActionSubmitResult] = useState<boolean>(false);
@@ -38,7 +39,7 @@ export const ServiceActionParameter = ({
     const getServiceActionsStatusPollingQuery = useLatestServiceOrderStatusQuery(
         createServiceActionRequest.data?.orderId ?? '',
         createServiceActionRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         isShowActionSubmitResult
     );
     const onSubmit = () => {
@@ -53,9 +54,11 @@ export const ServiceActionParameter = ({
             actionName: actionName,
             actionParameters: actionParameters,
         };
-        const data: CreateServiceActionData = {
-            serviceId: serviceId,
-            requestBody: request,
+        const data: Options<CreateServiceActionData> = {
+            path: {
+                serviceId: serviceId,
+            },
+            body: request,
         };
         createServiceActionRequest.mutate(data);
     };

@@ -5,24 +5,28 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    category,
+    Category,
     getAllServiceTemplatesByIsv,
     GetAllServiceTemplatesByIsvData,
+    Options,
 } from '../../../../../xpanse-api/generated';
 
-export function useAvailableServiceTemplatesQuery(currentCategory: category) {
+export function useAvailableServiceTemplatesQuery(currentCategory: Category) {
     return useQuery({
         queryKey: getQueryKey(currentCategory),
-        queryFn: () => {
-            const data: GetAllServiceTemplatesByIsvData = {
-                categoryName: currentCategory,
+        queryFn: async () => {
+            const data: Options<GetAllServiceTemplatesByIsvData> = {
+                query: {
+                    categoryName: currentCategory,
+                },
             };
-            return getAllServiceTemplatesByIsv(data);
+            const response = await getAllServiceTemplatesByIsv(data);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });
 }
 
-export function getQueryKey(category: category): string[] {
+export function getQueryKey(category: Category): string[] {
     return ['catalog', category];
 }

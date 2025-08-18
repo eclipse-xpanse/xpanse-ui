@@ -4,15 +4,16 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { port, type PortData, ServicePortingRequest } from '../../../../xpanse-api/generated';
+import { Options, port, type PortData, ServicePortingRequest } from '../../../../xpanse-api/generated';
 
 export function usePortServiceRequest() {
     return useMutation({
-        mutationFn: (servicePortingRequest: ServicePortingRequest) => {
-            const data: PortData = {
-                requestBody: servicePortingRequest,
+        mutationFn: async (servicePortingRequest: ServicePortingRequest) => {
+            const request: Options<PortData> = {
+                body: servicePortingRequest,
             };
-            return port(data);
+            const response = await port(request);
+            return response.data;
         },
     });
 }

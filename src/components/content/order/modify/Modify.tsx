@@ -11,14 +11,14 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    csp,
     DeployedServiceDetails,
     InputVariable,
     modify,
     type ModifyData,
     ModifyRequest,
-    orderStatus,
-    serviceDeploymentState,
+    Options,
+    OrderStatus,
+    ServiceDeploymentState,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
@@ -45,24 +45,27 @@ export const Modify = ({
     const [modifyWarning, setModifyWarning] = useState<React.JSX.Element[]>([]);
 
     const [isShowModifyingResult, setIsShowModifyingResult] = useState<boolean>(false);
-    const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
+    const [modifyStatus, setModifyStatus] = useState<ServiceDeploymentState | undefined>(undefined);
     const [cacheFormVariable] = useOrderFormStore((state) => [state.addDeployVariable]);
     const [storedInputVariables] = useOrderFormStore((state) => [state.deployParams]);
 
     const orderableServiceDetailsQuery = useGetOrderableServiceDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
-        mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            const data: ModifyData = {
-                requestBody: modifyServiceRequestParams.modifyRequest,
-                serviceId: modifyServiceRequestParams.serviceId,
+        mutationFn: async (modifyServiceRequestParams: ModifySubmitRequest) => {
+            const data: Options<ModifyData> = {
+                body: modifyServiceRequestParams.modifyRequest,
+                path: {
+                    serviceId: modifyServiceRequestParams.serviceId,
+                },
             };
-            return modify(data);
+            const response = await modify(data);
+            return response.data;
         },
     });
     const getModifyServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         isShowModifyingResult
     );
 
@@ -72,7 +75,7 @@ export const Modify = ({
         return prevParamsString !== newParamsString;
     };
 
-    if (orderableServiceDetailsQuery.isSuccess) {
+    if (orderableServiceDetailsQuery.isSuccess && orderableServiceDetailsQuery.data) {
         getParams = getModifyParams(orderableServiceDetailsQuery.data.inputVariables);
         getVariables = orderableServiceDetailsQuery.data.inputVariables;
     }
@@ -99,7 +102,7 @@ export const Modify = ({
         setIsShowModifyingResult(true);
     };
 
-    const getModifyDetailsStatus = (status: serviceDeploymentState | undefined) => {
+    const getModifyDetailsStatus = (status: ServiceDeploymentState | undefined) => {
         setModifyStatus(status);
     };
 
@@ -187,7 +190,7 @@ export const Modify = ({
                     getScaleOrModifyServiceOrderStatusQuery={getModifyServiceOrderStatusQuery}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
-                        orderableServiceDetailsQuery.isSuccess
+                        orderableServiceDetailsQuery.isSuccess && orderableServiceDetailsQuery.data
                             ? orderableServiceDetailsQuery.data.serviceProviderContactDetails
                             : undefined
                     }
@@ -230,8 +233,7 @@ export const Modify = ({
                 </Form.Item>
                 <div
                     className={
-                        currentSelectedService.serviceDeploymentState.toString() ===
-                        serviceDeploymentState.MODIFYING.toString()
+                        currentSelectedService.serviceDeploymentState === ServiceDeploymentState.MODIFYING
                             ? 'deploying order-param-item-row'
                             : ''
                     }
@@ -241,7 +243,7 @@ export const Modify = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.csp as csp}
+                                csp={currentSelectedService.csp}
                                 region={currentSelectedService.region}
                             />
                         ) : undefined
@@ -269,7 +271,7 @@ export const Modify = ({
                                 onClick={onClickModify}
                                 disabled={
                                     !hasVariableChanged() ||
-                                    (modifyStatus && modifyStatus === serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                    (modifyStatus && modifyStatus === ServiceDeploymentState.MODIFICATION_SUCCESSFUL)
                                 }
                             >
                                 Modify

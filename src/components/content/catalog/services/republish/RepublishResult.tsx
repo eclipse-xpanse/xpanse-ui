@@ -6,7 +6,7 @@
 import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
-import { category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
+import { Category, ServiceTemplateRequestInfo } from '../../../../../xpanse-api/generated';
 import { republishServiceTemplateErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
@@ -19,8 +19,8 @@ export function RepublishResult({
     serviceTemplateAction,
     setServiceTemplateAction,
 }: {
-    category: category;
-    republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    category: Category;
+    republishRequest: UseMutationResult<ServiceTemplateRequestInfo | undefined, Error, void>;
     onClose: () => void;
     serviceTemplateAction: ServiceTemplateAction;
     setServiceTemplateAction: (componentName: ServiceTemplateAction) => void;

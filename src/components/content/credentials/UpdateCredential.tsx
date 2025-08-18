@@ -11,15 +11,10 @@ import React, { ChangeEvent, useCallback, useEffect } from 'react';
 import styles from '../../../styles/credential.module.css';
 import {
     CreateCredential,
-    credentialType,
     CredentialVariable,
     CredentialVariables,
-    csp,
-    name,
     updateIsvCloudCredential,
-    type UpdateIsvCloudCredentialData,
     updateUserCloudCredential,
-    type UpdateUserCloudCredentialData,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { CredentialApiDoc } from './CredentialApiDoc';
@@ -65,15 +60,13 @@ function UpdateCredential({
     const updateCredentialByRole = useCallback(
         (createCredential: CreateCredential) => {
             if (role === 'user') {
-                const data: UpdateUserCloudCredentialData = {
-                    requestBody: createCredential,
-                };
-                return updateUserCloudCredential(data);
+                return updateUserCloudCredential({
+                    body: createCredential,
+                });
             } else {
-                const data: UpdateIsvCloudCredentialData = {
-                    requestBody: createCredential,
-                };
-                return updateIsvCloudCredential(data);
+                return updateIsvCloudCredential({
+                    body: createCredential,
+                });
             }
         },
         [role]
@@ -210,8 +203,8 @@ function UpdateCredential({
     return (
         <div>
             <CredentialApiDoc
-                csp={credentialVariables.csp as csp}
-                credentialType={credentialVariables.type as credentialType}
+                csp={credentialVariables.csp}
+                credentialType={credentialVariables.type}
                 styleClass={styles.updateCredentialApiDoc}
             />
             {updateCredentialRequest.isSuccess || updateCredentialRequest.isError ? (
@@ -233,11 +226,7 @@ function UpdateCredential({
             >
                 <div className={styles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp'>
-                        <Image
-                            width={100}
-                            preview={false}
-                            src={cspMap.get(credentialVariables.csp.valueOf() as name)?.logo}
-                        />
+                        <Image width={100} preview={false} src={cspMap.get(credentialVariables.csp)?.logo} />
                     </Form.Item>
                     <Form.Item label='Site' name='site'>
                         <Input disabled={true} />

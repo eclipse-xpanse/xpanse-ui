@@ -9,9 +9,9 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedServiceDetails,
     ErrorResponse,
-    orderStatus,
-    serviceDeploymentState,
-    serviceHostingType,
+    OrderStatus,
+    ServiceDeploymentState,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -31,11 +31,11 @@ function ScaleOrModifySubmitStatusAlert({
     serviceProviderContactDetails,
     getModifyDetailsStatus,
 }: {
-    modifyServiceRequest: UseMutationResult<ServiceOrder, Error, ModifySubmitRequest>;
-    getScaleOrModifyServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    modifyServiceRequest: UseMutationResult<ServiceOrder | undefined, Error, ModifySubmitRequest>;
+    getScaleOrModifyServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
-    getModifyDetailsStatus: (arg: serviceDeploymentState | undefined) => void;
+    getModifyDetailsStatus: (arg: ServiceDeploymentState | undefined) => void;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
         autoStart: true,
@@ -56,29 +56,26 @@ function ScaleOrModifySubmitStatusAlert({
         } else if (modifyServiceRequest.isSuccess) {
             if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                (getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString() ||
-                    getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
-                        orderStatus.FAILED.toString())
+                (getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
                         operationType={OperationType.Modify}
                         serviceOrderStatus={getScaleOrModifyServiceOrderStatusQuery.data}
                         serviceId={currentSelectedService.serviceId}
-                        selectedServiceHostingType={currentSelectedService.serviceHostingType as serviceHostingType}
+                        selectedServiceHostingType={currentSelectedService.serviceHostingType}
                     />
                 );
             } else if (getScaleOrModifyServiceOrderStatusQuery.isError) {
-                if (currentSelectedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (currentSelectedService.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Modification status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Modification status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isPending ||
-                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Modifying, Please wait...';
             }
@@ -103,32 +100,30 @@ function ScaleOrModifySubmitStatusAlert({
             if (stopWatch.isRunning) {
                 stopWatch.pause();
             }
-            getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_FAILED);
+            getModifyDetailsStatus(ServiceDeploymentState.MODIFICATION_FAILED);
             return 'error';
         } else if (modifyServiceRequest.isSuccess) {
             if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
                 }
-                getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_FAILED);
+                getModifyDetailsStatus(ServiceDeploymentState.MODIFICATION_FAILED);
                 return 'error';
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isSuccess &&
-                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
                 }
-                getModifyDetailsStatus(serviceDeploymentState.MODIFICATION_SUCCESSFUL);
+                getModifyDetailsStatus(ServiceDeploymentState.MODIFICATION_SUCCESSFUL);
                 return 'success';
             } else if (
                 getScaleOrModifyServiceOrderStatusQuery.isPending ||
-                getScaleOrModifyServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                getScaleOrModifyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -147,7 +142,7 @@ function ScaleOrModifySubmitStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (modifyServiceRequest.isSuccess) {
+        if (modifyServiceRequest.isSuccess && modifyServiceRequest.data) {
             return modifyServiceRequest.data.orderId;
         } else {
             if (

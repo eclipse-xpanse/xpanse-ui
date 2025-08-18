@@ -8,7 +8,6 @@ import React from 'react';
 import {
     DeployedService,
     DeployRequest,
-    serviceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -26,10 +25,10 @@ export const RetryServiceSubmit = ({
 }: {
     currentSelectedService: DeployedService;
     submitDeploymentRequest:
-        | UseMutationResult<ServiceOrder, Error, DeployRequest>
-        | UseMutationResult<ServiceOrder, Error, string>;
-    redeployFailedDeploymentQuery: UseMutationResult<ServiceOrder, Error, string>;
-    getSubmitLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+        | UseMutationResult<ServiceOrder | undefined, Error, DeployRequest>
+        | UseMutationResult<ServiceOrder | undefined, Error, string>;
+    redeployFailedDeploymentQuery: UseMutationResult<ServiceOrder | undefined, Error, string>;
+    getSubmitLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
     retryRequest: () => void;
     onClose: () => void;
@@ -38,7 +37,7 @@ export const RetryServiceSubmit = ({
         <>
             <OrderSubmitStatusAlert
                 serviceId={currentSelectedService.serviceId}
-                serviceHostType={currentSelectedService.serviceHostingType as serviceHostingType}
+                serviceHostType={currentSelectedService.serviceHostingType}
                 submitDeploymentRequest={submitDeploymentRequest}
                 redeployFailedDeploymentQuery={redeployFailedDeploymentQuery}
                 getSubmitLatestServiceOrderStatusQuery={getSubmitLatestServiceOrderStatusQuery}

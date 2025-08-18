@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test';
 import { isElementFullyVisibleInsideViewport } from '../utils/common/view-port-validation.ts';
 import { loadConnectionRefusedMock } from '../utils/mocks/common-errors-mock.ts';
 import { catalogServicesUrl } from '../utils/mocks/endpoints.ts';
+import { mockHealthCheckSuccessResponse } from '../utils/mocks/health-check-mock.ts';
 import {
     mockDeployDetailsSuccessResponse,
     mockDeployFailedResponse,
@@ -124,6 +125,8 @@ test('deploy service failed', async ({ page, baseURL }) => {
     const layoutHeader = new LayoutHeaderPage(page);
     await layoutHeader.switchUserRole('user');
 
+    await mockHealthCheckSuccessResponse(page, 0);
+    await mockVmResourceSuccessResponse(page, 0);
     await mockServicesSuccessResponse(page, 0);
     await mockSelectServicesSuccessResponse(page, 0);
     await mockSelectAzsSuccessResponse(page, 0);

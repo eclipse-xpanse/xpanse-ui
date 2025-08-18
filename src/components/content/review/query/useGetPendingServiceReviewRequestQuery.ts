@@ -4,16 +4,23 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getPendingServiceReviewRequests, GetPendingServiceReviewRequestsData } from '../../../../xpanse-api/generated';
+import {
+    getPendingServiceReviewRequests,
+    GetPendingServiceReviewRequestsData,
+    Options,
+} from '../../../../xpanse-api/generated';
 
 export default function useGetPendingServiceReviewRequestQuery(serviceTemplateId: string | undefined) {
     return useQuery({
         queryKey: ['getPendingServiceReviewRequests', serviceTemplateId],
-        queryFn: () => {
-            const data: GetPendingServiceReviewRequestsData = {
-                serviceTemplateId: serviceTemplateId,
+        queryFn: async () => {
+            const request: Options<GetPendingServiceReviewRequestsData> = {
+                query: {
+                    serviceTemplateId: serviceTemplateId,
+                },
             };
-            return getPendingServiceReviewRequests(data);
+            const response = await getPendingServiceReviewRequests(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });

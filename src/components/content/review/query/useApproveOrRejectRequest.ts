@@ -5,6 +5,7 @@
 
 import { useMutation } from '@tanstack/react-query';
 import {
+    Options,
     ReviewServiceTemplateRequest,
     reviewServiceTemplateRequest,
     ReviewServiceTemplateRequestData,
@@ -20,12 +21,15 @@ export interface ApproveOrRejectRequestParams {
 export default function useApproveOrRejectRequest(id: string) {
     return useMutation({
         mutationKey: [id, reviewKey],
-        mutationFn: (requestParams: ApproveOrRejectRequestParams) => {
-            const data: ReviewServiceTemplateRequestData = {
-                requestId: requestParams.id,
-                requestBody: requestParams.reviewServiceTemplateRequest,
+        mutationFn: async (requestParams: ApproveOrRejectRequestParams) => {
+            const data: Options<ReviewServiceTemplateRequestData> = {
+                body: requestParams.reviewServiceTemplateRequest,
+                path: {
+                    requestId: requestParams.id,
+                },
             };
-            return reviewServiceTemplateRequest(data);
+            const response = await reviewServiceTemplateRequest(data);
+            return response.data;
         },
     });
 }

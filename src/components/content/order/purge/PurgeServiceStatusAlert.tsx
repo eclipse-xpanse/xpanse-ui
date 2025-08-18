@@ -8,7 +8,7 @@ import React, { useMemo } from 'react';
 import {
     DeployedService,
     ErrorResponse,
-    errorType,
+    ErrorType,
     ServiceOrder,
     ServiceProviderContactDetails,
     VendorHostedDeployedServiceDetails,
@@ -25,8 +25,8 @@ export function PurgeServiceStatusAlert({
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
-    purgeSubmitRequest: UseMutationResult<ServiceOrder, Error, string>;
-    getPurgeServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails>;
+    purgeSubmitRequest: UseMutationResult<ServiceOrder | undefined, Error, string>;
+    getPurgeServiceDetailsQuery: UseQueryResult<VendorHostedDeployedServiceDetails | undefined>;
     closePurgeResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
@@ -49,7 +49,7 @@ export function PurgeServiceStatusAlert({
         if (deployedService.serviceId && getPurgeServiceDetailsQuery.isError) {
             if (isHandleKnownErrorResponse(getPurgeServiceDetailsQuery.error)) {
                 const response: ErrorResponse = getPurgeServiceDetailsQuery.error.body;
-                if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                if (response.errorType !== ErrorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                     return getOrderSubmissionFailedDisplay(response.errorType, response.details);
                 } else {
                     return 'Service purged successfully';
@@ -72,7 +72,7 @@ export function PurgeServiceStatusAlert({
         } else if (purgeSubmitRequest.isSuccess) {
             if (isHandleKnownErrorResponse(getPurgeServiceDetailsQuery.error)) {
                 const response: ErrorResponse = getPurgeServiceDetailsQuery.error.body;
-                if (response.errorType !== errorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
+                if (response.errorType !== ErrorType.SERVICE_DEPLOYMENT_NOT_FOUND) {
                     return 'error';
                 } else {
                     return 'success';
@@ -92,7 +92,7 @@ export function PurgeServiceStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (purgeSubmitRequest.isSuccess) {
+        if (purgeSubmitRequest.isSuccess && purgeSubmitRequest.data) {
             return purgeSubmitRequest.data.orderId;
         } else {
             if (isHandleKnownErrorResponse(purgeSubmitRequest.error) && 'orderId' in purgeSubmitRequest.error.body) {

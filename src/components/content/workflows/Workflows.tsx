@@ -10,13 +10,7 @@ import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
 import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import {
-    ErrorResponse,
-    manageFailedOrder,
-    type ManageFailedOrderData,
-    taskStatus,
-    WorkFlowTask,
-} from '../../../xpanse-api/generated';
+import { ErrorResponse, manageFailedOrder, WorkFlowTask, WorkFlowTaskStatus } from '../../../xpanse-api/generated';
 import { workflowTasksErrorText } from '../../utils/constants.tsx';
 import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
@@ -38,7 +32,7 @@ function Workflows(): React.JSX.Element {
         });
     };
 
-    if (tasksQuery.isSuccess) {
+    if (tasksQuery.isSuccess && tasksQuery.data) {
         todoTasks = tasksQuery.data;
     }
 
@@ -49,11 +43,14 @@ function Workflows(): React.JSX.Element {
 
     const completeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => {
-            const data: ManageFailedOrderData = {
-                taskId: taskId,
-                retryOrder: true,
-            };
-            return manageFailedOrder(data);
+            return manageFailedOrder({
+                path: {
+                    taskId: taskId,
+                },
+                query: {
+                    retryOrder: true,
+                },
+            });
         },
         onSuccess: () => {
             getTipInfo(
@@ -76,11 +73,14 @@ function Workflows(): React.JSX.Element {
 
     const closeFailedTasksQuery = useMutation({
         mutationFn: (taskId: string) => {
-            const data: ManageFailedOrderData = {
-                taskId: taskId,
-                retryOrder: false,
-            };
-            return manageFailedOrder(data);
+            return manageFailedOrder({
+                path: {
+                    taskId: taskId,
+                },
+                query: {
+                    retryOrder: false,
+                },
+            });
         },
         onSuccess: () => {
             getTipInfo('success', 'Failed workflow is closed successfully. Please create a new request if necessary.');
@@ -131,8 +131,8 @@ function Workflows(): React.JSX.Element {
         {
             title: 'Status',
             dataIndex: 'taskStatus',
-            render: (workflowStatus: taskStatus) => {
-                if (workflowStatus === taskStatus.FAILED) {
+            render: (workflowStatus: WorkFlowTaskStatus) => {
+                if (workflowStatus === WorkFlowTaskStatus.FAILED) {
                     return (
                         <Tag bordered={false} icon={<CloseCircleOutlined />} color='error'>
                             {workflowStatus.valueOf()}
@@ -155,7 +155,7 @@ function Workflows(): React.JSX.Element {
             title: 'Operation',
             dataIndex: 'operation',
             render: (_text: string, record: WorkFlowTask) => {
-                if (record.taskStatus === 'failed') {
+                if (record.taskStatus === WorkFlowTaskStatus.FAILED) {
                     return (
                         <>
                             <Space size='middle'>

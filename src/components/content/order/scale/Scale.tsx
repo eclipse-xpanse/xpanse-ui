@@ -12,13 +12,13 @@ import flavorStyles from '../../../../styles/flavor.module.css';
 import serviceOperationStyles from '../../../../styles/service-operation.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    csp,
     DeployedServiceDetails,
     modify,
-    type ModifyData,
+    ModifyData,
     ModifyRequest,
-    orderStatus,
-    serviceDeploymentState,
+    Options,
+    OrderStatus,
+    ServiceDeploymentState,
     ServiceFlavor,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -50,7 +50,7 @@ export const Scale = ({
     let flavorList: ServiceFlavor[] = [];
     let isDowngradeAllowed: boolean = true;
     let getParams: DeployParam[] = [];
-    const [modifyStatus, setModifyStatus] = useState<serviceDeploymentState | undefined>(undefined);
+    const [modifyStatus, setModifyStatus] = useState<ServiceDeploymentState | undefined>(undefined);
     const [selectFlavor, setSelectFlavor] = useState<string>(currentSelectedService.flavor);
     const [scaleWarning, setScaleWarning] = useState<string>('Are you sure to scale the service?');
 
@@ -59,22 +59,25 @@ export const Scale = ({
 
     const orderableServiceDetailsQuery = useGetOrderableServiceDetails(currentSelectedService.serviceTemplateId);
     const modifyServiceRequest = useMutation({
-        mutationFn: (modifyServiceRequestParams: ModifySubmitRequest) => {
-            const data: ModifyData = {
-                serviceId: modifyServiceRequestParams.serviceId,
-                requestBody: modifyServiceRequestParams.modifyRequest,
+        mutationFn: async (modifyServiceRequestParams: ModifySubmitRequest) => {
+            const request: Options<ModifyData> = {
+                body: modifyServiceRequestParams.modifyRequest,
+                path: {
+                    serviceId: modifyServiceRequestParams.serviceId,
+                },
             };
-            return modify(data);
+            const response = await modify(request);
+            return response.data;
         },
     });
     const getScaleServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         modifyServiceRequest.data?.orderId ?? '',
         modifyServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         true
     );
 
-    if (orderableServiceDetailsQuery.isSuccess) {
+    if (orderableServiceDetailsQuery.isSuccess && orderableServiceDetailsQuery.data) {
         if (orderableServiceDetailsQuery.data.flavors.serviceFlavors.length > 0) {
             flavorList = [...orderableServiceDetailsQuery.data.flavors.serviceFlavors].sort(
                 (a, b) => a.priority - b.priority
@@ -106,7 +109,7 @@ export const Scale = ({
         setIsShowModifyingResult(true);
     };
 
-    const getModifyDetailsStatus = (status: serviceDeploymentState | undefined) => {
+    const getModifyDetailsStatus = (status: ServiceDeploymentState | undefined) => {
         setModifyStatus(status);
     };
 
@@ -162,7 +165,7 @@ export const Scale = ({
                     getScaleOrModifyServiceOrderStatusQuery={getScaleServiceOrderStatusQuery}
                     currentSelectedService={currentSelectedService}
                     serviceProviderContactDetails={
-                        orderableServiceDetailsQuery.isSuccess
+                        orderableServiceDetailsQuery.isSuccess && orderableServiceDetailsQuery.data
                             ? orderableServiceDetailsQuery.data.serviceProviderContactDetails
                             : undefined
                     }
@@ -293,8 +296,7 @@ export const Scale = ({
                 </Form.Item>
                 <div
                     className={
-                        currentSelectedService.serviceDeploymentState.toString() ===
-                        serviceDeploymentState.MODIFYING.toString()
+                        currentSelectedService.serviceDeploymentState === ServiceDeploymentState.MODIFYING
                             ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                             : ''
                     }
@@ -304,7 +306,7 @@ export const Scale = ({
                             <OrderItem
                                 key={item.name}
                                 item={item}
-                                csp={currentSelectedService.csp as csp}
+                                csp={currentSelectedService.csp}
                                 region={currentSelectedService.region}
                             />
                         ) : undefined
@@ -327,7 +329,7 @@ export const Scale = ({
                                 type='primary'
                                 disabled={
                                     currentSelectedService.flavor === selectFlavor ||
-                                    (modifyStatus && modifyStatus === serviceDeploymentState.MODIFICATION_SUCCESSFUL)
+                                    (modifyStatus && modifyStatus === ServiceDeploymentState.MODIFICATION_SUCCESSFUL)
                                 }
                                 onClick={() => {
                                     onClickScale();

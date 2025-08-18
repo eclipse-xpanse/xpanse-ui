@@ -7,16 +7,20 @@ import { useQuery } from '@tanstack/react-query';
 import {
     getCurrentConfigurationOfService,
     type GetCurrentConfigurationOfServiceData,
+    Options,
 } from '../../../../xpanse-api/generated';
 
 export default function useGetCurrentConfigurationOfServiceQuery(serviceId: string) {
     return useQuery({
         queryKey: getCurrentConfigurationQueryKey(serviceId),
-        queryFn: () => {
-            const data: GetCurrentConfigurationOfServiceData = {
-                serviceId: serviceId,
+        queryFn: async () => {
+            const data: Options<GetCurrentConfigurationOfServiceData> = {
+                path: {
+                    serviceId: serviceId,
+                },
             };
-            return getCurrentConfigurationOfService(data);
+            const response = await getCurrentConfigurationOfService(data);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });

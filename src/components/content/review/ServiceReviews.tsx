@@ -11,10 +11,10 @@ import React, { useState } from 'react';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
 import tableStyles from '../../../styles/table.module.css';
 import {
-    category,
-    kind,
-    serviceHostingType,
-    serviceTemplateRegistrationState,
+    Category,
+    DeployerKind,
+    ServiceHostingType,
+    ServiceTemplateRegistrationState,
     ServiceTemplateRequestToReview,
 } from '../../../xpanse-api/generated';
 import { serviceTemplatesErrorText } from '../../utils/constants.tsx';
@@ -40,7 +40,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     const getServiceHostingTypeFilters = (): void => {
         const filters: ColumnFilterItem[] = [];
-        Object.values(serviceHostingType).forEach((serviceHostingType) => {
+        Object.values(ServiceHostingType).forEach((serviceHostingType) => {
             const filter = {
                 text: serviceHostingType,
                 value: serviceHostingType,
@@ -84,7 +84,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getCategoryFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(category).forEach((category) => {
+        Object.values(Category).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -96,7 +96,7 @@ export default function ServiceReviews(): React.JSX.Element {
 
     function getDeployerTypeFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(kind).forEach((kind) => {
+        Object.values(DeployerKind).forEach((kind) => {
             const filter = {
                 text: kind,
                 value: kind,
@@ -106,7 +106,11 @@ export default function ServiceReviews(): React.JSX.Element {
         deployerTypeFilters = filters;
     }
 
-    if (pendingServiceReviewRequestQuery.isSuccess && pendingServiceReviewRequestQuery.data.length > 0) {
+    if (
+        pendingServiceReviewRequestQuery.isSuccess &&
+        pendingServiceReviewRequestQuery.data &&
+        pendingServiceReviewRequestQuery.data.length > 0
+    ) {
         serviceTemplateRequestToReviewList = pendingServiceReviewRequestQuery.data;
         getServiceNameFilters(pendingServiceReviewRequestQuery.data);
         getVersionFilters(pendingServiceReviewRequestQuery.data);
@@ -236,9 +240,7 @@ export default function ServiceReviews(): React.JSX.Element {
                 record.ocl.serviceHostingType.startsWith(value.toString()),
             align: 'center',
             render: (_, record) => (
-                <DeployedServicesHostingType
-                    currentServiceHostingType={record.ocl.serviceHostingType as serviceHostingType}
-                />
+                <DeployedServicesHostingType currentServiceHostingType={record.ocl.serviceHostingType} />
             ),
         },
         {
@@ -252,9 +254,7 @@ export default function ServiceReviews(): React.JSX.Element {
             align: 'left',
             render: (_, record) => (
                 <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>
-                    {record.ocl.deployment.deployerTool.kind.toString() === kind.TERRAFORM.toString()
-                        ? 'Terraform'
-                        : 'Opentofu'}
+                    {record.ocl.deployment.deployerTool.kind === DeployerKind.TERRAFORM ? 'Terraform' : 'Opentofu'}
                 </Tag>
             ),
         },
@@ -263,7 +263,9 @@ export default function ServiceReviews(): React.JSX.Element {
             dataIndex: 'serviceTemplateRegistrationState',
             align: 'left',
             render: () => (
-                <ServiceTemplateRegisterStatus serviceRegistrationStatus={serviceTemplateRegistrationState.IN_REVIEW} />
+                <ServiceTemplateRegisterStatus
+                    serviceTemplateRegistrationState={ServiceTemplateRegistrationState.IN_REVIEW}
+                />
             ),
         },
         {

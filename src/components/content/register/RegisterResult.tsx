@@ -7,30 +7,37 @@ import { Alert, Button } from 'antd';
 import React from 'react';
 import errorAlertStyles from '../../../styles/error-alert.module.css';
 import registerStyles from '../../../styles/register.module.css';
-import { Ocl, serviceTemplateRegistrationState } from '../../../xpanse-api/generated';
+import { Ocl, ServiceTemplateRegistrationState } from '../../../xpanse-api/generated';
 import { convertStringArrayToUnorderedList } from '../../utils/generateUnorderedList';
+import { useGetServiceTemplateDetailsQuery } from './query/useGetServiceTemplateDetailsQuery.ts';
 
 function RegisterResult({
     ocl,
-    serviceRegistrationStatus,
+    serviceTemplateId,
     registerRequestStatus,
     registerResult,
     onRemove,
     retryRequest,
 }: {
     ocl: Ocl;
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
+    serviceTemplateId: string;
     registerRequestStatus: string;
     registerResult: string[];
     onRemove: () => void;
     retryRequest: () => void;
 }): React.JSX.Element {
-    if (registerRequestStatus === 'success') {
+    const getServiceTemplateDetailsQuery = useGetServiceTemplateDetailsQuery(serviceTemplateId);
+    if (
+        registerRequestStatus === 'success' &&
+        getServiceTemplateDetailsQuery.isSuccess &&
+        getServiceTemplateDetailsQuery.data
+    ) {
         return (
             <Alert
                 type={'success'}
                 message={
-                    serviceRegistrationStatus === serviceTemplateRegistrationState.APPROVED ? (
+                    getServiceTemplateDetailsQuery.data.serviceTemplateRegistrationState ===
+                    ServiceTemplateRegistrationState.APPROVED ? (
                         <>
                             Service <b>{ocl.name}</b> registered and added to catalog successfully
                         </>

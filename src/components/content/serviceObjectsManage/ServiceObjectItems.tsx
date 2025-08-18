@@ -5,15 +5,15 @@
 
 import { Tabs } from 'antd';
 import React, { useState } from 'react';
-import { objectActionType, ServiceObject } from '../../../xpanse-api/generated';
+import { ObjectActionType, ServiceObject } from '../../../xpanse-api/generated';
 import ServiceObjectManageItems from './ServiceObjectManageItems.tsx';
 
 export const ServiceObjectItems = ({ serviceObject }: { serviceObject: ServiceObject }): React.JSX.Element => {
-    const [objectManageActionType, setObjectManageActionType] = useState<objectActionType | undefined>(
-        serviceObject.objectsManage?.[0]?.objectActionType as objectActionType
+    const [objectManageActionType, setObjectManageActionType] = useState<ObjectActionType | undefined>(
+        serviceObject.objectsManage?.[0]?.objectActionType
     );
     const onChange = (key: string) => {
-        setObjectManageActionType(key as objectActionType);
+        setObjectManageActionType(key as ObjectActionType);
     };
     const items = serviceObject.objectsManage?.map((objectManage) => {
         return {

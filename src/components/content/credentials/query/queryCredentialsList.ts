@@ -11,11 +11,13 @@ export default function useCredentialsListQuery() {
     const currentRole: string | undefined = useCurrentUserRoleStore((state) => state.currentUserRole);
     return useQuery({
         queryKey: getCredentialsListQueryKey(currentRole),
-        queryFn: () => {
+        queryFn: async () => {
             if (currentRole === 'user') {
-                return getUserCloudCredentials();
+                const response = await getUserCloudCredentials();
+                return response.data;
             } else {
-                return getIsvCloudCredentials();
+                const response = await getIsvCloudCredentials();
+                return response.data;
             }
         },
         staleTime: 60000,

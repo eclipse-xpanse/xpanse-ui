@@ -3,21 +3,21 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { billingMode, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { BillingMode, Csp, ServiceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function getBillingModes(
-    csp: string,
-    selectServiceHostingType: string,
+    csp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     versionMapper: UserOrderableServiceVo[] | undefined
-): billingMode[] | undefined {
-    let billingMode: billingMode[] = [];
+): BillingMode[] | undefined {
+    let billingMode: BillingMode[] = [];
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
                 csp === userOrderableServiceVo.csp &&
                 selectServiceHostingType === userOrderableServiceVo.serviceHostingType
             ) {
-                billingMode = userOrderableServiceVo.billing.billingModes as billingMode[];
+                billingMode = userOrderableServiceVo.billing.billingModes;
             }
         });
     }
@@ -25,11 +25,11 @@ export function getBillingModes(
 }
 
 export function getDefaultBillingMode(
-    csp: string,
-    selectServiceHostingType: string,
+    csp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     versionMapper: UserOrderableServiceVo[] | undefined
-): billingMode | undefined {
-    let defaultBillingMode: billingMode | undefined = undefined;
+): BillingMode | undefined {
+    let defaultBillingMode: BillingMode | undefined = undefined;
     if (versionMapper) {
         versionMapper.forEach((userOrderableServiceVo) => {
             if (
@@ -37,7 +37,7 @@ export function getDefaultBillingMode(
                 selectServiceHostingType === userOrderableServiceVo.serviceHostingType &&
                 userOrderableServiceVo.billing.defaultBillingMode
             ) {
-                defaultBillingMode = userOrderableServiceVo.billing.defaultBillingMode.toString() as billingMode;
+                defaultBillingMode = userOrderableServiceVo.billing.defaultBillingMode;
             }
         });
     }

@@ -8,7 +8,7 @@ import '../../../../styles/app.module.css';
 import {
     DeployedServiceDetails,
     DeployResource,
-    serviceHostingType,
+    ServiceHostingType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { DeployedServicesDetailsContent } from '../common/DeployedServicesDetailsContent';
@@ -22,7 +22,7 @@ export const MyServiceDetails = ({
     const requestMap = new Map<string, string>();
     let deployResourceMap: DeployResource[] = [];
 
-    if (deployedService.serviceHostingType.toString() === serviceHostingType.SELF.toString()) {
+    if (deployedService.serviceHostingType === ServiceHostingType.SELF) {
         const serviceDetailVo = deployedService as DeployedServiceDetails;
         if (serviceDetailVo.deployedServiceProperties) {
             for (const key in serviceDetailVo.deployedServiceProperties) {

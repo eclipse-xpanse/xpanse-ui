@@ -4,16 +4,30 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { UserPolicyUpdateRequest, updateUserPolicy, type UpdateUserPolicyData } from '../../../../xpanse-api/generated';
+import {
+    Options,
+    updateUserPolicy,
+    UpdateUserPolicyData,
+    UserPolicyUpdateRequest,
+} from '../../../../xpanse-api/generated';
 
 export function useUpdateUserPolicyRequest() {
     return useMutation({
-        mutationFn: ({ userPolicyId, requestBody }: { userPolicyId: string; requestBody: UserPolicyUpdateRequest }) => {
-            const data: UpdateUserPolicyData = {
-                userPolicyId: userPolicyId,
-                requestBody: requestBody,
+        mutationFn: async ({
+            userPolicyId,
+            requestBody,
+        }: {
+            userPolicyId: string;
+            requestBody: UserPolicyUpdateRequest;
+        }) => {
+            const request: Options<UpdateUserPolicyData> = {
+                body: requestBody,
+                path: {
+                    userPolicyId: userPolicyId,
+                },
             };
-            return updateUserPolicy(data);
+            const response = await updateUserPolicy(request);
+            return response.data;
         },
     });
 }

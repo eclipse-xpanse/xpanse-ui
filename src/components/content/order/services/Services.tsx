@@ -12,7 +12,7 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import serviceEmptyStyles from '../../../../styles/services-empty.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Category, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { createServicePageRoute, serviceAvailableErrorText } from '../../../utils/constants';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import { IsvNameDisplay } from '../common/IsvNameDisplay.tsx';
@@ -41,13 +41,13 @@ function Services(): React.JSX.Element {
         );
     };
 
-    const orderableServicesQuery = userOrderableServicesQuery(location.hash.split('#')[1] as category, undefined);
+    const orderableServicesQuery = userOrderableServicesQuery(location.hash.split('#')[1] as Category, undefined);
 
     const queryClient = useQueryClient();
 
     const retryRequest = () => {
         void queryClient.refetchQueries({
-            queryKey: getOrderableServicesQueryKey(location.hash.split('#')[1] as category, undefined),
+            queryKey: getOrderableServicesQueryKey(location.hash.split('#')[1] as Category, undefined),
         });
     };
 

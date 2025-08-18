@@ -3,13 +3,13 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { category } from '../../../../xpanse-api/generated';
+import { Category } from '../../../../xpanse-api/generated';
 
 export interface UserServiceLatestVersionDisplayType {
     name: string;
     content: string;
     icon: string;
     latestVersion: string;
-    category: category;
+    category: Category;
     serviceVendor: string;
 }

@@ -5,18 +5,20 @@
 
 import { useMutation } from '@tanstack/react-query';
 import {
-    ServicePolicyCreateRequest,
     addServicePolicy,
-    type AddServicePolicyData,
+    AddServicePolicyData,
+    Options,
+    ServicePolicyCreateRequest,
 } from '../../../../../../xpanse-api/generated';
 
 export const useAddServicePolicy = () => {
     return useMutation({
-        mutationFn: (policyRequest: ServicePolicyCreateRequest) => {
-            const data: AddServicePolicyData = {
-                requestBody: policyRequest,
+        mutationFn: async (policyRequest: ServicePolicyCreateRequest) => {
+            const data: Options<AddServicePolicyData> = {
+                body: policyRequest,
             };
-            return addServicePolicy(data);
+            const response = await addServicePolicy(data);
+            return response.data;
         },
     });
 };

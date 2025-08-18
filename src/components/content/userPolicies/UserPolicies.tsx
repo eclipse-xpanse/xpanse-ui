@@ -11,7 +11,7 @@ import React, { useState } from 'react';
 import policyStyles from '../../../styles/policies.module.css';
 import tableButtonStyles from '../../../styles/table-buttons.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { UserPolicy, csp, name } from '../../../xpanse-api/generated';
+import { Csp, UserPolicy } from '../../../xpanse-api/generated';
 import { userPoliciesManagementErrorText } from '../../utils/constants.tsx';
 import { cspMap } from '../common/csp/CspLogo';
 import RetryPrompt from '../common/error/RetryPrompt.tsx';
@@ -35,7 +35,7 @@ function UserPolicies(): React.JSX.Element {
     if (listPoliciesManagementServiceQuery.isSuccess) {
         cspFilters = updateCspFilters();
         enabledFilters = updateEnabledFilters();
-        policiesManagementServiceList = listPoliciesManagementServiceQuery.data;
+        policiesManagementServiceList = listPoliciesManagementServiceQuery.data ?? [];
     }
 
     const columns: ColumnsType<UserPolicy> = [
@@ -50,10 +50,10 @@ function UserPolicies(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
-            render: (csp: csp, _) => {
+            render: (csp: Csp, _) => {
                 return (
                     <Space size='middle'>
-                        <Image width={100} preview={false} src={cspMap.get(csp.valueOf() as name)?.logo} />
+                        <Image width={100} preview={false} src={cspMap.get(csp)?.logo} />
                     </Space>
                 );
             },

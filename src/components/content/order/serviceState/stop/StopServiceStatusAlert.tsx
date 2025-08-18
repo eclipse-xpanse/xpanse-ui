@@ -8,8 +8,8 @@ import React, { useMemo } from 'react';
 import {
     DeployedService,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -28,9 +28,9 @@ function StopServiceStatusAlert({
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
-    serviceStateStopQuery: UseMutationResult<ServiceOrder, Error, string>;
+    serviceStateStopQuery: UseMutationResult<ServiceOrder | undefined, Error, string>;
     closeStopResultAlert: (arg: boolean) => void;
-    getStopServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    getStopServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const onClose = () => {
@@ -52,26 +52,26 @@ function StopServiceStatusAlert({
         } else if (serviceStateStopQuery.isSuccess) {
             if (
                 getStopServiceDetailsQuery.isSuccess &&
-                (getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
-                    getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                (getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
                         operationType={OperationType.Stop}
                         serviceOrderStatus={getStopServiceDetailsQuery.data}
                         serviceId={deployedService.serviceId}
-                        selectedServiceHostingType={deployedService.serviceHostingType as serviceHostingType}
+                        selectedServiceHostingType={deployedService.serviceHostingType}
                     />
                 );
             } else if (getStopServiceDetailsQuery.isError) {
-                if (deployedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (deployedService.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Service stop status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Service stop status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getStopServiceDetailsQuery.isPending ||
-                getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Stopping, Please wait...';
             }
@@ -97,17 +97,17 @@ function StopServiceStatusAlert({
         } else if (serviceStateStopQuery.isSuccess) {
             if (
                 getStopServiceDetailsQuery.isSuccess &&
-                getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 return 'error';
             } else if (
                 getStopServiceDetailsQuery.isSuccess &&
-                getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 return 'success';
             } else if (
                 getStopServiceDetailsQuery.isPending ||
-                getStopServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getStopServiceDetailsQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -125,7 +125,7 @@ function StopServiceStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (serviceStateStopQuery.isSuccess) {
+        if (serviceStateStopQuery.isSuccess && serviceStateStopQuery.data) {
             return serviceStateStopQuery.data.orderId;
         } else {
             if (

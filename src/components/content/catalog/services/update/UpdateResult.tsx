@@ -20,13 +20,13 @@ function UpdateResult({
     tryNewFile,
 }: {
     ocl: Ocl;
-    updateServiceRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, Ocl>;
+    updateServiceRequest: UseMutationResult<ServiceTemplateRequestInfo | undefined, Error, Ocl>;
     updateResult: string[];
     onRemove: () => void;
     retryRequest: () => void;
     tryNewFile: () => void;
 }): React.JSX.Element {
-    if (updateServiceRequest.isSuccess) {
+    if (updateServiceRequest.isSuccess && updateServiceRequest.data) {
         return (
             <Alert
                 type={'success'}

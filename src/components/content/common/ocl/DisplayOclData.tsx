@@ -9,7 +9,7 @@ import { Descriptions, Image, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
-import { Ocl, serviceHostingType } from '../../../../xpanse-api/generated';
+import { Ocl } from '../../../../xpanse-api/generated';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
 import DeploymentManagement from '../../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../../serviceActionManage/ServiceActionManagement.tsx';
@@ -74,7 +74,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                 <b>Service Hosted By</b>
                                 <br />
                                 <DeployedServicesHostingType
-                                    currentServiceHostingType={ocl.serviceHostingType as serviceHostingType}
+                                    currentServiceHostingType={ocl.serviceHostingType}
                                     className={oclDisplayStyles.oclDisplayTag}
                                 />
                                 <br />

@@ -10,7 +10,7 @@ import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
     ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
+    ServiceTemplateRegistrationState,
     ServiceTemplateRequestInfo,
 } from '../../../../../xpanse-api/generated';
 import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
@@ -23,7 +23,7 @@ function UnpublishService({
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    unPublishRequest: UseMutationResult<ServiceTemplateRequestInfo | undefined, Error, void>;
     setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const unpublish = () => {
@@ -49,7 +49,7 @@ function UnpublishService({
                     className={catalogStyles.catalogManageBtnClass}
                     disabled={
                         unPublishRequest.isSuccess ||
-                        serviceDetail.serviceTemplateRegistrationState !== serviceTemplateRegistrationState.APPROVED ||
+                        serviceDetail.serviceTemplateRegistrationState !== ServiceTemplateRegistrationState.APPROVED ||
                         !serviceDetail.isAvailableInCatalog
                     }
                 >

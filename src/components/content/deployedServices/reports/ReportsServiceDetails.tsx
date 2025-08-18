@@ -15,7 +15,7 @@ import useGetServiceDetailsByIdForIsvQuery from './query/useGetServiceDetailsByI
 export const ReportsServiceDetails = ({ serviceId }: { serviceId: string }): React.JSX.Element => {
     const getServiceDetailsByIdQuery = useGetServiceDetailsByIdForIsvQuery(serviceId);
 
-    if (getServiceDetailsByIdQuery.isSuccess) {
+    if (getServiceDetailsByIdQuery.isSuccess && getServiceDetailsByIdQuery.data) {
         const endPointMap = new Map<string, string>();
         const requestMap = new Map<string, string>();
         let deployResourceMap: DeployResource[] = [];

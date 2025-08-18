@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { serviceHostingType, ServiceOrderStatusUpdate } from '../../../../xpanse-api/generated';
+import { OrderStatus, ServiceHostingType, ServiceOrderStatusUpdate } from '../../../../xpanse-api/generated';
 import { OperationType } from '../types/OperationType';
 import { OrderEndPointDetails } from './OrderEndPointDetails.tsx';
 
@@ -18,7 +18,7 @@ export const OrderProcessingStatus = ({
     operationType: OperationType;
     serviceOrderStatus: ServiceOrderStatusUpdate;
     serviceId: string;
-    selectedServiceHostingType: serviceHostingType;
+    selectedServiceHostingType: ServiceHostingType;
     actionName?: string;
 }): React.JSX.Element => {
     const errorMsg: string = 'Please contact service vendor for error details.';
@@ -27,7 +27,7 @@ export const OrderProcessingStatus = ({
         operationType === OperationType.Recreate ||
         operationType === OperationType.Port
     ) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <OrderEndPointDetails
                     serviceOrderStatus={serviceOrderStatus}
@@ -36,12 +36,12 @@ export const OrderProcessingStatus = ({
                     operationType={operationType}
                 />
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{serviceOrderStatus.error?.errorType.toString()}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -51,7 +51,7 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Modify) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <OrderEndPointDetails
                     serviceOrderStatus={serviceOrderStatus}
@@ -60,12 +60,12 @@ export const OrderProcessingStatus = ({
                     operationType={operationType}
                 />
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Modification Failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -75,18 +75,18 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Destroy) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Destroyed Successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Destroyed Failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -96,18 +96,18 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.UpdateConfig) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Service configuration updated successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Service configuration updated failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -117,7 +117,7 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Action) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>
@@ -126,7 +126,7 @@ export const OrderProcessingStatus = ({
                     </span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>
@@ -134,7 +134,7 @@ export const OrderProcessingStatus = ({
                         {` request failed.`}
                     </span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -144,18 +144,18 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Restart) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Service restarted successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Service restarted failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -165,18 +165,18 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Start) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Service started successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Service started failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>
@@ -186,18 +186,18 @@ export const OrderProcessingStatus = ({
     }
 
     if (operationType === OperationType.Stop) {
-        if (serviceOrderStatus.orderStatus === 'successful') {
+        if (serviceOrderStatus.orderStatus === OrderStatus.SUCCESSFUL) {
             return (
                 <div>
                     <span>{'Service stopped successfully.'}</span>
                 </div>
             );
-        } else if (serviceOrderStatus.orderStatus === 'failed') {
+        } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
             return (
                 <div>
                     <span>{'Service stopped failed.'}</span>
                     <div>
-                        {selectedServiceHostingType === serviceHostingType.SELF
+                        {selectedServiceHostingType === ServiceHostingType.SELF
                             ? serviceOrderStatus.error?.details.join()
                             : errorMsg}
                     </div>

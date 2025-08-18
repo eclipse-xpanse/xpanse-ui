@@ -8,7 +8,6 @@ import React, { useState } from 'react';
 import '../../../../styles/app.module.css';
 import {
     DeployedServiceDetails,
-    serviceHostingType,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
@@ -37,7 +36,7 @@ export const CreateServiceActionForm = ({
                 children: (
                     <ServiceActionParameter
                         serviceId={deployedService.serviceId}
-                        serviceHostType={deployedService.serviceHostingType as serviceHostingType}
+                        serviceHostType={deployedService.serviceHostingType}
                         actionName={serviceAction.name}
                         actionParameters={serviceAction.actionParameters ?? []}
                         createServiceActionRequest={createServiceActionRequest}

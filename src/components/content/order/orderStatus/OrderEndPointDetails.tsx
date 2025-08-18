@@ -7,7 +7,7 @@ import { LinkOutlined } from '@ant-design/icons';
 import { Button, Skeleton } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { serviceHostingType, ServiceOrderStatusUpdate } from '../../../../xpanse-api/generated';
+import { ServiceHostingType, ServiceOrderStatusUpdate } from '../../../../xpanse-api/generated';
 import { myServicesRoute } from '../../../utils/constants.tsx';
 import FallbackSkeleton from '../../common/lazy/FallBackSkeleton.tsx';
 import { useServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
@@ -21,7 +21,7 @@ export function OrderEndPointDetails({
 }: {
     serviceOrderStatus: ServiceOrderStatusUpdate;
     serviceId: string;
-    selectedServiceHostingType: serviceHostingType;
+    selectedServiceHostingType: ServiceHostingType;
     operationType: OperationType;
 }): React.JSX.Element {
     const endPointMap = new Map<string, string>();

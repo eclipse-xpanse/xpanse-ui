@@ -27,7 +27,11 @@ export default function RegisteredServices(): React.JSX.Element {
 
     const availableServiceTemplatesQuery = useListAllServiceTemplatesQuery();
 
-    if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
+    if (
+        availableServiceTemplatesQuery.isSuccess &&
+        availableServiceTemplatesQuery.data &&
+        availableServiceTemplatesQuery.data.length > 0
+    ) {
         availableServiceList = availableServiceTemplatesQuery.data;
         const availableServicesData: Map<string, ServiceTemplateDetailVo[]> =
             groupServiceTemplatesByServiceVendor(availableServiceList);

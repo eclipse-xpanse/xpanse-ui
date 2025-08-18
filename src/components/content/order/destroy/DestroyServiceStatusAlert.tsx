@@ -9,8 +9,8 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -29,8 +29,8 @@ function DestroyServiceStatusAlert({
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
-    destroySubmitRequest: UseMutationResult<ServiceOrder, Error, string>;
-    getDestroyServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    destroySubmitRequest: UseMutationResult<ServiceOrder | undefined, Error, string>;
+    getDestroyServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     closeDestroyResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
@@ -57,26 +57,26 @@ function DestroyServiceStatusAlert({
         } else if (destroySubmitRequest.isSuccess) {
             if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                (getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
-                    getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                (getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
                         operationType={OperationType.Destroy}
                         serviceOrderStatus={getDestroyServiceOrderStatusQuery.data}
                         serviceId={deployedService.serviceId}
-                        selectedServiceHostingType={deployedService.serviceHostingType as serviceHostingType}
+                        selectedServiceHostingType={deployedService.serviceHostingType}
                     />
                 );
             } else if (getDestroyServiceOrderStatusQuery.isError) {
-                if (deployedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (deployedService.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Destroy status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Destroy status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getDestroyServiceOrderStatusQuery.isPending ||
-                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Destroying, Please wait...';
             }
@@ -105,7 +105,7 @@ function DestroyServiceStatusAlert({
         } else if (destroySubmitRequest.isSuccess) {
             if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -113,7 +113,7 @@ function DestroyServiceStatusAlert({
                 return 'error';
             } else if (
                 getDestroyServiceOrderStatusQuery.isSuccess &&
-                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -121,7 +121,7 @@ function DestroyServiceStatusAlert({
                 return 'success';
             } else if (
                 getDestroyServiceOrderStatusQuery.isPending ||
-                getDestroyServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getDestroyServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -139,7 +139,7 @@ function DestroyServiceStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (destroySubmitRequest.isSuccess) {
+        if (destroySubmitRequest.isSuccess && destroySubmitRequest.data) {
             return destroySubmitRequest.data.orderId;
         } else {
             if (

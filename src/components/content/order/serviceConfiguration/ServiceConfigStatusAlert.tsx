@@ -8,8 +8,9 @@ import React, { useMemo } from 'react';
 import {
     ChangeServiceConfigurationData,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    Options,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
 } from '../../../../xpanse-api/generated';
@@ -26,9 +27,9 @@ function ServiceConfigStatusAlert({
     getUpdateConfigStatusPollingQuery,
 }: {
     serviceId: string;
-    serviceHostType: serviceHostingType;
-    updateConfigRequest: UseMutationResult<ServiceOrder, Error, ChangeServiceConfigurationData>;
-    getUpdateConfigStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    serviceHostType: ServiceHostingType;
+    updateConfigRequest: UseMutationResult<ServiceOrder | undefined, Error, Options<ChangeServiceConfigurationData>>;
+    getUpdateConfigStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
 }): React.JSX.Element {
     const msg = useMemo(() => {
         if (updateConfigRequest.isPending) {
@@ -45,8 +46,9 @@ function ServiceConfigStatusAlert({
         } else if (updateConfigRequest.isSuccess) {
             if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                (getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
-                    getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                getUpdateConfigStatusPollingQuery.data &&
+                (getUpdateConfigStatusPollingQuery.data.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getUpdateConfigStatusPollingQuery.data.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
@@ -57,14 +59,14 @@ function ServiceConfigStatusAlert({
                     />
                 );
             } else if (getUpdateConfigStatusPollingQuery.isError) {
-                if (serviceHostType === serviceHostingType.SERVICE_VENDOR) {
+                if (serviceHostType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getUpdateConfigStatusPollingQuery.isPending ||
-                !getUpdateConfigStatusPollingQuery.data.isOrderCompleted
+                !getUpdateConfigStatusPollingQuery.data?.isOrderCompleted
             ) {
                 return 'Updating, Please wait...';
             }
@@ -90,17 +92,19 @@ function ServiceConfigStatusAlert({
         } else if (updateConfigRequest.isSuccess) {
             if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getUpdateConfigStatusPollingQuery.data &&
+                getUpdateConfigStatusPollingQuery.data.orderStatus === OrderStatus.FAILED
             ) {
                 return 'error';
             } else if (
                 getUpdateConfigStatusPollingQuery.isSuccess &&
-                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getUpdateConfigStatusPollingQuery.data &&
+                getUpdateConfigStatusPollingQuery.data.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 return 'success';
             } else if (
                 getUpdateConfigStatusPollingQuery.isPending ||
-                getUpdateConfigStatusPollingQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getUpdateConfigStatusPollingQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -118,7 +122,7 @@ function ServiceConfigStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (updateConfigRequest.isSuccess) {
+        if (updateConfigRequest.isSuccess && updateConfigRequest.data) {
             return updateConfigRequest.data.orderId;
         } else {
             if (isHandleKnownErrorResponse(updateConfigRequest.error) && 'orderId' in updateConfigRequest.error.body) {

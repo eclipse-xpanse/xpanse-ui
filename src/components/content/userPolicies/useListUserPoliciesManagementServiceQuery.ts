@@ -4,17 +4,20 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getAllUserPolicies, type GetAllUserPoliciesData } from '../../../xpanse-api/generated';
+import { getAllUserPolicies, GetAllUserPoliciesData, Options } from '../../../xpanse-api/generated';
 
 export default function useListUserPoliciesManagementServiceQuery() {
     return useQuery({
         queryKey: ['listUserPoliciesManagementService'],
-        queryFn: () => {
-            const data: GetAllUserPoliciesData = {
-                cspName: undefined,
-                enabled: undefined,
+        queryFn: async () => {
+            const request: Options<GetAllUserPoliciesData> = {
+                query: {
+                    cspName: undefined,
+                    enabled: undefined,
+                },
             };
-            return getAllUserPolicies(data);
+            const response = await getAllUserPolicies(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });

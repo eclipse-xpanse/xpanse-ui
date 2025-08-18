@@ -6,7 +6,7 @@
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
-import { DeployResource, deployResourceKind } from '../../../../xpanse-api/generated';
+import { DeployResource } from '../../../../xpanse-api/generated';
 import { DeployResourceDataType } from '../myServices/myServiceProps';
 import DeployedResourceProperties from './DeployedResourceProperties';
 
@@ -36,7 +36,7 @@ export function DeployedResources({ content, title }: { content: DeployResource[
         content.forEach(function (item, index) {
             const currentDeployResource: DeployResourceDataType = {
                 key: String(index),
-                resourceKind: item.resourceKind as deployResourceKind,
+                resourceKind: item.resourceKind,
                 resourceId: item.resourceId,
                 resourceName: DeployedResourceProperties(item),
             };

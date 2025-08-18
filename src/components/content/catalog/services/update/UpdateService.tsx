@@ -13,14 +13,13 @@ import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import registerStyles from '../../../../../styles/register.module.css';
 import {
-    category,
+    Category,
     ErrorResponse,
     Ocl,
     ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
+    ServiceTemplateRegistrationState,
     ServiceTemplateRequestInfo,
     update,
-    type UpdateData,
 } from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse.ts';
 import OclSummaryDisplay from '../../../common/ocl/OclSummaryDisplay';
@@ -36,7 +35,7 @@ function UpdateService({
     isViewDisabled,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
-    category: category;
+    category: Category;
     isViewDisabled: boolean;
 }): React.JSX.Element {
     const [form] = Form.useForm();
@@ -52,20 +51,27 @@ function UpdateService({
 
     const queryClient = useQueryClient();
     const updateServiceRequest = useMutation({
-        mutationFn: (ocl: Ocl) => {
-            const data: UpdateData = {
-                serviceTemplateId: serviceDetail.serviceTemplateId,
-                isUnpublishUntilApproved:
-                    serviceDetail.isAvailableInCatalog &&
-                    serviceDetail.serviceTemplateRegistrationState === serviceTemplateRegistrationState.APPROVED &&
-                    files.current.length > 0
-                        ? isRemoveServiceTemplateUntilApproved
-                        : false,
-                requestBody: ocl,
-            };
-            return update(data);
+        mutationFn: async (ocl: Ocl) => {
+            const response = await update({
+                body: ocl,
+                path: {
+                    serviceTemplateId: serviceDetail.serviceTemplateId,
+                },
+                query: {
+                    isUnpublishUntilApproved:
+                        serviceDetail.isAvailableInCatalog &&
+                        serviceDetail.serviceTemplateRegistrationState === ServiceTemplateRegistrationState.APPROVED &&
+                        files.current.length > 0
+                            ? isRemoveServiceTemplateUntilApproved
+                            : false,
+                },
+            });
+            return response.data;
         },
-        onSuccess: (serviceTemplateRequestInfo: ServiceTemplateRequestInfo) => {
+        onSuccess: (serviceTemplateRequestInfo: ServiceTemplateRequestInfo | undefined) => {
+            if (serviceTemplateRequestInfo === undefined) {
+                return;
+            }
             files.current[0].status = 'done';
             updateResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
         },
@@ -177,7 +183,7 @@ function UpdateService({
                 disabled={
                     isViewDisabled ||
                     (serviceDetail.isReviewInProgress &&
-                        serviceDetail.serviceTemplateRegistrationState === serviceTemplateRegistrationState.APPROVED)
+                        serviceDetail.serviceTemplateRegistrationState === ServiceTemplateRegistrationState.APPROVED)
                 }
             >
                 Update
@@ -279,7 +285,7 @@ function UpdateService({
                             </Upload>
                             {serviceDetail.isAvailableInCatalog &&
                             serviceDetail.serviceTemplateRegistrationState ===
-                                serviceTemplateRegistrationState.APPROVED &&
+                                ServiceTemplateRegistrationState.APPROVED &&
                             files.current.length > 0 ? (
                                 <Form.Item
                                     name='isRemoveServiceTemplateUntilApproved'

@@ -9,8 +9,8 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployedService,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -29,8 +29,8 @@ function RecreateServiceStatusAlert({
     serviceProviderContactDetails,
 }: {
     currentSelectedService: DeployedService;
-    recreateRequest: UseMutationResult<ServiceOrder, Error, string>;
-    recreateServiceOrderStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    recreateRequest: UseMutationResult<ServiceOrder | undefined, Error, string>;
+    recreateServiceOrderStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     closeRecreateResultAlert: (arg: boolean) => void;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
@@ -51,29 +51,26 @@ function RecreateServiceStatusAlert({
         } else if (recreateRequest.isSuccess) {
             if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                (recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString() ||
-                    recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
-                        orderStatus.FAILED.toString())
+                (recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
                         operationType={OperationType.Recreate}
                         serviceOrderStatus={recreateServiceOrderStatusPollingQuery.data}
                         serviceId={currentSelectedService.serviceId}
-                        selectedServiceHostingType={currentSelectedService.serviceHostingType as serviceHostingType}
+                        selectedServiceHostingType={currentSelectedService.serviceHostingType}
                     />
                 );
             } else if (recreateServiceOrderStatusPollingQuery.isError) {
-                if (currentSelectedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (currentSelectedService.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Recreate status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Recreate status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 recreateServiceOrderStatusPollingQuery.isPending ||
-                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Recreating, Please wait...';
             }
@@ -91,7 +88,7 @@ function RecreateServiceStatusAlert({
         } else if (recreateRequest.isSuccess) {
             if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -99,7 +96,7 @@ function RecreateServiceStatusAlert({
                 return 'error';
             } else if (
                 recreateServiceOrderStatusPollingQuery.isSuccess &&
-                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -107,8 +104,7 @@ function RecreateServiceStatusAlert({
                 return 'success';
             } else if (
                 recreateServiceOrderStatusPollingQuery.isPending ||
-                recreateServiceOrderStatusPollingQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                recreateServiceOrderStatusPollingQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -126,7 +122,7 @@ function RecreateServiceStatusAlert({
     }
 
     const getServiceId = (): string => {
-        if (recreateRequest.isSuccess) {
+        if (recreateRequest.isSuccess && recreateRequest.data) {
             return recreateRequest.data.serviceId;
         } else {
             if (isHandleKnownErrorResponse(recreateRequest.error) && 'serviceId' in recreateRequest.error.body) {
@@ -138,7 +134,7 @@ function RecreateServiceStatusAlert({
     };
 
     const getOrderId = (): string => {
-        if (recreateRequest.isSuccess) {
+        if (recreateRequest.isSuccess && recreateRequest.data) {
             return recreateRequest.data.orderId;
         } else {
             if (isHandleKnownErrorResponse(recreateRequest.error) && 'orderId' in recreateRequest.error.body) {

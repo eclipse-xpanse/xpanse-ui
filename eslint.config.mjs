@@ -70,6 +70,7 @@ export default [
             'react/jsx-uses-vars': 'error',
             'no-undef': 'off',
             '@typescript-eslint/no-inferrable-types': 'off',
+            '@typescript-eslint/no-invalid-void-type': 'off',
             '@tanstack/query/exhaustive-deps': 'error',
             'no-console': 'error',
             '@typescript-eslint/no-dynamic-delete': 'off',

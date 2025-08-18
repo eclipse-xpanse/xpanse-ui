@@ -12,9 +12,9 @@ import serviceOperationStyles from '../../../../styles/service-operation.module.
 import {
     DeployedServiceDetails,
     ErrorResponse,
-    orderStatus,
+    OrderStatus,
     ServiceOrderDetails,
-    taskType,
+    ServiceOrderType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { ShowId } from '../../order/common/ShowId.tsx';
@@ -32,7 +32,11 @@ export const MyServiceHistory = ({
     let serviceOrdersHistoryList: ServiceOrderDetails[] = [];
     const listServiceOrdersHistoryQuery = useListServiceOrdersHistoryQuery(deployedService.serviceId);
 
-    if (listServiceOrdersHistoryQuery.isSuccess && listServiceOrdersHistoryQuery.data.length > 0) {
+    if (
+        listServiceOrdersHistoryQuery.isSuccess &&
+        listServiceOrdersHistoryQuery.data &&
+        listServiceOrdersHistoryQuery.data.length > 0
+    ) {
         serviceOrdersHistoryList = listServiceOrdersHistoryQuery.data;
         updateOrderIdFilters(listServiceOrdersHistoryQuery.data);
         updateTaskTypeFilters();
@@ -53,7 +57,7 @@ export const MyServiceHistory = ({
 
     function updateTaskTypeFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(taskType).forEach((taskTypeItem) => {
+        Object.values(ServiceOrderType).forEach((taskTypeItem) => {
             const filter = {
                 text: taskTypeItem,
                 value: taskTypeItem,
@@ -65,7 +69,7 @@ export const MyServiceHistory = ({
 
     function updateorderStatusFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(orderStatus).forEach((orderStatusItem) => {
+        Object.values(OrderStatus).forEach((orderStatusItem) => {
             const filter = {
                 text: orderStatusItem,
                 value: orderStatusItem,
@@ -161,19 +165,19 @@ export const MyServiceHistory = ({
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) => record.orderStatus.startsWith(value.toString()),
             render: (value) => {
-                if (value === orderStatus.FAILED) {
+                if (value === OrderStatus.FAILED) {
                     return (
                         <Tag icon={<CloseCircleOutlined />} color={'error'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === orderStatus.SUCCESSFUL) {
+                } else if (value === OrderStatus.SUCCESSFUL) {
                     return (
                         <Tag icon={<CheckCircleOutlined />} color={'success'}>
                             {value}
                         </Tag>
                     );
-                } else if (value === orderStatus.IN_PROGRESS) {
+                } else if (value === OrderStatus.IN_PROGRESS) {
                     return (
                         <Tag icon={<SyncOutlined />} color={'orange'}>
                             {value}

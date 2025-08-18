@@ -9,36 +9,43 @@ import {
     GetSelfHostedServiceDetailsByIdData,
     getVendorHostedServiceDetailsById,
     GetVendorHostedServiceDetailsByIdData,
-    orderStatus,
-    serviceHostingType,
+    Options,
+    OrderStatus,
+    ServiceHostingType,
 } from '../../../../xpanse-api/generated';
 
 const GET_SERVICE_DETAILS_QUERY_ID = 'getServiceDetailsById';
 
 export function useServiceDetailsByServiceIdQuery(
     serviceId: string | undefined,
-    currentServiceHostingType: string,
+    currentServiceHostingType: ServiceHostingType,
     currentServiceOrderOrderStatus: string | undefined
 ) {
     return useQuery({
         queryKey: [GET_SERVICE_DETAILS_QUERY_ID, serviceId, currentServiceHostingType],
-        queryFn: () => {
-            if (currentServiceHostingType === serviceHostingType.SELF.toString()) {
-                const data: GetSelfHostedServiceDetailsByIdData = {
-                    serviceId: serviceId ?? '',
+        queryFn: async () => {
+            if (currentServiceHostingType === ServiceHostingType.SELF) {
+                const request: Options<GetSelfHostedServiceDetailsByIdData> = {
+                    path: {
+                        serviceId: serviceId ?? '',
+                    },
                 };
-                return getSelfHostedServiceDetailsById(data);
+                const response = await getSelfHostedServiceDetailsById(request);
+                return response.data;
             } else {
-                const data: GetVendorHostedServiceDetailsByIdData = {
-                    serviceId: serviceId ?? '',
+                const request: Options<GetVendorHostedServiceDetailsByIdData> = {
+                    path: {
+                        serviceId: serviceId ?? '',
+                    },
                 };
-                return getVendorHostedServiceDetailsById(data);
+                const response = await getVendorHostedServiceDetailsById(request);
+                return response.data;
             }
         },
         enabled:
             serviceId !== undefined &&
-            (currentServiceOrderOrderStatus === orderStatus.SUCCESSFUL ||
-                currentServiceOrderOrderStatus === orderStatus.FAILED),
+            (currentServiceOrderOrderStatus === OrderStatus.SUCCESSFUL ||
+                currentServiceOrderOrderStatus === OrderStatus.FAILED),
         staleTime: Infinity,
         gcTime: Infinity,
     });

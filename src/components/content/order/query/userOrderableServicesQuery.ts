@@ -4,25 +4,28 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { category, getOrderableServices, type GetOrderableServicesData } from '../../../../xpanse-api/generated';
+import { Category, getOrderableServices, GetOrderableServicesData, Options } from '../../../../xpanse-api/generated';
 
-export default function UserOrderableServicesQuery(category: category | undefined, serviceName: string | undefined) {
+export default function UserOrderableServicesQuery(category: Category | undefined, serviceName: string | undefined) {
     return useQuery({
         queryKey: getOrderableServicesQueryKey(category, serviceName),
-        queryFn: () => {
-            const data: GetOrderableServicesData = {
-                categoryName: category,
-                cspName: undefined,
-                serviceName: serviceName,
+        queryFn: async () => {
+            const request: Options<GetOrderableServicesData> = {
+                query: {
+                    categoryName: category,
+                    cspName: undefined,
+                    serviceName: serviceName,
+                },
             };
-            return getOrderableServices(data);
+            const response = await getOrderableServices(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });
 }
 
 export function getOrderableServicesQueryKey(
-    category: category | undefined,
+    category: Category | undefined,
     serviceName: string | undefined
 ): string[] {
     if (category && serviceName) {

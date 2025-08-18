@@ -7,7 +7,7 @@ import { Card, Col, Row, Statistic } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import dashboardStyles from '../../../../styles/dashboard.module.css';
-import { DeployedService, serviceDeploymentState } from '../../../../xpanse-api/generated';
+import { DeployedService, ServiceDeploymentState } from '../../../../xpanse-api/generated';
 import { myServicesRoute, serviceDetailsErrorText } from '../../../utils/constants';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import useListDeployedServicesQuery from '../../deployedServices/myServices/query/useListDeployedServicesDetailsQuery';
@@ -41,31 +41,31 @@ export function EndUserServicesDashboard(): React.JSX.Element {
         return <DashBoardSkeleton />;
     }
 
-    if (listDeployedServicesQuery.data.length > 0) {
+    if (listDeployedServicesQuery.data && listDeployedServicesQuery.data.length > 0) {
         listDeployedServicesQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_SUCCESSFUL
             ) {
                 successfulDeploymentsCount++;
             }
             if (
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_FAILED ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.ROLLBACK_FAILED
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_FAILED ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_FAILED ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.ROLLBACK_FAILED
             ) {
                 failedDeploymentsCount++;
             }
-            if (serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_SUCCESSFUL) {
+            if (serviceItem.serviceDeploymentState === ServiceDeploymentState.DESTROY_SUCCESSFUL) {
                 successfulDestroysCount++;
             }
-            if (serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED) {
+            if (serviceItem.serviceDeploymentState === ServiceDeploymentState.DESTROY_FAILED) {
                 failedDestroysCount++;
             }
         });
     }
 
-    const getMyServicesRedirectionUrl = (serviceDeploymentStates: serviceDeploymentState[]) => {
+    const getMyServicesRedirectionUrl = (serviceDeploymentStates: ServiceDeploymentState[]) => {
         const params = new URLSearchParams();
         serviceDeploymentStates.forEach((state) => {
             params.append('serviceDeploymentState', state);
@@ -81,8 +81,8 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_SUCCESSFUL,
-                                    serviceDeploymentState.MODIFICATION_SUCCESSFUL,
+                                    ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL,
+                                    ServiceDeploymentState.MODIFICATION_SUCCESSFUL,
                                 ]);
                             }}
                         >
@@ -99,9 +99,9 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                         <div
                             onClick={() => {
                                 getMyServicesRedirectionUrl([
-                                    serviceDeploymentState.DEPLOYMENT_FAILED,
-                                    serviceDeploymentState.MODIFICATION_FAILED,
-                                    serviceDeploymentState.ROLLBACK_FAILED,
+                                    ServiceDeploymentState.DEPLOYMENT_FAILED,
+                                    ServiceDeploymentState.MODIFICATION_FAILED,
+                                    ServiceDeploymentState.ROLLBACK_FAILED,
                                 ]);
                             }}
                         >
@@ -117,7 +117,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_SUCCESSFUL]);
+                                getMyServicesRedirectionUrl([ServiceDeploymentState.DESTROY_SUCCESSFUL]);
                             }}
                         >
                             <Statistic
@@ -132,7 +132,7 @@ export function EndUserServicesDashboard(): React.JSX.Element {
                     <Col span={12} className={dashboardStyles.dashboardContainerClass}>
                         <div
                             onClick={() => {
-                                getMyServicesRedirectionUrl([serviceDeploymentState.DESTROY_FAILED]);
+                                getMyServicesRedirectionUrl([ServiceDeploymentState.DESTROY_FAILED]);
                             }}
                         >
                             <Statistic

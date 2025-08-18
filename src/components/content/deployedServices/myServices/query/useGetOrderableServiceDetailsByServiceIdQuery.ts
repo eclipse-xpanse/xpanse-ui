@@ -7,16 +7,20 @@ import { useQuery } from '@tanstack/react-query';
 import {
     getOrderableServiceDetailsByServiceId,
     GetOrderableServiceDetailsByServiceIdData,
+    Options,
 } from '../../../../../xpanse-api/generated';
 
 export default function useGetOrderableServiceDetailsByServiceIdQuery(serviceId: string | undefined) {
     return useQuery({
         queryKey: ['getOrderableServiceDetailsByServiceId', serviceId],
-        queryFn: () => {
-            const data: GetOrderableServiceDetailsByServiceIdData = {
-                serviceId: serviceId ?? '',
+        queryFn: async () => {
+            const data: Options<GetOrderableServiceDetailsByServiceIdData> = {
+                path: {
+                    serviceId: serviceId ?? '',
+                },
             };
-            return getOrderableServiceDetailsByServiceId(data);
+            const response = await getOrderableServiceDetailsByServiceId(data);
+            return response.data;
         },
         refetchOnWindowFocus: false,
         enabled: serviceId !== undefined && serviceId.length > 0,

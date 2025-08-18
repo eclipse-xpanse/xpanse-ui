@@ -6,7 +6,7 @@
 import { Button } from 'antd';
 import React from 'react';
 import appStyles from '../../../styles/app.module.css';
-import { healthStatus } from '../../../xpanse-api/generated';
+import { HealthStatus } from '../../../xpanse-api/generated';
 import SystemStatusIcon from './SystemStatusIcon';
 import { useHealthCheckStatusQuery } from './useHealthCheckStatusQuery';
 
@@ -19,7 +19,7 @@ function SystemStatusBar(): React.JSX.Element {
                 className={appStyles.headerMenuButton}
                 icon={
                     <SystemStatusIcon
-                        isSystemUp={healthCheckQuery.data?.healthStatus === healthStatus.OK}
+                        isSystemUp={healthCheckQuery.data?.data?.healthStatus === HealthStatus.OK}
                         isStatusLoading={healthCheckQuery.isLoading}
                     />
                 }

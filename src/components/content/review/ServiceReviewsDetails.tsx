@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../styles/ocl-display.module.css';
 import serviceReviewStyles from '../../../styles/service-review.module.css';
-import { name, serviceTemplateRegistrationState, ServiceTemplateRequestToReview } from '../../../xpanse-api/generated';
+import { ServiceTemplateRegistrationState, ServiceTemplateRequestToReview } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { AgreementText } from '../common/ocl/AgreementText';
 import { BillingText } from '../common/ocl/BillingText';
@@ -117,9 +117,8 @@ export const ServiceReviewsDetails = ({
                                     width={120}
                                     preview={false}
                                     src={
-                                        cspMap.get(
-                                            currentServiceTemplateRequestToReview.ocl.cloudServiceProvider.name.valueOf() as name
-                                        )?.logo
+                                        cspMap.get(currentServiceTemplateRequestToReview.ocl.cloudServiceProvider.name)
+                                            ?.logo
                                     }
                                 />
                             </div>
@@ -219,7 +218,7 @@ export const ServiceReviewsDetails = ({
                         </h3>
                         <Descriptions column={1} bordered className={oclDisplayStyles.oclDataInfoTable}>
                             <Descriptions.Item label='Registration Status'>
-                                {serviceTemplateRegistrationState.IN_REVIEW.valueOf()}
+                                {ServiceTemplateRegistrationState.IN_REVIEW.valueOf()}
                             </Descriptions.Item>
                         </Descriptions>
                     </>

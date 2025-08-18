@@ -4,12 +4,12 @@
  */
 
 import { Tab } from 'rc-tabs/lib/interface';
-import { csp, Region, serviceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Csp, Region, ServiceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../types/Area';
 
 export function getAreasForSelectedVersionHostingTypeAndCsp(
-    selectCsp: string,
-    selectServiceHostingType: serviceHostingType,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Area[] {
     const areaMapper: Map<string, Area[]> = new Map<string, Area[]>();
@@ -40,8 +40,8 @@ export function getAreasForSelectedVersionHostingTypeAndCsp(
 }
 
 export function convertAreasToTabs(
-    selectCsp: csp,
-    selectServiceHostingType: serviceHostingType,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): Tab[] {
     const areaList: Area[] = getAreasForSelectedVersionHostingTypeAndCsp(

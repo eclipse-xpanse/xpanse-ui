@@ -10,7 +10,7 @@ import { Navigate, To, useLocation, useNavigate } from 'react-router-dom';
 import { v4 } from 'uuid';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
-import { DeployRequest, orderStatus } from '../../../../xpanse-api/generated';
+import { DeployRequest, OrderStatus } from '../../../../xpanse-api/generated';
 import {
     createServicePageRoute,
     CUSTOMER_SERVICE_NAME_FIELD,
@@ -39,10 +39,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
     const redeployFailedDeploymentQuery = useRedeployFailedDeploymentQuery(state.serviceHostingType);
     const getSubmitLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         redeployFailedDeploymentQuery.isSuccess
-            ? redeployFailedDeploymentQuery.data.orderId
+            ? redeployFailedDeploymentQuery.data?.orderId
             : (submitDeploymentRequest.data?.orderId ?? ''),
         submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         isShowDeploymentResult
     );
 
@@ -88,7 +88,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
 
     const retryRequest = () => {
         uniqueRequestId.current = v4();
-        if (submitDeploymentRequest.isSuccess) {
+        if (submitDeploymentRequest.isSuccess && submitDeploymentRequest.data) {
             redeployFailedDeploymentQuery.mutate(submitDeploymentRequest.data.serviceId);
         } else {
             if (
@@ -122,12 +122,10 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
             return true;
         }
         if (
-            submitDeploymentRequest.isSuccess &&
-            (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString())
+            (submitDeploymentRequest.isSuccess &&
+                (getSubmitLatestServiceOrderStatusQuery.isPending ||
+                    getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS)) ||
+            getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
         ) {
             return true;
         }
@@ -149,11 +147,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         if (
             submitDeploymentRequest.isSuccess &&
             (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString() ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED)
         ) {
             return true;
         }
@@ -174,8 +168,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
         if (
             submitDeploymentRequest.isSuccess &&
             (getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString())
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS)
         ) {
             return true;
         }
@@ -189,7 +182,11 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                     <NewOrderHeaderElements
                         title={state.name}
                         version={state.version}
-                        icon={orderableServicesQuery.isSuccess ? orderableServicesQuery.data[0].icon : ''}
+                        icon={
+                            orderableServicesQuery.isSuccess && orderableServicesQuery.data
+                                ? orderableServicesQuery.data[0].icon
+                                : ''
+                        }
                         id={state.id}
                         serviceVendor={state.serviceVendor}
                         contactServiceDetails={state.contactServiceDetails}
@@ -244,8 +241,7 @@ function OrderSubmit(state: OrderSubmitProps): React.JSX.Element {
                             </Form.Item>
                             <div
                                 className={
-                                    getSubmitLatestServiceOrderStatusQuery.data?.orderStatus.toString() ===
-                                    orderStatus.IN_PROGRESS.toString()
+                                    getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
                                         ? `${serviceOrderStyles.deploying} ${serviceOrderStyles.orderParamItemRow}`
                                         : ''
                                 }

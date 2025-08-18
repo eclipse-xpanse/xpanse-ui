@@ -3,14 +3,14 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { csp, Region, serviceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Csp, Region, ServiceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 import { Area } from '../types/Area';
 import { RegionDropDownInfo } from '../types/RegionDropDownInfo';
 import { getAreasForSelectedVersionHostingTypeAndCsp } from './areaHelper';
 
 export function getRegionDropDownValues(
-    selectCsp: csp,
-    selectServiceHostingType: serviceHostingType,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     selectArea: string,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): RegionDropDownInfo[] {

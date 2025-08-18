@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { ServiceChangeParameter } from '../../../../xpanse-api/generated';
+import { ServiceChangeParameter, VariableDataType } from '../../../../xpanse-api/generated';
 import { BooleanInput } from '../common/formItemElements/BooleanInput.tsx';
 import { NumberInput } from '../common/formItemElements/NumberInput.tsx';
 import { TextInput } from '../common/formItemElements/TextInput.tsx';
@@ -18,11 +18,11 @@ export function ServiceConfigParameterItem({
         return <></>;
     }
     switch (configParameter.dataType) {
-        case 'string':
+        case VariableDataType.STRING:
             return <TextInput actionParameter={configParameter} />;
-        case 'number':
+        case VariableDataType.NUMBER:
             return <NumberInput actionParameter={configParameter} />;
-        case 'boolean':
+        case VariableDataType.BOOLEAN:
             return <BooleanInput actionParameter={configParameter} />;
         default:
             return <></>;

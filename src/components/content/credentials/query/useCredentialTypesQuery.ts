@@ -4,16 +4,16 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { csp, getCredentialTypes, type GetCredentialTypesData } from '../../../../xpanse-api/generated';
+import { Csp, getCredentialTypes, GetCredentialTypesData } from '../../../../xpanse-api/generated';
+import { Options } from '../../../../xpanse-api/generated/client';
 
-export const useCredentialTypesQuery = (currentCsp: csp | undefined) => {
+export const useCredentialTypesQuery = (currentCsp: Csp | undefined) => {
     return useQuery({
         queryKey: ['credentialTypesQuery', currentCsp],
-        queryFn: () => {
-            const data: GetCredentialTypesData = {
-                cspName: currentCsp,
-            };
-            return getCredentialTypes(data);
+        queryFn: async () => {
+            const request: Options<GetCredentialTypesData> = { query: { cspName: currentCsp } };
+            const response = await getCredentialTypes(request);
+            return response.data;
         },
         staleTime: 60000,
         enabled: currentCsp !== undefined,

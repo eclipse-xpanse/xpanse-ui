@@ -10,7 +10,7 @@ import { useLocation } from 'react-router-dom';
 import monitorStyles from '../../../styles/monitor.module.css';
 import emptyServicesStyle from '../../../styles/services-empty.module.css';
 import tablesStyle from '../../../styles/table.module.css';
-import { DeployedService, ErrorResponse, serviceDeploymentState } from '../../../xpanse-api/generated';
+import { DeployedService, ErrorResponse, ServiceDeploymentState } from '../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { MetricAutoRefreshSwitch } from './MetricAutoRefreshSwitch';
 import { MetricChartsPerRowDropDown } from './MetricChartsPerRowDropDown';
@@ -67,13 +67,13 @@ function Monitor(): React.JSX.Element {
     }, [form, location.state, onFinish]);
 
     if (deployedServiceQuery.isSuccess) {
-        const serviceList: DeployedService[] = deployedServiceQuery.data;
+        const serviceList: DeployedService[] = deployedServiceQuery.data ?? [];
         const newServiceNameList: { value: string; label: string }[] = [];
         const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         if (serviceList.length > 0) {
             const serviceVoMap: Map<string, DeployedService[]> = new Map<string, DeployedService[]>();
             serviceList.forEach((serviceVo: DeployedService) => {
-                if (serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+                if (serviceVo.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                     if (!serviceVoMap.has(serviceVo.name)) {
                         serviceVoMap.set(
                             serviceVo.name,
@@ -127,7 +127,7 @@ function Monitor(): React.JSX.Element {
             deployedServiceList.forEach((serviceVo: DeployedService) => {
                 if (
                     serviceVo.name === selectServiceName &&
-                    serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL
+                    serviceVo.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL
                 ) {
                     const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                         value: serviceVo.customerServiceName ?? '',
@@ -160,7 +160,7 @@ function Monitor(): React.JSX.Element {
         form.resetFields();
         const newCustomerServiceNameList: { value: string; label: string; serviceName: string; id: string }[] = [];
         deployedServiceList.forEach((serviceVo: DeployedService) => {
-            if (serviceVo.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
+            if (serviceVo.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL) {
                 const cusServiceName: { value: string; label: string; serviceName: string; id: string } = {
                     value: serviceVo.customerServiceName ?? '',
                     label: serviceVo.customerServiceName ?? '',

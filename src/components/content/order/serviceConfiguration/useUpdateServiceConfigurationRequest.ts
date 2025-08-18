@@ -4,15 +4,20 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { changeServiceConfiguration, type ChangeServiceConfigurationData } from '../../../../xpanse-api/generated';
+import {
+    changeServiceConfiguration,
+    type ChangeServiceConfigurationData,
+    Options,
+} from '../../../../xpanse-api/generated';
 
 const updateCurrentServiceConfigurationKey: string = 'updateCurrentServiceConfig';
 
 export function useUpdateServiceConfigurationRequest() {
     return useMutation({
         mutationKey: [updateCurrentServiceConfigurationKey],
-        mutationFn: (data: ChangeServiceConfigurationData) => {
-            return changeServiceConfiguration(data);
+        mutationFn: async (data: Options<ChangeServiceConfigurationData>) => {
+            const response = await changeServiceConfiguration(data);
+            return response.data;
         },
         gcTime: 0,
     });

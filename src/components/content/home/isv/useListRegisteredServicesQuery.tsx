@@ -4,21 +4,28 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getAllServiceTemplatesByIsv, GetAllServiceTemplatesByIsvData } from '../../../../xpanse-api/generated';
+import {
+    getAllServiceTemplatesByIsv,
+    GetAllServiceTemplatesByIsvData,
+    Options,
+} from '../../../../xpanse-api/generated';
 
 export default function useListRegisteredServicesQuery() {
     return useQuery({
         queryKey: ['getAllServiceTemplatesByIsv'],
-        queryFn: () => {
-            const data: GetAllServiceTemplatesByIsvData = {
-                categoryName: undefined,
-                cspName: undefined,
-                serviceName: undefined,
-                serviceVersion: undefined,
-                serviceHostingType: undefined,
-                serviceTemplateRegistrationState: undefined,
+        queryFn: async () => {
+            const request: Options<GetAllServiceTemplatesByIsvData> = {
+                query: {
+                    categoryName: undefined,
+                    cspName: undefined,
+                    serviceName: undefined,
+                    serviceVersion: undefined,
+                    serviceHostingType: undefined,
+                    serviceTemplateRegistrationState: undefined,
+                },
             };
-            return getAllServiceTemplatesByIsv(data);
+            const response = await getAllServiceTemplatesByIsv(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
     });
