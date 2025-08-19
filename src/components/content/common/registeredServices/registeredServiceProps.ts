@@ -4,7 +4,7 @@
  */
 
 import { DataNode } from 'antd/es/tree';
-import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+import { Category, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
 export const groupServiceTemplatesByServiceVendor = (
     serviceTemplateList: ServiceTemplateDetailVo[]
@@ -31,19 +31,17 @@ export const groupServicesByCategoryForSpecificServiceVendor = (
     currentServiceVendor: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
 ): Map<string, ServiceTemplateDetailVo[]> => {
-    const categoryMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+    const categoryMapper: Map<Category, ServiceTemplateDetailVo[]> = new Map<Category, ServiceTemplateDetailVo[]>();
     const serviceVendorMapper: Map<string, ServiceTemplateDetailVo[]> =
         groupServiceTemplatesByServiceVendor(serviceTemplateList);
     serviceVendorMapper.forEach((serviceList, serviceVendor) => {
         if (serviceVendor === currentServiceVendor) {
             for (const service of serviceList) {
-                if (service.category.toString()) {
-                    if (!categoryMapper.has(service.category.toString())) {
-                        categoryMapper.set(
-                            service.category.toString(),
-                            serviceList.filter((data) => data.category === service.category)
-                        );
-                    }
+                if (!categoryMapper.has(service.category)) {
+                    categoryMapper.set(
+                        service.category,
+                        serviceList.filter((data) => data.category === service.category)
+                    );
                 }
             }
         }

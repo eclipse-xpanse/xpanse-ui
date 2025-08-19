@@ -64,7 +64,7 @@ export const ServicePolicies = ({
                         content={
                             <pre>
                                 {' '}
-                                <div className={policyStyles.policyContentHover}>{record.policy.toString()}</div>
+                                <div className={policyStyles.policyContentHover}>{record.policy}</div>
                             </pre>
                         }
                         title={'Policy Content'}

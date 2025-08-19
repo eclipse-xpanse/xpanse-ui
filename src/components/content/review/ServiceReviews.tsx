@@ -182,7 +182,7 @@ export default function ServiceReviews(): React.JSX.Element {
             filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />,
             onFilter: (value: React.Key | boolean, record) => {
                 if (record.serviceTemplateId) {
-                    return record.serviceTemplateId.toString().toLowerCase().includes(value.toString().toLowerCase());
+                    return record.serviceTemplateId.toLowerCase().includes(value.toString().toLowerCase());
                 }
                 return false;
             },
@@ -250,7 +250,7 @@ export default function ServiceReviews(): React.JSX.Element {
             filterMode: 'tree',
             filterSearch: true,
             onFilter: (value: React.Key | boolean, record) =>
-                record.ocl.deployment.deployerTool.kind.toString() === value.toString(),
+                record.ocl.deployment.deployerTool.kind.valueOf() === value.toString(),
             align: 'left',
             render: (_, record) => (
                 <Tag bordered={false} color='success' className={serviceReviewStyles.deployerTypeSize}>

@@ -29,7 +29,7 @@ function OrderSubmitResultDetails({
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
-                        text: String(serviceId),
+                        text: serviceId,
                         icon: [
                             <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                             <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
@@ -51,7 +51,7 @@ function OrderSubmitResultDetails({
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
-                        text: String(orderId),
+                        text: orderId,
                         icon: [
                             <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                             <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
