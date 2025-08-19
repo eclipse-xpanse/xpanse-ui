@@ -8,13 +8,13 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { Dispatch, SetStateAction } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
+    BillingMode,
+    Csp,
     DeployedServiceDetails,
     Region,
+    ServiceHostingType,
     UserOrderableServiceVo,
     VendorHostedDeployedServiceDetails,
-    billingMode,
-    csp,
-    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { convertAreasToTabs } from '../formDataHelpers/areaHelper';
 import { getBillingModes, getDefaultBillingMode } from '../formDataHelpers/billingHelper';
@@ -45,26 +45,26 @@ export const SelectPortingTarget = ({
     setTarget: Dispatch<SetStateAction<string | undefined>>;
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    setCspList: Dispatch<SetStateAction<csp[]>>;
-    setSelectCsp: Dispatch<SetStateAction<csp>>;
-    setServiceHostTypes: Dispatch<SetStateAction<serviceHostingType[]>>;
-    setSelectServiceHostingType: Dispatch<SetStateAction<serviceHostingType>>;
+    setCspList: Dispatch<SetStateAction<Csp[]>>;
+    setSelectCsp: Dispatch<SetStateAction<Csp>>;
+    setServiceHostTypes: Dispatch<SetStateAction<ServiceHostingType[]>>;
+    setSelectServiceHostingType: Dispatch<SetStateAction<ServiceHostingType>>;
     setAreaList: Dispatch<SetStateAction<Tab[]>>;
     setSelectArea: Dispatch<SetStateAction<string>>;
     setRegionList: Dispatch<SetStateAction<RegionDropDownInfo[]>>;
     setSelectRegion: Dispatch<SetStateAction<Region>>;
-    setBillingModes: Dispatch<SetStateAction<billingMode[] | undefined>>;
-    setSelectBillingMode: Dispatch<SetStateAction<billingMode>>;
+    setBillingModes: Dispatch<SetStateAction<BillingMode[] | undefined>>;
+    setSelectBillingMode: Dispatch<SetStateAction<BillingMode>>;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     stepItem: StepProps;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const onChange = (e: RadioChangeEvent) => {
         setTarget(e.target.value as string);
-        const cspList: csp[] = getCspList(e);
+        const cspList: Csp[] = getCspList(e);
         setCspList(cspList);
         setSelectCsp(cspList[0]);
-        const serviceHostTypes: serviceHostingType[] = getAvailableServiceHostingTypes(
+        const serviceHostTypes: ServiceHostingType[] = getAvailableServiceHostingTypes(
             cspList[0],
             userOrderableServiceVoList
         );
@@ -82,26 +82,26 @@ export const SelectPortingTarget = ({
         );
         setRegionList(regionList);
         setSelectRegion(regionList.length > 0 ? regionList[0].region : currentSelectedService.region);
-        const billingModes: billingMode[] | undefined = getBillingModes(
+        const billingModes: BillingMode[] | undefined = getBillingModes(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
         );
         setBillingModes(billingModes);
-        const defaultBillingMode: billingMode | undefined = getDefaultBillingMode(
+        const defaultBillingMode: BillingMode | undefined = getDefaultBillingMode(
             cspList[0],
             serviceHostTypes[0],
             userOrderableServiceVoList
         );
         setSelectBillingMode(
-            defaultBillingMode ?? (billingModes ? billingModes[0] : (currentSelectedService.billingMode as billingMode))
+            defaultBillingMode ?? (billingModes ? billingModes[0] : currentSelectedService.billingMode)
         );
     };
 
     const getRegionList = (
         e: RadioChangeEvent,
-        selectCsp: csp,
-        selectServiceHostingType: serviceHostingType,
+        selectCsp: Csp,
+        selectServiceHostingType: ServiceHostingType,
         selectArea: string,
         userOrderableServices: UserOrderableServiceVo[] | undefined
     ) => {
@@ -125,18 +125,18 @@ export const SelectPortingTarget = ({
     };
 
     const getCspList = (e: RadioChangeEvent) => {
-        const currentCspList: csp[] = [];
+        const currentCspList: Csp[] = [];
         if (e.target.value === 'csp') {
             userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
                 if (
-                    !currentCspList.includes(userOrderableServiceVo.csp as csp) &&
+                    !currentCspList.includes(userOrderableServiceVo.csp) &&
                     userOrderableServiceVo.csp !== currentSelectedService.csp
                 ) {
-                    currentCspList.push(userOrderableServiceVo.csp as csp);
+                    currentCspList.push(userOrderableServiceVo.csp);
                 }
             });
         } else {
-            currentCspList.push(currentSelectedService.csp as csp);
+            currentCspList.push(currentSelectedService.csp);
         }
         return currentCspList;
     };

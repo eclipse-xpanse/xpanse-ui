@@ -4,17 +4,19 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { queryTasks, QueryTasksData } from '../../../../xpanse-api/generated';
+import { Options, queryTasks, QueryTasksData, WorkFlowTaskStatus } from '../../../../xpanse-api/generated';
 
-export default function useAllTasksQuery(status: 'done' | 'failed' | undefined) {
+export default function useAllTasksQuery(status: WorkFlowTaskStatus | undefined) {
     return useQuery({
         queryKey: getAllTasksQueryKey(status),
-        queryFn: () => {
-            const data: QueryTasksData = {
-                status: status,
+        queryFn: async () => {
+            const data: Options<QueryTasksData> = {
+                query: {
+                    status: status,
+                },
             };
-
-            return queryTasks(data);
+            const response = await queryTasks(data);
+            return response.data;
         },
     });
 }

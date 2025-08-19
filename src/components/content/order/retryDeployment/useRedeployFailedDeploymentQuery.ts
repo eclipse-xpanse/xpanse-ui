@@ -5,23 +5,31 @@
 
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import {
+    Options,
     redeployFailedDeployment,
     RedeployFailedDeploymentData,
-    serviceHostingType,
+    ServiceHostingType,
 } from '../../../../xpanse-api/generated/';
 import { getQueryKeyForServiceDetailsByServiceIdQuery } from '../../common/queries/useServiceDetailsByServiceIdQuery.ts';
 
-export default function useRedeployFailedDeploymentQuery(serviceHostingType: serviceHostingType) {
+export default function useRedeployFailedDeploymentQuery(serviceHostingType: ServiceHostingType) {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (serviceId: string) => {
-            const data: RedeployFailedDeploymentData = { serviceId: serviceId };
-            return redeployFailedDeployment(data);
+        mutationFn: async (serviceId: string) => {
+            const request: Options<RedeployFailedDeploymentData> = {
+                path: {
+                    serviceId: serviceId,
+                },
+            };
+            const response = await redeployFailedDeployment(request);
+            return response.data;
         },
         onSuccess: (data) => {
-            queryClient.removeQueries({
-                queryKey: getQueryKeyForServiceDetailsByServiceIdQuery(data.serviceId, serviceHostingType),
-            });
+            if (data) {
+                queryClient.removeQueries({
+                    queryKey: getQueryKeyForServiceDetailsByServiceIdQuery(data.serviceId, serviceHostingType),
+                });
+            }
         },
     });
 }

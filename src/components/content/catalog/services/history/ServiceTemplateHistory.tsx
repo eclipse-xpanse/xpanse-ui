@@ -24,7 +24,7 @@ function ServiceTemplateHistory({
     const [isServiceTemplateHistoryModalOpen, setIsServiceTemplateHistoryModalOpen] = useState(false);
 
     let serviceTemplateRequestHistoryList: ServiceTemplateRequestHistory[] = [];
-    if (serviceTemplateHistoryQuery.isSuccess) {
+    if (serviceTemplateHistoryQuery.isSuccess && serviceTemplateHistoryQuery.data) {
         serviceTemplateRequestHistoryList = serviceTemplateHistoryQuery.data;
     }
 
@@ -49,7 +49,9 @@ function ServiceTemplateHistory({
                     <ServiceTemplateHistoryTable data={serviceTemplateRequestHistoryList} />
                 </Modal>
             ) : null}
-            {serviceTemplateHistoryQuery.isSuccess && serviceTemplateHistoryQuery.data.length > 0 ? (
+            {serviceTemplateHistoryQuery.isSuccess &&
+            serviceTemplateHistoryQuery.data &&
+            serviceTemplateHistoryQuery.data.length > 0 ? (
                 <Button
                     icon={<HistoryOutlined />}
                     type='primary'

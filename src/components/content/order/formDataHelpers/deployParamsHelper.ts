@@ -4,12 +4,11 @@
  */
 
 import {
-    billingMode,
-    category,
-    csp,
+    BillingMode,
+    Csp,
     Region,
-    sensitiveScope,
-    serviceHostingType,
+    SensitiveScope,
+    ServiceHostingType,
     ServiceProviderContactDetails,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -18,17 +17,18 @@ import { DeployParam } from '../types/DeployParam';
 
 export const getDeployParams = (
     userOrderableServiceVoList: UserOrderableServiceVo[],
-    selectCsp: csp,
-    selectServiceHostingType: serviceHostingType,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     region: Region,
     selectFlavor: string,
     currentContactServiceDetails: ServiceProviderContactDetails | undefined,
     availabilityZones: Record<string, string> | undefined,
     eula: string | undefined,
-    selectBillingMode: billingMode
+    selectBillingMode: BillingMode
 ): OrderSubmitProps => {
     let service: UserOrderableServiceVo | undefined;
     let registeredServiceId = '';
+    let props: OrderSubmitProps;
 
     userOrderableServiceVoList.forEach((userOrderableServiceVo) => {
         if (userOrderableServiceVo.csp === selectCsp) {
@@ -37,25 +37,25 @@ export const getDeployParams = (
         }
     });
 
-    const props: OrderSubmitProps = {
-        category: service?.category as category,
-        csp: service?.csp as csp,
-        id: registeredServiceId,
-        name: service?.name ?? '',
-        version: service?.version ?? '',
-        region: region,
-        area: region.area,
-        flavor: selectFlavor,
-        params: new Array<DeployParam>(),
-        serviceHostingType: selectServiceHostingType,
-        serviceVendor: service?.serviceVendor ?? '',
-        contactServiceDetails: currentContactServiceDetails ?? undefined,
-        availabilityZones: availabilityZones,
-        eula: eula,
-        billingMode: selectBillingMode,
-    };
+    if (service) {
+        props = {
+            category: service.category,
+            csp: service.csp,
+            id: registeredServiceId,
+            name: service.name,
+            version: service.version,
+            region: region,
+            area: region.area,
+            flavor: selectFlavor,
+            params: new Array<DeployParam>(),
+            serviceHostingType: selectServiceHostingType,
+            serviceVendor: service.serviceVendor,
+            contactServiceDetails: currentContactServiceDetails ?? undefined,
+            availabilityZones: availabilityZones,
+            eula: eula,
+            billingMode: selectBillingMode,
+        };
 
-    if (service !== undefined) {
         for (const param of service.inputVariables) {
             props.params.push({
                 name: param.name,
@@ -65,12 +65,12 @@ export const getDeployParams = (
                 description: param.description,
                 value: param.value ?? '',
                 mandatory: param.mandatory,
-                sensitiveScope: param.sensitiveScope ?? sensitiveScope.NONE,
+                sensitiveScope: param.sensitiveScope ?? SensitiveScope.NONE,
                 valueSchema: param.valueSchema ?? undefined,
                 autoFill: param.autoFill ?? undefined,
             });
         }
+        return props;
     }
-
-    return props;
+    throw new Error('No valid service found');
 };

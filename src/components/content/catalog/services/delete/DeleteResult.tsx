@@ -7,7 +7,7 @@ import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { category } from '../../../../../xpanse-api/generated';
+import { Category, ErrorResponse } from '../../../../../xpanse-api/generated';
 import { catalogPageRoute, deleteServiceTemplateErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
@@ -23,8 +23,24 @@ export function DeleteResult({
     setServiceTemplateAction,
 }: {
     id: string;
-    category: category;
-    deleteServiceRequest: UseMutationResult<void, Error, void>;
+    category: Category;
+    deleteServiceRequest: UseMutationResult<
+        (
+            | {
+                  data: void;
+                  error: undefined;
+              }
+            | {
+                  data: undefined;
+                  error: ErrorResponse;
+              }
+        ) & {
+            request: Request;
+            response: Response;
+        },
+        Error,
+        void
+    >;
     onClose: () => void;
     serviceTemplateAction: ServiceTemplateAction;
     setServiceTemplateAction: (componentName: ServiceTemplateAction) => void;

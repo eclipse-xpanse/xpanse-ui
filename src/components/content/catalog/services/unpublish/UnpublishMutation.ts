@@ -4,18 +4,21 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { unpublish, type UnpublishData } from '../../../../../xpanse-api/generated';
+import { Options, unpublish, type UnpublishData } from '../../../../../xpanse-api/generated';
 
 const unpublishKey: string = 'unpublish';
 
 export function useUnpublishRequest(id: string) {
     return useMutation({
         mutationKey: [id, unpublishKey],
-        mutationFn: () => {
-            const data: UnpublishData = {
-                serviceTemplateId: id,
+        mutationFn: async () => {
+            const request: Options<UnpublishData> = {
+                path: {
+                    serviceTemplateId: id,
+                },
             };
-            return unpublish(data);
+            const response = await unpublish(request);
+            return response.data;
         },
         // necessary to clear the mutationCache immediately.
         // Otherwise, the mutation state is cached and with retries, it is not possible to get the state of the

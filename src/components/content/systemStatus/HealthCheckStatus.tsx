@@ -11,7 +11,7 @@ import React from 'react';
 import appStyles from '../../../styles/app.module.css';
 import healthStatusStyles from '../../../styles/health-status.module.css';
 import tableStyles from '../../../styles/table.module.css';
-import { BackendSystemStatus, backendSystemType, healthStatus, StackStatus } from '../../../xpanse-api/generated';
+import { BackendSystemStatus, BackendSystemType, HealthStatus } from '../../../xpanse-api/generated';
 import { healthCheckStatusErrorText } from '../../utils/constants.tsx';
 import RetryPrompt from '../common/error/RetryPrompt.tsx';
 import SystemStatusIcon from './SystemStatusIcon';
@@ -19,9 +19,9 @@ import { useStackCheckStatusQuery } from './useStackStatusCheckQuery.ts';
 
 interface DataType {
     key: React.Key;
-    backendSystemType: backendSystemType;
+    backendSystemType: BackendSystemType;
     name: string;
-    healthStatus: healthStatus;
+    healthStatus: HealthStatus;
     endpoint: string | undefined;
     details: string | undefined;
 }
@@ -37,9 +37,9 @@ export default function HealthCheckStatus(): React.JSX.Element {
         backendSystemStatusList.forEach(function (item, index) {
             const currentBackendSystemStatus = {
                 key: String(index),
-                backendSystemType: item.backendSystemType as backendSystemType,
+                backendSystemType: item.backendSystemType,
                 name: item.name,
-                healthStatus: item.healthStatus as healthStatus,
+                healthStatus: item.healthStatus,
                 endpoint: item.endpoint,
                 details: item.details,
             };
@@ -100,8 +100,8 @@ export default function HealthCheckStatus(): React.JSX.Element {
         void healthCheckQuery.refetch();
     };
 
-    if (healthCheckQuery.isSuccess) {
-        const rsp: StackStatus | undefined = healthCheckQuery.data;
+    if (healthCheckQuery.isSuccess && healthCheckQuery.data) {
+        const rsp = healthCheckQuery.data;
         updateBackendSystemStatusList(rsp.backendSystemStatuses);
         updateNameFilters(rsp.backendSystemStatuses);
         updateBackendSystemTypeFilters(rsp.backendSystemStatuses);
@@ -147,7 +147,7 @@ export default function HealthCheckStatus(): React.JSX.Element {
                         className={appStyles.headerMenuButton}
                         icon={
                             <SystemStatusIcon
-                                isSystemUp={record.healthStatus.valueOf() === healthStatus.OK.valueOf()}
+                                isSystemUp={record.healthStatus === HealthStatus.OK}
                                 isStatusLoading={healthCheckQuery.isLoading}
                             />
                         }

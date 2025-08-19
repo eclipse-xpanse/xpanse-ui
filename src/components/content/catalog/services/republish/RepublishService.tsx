@@ -9,7 +9,7 @@ import React from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import {
     ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
+    ServiceTemplateRegistrationState,
     ServiceTemplateRequestInfo,
 } from '../../../../../xpanse-api/generated';
 
@@ -25,7 +25,7 @@ function RepublishService({
 }: {
     serviceDetail: ServiceTemplateDetailVo;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
-    republishRequest: UseMutationResult<ServiceTemplateRequestInfo, Error, void>;
+    republishRequest: UseMutationResult<ServiceTemplateRequestInfo | undefined, Error, void>;
     setServiceTemplateAction: (ServiceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {
     const deleteState = useGetDeleteMutationState(serviceDetail.serviceTemplateId);
@@ -54,7 +54,7 @@ function RepublishService({
                     disabled={
                         republishRequest.isSuccess ||
                         (deleteState.length > 0 && deleteState[0].status === 'success') ||
-                        serviceDetail.serviceTemplateRegistrationState !== serviceTemplateRegistrationState.APPROVED ||
+                        serviceDetail.serviceTemplateRegistrationState !== ServiceTemplateRegistrationState.APPROVED ||
                         serviceDetail.isReviewInProgress ||
                         serviceDetail.isAvailableInCatalog
                     }

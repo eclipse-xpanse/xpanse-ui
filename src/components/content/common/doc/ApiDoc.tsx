@@ -7,7 +7,7 @@ import { LinkOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { Link, openApi, OpenApiData } from '../../../../xpanse-api/generated';
+import { openApi } from '../../../../xpanse-api/generated';
 
 export function ApiDoc({
     serviceTemplateId,
@@ -17,12 +17,13 @@ export function ApiDoc({
     styleClass: string;
 }): React.JSX.Element {
     function onclick() {
-        const data: OpenApiData = {
-            serviceTemplateId: serviceTemplateId,
-        };
-        void openApi(data).then((link: Link) => {
-            if (link.href !== undefined) {
-                window.open(link.href);
+        void openApi({
+            path: {
+                serviceTemplateId: serviceTemplateId,
+            },
+        }).then((link) => {
+            if (link.data !== undefined) {
+                window.open(link.data.href);
             }
         });
     }

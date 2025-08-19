@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import appStyles from '../../../styles/app.module.css';
 import searchServiceStyle from '../../../styles/search-services.module.css';
-import { category } from '../../../xpanse-api/generated';
+import { Category } from '../../../xpanse-api/generated';
 import { groupServicesByLatestVersion } from '../../content/order/common/utils/groupServicesByLatestVersion.ts';
 import userOrderableServicesQuery from '../../content/order/query/userOrderableServicesQuery.ts';
 import { UserServiceLatestVersionDisplayType } from '../../content/order/services/UserServiceLatestVersionDisplayType.ts';
@@ -22,7 +22,7 @@ export function SearchServices() {
     const [isSearchClicked, setIsSearchClicked] = useState<boolean>(false);
     const [searchText, setSearchText] = useState<string>('');
     const { Search } = Input;
-    const onSelectService = function (serviceName: string, latestVersion: string, category: category) {
+    const onSelectService = function (serviceName: string, latestVersion: string, category: Category) {
         setIsSearchClicked(false);
         setSearchText('');
         void navigate(

@@ -12,12 +12,11 @@ import { useLocation } from 'react-router-dom';
 import myServicesStyle from '../../../../styles/my-services.module.css';
 import tablesStyle from '../../../../styles/table.module.css';
 import {
-    category,
-    csp,
+    Category,
+    Csp,
     DeployedService,
-    name,
-    serviceDeploymentState,
-    serviceHostingType,
+    ServiceDeploymentState,
+    ServiceHostingType,
 } from '../../../../xpanse-api/generated';
 import { sortVersionNum } from '../../../utils/Sort';
 import { serviceDetailsErrorText } from '../../../utils/constants';
@@ -93,7 +92,11 @@ function Reports(): React.JSX.Element {
 
     const listDeployedServicesByIsvQuery = useListDeployedServicesByIsvQuery();
 
-    if (listDeployedServicesByIsvQuery.isSuccess && listDeployedServicesByIsvQuery.data.length > 0) {
+    if (
+        listDeployedServicesByIsvQuery.isSuccess &&
+        listDeployedServicesByIsvQuery.data &&
+        listDeployedServicesByIsvQuery.data.length > 0
+    ) {
         deployedServiceList = listDeployedServicesByIsvQuery.data;
         updateServiceIdFilters(listDeployedServicesByIsvQuery.data);
         updateVersionFilters(listDeployedServicesByIsvQuery.data);
@@ -173,7 +176,7 @@ function Reports(): React.JSX.Element {
             onFilter: (value: React.Key | boolean, record) => record.serviceHostingType.startsWith(value.toString()),
             align: 'center',
 
-            render: (serviceHostingType: serviceHostingType) => (
+            render: (serviceHostingType: ServiceHostingType) => (
                 <DeployedServicesHostingType currentServiceHostingType={serviceHostingType} />
             ),
         },
@@ -185,10 +188,10 @@ function Reports(): React.JSX.Element {
             filterSearch: true,
             filteredValue: cspFilteredValue,
             onFilter: (value: React.Key | boolean, record) => record.csp.startsWith(value.toString()),
-            render: (csp: csp, _) => {
+            render: (csp: Csp, _) => {
                 return (
                     <Space size='middle'>
-                        <Image width={100} preview={false} src={cspMap.get(csp.valueOf() as name)?.logo} />
+                        <Image width={100} preview={false} src={cspMap.get(csp)?.logo} />
                     </Space>
                 );
             },
@@ -219,7 +222,7 @@ function Reports(): React.JSX.Element {
             filteredValue: serviceDeploymentStateFilteredValue,
             onFilter: (value: React.Key | boolean, record) =>
                 record.serviceDeploymentState.startsWith(value.toString()),
-            render: (serviceState: serviceDeploymentState) => DeployedServicesStatus(serviceState),
+            render: (serviceState: ServiceDeploymentState) => DeployedServicesStatus(serviceState),
             align: 'center',
         },
         {
@@ -231,13 +234,13 @@ function Reports(): React.JSX.Element {
                         <Space size='middle'>
                             <Tooltip
                                 title={
-                                    record.serviceHostingType === serviceHostingType.SELF
+                                    record.serviceHostingType === ServiceHostingType.SELF
                                         ? 'details of self hosted services cannot be viewed.'
                                         : ''
                                 }
                             >
                                 <Button
-                                    disabled={record.serviceHostingType === serviceHostingType.SELF}
+                                    disabled={record.serviceHostingType === ServiceHostingType.SELF}
                                     type='primary'
                                     icon={<InfoCircleOutlined />}
                                     onClick={() => {
@@ -273,7 +276,7 @@ function Reports(): React.JSX.Element {
 
     function updateCspFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(csp).forEach((csp) => {
+        Object.values(Csp).forEach((csp) => {
             const filter = {
                 text: csp,
                 value: csp,
@@ -285,7 +288,7 @@ function Reports(): React.JSX.Element {
 
     function updateServiceStateFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(serviceDeploymentState).forEach((serviceStateItem) => {
+        Object.values(ServiceDeploymentState).forEach((serviceStateItem) => {
             const filter = {
                 text: serviceStateItem,
                 value: serviceStateItem,
@@ -297,7 +300,7 @@ function Reports(): React.JSX.Element {
 
     function updateCategoryFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(category).forEach((category) => {
+        Object.values(Category).forEach((category) => {
             const filter = {
                 text: category,
                 value: category,
@@ -359,7 +362,7 @@ function Reports(): React.JSX.Element {
 
     function updateServiceHostingFilters(): void {
         const filters: ColumnFilterItem[] = [];
-        Object.values(serviceHostingType).forEach((serviceHostingType) => {
+        Object.values(ServiceHostingType).forEach((serviceHostingType) => {
             const filter = {
                 text: serviceHostingType,
                 value: serviceHostingType,

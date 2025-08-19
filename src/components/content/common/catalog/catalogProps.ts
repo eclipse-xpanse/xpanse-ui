@@ -5,7 +5,7 @@
 
 import { DataNode } from 'antd/es/tree';
 import React from 'react';
-import { ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
+import { Csp, ServiceTemplateDetailVo } from '../../../../xpanse-api/generated';
 
 export const groupServiceTemplatesByName = (
     serviceTemplateList: ServiceTemplateDetailVo[]
@@ -56,8 +56,8 @@ export const groupServicesByCspForSpecificServiceNameAndVersion = (
     currentServiceName: string,
     currentVersionName: string,
     serviceTemplateList: ServiceTemplateDetailVo[]
-): Map<string, ServiceTemplateDetailVo[]> => {
-    const cspMapper: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
+): Map<Csp, ServiceTemplateDetailVo[]> => {
+    const cspMapper: Map<Csp, ServiceTemplateDetailVo[]> = new Map<Csp, ServiceTemplateDetailVo[]>();
     const versionMapper: Map<string, ServiceTemplateDetailVo[]> = groupServicesByVersionForSpecificServiceName(
         currentServiceName,
         serviceTemplateList

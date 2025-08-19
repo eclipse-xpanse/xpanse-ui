@@ -19,12 +19,9 @@ import tableStyles from '../../../styles/table.module.css';
 import {
     AbstractCredentialInfo,
     CredentialVariables,
-    csp,
+    Csp,
     deleteIsvCloudCredential,
-    DeleteIsvCloudCredentialData,
     deleteUserCloudCredential,
-    DeleteUserCloudCredentialData,
-    name,
 } from '../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../layouts/header/useCurrentRoleStore';
 import { credentialsErrorText } from '../../utils/constants.tsx';
@@ -55,7 +52,7 @@ function Credentials(): React.JSX.Element {
         });
     };
 
-    if (credentialsQuery.isSuccess) {
+    if (credentialsQuery.isSuccess && credentialsQuery.data !== undefined) {
         const credentials: AbstractCredentialInfo[] = credentialsQuery.data;
         if (credentials.length > 0) {
             abstractCredentialInfoList = credentials;
@@ -70,21 +67,23 @@ function Credentials(): React.JSX.Element {
 
     const deleteCredentialByRole = (credentialVariables: CredentialVariables) => {
         if (currentRole === 'user') {
-            const data: DeleteUserCloudCredentialData = {
-                cspName: credentialVariables.csp,
-                siteName: credentialVariables.site,
-                type: credentialVariables.type,
-                name: credentialVariables.name,
-            };
-            return deleteUserCloudCredential(data);
+            return deleteUserCloudCredential({
+                query: {
+                    cspName: credentialVariables.csp,
+                    siteName: credentialVariables.site,
+                    type: credentialVariables.type,
+                    name: credentialVariables.name,
+                },
+            });
         } else {
-            const data: DeleteIsvCloudCredentialData = {
-                cspName: credentialVariables.csp,
-                siteName: credentialVariables.site,
-                type: credentialVariables.type,
-                name: credentialVariables.name,
-            };
-            return deleteIsvCloudCredential(data);
+            return deleteIsvCloudCredential({
+                query: {
+                    cspName: credentialVariables.csp,
+                    siteName: credentialVariables.site,
+                    type: credentialVariables.type,
+                    name: credentialVariables.name,
+                },
+            });
         }
     };
 
@@ -92,10 +91,10 @@ function Credentials(): React.JSX.Element {
         {
             title: 'Csp',
             dataIndex: 'csp',
-            render: (csp: csp, _) => {
+            render: (csp: Csp, _) => {
                 return (
                     <Space size='middle'>
-                        <Image width={100} preview={false} src={cspMap.get(csp.valueOf() as name)?.logo} />
+                        <Image width={100} preview={false} src={cspMap.get(csp)?.logo} />
                     </Space>
                 );
             },

@@ -8,13 +8,13 @@ import { Button, Col, Form, Input, Row, Select, Tooltip } from 'antd';
 import { Rule } from 'rc-field-form/lib/interface';
 import React, { ChangeEvent, useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { csp, deployResourceKind, Region, sensitiveScope } from '../../../../xpanse-api/generated';
+import { Csp, DeployResourceKind, Region, SensitiveScope } from '../../../../xpanse-api/generated';
 import useAutoFillDeployVariableQuery from '../create/useAutoFillDeployVariableQuery';
 import { useOrderFormStore } from '../store/OrderFormStore';
 import { DeployParam } from '../types/DeployParam';
 import { DeployVariableSchema } from '../types/DeployVariableSchema';
 
-export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; region: Region }): React.JSX.Element {
+export function TextInput({ item, csp, region }: { item: DeployParam; csp: Csp; region: Region }): React.JSX.Element {
     const [isExistingResourceDropDownDisabled, setIsExistingResourceDropDownDisabled] = useState<boolean>(false);
     const ruleItems: Rule[] = [{ required: item.mandatory }, { type: 'string' }];
     let regExp: RegExp;
@@ -27,10 +27,10 @@ export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; 
         csp,
         region.site,
         region.name,
-        item.autoFill ? (item.autoFill.deployResourceKind as deployResourceKind) : deployResourceKind.VM
+        item.autoFill ? item.autoFill.deployResourceKind : DeployResourceKind.VM
     );
 
-    if (autoFillDeployVariableRequest.isSuccess) {
+    if (autoFillDeployVariableRequest.isSuccess && autoFillDeployVariableRequest.data) {
         autoFillDeployVariableList = autoFillDeployVariableRequest.data;
     }
 
@@ -69,8 +69,7 @@ export function TextInput({ item, csp, region }: { item: DeployParam; csp: csp; 
             <div className={serviceOrderStyles.orderParamItemLeft} />
             <div className={serviceOrderStyles.orderParamItemContent}>
                 <Form.Item name={item.name} label={item.name + ' :  ' + item.description} rules={ruleItems}>
-                    {item.sensitiveScope === sensitiveScope.ALWAYS.toString() ||
-                    item.sensitiveScope === sensitiveScope.ONCE.toString() ? (
+                    {item.sensitiveScope === SensitiveScope.ALWAYS || item.sensitiveScope === SensitiveScope.ONCE ? (
                         <Input.Password
                             name={item.name}
                             placeholder={item.example}

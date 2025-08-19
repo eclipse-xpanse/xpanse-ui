@@ -8,8 +8,8 @@ import React, { useMemo } from 'react';
 import { useStopwatch } from 'react-timer-hook';
 import {
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServicePortingRequest,
@@ -27,9 +27,9 @@ function PortServiceStatusAlert({
     getPortLatestServiceOrderStatusQuery,
     serviceProviderContactDetails,
 }: {
-    selectServiceHostingType: serviceHostingType;
-    portServiceRequest: UseMutationResult<ServiceOrder, Error, ServicePortingRequest>;
-    getPortLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    selectServiceHostingType: ServiceHostingType;
+    portServiceRequest: UseMutationResult<ServiceOrder | undefined, Error, ServicePortingRequest>;
+    getPortLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
@@ -48,12 +48,12 @@ function PortServiceStatusAlert({
                     portServiceRequest.error.message,
                 ]);
             }
-        } else if (portServiceRequest.isSuccess) {
+        } else if (portServiceRequest.isSuccess && portServiceRequest.data) {
             if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                (getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString() ||
-                    getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                getPortLatestServiceOrderStatusQuery.data &&
+                (getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
@@ -64,14 +64,14 @@ function PortServiceStatusAlert({
                     />
                 );
             } else if (getPortLatestServiceOrderStatusQuery.isError) {
-                if (selectServiceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (selectServiceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Service porting status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Service porting status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getPortLatestServiceOrderStatusQuery.isPending ||
-                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getPortLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Service porting, Please wait...';
             }
@@ -89,7 +89,7 @@ function PortServiceStatusAlert({
         } else if (portServiceRequest.isSuccess) {
             if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getPortLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -97,7 +97,7 @@ function PortServiceStatusAlert({
                 return 'error';
             } else if (
                 getPortLatestServiceOrderStatusQuery.isSuccess &&
-                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getPortLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -105,7 +105,7 @@ function PortServiceStatusAlert({
                 return 'success';
             } else if (
                 getPortLatestServiceOrderStatusQuery.isPending ||
-                getPortLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getPortLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -123,7 +123,7 @@ function PortServiceStatusAlert({
     }
 
     const getServiceId = (): string => {
-        if (portServiceRequest.isSuccess) {
+        if (portServiceRequest.isSuccess && portServiceRequest.data) {
             return portServiceRequest.data.serviceId;
         } else {
             if (isHandleKnownErrorResponse(portServiceRequest.error) && 'serviceId' in portServiceRequest.error.body) {
@@ -135,7 +135,7 @@ function PortServiceStatusAlert({
     };
 
     const getOrderId = (): string => {
-        if (portServiceRequest.isSuccess) {
+        if (portServiceRequest.isSuccess && portServiceRequest.data) {
             return portServiceRequest.data.orderId;
         } else {
             if (isHandleKnownErrorResponse(portServiceRequest.error) && 'orderId' in portServiceRequest.error.body) {

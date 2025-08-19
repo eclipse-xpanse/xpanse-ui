@@ -4,15 +4,18 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { deleteUserPolicy, DeleteUserPolicyData } from '../../../../xpanse-api/generated';
+import { deleteUserPolicy, DeleteUserPolicyData, Options } from '../../../../xpanse-api/generated';
 
 export function useDeleteUserPolicyRequest() {
     return useMutation({
-        mutationFn: (userPolicyId: string) => {
-            const data: DeleteUserPolicyData = {
-                userPolicyId: userPolicyId,
+        mutationFn: async (userPolicyId: string) => {
+            const request: Options<DeleteUserPolicyData> = {
+                path: {
+                    userPolicyId: userPolicyId,
+                },
             };
-            return deleteUserPolicy(data);
+            const response = await deleteUserPolicy(request);
+            return response.data;
         },
     });
 }

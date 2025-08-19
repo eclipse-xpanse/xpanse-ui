@@ -4,22 +4,15 @@
  */
 
 import { UploadOutlined } from '@ant-design/icons';
-import { useQuery } from '@tanstack/react-query';
 import { Alert, Button, Card, Form, Image, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import React, { useRef, useState } from 'react';
 import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 import policyStyles from '../../../styles/policies.module.css';
 import submitAlertStyles from '../../../styles/submit-alert.module.css';
-import {
-    UserPolicy,
-    UserPolicyCreateRequest,
-    UserPolicyUpdateRequest,
-    csp,
-    getActiveCsps,
-    name,
-} from '../../../xpanse-api/generated';
+import { Csp, UserPolicy, UserPolicyCreateRequest, UserPolicyUpdateRequest } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
+import { useActiveCspsQuery } from '../credentials/query/useActiveCspsQuery.ts';
 import UserPolicySubmitResultDetails from './UserPolicySubmitResultDetails.tsx';
 import UserPolicyCreateResultStatus from './add/UserPolicyCreateResultStatus.tsx';
 import { useCreateUserPolicyRequest } from './add/useCreateUserPolicyRequest.ts';
@@ -41,23 +34,17 @@ export const AddOrUpdateUserPolicy = ({
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
     const files = useRef<UploadFile[]>([]);
     const [regoFileUploadStatus, setRegoFileUploadStatus] = useState<PolicyUploadFileStatus>('notStarted');
-    const activeCspList = useRef<csp[]>([]);
+    const activeCspList = useRef<Csp[]>([]);
     const createPoliciesManagementServiceRequest = useCreateUserPolicyRequest();
     const updatePoliciesManagementServiceRequest = useUpdateUserPolicyRequest();
 
-    const getActiveCspsQuery = useQuery({
-        queryKey: ['getActiveCspsQuery'],
-        queryFn: () => {
-            return getActiveCsps();
-        },
-        staleTime: 60000,
-    });
+    const getActiveCspsQuery = useActiveCspsQuery();
 
-    if (getActiveCspsQuery.isSuccess) {
-        activeCspList.current = getActiveCspsQuery.data as csp[];
+    if (getActiveCspsQuery.isSuccess && getActiveCspsQuery.data) {
+        activeCspList.current = getActiveCspsQuery.data;
     }
 
-    const onFinish = (policyRequest: { csp: csp; enabled: boolean; policy: string }) => {
+    const onFinish = (policyRequest: { csp: Csp; enabled: boolean; policy: string }) => {
         if (currentPolicyService === undefined) {
             const policyCreateRequest: UserPolicyCreateRequest = policyRequest as UserPolicyCreateRequest;
             policyCreateRequest.csp = policyRequest.csp;
@@ -81,7 +68,7 @@ export const AddOrUpdateUserPolicy = ({
     };
 
     const comparePolicyUpdateRequestResult = (policyRequest: {
-        csp: csp;
+        csp: Csp;
         enabled: boolean;
         policy: string;
     }): boolean => {
@@ -107,7 +94,7 @@ export const AddOrUpdateUserPolicy = ({
         getCancelUpdateStatus(true);
     };
 
-    const handleCspSelect = (cspName: csp) => {
+    const handleCspSelect = (cspName: Csp) => {
         setIsUpdated(false);
         form.setFieldsValue({ csp: cspName });
     };
@@ -241,13 +228,13 @@ export const AddOrUpdateUserPolicy = ({
                         size={'large'}
                         className={policyStyles.policyFormSelect}
                     >
-                        {activeCspList.current.map((csp: csp) => (
+                        {activeCspList.current.map((csp: Csp) => (
                             <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                 <Image
                                     className={policyStyles.customSelectImage}
                                     width={100}
                                     preview={false}
-                                    src={cspMap.get(csp.valueOf() as name)?.logo}
+                                    src={cspMap.get(csp)?.logo}
                                 />
                             </Select.Option>
                         ))}

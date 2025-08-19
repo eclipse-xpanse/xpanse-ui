@@ -4,29 +4,29 @@
  */
 
 import {
-    billingMode,
-    category,
-    csp,
+    BillingMode,
+    Category,
+    Csp,
     Region,
-    serviceHostingType,
+    ServiceHostingType,
     ServiceProviderContactDetails,
 } from '../../../../../xpanse-api/generated';
 import { DeployParam } from '../../types/DeployParam';
 
 export interface OrderSubmitProps {
     id: string;
-    category: category;
+    category: Category;
     name: string;
     serviceVendor: string;
     version: string;
     region: Region;
     area: string;
-    csp: csp;
+    csp: Csp;
     flavor: string;
     params: DeployParam[];
-    serviceHostingType: serviceHostingType;
+    serviceHostingType: ServiceHostingType;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
     availabilityZones?: Record<string, string>;
     eula: string | undefined;
-    billingMode: billingMode;
+    billingMode: BillingMode;
 }

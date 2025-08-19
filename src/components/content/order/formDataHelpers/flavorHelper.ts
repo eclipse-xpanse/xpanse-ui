@@ -4,17 +4,19 @@
  */
 
 import {
+    Csp,
     ErrorResponse,
     FlavorPriceResult,
     ServiceFlavor,
+    ServiceHostingType,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../common/error/isHandleKnownErrorResponse.ts';
 import { ServiceFlavorWithPriceResult } from '../types/ServiceFlavorWithPrice.ts';
 
 export function getServiceFlavorList(
-    selectCsp: string,
-    selectServiceHostingType: string,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): ServiceFlavor[] {
     const flavorMapper: Map<string, ServiceFlavor[]> = new Map<string, ServiceFlavor[]>();

@@ -3,11 +3,11 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { UserOrderableServiceVo } from '../../../../xpanse-api/generated';
+import { Csp, ServiceHostingType, UserOrderableServiceVo } from '../../../../xpanse-api/generated';
 
 export function serviceVendorHelper(
-    selectCsp: string,
-    selectServiceHostingType: string,
+    selectCsp: Csp,
+    selectServiceHostingType: ServiceHostingType,
     userOrderableServices: UserOrderableServiceVo[] | undefined
 ): string {
     if (userOrderableServices) {

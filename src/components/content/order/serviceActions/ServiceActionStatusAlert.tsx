@@ -8,8 +8,9 @@ import React, { useMemo } from 'react';
 import {
     CreateServiceActionData,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    Options,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
 } from '../../../../xpanse-api/generated';
@@ -27,9 +28,9 @@ function ServiceActionStatusAlert({
     actionName,
 }: {
     serviceId: string;
-    serviceHostType: serviceHostingType;
-    createServiceActionRequest: UseMutationResult<ServiceOrder, Error, CreateServiceActionData>;
-    getServiceActionStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    serviceHostType: ServiceHostingType;
+    createServiceActionRequest: UseMutationResult<ServiceOrder | undefined, Error, Options<CreateServiceActionData>>;
+    getServiceActionStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     actionName?: string;
 }): React.JSX.Element {
     const msg = useMemo(() => {
@@ -47,8 +48,8 @@ function ServiceActionStatusAlert({
         } else if (createServiceActionRequest.isSuccess) {
             if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                (getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
-                    getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                (getServiceActionStatusPollingQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getServiceActionStatusPollingQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
@@ -60,14 +61,14 @@ function ServiceActionStatusAlert({
                     />
                 );
             } else if (getServiceActionStatusPollingQuery.isError) {
-                if (serviceHostType === serviceHostingType.SERVICE_VENDOR) {
+                if (serviceHostType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getServiceActionStatusPollingQuery.isPending ||
-                !getServiceActionStatusPollingQuery.data.isOrderCompleted
+                !getServiceActionStatusPollingQuery.data?.isOrderCompleted
             ) {
                 return 'Submitting, Please wait...';
             }
@@ -95,17 +96,17 @@ function ServiceActionStatusAlert({
         } else if (createServiceActionRequest.isSuccess) {
             if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getServiceActionStatusPollingQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 return 'error';
             } else if (
                 getServiceActionStatusPollingQuery.isSuccess &&
-                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getServiceActionStatusPollingQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 return 'success';
             } else if (
                 getServiceActionStatusPollingQuery.isPending ||
-                getServiceActionStatusPollingQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getServiceActionStatusPollingQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -132,7 +133,7 @@ function ServiceActionStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (createServiceActionRequest.isSuccess) {
+        if (createServiceActionRequest.isSuccess && createServiceActionRequest.data) {
             return createServiceActionRequest.data.orderId;
         } else {
             if (

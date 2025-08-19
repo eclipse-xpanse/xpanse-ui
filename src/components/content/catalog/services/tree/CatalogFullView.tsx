@@ -8,7 +8,7 @@ import { DataNode } from 'antd/es/tree';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { Category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -31,7 +31,7 @@ export function CatalogFullView({
 }: {
     treeData: DataNode[];
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
-    category: category;
+    category: Category;
     serviceTemplateAction: ServiceTemplateAction;
     setServiceTemplateAction: (serviceTemplateAction: ServiceTemplateAction) => void;
 }): React.JSX.Element {

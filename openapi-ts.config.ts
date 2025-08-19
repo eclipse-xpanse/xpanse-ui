@@ -11,13 +11,21 @@ export default defineConfig({
         format: 'prettier',
         path: 'src/xpanse-api/generated',
     },
+    parser: {
+        transforms: {
+            enums: 'root',
+        },
+    },
     plugins: [
-        '@hey-api/sdk',
+        {
+            name: '@hey-api/sdk',
+        },
+        {
+            name: '@hey-api/client-fetch',
+        },
         {
             name: '@hey-api/typescript',
-            exportInlineEnums: true,
             enums: 'typescript',
         },
-        'legacy/fetch',
     ],
 });

@@ -7,31 +7,33 @@ import { useQuery } from '@tanstack/react-query';
 import {
     getLatestServiceOrderStatus,
     GetLatestServiceOrderStatusData,
-    orderStatus,
+    Options,
+    OrderStatus,
 } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants.tsx';
 
 export function useLatestServiceOrderStatusQuery(
     orderId: string | undefined,
     isStartPolling: boolean,
-    refetchUntilStates: orderStatus[],
+    refetchUntilStates: OrderStatus[],
     isDeployRequestSubmitted: boolean // necessary to stop fetching if
 ) {
     return useQuery({
         queryKey: ['getServiceDetailsById', orderId],
-        queryFn: () => {
-            const data: GetLatestServiceOrderStatusData = {
-                lastKnownServiceDeploymentState: undefined,
-                orderId: orderId ?? '',
+        queryFn: async () => {
+            const data: Options<GetLatestServiceOrderStatusData> = {
+                path: {
+                    orderId: orderId ?? '',
+                },
+                query: {
+                    lastKnownServiceDeploymentState: undefined,
+                },
             };
-            return getLatestServiceOrderStatus(data);
+            const response = await getLatestServiceOrderStatus(data);
+            return response.data;
         },
         refetchInterval: (query) => {
-            if (
-                !query.state.data ||
-                query.state.error ||
-                refetchUntilStates.includes(query.state.data.orderStatus as orderStatus)
-            ) {
+            if (!query.state.data || query.state.error || refetchUntilStates.includes(query.state.data.orderStatus)) {
                 return false;
             }
             return deploymentStatusPollingInterval;

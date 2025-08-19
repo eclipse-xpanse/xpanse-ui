@@ -9,29 +9,36 @@ import {
     GetSelfHostedServiceDetailsByIdData,
     getVendorHostedServiceDetailsById,
     GetVendorHostedServiceDetailsByIdData,
-    serviceHostingType,
+    Options,
+    ServiceHostingType,
 } from '../../../../xpanse-api/generated';
 import { deploymentStatusPollingInterval } from '../../../utils/constants';
 
 export function usePurgeRequestStatusQuery(
     uuid: string | undefined,
-    currentServiceHostingType: serviceHostingType,
+    currentServiceHostingType: ServiceHostingType,
     isStartPolling: boolean,
     isPurgeRequestSubmitted: boolean
 ) {
     return useQuery({
         queryKey: ['getPurgeServiceDetailsById', uuid, currentServiceHostingType],
-        queryFn: () => {
-            if (currentServiceHostingType === serviceHostingType.SELF) {
-                const data: GetSelfHostedServiceDetailsByIdData = {
-                    serviceId: uuid ?? '',
+        queryFn: async () => {
+            if (currentServiceHostingType === ServiceHostingType.SELF) {
+                const request: Options<GetSelfHostedServiceDetailsByIdData> = {
+                    path: {
+                        serviceId: uuid ?? '',
+                    },
                 };
-                return getSelfHostedServiceDetailsById(data);
+                const response = await getSelfHostedServiceDetailsById(request);
+                return response.data;
             } else {
-                const data: GetVendorHostedServiceDetailsByIdData = {
-                    serviceId: uuid ?? '',
+                const request: Options<GetVendorHostedServiceDetailsByIdData> = {
+                    path: {
+                        serviceId: uuid ?? '',
+                    },
                 };
-                return getVendorHostedServiceDetailsById(data);
+                const response = await getVendorHostedServiceDetailsById(request);
+                return response.data;
             }
         },
         refetchOnWindowFocus: false,

@@ -6,7 +6,7 @@
 import { Col, Form, Radio, RadioChangeEvent, Row, Space } from 'antd';
 import React from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
-import { serviceHostingType } from '../../../../xpanse-api/generated';
+import { ServiceHostingType } from '../../../../xpanse-api/generated';
 
 export function ServiceHostingSelection({
     serviceHostingTypes,
@@ -14,14 +14,14 @@ export function ServiceHostingSelection({
     disabledAlways,
     previousSelection,
 }: {
-    serviceHostingTypes: serviceHostingType[];
-    updateServiceHostingType?: (serviceHostingType: serviceHostingType) => void;
+    serviceHostingTypes: ServiceHostingType[];
+    updateServiceHostingType?: (serviceHostingType: ServiceHostingType) => void;
     disabledAlways: boolean;
-    previousSelection: serviceHostingType | undefined;
+    previousSelection: ServiceHostingType | undefined;
 }): React.JSX.Element {
     const onChange = (e: RadioChangeEvent) => {
         if (updateServiceHostingType) {
-            updateServiceHostingType(e.target.value as serviceHostingType);
+            updateServiceHostingType(e.target.value as ServiceHostingType);
         }
     };
 
@@ -51,8 +51,8 @@ export function ServiceHostingSelection({
                         value={value}
                         className={serviceOrderStyles.orderFormSelectionStyle}
                     >
-                        <Radio value={serviceHostingType.SELF}>self</Radio>
-                        <Radio value={serviceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
+                        <Radio value={ServiceHostingType.SELF}>self</Radio>
+                        <Radio value={ServiceHostingType.SERVICE_VENDOR}>service-vendor</Radio>
                     </Radio.Group>
                 </Space>
             </Col>

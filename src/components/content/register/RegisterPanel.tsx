@@ -11,24 +11,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import appStyles from '../../../styles/app.module.css';
 import registerStyles from '../../../styles/register.module.css';
-import {
-    category,
-    ErrorResponse,
-    getServiceTemplateDetailsById,
-    GetServiceTemplateDetailsByIdData,
-    Ocl,
-    register,
-    type RegisterData,
-    serviceTemplateRegistrationState,
-    ServiceTemplateRequestInfo,
-} from '../../../xpanse-api/generated';
+import { ErrorResponse, Ocl, register, ServiceTemplateRequestInfo } from '../../../xpanse-api/generated';
 import {
     registerFailedRoute,
     registerInvalidRoute,
     registerPageRoute,
     registerSuccessfulRoute,
 } from '../../utils/constants';
-import { getQueryKey } from '../catalog/services/query/useAvailableServiceTemplatesQuery';
+import { getQueryKey } from '../catalog/services/query/useAvailableServiceTemplatesQuery.ts';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import OclSummaryDisplay from '../common/ocl/OclSummaryDisplay';
 import { ValidationStatus } from '../common/ocl/ValidationStatus';
@@ -42,9 +32,7 @@ function RegisterPanel(): React.JSX.Element {
     const yamlValidationResult = useRef<string>('');
     const oclDisplayData = useRef<React.JSX.Element>(<></>);
     const registerResult = useRef<string[]>([]);
-    const serviceRegistrationStatus = useRef<serviceTemplateRegistrationState>(
-        serviceTemplateRegistrationState.IN_REVIEW
-    );
+    const serviceTemplateId = useRef<string>('');
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const navigate = useNavigate();
@@ -52,23 +40,21 @@ function RegisterPanel(): React.JSX.Element {
     const queryClient = useQueryClient();
 
     const registerRequest = useMutation({
-        mutationFn: (ocl: Ocl) => {
-            const data: RegisterData = {
-                requestBody: ocl,
-            };
-            return register(data);
+        mutationFn: async (ocl: Ocl) => {
+            const response = await register({ body: ocl });
+            return response.data;
         },
-        onSuccess: async (serviceTemplateRequestInfo: ServiceTemplateRequestInfo) => {
+        onSuccess: (serviceTemplateRequestInfo: ServiceTemplateRequestInfo | undefined) => {
+            if (serviceTemplateRequestInfo === undefined) {
+                return;
+            }
             files.current[0].status = 'done';
             registerResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
-            const getServiceTemplateDetailsByIdData: GetServiceTemplateDetailsByIdData = {
-                serviceTemplateId: serviceTemplateRequestInfo.serviceTemplateId,
-            };
-            const serviceTemplateDetailsVo = await getServiceTemplateDetailsById(getServiceTemplateDetailsByIdData);
-            serviceRegistrationStatus.current =
-                serviceTemplateDetailsVo.serviceTemplateRegistrationState as serviceTemplateRegistrationState;
-            void queryClient.refetchQueries({ queryKey: getQueryKey(serviceTemplateDetailsVo.category as category) });
-            void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateDetailsVo.serviceTemplateId}`));
+            serviceTemplateId.current = serviceTemplateRequestInfo.serviceTemplateId;
+            if (ocl.current) {
+                void queryClient.refetchQueries({ queryKey: getQueryKey(ocl.current.category) });
+            }
+            void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateRequestInfo.serviceTemplateId}`));
         },
         onError: (error: Error) => {
             files.current[0].status = 'error';
@@ -171,7 +157,7 @@ function RegisterPanel(): React.JSX.Element {
             {ocl.current !== undefined && !registerRequest.isPending && !registerRequest.isIdle ? (
                 <RegisterResult
                     ocl={ocl.current}
-                    serviceRegistrationStatus={serviceRegistrationStatus.current}
+                    serviceTemplateId={serviceTemplateId.current}
                     registerRequestStatus={registerRequest.status}
                     registerResult={registerResult.current}
                     onRemove={onRemove}

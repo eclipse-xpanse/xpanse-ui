@@ -9,7 +9,10 @@ import { stackHealthStatus } from '../../../xpanse-api/generated';
 export function useStackCheckStatusQuery() {
     return useQuery({
         queryKey: ['stackHealthCheckQuery'],
-        queryFn: () => stackHealthStatus(),
+        queryFn: async () => {
+            const response = await stackHealthStatus();
+            return response.data;
+        },
         staleTime: 60000,
     });
 }

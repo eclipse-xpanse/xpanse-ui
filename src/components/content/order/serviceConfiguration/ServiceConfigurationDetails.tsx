@@ -9,12 +9,11 @@ import React, { useState } from 'react';
 import '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
-    type ChangeServiceConfigurationData,
     DeployedServiceDetails,
-    orderStatus,
+    OrderStatus,
     ServiceConfigurationUpdate,
-    serviceHostingType,
     UserOrderableServiceVo,
+    VariableDataType,
     VendorHostedDeployedServiceDetails,
 } from '../../../../xpanse-api/generated';
 import { useLatestServiceOrderStatusQuery } from '../../common/queries/useLatestServiceOrderStatusQuery.ts';
@@ -39,26 +38,27 @@ export const ServiceConfigurationDetails = ({
     const updateConfigRequest = useUpdateServiceConfigurationRequest();
 
     const getUpdateConfigStatusPollingQuery = useLatestServiceOrderStatusQuery(
-        updateConfigRequest.data?.orderId ?? '',
+        updateConfigRequest.data?.orderId,
         updateConfigRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         true
     );
 
     const updateConfig = (values: ServiceConfigurationUpdate) => {
         setIsShowUpdateConfigResult(true);
-        const data: ChangeServiceConfigurationData = {
-            requestBody: { configuration: values },
-            serviceId: deployedService.serviceId,
-        };
-        updateConfigRequest.mutate(data);
+        updateConfigRequest.mutate({
+            body: values,
+            path: {
+                serviceId: deployedService.serviceId,
+            },
+        });
     };
 
     const initialValues = React.useMemo(() => {
         const config = getCurrentConfigurationOfServiceQuery.data?.configuration ?? {};
         const numericKeys =
             userOrderableServiceVo?.configurationParameters
-                ?.filter((param) => param.dataType === 'number')
+                ?.filter((param) => param.dataType === VariableDataType.NUMBER)
                 .map((param) => param.name) ?? [];
 
         const numericConfig = Object.keys(config).reduce<Record<string, unknown>>((acc, key) => {
@@ -91,7 +91,7 @@ export const ServiceConfigurationDetails = ({
                     <ServiceConfigStatusAlert
                         key={deployedService.serviceId}
                         serviceId={deployedService.serviceId}
-                        serviceHostType={deployedService.serviceHostingType as serviceHostingType}
+                        serviceHostType={deployedService.serviceHostingType}
                         updateConfigRequest={updateConfigRequest}
                         getUpdateConfigStatusPollingQuery={getUpdateConfigStatusPollingQuery}
                     />

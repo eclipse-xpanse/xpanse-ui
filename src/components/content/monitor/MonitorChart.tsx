@@ -7,7 +7,7 @@ import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
 import React, { useRef, useState } from 'react';
 import monitorStyles from '../../../styles/monitor.module.css';
-import { ErrorResponse, Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
+import { ErrorResponse, Metric, MetricUnit, MonitorResourceType } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
 import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
@@ -45,8 +45,8 @@ export default function MonitorChart({
     let tipType: 'error' | 'success' | undefined = undefined;
     let tipMessage: string = '';
     let tipDescription: string = '';
-    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<monitorResourceType>(
-        monitorResourceType.CPU
+    const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<MonitorResourceType>(
+        MonitorResourceType.CPU
     );
     const useGetLastKnownMetric = useGetLastKnownMetricForASpecificTypeQuery(
         serviceId,
@@ -64,11 +64,11 @@ export default function MonitorChart({
     );
 
     // useRef necessary to store existing data between re-renders
-    const onlyLastKnownMetricsQueue = useRef<Map<monitorResourceType, Metric[]>>(
-        new Map<monitorResourceType.CPU, []>()
+    const onlyLastKnownMetricsQueue = useRef<Map<MonitorResourceType, Metric[]>>(
+        new Map<MonitorResourceType.CPU, []>()
     );
-    const metricsForSpecificTimePeriodQueue = useRef<Map<monitorResourceType, Metric[]>>(
-        new Map<monitorResourceType.CPU, []>()
+    const metricsForSpecificTimePeriodQueue = useRef<Map<MonitorResourceType, Metric[]>>(
+        new Map<MonitorResourceType.CPU, []>()
     );
 
     let chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
@@ -90,7 +90,7 @@ export default function MonitorChart({
                     .split('_')[0]
                     .concat(
                         ' usage (' +
-                            (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                            (metricProps[0].unit === MetricUnit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
                             ') - '
                     ),
                 metricSubTitle: metricProps[0].vmName,
@@ -137,7 +137,9 @@ export default function MonitorChart({
                             .split('_')[0]
                             .concat(
                                 ' usage (' +
-                                    (metricProps[0].unit === unit.PERCENTAGE ? '%' : metricProps[0].unit.valueOf()) +
+                                    (metricProps[0].unit === MetricUnit.PERCENTAGE
+                                        ? '%'
+                                        : metricProps[0].unit.valueOf()) +
                                     ') - '
                             ),
                         type: 'line',
@@ -174,7 +176,7 @@ export default function MonitorChart({
     }
     if (useGetLastKnownMetric.isSuccess) {
         const data: Metric[] | undefined = useGetLastKnownMetric.data;
-        if (data.length > 0) {
+        if (data && data.length > 0) {
             tipType = undefined;
             tipMessage = '';
             tipDescription = '';
@@ -200,7 +202,7 @@ export default function MonitorChart({
 
     if (useGetMetricForSpecificTimePeriod.isSuccess) {
         const rsp: Metric[] | undefined = useGetMetricForSpecificTimePeriod.data;
-        if (rsp.length > 0) {
+        if (rsp && rsp.length > 0) {
             tipType = undefined;
             tipMessage = '';
             tipDescription = '';

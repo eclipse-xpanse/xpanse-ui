@@ -8,7 +8,7 @@ import { Tab } from 'rc-tabs/lib/interface';
 import React, { useMemo } from 'react';
 import { createSearchParams, useNavigate, useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { category, name, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { Category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import {
     catalogPageRoute,
     serviceCspQuery,
@@ -52,7 +52,7 @@ function ServiceProvider({
     categoryOclData: Map<string, ServiceTemplateDetailVo[]>;
     selectedServiceNameInTree: string;
     selectedServiceVersionInTree: string;
-    category: category;
+    category: Category;
     isViewDisabled: boolean;
     setIsViewDisabled: (isViewDisabled: boolean) => void;
     serviceTemplateAction: ServiceTemplateAction;
@@ -114,7 +114,7 @@ function ServiceProvider({
                             const item: Tab = {
                                 label: (
                                     <div>
-                                        <Image width={120} preview={false} src={cspMap.get(cspName as name)?.logo} />
+                                        <Image width={120} preview={false} src={cspMap.get(cspName)?.logo} />
                                     </div>
                                 ),
                                 key: cspName.toString(),

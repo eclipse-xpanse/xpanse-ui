@@ -11,14 +11,14 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
-    billingMode,
-    csp,
+    BillingMode,
+    Csp,
     DeployedService,
     DeployRequest,
-    orderStatus,
+    OrderStatus,
     Region,
     ServiceFlavor,
-    serviceHostingType,
+    ServiceHostingType,
     ServicePortingRequest,
     UserOrderableServiceVo,
 } from '../../../../xpanse-api/generated';
@@ -52,12 +52,12 @@ export const PortServiceSubmit = ({
     getServicePriceQuery,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: csp;
+    selectCsp: Csp;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectServiceHostingType: serviceHostingType;
-    selectBillingMode: billingMode;
+    selectServiceHostingType: ServiceHostingType;
+    selectBillingMode: BillingMode;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
@@ -78,7 +78,7 @@ export const PortServiceSubmit = ({
     const getPortLatestServiceOrderStatusQuery = useLatestServiceOrderStatusQuery(
         portServiceRequest.data?.orderId ?? '',
         portServiceRequest.isSuccess,
-        [orderStatus.SUCCESSFUL, orderStatus.FAILED],
+        [OrderStatus.SUCCESSFUL, OrderStatus.FAILED],
         isShowDeploymentResult
     );
 
@@ -105,9 +105,9 @@ export const PortServiceSubmit = ({
         stepItem.status = 'process';
     } else {
         if (getPortLatestServiceOrderStatusQuery.data) {
-            if (getPortLatestServiceOrderStatusQuery.data.orderStatus === orderStatus.SUCCESSFUL) {
+            if (getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.SUCCESSFUL) {
                 stepItem.status = 'finish';
-            } else if (getPortLatestServiceOrderStatusQuery.data.orderStatus === orderStatus.FAILED) {
+            } else if (getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.FAILED) {
                 stepItem.status = 'error';
             } else {
                 stepItem.status = 'process';

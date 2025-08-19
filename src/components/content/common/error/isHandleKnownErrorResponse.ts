@@ -3,7 +3,8 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { ApiError, ErrorResponse } from '../../../../xpanse-api/generated';
+import { ApiError } from '../../../../xpanse-api/error.ts';
+import { ErrorResponse } from '../../../../xpanse-api/generated';
 
 export function isHandleKnownErrorResponse(error: Error | null): error is ApiError & { body: ErrorResponse } {
     return (

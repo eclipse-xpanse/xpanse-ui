@@ -1,5 +1,5 @@
 import { Page } from 'playwright-core';
-import { UserOrderableServiceVo, VariableKind } from '../../../src/xpanse-api/generated';
+import { VariableKind } from '../../../src/xpanse-api/generated';
 import {
     catalogServicesUrl,
     deployDetailsUrl,
@@ -238,7 +238,7 @@ export const mockServicesSuccessResponse = async (page: Page, timeToWaitForRespo
 };
 
 export const mockSelectServicesSuccessResponse = async (page: Page, timeToWaitForResponse: number) => {
-    const mockResponseData: UserOrderableServiceVo[] = [
+    const mockResponseData = [
         {
             serviceTemplateId: '10c2baff-36a8-4ea9-9041-b51409b0f291',
             category: 'compute',
@@ -891,12 +891,12 @@ export const mockRetryDeployFailedResponse = async (page: Page, timeToWaitForRes
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({
-                error: {
-                    errorType: 'Deployment Failed Exception',
-                    details: [
-                        'OpenTofuExecutor Exception:OpenTofuExecutor.tfPlan failed.\r\nError: Authentication failed\r\n\r\n  with provider["registry.opentofu.org/huaweicloud/huaweicloud"],\r\n  on provider.tf line 10, in provider "huaweicloud":\r\n  10: provider "huaweicloud" {\r\n',
-                    ],
-                },
+                errorType: 'Deployment Failed Exception',
+                details: [
+                    'OpenTofuExecutor Exception:OpenTofuExecutor.tfPlan failed.\r\nError: Authentication failed\r\n\r\n  with provider["registry.opentofu.org/huaweicloud/huaweicloud"],\r\n  on provider.tf line 10, in provider "huaweicloud":\r\n  10: provider "huaweicloud" {\r\n',
+                ],
+                serviceId: '868326e9-3611-43d6-ad88-c15d514f3f57',
+                orderId: 'test-OrderId',
             }),
         });
     });
@@ -911,12 +911,12 @@ export const mockDeployFailedResponse = async (page: Page, timeToWaitForResponse
             status: 400,
             contentType: 'application/json',
             body: JSON.stringify({
-                error: {
-                    errorType: 'Deployment Failed Exception',
-                    details: [
-                        'OpenTofuExecutor Exception:OpenTofuExecutor.tfPlan failed.\r\nError: Authentication failed\r\n\r\n  with provider["registry.opentofu.org/huaweicloud/huaweicloud"],\r\n  on provider.tf line 10, in provider "huaweicloud":\r\n  10: provider "huaweicloud" {\r\n',
-                    ],
-                },
+                errorType: 'Deployment Failed Exception',
+                details: [
+                    'OpenTofuExecutor Exception:OpenTofuExecutor.tfPlan failed.\r\nError: Authentication failed\r\n\r\n  with provider["registry.opentofu.org/huaweicloud/huaweicloud"],\r\n  on provider.tf line 10, in provider "huaweicloud":\r\n  10: provider "huaweicloud" {\r\n',
+                ],
+                serviceId: '868326e9-3611-43d6-ad88-c15d514f3f57',
+                orderId: 'test-OrderId',
             }),
         });
     });

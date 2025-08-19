@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { InputVariable, sensitiveScope } from '../../../../xpanse-api/generated';
+import { InputVariable, SensitiveScope } from '../../../../xpanse-api/generated';
 import { DeployParam } from '../types/DeployParam';
 
 export const getModifyParams = (variables: InputVariable[]): DeployParam[] => {
@@ -19,7 +19,7 @@ export const getModifyParams = (variables: InputVariable[]): DeployParam[] => {
                 description: param.description,
                 value: param.value ?? '',
                 mandatory: param.mandatory,
-                sensitiveScope: param.sensitiveScope ?? sensitiveScope.NONE,
+                sensitiveScope: param.sensitiveScope ?? SensitiveScope.NONE,
                 valueSchema: param.valueSchema ?? undefined,
                 autoFill: param.autoFill ?? undefined,
             });

@@ -3,7 +3,7 @@
     "info": {
         "title": "XpanseAPI",
         "description": "RESTful Services to interact with Xpanse runtime.",
-        "version": "1.0.26-SNAPSHOT"
+        "version": "1.0.27-SNAPSHOT"
     },
     "servers": [
         {
@@ -234,9 +234,7 @@
                         "application/json": {
                             "schema": {
                                 "type": "object",
-                                "additionalProperties": {
-                                    "type": "object"
-                                }
+                                "additionalProperties": {}
                             }
                         }
                     },
@@ -331,18 +329,7 @@
                         "description": "The cloud service provider.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -351,8 +338,7 @@
                         "description": "The type of credential.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     }
                 ],
@@ -633,18 +619,7 @@
                         "description": "The cloud service provider.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -662,8 +637,7 @@
                         "description": "The type of credential.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     },
                     {
@@ -3276,18 +3250,7 @@
                         "description": "The cloud service provider.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -3296,8 +3259,7 @@
                         "description": "The type of credential.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     }
                 ],
@@ -3578,18 +3540,7 @@
                         "description": "The cloud service provider.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -3607,8 +3558,7 @@
                         "description": "The type of credential.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     },
                     {
@@ -3918,19 +3868,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -3939,18 +3877,7 @@
                         "description": "name of the cloud service provider",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -3977,20 +3904,7 @@
                         "description": "deployment state of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploying",
-                                "deployment successful",
-                                "deployment failed",
-                                "destroying",
-                                "destroy successful",
-                                "destroy failed",
-                                "manual cleanup required",
-                                "rollback failed",
-                                "modifying",
-                                "modification failed",
-                                "modification successful"
-                            ]
+                            "$ref": "#/components/schemas/ServiceDeploymentState"
                         }
                     }
                 ],
@@ -4409,19 +4323,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -4430,18 +4332,7 @@
                         "description": "name of the cloud service provider",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -4468,9 +4359,7 @@
                         "description": "who hosts ths cloud resources",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "description": "Defines which cloud service account is used for deploying cloud resources.",
-                            "enum": ["self", "service-vendor"]
+                            "$ref": "#/components/schemas/ServiceHostingType"
                         }
                     },
                     {
@@ -4479,8 +4368,7 @@
                         "description": "state of service template registration",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["in-review", "approved", "cancelled", "rejected"]
+                            "$ref": "#/components/schemas/ServiceTemplateRegistrationState"
                         }
                     },
                     {
@@ -5009,18 +4897,7 @@
                         "description": "Name of csp which the policy belongs to.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -5229,8 +5106,7 @@
                         "description": "the status of task",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["done", "failed"]
+                            "$ref": "#/components/schemas/WorkFlowTaskStatus"
                         }
                     }
                 ],
@@ -5637,26 +5513,7 @@
                         "description": "Task type of the service order.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploy",
-                                "retry",
-                                "rollback",
-                                "modify",
-                                "destroy",
-                                "port",
-                                "recreate",
-                                "lockChange",
-                                "configChange",
-                                "serviceAction",
-                                "purge",
-                                "serviceStart",
-                                "serviceStop",
-                                "serviceRestart",
-                                "objectCreate",
-                                "objectModify",
-                                "objectDelete"
-                            ]
+                            "$ref": "#/components/schemas/ServiceOrderType"
                         }
                     },
                     {
@@ -5665,8 +5522,7 @@
                         "description": "Task status of the service order",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["created", "in-progress", "successful", "failed"]
+                            "$ref": "#/components/schemas/OrderStatus"
                         }
                     }
                 ],
@@ -5871,20 +5727,7 @@
                         "description": "Last known service status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploying",
-                                "deployment successful",
-                                "deployment failed",
-                                "destroying",
-                                "destroy successful",
-                                "destroy failed",
-                                "manual cleanup required",
-                                "rollback failed",
-                                "modifying",
-                                "modification failed",
-                                "modification successful"
-                            ]
+                            "$ref": "#/components/schemas/ServiceDeploymentState"
                         }
                     }
                 ],
@@ -6187,8 +6030,7 @@
                         "description": "Last known service order task status to client. When provided, the service will wait for a configured period time until to see if there is a change to the last known state.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["created", "in-progress", "successful", "failed"]
+                            "$ref": "#/components/schemas/OrderStatus"
                         }
                     }
                 ],
@@ -6395,19 +6237,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -6416,18 +6246,7 @@
                         "description": "name of the cloud service provider",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -6454,20 +6273,7 @@
                         "description": "deployment state of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploying",
-                                "deployment successful",
-                                "deployment failed",
-                                "destroying",
-                                "destroy successful",
-                                "destroy failed",
-                                "manual cleanup required",
-                                "rollback failed",
-                                "modifying",
-                                "modification failed",
-                                "modification successful"
-                            ]
+                            "$ref": "#/components/schemas/ServiceDeploymentState"
                         }
                     }
                 ],
@@ -6671,19 +6477,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -6692,18 +6486,7 @@
                         "description": "name of the cloud service provider",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -6730,20 +6513,7 @@
                         "description": "deployment state of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploying",
-                                "deployment successful",
-                                "deployment failed",
-                                "destroying",
-                                "destroy successful",
-                                "destroy failed",
-                                "manual cleanup required",
-                                "rollback failed",
-                                "modifying",
-                                "modification failed",
-                                "modification successful"
-                            ]
+                            "$ref": "#/components/schemas/ServiceDeploymentState"
                         }
                     }
                 ],
@@ -7048,19 +6818,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -7087,20 +6845,7 @@
                         "description": "deployment state of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "deploying",
-                                "deployment successful",
-                                "deployment failed",
-                                "destroying",
-                                "destroy successful",
-                                "destroy failed",
-                                "manual cleanup required",
-                                "rollback failed",
-                                "modifying",
-                                "modification failed",
-                                "modification successful"
-                            ]
+                            "$ref": "#/components/schemas/ServiceDeploymentState"
                         }
                     }
                 ],
@@ -7239,8 +6984,7 @@
                         "description": "Status of the service configuration",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["pending", "processing", "successful", "error"]
+                            "$ref": "#/components/schemas/ServiceChangeStatus"
                         }
                     }
                 ],
@@ -7353,8 +7097,7 @@
                         "description": "type of service template request",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["register", "update", "unpublish", "republish"]
+                            "$ref": "#/components/schemas/ServiceTemplateRequestType"
                         }
                     },
                     {
@@ -7363,8 +7106,7 @@
                         "description": "status of service template request",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["in-review", "accepted", "rejected", "cancelled"]
+                            "$ref": "#/components/schemas/ServiceTemplateRequestStatus"
                         }
                     }
                 ],
@@ -7697,8 +7439,7 @@
                         "description": "mode of billing",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": ["Fixed", "Pay per Use"]
+                            "$ref": "#/components/schemas/BillingMode"
                         }
                     },
                     {
@@ -7835,8 +7576,7 @@
                         "description": "mode of billing",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": ["Fixed", "Pay per Use"]
+                            "$ref": "#/components/schemas/BillingMode"
                         }
                     }
                 ],
@@ -7959,8 +7699,7 @@
                         "description": "Types of the monitor resource.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
+                            "$ref": "#/components/schemas/MonitorResourceType"
                         }
                     },
                     {
@@ -8194,18 +7933,7 @@
                         "description": "The cloud service provider",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     }
                 ],
@@ -8309,18 +8037,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "string",
-                                        "enum": [
-                                            "HuaweiCloud",
-                                            "FlexibleEngine",
-                                            "OpenstackTestlab",
-                                            "PlusServer",
-                                            "RegioCloud",
-                                            "AlibabaCloud",
-                                            "aws",
-                                            "azure",
-                                            "GoogleCloudPlatform"
-                                        ]
+                                        "$ref": "#/components/schemas/Csp"
                                     }
                                 }
                             }
@@ -8411,19 +8128,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -8450,9 +8155,7 @@
                         "description": "who hosts ths cloud resources",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "description": "Defines which cloud service account is used for deploying cloud resources.",
-                            "enum": ["self", "service-vendor"]
+                            "$ref": "#/components/schemas/ServiceHostingType"
                         }
                     },
                     {
@@ -8461,8 +8164,7 @@
                         "description": "state of service template registration",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["in-review", "approved", "cancelled", "rejected"]
+                            "$ref": "#/components/schemas/ServiceTemplateRegistrationState"
                         }
                     },
                     {
@@ -8694,8 +8396,7 @@
                         "description": "type of service template request",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["register", "update", "unpublish", "republish"]
+                            "$ref": "#/components/schemas/ServiceTemplateRequestType"
                         }
                     },
                     {
@@ -8704,8 +8405,7 @@
                         "description": "status of service template request",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["in-review", "accepted", "rejected", "cancelled"]
+                            "$ref": "#/components/schemas/ServiceTemplateRequestStatus"
                         }
                     }
                 ],
@@ -8912,18 +8612,7 @@
                         "description": "name of the cloud service provider",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -8950,20 +8639,7 @@
                         "description": "kind of the CloudResource",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "vm",
-                                "rds",
-                                "container",
-                                "publicIP",
-                                "vpc",
-                                "volume",
-                                "unknown",
-                                "security_group",
-                                "security_group_rule",
-                                "keypair",
-                                "subnet"
-                            ]
+                            "$ref": "#/components/schemas/DeployResourceKind"
                         }
                     },
                     {
@@ -9076,18 +8752,7 @@
                         "description": "name of the cloud service provider",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -9228,18 +8893,7 @@
                         "description": "The cloud service provider.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -9248,8 +8902,7 @@
                         "description": "The type of credential.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     }
                 ],
@@ -9349,18 +9002,7 @@
                         "description": "name of the cloud service provider.",
                         "required": true,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -9369,8 +9011,7 @@
                         "description": "The type of credential.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                            "$ref": "#/components/schemas/CredentialType"
                         }
                     },
                     {
@@ -9482,18 +9123,7 @@
                         "description": "The cloud service provider.",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     }
                 ],
@@ -9505,8 +9135,7 @@
                                 "schema": {
                                     "type": "array",
                                     "items": {
-                                        "type": "string",
-                                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                                        "$ref": "#/components/schemas/CredentialType"
                                     }
                                 }
                             }
@@ -9597,19 +9226,7 @@
                         "description": "category of the service",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "ai",
-                                "compute",
-                                "container",
-                                "storage",
-                                "network",
-                                "database",
-                                "mediaService",
-                                "security",
-                                "middleware",
-                                "others"
-                            ]
+                            "$ref": "#/components/schemas/Category"
                         }
                     },
                     {
@@ -9618,18 +9235,7 @@
                         "description": "name of the cloud service provider",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "enum": [
-                                "HuaweiCloud",
-                                "FlexibleEngine",
-                                "OpenstackTestlab",
-                                "PlusServer",
-                                "RegioCloud",
-                                "AlibabaCloud",
-                                "aws",
-                                "azure",
-                                "GoogleCloudPlatform"
-                            ]
+                            "$ref": "#/components/schemas/Csp"
                         }
                     },
                     {
@@ -9656,9 +9262,7 @@
                         "description": "who hosts ths cloud resources",
                         "required": false,
                         "schema": {
-                            "type": "string",
-                            "description": "Defines which cloud service account is used for deploying cloud resources.",
-                            "enum": ["self", "service-vendor"]
+                            "$ref": "#/components/schemas/ServiceHostingType"
                         }
                     }
                 ],
@@ -10471,147 +10075,146 @@
                 "type": "object",
                 "properties": {
                     "errorType": {
-                        "type": "string",
-                        "description": "The result code of response.",
-                        "enum": [
-                            "Runtime Error",
-                            "Parameters Invalid",
-                            "Terraform Script Invalid",
-                            "Unprocessable Entity",
-                            "Response Not Valid",
-                            "Failure while connecting to backend",
-                            "Credential Capability Not Found",
-                            "Credentials Not Found",
-                            "Credential Variables Not Complete",
-                            "Flavor Invalid",
-                            "Terraform Execution Failed",
-                            "Plugin Not Found",
-                            "Deployer Not Found",
-                            "No Credential Definition Available",
-                            "Invalid Service State",
-                            "Invalid Service Deployment State",
-                            "Resource Invalid For Monitoring",
-                            "Unhandled Exception",
-                            "Icon Processing Failed",
-                            "Service Template Not Registered",
-                            "Service Template Unavailable",
-                            "Service Template Request Not Allowed",
-                            "Service Template Request Not Found",
-                            "Review Service Template Request Not Allowed",
-                            "Invalid Service Version",
-                            "Invalid Service Flavors",
-                            "Mandatory Value Missing",
-                            "Invalid Billing Config",
-                            "Unavailable Service Regions",
-                            "Service Deployment Not Found",
-                            "Resource Not Found",
-                            "Deployment Variable Invalid",
-                            "Unauthorized",
-                            "Access Denied",
-                            "Sensitive Field Encryption Or Decryption Failed Exception",
-                            "Unsupported Enum Value",
-                            "Terra Boot Request Failed",
-                            "Tofu Maker Request Failed",
-                            "Metrics Data Not Ready",
-                            "Variable Validation Failed",
-                            "Variable Schema Definition Invalid",
-                            "Policy Not Found",
-                            "Duplicate Policy",
-                            "Policy Validation Failed",
-                            "Policy Evaluation Failed",
-                            "Current Login User No Found",
-                            "Service Details No Accessible",
-                            "Service Porting Activiti Task Not Found",
-                            "Service Porting Failed Exception",
-                            "Service Porting Not Found",
-                            "Service Locked",
-                            "Eula Not Accepted",
-                            "Service Flavor Downgrade Not Allowed",
-                            "Billing Mode Not Supported",
-                            "Service State Management Task Not Found",
-                            "Service Order Not Found",
-                            "Service Price Calculation Failed",
-                            "Invalid Git Repo Details",
-                            "File Locked",
-                            "Service Configuration Invalid",
-                            "Service Configuration Update Request Not Found",
-                            "Service Configuration Not Found",
-                            "Invalid Deployer Tool",
-                            "Deployment Scripts Creation Failed",
-                            "Async Start Service Error",
-                            "Async Stop Service Error",
-                            "Async Restart Service Error",
-                            "Deployment Failed Exception",
-                            "Destroy Failed Exception",
-                            "Service Action Invalid",
-                            "Service Change Request Failed",
-                            "Service Configuration Change Order Already Exists",
-                            "Service Action Change Order Already Exists",
-                            "Invalid Service Object Request",
-                            "Service Object Not Found",
-                            "Service Object Change Order Already Exists"
-                        ]
+                        "$ref": "#/components/schemas/ErrorType",
+                        "description": "The result code of response."
                     },
                     "details": {
                         "type": "array",
                         "description": "Details of the errors occurred",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "minItems": 1
                     }
                 },
                 "required": ["details", "errorType"]
+            },
+            "ErrorType": {
+                "type": "string",
+                "enum": [
+                    "Runtime Error",
+                    "Parameters Invalid",
+                    "Terraform Script Invalid",
+                    "Unprocessable Entity",
+                    "Response Not Valid",
+                    "Failure while connecting to backend",
+                    "Credential Capability Not Found",
+                    "Credentials Not Found",
+                    "Credential Variables Not Complete",
+                    "Flavor Invalid",
+                    "Terraform Execution Failed",
+                    "Plugin Not Found",
+                    "Deployer Not Found",
+                    "No Credential Definition Available",
+                    "Invalid Service State",
+                    "Invalid Service Deployment State",
+                    "Resource Invalid For Monitoring",
+                    "Unhandled Exception",
+                    "Icon Processing Failed",
+                    "Service Template Not Registered",
+                    "Service Template Unavailable",
+                    "Service Template Request Not Allowed",
+                    "Service Template Request Not Found",
+                    "Review Service Template Request Not Allowed",
+                    "Invalid Service Version",
+                    "Invalid Service Flavors",
+                    "Mandatory Value Missing",
+                    "Invalid Billing Config",
+                    "Unavailable Service Regions",
+                    "Service Deployment Not Found",
+                    "Resource Not Found",
+                    "Deployment Variable Invalid",
+                    "Unauthorized",
+                    "Access Denied",
+                    "Sensitive Field Encryption Or Decryption Failed Exception",
+                    "Unsupported Enum Value",
+                    "Terra Boot Request Failed",
+                    "Tofu Maker Request Failed",
+                    "Metrics Data Not Ready",
+                    "Variable Validation Failed",
+                    "Variable Schema Definition Invalid",
+                    "Policy Not Found",
+                    "Duplicate Policy",
+                    "Policy Validation Failed",
+                    "Policy Evaluation Failed",
+                    "Current Login User No Found",
+                    "Service Details No Accessible",
+                    "Service Porting Activiti Task Not Found",
+                    "Service Porting Failed Exception",
+                    "Service Porting Not Found",
+                    "Service Locked",
+                    "Eula Not Accepted",
+                    "Service Flavor Downgrade Not Allowed",
+                    "Billing Mode Not Supported",
+                    "Service State Management Task Not Found",
+                    "Service Order Not Found",
+                    "Service Price Calculation Failed",
+                    "Invalid Git Repo Details",
+                    "File Locked",
+                    "Service Configuration Invalid",
+                    "Service Configuration Update Request Not Found",
+                    "Service Configuration Not Found",
+                    "Invalid Deployer Tool",
+                    "Deployment Scripts Creation Failed",
+                    "Async Start Service Error",
+                    "Async Stop Service Error",
+                    "Async Restart Service Error",
+                    "Deployment Failed Exception",
+                    "Destroy Failed Exception",
+                    "Service Action Invalid",
+                    "Service Change Request Failed",
+                    "Service Configuration Change Order Already Exists",
+                    "Service Action Change Order Already Exists",
+                    "Invalid Service Object Request",
+                    "Service Object Not Found",
+                    "Service Object Change Order Already Exists"
+                ]
             },
             "CreateCredential": {
                 "type": "object",
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the credential"
+                        "description": "The name of the credential",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The cloud service provider of the credential.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The cloud service provider of the credential."
                     },
                     "site": {
                         "type": "string",
-                        "description": "The site to which the credentials belong to."
+                        "description": "The site to which the credentials belong to.",
+                        "minLength": 1
                     },
                     "description": {
                         "type": "string",
                         "description": "The description of the credential"
                     },
                     "type": {
-                        "type": "string",
-                        "description": "The type of the credential",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        "$ref": "#/components/schemas/CredentialType",
+                        "description": "The type of the credential"
                     },
                     "variables": {
                         "type": "array",
                         "description": "The variables list of the credential. The list elements must be unique.",
                         "items": {
                             "$ref": "#/components/schemas/CredentialVariable"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "timeToLive": {
                         "type": "integer",
                         "format": "int32",
-                        "default": "3600",
+                        "default": 3600,
                         "description": "The time in seconds to live of the credential"
                     }
                 },
                 "required": ["csp", "name", "site", "timeToLive", "type", "variables"]
+            },
+            "CredentialType": {
+                "type": "string",
+                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
             },
             "CredentialVariable": {
                 "type": "object",
@@ -10626,7 +10229,7 @@
                     },
                     "isMandatory": {
                         "type": "boolean",
-                        "default": "true",
+                        "default": true,
                         "description": "If the variable is mandatory. If is optional then the credential completeness check will ignore this variable. It is upto the plugin to decide what needs to be done if this optional credential variable is present."
                     },
                     "isSensitive": {
@@ -10635,10 +10238,25 @@
                     },
                     "value": {
                         "type": "string",
-                        "description": "The value of the CredentialVariable, this field is filled by the user."
+                        "description": "The value of the CredentialVariable, this field is filled by the user.",
+                        "minLength": 1
                     }
                 },
                 "required": ["description", "isSensitive", "name", "value"]
+            },
+            "Csp": {
+                "type": "string",
+                "enum": [
+                    "HuaweiCloud",
+                    "FlexibleEngine",
+                    "OpenstackTestlab",
+                    "PlusServer",
+                    "RegioCloud",
+                    "AlibabaCloud",
+                    "aws",
+                    "azure",
+                    "GoogleCloudPlatform"
+                ]
             },
             "ServiceOrder": {
                 "type": "object",
@@ -10675,9 +10293,7 @@
                     },
                     "serviceObjectParameters": {
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "object"
-                        },
+                        "additionalProperties": {},
                         "description": "The collection of service object parameter."
                     }
                 },
@@ -10705,93 +10321,16 @@
                 "type": "object",
                 "properties": {
                     "errorType": {
-                        "type": "string",
-                        "description": "The result code of response.",
-                        "enum": [
-                            "Runtime Error",
-                            "Parameters Invalid",
-                            "Terraform Script Invalid",
-                            "Unprocessable Entity",
-                            "Response Not Valid",
-                            "Failure while connecting to backend",
-                            "Credential Capability Not Found",
-                            "Credentials Not Found",
-                            "Credential Variables Not Complete",
-                            "Flavor Invalid",
-                            "Terraform Execution Failed",
-                            "Plugin Not Found",
-                            "Deployer Not Found",
-                            "No Credential Definition Available",
-                            "Invalid Service State",
-                            "Invalid Service Deployment State",
-                            "Resource Invalid For Monitoring",
-                            "Unhandled Exception",
-                            "Icon Processing Failed",
-                            "Service Template Not Registered",
-                            "Service Template Unavailable",
-                            "Service Template Request Not Allowed",
-                            "Service Template Request Not Found",
-                            "Review Service Template Request Not Allowed",
-                            "Invalid Service Version",
-                            "Invalid Service Flavors",
-                            "Mandatory Value Missing",
-                            "Invalid Billing Config",
-                            "Unavailable Service Regions",
-                            "Service Deployment Not Found",
-                            "Resource Not Found",
-                            "Deployment Variable Invalid",
-                            "Unauthorized",
-                            "Access Denied",
-                            "Sensitive Field Encryption Or Decryption Failed Exception",
-                            "Unsupported Enum Value",
-                            "Terra Boot Request Failed",
-                            "Tofu Maker Request Failed",
-                            "Metrics Data Not Ready",
-                            "Variable Validation Failed",
-                            "Variable Schema Definition Invalid",
-                            "Policy Not Found",
-                            "Duplicate Policy",
-                            "Policy Validation Failed",
-                            "Policy Evaluation Failed",
-                            "Current Login User No Found",
-                            "Service Details No Accessible",
-                            "Service Porting Activiti Task Not Found",
-                            "Service Porting Failed Exception",
-                            "Service Porting Not Found",
-                            "Service Locked",
-                            "Eula Not Accepted",
-                            "Service Flavor Downgrade Not Allowed",
-                            "Billing Mode Not Supported",
-                            "Service State Management Task Not Found",
-                            "Service Order Not Found",
-                            "Service Price Calculation Failed",
-                            "Invalid Git Repo Details",
-                            "File Locked",
-                            "Service Configuration Invalid",
-                            "Service Configuration Update Request Not Found",
-                            "Service Configuration Not Found",
-                            "Invalid Deployer Tool",
-                            "Deployment Scripts Creation Failed",
-                            "Async Start Service Error",
-                            "Async Stop Service Error",
-                            "Async Restart Service Error",
-                            "Deployment Failed Exception",
-                            "Destroy Failed Exception",
-                            "Service Action Invalid",
-                            "Service Change Request Failed",
-                            "Service Configuration Change Order Already Exists",
-                            "Service Action Change Order Already Exists",
-                            "Invalid Service Object Request",
-                            "Service Object Not Found",
-                            "Service Object Change Order Already Exists"
-                        ]
+                        "$ref": "#/components/schemas/ErrorType",
+                        "description": "The result code of response."
                     },
                     "details": {
                         "type": "array",
                         "description": "Details of the errors occurred",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "serviceId": {
                         "type": "string",
@@ -10849,17 +10388,20 @@
                     "playbookName": {
                         "type": "string",
                         "description": "name of the ansible playbook. Should be the fully qualified file name (including the directory path) in the repo.",
-                        "example": "playbook-name.yml"
+                        "example": "playbook-name.yml",
+                        "minLength": 1
                     },
                     "virtualEnv": {
                         "type": "string",
                         "description": "Path where the virtualenv must be created.",
-                        "example": "/tmp/virtualEnv"
+                        "example": "/tmp/virtualEnv",
+                        "minLength": 1
                     },
                     "pythonVersion": {
                         "type": "string",
                         "description": "Version of the python. This version of python must be available in node which is acting as the configManager.",
-                        "example": 3.1
+                        "example": 3.1,
+                        "minLength": 1
                     },
                     "isPrepareAnsibleEnvironment": {
                         "type": "boolean",
@@ -10867,20 +10409,24 @@
                     },
                     "repoUrl": {
                         "type": "string",
-                        "description": "Url of the script repo."
+                        "description": "Url of the script repo.",
+                        "minLength": 1
                     },
                     "branch": {
                         "type": "string",
-                        "description": "Branch of the git repo."
+                        "description": "Branch of the git repo.",
+                        "minLength": 1
                     },
                     "requirementsFile": {
                         "type": "string",
                         "description": "the python module requirements file in GIT repo. Should be the fully qualified file name (including the directory path). ",
-                        "example": "modules/requirements.txt"
+                        "example": "modules/requirements.txt",
+                        "minLength": 1
                     },
                     "galaxyFile": {
                         "type": "string",
-                        "description": "Full path of the roles and collections requirements file in GIT repo."
+                        "description": "Full path of the roles and collections requirements file in GIT repo.",
+                        "minLength": 1
                     },
                     "ansibleInventoryRequired": {
                         "type": "boolean",
@@ -10902,21 +10448,8 @@
                 "type": "object",
                 "properties": {
                     "deployResourceKind": {
-                        "type": "string",
-                        "description": "Type of the cloud resource to be reused.",
-                        "enum": [
-                            "vm",
-                            "rds",
-                            "container",
-                            "publicIP",
-                            "vpc",
-                            "volume",
-                            "unknown",
-                            "security_group",
-                            "security_group_rule",
-                            "keypair",
-                            "subnet"
-                        ]
+                        "$ref": "#/components/schemas/DeployResourceKind",
+                        "description": "Type of the cloud resource to be reused."
                     },
                     "isAllowCreate": {
                         "type": "boolean",
@@ -10930,11 +10463,13 @@
                 "properties": {
                     "displayName": {
                         "type": "string",
-                        "description": "The display name of availability zone."
+                        "description": "The display name of availability zone.",
+                        "minLength": 1
                     },
                     "varName": {
                         "type": "string",
-                        "description": "The variable name of availability zone."
+                        "description": "The variable name of availability zone.",
+                        "minLength": 1
                     },
                     "mandatory": {
                         "type": "boolean",
@@ -10954,57 +10489,93 @@
                         "type": "array",
                         "description": "Supported billing modes by the managed service. The list elements must be unique.",
                         "items": {
-                            "type": "string",
-                            "enum": ["Fixed", "Pay per Use"]
-                        }
+                            "$ref": "#/components/schemas/BillingMode"
+                        },
+                        "minItems": 1
                     },
                     "defaultBillingMode": {
-                        "type": "string",
-                        "description": " This is used only for display purposes. When provided, this billingMode will be selected in the frontends by default.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": " This is used only for display purposes. When provided, this billingMode will be selected in the frontends by default."
                     }
                 },
                 "required": ["billingModes"]
+            },
+            "BillingMode": {
+                "type": "string",
+                "enum": ["Fixed", "Pay per Use"]
+            },
+            "Category": {
+                "type": "string",
+                "enum": [
+                    "ai",
+                    "compute",
+                    "container",
+                    "storage",
+                    "network",
+                    "database",
+                    "mediaService",
+                    "security",
+                    "middleware",
+                    "others"
+                ]
             },
             "CloudServiceProvider": {
                 "type": "object",
                 "properties": {
                     "name": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The Cloud Service Provider."
                     },
                     "regions": {
                         "type": "array",
                         "description": "The regions of the Cloud Service Provider. The list elements must be unique.",
                         "items": {
                             "$ref": "#/components/schemas/Region"
-                        }
+                        },
+                        "minItems": 1
                     }
                 },
                 "required": ["name", "regions"]
+            },
+            "ConfigurationManagerTool": {
+                "type": "string",
+                "enum": ["ansible"]
+            },
+            "Currency": {
+                "type": "string",
+                "enum": ["USD", "EUR", "CNY"]
+            },
+            "DeployResourceKind": {
+                "type": "string",
+                "enum": [
+                    "vm",
+                    "rds",
+                    "container",
+                    "publicIP",
+                    "vpc",
+                    "volume",
+                    "unknown",
+                    "security_group",
+                    "security_group_rule",
+                    "keypair",
+                    "subnet"
+                ]
+            },
+            "DeployerKind": {
+                "type": "string",
+                "enum": ["terraform", "opentofu", "helm"]
             },
             "DeployerTool": {
                 "type": "object",
                 "properties": {
                     "kind": {
-                        "type": "string",
-                        "description": "The type of the deployer which will handle the service deployment.",
-                        "enum": ["terraform", "opentofu", "helm"]
+                        "$ref": "#/components/schemas/DeployerKind",
+                        "description": "The type of the deployer which will handle the service deployment."
                     },
                     "version": {
                         "type": "string",
                         "description": "The version of the deployer which will handle the service deployment.",
+                        "minLength": 1,
                         "pattern": "^(=|>=|<=)\\s*[vV]?\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$"
                     }
                 },
@@ -11018,9 +10589,8 @@
                         "description": "The deployer tool which will handle the service deployment."
                     },
                     "credentialType": {
-                        "type": "string",
-                        "description": "The credential type to do the deployment",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        "$ref": "#/components/schemas/CredentialType",
+                        "description": "The credential type to do the deployment"
                     },
                     "serviceAvailabilityConfig": {
                         "type": "array",
@@ -11071,11 +10641,13 @@
                 "properties": {
                     "repository": {
                         "type": "string",
-                        "description": "The repository of helm chart."
+                        "description": "The repository of helm chart.",
+                        "minLength": 1
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the helm chart."
+                        "description": "The version of the helm chart.",
+                        "minLength": 1
                     }
                 },
                 "required": ["repository", "version"]
@@ -11088,14 +10660,16 @@
                         "description": "The input variables for the helm deployment, which will be passed to the deployer.The list elements must be unique. All input variables are put together to build a JSON 'object' with each variable as a property of this object.",
                         "items": {
                             "$ref": "#/components/schemas/InputVariable"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "helmOutputVariables": {
                         "type": "array",
                         "description": "The output variables for the helm deployment, which will be generated by the helm deployer. The list elements must be unique.",
                         "items": {
                             "$ref": "#/components/schemas/HelmOutputVariable"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "kubernetesCluster": {
                         "$ref": "#/components/schemas/KubernetesCluster",
@@ -11113,21 +10687,20 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the output variable"
+                        "description": "The name of the output variable",
+                        "minLength": 1
                     },
                     "dataType": {
-                        "type": "string",
-                        "description": "The type of the output variable",
-                        "enum": ["string", "number", "boolean", "array"]
+                        "$ref": "#/components/schemas/VariableDataType",
+                        "description": "The type of the output variable"
                     },
                     "description": {
                         "type": "string",
                         "description": "The description of the output variable"
                     },
                     "sensitiveScope": {
-                        "type": "string",
-                        "description": "Sensitive scope of variable storage",
-                        "enum": ["none", "once", "always"]
+                        "$ref": "#/components/schemas/SensitiveScope",
+                        "description": "Sensitive scope of variable storage"
                     },
                     "resourceType": {
                         "type": "string",
@@ -11141,16 +10714,16 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the deploy variable"
+                        "description": "The name of the deploy variable",
+                        "minLength": 1
                     },
                     "kind": {
                         "$ref": "#/components/schemas/VariableKind",
                         "description": "The kind of the deploy variable"
                     },
                     "dataType": {
-                        "type": "string",
-                        "description": "The type of the deploy variable",
-                        "enum": ["string", "number", "boolean", "array"]
+                        "$ref": "#/components/schemas/VariableDataType",
+                        "description": "The type of the deploy variable"
                     },
                     "example": {
                         "type": "string",
@@ -11158,7 +10731,8 @@
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the deploy variable"
+                        "description": "The description of the deploy variable",
+                        "minLength": 1
                     },
                     "value": {
                         "type": "string",
@@ -11174,9 +10748,8 @@
                         "description": "valueSchema of the variable. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly."
                     },
                     "sensitiveScope": {
-                        "type": "string",
-                        "description": "Sensitive scope of variable storage",
-                        "enum": ["none", "once", "always"]
+                        "$ref": "#/components/schemas/SensitiveScope",
+                        "description": "Sensitive scope of variable storage"
                     },
                     "autoFill": {
                         "$ref": "#/components/schemas/AutoFill",
@@ -11194,15 +10767,19 @@
                 "properties": {
                     "version": {
                         "type": "string",
-                        "description": "The version of the kubernetes."
+                        "description": "The version of the kubernetes.",
+                        "minLength": 1
                     },
                     "type": {
-                        "type": "string",
-                        "description": "The type of the kubernetes cluster.",
-                        "enum": ["dedicated", "shared"]
+                        "$ref": "#/components/schemas/KubernetesClusterType",
+                        "description": "The type of the kubernetes cluster."
                     }
                 },
                 "required": ["type", "version"]
+            },
+            "KubernetesClusterType": {
+                "type": "string",
+                "enum": ["dedicated", "shared"]
             },
             "ModificationImpact": {
                 "type": "object",
@@ -11216,6 +10793,10 @@
                         "description": "Is service availability interrupted when the configuration is interrupted."
                     }
                 }
+            },
+            "ObjectActionType": {
+                "type": "string",
+                "enum": ["create", "update", "delete"]
             },
             "ObjectIdentifier": {
                 "type": "object",
@@ -11235,9 +10816,8 @@
                 "type": "object",
                 "properties": {
                     "objectActionType": {
-                        "type": "string",
-                        "description": "the type of service object action.",
-                        "enum": ["create", "update", "delete"]
+                        "$ref": "#/components/schemas/ObjectActionType",
+                        "description": "the type of service object action."
                     },
                     "modificationImpact": {
                         "$ref": "#/components/schemas/ModificationImpact",
@@ -11264,32 +10844,29 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the service object parameter"
+                        "description": "The name of the service object parameter",
+                        "minLength": 1
                     },
                     "dataType": {
-                        "type": "string",
-                        "description": "The type of the service object  parameter",
-                        "enum": ["string", "number", "boolean", "array"]
+                        "$ref": "#/components/schemas/VariableDataType",
+                        "description": "The type of the service object  parameter"
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the service object parameter"
+                        "description": "The description of the service object parameter",
+                        "minLength": 1
                     },
                     "example": {
-                        "type": "object",
                         "description": "The example value of the service object  parameter"
                     },
                     "valueSchema": {
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "object"
-                        },
+                        "additionalProperties": {},
                         "description": "valueSchema of the service config parameter. The key be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/schema"
                     },
                     "sensitiveScope": {
-                        "type": "string",
-                        "description": "Sensitive scope of service config parameter storage",
-                        "enum": ["none", "once", "always"]
+                        "$ref": "#/components/schemas/SensitiveScope",
+                        "description": "Sensitive scope of service config parameter storage"
                     },
                     "isMandatory": {
                         "type": "boolean",
@@ -11306,44 +10883,38 @@
                 "type": "object",
                 "properties": {
                     "category": {
-                        "type": "string",
-                        "description": "The catalog of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The catalog of the service"
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the Ocl"
+                        "description": "The version of the Ocl",
+                        "minLength": 1
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the managed service"
+                        "description": "The name of the managed service",
+                        "minLength": 1
                     },
                     "serviceVersion": {
                         "type": "string",
-                        "description": "The version of the managed service"
+                        "description": "The version of the managed service",
+                        "minLength": 1
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the managed service"
+                        "description": "The description of the managed service",
+                        "minLength": 1
                     },
                     "serviceVendor": {
                         "type": "string",
-                        "description": "The serviceVendor of the managed service"
+                        "description": "The serviceVendor of the managed service",
+                        "minLength": 1
                     },
                     "icon": {
                         "type": "string",
-                        "description": "The icon of the managed service"
+                        "description": "The icon of the managed service",
+                        "minLength": 1
                     },
                     "cloudServiceProvider": {
                         "$ref": "#/components/schemas/CloudServiceProvider",
@@ -11362,9 +10933,8 @@
                         "description": "The billing policy of the managed service"
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "serviceProviderContactDetails": {
                         "$ref": "#/components/schemas/ServiceProviderContactDetails",
@@ -11414,21 +10984,20 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the output variable"
+                        "description": "The name of the output variable",
+                        "minLength": 1
                     },
                     "dataType": {
-                        "type": "string",
-                        "description": "The type of the output variable",
-                        "enum": ["string", "number", "boolean", "array"]
+                        "$ref": "#/components/schemas/VariableDataType",
+                        "description": "The type of the output variable"
                     },
                     "description": {
                         "type": "string",
                         "description": "The description of the output variable"
                     },
                     "sensitiveScope": {
-                        "type": "string",
-                        "description": "Sensitive scope of variable storage",
-                        "enum": ["none", "once", "always"]
+                        "$ref": "#/components/schemas/SensitiveScope",
+                        "description": "Sensitive scope of variable storage"
                     }
                 },
                 "required": ["dataType", "name"]
@@ -11441,14 +11010,12 @@
                         "description": "The value of the cost."
                     },
                     "currency": {
-                        "type": "string",
-                        "description": "The currency of the cost.",
-                        "enum": ["USD", "EUR", "CNY"]
+                        "$ref": "#/components/schemas/Currency",
+                        "description": "The currency of the cost."
                     },
                     "period": {
-                        "type": "string",
-                        "description": "The period of the cost.",
-                        "enum": ["yearly", "monthly", "daily", "hourly", "oneTime"]
+                        "$ref": "#/components/schemas/PricingPeriod",
+                        "description": "The period of the cost."
                     }
                 },
                 "required": ["cost", "currency"]
@@ -11458,11 +11025,13 @@
                 "properties": {
                     "regionName": {
                         "type": "string",
-                        "description": "The defined region name. If the special name 'any' provided, this price for all unknown regions."
+                        "description": "The defined region name. If the special name 'any' provided, this price for all unknown regions.",
+                        "minLength": 1
                     },
                     "siteName": {
                         "type": "string",
-                        "description": "The defined site name. If the special name 'default' provided, this price for all sites."
+                        "description": "The defined site name. If the special name 'default' provided, this price for all sites.",
+                        "minLength": 1
                     },
                     "price": {
                         "$ref": "#/components/schemas/Price",
@@ -11470,6 +11039,10 @@
                     }
                 },
                 "required": ["price", "regionName", "siteName"]
+            },
+            "PricingPeriod": {
+                "type": "string",
+                "enum": ["yearly", "monthly", "daily", "hourly", "oneTime"]
             },
             "RatingMode": {
                 "type": "object",
@@ -11497,15 +11070,18 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the region"
+                        "description": "The name of the region",
+                        "minLength": 1
                     },
                     "site": {
                         "type": "string",
-                        "description": "The site with the region belongs to, such as default, Chinese Mainland, International, "
+                        "description": "The site with the region belongs to, such as default, Chinese Mainland, International, ",
+                        "minLength": 1
                     },
                     "area": {
                         "type": "string",
-                        "description": "The area which the region belongs to, such as Asia, Europe, Africa"
+                        "description": "The area which the region belongs to, such as Asia, Europe, Africa",
+                        "minLength": 1
                     }
                 },
                 "required": ["area", "name", "site"]
@@ -11519,21 +11095,8 @@
                         "description": "The count of the same resource."
                     },
                     "deployResourceKind": {
-                        "type": "string",
-                        "description": "The kind of the same resource.",
-                        "enum": [
-                            "vm",
-                            "rds",
-                            "container",
-                            "publicIP",
-                            "vpc",
-                            "volume",
-                            "unknown",
-                            "security_group",
-                            "security_group_rule",
-                            "keypair",
-                            "subnet"
-                        ]
+                        "$ref": "#/components/schemas/DeployResourceKind",
+                        "description": "The kind of the same resource."
                     },
                     "properties": {
                         "type": "object",
@@ -11553,7 +11116,8 @@
                         "description": "The resources of the flavor of the manged service.",
                         "items": {
                             "$ref": "#/components/schemas/Resource"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "licensePrices": {
                         "type": "array",
@@ -11590,6 +11154,10 @@
                 },
                 "required": ["branch", "repoUrl"]
             },
+            "SensitiveScope": {
+                "type": "string",
+                "enum": ["none", "once", "always"]
+            },
             "ServiceAction": {
                 "type": "object",
                 "properties": {
@@ -11598,9 +11166,8 @@
                         "description": "the name of service action."
                     },
                     "type": {
-                        "type": "string",
-                        "description": "the tool used to manage the service action.",
-                        "enum": ["ansible"]
+                        "$ref": "#/components/schemas/ConfigurationManagerTool",
+                        "description": "the tool used to manage the service action."
                     },
                     "actionManageScripts": {
                         "type": "array",
@@ -11627,9 +11194,8 @@
                 "type": "object",
                 "properties": {
                     "type": {
-                        "type": "string",
-                        "description": "the tool used to manage the service configuration.",
-                        "enum": ["ansible"]
+                        "$ref": "#/components/schemas/ConfigurationManagerTool",
+                        "description": "the tool used to manage the service configuration."
                     },
                     "agentVersion": {
                         "type": "string",
@@ -11661,16 +11227,16 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The name of the service config parameter"
+                        "description": "The name of the service config parameter",
+                        "minLength": 1
                     },
                     "kind": {
                         "$ref": "#/components/schemas/VariableKind",
                         "description": "The kind of the service config parameter"
                     },
                     "dataType": {
-                        "type": "string",
-                        "description": "The type of the service config parameter",
-                        "enum": ["string", "number", "boolean", "array"]
+                        "$ref": "#/components/schemas/VariableDataType",
+                        "description": "The type of the service config parameter"
                     },
                     "example": {
                         "type": "string",
@@ -11678,14 +11244,14 @@
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the service config parameter"
+                        "description": "The description of the service config parameter",
+                        "minLength": 1
                     },
                     "value": {
                         "type": "string",
                         "description": "The value of the service config parameter. Value can be provided for initial value"
                     },
                     "initialValue": {
-                        "type": "object",
                         "description": "The init value of the service config parameter"
                     },
                     "valueSchema": {
@@ -11694,9 +11260,8 @@
                         "description": "valueSchema of the variable. The key can be any keyword that is part of the JSON schema definition which can be found here https://json-schema.org/draft/2020-12/meta/validation. Only the type field is taken from dataType parameter directly."
                     },
                     "sensitiveScope": {
-                        "type": "string",
-                        "description": "Sensitive scope of service config parameter storage",
-                        "enum": ["none", "once", "always"]
+                        "$ref": "#/components/schemas/SensitiveScope",
+                        "description": "Sensitive scope of service config parameter storage"
                     },
                     "modificationImpact": {
                         "$ref": "#/components/schemas/ModificationImpact",
@@ -11708,7 +11273,8 @@
                     },
                     "managedBy": {
                         "type": "string",
-                        "description": "Service component which manages this configuration parameter."
+                        "description": "Service component which manages this configuration parameter.",
+                        "minLength": 1
                     }
                 },
                 "required": [
@@ -11727,7 +11293,8 @@
                 "properties": {
                     "changeHandler": {
                         "type": "string",
-                        "description": "should be the name of the resource available in the deployer script."
+                        "description": "should be the name of the resource available in the deployer script.",
+                        "minLength": 1
                     },
                     "runOnlyOnce": {
                         "type": "boolean",
@@ -11745,14 +11312,16 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The flavor name"
+                        "description": "The flavor name",
+                        "minLength": 1
                     },
                     "properties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string"
                         },
-                        "description": "The properties of the flavor"
+                        "description": "The properties of the flavor",
+                        "minProperties": 1
                     },
                     "priority": {
                         "type": "integer",
@@ -11774,6 +11343,11 @@
                 },
                 "required": ["name", "pricing", "priority", "properties"]
             },
+            "ServiceHostingType": {
+                "type": "string",
+                "description": "Defines which cloud service account is used for deploying cloud resources.",
+                "enum": ["self", "service-vendor"]
+            },
             "ServiceObject": {
                 "type": "object",
                 "properties": {
@@ -11786,9 +11360,8 @@
                         "description": "the identifier of service object."
                     },
                     "handlerType": {
-                        "type": "string",
-                        "description": "the tool used to manage the service object.",
-                        "enum": ["ansible"]
+                        "$ref": "#/components/schemas/ConfigurationManagerTool",
+                        "description": "the tool used to manage the service object."
                     },
                     "objectsManage": {
                         "type": "array",
@@ -11862,17 +11435,23 @@
                         "description": "The input variables for the deployment, which will be passed to the deployer.The list elements must be unique. All input variables are put together to build a JSON 'object' with each variable as a property of this object.",
                         "items": {
                             "$ref": "#/components/schemas/InputVariable"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "outputVariables": {
                         "type": "array",
                         "description": "The output variables for the deployment, which will be generated by the deployer. The list elements must be unique.",
                         "items": {
                             "$ref": "#/components/schemas/OutputVariable"
-                        }
+                        },
+                        "minItems": 1
                     }
                 },
                 "required": ["inputVariables", "outputVariables"]
+            },
+            "VariableDataType": {
+                "type": "string",
+                "enum": ["string", "number", "boolean", "array"]
             },
             "VariableKind": {
                 "type": "string",
@@ -11928,7 +11507,8 @@
                     },
                     "policy": {
                         "type": "string",
-                        "description": "The valid policy belongs to the service."
+                        "description": "The valid policy belongs to the service.",
+                        "minLength": 1
                     },
                     "serviceTemplateId": {
                         "type": "string",
@@ -11970,19 +11550,8 @@
                 "type": "object",
                 "properties": {
                     "csp": {
-                        "type": "string",
-                        "description": "The csp which the policy belongs to.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The csp which the policy belongs to."
                     },
                     "policy": {
                         "type": "string",
@@ -12004,22 +11573,12 @@
                     },
                     "policy": {
                         "type": "string",
-                        "description": "The valid policy created by the user."
+                        "description": "The valid policy created by the user.",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The csp which the policy belongs to.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The csp which the policy belongs to."
                     },
                     "enabled": {
                         "type": "boolean",
@@ -12042,16 +11601,20 @@
                 "type": "object",
                 "properties": {
                     "reviewResult": {
-                        "type": "string",
-                        "description": "The result of review registration.",
-                        "enum": ["approved", "rejected"]
+                        "$ref": "#/components/schemas/ServiceReviewResult",
+                        "description": "The result of review registration."
                     },
                     "reviewComment": {
                         "type": "string",
-                        "description": "The comment of review registration."
+                        "description": "The comment of review registration.",
+                        "minLength": 1
                     }
                 },
                 "required": ["reviewComment", "reviewResult"]
+            },
+            "ServiceReviewResult": {
+                "type": "string",
+                "enum": ["approved", "rejected"]
             },
             "AnsibleTaskResult": {
                 "type": "object",
@@ -12097,24 +11660,13 @@
                 "type": "object",
                 "properties": {
                     "category": {
-                        "type": "string",
-                        "description": "The category of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The category of the service"
                     },
                     "serviceName": {
                         "type": "string",
-                        "description": "The name of the service ordered."
+                        "description": "The name of the service ordered.",
+                        "minLength": 1
                     },
                     "customerServiceName": {
                         "type": "string",
@@ -12122,35 +11674,25 @@
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of service"
+                        "description": "The version of service",
+                        "minLength": 1
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
                         "description": "The region of the provider."
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The csp of the Service.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The csp of the Service."
                     },
                     "flavor": {
                         "type": "string",
-                        "description": "The flavor of the Service."
+                        "description": "The flavor of the Service.",
+                        "minLength": 1
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "serviceRequestProperties": {
                         "type": "object",
@@ -12165,9 +11707,8 @@
                         "description": "The availability zones to deploy the service instance."
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the managed service.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the managed service."
                     },
                     "eulaAccepted": {
                         "type": "boolean"
@@ -12188,24 +11729,13 @@
                 "type": "object",
                 "properties": {
                     "category": {
-                        "type": "string",
-                        "description": "The category of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The category of the service"
                     },
                     "serviceName": {
                         "type": "string",
-                        "description": "The name of the service ordered."
+                        "description": "The name of the service ordered.",
+                        "minLength": 1
                     },
                     "customerServiceName": {
                         "type": "string",
@@ -12213,35 +11743,25 @@
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of service"
+                        "description": "The version of service",
+                        "minLength": 1
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
                         "description": "The region of the provider."
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The csp of the Service.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The csp of the Service."
                     },
                     "flavor": {
                         "type": "string",
-                        "description": "The flavor of the Service."
+                        "description": "The flavor of the Service.",
+                        "minLength": 1
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "serviceRequestProperties": {
                         "type": "object",
@@ -12256,9 +11776,8 @@
                         "description": "The availability zones to deploy the service instance."
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the managed service.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the managed service."
                     },
                     "originalServiceId": {
                         "type": "string",
@@ -12298,7 +11817,8 @@
                     },
                     "policy": {
                         "type": "string",
-                        "description": "The policy."
+                        "description": "The policy.",
+                        "minLength": 1
                     },
                     "enabled": {
                         "type": "boolean",
@@ -12311,23 +11831,13 @@
                 "type": "object",
                 "properties": {
                     "csp": {
-                        "type": "string",
-                        "description": "The csp which the policy belongs to.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The csp which the policy belongs to."
                     },
                     "policy": {
                         "type": "string",
-                        "description": "The policy."
+                        "description": "The policy.",
+                        "minLength": 1
                     },
                     "enabled": {
                         "type": "boolean",
@@ -12336,12 +11846,17 @@
                 },
                 "required": ["csp", "enabled", "policy"]
             },
+            "WorkFlowTaskStatus": {
+                "type": "string",
+                "enum": ["done", "failed"]
+            },
             "WorkFlowTask": {
                 "type": "object",
                 "properties": {
                     "processInstanceId": {
                         "type": "string",
-                        "description": "The id of the ProcessInstance"
+                        "description": "The id of the ProcessInstance",
+                        "minLength": 1
                     },
                     "processInstanceName": {
                         "type": "string",
@@ -12349,32 +11864,36 @@
                     },
                     "processDefinitionId": {
                         "type": "string",
-                        "description": "The id of the ProcessDefinition"
+                        "description": "The id of the ProcessDefinition",
+                        "minLength": 1
                     },
                     "processDefinitionName": {
                         "type": "string",
-                        "description": "The name of the ProcessDefinition"
+                        "description": "The name of the ProcessDefinition",
+                        "minLength": 1
                     },
                     "executionId": {
                         "type": "string",
-                        "description": "The execution id of the ProcessInstance"
+                        "description": "The execution id of the ProcessInstance",
+                        "minLength": 1
                     },
                     "taskId": {
                         "type": "string",
-                        "description": "The id of the task"
+                        "description": "The id of the task",
+                        "minLength": 1
                     },
                     "taskName": {
                         "type": "string",
-                        "description": "The name of the task"
+                        "description": "The name of the task",
+                        "minLength": 1
                     },
                     "businessKey": {
                         "type": "string",
                         "description": "The businessKey of the Process"
                     },
                     "taskStatus": {
-                        "type": "string",
-                        "description": "The status of the Task",
-                        "enum": ["done", "failed"]
+                        "$ref": "#/components/schemas/WorkFlowTaskStatus",
+                        "description": "The status of the Task"
                     },
                     "createdTime": {
                         "type": "string",
@@ -12403,36 +11922,27 @@
                         "type": "object",
                         "properties": {
                             "csp": {
-                                "type": "string",
-                                "description": "The cloud service provider of the credential.",
-                                "enum": [
-                                    "HuaweiCloud",
-                                    "FlexibleEngine",
-                                    "OpenstackTestlab",
-                                    "PlusServer",
-                                    "RegioCloud",
-                                    "AlibabaCloud",
-                                    "aws",
-                                    "azure",
-                                    "GoogleCloudPlatform"
-                                ]
+                                "$ref": "#/components/schemas/Csp",
+                                "description": "The cloud service provider of the credential."
                             },
                             "site": {
                                 "type": "string",
-                                "description": "The site which the credentials belong to."
+                                "description": "The site which the credentials belong to.",
+                                "minLength": 1
                             },
                             "type": {
-                                "type": "string",
-                                "description": "The type of the credential, this field is provided by the plugin of cloud service provider.",
-                                "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                                "$ref": "#/components/schemas/CredentialType",
+                                "description": "The type of the credential, this field is provided by the plugin of cloud service provider."
                             },
                             "name": {
                                 "type": "string",
-                                "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
+                                "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.",
+                                "minLength": 1
                             },
                             "description": {
                                 "type": "string",
-                                "description": "The description of the credential,this field is provided by the plugin of cloud service provider."
+                                "description": "The description of the credential,this field is provided by the plugin of cloud service provider.",
+                                "minLength": 1
                             },
                             "userId": {
                                 "type": "string",
@@ -12447,36 +11957,27 @@
                 "type": "object",
                 "properties": {
                     "csp": {
-                        "type": "string",
-                        "description": "The cloud service provider of the credential.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The cloud service provider of the credential."
                     },
                     "site": {
                         "type": "string",
-                        "description": "The site which the credentials belong to."
+                        "description": "The site which the credentials belong to.",
+                        "minLength": 1
                     },
                     "type": {
-                        "type": "string",
-                        "description": "The type of the credential, this field is provided by the plugin of cloud service provider.",
-                        "enum": ["variables", "http_authentication", "api_key", "oauth2"]
+                        "$ref": "#/components/schemas/CredentialType",
+                        "description": "The type of the credential, this field is provided by the plugin of cloud service provider."
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type."
+                        "description": "The name of the credential, this field is provided by the plugin of cloud service provider. The value of this field must be unique between credentials with the same csp and type.",
+                        "minLength": 1
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the credential,this field is provided by the plugin of cloud service provider."
+                        "description": "The description of the credential,this field is provided by the plugin of cloud service provider.",
+                        "minLength": 1
                     },
                     "userId": {
                         "type": "string",
@@ -12498,26 +11999,16 @@
                 "type": "object",
                 "properties": {
                     "backendSystemType": {
-                        "type": "string",
-                        "description": "The type of backend system.",
-                        "enum": [
-                            "Identity Provider",
-                            "Database",
-                            "Terra Boot",
-                            "Tofu Maker",
-                            "Policy Man",
-                            "Cache Provider",
-                            "OpenTelemetry Collector"
-                        ]
+                        "$ref": "#/components/schemas/BackendSystemType",
+                        "description": "The type of backend system."
                     },
                     "name": {
                         "type": "string",
                         "description": "The name of backend system."
                     },
                     "healthStatus": {
-                        "type": "string",
-                        "description": "The health status of backend system.",
-                        "enum": ["OK", "NOK"]
+                        "$ref": "#/components/schemas/HealthStatus",
+                        "description": "The health status of backend system."
                     },
                     "endpoint": {
                         "type": "string",
@@ -12530,13 +12021,28 @@
                 },
                 "required": ["backendSystemType", "healthStatus", "name"]
             },
+            "BackendSystemType": {
+                "type": "string",
+                "enum": [
+                    "Identity Provider",
+                    "Database",
+                    "Terra Boot",
+                    "Tofu Maker",
+                    "Policy Man",
+                    "Cache Provider",
+                    "OpenTelemetry Collector"
+                ]
+            },
+            "HealthStatus": {
+                "type": "string",
+                "enum": ["OK", "NOK"]
+            },
             "StackStatus": {
                 "type": "object",
                 "properties": {
                     "healthStatus": {
-                        "type": "string",
-                        "description": "The health status of Xpanse service.",
-                        "enum": ["OK", "NOK"]
+                        "$ref": "#/components/schemas/HealthStatus",
+                        "description": "The health status of Xpanse service."
                     },
                     "backendSystemStatuses": {
                         "type": "array",
@@ -12548,6 +12054,23 @@
                 },
                 "required": ["backendSystemStatuses", "healthStatus"]
             },
+            "ServiceDeploymentState": {
+                "type": "string",
+                "enum": [
+                    "deploying",
+                    "deployment successful",
+                    "deployment failed",
+                    "destroying",
+                    "destroy successful",
+                    "destroy failed",
+                    "manual cleanup required",
+                    "rollback failed",
+                    "modifying",
+                    "modification failed",
+                    "modification successful",
+                    "rolling back"
+                ]
+            },
             "DeployedService": {
                 "type": "object",
                 "properties": {
@@ -12557,24 +12080,13 @@
                         "description": "The ID of the service"
                     },
                     "category": {
-                        "type": "string",
-                        "description": "The catalog of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The catalog of the service"
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the service"
+                        "description": "The name of the service",
+                        "minLength": 1
                     },
                     "customerServiceName": {
                         "type": "string",
@@ -12582,27 +12094,16 @@
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the service"
+                        "description": "The version of the service",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The provider of the service",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The provider of the service"
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
@@ -12617,12 +12118,12 @@
                     },
                     "flavor": {
                         "type": "string",
-                        "description": "The flavor of the service"
+                        "description": "The flavor of the service",
+                        "minLength": 1
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the managed service.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the managed service."
                     },
                     "inputProperties": {
                         "type": "object",
@@ -12648,26 +12149,12 @@
                         "description": "The id of the user who deployed the service."
                     },
                     "serviceDeploymentState": {
-                        "type": "string",
-                        "description": "The deployment state of the service",
-                        "enum": [
-                            "deploying",
-                            "deployment successful",
-                            "deployment failed",
-                            "destroying",
-                            "destroy successful",
-                            "destroy failed",
-                            "manual cleanup required",
-                            "rollback failed",
-                            "modifying",
-                            "modification failed",
-                            "modification successful"
-                        ]
+                        "$ref": "#/components/schemas/ServiceDeploymentState",
+                        "description": "The deployment state of the service"
                     },
                     "serviceState": {
-                        "type": "string",
-                        "description": "The run state of the service",
-                        "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
+                        "$ref": "#/components/schemas/ServiceState",
+                        "description": "The run state of the service"
                     },
                     "createdTime": {
                         "type": "string",
@@ -12735,19 +12222,25 @@
                     }
                 }
             },
+            "ServiceState": {
+                "type": "string",
+                "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting", "unknown"]
+            },
             "EndUserFlavors": {
                 "type": "object",
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The flavor name"
+                        "description": "The flavor name",
+                        "minLength": 1
                     },
                     "properties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string"
                         },
-                        "description": "The properties of the flavor"
+                        "description": "The properties of the flavor",
+                        "minProperties": 1
                     },
                     "priority": {
                         "type": "integer",
@@ -12827,14 +12320,16 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "The flavor name"
+                        "description": "The flavor name",
+                        "minLength": 1
                     },
                     "properties": {
                         "type": "object",
                         "additionalProperties": {
                             "type": "string"
                         },
-                        "description": "The properties of the flavor"
+                        "description": "The properties of the flavor",
+                        "minProperties": 1
                     },
                     "priority": {
                         "type": "integer",
@@ -12861,62 +12356,45 @@
                         "description": "The id of the orderable service."
                     },
                     "category": {
-                        "type": "string",
-                        "description": "The category of the orderable service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The category of the orderable service."
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the orderable service."
+                        "description": "The name of the orderable service.",
+                        "minLength": 1
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the orderable service."
+                        "description": "The version of the orderable service.",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The Cloud Service Provider of the orderable service.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The Cloud Service Provider of the orderable service."
                     },
                     "regions": {
                         "type": "array",
                         "description": "The regions of the Cloud Service Provider.",
                         "items": {
                             "$ref": "#/components/schemas/Region"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "serviceVendor": {
                         "type": "string",
-                        "description": "The serviceVendor of the orderable service."
+                        "description": "The serviceVendor of the orderable service.",
+                        "minLength": 1
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the orderable service."
+                        "description": "The description of the orderable service.",
+                        "minLength": 1
                     },
                     "icon": {
                         "type": "string",
-                        "description": "The icon of the orderable service."
+                        "description": "The icon of the orderable service.",
+                        "minLength": 1
                     },
                     "inputVariables": {
                         "type": "array",
@@ -12941,9 +12419,8 @@
                         "description": "The billing policy of the orderable service."
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "serviceProviderContactDetails": {
                         "$ref": "#/components/schemas/ServiceProviderContactDetails",
@@ -13011,36 +12488,27 @@
                 "properties": {
                     "groupType": {
                         "type": "string",
-                        "description": "The type of the resource as defined by the deployer used to deploy the service. Example, in case of terraform this will be the type of the resource defined by the terraform provider."
+                        "description": "The type of the resource as defined by the deployer used to deploy the service. Example, in case of terraform this will be the type of the resource defined by the terraform provider.",
+                        "minLength": 1
                     },
                     "groupName": {
                         "type": "string",
-                        "description": "The group to which the resource belongs to. A service can have multiple types of resources. This defines the type of resource. The name of resource group is controlled in the service template."
+                        "description": "The group to which the resource belongs to. A service can have multiple types of resources. This defines the type of resource. The name of resource group is controlled in the service template.",
+                        "minLength": 1
                     },
                     "resourceId": {
                         "type": "string",
-                        "description": "The id of the deployed resource."
+                        "description": "The id of the deployed resource.",
+                        "minLength": 1
                     },
                     "resourceName": {
                         "type": "string",
-                        "description": "The name of the deployed resource."
+                        "description": "The name of the deployed resource.",
+                        "minLength": 1
                     },
                     "resourceKind": {
-                        "type": "string",
-                        "description": "The kind of the deployed resource.",
-                        "enum": [
-                            "vm",
-                            "rds",
-                            "container",
-                            "publicIP",
-                            "vpc",
-                            "volume",
-                            "unknown",
-                            "security_group",
-                            "security_group_rule",
-                            "keypair",
-                            "subnet"
-                        ]
+                        "$ref": "#/components/schemas/DeployResourceKind",
+                        "description": "The kind of the deployed resource."
                     },
                     "properties": {
                         "type": "object",
@@ -13051,6 +12519,32 @@
                     }
                 },
                 "required": ["groupName", "groupType", "properties", "resourceId", "resourceKind", "resourceName"]
+            },
+            "ServiceOrderType": {
+                "type": "string",
+                "enum": [
+                    "deploy",
+                    "retry",
+                    "rollback",
+                    "modify",
+                    "destroy",
+                    "port",
+                    "recreate",
+                    "lockChange",
+                    "configChange",
+                    "serviceAction",
+                    "purge",
+                    "serviceStart",
+                    "serviceStop",
+                    "serviceRestart",
+                    "objectCreate",
+                    "objectModify",
+                    "objectDelete"
+                ]
+            },
+            "OrderStatus": {
+                "type": "string",
+                "enum": ["created", "in-progress", "successful", "failed"]
             },
             "ServiceOrderDetails": {
                 "type": "object",
@@ -13066,32 +12560,12 @@
                         "description": "The id of the deployed service."
                     },
                     "taskType": {
-                        "type": "string",
-                        "description": "The task type of the service order.",
-                        "enum": [
-                            "deploy",
-                            "retry",
-                            "rollback",
-                            "modify",
-                            "destroy",
-                            "port",
-                            "recreate",
-                            "lockChange",
-                            "configChange",
-                            "serviceAction",
-                            "purge",
-                            "serviceStart",
-                            "serviceStop",
-                            "serviceRestart",
-                            "objectCreate",
-                            "objectModify",
-                            "objectDelete"
-                        ]
+                        "$ref": "#/components/schemas/ServiceOrderType",
+                        "description": "The task type of the service order."
                     },
                     "orderStatus": {
-                        "type": "string",
-                        "description": "The task status of the service order.",
-                        "enum": ["created", "in-progress", "successful", "failed"]
+                        "$ref": "#/components/schemas/OrderStatus",
+                        "description": "The task status of the service order."
                     },
                     "originalServiceId": {
                         "type": "string",
@@ -13142,21 +12616,8 @@
                 "type": "object",
                 "properties": {
                     "serviceDeploymentState": {
-                        "type": "string",
-                        "description": "Current state of the deployment request.",
-                        "enum": [
-                            "deploying",
-                            "deployment successful",
-                            "deployment failed",
-                            "destroying",
-                            "destroy successful",
-                            "destroy failed",
-                            "manual cleanup required",
-                            "rollback failed",
-                            "modifying",
-                            "modification failed",
-                            "modification successful"
-                        ]
+                        "$ref": "#/components/schemas/ServiceDeploymentState",
+                        "description": "Current state of the deployment request."
                     },
                     "isOrderCompleted": {
                         "type": "boolean",
@@ -13169,9 +12630,8 @@
                 "type": "object",
                 "properties": {
                     "orderStatus": {
-                        "type": "string",
-                        "description": "Current task status of the service order.",
-                        "enum": ["created", "in-progress", "successful", "failed"]
+                        "$ref": "#/components/schemas/OrderStatus",
+                        "description": "Current task status of the service order."
                     },
                     "isOrderCompleted": {
                         "type": "boolean",
@@ -13199,11 +12659,13 @@
                     },
                     "objectType": {
                         "type": "string",
-                        "description": "The type of service object."
+                        "description": "The type of service object.",
+                        "minLength": 1
                     },
                     "objectIdentifierName": {
                         "type": "string",
-                        "description": "The name of service object identifier."
+                        "description": "The name of service object identifier.",
+                        "minLength": 1
                     },
                     "dependentObjectIds": {
                         "type": "array",
@@ -13216,9 +12678,7 @@
                     },
                     "parameters": {
                         "type": "object",
-                        "additionalProperties": {
-                            "type": "object"
-                        },
+                        "additionalProperties": {},
                         "description": "The collection of service object parameter."
                     },
                     "objectOrderHistory": {
@@ -13247,24 +12707,13 @@
                         "description": "The ID of the service"
                     },
                     "category": {
-                        "type": "string",
-                        "description": "The catalog of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The catalog of the service"
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the service"
+                        "description": "The name of the service",
+                        "minLength": 1
                     },
                     "customerServiceName": {
                         "type": "string",
@@ -13272,27 +12721,16 @@
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the service"
+                        "description": "The version of the service",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The provider of the service",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The provider of the service"
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
@@ -13307,12 +12745,12 @@
                     },
                     "flavor": {
                         "type": "string",
-                        "description": "The flavor of the service"
+                        "description": "The flavor of the service",
+                        "minLength": 1
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the managed service.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the managed service."
                     },
                     "inputProperties": {
                         "type": "object",
@@ -13338,26 +12776,12 @@
                         "description": "The id of the user who deployed the service."
                     },
                     "serviceDeploymentState": {
-                        "type": "string",
-                        "description": "The deployment state of the service",
-                        "enum": [
-                            "deploying",
-                            "deployment successful",
-                            "deployment failed",
-                            "destroying",
-                            "destroy successful",
-                            "destroy failed",
-                            "manual cleanup required",
-                            "rollback failed",
-                            "modifying",
-                            "modification failed",
-                            "modification successful"
-                        ]
+                        "$ref": "#/components/schemas/ServiceDeploymentState",
+                        "description": "The deployment state of the service"
                     },
                     "serviceState": {
-                        "type": "string",
-                        "description": "The run state of the service",
-                        "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
+                        "$ref": "#/components/schemas/ServiceState",
+                        "description": "The run state of the service"
                     },
                     "createdTime": {
                         "type": "string",
@@ -13421,24 +12845,13 @@
                         "description": "The ID of the service"
                     },
                     "category": {
-                        "type": "string",
-                        "description": "The catalog of the service",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "The catalog of the service"
                     },
                     "name": {
                         "type": "string",
-                        "description": "The name of the service"
+                        "description": "The name of the service",
+                        "minLength": 1
                     },
                     "customerServiceName": {
                         "type": "string",
@@ -13446,27 +12859,16 @@
                     },
                     "version": {
                         "type": "string",
-                        "description": "The version of the service"
+                        "description": "The version of the service",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "The provider of the service",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "The provider of the service"
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
@@ -13481,12 +12883,12 @@
                     },
                     "flavor": {
                         "type": "string",
-                        "description": "The flavor of the service"
+                        "description": "The flavor of the service",
+                        "minLength": 1
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the managed service.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the managed service."
                     },
                     "inputProperties": {
                         "type": "object",
@@ -13512,26 +12914,12 @@
                         "description": "The id of the user who deployed the service."
                     },
                     "serviceDeploymentState": {
-                        "type": "string",
-                        "description": "The deployment state of the service",
-                        "enum": [
-                            "deploying",
-                            "deployment successful",
-                            "deployment failed",
-                            "destroying",
-                            "destroy successful",
-                            "destroy failed",
-                            "manual cleanup required",
-                            "rollback failed",
-                            "modifying",
-                            "modification failed",
-                            "modification successful"
-                        ]
+                        "$ref": "#/components/schemas/ServiceDeploymentState",
+                        "description": "The deployment state of the service"
                     },
                     "serviceState": {
-                        "type": "string",
-                        "description": "The run state of the service",
-                        "enum": ["not running", "running", "starting", "stopping", "stopped", "restarting"]
+                        "$ref": "#/components/schemas/ServiceState",
+                        "description": "The run state of the service"
                     },
                     "createdTime": {
                         "type": "string",
@@ -13579,6 +12967,10 @@
                     "version"
                 ]
             },
+            "ServiceChangeStatus": {
+                "type": "string",
+                "enum": ["pending", "processing", "successful", "error"]
+            },
             "ServiceChangeOrderDetails": {
                 "type": "object",
                 "properties": {
@@ -13588,9 +12980,8 @@
                         "description": "The id of the order."
                     },
                     "orderStatus": {
-                        "type": "string",
-                        "description": "Order status of service update request.",
-                        "enum": ["created", "in-progress", "successful", "failed"]
+                        "$ref": "#/components/schemas/OrderStatus",
+                        "description": "Order status of service update request."
                     },
                     "serviceChangeRequestProperties": {
                         "type": "object",
@@ -13633,12 +13024,15 @@
                         "description": "parameters sent to the agent."
                     },
                     "status": {
-                        "type": "string",
-                        "description": "status of service change request.",
-                        "enum": ["pending", "processing", "successful", "error"]
+                        "$ref": "#/components/schemas/ServiceChangeStatus",
+                        "description": "status of service change request."
                     }
                 },
                 "required": ["changeHandler", "changeId", "properties", "status"]
+            },
+            "ServiceTemplateRegistrationState": {
+                "type": "string",
+                "enum": ["in-review", "approved", "cancelled", "rejected"]
             },
             "ServiceTemplateDetailVo": {
                 "type": "object",
@@ -13650,61 +13044,44 @@
                     },
                     "name": {
                         "type": "string",
-                        "description": "Name of the registered service."
+                        "description": "Name of the registered service.",
+                        "minLength": 1
                     },
                     "version": {
                         "type": "string",
-                        "description": "Version of the registered service."
+                        "description": "Version of the registered service.",
+                        "minLength": 1
                     },
                     "csp": {
-                        "type": "string",
-                        "description": "Csp of the registered service.",
-                        "enum": [
-                            "HuaweiCloud",
-                            "FlexibleEngine",
-                            "OpenstackTestlab",
-                            "PlusServer",
-                            "RegioCloud",
-                            "AlibabaCloud",
-                            "aws",
-                            "azure",
-                            "GoogleCloudPlatform"
-                        ]
+                        "$ref": "#/components/schemas/Csp",
+                        "description": "Csp of the registered service."
                     },
                     "category": {
-                        "type": "string",
-                        "description": "Category of the registered service.",
-                        "enum": [
-                            "ai",
-                            "compute",
-                            "container",
-                            "storage",
-                            "network",
-                            "database",
-                            "mediaService",
-                            "security",
-                            "middleware",
-                            "others"
-                        ]
+                        "$ref": "#/components/schemas/Category",
+                        "description": "Category of the registered service."
                     },
                     "serviceVendor": {
                         "type": "string",
-                        "description": "ServiceVendor of the user who registered service template."
+                        "description": "ServiceVendor of the user who registered service template.",
+                        "minLength": 1
                     },
                     "regions": {
                         "type": "array",
                         "description": "The regions of the Cloud Service Provider.",
                         "items": {
                             "$ref": "#/components/schemas/Region"
-                        }
+                        },
+                        "minItems": 1
                     },
                     "description": {
                         "type": "string",
-                        "description": "The description of the registered service."
+                        "description": "The description of the registered service.",
+                        "minLength": 1
                     },
                     "icon": {
                         "type": "string",
-                        "description": "The icon of the registered service."
+                        "description": "The icon of the registered service.",
+                        "minLength": 1
                     },
                     "deployment": {
                         "$ref": "#/components/schemas/Deployment",
@@ -13719,9 +13096,8 @@
                         "description": "The billing policy of the registered service."
                     },
                     "serviceHostingType": {
-                        "type": "string",
-                        "description": "Defines which cloud service account is used for deploying cloud resources.",
-                        "enum": ["self", "service-vendor"]
+                        "$ref": "#/components/schemas/ServiceHostingType",
+                        "description": "Defines which cloud service account is used for deploying cloud resources."
                     },
                     "createdTime": {
                         "type": "string",
@@ -13734,9 +13110,8 @@
                         "description": "Last updateTime of the registered service."
                     },
                     "serviceTemplateRegistrationState": {
-                        "type": "string",
-                        "description": "Registration state of service template.",
-                        "enum": ["in-review", "approved", "cancelled", "rejected"]
+                        "$ref": "#/components/schemas/ServiceTemplateRegistrationState",
+                        "description": "Registration state of service template."
                     },
                     "isReviewInProgress": {
                         "type": "boolean",
@@ -13801,6 +13176,14 @@
                     "version"
                 ]
             },
+            "ServiceTemplateRequestType": {
+                "type": "string",
+                "enum": ["register", "update", "unpublish", "republish"]
+            },
+            "ServiceTemplateRequestStatus": {
+                "type": "string",
+                "enum": ["in-review", "accepted", "rejected", "cancelled"]
+            },
             "ServiceTemplateRequestHistory": {
                 "type": "object",
                 "properties": {
@@ -13815,14 +13198,12 @@
                         "description": "ID of the request history of the service template."
                     },
                     "requestType": {
-                        "type": "string",
-                        "description": "Type of the request.",
-                        "enum": ["register", "update", "unpublish", "republish"]
+                        "$ref": "#/components/schemas/ServiceTemplateRequestType",
+                        "description": "Type of the request."
                     },
                     "requestStatus": {
-                        "type": "string",
-                        "description": "Status of the request.",
-                        "enum": ["in-review", "accepted", "rejected", "cancelled"]
+                        "$ref": "#/components/schemas/ServiceTemplateRequestStatus",
+                        "description": "Status of the request."
                     },
                     "reviewComment": {
                         "type": "string",
@@ -13863,9 +13244,8 @@
                         "description": "The name of the flavor."
                     },
                     "billingMode": {
-                        "type": "string",
-                        "description": "The billing mode of the price.",
-                        "enum": ["Fixed", "Pay per Use"]
+                        "$ref": "#/components/schemas/BillingMode",
+                        "description": "The billing mode of the price."
                     },
                     "recurringPrice": {
                         "$ref": "#/components/schemas/Price",
@@ -13885,6 +13265,10 @@
                 },
                 "required": ["billingMode", "flavorName"]
             },
+            "MonitorResourceType": {
+                "type": "string",
+                "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
+            },
             "Metric": {
                 "type": "object",
                 "properties": {
@@ -13897,19 +13281,16 @@
                         "description": "The description of the metric."
                     },
                     "type": {
-                        "type": "string",
-                        "description": "The type of the metric.",
-                        "enum": ["counter", "gauge", "histogram", "summary"]
+                        "$ref": "#/components/schemas/MetricType",
+                        "description": "The type of the metric."
                     },
                     "monitorResourceType": {
-                        "type": "string",
-                        "description": "The resource type of the metric.",
-                        "enum": ["cpu", "mem", "vm_network_incoming", "vm_network_outgoing"]
+                        "$ref": "#/components/schemas/MonitorResourceType",
+                        "description": "The resource type of the metric."
                     },
                     "unit": {
-                        "type": "string",
-                        "description": "The unit of the metric.",
-                        "enum": ["mb", "kb", "percentage", "bit/s", "Byte/s"]
+                        "$ref": "#/components/schemas/MetricUnit",
+                        "description": "The unit of the metric."
                     },
                     "labels": {
                         "type": "object",
@@ -13939,9 +13320,8 @@
                         "description": "The labels for the MetricItem."
                     },
                     "type": {
-                        "type": "string",
-                        "description": "Type of the MetricItem.",
-                        "enum": ["value", "count", "sum"]
+                        "$ref": "#/components/schemas/MetricItemType",
+                        "description": "Type of the MetricItem."
                     },
                     "timeStamp": {
                         "type": "integer",
@@ -13955,13 +13335,24 @@
                 },
                 "required": ["timeStamp", "type", "value"]
             },
+            "MetricItemType": {
+                "type": "string",
+                "enum": ["value", "count", "sum"]
+            },
+            "MetricType": {
+                "type": "string",
+                "enum": ["counter", "gauge", "histogram", "summary"]
+            },
+            "MetricUnit": {
+                "type": "string",
+                "enum": ["mb", "kb", "percentage", "bit/s", "Byte/s"]
+            },
             "SystemStatus": {
                 "type": "object",
                 "properties": {
                     "healthStatus": {
-                        "type": "string",
-                        "description": "The health status of Xpanse api service.",
-                        "enum": ["OK", "NOK"]
+                        "$ref": "#/components/schemas/HealthStatus",
+                        "description": "The health status of Xpanse api service."
                     }
                 },
                 "required": ["healthStatus"]
@@ -13980,9 +13371,8 @@
                         "description": "ID of the request history of the service template."
                     },
                     "requestType": {
-                        "type": "string",
-                        "description": "Type of the request.",
-                        "enum": ["register", "update", "unpublish", "republish"]
+                        "$ref": "#/components/schemas/ServiceTemplateRequestType",
+                        "description": "Type of the request."
                     },
                     "ocl": {
                         "$ref": "#/components/schemas/Ocl",
@@ -14061,8 +13451,8 @@
                 "type": "oauth2",
                 "flows": {
                     "authorizationCode": {
-                        "authorizationUrl": "http://localhost:8088/oauth/v2/authorize",
-                        "tokenUrl": "http://localhost:8088/oauth/v2/token",
+                        "authorizationUrl": "https://xpanse-demo.eclipseprojects.io/oauth/v2/authorize",
+                        "tokenUrl": "https://xpanse-demo.eclipseprojects.io/oauth/v2/token",
                         "scopes": {
                             "urn:zitadel:iam:org:project:roles": "mandatory must be selected.",
                             "openid": "mandatory must be selected.",

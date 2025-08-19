@@ -8,7 +8,11 @@ import { Alert, Button, Modal, Skeleton, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React, { useState } from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import { ServiceTemplateRequestHistory } from '../../../../../xpanse-api/generated';
+import {
+    ServiceTemplateRequestHistory,
+    ServiceTemplateRequestStatus,
+    ServiceTemplateRequestType,
+} from '../../../../../xpanse-api/generated';
 import { isHandleKnownErrorResponse } from '../../../common/error/isHandleKnownErrorResponse';
 import DisplayOclData from '../../../common/ocl/DisplayOclData';
 import useRequestedServiceTemplateQuery from './useRequestedServiceTemplateQuery';
@@ -29,11 +33,11 @@ function ServiceTemplateHistoryTable({ data }: { data: ServiceTemplateRequestHis
             dataIndex: 'requestType',
             align: 'center',
             render: (_text, record) => {
-                if (record.requestType === 'register') {
+                if (record.requestType === ServiceTemplateRequestType.REGISTER) {
                     return <Tag color='default'>{record.requestType}</Tag>;
-                } else if (record.requestType === 'republish') {
+                } else if (record.requestType === ServiceTemplateRequestType.REPUBLISH) {
                     return <Tag color='success'>{record.requestType}</Tag>;
-                } else if (record.requestType === 'unpublish') {
+                } else if (record.requestType === ServiceTemplateRequestType.UNPUBLISH) {
                     return <Tag color='error'>{record.requestType}</Tag>;
                 } else {
                     return <Tag color='processing'>{record.requestType}</Tag>;
@@ -45,11 +49,11 @@ function ServiceTemplateHistoryTable({ data }: { data: ServiceTemplateRequestHis
             dataIndex: 'requestStatus',
             align: 'center',
             render: (_text, record) => {
-                if (record.requestStatus === 'in-review') {
+                if (record.requestStatus === ServiceTemplateRequestStatus.IN_REVIEW) {
                     return <Tag color='#ffa366'>{record.requestStatus}</Tag>;
-                } else if (record.requestStatus === 'accepted') {
+                } else if (record.requestStatus === ServiceTemplateRequestStatus.ACCEPTED) {
                     return <Tag color='#87d068'>{record.requestStatus}</Tag>;
-                } else if (record.requestStatus === 'rejected') {
+                } else if (record.requestStatus === ServiceTemplateRequestStatus.REJECTED) {
                     return <Tag color='#ff6666'>{record.requestStatus}</Tag>;
                 } else {
                     return <Tag color='default'>{record.requestStatus}</Tag>;
@@ -115,7 +119,7 @@ function ServiceTemplateHistoryTable({ data }: { data: ServiceTemplateRequestHis
                 >
                     <Skeleton active />
                 </Modal>
-            ) : requestedServiceTemplateQuery.isSuccess ? (
+            ) : requestedServiceTemplateQuery.isSuccess && requestedServiceTemplateQuery.data ? (
                 <Modal
                     title={'Requested Service Template'}
                     width={1600}

@@ -8,7 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../../styles/deployment-variables.module.css';
-import { deployResourceKind, sensitiveScope, ServiceChangeParameter } from '../../../../xpanse-api/generated';
+import { DeployResourceKind, SensitiveScope, ServiceChangeParameter } from '../../../../xpanse-api/generated';
 
 function ServiceChangeParameters({
     parameters,
@@ -114,7 +114,7 @@ function ServiceChangeParameters({
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>SensitiveScope</div>,
             dataIndex: 'sensitiveScope',
-            render: (text: sensitiveScope) => {
+            render: (text: SensitiveScope) => {
                 return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
             },
         },
@@ -130,7 +130,7 @@ function ServiceChangeParameters({
                     ),
                     dataIndex: ['autoFill', 'deployResourceKind'],
                     key: 'deployResourceKind',
-                    render: (text: deployResourceKind) => {
+                    render: (text: DeployResourceKind) => {
                         return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
                     },
                 },

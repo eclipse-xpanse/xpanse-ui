@@ -7,15 +7,15 @@ import { CheckCircleOutlined, CloseCircleOutlined, ExclamationCircleOutlined, Sy
 import { Tag } from 'antd';
 import React from 'react';
 import serviceReviewStyles from '../../../../styles/service-review.module.css';
-import { serviceTemplateRegistrationState } from '../../../../xpanse-api/generated';
+import { ServiceTemplateRegistrationState } from '../../../../xpanse-api/generated';
 
 export function ServiceTemplateRegisterStatus({
-    serviceRegistrationStatus,
+    serviceTemplateRegistrationState,
 }: {
-    serviceRegistrationStatus: serviceTemplateRegistrationState;
+    serviceTemplateRegistrationState: ServiceTemplateRegistrationState;
 }): React.JSX.Element {
-    switch (serviceRegistrationStatus) {
-        case serviceTemplateRegistrationState.IN_REVIEW:
+    switch (serviceTemplateRegistrationState) {
+        case ServiceTemplateRegistrationState.IN_REVIEW:
             return (
                 <Tag
                     bordered={false}
@@ -23,10 +23,10 @@ export function ServiceTemplateRegisterStatus({
                     color='#ffa366'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
-                    {serviceRegistrationStatus.valueOf()}
+                    {serviceTemplateRegistrationState.valueOf()}
                 </Tag>
             );
-        case serviceTemplateRegistrationState.REJECTED:
+        case ServiceTemplateRegistrationState.REJECTED:
             return (
                 <Tag
                     bordered={false}
@@ -34,10 +34,10 @@ export function ServiceTemplateRegisterStatus({
                     color='#ff6666'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
-                    {serviceRegistrationStatus.valueOf()}
+                    {serviceTemplateRegistrationState.valueOf()}
                 </Tag>
             );
-        case serviceTemplateRegistrationState.APPROVED:
+        case ServiceTemplateRegistrationState.APPROVED:
             return (
                 <Tag
                     bordered={false}
@@ -45,7 +45,7 @@ export function ServiceTemplateRegisterStatus({
                     color='#87d068'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
-                    {serviceRegistrationStatus.valueOf()}
+                    {serviceTemplateRegistrationState.valueOf()}
                 </Tag>
             );
         default:
@@ -56,7 +56,7 @@ export function ServiceTemplateRegisterStatus({
                     color='default'
                     className={serviceReviewStyles.serviceTemplateStateSize}
                 >
-                    {serviceRegistrationStatus as unknown as string}
+                    {serviceTemplateRegistrationState as unknown as string}
                 </Tag>
             );
     }

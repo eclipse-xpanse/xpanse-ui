@@ -9,7 +9,7 @@ import { DataNode } from 'antd/es/tree';
 import React, { useMemo, useState } from 'react';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import servicesEmptyStyles from '../../../../../styles/services-empty.module.css';
-import { category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
+import { Category, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { serviceDetailsErrorText } from '../../../../utils/constants.tsx';
 import {
     groupServicesByVersionForSpecificServiceName,
@@ -20,7 +20,7 @@ import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
 import { useAvailableServiceTemplatesQuery } from '../query/useAvailableServiceTemplatesQuery';
 import { CatalogFullView } from './CatalogFullView';
 
-function CategoryCatalog({ category }: { category: category }): React.JSX.Element {
+function CategoryCatalog({ category }: { category: Category }): React.JSX.Element {
     const availableServiceTemplatesQuery = useAvailableServiceTemplatesQuery(category);
     const [serviceTemplateAction, setServiceTemplateAction] = useState<ServiceTemplateAction>(
         ServiceTemplateAction.NOOP
@@ -29,7 +29,11 @@ function CategoryCatalog({ category }: { category: category }): React.JSX.Elemen
     // Process data conditionally, but don't return yet
     const categoryOclData: Map<string, ServiceTemplateDetailVo[]> = useMemo(() => {
         let categoryOclData: Map<string, ServiceTemplateDetailVo[]> = new Map<string, ServiceTemplateDetailVo[]>();
-        if (availableServiceTemplatesQuery.isSuccess && availableServiceTemplatesQuery.data.length > 0) {
+        if (
+            availableServiceTemplatesQuery.isSuccess &&
+            availableServiceTemplatesQuery.data &&
+            availableServiceTemplatesQuery.data.length > 0
+        ) {
             const userAvailableServiceList: ServiceTemplateDetailVo[] = availableServiceTemplatesQuery.data;
             categoryOclData = groupServiceTemplatesByName(userAvailableServiceList);
         }

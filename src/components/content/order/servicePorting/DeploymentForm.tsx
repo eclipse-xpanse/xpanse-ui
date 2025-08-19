@@ -10,12 +10,12 @@ import appStyles from '../../../../styles/app.module.css';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import tableStyles from '../../../../styles/table.module.css';
 import {
+    BillingMode,
+    Csp,
     DeployRequest,
     Region,
+    ServiceHostingType,
     UserOrderableServiceVo,
-    billingMode,
-    csp,
-    serviceHostingType,
 } from '../../../../xpanse-api/generated';
 import { CUSTOMER_SERVICE_NAME_FIELD } from '../../../utils/constants';
 import { ApiDoc } from '../../common/doc/ApiDoc';
@@ -39,12 +39,12 @@ export const DeploymentForm = ({
     stepItem,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
-    selectCsp: csp;
-    selectServiceHostingType: serviceHostingType;
+    selectCsp: Csp;
+    selectServiceHostingType: ServiceHostingType;
     region: Region;
     availabilityZones: Record<string, string>;
     selectFlavor: string;
-    selectBillingMode: billingMode;
+    selectBillingMode: BillingMode;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
     stepItem: StepProps;

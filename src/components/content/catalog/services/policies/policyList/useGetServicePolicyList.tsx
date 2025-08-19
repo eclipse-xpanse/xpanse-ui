@@ -4,16 +4,19 @@
  */
 
 import { useQuery } from '@tanstack/react-query';
-import { getAllServicePolicies, type GetAllServicePoliciesData } from '../../../../../../xpanse-api/generated';
+import { getAllServicePolicies, GetAllServicePoliciesData, Options } from '../../../../../../xpanse-api/generated';
 
 export const useGetServicePolicyList = (serviceTemplateId: string) => {
     return useQuery({
         queryKey: ['listServicePolicies', serviceTemplateId],
-        queryFn: () => {
-            const data: GetAllServicePoliciesData = {
-                serviceTemplateId: serviceTemplateId,
+        queryFn: async () => {
+            const request: Options<GetAllServicePoliciesData> = {
+                query: {
+                    serviceTemplateId: serviceTemplateId,
+                },
             };
-            return getAllServicePolicies(data);
+            const response = await getAllServicePolicies(request);
+            return response.data;
         },
         refetchOnWindowFocus: false,
         enabled: serviceTemplateId.length > 0,

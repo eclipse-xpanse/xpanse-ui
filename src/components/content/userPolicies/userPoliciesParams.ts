@@ -4,7 +4,7 @@
  */
 
 import { ColumnFilterItem } from 'antd/es/table/interface';
-import { csp } from '../../../xpanse-api/generated';
+import { Csp } from '../../../xpanse-api/generated';
 
 export const policiesStatuses: boolean[] = [true, false];
 
@@ -12,7 +12,7 @@ export type PolicyUploadFileStatus = 'notStarted' | 'inProgress' | 'completed' |
 
 export const updateCspFilters = (): ColumnFilterItem[] => {
     const filters: ColumnFilterItem[] = [];
-    Object.values(csp).forEach((csp) => {
+    Object.values(Csp).forEach((csp) => {
         const filter = {
             text: csp,
             value: csp,

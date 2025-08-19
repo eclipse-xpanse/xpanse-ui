@@ -9,14 +9,7 @@ import React from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
-import {
-    category,
-    csp,
-    DeployedService,
-    serviceDeploymentState,
-    ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
-} from '../../../../../xpanse-api/generated';
+import { DeployedService, ServiceDeploymentState, ServiceTemplateDetailVo } from '../../../../../xpanse-api/generated';
 import { useCurrentUserRoleStore } from '../../../../layouts/header/useCurrentRoleStore';
 import { reportsRoute } from '../../../../utils/constants';
 import { ServiceTemplateRegisterStatus } from '../../../common/catalog/ServiceTemplateRegisterStatus.tsx';
@@ -39,19 +32,19 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
     const navigate = useNavigate();
     let numberOfActiveServiceDeployments: number = 0;
     const listDeployedServicesByIsvQuery = useDeployedServicesQuery(
-        serviceDetails.category as category,
-        serviceDetails.csp as csp,
+        serviceDetails.category,
+        serviceDetails.csp,
         serviceDetails.name,
         serviceDetails.version
     );
 
-    if (listDeployedServicesByIsvQuery.data !== undefined && listDeployedServicesByIsvQuery.data.length > 0) {
+    if (listDeployedServicesByIsvQuery.data && listDeployedServicesByIsvQuery.data.length > 0) {
         listDeployedServicesByIsvQuery.data.forEach((serviceItem: DeployedService) => {
             if (
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.DESTROY_FAILED ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_SUCCESSFUL ||
-                serviceItem.serviceDeploymentState === serviceDeploymentState.MODIFICATION_FAILED
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DEPLOYMENT_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.DESTROY_FAILED ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_SUCCESSFUL ||
+                serviceItem.serviceDeploymentState === ServiceDeploymentState.MODIFICATION_FAILED
             ) {
                 numberOfActiveServiceDeployments++;
             }
@@ -104,9 +97,7 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 <Descriptions.Item label='Update Time'>{serviceDetails.lastModifiedTime}</Descriptions.Item>
                 <Descriptions.Item label='Registration Status'>
                     <ServiceTemplateRegisterStatus
-                        serviceRegistrationStatus={
-                            serviceDetails.serviceTemplateRegistrationState as serviceTemplateRegistrationState
-                        }
+                        serviceTemplateRegistrationState={serviceDetails.serviceTemplateRegistrationState}
                     />
                 </Descriptions.Item>
                 <Descriptions.Item label='Credential Type'>

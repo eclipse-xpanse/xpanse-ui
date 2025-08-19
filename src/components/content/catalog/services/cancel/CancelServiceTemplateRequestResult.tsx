@@ -6,11 +6,7 @@
 import { UseMutationResult, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'antd';
 import React from 'react';
-import {
-    category,
-    ServiceTemplateDetailVo,
-    serviceTemplateRegistrationState,
-} from '../../../../../xpanse-api/generated';
+import { Category, ServiceTemplateDetailVo, ServiceTemplateRequestStatus } from '../../../../../xpanse-api/generated';
 import { cancelServiceTemplateReviewErrorText } from '../../../../utils/constants.tsx';
 import RetryPrompt from '../../../common/error/RetryPrompt.tsx';
 import { ServiceTemplateAction } from '../details/serviceTemplateAction.tsx';
@@ -26,8 +22,8 @@ export function CancelServiceTemplateRequestResult({
     setServiceTemplateAction,
 }: {
     serviceDetail: ServiceTemplateDetailVo;
-    category: category;
-    cancelServiceTemplateRequest: UseMutationResult<void, Error, string>;
+    category: Category;
+    cancelServiceTemplateRequest: UseMutationResult<void | undefined, Error, string>;
     onClose: () => void;
     serviceTemplateAction: ServiceTemplateAction;
     setServiceTemplateAction: (componentName: ServiceTemplateAction) => void;
@@ -36,12 +32,16 @@ export function CancelServiceTemplateRequestResult({
 
     const serviceTemplateHistoryQuery = useServiceTemplateHistoryQuery(
         serviceDetail.serviceTemplateId,
-        serviceTemplateRegistrationState.IN_REVIEW,
+        ServiceTemplateRequestStatus.IN_REVIEW,
         undefined
     );
 
     let requestId: string | undefined = undefined;
-    if (serviceTemplateHistoryQuery.isSuccess && serviceTemplateHistoryQuery.data.length > 0) {
+    if (
+        serviceTemplateHistoryQuery.isSuccess &&
+        serviceTemplateHistoryQuery.data &&
+        serviceTemplateHistoryQuery.data.length > 0
+    ) {
         requestId = serviceTemplateHistoryQuery.data.reduce((latest, current) => {
             return new Date(current.createdTime) > new Date(latest.createdTime) ? current : latest;
         }).requestId;

@@ -4,15 +4,18 @@
  */
 
 import { useMutation } from '@tanstack/react-query';
-import { destroy, type DestroyData } from '../../../../xpanse-api/generated';
+import { destroy, DestroyData, Options } from '../../../../xpanse-api/generated';
 
 export function useDestroyRequestSubmitQuery() {
     return useMutation({
-        mutationFn: (id: string) => {
-            const data: DestroyData = {
-                serviceId: id,
+        mutationFn: async (id: string) => {
+            const request: Options<DestroyData> = {
+                path: {
+                    serviceId: id,
+                },
             };
-            return destroy(data);
+            const response = await destroy(request);
+            return response.data;
         },
     });
 }

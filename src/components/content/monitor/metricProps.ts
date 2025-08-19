@@ -3,7 +3,7 @@
  * SPDX-FileCopyrightText: Huawei Inc.
  */
 
-import { Metric, monitorResourceType, unit } from '../../../xpanse-api/generated';
+import { Metric, MetricUnit, MonitorResourceType } from '../../../xpanse-api/generated';
 
 export interface MetricProps {
     id: string;
@@ -14,7 +14,8 @@ export interface MetricProps {
 
     vmName: string;
 
-    unit: unit;
+    unit: MetricUnit;
+
     timeStamp: number;
 }
 
@@ -112,10 +113,10 @@ export const getOptionData = (metricProps: MetricProps[], currentTime: Date | un
 };
 
 export const MonitorTypeList: string[] = [
-    monitorResourceType.CPU.valueOf(),
-    monitorResourceType.MEM.valueOf(),
-    monitorResourceType.VM_NETWORK_INCOMING.valueOf(),
-    monitorResourceType.VM_NETWORK_OUTGOING.valueOf(),
+    MonitorResourceType.CPU.valueOf(),
+    MonitorResourceType.MEM.valueOf(),
+    MonitorResourceType.VM_NETWORK_INCOMING.valueOf(),
+    MonitorResourceType.VM_NETWORK_OUTGOING.valueOf(),
 ];
 
 export const getMetricRequestParams = (totalSeconds: number): MetricRequestParams => {
@@ -149,7 +150,7 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                     name: metric.name,
                     vmName: labelsMap.get('name') ?? '',
                     value: item.value,
-                    unit: metric.unit as unit,
+                    unit: metric.unit,
                     timeStamp: item.timeStamp,
                 };
                 metricProps.push(metricProp);
@@ -160,7 +161,7 @@ export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] =>
                 name: metric.name,
                 vmName: labelsMap.get('name') ?? '',
                 value: 0,
-                unit: metric.unit as unit,
+                unit: metric.unit,
                 timeStamp: new Date().getTime(),
             };
             metricProps.push(metricProp);

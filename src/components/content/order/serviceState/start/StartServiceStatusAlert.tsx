@@ -8,8 +8,8 @@ import React, { useMemo } from 'react';
 import {
     DeployedService,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -28,9 +28,9 @@ function StartServiceStatusAlert({
     serviceProviderContactDetails,
 }: {
     deployedService: DeployedService;
-    serviceStateStartQuery: UseMutationResult<ServiceOrder, Error, string>;
+    serviceStateStartQuery: UseMutationResult<ServiceOrder | undefined, Error, string>;
     closeStartResultAlert: (arg: boolean) => void;
-    getStartServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+    getStartServiceDetailsQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
 }): React.JSX.Element {
     const onClose = () => {
@@ -52,26 +52,26 @@ function StartServiceStatusAlert({
         } else if (serviceStateStartQuery.isSuccess) {
             if (
                 getStartServiceDetailsQuery.isSuccess &&
-                (getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString() ||
-                    getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString())
+                (getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
                         operationType={OperationType.Start}
                         serviceOrderStatus={getStartServiceDetailsQuery.data}
                         serviceId={deployedService.serviceId}
-                        selectedServiceHostingType={deployedService.serviceHostingType as serviceHostingType}
+                        selectedServiceHostingType={deployedService.serviceHostingType}
                     />
                 );
             } else if (getStartServiceDetailsQuery.isError) {
-                if (deployedService.serviceHostingType === serviceHostingType.SERVICE_VENDOR) {
+                if (deployedService.serviceHostingType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Service start status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Service start status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getStartServiceDetailsQuery.isPending ||
-                getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Starting, Please wait...';
             }
@@ -97,17 +97,17 @@ function StartServiceStatusAlert({
         } else if (serviceStateStartQuery.isSuccess) {
             if (
                 getStartServiceDetailsQuery.isSuccess &&
-                getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 return 'error';
             } else if (
                 getStartServiceDetailsQuery.isSuccess &&
-                getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 return 'success';
             } else if (
                 getStartServiceDetailsQuery.isPending ||
-                getStartServiceDetailsQuery.data.orderStatus.toString() === orderStatus.IN_PROGRESS.toString()
+                getStartServiceDetailsQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -125,7 +125,7 @@ function StartServiceStatusAlert({
     }
 
     const getOrderId = (): string => {
-        if (serviceStateStartQuery.isSuccess) {
+        if (serviceStateStartQuery.isSuccess && serviceStateStartQuery.data) {
             return serviceStateStartQuery.data.orderId;
         } else {
             if (

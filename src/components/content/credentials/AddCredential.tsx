@@ -13,16 +13,12 @@ import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 
 import {
     addIsvCloudCredential,
-    AddIsvCloudCredentialData,
     addUserCloudCredential,
-    AddUserCloudCredentialData,
     CreateCredential,
-    credentialType,
+    CredentialType,
     CredentialVariable,
     CredentialVariables,
-    csp,
-    name,
-    type,
+    Csp,
 } from '../../../xpanse-api/generated';
 import { cspMap } from '../common/csp/CspLogo';
 import { CredentialApiDoc } from './CredentialApiDoc';
@@ -36,16 +32,16 @@ import { useSitesOfCspQuery } from './query/useSitesOfCspQuery.tsx';
 
 function AddCredential({ role, onCancel }: { role: string | undefined; onCancel: () => void }): React.JSX.Element {
     const [form] = Form.useForm();
-    const [currentCsp, setCurrentCsp] = useState<csp | undefined>(undefined);
+    const [currentCsp, setCurrentCsp] = useState<Csp | undefined>(undefined);
     const [siteDisabled, setSiteDisabled] = useState<boolean>(true);
     const [typeDisabled, setTypeDisabled] = useState<boolean>(true);
     const [nameDisable, setNameDisable] = useState<boolean>(true);
     const [currentSite, setCurrentSite] = useState<string | undefined>(undefined);
-    const [currentType, setCurrentType] = useState<credentialType | undefined>(undefined);
+    const [currentType, setCurrentType] = useState<CredentialType | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
-    const activeCspList = useRef<csp[]>([]);
+    const activeCspList = useRef<Csp[]>([]);
     const siteList = useRef<string[]>([]);
-    const credentialTypeList = useRef<type[]>([]);
+    const credentialTypeList = useRef<CredentialType[]>([]);
     const nameList = useRef<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const credentialsQuery = useCredentialsListQuery();
@@ -56,21 +52,21 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const getCredentialTypesQuery = useCredentialTypesQuery(currentCsp);
 
-    if (getSitesQuery.isSuccess) {
-        siteList.current = getSitesQuery.data as string[];
+    if (getSitesQuery.isSuccess && getSitesQuery.data) {
+        siteList.current = getSitesQuery.data;
     }
 
-    if (getCredentialTypesQuery.isSuccess) {
-        credentialTypeList.current = getCredentialTypesQuery.data as type[];
+    if (getCredentialTypesQuery.isSuccess && getCredentialTypesQuery.data) {
+        credentialTypeList.current = getCredentialTypesQuery.data;
     }
 
-    if (getActiveCspsQuery.isSuccess) {
-        activeCspList.current = getActiveCspsQuery.data as csp[];
+    if (getActiveCspsQuery.isSuccess && getActiveCspsQuery.data) {
+        activeCspList.current = getActiveCspsQuery.data;
     }
 
     const credentialCapabilitiesQuery = useCredentialCapabilitiesQuery(currentCsp, currentType);
 
-    if (credentialCapabilitiesQuery.isSuccess) {
+    if (credentialCapabilitiesQuery.isSuccess && credentialCapabilitiesQuery.data) {
         const credentials = credentialCapabilitiesQuery.data;
         const names: string[] = [];
         if (credentials.length > 0) {
@@ -93,15 +89,13 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const addCredentialByRole = useCallback(
         (createCredential: CreateCredential) => {
             if (role === 'user') {
-                const data: AddUserCloudCredentialData = {
-                    requestBody: createCredential,
-                };
-                return addUserCloudCredential(data);
+                return addUserCloudCredential({
+                    body: createCredential,
+                });
             } else {
-                const data: AddIsvCloudCredentialData = {
-                    requestBody: createCredential,
-                };
-                return addIsvCloudCredential(data);
+                return addIsvCloudCredential({
+                    body: createCredential,
+                });
             }
         },
         [role]
@@ -133,7 +127,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     }, [currentCsp, currentSite, currentName, currentType, form, credentialCapabilitiesQuery.data]);
 
     const handleCspSelect = useCallback(
-        (cspName: csp) => {
+        (cspName: Csp) => {
             setCurrentCsp(cspName);
 
             setSiteDisabled(false);
@@ -164,7 +158,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     );
 
     const handleCredentialTypeSelect = useCallback(
-        (type: credentialType) => {
+        (type: CredentialType) => {
             setCurrentType(type);
 
             setNameDisable(false);
@@ -333,7 +327,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             {currentCsp ? (
                 <CredentialApiDoc
                     csp={currentCsp}
-                    credentialType={currentType ?? credentialType.VARIABLES}
+                    credentialType={currentType ?? CredentialType.VARIABLES}
                     styleClass={credentialStyles.addCredentialApiDoc}
                 />
             ) : undefined}
@@ -363,14 +357,14 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
-                            {activeCspList.current.map((csp: csp) => {
+                            {activeCspList.current.map((csp: Csp) => {
                                 return (
                                     <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
                                         <Image
                                             className={credentialStyles.customSelect}
                                             width={100}
                                             preview={false}
-                                            src={cspMap.get(csp.valueOf() as name)?.logo}
+                                            src={cspMap.get(csp)?.logo}
                                         />
                                     </Select.Option>
                                 );
@@ -412,7 +406,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
                         >
-                            {credentialTypeList.current.map((type: type) => {
+                            {credentialTypeList.current.map((type: CredentialType) => {
                                 return (
                                     <Select.Option key={type} value={type}>
                                         {type}

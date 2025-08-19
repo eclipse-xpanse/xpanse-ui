@@ -9,8 +9,8 @@ import { useStopwatch } from 'react-timer-hook';
 import {
     DeployRequest,
     ErrorResponse,
-    orderStatus,
-    serviceHostingType,
+    OrderStatus,
+    ServiceHostingType,
     ServiceOrder,
     ServiceOrderStatusUpdate,
     ServiceProviderContactDetails,
@@ -32,12 +32,12 @@ function OrderSubmitStatusAlert({
     onClose,
 }: {
     serviceId: string;
-    serviceHostType: serviceHostingType;
+    serviceHostType: ServiceHostingType;
     submitDeploymentRequest:
-        | UseMutationResult<ServiceOrder, Error, DeployRequest>
-        | UseMutationResult<ServiceOrder, Error, string>;
-    redeployFailedDeploymentQuery: UseMutationResult<ServiceOrder, Error, string>;
-    getSubmitLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate>;
+        | UseMutationResult<ServiceOrder | undefined, Error, DeployRequest>
+        | UseMutationResult<ServiceOrder | undefined, Error, string>;
+    redeployFailedDeploymentQuery: UseMutationResult<ServiceOrder | undefined, Error, string>;
+    getSubmitLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
     retryRequest: () => void;
     onClose: () => void;
@@ -69,10 +69,8 @@ function OrderSubmitStatusAlert({
         } else if (submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess) {
             if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                (getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.SUCCESSFUL.toString() ||
-                    getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                        orderStatus.FAILED.toString())
+                (getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL ||
+                    getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED)
             ) {
                 return (
                     <OrderProcessingStatus
@@ -83,15 +81,14 @@ function OrderSubmitStatusAlert({
                     />
                 );
             } else if (getSubmitLatestServiceOrderStatusQuery.isError) {
-                if (serviceHostType === serviceHostingType.SERVICE_VENDOR) {
+                if (serviceHostType === ServiceHostingType.SERVICE_VENDOR) {
                     return 'Deployment status polling failed. Please visit MyServices page to check the status of the request and contact service vendor for error details.';
                 } else {
                     return 'Deployment status polling failed. Please visit MyServices page to check the status of the request';
                 }
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'Deploying, Please wait...';
             }
@@ -128,7 +125,7 @@ function OrderSubmitStatusAlert({
         } else if (submitDeploymentRequest.isSuccess || redeployFailedDeploymentQuery.isSuccess) {
             if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.FAILED.toString()
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.FAILED
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -136,7 +133,7 @@ function OrderSubmitStatusAlert({
                 return 'error';
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isSuccess &&
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() === orderStatus.SUCCESSFUL.toString()
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.SUCCESSFUL
             ) {
                 if (stopWatch.isRunning) {
                     stopWatch.pause();
@@ -144,8 +141,7 @@ function OrderSubmitStatusAlert({
                 return 'success';
             } else if (
                 getSubmitLatestServiceOrderStatusQuery.isPending ||
-                getSubmitLatestServiceOrderStatusQuery.data.orderStatus.toString() ===
-                    orderStatus.IN_PROGRESS.toString()
+                getSubmitLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
                 return 'success';
             }
@@ -163,7 +159,7 @@ function OrderSubmitStatusAlert({
     }
 
     const getServiceId = (): string => {
-        if (submitDeploymentRequest.isSuccess) {
+        if (submitDeploymentRequest.isSuccess && submitDeploymentRequest.data) {
             return submitDeploymentRequest.data.serviceId;
         } else {
             if (
@@ -178,10 +174,10 @@ function OrderSubmitStatusAlert({
     };
 
     const getOrderId = (): string => {
-        if (submitDeploymentRequest.isSuccess) {
+        if (submitDeploymentRequest.isSuccess && submitDeploymentRequest.data) {
             return submitDeploymentRequest.data.orderId;
         }
-        if (redeployFailedDeploymentQuery.isSuccess) {
+        if (redeployFailedDeploymentQuery.isSuccess && redeployFailedDeploymentQuery.data) {
             return redeployFailedDeploymentQuery.data.orderId;
         }
 

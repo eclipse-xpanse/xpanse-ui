@@ -5,28 +5,34 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    csp,
-    deployResourceKind,
+    Csp,
+    DeployResourceKind,
     getExistingResourceNamesWithKind,
     GetExistingResourceNamesWithKindData,
+    Options,
 } from '../../../../xpanse-api/generated';
 
 export default function useAutoFillDeployVariableQuery(
-    csp: csp,
+    csp: Csp,
     site: string,
     region: string,
-    kind: deployResourceKind
+    kind: DeployResourceKind
 ) {
     return useQuery({
         queryKey: ['getExistingResourceNamesWithKind', csp, site, kind, region],
-        queryFn: () => {
-            const data: GetExistingResourceNamesWithKindData = {
-                csp: csp,
-                siteName: site,
-                regionName: region,
-                deployResourceKind: kind,
+        queryFn: async () => {
+            const request: Options<GetExistingResourceNamesWithKindData> = {
+                query: {
+                    csp: csp,
+                    siteName: site,
+                    regionName: region,
+                },
+                path: {
+                    deployResourceKind: kind,
+                },
             };
-            return getExistingResourceNamesWithKind(data);
+            const response = await getExistingResourceNamesWithKind(request);
+            return response.data;
         },
         enabled: kind.length > 0,
     });

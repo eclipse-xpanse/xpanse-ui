@@ -8,7 +8,7 @@ import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import catalogStyles from '../../../styles/catalog.module.css';
 import deploymentVariablesStyles from '../../../styles/deployment-variables.module.css';
-import { deployResourceKind, InputVariable, sensitiveScope } from '../../../xpanse-api/generated';
+import { DeployResourceKind, InputVariable, SensitiveScope } from '../../../xpanse-api/generated';
 
 function DeploymentVariables({ variables }: { variables: InputVariable[] | undefined }): React.JSX.Element {
     const columns: ColumnsType<InputVariable> = [
@@ -121,7 +121,7 @@ function DeploymentVariables({ variables }: { variables: InputVariable[] | undef
         {
             title: <div className={deploymentVariablesStyles.variablesColumns}>SensitiveScope</div>,
             dataIndex: 'sensitiveScope',
-            render: (text: sensitiveScope) => {
+            render: (text: SensitiveScope) => {
                 return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
             },
         },
@@ -137,7 +137,7 @@ function DeploymentVariables({ variables }: { variables: InputVariable[] | undef
                     ),
                     dataIndex: ['autoFill', 'deployResourceKind'],
                     key: 'deployResourceKind',
-                    render: (text: deployResourceKind) => {
+                    render: (text: DeployResourceKind) => {
                         return <div className={deploymentVariablesStyles.variablesColumns}>{text}</div>;
                     },
                 },

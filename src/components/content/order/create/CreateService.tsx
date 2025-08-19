@@ -8,7 +8,7 @@ import { Skeleton } from 'antd';
 import React from 'react';
 import { useSearchParams } from 'react-router-dom';
 import catalogStyles from '../../../../styles/catalog.module.css';
-import { category } from '../../../../xpanse-api/generated';
+import { Category } from '../../../../xpanse-api/generated';
 import { serviceAvailableErrorText } from '../../../utils/constants.tsx';
 import RetryPrompt from '../../common/error/RetryPrompt.tsx';
 import userOrderableServicesQuery, { getOrderableServicesQueryKey } from '../query/userOrderableServicesQuery';
@@ -19,16 +19,16 @@ function CreateService(): React.JSX.Element {
     const [urlParams] = useSearchParams();
     const serviceName = decodeURI(urlParams.get('serviceName') ?? '');
     const categoryName = location.hash.split('#')[1];
-    const orderableServicesQuery = userOrderableServicesQuery(categoryName as category, serviceName);
+    const orderableServicesQuery = userOrderableServicesQuery(categoryName as Category, serviceName);
 
     const retryRequest = () => {
         void queryClient.refetchQueries({
-            queryKey: getOrderableServicesQueryKey(categoryName as category, serviceName),
+            queryKey: getOrderableServicesQueryKey(categoryName as Category, serviceName),
         });
     };
 
     if (orderableServicesQuery.isSuccess) {
-        return <SelectServiceForm services={orderableServicesQuery.data} />;
+        return <SelectServiceForm services={orderableServicesQuery.data ?? []} />;
     }
 
     if (orderableServicesQuery.isError) {

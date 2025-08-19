@@ -5,10 +5,10 @@
 
 import { useQuery } from '@tanstack/react-query';
 import {
-    billingMode,
-    FlavorPriceResult,
+    BillingMode,
     getPricesByService,
     GetPricesByServiceData,
+    Options,
     ServiceFlavor,
 } from '../../../../xpanse-api/generated';
 import { getFlavorWithPricesList } from '../formDataHelpers/flavorHelper.ts';
@@ -17,20 +17,22 @@ export default function useGetServicePricesQuery(
     serviceTemplateId: string,
     regionName: string,
     siteName: string,
-    billingMode: string,
+    billingMode: BillingMode,
     flavorList?: ServiceFlavor[]
 ) {
     return useQuery({
         queryKey: ['getServicePricesQuery', serviceTemplateId, regionName, siteName, billingMode, flavorList],
         queryFn: async () => {
-            const data: GetPricesByServiceData = {
-                serviceTemplateId: serviceTemplateId,
-                regionName: regionName,
-                siteName: siteName,
-                billingMode: billingMode as billingMode,
+            const request: Options<GetPricesByServiceData> = {
+                path: {
+                    serviceTemplateId: serviceTemplateId,
+                    regionName: regionName,
+                    siteName: siteName,
+                    billingMode: billingMode,
+                },
             };
-            const prices: FlavorPriceResult[] = await getPricesByService(data);
-            return getFlavorWithPricesList(prices, flavorList);
+            const response = await getPricesByService(request);
+            return getFlavorWithPricesList(response.data ?? [], flavorList);
         },
         enabled: serviceTemplateId.length > 0,
         refetchOnWindowFocus: false,
