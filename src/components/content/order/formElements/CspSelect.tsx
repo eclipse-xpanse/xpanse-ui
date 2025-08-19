@@ -72,7 +72,7 @@ export default function CspSelect({
                                     preview={false}
                                     fallback={
                                         'https://img.shields.io/badge/-' +
-                                        (selectCsp.length === 0 ? '' : selectCsp.toString()) +
+                                        (selectCsp.length === 0 ? '' : selectCsp.valueOf()) +
                                         '-gray'
                                     }
                                 />

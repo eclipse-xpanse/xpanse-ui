@@ -142,7 +142,7 @@ export const DeploymentForm = ({
                                     </Tooltip>
                                 }
                                 onChange={(e) => {
-                                    cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, String(e.target.value));
+                                    cacheFormVariable(CUSTOMER_SERVICE_NAME_FIELD, e.target.value);
                                 }}
                             />
                         </Form.Item>

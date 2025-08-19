@@ -100,7 +100,7 @@ export function RegisteredServicesFullView({
             for (const value of availableServiceList) {
                 if (
                     value.serviceVendor === serviceVendor &&
-                    value.category.toString() === category &&
+                    value.category.valueOf() === category &&
                     value.name === name &&
                     value.version === version
                 ) {

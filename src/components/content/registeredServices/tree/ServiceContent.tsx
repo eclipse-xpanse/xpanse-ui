@@ -84,10 +84,10 @@ function ServiceContent({
         if (availableServiceList.length > 0) {
             for (const value of availableServiceList) {
                 if (
-                    value.category.toString() === serviceCategoryInQuery &&
+                    value.category.valueOf() === serviceCategoryInQuery &&
                     value.name === serviceNameInQuery &&
                     value.version === serviceVersionInQuery &&
-                    value.serviceHostingType.toString() === serviceHostingTypeInQuery
+                    value.serviceHostingType.valueOf() === serviceHostingTypeInQuery
                 ) {
                     activeServiceDetail = value;
                 }
@@ -103,7 +103,7 @@ function ServiceContent({
                 category: selectedServiceCategoryInTree,
                 serviceName: selectedServiceNameInTree,
                 version: selectedServiceVersionInTree,
-                hostingType: serviceTemplateDetailVo.serviceHostingType.toString(),
+                hostingType: serviceTemplateDetailVo.serviceHostingType.valueOf(),
             }).toString(),
         });
     };

@@ -27,7 +27,7 @@ function ServicePolicySubmitResult({
                     <Paragraph
                         className={submitResultStyles.resultMainDetails}
                         copyable={{
-                            text: String(uuid),
+                            text: uuid,
                             icon: [
                                 <CopyOutlined
                                     className={submitResultStyles.showDetailsTypographyCopy}

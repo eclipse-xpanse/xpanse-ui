@@ -99,7 +99,7 @@ export const getOptionData = (metricProps: MetricProps[], currentTime: Date | un
             }
         });
 
-        newCurrentTime.setSeconds(+newCurrentTime.getSeconds() - totalSeconds);
+        newCurrentTime.setSeconds(newCurrentTime.getSeconds() - totalSeconds);
         return dataNew;
     } else {
         metricProps.sort((a, b) => a.timeStamp - b.timeStamp);

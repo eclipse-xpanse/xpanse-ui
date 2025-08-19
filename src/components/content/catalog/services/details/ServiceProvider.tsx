@@ -79,8 +79,8 @@ function ServiceProvider({
                 for (const value of serviceTemplates) {
                     if (
                         value.version === serviceVersionInQuery &&
-                        value.serviceHostingType.toString() === serviceHostingTypeInQuery &&
-                        value.csp.toString() === serviceCspInQuery
+                        value.serviceHostingType.valueOf() === serviceHostingTypeInQuery &&
+                        value.csp.valueOf() === serviceCspInQuery
                     ) {
                         return value;
                     }
@@ -117,7 +117,7 @@ function ServiceProvider({
                                         <Image width={120} preview={false} src={cspMap.get(cspName)?.logo} />
                                     </div>
                                 ),
-                                key: cspName.toString(),
+                                key: cspName.valueOf(),
                                 children: [],
                                 disabled: isViewDisabled,
                             };
@@ -156,7 +156,7 @@ function ServiceProvider({
                 csp: serviceCspInQuery,
                 serviceName: selectedServiceNameInTree,
                 version: selectedServiceVersionInTree,
-                hostingType: serviceTemplateDetailVo.serviceHostingType.toString(),
+                hostingType: serviceTemplateDetailVo.serviceHostingType.valueOf(),
             }).toString(),
         });
     };

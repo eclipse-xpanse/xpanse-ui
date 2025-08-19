@@ -24,7 +24,7 @@ function ServiceChangeResultDetails({
                 <Paragraph
                     className={submitResultStyles.resultMainDetails}
                     copyable={{
-                        text: String(orderId),
+                        text: orderId,
                         icon: [
                             <CopyOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,
                             <CheckOutlined className={submitResultStyles.showDetailsTypographyCopy} key={uuidv4()} />,

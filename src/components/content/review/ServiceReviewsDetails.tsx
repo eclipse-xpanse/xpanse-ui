@@ -130,9 +130,9 @@ export const ServiceReviewsDetails = ({
                             <Tag
                                 className={oclDisplayStyles.oclDisplayTag}
                                 color='red'
-                                key={currentServiceTemplateRequestToReview.ocl.serviceHostingType.toString()}
+                                key={currentServiceTemplateRequestToReview.ocl.serviceHostingType.valueOf()}
                             >
-                                {currentServiceTemplateRequestToReview.ocl.serviceHostingType.toString()}
+                                {currentServiceTemplateRequestToReview.ocl.serviceHostingType.valueOf()}
                             </Tag>
                             <br />
                             <br />
