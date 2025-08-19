@@ -17,7 +17,7 @@
         "react-dom": "^19.1.1",
         "react-router-dom": "^7.8.0",
         "react-timer-hook": "^4.0.5",
-        "yaml": "^2.8.0",
+        "yaml": "^2.8.1",
         "zustand": "^5.0.7"
     },
     "scripts": {
