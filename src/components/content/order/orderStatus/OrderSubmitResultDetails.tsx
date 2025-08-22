@@ -15,10 +15,12 @@ function OrderSubmitResultDetails({
     msg,
     serviceId,
     orderId,
+    closeModal,
 }: {
     msg: string | React.JSX.Element;
     serviceId: string;
     orderId: string;
+    closeModal?: () => void;
 }): React.JSX.Element {
     const { Paragraph } = Typography;
     const navigate = useNavigate();
@@ -38,6 +40,9 @@ function OrderSubmitResultDetails({
                 >
                     <span
                         onClick={() => {
+                            if (closeModal) {
+                                closeModal();
+                            }
                             void navigate(`${myServicesRoute}?serviceId=${encodeURIComponent(serviceId)}`);
                         }}
                         className={submitResultStyles.showDetailsTypographyCopyInfo}

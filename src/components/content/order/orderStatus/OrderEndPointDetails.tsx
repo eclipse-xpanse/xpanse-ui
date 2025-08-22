@@ -18,11 +18,13 @@ export function OrderEndPointDetails({
     serviceId,
     selectedServiceHostingType,
     operationType,
+    closeModal,
 }: {
     serviceOrderStatus: ServiceOrderStatusUpdate;
     serviceId: string;
     selectedServiceHostingType: ServiceHostingType;
     operationType: OperationType;
+    closeModal?: () => void;
 }): React.JSX.Element {
     const endPointMap = new Map<string, string>();
     const navigate = useNavigate();
@@ -60,7 +62,10 @@ export function OrderEndPointDetails({
                             color='blue'
                             variant='link'
                             onClick={() => {
-                                getServiceDeploymentDetails();
+                                if (closeModal) {
+                                    closeModal();
+                                    getServiceDeploymentDetails();
+                                }
                             }}
                         >
                             view details

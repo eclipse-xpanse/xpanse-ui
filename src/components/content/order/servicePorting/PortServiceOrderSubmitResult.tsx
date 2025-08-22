@@ -21,6 +21,7 @@ export const PortServiceOrderSubmitResult = ({
     type,
     stopWatch,
     contactServiceDetails,
+    closeModal,
 }: {
     msg: string | React.JSX.Element;
     serviceId: string;
@@ -28,13 +29,21 @@ export const PortServiceOrderSubmitResult = ({
     type: 'success' | 'error';
     stopWatch: useStopwatchResultType;
     contactServiceDetails: ServiceProviderContactDetails | undefined;
+    closeModal: () => void;
 }): React.JSX.Element => {
     return (
         <div className={submitAlertStyles.submitAlertTip}>
             {' '}
             <Alert
                 message={`Processing Status`}
-                description={<OrderSubmitResultDetails msg={msg} serviceId={serviceId} orderId={orderId} />}
+                description={
+                    <OrderSubmitResultDetails
+                        msg={msg}
+                        serviceId={serviceId}
+                        orderId={orderId}
+                        closeModal={closeModal}
+                    />
+                }
                 showIcon
                 closable={false}
                 type={type}

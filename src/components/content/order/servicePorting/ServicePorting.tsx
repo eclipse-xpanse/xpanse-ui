@@ -33,8 +33,10 @@ import { SelectPortingTarget } from './SelectPortingTarget.tsx';
 
 export const ServicePorting = ({
     currentSelectedService,
+    closeModal,
 }: {
     currentSelectedService: DeployedServiceDetails | VendorHostedDeployedServiceDetails;
+    closeModal: () => void;
 }): React.JSX.Element => {
     const [currentPortingStep, setCurrentPortingStep] = useState<ServicePortingSteps>(
         ServicePortingSteps.ExportServiceData
@@ -278,6 +280,7 @@ export const ServicePorting = ({
                         currentSelectedService={currentSelectedService}
                         stepItem={items[ServicePortingSteps.PortService]}
                         getServicePriceQuery={getServicePriceQuery}
+                        closeModal={closeModal}
                     />
                 );
         }

@@ -26,11 +26,13 @@ function PortServiceStatusAlert({
     portServiceRequest,
     getPortLatestServiceOrderStatusQuery,
     serviceProviderContactDetails,
+    closeModal,
 }: {
     selectServiceHostingType: ServiceHostingType;
     portServiceRequest: UseMutationResult<ServiceOrder | undefined, Error, ServicePortingRequest>;
     getPortLatestServiceOrderStatusQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
     serviceProviderContactDetails: ServiceProviderContactDetails | undefined;
+    closeModal: () => void;
 }): React.JSX.Element {
     const stopWatch = useStopwatch({
         autoStart: true,
@@ -61,6 +63,7 @@ function PortServiceStatusAlert({
                         serviceOrderStatus={getPortLatestServiceOrderStatusQuery.data}
                         serviceId={portServiceRequest.data.serviceId}
                         selectedServiceHostingType={selectServiceHostingType}
+                        closeModal={closeModal}
                     />
                 );
             } else if (getPortLatestServiceOrderStatusQuery.isError) {
@@ -73,10 +76,10 @@ function PortServiceStatusAlert({
                 getPortLatestServiceOrderStatusQuery.isPending ||
                 getPortLatestServiceOrderStatusQuery.data?.orderStatus === OrderStatus.IN_PROGRESS
             ) {
-                return 'Service porting, Please wait...';
+                return 'Service porting in-progress, Please wait...';
             }
         }
-    }, [selectServiceHostingType, portServiceRequest, getPortLatestServiceOrderStatusQuery]);
+    }, [closeModal, selectServiceHostingType, portServiceRequest, getPortLatestServiceOrderStatusQuery]);
 
     const alertType = useMemo(() => {
         if (portServiceRequest.isPending) {
@@ -153,6 +156,7 @@ function PortServiceStatusAlert({
             type={alertType}
             stopWatch={stopWatch}
             contactServiceDetails={alertType !== 'success' ? serviceProviderContactDetails : undefined}
+            closeModal={closeModal}
         />
     );
 }

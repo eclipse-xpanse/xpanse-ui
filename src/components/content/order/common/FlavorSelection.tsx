@@ -53,6 +53,7 @@ export const FlavorSelection = ({
                     <Flex vertical gap='middle'>
                         <Radio.Group
                             optionType={'button'}
+                            disabled={!setSelectFlavor}
                             onChange={(e) => {
                                 if (onChangeFlavor) {
                                     onChangeFlavor(e.target.value as string);
