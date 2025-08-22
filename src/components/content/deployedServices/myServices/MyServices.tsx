@@ -368,6 +368,22 @@ function MyServices(): React.JSX.Element {
         listDeployedServicesQuery.data,
     ]);
 
+    useEffect(() => {
+        setFilters({
+            serviceId: serviceIdInQuery ? [serviceIdInQuery] : null,
+            customerServiceName: null,
+            category: null,
+            csp: null,
+            name: null,
+            version: null,
+            serviceHostingType: null,
+            billingMode: null,
+            region: null,
+            serviceDeploymentState: serviceDeploymentStateInQuery,
+            serviceState: null,
+        });
+    }, [serviceIdInQuery, serviceDeploymentStateInQuery]);
+
     const getOperationMenu = (record: DeployedService): MenuProps['items'] => {
         return [
             {
@@ -1649,7 +1665,10 @@ function MyServices(): React.JSX.Element {
                     width={1600}
                     mask={true}
                 >
-                    <ServicePorting currentSelectedService={activeRecord} />
+                    <ServicePorting
+                        currentSelectedService={activeRecord}
+                        closeModal={handleCancelServicePortingModel}
+                    />
                 </Modal>
             ) : null}
 

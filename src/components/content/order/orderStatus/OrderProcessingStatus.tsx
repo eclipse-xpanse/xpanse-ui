@@ -14,12 +14,14 @@ export const OrderProcessingStatus = ({
     serviceId,
     selectedServiceHostingType,
     actionName,
+    closeModal,
 }: {
     operationType: OperationType;
     serviceOrderStatus: ServiceOrderStatusUpdate;
     serviceId: string;
     selectedServiceHostingType: ServiceHostingType;
     actionName?: string;
+    closeModal?: () => void;
 }): React.JSX.Element => {
     const errorMsg: string = 'Please contact service vendor for error details.';
     if (
@@ -34,6 +36,7 @@ export const OrderProcessingStatus = ({
                     serviceId={serviceId}
                     selectedServiceHostingType={selectedServiceHostingType}
                     operationType={operationType}
+                    closeModal={closeModal}
                 />
             );
         } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {
@@ -58,6 +61,7 @@ export const OrderProcessingStatus = ({
                     serviceId={serviceId}
                     selectedServiceHostingType={selectedServiceHostingType}
                     operationType={operationType}
+                    closeModal={closeModal}
                 />
             );
         } else if (serviceOrderStatus.orderStatus === OrderStatus.FAILED) {

@@ -50,6 +50,7 @@ export const PortServiceSubmit = ({
     currentSelectedService,
     stepItem,
     getServicePriceQuery,
+    closeModal,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: Csp;
@@ -63,6 +64,7 @@ export const PortServiceSubmit = ({
     currentSelectedService: DeployedService;
     stepItem: StepProps;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
+    closeModal: () => void;
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
 
@@ -123,6 +125,7 @@ export const PortServiceSubmit = ({
                     portServiceRequest={portServiceRequest}
                     getPortLatestServiceOrderStatusQuery={getPortLatestServiceOrderStatusQuery}
                     serviceProviderContactDetails={getOrderableServiceDetails.data?.serviceProviderContactDetails}
+                    closeModal={closeModal}
                 />
             ) : null}
             <Form
