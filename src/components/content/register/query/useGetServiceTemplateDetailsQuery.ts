@@ -23,5 +23,6 @@ export function useGetServiceTemplateDetailsQuery(serviceTemplateId: string) {
             return response.data;
         },
         refetchOnWindowFocus: false,
+        enabled: serviceTemplateId !== '',
     });
 }

@@ -10,6 +10,7 @@ import React from 'react';
 import catalogStyles from '../../../../styles/catalog.module.css';
 import oclDisplayStyles from '../../../../styles/ocl-display.module.css';
 import { Ocl } from '../../../../xpanse-api/generated';
+import { ServiceShortCode } from '../../catalog/services/details/ServiceShortCode.tsx';
 import { DeployedServicesHostingType } from '../../deployedServices/common/DeployedServicesHostingType';
 import DeploymentManagement from '../../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../../serviceActionManage/ServiceActionManagement.tsx';
@@ -54,7 +55,7 @@ function DisplayOclData({ ocl }: { ocl: Ocl }): React.JSX.Element | string {
                                         ellipsis={true}
                                         className={oclDisplayStyles.oclDataDisplayServiceRegisterName}
                                     >
-                                        {ocl.name}
+                                        {ocl.name} <ServiceShortCode shortCode={ocl.shortCode} />
                                     </Paragraph>
                                 </Tooltip>
                             </div>
