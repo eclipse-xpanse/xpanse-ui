@@ -25,6 +25,7 @@ import DeploymentManagement from '../../../deployment/DeploymentManagement';
 import { ServiceActionManagement } from '../../../serviceActionManage/ServiceActionManagement.tsx';
 import ServiceConfigManagement from '../../../serviceConfigurationManage/ServiceConfigManagement';
 import { ServiceObjectsManagement } from '../../../serviceObjectsManage/ServiceObjectsManagement.tsx';
+import { ServiceShortCode } from './ServiceShortCode.tsx';
 import { ShowIcon } from './ShowIcon';
 
 function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDetailVo }): React.JSX.Element {
@@ -84,6 +85,9 @@ function ServiceDetail({ serviceDetails }: { serviceDetails: ServiceTemplateDeta
                 </Descriptions.Item>
                 <Descriptions.Item label='Service Template Id' styles={{ label: { width: '230px' } }}>
                     {serviceDetails.serviceTemplateId}
+                </Descriptions.Item>
+                <Descriptions.Item label='Short Code' styles={{ label: { width: '230px' } }}>
+                    <ServiceShortCode shortCode={serviceDetails.shortCode} />
                 </Descriptions.Item>
                 <Descriptions.Item label='Category'>{serviceDetails.category}</Descriptions.Item>
                 <Descriptions.Item label='Service Version'>{serviceDetails.version}</Descriptions.Item>
