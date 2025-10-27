@@ -91,7 +91,7 @@ function CategoryCatalog({ category }: { category: Category }): React.JSX.Elemen
     }
 
     // Handle empty state
-    if (availableServiceTemplatesQuery.data && availableServiceTemplatesQuery.data.length === 0) {
+    if (availableServiceTemplatesQuery.data?.length === 0) {
         return (
             <div className={servicesEmptyStyles.serviceBlankClass}>
                 <Empty description={'No services available.'} />
