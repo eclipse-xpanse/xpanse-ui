@@ -48,8 +48,9 @@ export const PortServiceSubmit = ({
     setCurrentPortingStep,
     deployParams,
     currentSelectedService,
-    stepItem,
+    updateCurrentStepStatus,
     getServicePriceQuery,
+    stepItem,
     closeModal,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
@@ -62,8 +63,9 @@ export const PortServiceSubmit = ({
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     deployParams: DeployRequest | undefined;
     currentSelectedService: DeployedService;
-    stepItem: StepProps;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
+    stepItem: StepProps;
     closeModal: () => void;
 }): React.JSX.Element => {
     const [isShowDeploymentResult, setIsShowDeploymentResult] = useState<boolean>(false);
@@ -88,12 +90,12 @@ export const PortServiceSubmit = ({
 
     const port = () => {
         if (deployParams !== undefined) {
-            const servicePortingRequest: ServicePortingRequest = deployParams as ServicePortingRequest;
+            const servicePortingRequest: ServicePortingRequest = { ...deployParams } as ServicePortingRequest;
             servicePortingRequest.region = region;
             servicePortingRequest.originalServiceId = currentSelectedService.serviceId;
             servicePortingRequest.billingMode = selectBillingMode;
             portServiceRequest.mutate(servicePortingRequest);
-            stepItem.status = 'process';
+            updateCurrentStepStatus(ServicePortingSteps.PortService, 'process');
             setIsShowDeploymentResult(true);
         }
     };
@@ -102,17 +104,17 @@ export const PortServiceSubmit = ({
     };
 
     if (portServiceRequest.isError) {
-        stepItem.status = 'error';
+        updateCurrentStepStatus(ServicePortingSteps.PortService, 'error');
     } else if (portServiceRequest.isPending) {
-        stepItem.status = 'process';
+        updateCurrentStepStatus(ServicePortingSteps.PortService, 'process');
     } else {
         if (getPortLatestServiceOrderStatusQuery.data) {
             if (getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.SUCCESSFUL) {
-                stepItem.status = 'finish';
+                updateCurrentStepStatus(ServicePortingSteps.PortService, 'finish');
             } else if (getPortLatestServiceOrderStatusQuery.data.orderStatus === OrderStatus.FAILED) {
-                stepItem.status = 'error';
+                updateCurrentStepStatus(ServicePortingSteps.PortService, 'error');
             } else {
-                stepItem.status = 'process';
+                updateCurrentStepStatus(ServicePortingSteps.PortService, 'process');
             }
         }
     }

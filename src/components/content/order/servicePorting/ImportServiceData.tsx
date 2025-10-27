@@ -10,20 +10,20 @@ import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 
 export const ImportServiceData = ({
     setCurrentPortingStep,
-    stepItem,
+    updateCurrentStepStatus,
 }: {
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
-    stepItem: StepProps;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
 }): React.JSX.Element => {
     const importDataContentDescription: string = 'The data import function is not yet implemented.';
 
     const prev = () => {
-        stepItem.status = 'wait';
+        updateCurrentStepStatus(ServicePortingSteps.ImportServiceData, 'wait');
         setCurrentPortingStep(ServicePortingSteps.PrepareDeploymentParameters);
     };
 
     const next = () => {
-        stepItem.status = 'finish';
+        updateCurrentStepStatus(ServicePortingSteps.ImportServiceData, 'finish');
         setCurrentPortingStep(ServicePortingSteps.PortService);
     };
 

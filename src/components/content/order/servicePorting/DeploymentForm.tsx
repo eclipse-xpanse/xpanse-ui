@@ -36,7 +36,7 @@ export const DeploymentForm = ({
     selectBillingMode,
     setCurrentPortingStep,
     setDeployParameters,
-    stepItem,
+    updateCurrentStepStatus,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     selectCsp: Csp;
@@ -47,7 +47,7 @@ export const DeploymentForm = ({
     selectBillingMode: BillingMode;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
     setDeployParameters: (createRequest: DeployRequest) => void;
-    stepItem: StepProps;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const [isEulaAccepted, setIsEulaAccepted] = useState<boolean>(false);
@@ -94,7 +94,7 @@ export const DeploymentForm = ({
         }
         createRequest.serviceRequestProperties = serviceRequestProperties;
         setDeployParameters(createRequest);
-        stepItem.status = 'finish';
+        updateCurrentStepStatus(ServicePortingSteps.PrepareDeploymentParameters, 'finish');
         setCurrentPortingStep(ServicePortingSteps.ImportServiceData);
     };
 

@@ -8,7 +8,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, Col, Form, Modal, Radio, Row, Upload, UploadFile } from 'antd';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
 import { RcFile } from 'antd/es/upload';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import appStyles from '../../../../../styles/app.module.css';
 import catalogStyles from '../../../../../styles/catalog.module.css';
 import registerStyles from '../../../../../styles/register.module.css';
@@ -39,11 +39,10 @@ function UpdateService({
     isViewDisabled: boolean;
 }): React.JSX.Element {
     const [form] = Form.useForm();
-    const ocl = useRef<Ocl | undefined>(undefined);
-    const files = useRef<UploadFile[]>([]);
-    const yamlValidationResult = useRef<string>('');
-    const oclDisplayData = useRef<React.JSX.Element>(<></>);
-    const updateResult = useRef<string[]>([]);
+    const [ocl, setOcl] = useState<Ocl | undefined>(undefined);
+    const [files] = useState<UploadFile[]>([]);
+    const [yamlValidationResult, setYamlValidationResult] = useState<string>('');
+    const [updateResult, setUpdateResult] = useState<string[]>([]);
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -61,7 +60,7 @@ function UpdateService({
                     isUnpublishUntilApproved:
                         serviceDetail.isAvailableInCatalog &&
                         serviceDetail.serviceTemplateRegistrationState === ServiceTemplateRegistrationState.APPROVED &&
-                        files.current.length > 0
+                        files.length > 0
                             ? isRemoveServiceTemplateUntilApproved
                             : false,
                 },
@@ -72,16 +71,20 @@ function UpdateService({
             if (serviceTemplateRequestInfo === undefined) {
                 return;
             }
-            files.current[0].status = 'done';
-            updateResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
+            files.forEach((file: UploadFile) => {
+                file.status = 'done';
+            });
+            setUpdateResult([`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`]);
         },
         onError: (error: Error) => {
-            files.current[0].status = 'error';
+            files.forEach((file: UploadFile) => {
+                file.status = 'error';
+            });
             if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
-                updateResult.current = response.details;
+                setUpdateResult(response.details);
             } else {
-                updateResult.current = [error.message];
+                setUpdateResult([error.message]);
             }
         },
     });
@@ -96,25 +99,23 @@ function UpdateService({
 
     const handleCancel = () => {
         void queryClient.refetchQueries({ queryKey: getQueryKey(category) });
-        files.current.pop();
-        ocl.current = undefined;
-        yamlValidationResult.current = '';
-        updateResult.current = [];
+        files.pop();
+        setOcl(undefined);
+        setYamlValidationResult('');
+        setUpdateResult([]);
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        oclDisplayData.current = <></>;
         setIsModalOpen(false);
         updateServiceRequest.reset();
     };
 
     const tryNewFile = () => {
-        files.current.pop();
-        ocl.current = undefined;
-        yamlValidationResult.current = '';
-        updateResult.current = [];
+        files.pop();
+        setOcl(undefined);
+        setYamlValidationResult('');
+        setUpdateResult([]);
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        oclDisplayData.current = <></>;
         updateServiceRequest.reset();
     };
 
@@ -125,22 +126,17 @@ function UpdateService({
             reader.onload = (e) => {
                 if (e.target) {
                     try {
-                        ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'done';
-                        yamlValidationResult.current = 'YAML Syntax Valid';
+                        setOcl(loadOclFile(e.target.result as string));
+                        files[0].status = 'done';
+                        setYamlValidationResult('YAML Syntax Valid');
                         setYamlSyntaxValidationStatus('completed');
-                        oclDisplayData.current = OclSummaryDisplay(
-                            setOclValidationStatus,
-                            ocl.current,
-                            files.current[0]
-                        );
                     } catch (e: unknown) {
-                        files.current[0].status = 'error';
+                        files[0].status = 'error';
                         setYamlSyntaxValidationStatus('error');
                         if (e instanceof Error) {
-                            yamlValidationResult.current = e.message;
+                            setYamlValidationResult(e.message);
                         } else {
-                            yamlValidationResult.current = 'unhandled error occurred';
+                            setYamlValidationResult('unhandled error occurred');
                         }
                     }
                 }
@@ -150,20 +146,20 @@ function UpdateService({
 
     const sendRequestRequest = ({ event }: { event: React.MouseEvent }) => {
         event.stopPropagation();
-        if (ocl.current) {
-            updateServiceRequest.mutate(ocl.current);
+        if (ocl) {
+            updateServiceRequest.mutate(ocl);
         }
     };
 
     const retryRequest = () => {
-        if (ocl.current) {
-            updateServiceRequest.mutate(ocl.current);
+        if (ocl) {
+            updateServiceRequest.mutate(ocl);
         }
     };
 
     const setFileData = (file: RcFile): boolean => {
-        files.current.pop();
-        files.current.push(file);
+        files.pop();
+        files.push(file);
         setYamlSyntaxValidationStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
@@ -203,11 +199,11 @@ function UpdateService({
                         <AppstoreAddOutlined />
                         &nbsp;Update Service
                     </div>
-                    {ocl.current ? (
+                    {ocl ? (
                         <UpdateResult
-                            ocl={ocl.current}
+                            ocl={ocl}
                             updateServiceRequest={updateServiceRequest}
-                            updateResult={updateResult.current}
+                            updateResult={updateResult}
                             onRemove={handleCancel}
                             tryNewFile={tryNewFile}
                             retryRequest={retryRequest}
@@ -225,7 +221,7 @@ function UpdateService({
                                 multiple={false}
                                 beforeUpload={setFileData}
                                 maxCount={1}
-                                fileList={files.current}
+                                fileList={files}
                                 onRemove={tryNewFile}
                                 accept={'.yaml, .yml'}
                                 showUploadList={{
@@ -275,7 +271,7 @@ function UpdateService({
                                             {yamlSyntaxValidationStatus === 'completed' ||
                                             yamlSyntaxValidationStatus === 'error' ? (
                                                 <YamlSyntaxValidationResult
-                                                    validationResult={yamlValidationResult.current}
+                                                    validationResult={yamlValidationResult}
                                                     yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
                                                 />
                                             ) : null}
@@ -286,7 +282,7 @@ function UpdateService({
                             {serviceDetail.isAvailableInCatalog &&
                             serviceDetail.serviceTemplateRegistrationState ===
                                 ServiceTemplateRegistrationState.APPROVED &&
-                            files.current.length > 0 ? (
+                            files.length > 0 ? (
                                 <Form.Item
                                     name='isRemoveServiceTemplateUntilApproved'
                                     label={
@@ -309,7 +305,9 @@ function UpdateService({
                             ) : null}
                         </Form>
                     </div>
-                    <div>{oclDisplayData.current}</div>
+                    {ocl ? (
+                        <OclSummaryDisplay setOclValidationStatus={setOclValidationStatus} ocl={ocl} file={files[0]} />
+                    ) : null}
                 </div>
             </Modal>
         </div>

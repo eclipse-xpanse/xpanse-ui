@@ -6,7 +6,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { StepProps, Steps } from 'antd';
 import { Tab } from 'rc-tabs/lib/interface';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import serviceOrderStyles from '../../../../styles/service-order.module.css';
 import {
     BillingMode,
@@ -142,46 +142,45 @@ export const ServicePorting = ({
         getServiceFlavorList(selectCsp, selectServiceHostingType, getOrderableServicesQuery.data ?? [])
     );
 
-    const steps = useMemo(() => {
-        return [
-            {
-                title: 'Export data',
-                description: 'Export service data.',
-            },
-            {
-                title: 'Select a porting target',
-                description:
-                    'Select between porting between different regions within the same cloud or porting between different clouds',
-            },
-            {
-                title: 'Select a destination',
-                description: 'Select a destination for porting the existing deployment.',
-            },
-            {
-                title: 'Prepare deployment parameters',
-                description: 'Prepare deployment parameters.',
-            },
-            {
-                title: 'Import Data',
-                description: 'Import service data.',
-            },
-            {
-                title: 'Port Service',
-                description: 'Port service to the new destination.',
-            },
-        ];
-    }, []);
+    const steps = [
+        {
+            title: 'Export data',
+            description: 'Export service data.',
+        },
+        {
+            title: 'Select a porting target',
+            description:
+                'Select between porting between different regions within the same cloud or porting between different clouds',
+        },
+        {
+            title: 'Select a destination',
+            description: 'Select a destination for porting the existing deployment.',
+        },
+        {
+            title: 'Prepare deployment parameters',
+            description: 'Prepare deployment parameters.',
+        },
+        {
+            title: 'Import Data',
+            description: 'Import service data.',
+        },
+        {
+            title: 'Port Service',
+            description: 'Port service to the new destination.',
+        },
+    ];
 
-    const items: StepProps[] = useMemo(
-        () =>
-            steps.map((item) => ({
-                key: item.title,
-                title: item.title,
-                description: item.description,
-                status: 'wait',
-            })),
-        [steps]
-    );
+    const items: StepProps[] = (() =>
+        steps.map((item) => ({
+            key: item.title,
+            title: item.title,
+            description: item.description,
+            status: 'wait',
+        })))();
+
+    function updateCurrentStepStatus(currentStepName: ServicePortingSteps, status: StepProps['status']): void {
+        items[currentStepName].status = status;
+    }
 
     function renderStepContent(migrationStep: ServicePortingSteps): React.JSX.Element {
         switch (migrationStep) {
@@ -190,7 +189,7 @@ export const ServicePorting = ({
                     <ExportServiceData
                         isQueryLoading={getOrderableServicesQuery.isLoading}
                         setCurrentMigrationStep={setCurrentPortingStep}
-                        stepItem={items[ServicePortingSteps.ExportServiceData]}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                     />
                 );
             case ServicePortingSteps.SelectPortingTarget:
@@ -211,7 +210,7 @@ export const ServicePorting = ({
                         setBillingModes={setBillingModes}
                         setSelectBillingMode={setSelectBillingMode}
                         setCurrentPortingStep={setCurrentPortingStep}
-                        stepItem={items[ServicePortingSteps.SelectPortingTarget]}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                     />
                 );
             case ServicePortingSteps.SelectADestination:
@@ -238,16 +237,16 @@ export const ServicePorting = ({
                         selectBillingMode={selectBillingMode}
                         setSelectBillingMode={setSelectBillingMode}
                         setCurrentPortingStep={setCurrentPortingStep}
-                        stepItem={items[ServicePortingSteps.SelectADestination]}
                         onChangeFlavor={onChangeFlavor}
                         getServicePriceQuery={getServicePriceQuery}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                     />
                 );
             case ServicePortingSteps.ImportServiceData:
                 return (
                     <ImportServiceData
                         setCurrentPortingStep={setCurrentPortingStep}
-                        stepItem={items[ServicePortingSteps.ImportServiceData]}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                     />
                 );
             case ServicePortingSteps.PrepareDeploymentParameters:
@@ -262,7 +261,7 @@ export const ServicePorting = ({
                         selectBillingMode={selectBillingMode}
                         setCurrentPortingStep={setCurrentPortingStep}
                         setDeployParameters={setDeployParams}
-                        stepItem={items[ServicePortingSteps.PrepareDeploymentParameters]}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                     />
                 );
             case ServicePortingSteps.PortService:
@@ -279,6 +278,7 @@ export const ServicePorting = ({
                         deployParams={deployParams}
                         currentSelectedService={currentSelectedService}
                         stepItem={items[ServicePortingSteps.PortService]}
+                        updateCurrentStepStatus={updateCurrentStepStatus}
                         getServicePriceQuery={getServicePriceQuery}
                         closeModal={closeModal}
                     />

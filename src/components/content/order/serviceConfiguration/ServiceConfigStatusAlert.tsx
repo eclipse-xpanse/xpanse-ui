@@ -31,7 +31,7 @@ function ServiceConfigStatusAlert({
     updateConfigRequest: UseMutationResult<ServiceOrder | undefined, Error, Options<ChangeServiceConfigurationData>>;
     getUpdateConfigStatusPollingQuery: UseQueryResult<ServiceOrderStatusUpdate | undefined>;
 }): React.JSX.Element {
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (updateConfigRequest.isPending) {
             return 'Request submission in-progress';
         } else if (updateConfigRequest.isError) {
@@ -71,18 +71,7 @@ function ServiceConfigStatusAlert({
                 return 'Updating, Please wait...';
             }
         }
-    }, [
-        updateConfigRequest.isPending,
-        updateConfigRequest.isError,
-        updateConfigRequest.isSuccess,
-        updateConfigRequest.error,
-        getUpdateConfigStatusPollingQuery.isSuccess,
-        getUpdateConfigStatusPollingQuery.data,
-        getUpdateConfigStatusPollingQuery.isError,
-        getUpdateConfigStatusPollingQuery.isPending,
-        serviceId,
-        serviceHostType,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (updateConfigRequest.isPending) {

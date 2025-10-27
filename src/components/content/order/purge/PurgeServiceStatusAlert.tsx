@@ -34,7 +34,7 @@ export function PurgeServiceStatusAlert({
         closePurgeResultAlert(true);
     };
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (purgeSubmitRequest.isError) {
             if (isHandleKnownErrorResponse(purgeSubmitRequest.error)) {
                 const response: ErrorResponse = purgeSubmitRequest.error.body;
@@ -56,13 +56,7 @@ export function PurgeServiceStatusAlert({
                 }
             }
         }
-    }, [
-        purgeSubmitRequest.isError,
-        purgeSubmitRequest.error,
-        getPurgeServiceDetailsQuery.isError,
-        getPurgeServiceDetailsQuery.error,
-        deployedService.serviceId,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (purgeSubmitRequest.isPending) {

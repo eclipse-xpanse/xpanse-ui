@@ -38,7 +38,7 @@ function PortServiceStatusAlert({
         autoStart: true,
     });
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (portServiceRequest.isPending) {
             return 'Service porting request submission in-progress';
         } else if (portServiceRequest.isError) {
@@ -79,7 +79,7 @@ function PortServiceStatusAlert({
                 return 'Service porting in-progress, Please wait...';
             }
         }
-    }, [closeModal, selectServiceHostingType, portServiceRequest, getPortLatestServiceOrderStatusQuery]);
+    })();
 
     const alertType = useMemo(() => {
         if (portServiceRequest.isPending) {
