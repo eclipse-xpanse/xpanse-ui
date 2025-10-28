@@ -119,7 +119,7 @@ export default function RegisteredServices(): React.JSX.Element {
         );
     }
 
-    if (availableServiceTemplatesQuery.data && availableServiceTemplatesQuery.data.length === 0) {
+    if (availableServiceTemplatesQuery.data?.length === 0) {
         return (
             <div className={servicesEmptyStyles.serviceBlankClass}>
                 <Empty description={'No services available.'} />
