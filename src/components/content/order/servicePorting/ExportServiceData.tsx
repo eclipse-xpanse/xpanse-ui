@@ -11,16 +11,16 @@ import { ServicePortingSteps } from '../types/ServicePortingSteps.ts';
 export const ExportServiceData = ({
     isQueryLoading,
     setCurrentMigrationStep,
-    stepItem,
+    updateCurrentStepStatus,
 }: {
     isQueryLoading: boolean;
     setCurrentMigrationStep: (currentMigrationStep: ServicePortingSteps) => void;
-    stepItem: StepProps;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
 }): React.JSX.Element => {
     const exportDataContentDescription: string = 'The export function is not yet implemented.';
 
     const next = () => {
-        stepItem.status = 'finish';
+        updateCurrentStepStatus(ServicePortingSteps.ExportServiceData, 'finish');
         setCurrentMigrationStep(ServicePortingSteps.SelectPortingTarget);
     };
 

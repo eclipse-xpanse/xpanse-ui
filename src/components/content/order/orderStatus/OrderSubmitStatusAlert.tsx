@@ -45,7 +45,7 @@ function OrderSubmitStatusAlert({
     const stopWatch = useStopwatch({
         autoStart: true,
     });
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {
             return 'Request submission in-progress';
         } else if (redeployFailedDeploymentQuery.isError) {
@@ -93,22 +93,7 @@ function OrderSubmitStatusAlert({
                 return 'Deploying, Please wait...';
             }
         }
-    }, [
-        submitDeploymentRequest.isPending,
-        submitDeploymentRequest.isError,
-        submitDeploymentRequest.isSuccess,
-        submitDeploymentRequest.error,
-        redeployFailedDeploymentQuery.isPending,
-        redeployFailedDeploymentQuery.isError,
-        redeployFailedDeploymentQuery.isSuccess,
-        redeployFailedDeploymentQuery.error,
-        getSubmitLatestServiceOrderStatusQuery.isSuccess,
-        getSubmitLatestServiceOrderStatusQuery.data,
-        getSubmitLatestServiceOrderStatusQuery.isError,
-        getSubmitLatestServiceOrderStatusQuery.isPending,
-        serviceId,
-        serviceHostType,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (submitDeploymentRequest.isPending || redeployFailedDeploymentQuery.isPending) {

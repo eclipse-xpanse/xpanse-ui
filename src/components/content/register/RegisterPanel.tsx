@@ -27,11 +27,10 @@ import loadOclFile from '../common/ocl/loadOclFile';
 import RegisterResult from './RegisterResult';
 
 function RegisterPanel(): React.JSX.Element {
-    const ocl = useRef<Ocl | undefined>(undefined);
-    const files = useRef<UploadFile[]>([]);
-    const yamlValidationResult = useRef<string>('');
-    const oclDisplayData = useRef<React.JSX.Element>(<></>);
-    const registerResult = useRef<string[]>([]);
+    const [ocl, setOcl] = useState<Ocl | undefined>(undefined);
+    const [files] = useState<UploadFile[]>([]);
+    const [yamlValidationResult, setYamlValidationResult] = useState<string>('');
+    const [registerResult, setRegisterResult] = useState<string[]>([]);
     const serviceTemplateId = useRef<string>('');
     const [yamlSyntaxValidationStatus, setYamlSyntaxValidationStatus] = useState<ValidationStatus>('notStarted');
     const [oclValidationStatus, setOclValidationStatus] = useState<ValidationStatus>('notStarted');
@@ -48,21 +47,21 @@ function RegisterPanel(): React.JSX.Element {
             if (serviceTemplateRequestInfo === undefined) {
                 return;
             }
-            files.current[0].status = 'done';
-            registerResult.current = [`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`];
+            files[0].status = 'done';
+            setRegisterResult([`ID - ${serviceTemplateRequestInfo.serviceTemplateId}`]);
             serviceTemplateId.current = serviceTemplateRequestInfo.serviceTemplateId;
-            if (ocl.current) {
-                void queryClient.refetchQueries({ queryKey: getQueryKey(ocl.current.category) });
+            if (ocl) {
+                void queryClient.refetchQueries({ queryKey: getQueryKey(ocl.category) });
             }
             void navigate(registerSuccessfulRoute.concat(`?id=${serviceTemplateRequestInfo.serviceTemplateId}`));
         },
         onError: (error: Error) => {
-            files.current[0].status = 'error';
+            files[0].status = 'error';
             if (isHandleKnownErrorResponse(error)) {
                 const response: ErrorResponse = error.body;
-                registerResult.current = response.details;
+                setRegisterResult(response.details);
             } else {
-                registerResult.current = [error.message];
+                setRegisterResult([error.message]);
             }
             void navigate(registerFailedRoute);
         },
@@ -91,22 +90,17 @@ function RegisterPanel(): React.JSX.Element {
             reader.onload = (e) => {
                 if (e.target) {
                     try {
-                        ocl.current = loadOclFile(e.target.result as string);
-                        files.current[0].status = 'done';
-                        yamlValidationResult.current = 'YAML Syntax Valid';
+                        setOcl(loadOclFile(e.target.result as string));
+                        files[0].status = 'done';
+                        setYamlValidationResult('YAML Syntax Valid');
                         setYamlSyntaxValidationStatus('completed');
-                        oclDisplayData.current = OclSummaryDisplay(
-                            setOclValidationStatus,
-                            ocl.current,
-                            files.current[0]
-                        );
                     } catch (e: unknown) {
-                        files.current[0].status = 'error';
+                        files[0].status = 'error';
                         setYamlSyntaxValidationStatus('error');
                         if (e instanceof Error) {
-                            yamlValidationResult.current = e.message;
+                            setYamlValidationResult(e.message);
                         } else {
-                            yamlValidationResult.current = 'unhandled error occurred';
+                            setYamlValidationResult('unhandled error occurred');
                         }
                         void navigate(registerInvalidRoute);
                     }
@@ -117,34 +111,33 @@ function RegisterPanel(): React.JSX.Element {
 
     const sendRequestRequest = ({ event }: { event: React.MouseEvent }) => {
         event.stopPropagation();
-        if (ocl.current !== undefined) {
-            registerRequest.mutate(ocl.current);
+        if (ocl !== undefined) {
+            registerRequest.mutate(ocl);
         }
     };
 
     const setFileData = (file: RcFile): boolean => {
-        files.current.pop();
-        files.current.push(file);
+        files.pop();
+        files.push(file);
         setYamlSyntaxValidationStatus('notStarted');
         validateAndLoadYamlFile([file]);
         return false;
     };
 
     const onRemove = () => {
-        files.current.pop();
-        ocl.current = undefined;
-        yamlValidationResult.current = '';
-        registerResult.current = [];
+        files.pop();
+        setOcl(undefined);
+        setYamlValidationResult('');
+        setRegisterResult([]);
         setYamlSyntaxValidationStatus('notStarted');
         setOclValidationStatus('notStarted');
-        oclDisplayData.current = <></>;
         registerRequest.reset();
         void navigate(registerPageRoute);
     };
 
     const retryRequest = () => {
-        if (ocl.current !== undefined) {
-            registerRequest.mutate(ocl.current);
+        if (ocl !== undefined) {
+            registerRequest.mutate(ocl);
         }
     };
 
@@ -154,12 +147,12 @@ function RegisterPanel(): React.JSX.Element {
                 <AppstoreAddOutlined />
                 &nbsp;Register Service
             </div>
-            {ocl.current !== undefined && !registerRequest.isPending && !registerRequest.isIdle ? (
+            {ocl !== undefined && !registerRequest.isPending && !registerRequest.isIdle ? (
                 <RegisterResult
-                    ocl={ocl.current}
+                    ocl={ocl}
                     serviceTemplateId={serviceTemplateId.current}
                     registerRequestStatus={registerRequest.status}
-                    registerResult={registerResult.current}
+                    registerResult={registerResult}
                     onRemove={onRemove}
                     retryRequest={retryRequest}
                 />
@@ -170,7 +163,7 @@ function RegisterPanel(): React.JSX.Element {
                     multiple={false}
                     beforeUpload={setFileData}
                     maxCount={1}
-                    fileList={files.current}
+                    fileList={files}
                     onRemove={onRemove}
                     accept={'.yaml, .yml'}
                     showUploadList={{
@@ -219,7 +212,7 @@ function RegisterPanel(): React.JSX.Element {
                                 {yamlSyntaxValidationStatus === 'completed' ||
                                 yamlSyntaxValidationStatus === 'error' ? (
                                     <YamlSyntaxValidationResult
-                                        validationResult={yamlValidationResult.current}
+                                        validationResult={yamlValidationResult}
                                         yamlSyntaxValidationStatus={yamlSyntaxValidationStatus}
                                     />
                                 ) : null}
@@ -228,7 +221,9 @@ function RegisterPanel(): React.JSX.Element {
                     </Row>
                 </Upload>
             </div>
-            <div>{oclDisplayData.current}</div>
+            {ocl !== undefined ? (
+                <OclSummaryDisplay setOclValidationStatus={setOclValidationStatus} ocl={ocl} file={files[0]} />
+            ) : null}
         </div>
     );
 }

@@ -5,11 +5,10 @@
 
 import { Spin } from 'antd';
 import { EChartsCoreOption } from 'echarts';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import monitorStyles from '../../../styles/monitor.module.css';
-import { ErrorResponse, Metric, MetricUnit, MonitorResourceType } from '../../../xpanse-api/generated';
+import { Metric, MetricUnit, MonitorResourceType } from '../../../xpanse-api/generated';
 import { monitorMetricQueueSize } from '../../utils/constants';
-import { isHandleKnownErrorResponse } from '../common/error/isHandleKnownErrorResponse.ts';
 import { BuildMetricGraphs } from './BuildMetricGraphs';
 import {
     useGetLastKnownMetricForASpecificTypeQuery,
@@ -20,9 +19,7 @@ import { MonitorTip } from './MonitorTip';
 import {
     convertMetricsToMetricProps,
     getOptionData,
-    getTotalSecondsOfTimePeriod,
     groupMetricsByResourceIds,
-    isMetricEmpty,
     lastMinuteRadioButtonKeyId,
     MetricProps,
 } from './metricProps';
@@ -42,9 +39,6 @@ export default function MonitorChart({
     setNumberOfChartsAvailable: (chartCount: number) => void;
     onReset: () => void;
 }): React.JSX.Element {
-    let tipType: 'error' | 'success' | undefined = undefined;
-    let tipMessage: string = '';
-    let tipDescription: string = '';
     const [activeMonitorMetricType, setActiveMonitorMetricType] = useState<MonitorResourceType>(
         MonitorResourceType.CPU
     );
@@ -63,23 +57,9 @@ export default function MonitorChart({
         isAutoRefresh
     );
 
-    // useRef necessary to store existing data between re-renders
-    const onlyLastKnownMetricsQueue = useRef<Map<MonitorResourceType, Metric[]>>(
-        new Map<MonitorResourceType.CPU, []>()
-    );
-    const metricsForSpecificTimePeriodQueue = useRef<Map<MonitorResourceType, Metric[]>>(
-        new Map<MonitorResourceType.CPU, []>()
-    );
-
     let chartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
     let options: EChartsCoreOption[] = [];
     const convertMetricToEchartOptions = (metricProps: MetricProps[]) => {
-        const newCurrentTime = new Date();
-        if (timePeriod === lastMinuteRadioButtonKeyId) {
-            const totalSeconds: number = getTotalSecondsOfTimePeriod(timePeriod);
-            newCurrentTime.setSeconds(newCurrentTime.getSeconds() - totalSeconds);
-        }
-
         const currentMetricProps: Map<string, MetricProps[]> = groupMetricsByResourceIds(metricProps);
         const currentChartsTitle: { Id: string; metricTitle: string; metricSubTitle: string }[] = [];
         const currentOptions: EChartsCoreOption[] = [];
@@ -146,7 +126,7 @@ export default function MonitorChart({
                         smooth: true,
                         symbol: 'none',
                         areaStyle: { marginBottom: '0px' },
-                        data: getOptionData(metricProps, newCurrentTime, timePeriod),
+                        data: getOptionData(metricProps),
                     },
                 ],
             };
@@ -157,96 +137,31 @@ export default function MonitorChart({
         setNumberOfChartsAvailable(currentOptions.length);
     };
 
-    const setErrorAlertData = (error: Error) => {
-        tipType = 'error';
-        if (isHandleKnownErrorResponse(error)) {
-            const response: ErrorResponse = error.body;
-            tipMessage = response.errorType.valueOf();
-            tipDescription = response.details.join();
-        } else {
-            tipMessage = 'Error while fetching metrics data.';
-            tipDescription = error.message;
-        }
-    };
-
-    if (useGetLastKnownMetric.isLoading || useGetMetricForSpecificTimePeriod.isLoading) {
-        tipType = undefined;
-        tipMessage = '';
-        tipDescription = '';
-    }
     if (useGetLastKnownMetric.isSuccess) {
         const data: Metric[] | undefined = useGetLastKnownMetric.data;
-        if (data && data.length > 0) {
-            tipType = undefined;
-            tipMessage = '';
-            tipDescription = '';
-            let newQueue: Metric[];
-            const currentData = onlyLastKnownMetricsQueue.current.get(activeMonitorMetricType);
-            if (currentData) {
-                newQueue = [...currentData, ...data];
-                if (newQueue.length > monitorMetricQueueSize) {
-                    newQueue.shift();
-                }
-            } else {
-                newQueue = data;
+        if (data.length > 0) {
+            if (data.length > monitorMetricQueueSize) {
+                data.shift();
             }
-            onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, newQueue);
-            convertMetricToEchartOptions(convertMetricsToMetricProps(newQueue));
-        } else {
-            onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, []);
-            tipType = undefined;
-            tipMessage = 'No metrics found for the selected service.';
-            tipDescription = '';
+            convertMetricToEchartOptions(convertMetricsToMetricProps(data));
         }
     }
 
     if (useGetMetricForSpecificTimePeriod.isSuccess) {
         const rsp: Metric[] | undefined = useGetMetricForSpecificTimePeriod.data;
-        if (rsp && rsp.length > 0) {
-            tipType = undefined;
-            tipMessage = '';
-            tipDescription = '';
-            let newQueue: Metric[] = [];
-            const currentItem: Metric[] | null | undefined =
-                metricsForSpecificTimePeriodQueue.current.get(activeMonitorMetricType);
-            if (isMetricEmpty(rsp)) {
-                if (currentItem) {
-                    newQueue = [...currentItem, currentItem[0]];
-                }
-            } else {
-                if (currentItem) {
-                    newQueue = [...currentItem, ...rsp];
-                } else {
-                    newQueue = [...rsp];
-                }
+        if (rsp.length > 0) {
+            if (rsp.length > monitorMetricQueueSize) {
+                rsp.shift();
             }
-
-            if (newQueue.length > monitorMetricQueueSize) {
-                newQueue.shift();
-            }
-
-            metricsForSpecificTimePeriodQueue.current.set(activeMonitorMetricType, newQueue);
-            convertMetricToEchartOptions(convertMetricsToMetricProps(newQueue));
-        } else {
-            tipType = undefined;
-            tipMessage = 'No metrics found for the selected service.';
-            tipDescription = '';
+            convertMetricToEchartOptions(convertMetricsToMetricProps(rsp));
         }
     }
 
-    if (useGetMetricForSpecificTimePeriod.isError) {
-        setErrorAlertData(useGetMetricForSpecificTimePeriod.error);
-    }
-
-    if (useGetLastKnownMetric.isError) {
-        onlyLastKnownMetricsQueue.current.set(activeMonitorMetricType, []);
-        setErrorAlertData(useGetLastKnownMetric.error);
-    }
+    const hasError = useGetMetricForSpecificTimePeriod.isError || useGetLastKnownMetric.isError;
+    const isEmpty =
+        (useGetMetricForSpecificTimePeriod.isSuccess || useGetLastKnownMetric.isSuccess) && options.length == 0;
 
     const onRemove = () => {
-        tipType = undefined;
-        tipMessage = '';
-        tipDescription = '';
         onReset();
     };
 
@@ -257,15 +172,19 @@ export default function MonitorChart({
             void useGetMetricForSpecificTimePeriod.refetch();
         }
     };
-
     return (
         <>
-            <MonitorTip
-                type={tipType}
-                msg={tipMessage}
-                description={tipDescription}
-                onRemove={onRemove}
-                retryRequest={retryRequest}
+            {hasError || isEmpty ? (
+                <MonitorTip
+                    error={useGetLastKnownMetric.error ?? useGetMetricForSpecificTimePeriod.error}
+                    isNoMetricsAvailable={isEmpty}
+                    onRemove={onRemove}
+                    retryRequest={retryRequest}
+                />
+            ) : null}
+            <MonitorMetricsTypeTabs
+                activeMonitorMetricType={activeMonitorMetricType}
+                setActiveMonitorMetricType={setActiveMonitorMetricType}
             />
             {useGetMetricForSpecificTimePeriod.isLoading || useGetLastKnownMetric.isLoading ? (
                 <div className={monitorStyles.monitorSearchLoadingClass}>
@@ -275,13 +194,7 @@ export default function MonitorChart({
                     />
                 </div>
             ) : (
-                <>
-                    <MonitorMetricsTypeTabs
-                        activeMonitorMetricType={activeMonitorMetricType}
-                        setActiveMonitorMetricType={setActiveMonitorMetricType}
-                    />
-                    <BuildMetricGraphs chartsPerRow={chartsPerRow} graphData={options} chartsTitle={chartsTitle} />
-                </>
+                <BuildMetricGraphs chartsPerRow={chartsPerRow} graphData={options} chartsTitle={chartsTitle} />
             )}
         </>
     );

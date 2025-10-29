@@ -37,7 +37,7 @@ function RestartServiceStatusAlert({
         closeRestartResultAlert(true);
     };
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (serviceStateRestartQuery.isPending) {
             return 'Request submission in-progress';
         } else if (serviceStateRestartQuery.isError) {
@@ -76,18 +76,7 @@ function RestartServiceStatusAlert({
                 return 'Restarting, Please wait...';
             }
         }
-    }, [
-        serviceStateRestartQuery.isPending,
-        serviceStateRestartQuery.isError,
-        serviceStateRestartQuery.isSuccess,
-        serviceStateRestartQuery.error,
-        getRestartServiceDetailsQuery.isSuccess,
-        getRestartServiceDetailsQuery.isError,
-        getRestartServiceDetailsQuery.isPending,
-        getRestartServiceDetailsQuery.data,
-        deployedService.serviceId,
-        deployedService.serviceHostingType,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (serviceStateRestartQuery.isPending) {

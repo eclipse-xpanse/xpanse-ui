@@ -37,7 +37,7 @@ function StopServiceStatusAlert({
         closeStopResultAlert(true);
     };
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (serviceStateStopQuery.isPending) {
             return 'Request submission in-progress';
         } else if (serviceStateStopQuery.isError) {
@@ -76,18 +76,7 @@ function StopServiceStatusAlert({
                 return 'Stopping, Please wait...';
             }
         }
-    }, [
-        serviceStateStopQuery.isPending,
-        serviceStateStopQuery.isError,
-        serviceStateStopQuery.isSuccess,
-        serviceStateStopQuery.error,
-        getStopServiceDetailsQuery.isSuccess,
-        getStopServiceDetailsQuery.isError,
-        getStopServiceDetailsQuery.isPending,
-        getStopServiceDetailsQuery.data,
-        deployedService.serviceId,
-        deployedService.serviceHostingType,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (serviceStateStopQuery.isPending) {

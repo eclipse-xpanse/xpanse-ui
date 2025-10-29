@@ -7,7 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Button, Form, Image, Input, InputNumber, Select, Table, Tooltip } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
 import { ColumnsType } from 'antd/es/table';
-import React, { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import credentialStyles from '../../../styles/credential.module.css';
 import cspSelectStyles from '../../../styles/csp-select-drop-down.module.css';
 
@@ -39,10 +39,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
     const [currentSite, setCurrentSite] = useState<string | undefined>(undefined);
     const [currentType, setCurrentType] = useState<CredentialType | undefined>(undefined);
     const [currentName, setCurrentName] = useState<string | undefined>(undefined);
-    const activeCspList = useRef<Csp[]>([]);
-    const siteList = useRef<string[]>([]);
-    const credentialTypeList = useRef<CredentialType[]>([]);
-    const nameList = useRef<string[]>([]);
     const [credentialVariableList, setCredentialVariableList] = useState<CredentialVariable[]>([]);
     const credentialsQuery = useCredentialsListQuery();
 
@@ -52,30 +48,7 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
 
     const getCredentialTypesQuery = useCredentialTypesQuery(currentCsp);
 
-    if (getSitesQuery.isSuccess && getSitesQuery.data) {
-        siteList.current = getSitesQuery.data;
-    }
-
-    if (getCredentialTypesQuery.isSuccess && getCredentialTypesQuery.data) {
-        credentialTypeList.current = getCredentialTypesQuery.data;
-    }
-
-    if (getActiveCspsQuery.isSuccess && getActiveCspsQuery.data) {
-        activeCspList.current = getActiveCspsQuery.data;
-    }
-
     const credentialCapabilitiesQuery = useCredentialCapabilitiesQuery(currentCsp, currentType);
-
-    if (credentialCapabilitiesQuery.isSuccess && credentialCapabilitiesQuery.data) {
-        const credentials = credentialCapabilitiesQuery.data;
-        const names: string[] = [];
-        if (credentials.length > 0) {
-            credentials.forEach((credential: CredentialVariables) => {
-                names.push(credential.name);
-            });
-        }
-        nameList.current = names;
-    }
 
     const addCredentialRequest = useMutation({
         mutationFn: (createCredential: CreateCredential) => {
@@ -298,9 +271,6 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
         setCurrentCsp(undefined);
         setCurrentType(undefined);
         setCurrentName(undefined);
-        siteList.current = [];
-        nameList.current = [];
-        credentialTypeList.current = [];
         setCredentialVariableList([]);
         form.resetFields();
     };
@@ -321,6 +291,20 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
             void credentialsQuery.refetch();
         }
     };
+
+    function getNames(): string[] {
+        if (credentialCapabilitiesQuery.isSuccess && credentialCapabilitiesQuery.data) {
+            const credentials = credentialCapabilitiesQuery.data;
+            const names: string[] = [];
+            if (credentials.length > 0) {
+                credentials.forEach((credential: CredentialVariables) => {
+                    names.push(credential.name);
+                });
+            }
+            return names;
+        }
+        return [];
+    }
 
     return (
         <div>
@@ -357,18 +341,24 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                 <div className={credentialStyles.credentialFormInput}>
                     <Form.Item label='Csp' name='csp' rules={[{ required: true, message: 'Please select Csp' }]}>
                         <Select loading={getActiveCspsQuery.isLoading} onSelect={handleCspSelect} size={'large'}>
-                            {activeCspList.current.map((csp: Csp) => {
-                                return (
-                                    <Select.Option key={csp} value={csp} className={cspSelectStyles.cspSelectDropDown}>
-                                        <Image
-                                            className={credentialStyles.customSelect}
-                                            width={100}
-                                            preview={false}
-                                            src={cspMap.get(csp)?.logo}
-                                        />
-                                    </Select.Option>
-                                );
-                            })}
+                            {getActiveCspsQuery.data
+                                ? getActiveCspsQuery.data.map((csp: Csp) => {
+                                      return (
+                                          <Select.Option
+                                              key={csp}
+                                              value={csp}
+                                              className={cspSelectStyles.cspSelectDropDown}
+                                          >
+                                              <Image
+                                                  className={credentialStyles.customSelect}
+                                                  width={100}
+                                                  preview={false}
+                                                  src={cspMap.get(csp)?.logo}
+                                              />
+                                          </Select.Option>
+                                      );
+                                  })
+                                : undefined}
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -384,13 +374,15 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                             disabled={siteDisabled}
                             onSelect={handleSiteSelect}
                         >
-                            {siteList.current.map((site: string) => {
-                                return (
-                                    <Select.Option key={site} value={site}>
-                                        {site}
-                                    </Select.Option>
-                                );
-                            })}
+                            {getSitesQuery.data
+                                ? getSitesQuery.data.map((site: string) => {
+                                      return (
+                                          <Select.Option key={site} value={site}>
+                                              {site}
+                                          </Select.Option>
+                                      );
+                                  })
+                                : undefined}
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -406,13 +398,15 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                             disabled={typeDisabled}
                             onSelect={handleCredentialTypeSelect}
                         >
-                            {credentialTypeList.current.map((type: CredentialType) => {
-                                return (
-                                    <Select.Option key={type} value={type}>
-                                        {type}
-                                    </Select.Option>
-                                );
-                            })}
+                            {getCredentialTypesQuery.data
+                                ? getCredentialTypesQuery.data.map((type: CredentialType) => {
+                                      return (
+                                          <Select.Option key={type} value={type}>
+                                              {type}
+                                          </Select.Option>
+                                      );
+                                  })
+                                : undefined}
                         </Select>
                     </Form.Item>
                     <Form.Item
@@ -422,19 +416,21 @@ function AddCredential({ role, onCancel }: { role: string | undefined; onCancel:
                     >
                         <Select
                             loading={
-                                (getCredentialTypesQuery.isLoading || getCredentialTypesQuery.isRefetching) &&
-                                getCredentialTypesQuery.fetchStatus !== 'idle'
+                                (credentialCapabilitiesQuery.isLoading || credentialCapabilitiesQuery.isRefetching) &&
+                                credentialCapabilitiesQuery.fetchStatus !== 'idle'
                             }
                             disabled={nameDisable}
                             onSelect={handleCredentialNameSelect}
                         >
-                            {nameList.current.map((name: string) => {
-                                return (
-                                    <Select.Option key={name} value={name}>
-                                        {name}
-                                    </Select.Option>
-                                );
-                            })}
+                            {credentialCapabilitiesQuery.data
+                                ? getNames().map((name) => {
+                                      return (
+                                          <Select.Option key={name} value={name}>
+                                              {name}
+                                          </Select.Option>
+                                      );
+                                  })
+                                : undefined}
                         </Select>
                     </Form.Item>
                     <Form.Item label='Description' name='description'>

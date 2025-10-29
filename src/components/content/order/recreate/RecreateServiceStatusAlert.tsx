@@ -38,7 +38,7 @@ function RecreateServiceStatusAlert({
         autoStart: true,
     });
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (recreateRequest.isPending) {
             return 'Recreate request submission in-progress';
         } else if (recreateRequest.isError) {
@@ -75,7 +75,7 @@ function RecreateServiceStatusAlert({
                 return 'Recreating, Please wait...';
             }
         }
-    }, [currentSelectedService, recreateRequest, recreateServiceOrderStatusPollingQuery]);
+    })();
 
     const alertType = useMemo(() => {
         if (recreateRequest.isPending) {

@@ -42,7 +42,7 @@ function DestroyServiceStatusAlert({
         closeDestroyResultAlert(true);
     };
 
-    const msg = useMemo(() => {
+    const msg = (() => {
         if (destroySubmitRequest.isPending) {
             return 'Request submission in-progress';
         } else if (destroySubmitRequest.isError) {
@@ -81,18 +81,7 @@ function DestroyServiceStatusAlert({
                 return 'Destroying, Please wait...';
             }
         }
-    }, [
-        destroySubmitRequest.isPending,
-        destroySubmitRequest.isError,
-        destroySubmitRequest.isSuccess,
-        destroySubmitRequest.error,
-        getDestroyServiceOrderStatusQuery.isSuccess,
-        getDestroyServiceOrderStatusQuery.isError,
-        getDestroyServiceOrderStatusQuery.isPending,
-        getDestroyServiceOrderStatusQuery.data,
-        deployedService.serviceId,
-        deployedService.serviceHostingType,
-    ]);
+    })();
 
     const alertType = useMemo(() => {
         if (destroySubmitRequest.isPending) {

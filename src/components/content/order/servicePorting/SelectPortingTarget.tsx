@@ -39,7 +39,7 @@ export const SelectPortingTarget = ({
     setBillingModes,
     setSelectBillingMode,
     setCurrentPortingStep,
-    stepItem,
+    updateCurrentStepStatus,
 }: {
     target: string | undefined;
     setTarget: Dispatch<SetStateAction<string | undefined>>;
@@ -56,7 +56,7 @@ export const SelectPortingTarget = ({
     setBillingModes: Dispatch<SetStateAction<BillingMode[] | undefined>>;
     setSelectBillingMode: Dispatch<SetStateAction<BillingMode>>;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
-    stepItem: StepProps;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const onChange = (e: RadioChangeEvent) => {
@@ -142,12 +142,12 @@ export const SelectPortingTarget = ({
     };
 
     const next = () => {
-        stepItem.status = 'finish';
+        updateCurrentStepStatus(ServicePortingSteps.SelectPortingTarget, 'finish');
         setCurrentPortingStep(ServicePortingSteps.SelectADestination);
     };
 
     const prev = () => {
-        stepItem.status = 'wait';
+        updateCurrentStepStatus(ServicePortingSteps.SelectPortingTarget, 'wait');
         setCurrentPortingStep(ServicePortingSteps.ExportServiceData);
     };
 

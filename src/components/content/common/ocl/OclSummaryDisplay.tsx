@@ -9,11 +9,15 @@ import { Ocl } from '../../../../xpanse-api/generated';
 import DisplayOclData from './DisplayOclData';
 import { ValidationStatus } from './ValidationStatus';
 
-function OclSummaryDisplay(
-    setOclValidationStatus: (newState: ValidationStatus) => void,
-    ocl: Ocl,
-    file: UploadFile
-): React.JSX.Element {
+function OclSummaryDisplay({
+    setOclValidationStatus,
+    ocl,
+    file,
+}: {
+    setOclValidationStatus: (newState: ValidationStatus) => void;
+    ocl: Ocl;
+    file: UploadFile;
+}): React.JSX.Element {
     const oclTableData = DisplayOclData({ ocl: ocl });
     if (typeof oclTableData === 'string') {
         file.status = 'error';

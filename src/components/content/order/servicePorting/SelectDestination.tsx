@@ -58,9 +58,9 @@ export const SelectDestination = ({
     selectBillingMode,
     setSelectBillingMode,
     setCurrentPortingStep,
-    stepItem,
     onChangeFlavor,
     getServicePriceQuery,
+    updateCurrentStepStatus,
 }: {
     userOrderableServiceVoList: UserOrderableServiceVo[];
     updateSelectedParameters: (
@@ -90,9 +90,9 @@ export const SelectDestination = ({
     selectBillingMode: BillingMode;
     setSelectBillingMode: Dispatch<SetStateAction<BillingMode>>;
     setCurrentPortingStep: (currentMigrationStep: ServicePortingSteps) => void;
-    stepItem: StepProps;
     onChangeFlavor: (newFlavor: string) => void;
     getServicePriceQuery: UseQueryResult<ServiceFlavorWithPriceResult[]>;
+    updateCurrentStepStatus: (currentStep: ServicePortingSteps, stepState: StepProps['status']) => void;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
     const getServiceTemplateId = (): string => {
@@ -139,13 +139,13 @@ export const SelectDestination = ({
     const [isPreviousDisabled, setIsPreviousDisabled] = useState<boolean>(false);
 
     const prev = () => {
-        stepItem.status = 'wait';
+        updateCurrentStepStatus(ServicePortingSteps.SelectADestination, 'wait');
         setCurrentPortingStep(ServicePortingSteps.SelectPortingTarget);
     };
 
     const next = () => {
         setIsPreviousDisabled(true);
-        stepItem.status = 'finish';
+        updateCurrentStepStatus(ServicePortingSteps.SelectADestination, 'finish');
         setCurrentPortingStep(ServicePortingSteps.PrepareDeploymentParameters);
     };
 

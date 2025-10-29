@@ -6,7 +6,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Alert, Button, Card, Form, Radio, RadioChangeEvent, Select, Upload, UploadFile } from 'antd';
 import { RcFile } from 'antd/es/upload';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import servicePolicyStyles from '../../../../../styles/service-policies.module.css';
 import submitAlertStyles from '../../../../../styles/submit-alert.module.css';
 import {
@@ -40,11 +40,11 @@ export const AddOrUpdateServicePolicy = ({
     serviceDetails: ServiceTemplateDetailVo;
 }): React.JSX.Element => {
     const [form] = Form.useForm();
-    const policyContent = useRef<string>(currentServicePolicy?.policy ?? '');
-    const flavorList = useRef<string[]>(flavorNameList(serviceDetails));
+    const [policyContent, setPolicyContent] = useState<string>(currentServicePolicy?.policy ?? '');
+    const flavorList = useMemo(() => flavorNameList(serviceDetails), [serviceDetails]);
     const [isEnabled, setIsEnabled] = useState<boolean>(false);
     const [isUpdated, setIsUpdated] = useState<boolean>(false);
-    const files = useRef<UploadFile[]>([]);
+    const [files] = useState<UploadFile[]>([]);
     const [regoFileUploadStatus, setRegoFileUploadStatus] = useState<ServicePolicyUploadFileStatus>('notStarted');
     const createServicePoliciesRequest = useAddServicePolicy();
     const updatePoliciesManagementServiceRequest = useUpdateServicePolicy();
@@ -78,9 +78,9 @@ export const AddOrUpdateServicePolicy = ({
     };
 
     const onReset = () => {
-        files.current.pop();
+        files.pop();
         form.resetFields();
-        policyContent.current = '';
+        setPolicyContent('');
         setRegoFileUploadStatus('notStarted');
         updatePoliciesManagementServiceRequest.reset();
         createServicePoliciesRequest.reset();
@@ -104,12 +104,12 @@ export const AddOrUpdateServicePolicy = ({
                 if (e.target) {
                     try {
                         const content = (e.target.result as string).replace(/\\n/g, '\n').replace(/\\"/g, '"');
-                        policyContent.current = content;
+                        setPolicyContent(content);
                         form.setFieldsValue({ policy: content });
-                        files.current[0].status = 'done';
+                        files[0].status = 'done';
                         setRegoFileUploadStatus('completed');
                     } catch (e: unknown) {
-                        files.current[0].status = 'error';
+                        files[0].status = 'error';
                         setRegoFileUploadStatus('error');
                         if (e instanceof Error) {
                             return (
@@ -150,8 +150,8 @@ export const AddOrUpdateServicePolicy = ({
     }
 
     const setPolicyContentFileData = (file: RcFile): boolean => {
-        files.current.pop();
-        files.current.push(file);
+        files.pop();
+        files.push(file);
         setIsUpdated(false);
         setRegoFileUploadStatus('notStarted');
         getAndLoadPolicyContentFile([file]);
@@ -159,8 +159,8 @@ export const AddOrUpdateServicePolicy = ({
     };
 
     const onRemovePolicyContentFile = () => {
-        files.current.pop();
-        policyContent.current = '';
+        files.pop();
+        setPolicyContent('');
         setIsUpdated(false);
         setRegoFileUploadStatus('notStarted');
         updatePoliciesManagementServiceRequest.reset();
@@ -215,7 +215,7 @@ export const AddOrUpdateServicePolicy = ({
                         currentServicePolicy.flavorNameList
                             ? currentServicePolicy.flavorNameList
                             : [],
-                    policy: policyContent.current,
+                    policy: policyContent,
                 }}
                 onFinish={onFinish}
                 autoComplete='off'
@@ -241,7 +241,7 @@ export const AddOrUpdateServicePolicy = ({
                         className={servicePolicyStyles.servicePoliciesSelectOptionFlavor}
                         value={[]}
                     >
-                        {flavorList.current.map((flavor: string) => (
+                        {flavorList.map((flavor: string) => (
                             <Select.Option
                                 key={flavor}
                                 value={flavor}
@@ -264,7 +264,7 @@ export const AddOrUpdateServicePolicy = ({
                                 multiple={false}
                                 beforeUpload={setPolicyContentFileData}
                                 maxCount={1}
-                                fileList={files.current}
+                                fileList={files}
                                 onRemove={onRemovePolicyContentFile}
                                 accept={'.rego'}
                                 showUploadList={true}
@@ -286,11 +286,11 @@ export const AddOrUpdateServicePolicy = ({
                         </div>
                         <br />
                         <div>
-                            {policyContent.current ? (
+                            {policyContent ? (
                                 <Card className={servicePolicyStyles.servicePolicyContentUploadPreview}>
                                     <pre>
                                         <div className={servicePolicyStyles.servicePolicyContentReadOnlyPreview}>
-                                            {policyContent.current}
+                                            {policyContent}
                                         </div>
                                     </pre>
                                 </Card>

@@ -79,37 +79,21 @@ export const groupMetricsByResourceIds = (metricProps: MetricProps[]): Map<strin
     return currentMetricProps;
 };
 
-export const getOptionData = (metricProps: MetricProps[], currentTime: Date | undefined, timePeriod: number) => {
-    const dataNew: [number, number][] = [];
-    if (timePeriod === lastMinuteRadioButtonKeyId) {
-        currentTime ??= new Date();
-        const totalSeconds: number = getTotalSecondsOfTimePeriod(timePeriod);
-
-        const newCurrentTime = currentTime;
-
-        for (let i = 0; i < totalSeconds / 5; i++) {
-            dataNew.push([+newCurrentTime, 0]);
-            newCurrentTime.setSeconds(newCurrentTime.getSeconds() + 5);
+export const getOptionData = (metricProps: MetricProps[]) => {
+    const dataNew: [string, number][] = [];
+    const existingTimestamps: number[] = [];
+    metricProps.forEach((metricProp: MetricProps) => {
+        // remove duplicates in the received data based on timestamp.
+        if (!existingTimestamps.includes(metricProp.timeStamp)) {
+            existingTimestamps.push(metricProp.timeStamp);
+            dataNew.push([new Date(metricProp.timeStamp).toISOString(), metricProp.value]);
         }
-
-        metricProps.forEach((metricProp) => {
-            const index = metricProps.indexOf(metricProp);
-            if (index !== -1 && dataNew[index] && index < metricProps.length) {
-                dataNew[index][1] = metricProp.value;
-            }
-        });
-
-        newCurrentTime.setSeconds(newCurrentTime.getSeconds() - totalSeconds);
-        return dataNew;
-    } else {
-        metricProps.sort((a, b) => a.timeStamp - b.timeStamp);
-
-        metricProps.forEach((metricProp: MetricProps) => {
-            dataNew.push([metricProp.timeStamp, metricProp.value]);
-        });
-
-        return dataNew;
-    }
+    });
+    // sort data based on timestamp - ascending order.
+    dataNew.sort((a, b) => new Date(a[0]).valueOf() - new Date(b[0]).valueOf());
+    // copy the most recent data also to the current time to show updated graphs. This is needed since not all cloud providers will return data for every second.
+    dataNew.push([new Date().toISOString(), dataNew[dataNew.length - 1][1]]);
+    return dataNew;
 };
 
 export const MonitorTypeList: string[] = [
@@ -128,10 +112,6 @@ export const getMetricRequestParams = (totalSeconds: number): MetricRequestParam
         from: from,
         to: to,
     };
-};
-
-export const isMetricEmpty = (metricList: Metric[]): boolean => {
-    return metricList.some((metric: Metric) => metric.metrics?.length === 0);
 };
 
 export const convertMetricsToMetricProps = (metrics: Metric[]): MetricProps[] => {
