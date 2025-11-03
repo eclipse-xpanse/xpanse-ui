@@ -10,7 +10,7 @@
         "antd": "^5.27.6",
         "echarts": "6.0.0",
         "echarts-for-react": "^3.0.4",
-        "rc-field-form": "^2.6.0",
+        "rc-field-form": "^2.7.1",
         "rc-menu": "^9.16.0",
         "rc-tabs": "^15.7.0",
         "react": "^19.2.0",
