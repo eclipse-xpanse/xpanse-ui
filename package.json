@@ -47,7 +47,7 @@
         "@ant-design/v5-patch-for-react-19": "^1.0.3",
         "@axa-fr/oidc-client": "^7.22.32",
         "@eslint/compat": "^1.4.0",
-        "@eslint/eslintrc": "^3.2.0",
+        "@eslint/eslintrc": "^3.3.3",
         "@eslint/js": "^9.38.0",
         "@hey-api/openapi-ts": "^0.90.4",
         "@playwright/test": "^1.56.1",
